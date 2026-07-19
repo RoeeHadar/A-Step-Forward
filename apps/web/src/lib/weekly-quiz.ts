@@ -561,12 +561,34 @@ export async function submitWeeklyQuizForUser(
     })),
   }).catch(() => null);
 
+  // Gate → advance (ADR-0009, soft gate). Passing the weekly gate completes the
+  // ACTIVE plan week so the rolling window re-paces forward toward the goal terminal
+  // on the next `/api/plans/current` load (which calls advanceRollingPlanWindow).
+  // A fail is recorded (for remediation) but never strands the learner — the
+  // time-based advance remains the backstop.
+  let planAdvanced = false;
+  if (passed) {
+    try {
+      const updated = (await sql`
+        UPDATE plan_weeks
+        SET status = 'completed'
+        WHERE plan_id = ${row.plan_id ?? args.planId}::uuid
+          AND week_number = ${row.week_num ?? args.weekNum}
+          AND status = 'active'
+        RETURNING id
+      `) as Array<{ id: string }>;
+      planAdvanced = updated.length > 0;
+    } catch {
+      // Best-effort; time-based advance remains the backstop.
+    }
+  }
+
   return {
     quiz_id: quizId,
     score,
     per_topic,
     weak_concepts,
-    plan_adapted: false,
+    plan_adapted: planAdvanced,
     next_week_concepts: null,
     passed,
     pass_threshold: GATE_PASS_THRESHOLD,
