@@ -131,12 +131,34 @@ Each has a calibrated easy/med/hard spread across 4–5 kinds with multi-step
 bilingual solutions. Strict + math + track-scope audits and the 207/207 seed
 dry-run all green.
 
+## Batch F — shipped
+
+Four new **verified generators** for the highest-traffic geometry/trig foundation
+lessons (3pt/4pt/5pt, previously ~8 hand-authored, no generator), now **15
+CAS-verified items each** (60 total, 0 rejections):
+
+- `pythagorean_theorem` — hypotenuse/leg, triples, converse, distance formula,
+  ladder + square-diagonal word problems.
+- `trigonometry_ratios` — SOH-CAH-TOA, special angles (30/45/60), solving for a
+  side, hypotenuse+sine reveal.
+- `geometry_area_perimeter` — rectangle/triangle/parallelogram/trapezoid area &
+  perimeter, composite shapes, inner-path word problem.
+- `circle_area_circumference` — area, circumference, arc length, sector area,
+  semicircle, reverse (radius from circumference), fence word problem.
+
+**Math-lint catch:** the first bake put Hebrew inside `\text{}` within math spans
+(e.g. `\dfrac{\text{מול}}{\text{יתר}}`), which KaTeX cannot render. Fixed by
+moving Hebrew descriptors outside the math. Note: the file-backed question store
+is content-addressed, so regenerating after an edit leaves stale copies — purge
+the concept's store rows before rebaking (done here). Strict + math + track-scope
+audits and the 207/207 seed dry-run all green.
+
 ## Corpus progress
 
-Verified 15+ item banks now cover **16 math lessons** (Batches B, D, E + exponents):
-the entire 3pt/4pt algebra & functions foundation, sequences, and the six
-original foundational lessons. Remaining thin lessons (8 questions): geometry/
-trig, probability/statistics, and the 5pt calculus core (11 each).
+Verified 15+ item banks now cover **20 math lessons** (Batches B, D, E, F +
+exponents): the entire 3pt/4pt algebra & functions foundation, sequences, and the
+core geometry/trig foundation. Remaining thin lessons (8 questions): probability/
+statistics, and the 5pt calculus core (11 each).
 
 ## Pending (not yet done this window)
 

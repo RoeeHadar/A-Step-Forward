@@ -241,151 +241,323 @@
       "body_he_md": "- **המשפט:** $a^2+b^2=c^2$ מתקיים בכל משולש ישר-זוויתי, כאשר $c$ הוא היתר.\n- **ההיפוך:** אם $a^2+b^2=c^2$, המשולש ישר-זוויתי. אם $a^2+b^2>c^2$, הוא חד-זוויתי; אם $<c^2$, קהה-זוויתי.\n- **שלשות פיתגורס** $(3,4,5)$, $(5,12,13)$, $(7,24,25)$ מופיעות לעתים קרובות — זהו כפולות.\n- **אלכסון בתלת-ממד:** יישם פיתגורס פעמיים, או השתמש ישירות ב-$d=\\sqrt{a^2+b^2+c^2}$.\n- **קשר לנושאים אחרים:** נוסחת המרחק, $\\sin^2\\theta+\\cos^2\\theta=1$, והרבה הוכחות גאומטריות הן יישומים של משפט יחיד זה."
     }
   ],
-  "agent_hints": {},
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "converse_pythagorean",
+      "distance_formula",
+      "find_hypotenuse",
+      "find_leg",
+      "pythagorean_triple"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "A right triangle has legs $9$ and $12$. Find the hypotenuse.",
-      "stem_he": "למשולש ישר-זוויתי ניצבים $9$ ו-$12$. מצאו את היתר.",
+      "stem_en": "A right triangle has legs $3$ and $4$. Find the hypotenuse.",
+      "stem_he": "במשולש ישר-זווית הניצבים הם $3$ ו-$4$. מצאו את היתר.",
+      "explanation_en": "**Pythagoras.** $c^2 = a^2 + b^2 = 9 + 16 = 25$.\n\n**Square root.** $c = 5$.\n\n**Answer:** $5$.",
+      "explanation_he": "**משפט פיתגורס.** $c^2 = 9 + 16 = 25$.\n\n**שורש.** $c = 5$.\n\n**תשובה:** $5$.",
+      "skill_atoms": [
+        "find_hypotenuse"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$c = \\sqrt{81+144} = \\sqrt{225} = 15$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "15$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "15"
-        ],
-        "case_sensitive": false
+        "value": 5
       },
-      "explanation_en": "**Why this is correct:**\nWith legs $9$ and $12$, apply $c = \\sqrt{a^2+b^2}$:\n$c = \\sqrt{81+144} = \\sqrt{225} = 15$. Check: $9^2+12^2 = 81+144 = 225 = 15^2$ ✓, and $15 > 9$ and $15 > 12$ ✓.\n\n**How to think about it:**\nWhen both legs are given, square each, add, and take the positive square root. Before computing, scan for a Pythagorean triple — $(9,12,15)$ is $3\\times(3,4,5)$, so you may recognise $15$ immediately.\n\n**Common slip:**\nAdding $9+12=21$ instead of squaring. Pythagoras uses $a^2+b^2$, never $a+b$. Another error: forgetting the square root and writing $225$ as the side length.\n\n**Exam tip:**\nMemorise $(3,4,5)$ and its multiples. On the Bagrut, spotting a scaled triple saves a full calculation and reduces arithmetic errors under time pressure.",
-      "explanation_he": "**למה זה נכון:**\nעם ניצבים $9$ ו-$12$, מיישמים $c = \\sqrt{a^2+b^2}$:\n$c = \\sqrt{81+144} = \\sqrt{225} = 15$. בדיקה: $9^2+12^2 = 81+144 = 225 = 15^2$ ✓, ו-$15 > 9$ ו-$15 > 12$ ✓.\n\n**איך לחשוב על זה:**\nכששני הניצבים נתונים, מרבעים כל אחד, מחברים, ולוקחים שורש חיובי. לפני חישוב, חפשו שלשת פיתגורס — $(9,12,15)$ היא $3\\times(3,4,5)$, ואפשר לזהות $15$ מיד.\n\n**טעות נפוצה:**\nחיבור $9+12=21$ במקום העלאה לריבוע. פיתגורס משתמש ב-$a^2+b^2$, לא ב-$a+b$. שגיאה נוספת: שכחת השורש וכתיבת $225$ כאורך צלע.\n\n**טיפ לבחינה:**\nזכרו $(3,4,5)$ וכפולותיה. בבגרות, זיהוי שלשה מוכרת חוסך חישוב מלא ומפחית טעויות חשבון תחת לחץ זמן.",
-      "skill_atoms": []
+      "source_item_id": "3dadb1f8-1ea7-5da4-8635-04fdedff8fb0",
+      "points_level_min": "3pt",
+      "correct_answer": "5"
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "A right triangle has hypotenuse $17$ and leg $8$. Find the other leg.",
-      "stem_he": "למשולש ישר-זוויתי יתר $17$ וניצב $8$. מצאו את הניצב האחר.",
+      "stem_en": "True or False: a triangle with sides $5$, $12$, $13$ is right-angled.",
+      "stem_he": "נכון או לא נכון: משולש עם צלעות $5$, $12$, $13$ הוא ישר-זווית.",
+      "explanation_en": "**Converse of Pythagoras.** Check $5^2 + 12^2 = 25 + 144 = 169 = 13^2$ ✓.\n\n**Conclusion:** right-angled — **true**.",
+      "explanation_he": "**המשפט ההפוך.** בדקו $25 + 144 = 169 = 13^2$ ✓.\n\n**מסקנה:** ישר-זווית — **נכון**.",
+      "skill_atoms": [
+        "converse_pythagorean"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$b = \\sqrt{289-64} = \\sqrt{225} = 15$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "15$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "15"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why this is correct:**\nHypotenuse $c=17$, leg $a=8$. To find the other leg, **subtract** squares:\n$b = \\sqrt{17^2-8^2} = \\sqrt{289-64} = \\sqrt{225} = 15$. Verify: $8^2+15^2 = 64+225 = 289 = 17^2$ ✓.\n\n**How to think about it:**\nWhen the hypotenuse and one leg are known, use $b = \\sqrt{c^2-a^2}$. The hypotenuse is always the largest side, so its square minus a leg's square gives the other leg's square. $(8,15,17)$ is the $(5,12,13)$ pattern scaled — or simply a standard triple.\n\n**Common slip:**\nUsing $b = \\sqrt{17^2+8^2}$ — adding instead of subtracting. This gives $\\sqrt{353}$, which is longer than the hypotenuse — an immediate red flag.\n\n**Exam tip:**\nAfter finding $b$, check that $b < c$. If your \"leg\" is longer than the hypotenuse, you used the wrong formula.",
-      "explanation_he": "**למה זה נכון:**\nיתר $c=17$, ניצב $a=8$. למציאת הניצב השני, **מחסירים** ריבועים:\n$b = \\sqrt{17^2-8^2} = \\sqrt{289-64} = \\sqrt{225} = 15$. אימות: $8^2+15^2 = 64+225 = 289 = 17^2$ ✓.\n\n**איך לחשוב על זה:**\nכשהיתר וניצב אחד ידועים, משתמשים ב-$b = \\sqrt{c^2-a^2}$. היתר תמיד הצלע הגדולה, ולכן ריבועו פחות ריבוע הניצב נותן את ריבוע הניצב השני. $(8,15,17)$ היא שלשה סטנדרטית.\n\n**טעות נפוצה:**\nשימוש ב-$b = \\sqrt{17^2+8^2}$ — חיבור במקום חיסור. זה נותן $\\sqrt{353}$, ארוך מהיתר — סימן אזהרה מיידי.\n\n**טיפ לבחינה:**\nאחרי מציאת $b$, וודאו ש-$b < c$. אם ה\"ניצב\" ארוך מהיתר, השתמשתם בנוסחה הלא נכונה.",
-      "skill_atoms": []
+      "source_item_id": "ed9a33d5-589e-5ddf-ac66-c6fcb95ff6fc",
+      "points_level_min": "3pt",
+      "correct_bool": true
     },
     {
       "ord": 3,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Find the distance between points $A(1, 2)$ and $B(4, 6)$.",
-      "stem_he": "מצאו את המרחק בין הנקודות $A(1, 2)$ ו-$B(4, 6)$.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "A $13$ m ladder leans against a wall with its base $5$ m from the wall. How high up the wall does it reach?",
+      "stem_he": "סולם באורך $13$ מ' נשען על קיר כשבסיסו $5$ מ' מהקיר. לאיזה גובה על הקיר הוא מגיע?",
+      "explanation_en": "**Step 1 — Model.** The ladder is the hypotenuse $13$; the base $5$ is one leg; the height $h$ is the other leg.\n\n**Step 2 — Pythagoras.** $h^2 = 13^2 - 5^2 = 169 - 25 = 144$.\n\n**Step 3 — Solve.** $h = 12$.\n\n**Answer:** $12$ m.",
+      "explanation_he": "**שלב 1 — מידול.** הסולם הוא היתר $13$; הבסיס $5$ ניצב אחד; הגובה $h$ הניצב השני.\n\n**שלב 2 — פיתגורס.** $h^2 = 169 - 25 = 144$.\n\n**שלב 3 — פתרון.** $h = 12$.\n\n**תשובה:** $12$ מ'.",
+      "skill_atoms": [
+        "find_leg"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$d = \\sqrt{(4-1)^2+(6-2)^2} = \\sqrt{9+16} = \\sqrt{25} = 5$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "5$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "5"
+        "steps_en": [
+          "**Step 1 — Model.** The ladder is the hypotenuse $13$; the base $5$ is one leg; the height $h$ is the other leg.",
+          "**Step 2 — Pythagoras.** $h^2 = 13^2 - 5^2 = 169 - 25 = 144$.",
+          "**Step 3 — Solve.** $h = 12$.",
+          "**Answer:** $12$ m."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — מידול.** הסולם הוא היתר $13$; הבסיס $5$ ניצב אחד; הגובה $h$ הניצב השני.",
+          "**שלב 2 — פיתגורס.** $h^2 = 169 - 25 = 144$.",
+          "**שלב 3 — פתרון.** $h = 12$.",
+          "**תשובה:** $12$ מ'."
+        ]
       },
-      "explanation_en": "**Why this is correct:**\nThe distance formula is Pythagoras on a right triangle with horizontal leg $(4-1)=3$ and vertical leg $(6-2)=4$:\n$d = \\sqrt{3^2+4^2} = \\sqrt{9+16} = \\sqrt{25} = 5$. This is the classic $(3,4,5)$ triangle.\n\n**How to think about it:**\nPlot the points or sketch a right triangle: one leg runs horizontally (difference in $x$), the other vertically (difference in $y$). The distance is the hypotenuse. Always use absolute differences — $(4-1)$ and $(6-2)$, not the coordinates themselves.\n\n**Common slip:**\nForgetting to square the differences: writing $\\sqrt{3+4}$ instead of $\\sqrt{9+16}$. Another error: using $(4+1)$ or $(6+2)$ instead of subtracting coordinates.\n\n**Exam tip:**\nWhen horizontal and vertical legs are $3$ and $4$, the distance is always $5$ — no calculator needed. Recognise this pattern instantly on coordinate geometry questions.",
-      "explanation_he": "**למה זה נכון:**\nנוסחת המרחק היא פיתגורס על משולש ישר-זוויתי עם ניצב אופקי $(4-1)=3$ וניצב אנכי $(6-2)=4$:\n$d = \\sqrt{3^2+4^2} = \\sqrt{9+16} = \\sqrt{25} = 5$. זה המשולש הקלאסי $(3,4,5)$.\n\n**איך לחשוב על זה:**\nשרטטו את הנקודות או משולש ישר-זוויתי: ניצב אחד אופקי (הפרש ב-$x$), השני אנכי (הפרש ב-$y$). המרחק הוא היתר. תמיד השתמשו בהפרשים — $(4-1)$ ו-$(6-2)$, לא בקואורדינטות עצמן.\n\n**טעות נפוצה:**\nשכחת הריבוע: כתיבת $\\sqrt{3+4}$ במקום $\\sqrt{9+16}$. שגיאה נוספת: שימוש ב-$(4+1)$ או $(6+2)$ במקום חיסור קואורדינטות.\n\n**טיפ לבחינה:**\nכשהניצבים האופקי והאנכי הם $3$ ו-$4$, המרחק תמיד $5$ — בלי מחשבון. זהו את הדפוס מיד בשאלות גאומטריה אנליטית.",
-      "skill_atoms": []
+      "source_item_id": "9ea58309-6eb9-5217-88e5-c396e98f34d9",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "3pt"
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Is a triangle with sides $10, 24, 26$ right-angled?",
-      "stem_he": "האם משולש עם צלעות $10, 24, 26$ הוא ישר-זוויתי?",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Which of the following is a Pythagorean triple?",
+      "stem_he": "איזו מהאפשרויות היא שלשה פיתגורית?",
+      "explanation_en": "**Test $a^2 + b^2 = c^2$.** $9 + 16 = 25 = 5^2$ ✓.\n\n**The others fail** the check.\n\n**Answer:** $(3,4,5)$.",
+      "explanation_he": "**בדקו $a^2 + b^2 = c^2$.** $9 + 16 = 25 = 5^2$ ✓.\n\n**האחרות נכשלות** במבחן.\n\n**תשובה:** $(3,4,5)$.",
+      "skill_atoms": [
+        "pythagorean_triple"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$10^2+24^2 = 100+576 = 676 = 26^2$. Yes — it is a multiple of $(5,12,13)$",
-          "26^2$. Yes — it is a multiple of $(5,12,13)$",
-          "5,12,13"
+        "options_en": [
+          "$(3, 4, 5)$",
+          "$(2, 3, 4)$",
+          "$(5, 6, 7)$",
+          "$(1, 2, 3)$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$(3, 4, 5)$",
+          "$(2, 3, 4)$",
+          "$(5, 6, 7)$",
+          "$(1, 2, 3)$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nLongest side is $26$, so set $c=26$. Check the converse:\n$10^2+24^2 = 100+576 = 676 = 26^2$. Since $a^2+b^2=c^2$, the triangle is right-angled. Note: $(10,24,26) = 2\\times(5,12,13)$.\n\n**How to think about it:**\nFor the converse, always assign the longest side to $c$. Square the two shorter sides, add, and compare to $c^2$. Equal means right-angled. Recognising that $10$ and $24$ are double $5$ and $12$ lets you skip arithmetic.\n\n**Common slip:**\nPutting $10$ or $24$ as the hypotenuse and getting a false \"not right-angled\" result. Sort sides first: longest → $c$.\n\n**Exam tip:**\nMultiples of $(5,12,13)$ appear frequently on the Bagrut. If you see sides in ratio $5:12:13$, answer \"yes\" immediately and state the triple.",
-      "explanation_he": "**למה זה נכון:**\nהצלע הארוכה היא $26$, לכן $c=26$. בודקים את ההיפוך:\n$10^2+24^2 = 100+576 = 676 = 26^2$. כיוון ש-$a^2+b^2=c^2$, המשולש ישר-זוויתי. שימו לב: $(10,24,26) = 2\\times(5,12,13)$.\n\n**איך לחשוב על זה:**\nבהיפוך, תמיד שימו את הצלע הארוכה ב-$c$. מרבעים את שתי הקצרות, מחברים, ומשווים ל-$c^2$. שוויון = ישר-זוויתי. זיהוי ש-$10$ ו-$24$ הם כפול $5$ ו-$12$ מאפשר לדלג על חישוב.\n\n**טעות נפוצה:**\nשימוש ב-$10$ או $24$ כיתר וקבלת \"לא ישר-זוויתי\" שגוי. מיינו קודם: הארוכה → $c$.\n\n**טיפ לבחינה:**\nכפולות של $(5,12,13)$ מופיעות לעתים קרובות בבגרות. אם רואים צלעות ביחס $5:12:13$, ענו \"כן\" מיד וציינו את השלשה.",
-      "skill_atoms": []
+      "source_item_id": "e8b37f99-eccc-5637-aa7c-76d766cb8269",
+      "points_level_min": "3pt",
+      "options_en": [
+        "$(3, 4, 5)$",
+        "$(2, 3, 4)$",
+        "$(5, 6, 7)$",
+        "$(1, 2, 3)$"
+      ],
+      "options_he": [
+        "$(3, 4, 5)$",
+        "$(2, 3, 4)$",
+        "$(5, 6, 7)$",
+        "$(1, 2, 3)$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 5,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "In triangle $ABC$, $AB = 15$, $BC = 20$, $AC = 25$. Find the area of the triangle.",
-      "stem_he": "במשולש $ABC$: $AB = 15$, $BC = 20$, $AC = 25$. מצאו את שטח המשולש.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "A right triangle has legs $6$ and $8$. Find the hypotenuse.",
+      "stem_he": "במשולש ישר-זווית הניצבים הם $6$ ו-$8$. מצאו את היתר.",
+      "explanation_en": "**Pythagoras.** $c^2 = 36 + 64 = 100$.\n\n**Square root.** $c = 10$.\n\n**Answer:** $10$.",
+      "explanation_he": "**משפט פיתגורס.** $c^2 = 36 + 64 = 100$.\n\n**שורש.** $c = 10$.\n\n**תשובה:** $10$.",
+      "skill_atoms": [
+        "find_hypotenuse"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nCheck: $15^2+20^2 = 225+400 = 625 = 25^2$, so $AC$ is the hypotenuse. Area $= \\frac{1}{2} \\cdot 15 \\cdot 20 = 150$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "150$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "150"
-        ],
-        "case_sensitive": false
+        "value": 10
       },
-      "explanation_en": "**Why this is correct:**\nFirst verify the triangle is right-angled: $15^2+20^2 = 225+400 = 625 = 25^2$, so $AC=25$ is the hypotenuse. The right angle is at $B$ (opposite $AC$). Area of a right triangle $= \\frac{1}{2}\\times\\text{leg}_1\\times\\text{leg}_2 = \\frac{1}{2}\\cdot 15\\cdot 20 = 150$.\n\n**How to think about it:**\nWhen asked for area with three sides given, check whether they form a Pythagorean triple. If yes, identify the two legs and use the simple $\\frac{1}{2}ab$ formula instead of Heron's formula. $(15,20,25) = 5\\times(3,4,5)$.\n\n**Common slip:**\nUsing all three sides in Heron's formula unnecessarily — correct but slow. Another error: treating $25$ as a leg and computing $\\frac{1}{2}\\cdot 15\\cdot 25$.\n\n**Exam tip:**\nAlways confirm which side is the hypotenuse before computing area. The area formula $\\frac{1}{2}ab$ uses the two legs, never the hypotenuse.",
-      "explanation_he": "**למה זה נכון:**\nקודם מאמתים שהמשולש ישר-זוויתי: $15^2+20^2 = 225+400 = 625 = 25^2$, לכן $AC=25$ הוא היתר. הזווית הישרה ב-$B$ (מול $AC$). שטח משולש ישר-זוויתי $= \\frac{1}{2}\\times\\text{leg}_1\\times\\text{leg}_2 = \\frac{1}{2}\\cdot 15\\cdot 20 = 150$.\n\n**איך לחשוב על זה:**\nכשמבקשים שטח עם שלוש צלעות, בדקו אם הן שלשת פיתגורס. אם כן, זהו את שני הניצבים והשתמשו ב-$\\frac{1}{2}ab$ במקום נוסחת הרון. $(15,20,25) = 5\\times(3,4,5)$.\n\n**טעות נפוצה:**\nשימוש בנוסחת הרון מיותר — נכון אבל איטי. שגיאה נוספת: התייחסות ל-$25$ כניצב וחישוב $\\frac{1}{2}\\cdot 15\\cdot 25$.\n\n**טיפ לבחינה:**\nתמיד וודאו איזו צלע היא היתר לפני חישוב שטח. נוסחת $\\frac{1}{2}ab$ משתמשת בשני הניצבים, לא ביתר.",
-      "skill_atoms": []
+      "source_item_id": "0808b265-6016-5e51-aa27-b2ba9cf9bb8a",
+      "points_level_min": "3pt",
+      "correct_answer": "10"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "A ladder $10$ m long leans against a wall. Its foot is $6$ m from the wall. How high up the wall does it reach?",
-      "stem_he": "סולם באורך $10$ מ' נשען על קיר. רגלו נמצאת $6$ מ' מהקיר. עד לאיזה גובה הוא מגיע?",
+      "stem_en": "A right triangle has hypotenuse $13$ and one leg $5$. Find the other leg.",
+      "stem_he": "במשולש ישר-זווית היתר הוא $13$ וניצב אחד הוא $5$. מצאו את הניצב השני.",
+      "explanation_en": "**Rearrange Pythagoras.** $b^2 = c^2 - a^2 = 169 - 25 = 144$.\n\n**Square root.** $b = 12$.\n\n**Answer:** $12$.",
+      "explanation_he": "**סידור מחדש.** $b^2 = 169 - 25 = 144$.\n\n**שורש.** $b = 12$.\n\n**תשובה:** $12$.",
+      "skill_atoms": [
+        "find_leg"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$h = \\sqrt{10^2 - 6^2} = \\sqrt{100-36} = \\sqrt{64} = 8$ m.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "8$ m.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "8"
-        ],
-        "case_sensitive": false
+        "value": 12
       },
-      "explanation_en": "**Why this is correct:**\nThe ladder, wall, and ground form a right triangle: hypotenuse $= 10$ m (ladder), one leg $= 6$ m (distance from wall). Height on wall:\n$h = \\sqrt{10^2-6^2} = \\sqrt{100-36} = \\sqrt{64} = 8$ m. Check: $6^2+8^2 = 36+64 = 100 = 10^2$ ✓.\n\n**How to think about it:**\nIn ladder problems, the ladder is always the hypotenuse (longest side). The wall height and ground distance are the two legs. Draw the right angle at the base of the wall where ladder meets ground.\n\n**Common slip:**\nTreating the $6$ m distance as the hypotenuse, or adding $10^2+6^2$ instead of subtracting. The height must be shorter than the ladder.\n\n**Exam tip:**\n$(6,8,10)$ is $2\\times(3,4,5)$. If you recognise the triple, write $h=8$ immediately. Always include units (m) in your final answer on word problems.",
-      "explanation_he": "**למה זה נכון:**\nהסולם, הקיר והקרקע יוצרים משולש ישר-זוויתי: יתר $= 10$ מ' (סולם), ניצב אחד $= 6$ מ' (מרחק מהקיר). גובה על הקיר:\n$h = \\sqrt{10^2-6^2} = \\sqrt{100-36} = \\sqrt{64} = 8$ מ'. בדיקה: $6^2+8^2 = 36+64 = 100 = 10^2$ ✓.\n\n**איך לחשוב על זה:**\nבבעיות סולם, הסולם תמיד היתר (הצלע הארוכה). גובה הקיר ומרחק הקרקע הם שני הניצבים. שרטטו את הזווית הישרה בבסיס הקיר שבו הסולם נוגע בקרקע.\n\n**טעות נפוצה:**\nהתייחסות ל-$6$ מ' כיתר, או חיבור $10^2+6^2$ במקום חיסור. הגובה חייב להיות קצר מהסולם.\n\n**טיפ לבחינה:**\n$(6,8,10)$ היא $2\\times(3,4,5)$. אם מזהים את השלשה, כתבו $h=8$ מיד. תמיד ציינו יחידות (מ') בתשובה הסופית בבעיות מילוליות.",
-      "skill_atoms": []
+      "source_item_id": "374c1edf-4edf-50a9-83ed-86664840a6e5",
+      "points_level_min": "3pt",
+      "correct_answer": "12"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "A right triangle has hypotenuse $c = \\sqrt{2}$ and both legs equal. Find each leg.",
-      "stem_he": "למשולש ישר-זוויתי יתר $c = \\sqrt{2}$ ושני הניצבים שווים. מצאו כל ניצב.",
+      "stem_en": "A right triangle has legs $5$ and $12$. Find the hypotenuse.",
+      "stem_he": "במשולש ישר-זווית הניצבים הם $5$ ו-$12$. מצאו את היתר.",
+      "explanation_en": "**Pythagoras.** $c^2 = 25 + 144 = 169$.\n\n**Square root.** $c = 13$.\n\n**Answer:** $13$ (a $5$-$12$-$13$ triple).",
+      "explanation_he": "**משפט פיתגורס.** $c^2 = 25 + 144 = 169$.\n\n**שורש.** $c = 13$.\n\n**תשובה:** $13$ (שלשה $5$-$12$-$13$).",
+      "skill_atoms": [
+        "find_hypotenuse",
+        "pythagorean_triple"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$a^2+a^2 = 2 \\Rightarrow 2a^2 = 2 \\Rightarrow a = 1$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1"
-        ],
-        "case_sensitive": false
+        "value": 13
       },
-      "explanation_en": "**Why this is correct:**\nBoth legs equal, call each $a$. Then $a^2+a^2=c^2$ with $c=\\sqrt{2}$:\n$2a^2 = 2$, so $a^2=1$ and $a=1$. Check: $1^2+1^2=2=(\\sqrt{2})^2$ ✓. This is an isosceles right triangle with legs $1,1$ and hypotenuse $\\sqrt{2}$.\n\n**How to think about it:**\nWhen both legs are equal, Pythagoras simplifies to $2a^2=c^2$. Substitute the given hypotenuse, solve for $a^2$, then take the positive root. This pattern appears whenever you see a $45°$-$45°$-$90°$ triangle.\n\n**Common slip:**\nWriting $a+a=\\sqrt{2}$ (adding legs instead of squaring), or forgetting that $a^2=1$ gives $a=1$, not $a=\\pm 1$ for a side length.\n\n**Exam tip:**\nIn an isosceles right triangle, legs are equal and hypotenuse $= \\text{leg}\\times\\sqrt{2}$. Here $\\sqrt{2}=1\\cdot\\sqrt{2}$, confirming $a=1$ without full algebra.",
-      "explanation_he": "**למה זה נכון:**\nשני הניצבים שווים, נסמן כל אחד $a$. אז $a^2+a^2=c^2$ עם $c=\\sqrt{2}$:\n$2a^2 = 2$, לכן $a^2=1$ ו-$a=1$. בדיקה: $1^2+1^2=2=(\\sqrt{2})^2$ ✓. זה משולש ישר-זוויתי שווה-שוקיים עם ניצבים $1,1$ ויתר $\\sqrt{2}$.\n\n**איך לחשוב על זה:**\nכששני הניצבים שווים, פיתגורס מתפשט ל-$2a^2=c^2$. הציבו את היתר הנתון, פתרו ל-$a^2$, ולקחו שורש חיובי. הדפוס הזה מופיע בכל משולש $45°$-$45°$-$90°$.\n\n**טעות נפוצה:**\nכתיבת $a+a=\\sqrt{2}$ (חיבור ניצבים במקום ריבוע), או שכחה ש-$a^2=1$ נותן $a=1$, לא $a=\\pm 1$ לאורך צלע.\n\n**טיפ לבחינה:**\nבמשולש ישר-זוויתי שווה-שוקיים, הניצבים שווים והיתר $= \\text{leg}\\times\\sqrt{2}$. כאן $\\sqrt{2}=1\\cdot\\sqrt{2}$, מאשר $a=1$ בלי אלגברה מלאה.",
-      "skill_atoms": []
+      "source_item_id": "e4813880-4b1e-5ce5-847b-7993f3c17047",
+      "points_level_min": "3pt",
+      "correct_answer": "13"
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "The diagonal of a square is $8\\sqrt{2}$. Find the side length and the area.",
-      "stem_he": "אלכסון ריבוע הוא $8\\sqrt{2}$. מצאו את אורך הצלע ואת השטח.",
+      "stem_en": "A right triangle has hypotenuse $10$ and one leg $6$. Find the other leg.",
+      "stem_he": "במשולש ישר-זווית היתר הוא $10$ וניצב אחד הוא $6$. מצאו את הניצב השני.",
+      "explanation_en": "**Rearrange.** $b^2 = 100 - 36 = 64$.\n\n**Square root.** $b = 8$.\n\n**Answer:** $8$.",
+      "explanation_he": "**סידור מחדש.** $b^2 = 100 - 36 = 64$.\n\n**שורש.** $b = 8$.\n\n**תשובה:** $8$.",
+      "skill_atoms": [
+        "find_leg"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nDiagonal $= s\\sqrt{2} \\Rightarrow s\\sqrt{2} = 8\\sqrt{2} \\Rightarrow s = 8$. Area $= 64$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "64$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "64"
-        ],
-        "case_sensitive": false
+        "value": 8
       },
-      "explanation_en": "**Why this is correct:**\nA square with side $s$ has diagonal $s\\sqrt{2}$ (Pythagoras on two equal legs). Given diagonal $= 8\\sqrt{2}$:\n$s\\sqrt{2} = 8\\sqrt{2} \\Rightarrow s = 8$. Area $= s^2 = 64$.\n\n**How to think about it:**\nThe diagonal formula for a square comes directly from $s^2+s^2=d^2$, so $d=s\\sqrt{2}$. When the diagonal contains $\\sqrt{2}$, divide both sides by $\\sqrt{2}$ to find the side. Then square the side for area.\n\n**Common slip:**\nConfusing diagonal with side: writing area $= (8\\sqrt{2})^2=128$ instead of first finding $s=8$. Another error: reporting side $8$ but forgetting to compute area $64$.\n\n**Exam tip:**\nBagrut questions often ask for two quantities (side and area). Answer both parts. The $\\sqrt{2}$ in the diagonal cancels cleanly — expect integer side lengths when the diagonal is $k\\sqrt{2}$.",
-      "explanation_he": "**למה זה נכון:**\nלריבוע עם צלע $s$ יש אלכסון $s\\sqrt{2}$ (פיתגורס על שני ניצבים שווים). נתון אלכסון $= 8\\sqrt{2}$:\n$s\\sqrt{2} = 8\\sqrt{2} \\Rightarrow s = 8$. שטח $= s^2 = 64$.\n\n**איך לחשוב על זה:**\nנוסחת האלכסון של ריבוע נגזרת מ-$s^2+s^2=d^2$, לכן $d=s\\sqrt{2}$. כשהאלכסון מכיל $\\sqrt{2}$, חלקו ב-$\\sqrt{2}$ כדי למצוא את הצלע. אחר כך הרבעו את הצלע לשטח.\n\n**טעות נפוצה:**\nבלבול אלכסון עם צלע: כתיבת שטח $= (8\\sqrt{2})^2=128$ במקום מציאת $s=8$ קודם. שגיאה נוספת: דיווח על צלע $8$ בלי חישוב שטח $64$.\n\n**טיפ לבחינה:**\nשאלות בבגרות לעיתים מבקשות שני ערכים (צלע ושטח). ענו על שני החלקים. ה-$\\sqrt{2}$ באלכסון מתקצר יפה — צפו לצלעות שלמות כשהאלכסון הוא $k\\sqrt{2}$.",
-      "skill_atoms": []
+      "source_item_id": "e680a9df-4b91-5111-8207-a0737b421ca3",
+      "points_level_min": "3pt",
+      "correct_answer": "8"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the diagonal of a rectangle with sides $9$ and $12$.",
+      "stem_he": "מצאו את האלכסון של מלבן עם צלעות $9$ ו-$12$.",
+      "explanation_en": "**Diagonal = hypotenuse.** $d^2 = 81 + 144 = 225$.\n\n**Square root.** $d = 15$.\n\n**Answer:** $15$.",
+      "explanation_he": "**אלכסון = יתר.** $d^2 = 81 + 144 = 225$.\n\n**שורש.** $d = 15$.\n\n**תשובה:** $15$.",
+      "skill_atoms": [
+        "find_hypotenuse"
+      ],
+      "answer_payload": {
+        "value": 15
+      },
+      "source_item_id": "bd5e25c9-725a-57e8-865d-329068d1c9a4",
+      "points_level_min": "3pt",
+      "correct_answer": "15"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "A right triangle has legs $8$ and $15$. Find the hypotenuse.",
+      "stem_he": "במשולש ישר-זווית הניצבים הם $8$ ו-$15$. מצאו את היתר.",
+      "explanation_en": "**Pythagoras.** $c^2 = 64 + 225 = 289$.\n\n**Square root.** $c = 17$.\n\n**Answer:** $17$ (an $8$-$15$-$17$ triple).",
+      "explanation_he": "**משפט פיתגורס.** $c^2 = 64 + 225 = 289$.\n\n**שורש.** $c = 17$.\n\n**תשובה:** $17$ (שלשה $8$-$15$-$17$).",
+      "skill_atoms": [
+        "find_hypotenuse",
+        "pythagorean_triple"
+      ],
+      "answer_payload": {
+        "value": 17
+      },
+      "source_item_id": "3c85da78-55fc-5bad-b127-6761f4705c5e",
+      "points_level_min": "3pt",
+      "correct_answer": "17"
+    },
+    {
+      "ord": 11,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: a triangle with sides $4$, $5$, $6$ is right-angled.",
+      "stem_he": "נכון או לא נכון: משולש עם צלעות $4$, $5$, $6$ הוא ישר-זווית.",
+      "explanation_en": "**Check.** $4^2 + 5^2 = 16 + 25 = 41 \\ne 36 = 6^2$.\n\n**Conclusion:** not right-angled — **false**.",
+      "explanation_he": "**בדיקה.** $16 + 25 = 41 \\ne 36 = 6^2$.\n\n**מסקנה:** לא ישר-זווית — **לא נכון**.",
+      "skill_atoms": [
+        "converse_pythagorean"
+      ],
+      "answer_payload": {
+        "value": false
+      },
+      "source_item_id": "e3912fa9-ff8d-5ad6-9f3f-c1d29a19e372",
+      "points_level_min": "3pt",
+      "correct_bool": false
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "A right triangle has both legs equal to $1$. Find the hypotenuse (to $6$ decimals).",
+      "stem_he": "במשולש ישר-זווית שני הניצבים שווים ל-$1$. מצאו את היתר (עד $6$ ספרות).",
+      "explanation_en": "**Pythagoras.** $c^2 = 1 + 1 = 2$.\n\n**Square root.** $c = \\sqrt{2} \\approx 1.414214$.\n\n**Answer:** $\\sqrt{2} \\approx 1.414214$.",
+      "explanation_he": "**משפט פיתגורס.** $c^2 = 2$.\n\n**שורש.** $c = \\sqrt{2} \\approx 1.414214$.\n\n**תשובה:** $\\sqrt{2} \\approx 1.414214$.",
+      "skill_atoms": [
+        "find_hypotenuse"
+      ],
+      "answer_payload": {
+        "value": 1.414214
+      },
+      "source_item_id": "752793e1-4e92-50b6-bb28-26a045bec732",
+      "points_level_min": "3pt",
+      "correct_answer": "1.414214"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the distance between the points $(0, 0)$ and $(3, 4)$.",
+      "stem_he": "מצאו את המרחק בין הנקודות $(0, 0)$ ו-$(3, 4)$.",
+      "explanation_en": "**Distance formula.** $d = \\sqrt{(3-0)^2 + (4-0)^2} = \\sqrt{9 + 16}$.\n\n**Compute.** $\\sqrt{25} = 5$.\n\n**Answer:** $5$.",
+      "explanation_he": "**נוסחת המרחק.** $d = \\sqrt{9 + 16}$.\n\n**חישוב.** $\\sqrt{25} = 5$.\n\n**תשובה:** $5$.",
+      "skill_atoms": [
+        "distance_formula"
+      ],
+      "answer_payload": {
+        "value": 5
+      },
+      "source_item_id": "28a71083-e111-5671-89b7-4c3769cde850",
+      "points_level_min": "3pt",
+      "correct_answer": "5"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the distance between the points $(1, 2)$ and $(4, 6)$.",
+      "stem_he": "מצאו את המרחק בין הנקודות $(1, 2)$ ו-$(4, 6)$.",
+      "explanation_en": "**Distance formula.** $d = \\sqrt{(4-1)^2 + (6-2)^2} = \\sqrt{9 + 16}$.\n\n**Compute.** $\\sqrt{25} = 5$.\n\n**Answer:** $5$.",
+      "explanation_he": "**נוסחת המרחק.** $d = \\sqrt{9 + 16}$.\n\n**חישוב.** $\\sqrt{25} = 5$.\n\n**תשובה:** $5$.",
+      "skill_atoms": [
+        "distance_formula"
+      ],
+      "answer_payload": {
+        "value": 5
+      },
+      "source_item_id": "3c00dc6c-a57e-5548-873e-217c71f10275",
+      "points_level_min": "3pt",
+      "correct_answer": "5"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the diagonal of a square with side $5$ (to $6$ decimals).",
+      "stem_he": "מצאו את אלכסון הריבוע שצלעו $5$ (עד $6$ ספרות).",
+      "explanation_en": "**Diagonal of a square.** $d = \\sqrt{5^2 + 5^2} = \\sqrt{50} = 5\\sqrt{2}$.\n\n**Decimal.** $\\approx 7.071068$.\n\n**Answer:** $5\\sqrt{2} \\approx 7.071068$.",
+      "explanation_he": "**אלכסון ריבוע.** $d = \\sqrt{50} = 5\\sqrt{2}$.\n\n**עשרוני.** $\\approx 7.071068$.\n\n**תשובה:** $5\\sqrt{2} \\approx 7.071068$.",
+      "skill_atoms": [
+        "find_hypotenuse"
+      ],
+      "answer_payload": {
+        "value": 7.071068
+      },
+      "source_item_id": "1dc5aa5c-299b-59a5-b3c9-5de3df60ea1b",
+      "points_level_min": "3pt",
+      "correct_answer": "7.071068"
     }
   ],
   "est_minutes": 55,
