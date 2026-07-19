@@ -2,7 +2,7 @@
 type: active-context
 updated: 2026-07-19
 coordinator_status: .cursor/coordinator/STATUS.md
-production_web: d67a7ac0
+production_web: f234a816
 ---
 
 # Active Context
