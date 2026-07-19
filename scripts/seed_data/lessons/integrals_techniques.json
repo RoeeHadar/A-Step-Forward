@@ -243,10 +243,10 @@
       }
     ],
     "skill_atoms_unlocked": [
-      "u_substitution",
-      "integration_by_parts",
-      "technique_selection",
-      "trig_substitution"
+      "definite_integral",
+      "linearity",
+      "log_integral",
+      "substitution"
     ],
     "tutor_pacing_hint": "Spend most time on technique selection (method guide). Examples: one per technique, then mixed exercises.",
     "next_recommended": [
@@ -260,169 +260,331 @@
       "ord": 1,
       "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "Which technique is most appropriate for $\\int x^2\\ln x\\,dx$?",
-      "stem_he": "איזו שיטה מתאימה ביותר ל-$\\int x^2\\ln x\\,dx$?",
+      "stem_en": "To integrate $\\int f(g(x))\\,g'(x)\\,dx$ the natural technique is:",
+      "stem_he": "כדי לחשב $\\int f(g(x))\\,g'(x)\\,dx$ הטכניקה הטבעית היא:",
+      "explanation_en": "**Substitution** ($u=g(x)$, $du=g'(x)dx$) is designed for this pattern.\n\n**Answer:** substitution.",
+      "explanation_he": "**הצבה** ($u=g(x)$, $du=g'(x)dx$) מתאימה לתבנית זו.\n\n**תשובה:** הצבה.",
+      "skill_atoms": [
+        "substitution"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\text{substitution}$",
+          "$\\text{partial fractions}$",
+          "$\\text{long division}$",
+          "$\\text{completing the square}$"
+        ],
+        "options_he": [
+          "$\\text{substitution}$",
+          "$\\text{partial fractions}$",
+          "$\\text{long division}$",
+          "$\\text{completing the square}$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "a0b44ff1-9d10-5703-9f58-3a3f039ff462",
+      "points_level_min": "5pt",
       "options_en": [
-        "IBP with $u=\\ln x$",
-        "u-substitution",
-        "Partial fractions",
-        "Trig substitution"
+        "$\\text{substitution}$",
+        "$\\text{partial fractions}$",
+        "$\\text{long division}$",
+        "$\\text{completing the square}$"
       ],
       "options_he": [
-        "IBP עם $u=\\ln x$",
-        "u-sub",
-        "שברים חלקיים",
-        "הצבה טריגו"
+        "$\\text{substitution}$",
+        "$\\text{partial fractions}$",
+        "$\\text{long division}$",
+        "$\\text{completing the square}$"
       ],
-      "correct_index": 0,
-      "explanation_en": "**Why this is correct:**\n$\\int x^2\\ln x\\,dx$ is a product of algebraic ($x^2$) and logarithmic ($\\ln x$) factors — the classic IBP setup. LIATE says Logarithm before Algebraic, so $u=\\ln x$, $dv=x^2\\,dx$. u-sub fails because no inner function's derivative appears.\n\n**How to think about it:**\nRun the decision tree: no $f(g)g'$ pattern → product of types → IBP. Partial fractions apply to rationals; trig sub to radicals with $\\sqrt{a^2\\pm x^2}$.\n\n**Common slip:**\nChoosing u-sub with $u=x^2$ (leaves $\\ln x$ trapped inside) or picking $u=x^2$ for IBP (makes $\\int v\\,du$ harder).\n\n**Exam tip:**\nWhenever $\\ln x$ or $\\arctan x$ appears in a product, mark it as $u$ before touching the formula — LIATE is worth memorizing verbatim.",
-      "explanation_he": "**למה זה נכון:**\n$\\int x^2\\ln x\\,dx$ הוא מכפלה של אלגברה ($x^2$) ולוג ($\\ln x$) — הגדרת IBP קלאסית. LIATE: לוג לפני אלגברה, לכן $u=\\ln x$, $dv=x^2\\,dx$. u-sub נכשל כי אין נגזרת של פונקציה פנימית.\n\n**איך לחשוב על זה:**\nעץ החלטות: אין $f(g)g'$ → מכפלה של סוגים → IBP. שברים חלקיים לרציונליות; הצבה טריג לשורשים עם $\\sqrt{a^2\\pm x^2}$.\n\n**טעות נפוצה:**\nu-sub עם $u=x^2$ (משאיר $\\ln x$ בפנים) או $u=x^2$ ב-IBP (מקשה את $\\int v\\,du$).\n\n**טיפ לבחינה:**\nכש-$\\ln x$ או $\\arctan x$ במכפלה — סמנו כ-$u$ לפני הנוסחה; LIATE שווה שינון.",
-      "skill_atoms": [
-        "integration_by_parts",
-        "technique_selection"
-      ]
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Evaluate $\\int e^x\\cos x\\,dx$.",
-      "stem_he": "חשבו $\\int e^x\\cos x\\,dx$.",
-      "rubric_en": "IBP loop: $I=e^x\\sin x+e^x\\cos x-I$. $I=e^x(\\sin x+\\cos x)/2+C$.",
-      "rubric_he": "$e^x(\\sin x+\\cos x)/2+C$.",
-      "explanation_en": "**Why this is correct:**\n$\\int e^x\\cos x\\,dx$ requires IBP twice. Let $I=\\int e^x\\cos x\\,dx$. First IBP: $u=\\cos x$, $dv=e^x\\,dx$ gives $e^x\\cos x+\\int e^x\\sin x\\,dx$. Second IBP on the sine integral returns $+I$. Collecting: $I=e^x\\cos x+e^x\\sin x-I$, so $2I=e^x(\\cos x+\\sin x)$ and $I=\\frac{e^x(\\sin x+\\cos x)}{2}+C$.\n\n**How to think about it:**\nExponential–trig products always loop. Plan to solve for $I$ algebraically after the second IBP — do not stop at $\\int e^x\\sin x\\,dx$.\n\n**Common slip:**\nSign error on the second IBP (forgetting the minus from $u=\\sin x$), or dividing by 2 too early before collecting both $I$ terms.\n\n**Exam tip:**\nWrite $I=$ on the left margin at the start — loop problems are graded on the algebraic finish, not just the first IBP step.",
-      "explanation_he": "**למה זה נכון:**\n$\\int e^x\\cos x\\,dx$ דורש IBP פעמיים. נסמן $I=\\int e^x\\cos x\\,dx$. IBP ראשון: $u=\\cos x$, $dv=e^x\\,dx$ → $e^x\\cos x+\\int e^x\\sin x\\,dx$. IBP שני מחזיר $+I$. איסוף: $I=e^x\\cos x+e^x\\sin x-I$, לכן $I=\\frac{e^x(\\sin x+\\cos x)}{2}+C$.\n\n**איך לחשוב על זה:**\nמכפלה מעריך–טריג תמיד לולאת. תכננו לפתור עבור $I$ אחרי IBP שני — אל תעצרו ב-$\\int e^x\\sin x\\,dx$.\n\n**טעות נפוצה:**\nטעות סימן ב-IBP שני, או חלוקה ב-2 לפני איסוף שני איברי $I$.\n\n**טיפ לבחינה:**\nכתבו $I=$ בשוליים — בבעיות לולאה מעריכים את הסיום האלגברהי.\n\n**טיפ לבחינה:** כתבו את שם השיטה בשוליים לפני החישוב — מקבלים נקודות שיטה גם כשיש טעות חשבונית, ובדקו בגזירה בסוף.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int_0^2 (2x+2)\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^2 (2x+2)\\,dx$.",
+      "explanation_en": "**Antiderivative** $x^2+2x$.\n\n**$[x^2+2x]_0^2 = 4+4 = 8$.**\n\n**Answer:** $8$.",
+      "explanation_he": "**פונקציה קדומה** $x^2+2x$.\n\n**$[x^2+2x]_0^2 = 8$.**\n\n**תשובה:** $8$.",
       "skill_atoms": [
-        "integration_by_parts",
-        "ibp_loop"
-      ]
+        "linearity"
+      ],
+      "answer_payload": {
+        "value": 8
+      },
+      "source_item_id": "a058d5d0-1647-5ad9-b20b-71c47dc78bf2",
+      "points_level_min": "5pt",
+      "correct_answer": "8"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "$\\int (2x+1)^5\\,dx$ (u-sub)",
-      "stem_he": "$\\int(2x+1)^5\\,dx$ (u-sub)",
-      "answer_payload": {
-        "acceptable_answers": [
-          "(2x+1)^6/12+C",
-          "(2x+1)^6/12 + C",
-          "$\\frac{(2x+1)^6}{12}+C$",
-          "u=2x+1, du=2 dx, u^6/12+C"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\n$\\int(2x+1)^5\\,dx$ is u-sub with $u=2x+1$. Then $du=2\\,dx$, so $dx=du/2$ and $\\int u^5\\,du/2=u^6/12+C=(2x+1)^6/12+C$. The power rule in $u$ applies directly after adjusting for the missing factor of 2.\n\n**How to think about it:**\nExpand $(2x+1)^5$ manually would take minutes and invite arithmetic errors — substitution collapses five terms into one power integral.\n\n**Common slip:**\nForgetting the $1/2$ from $du=2\\,dx$, giving $(2x+1)^6/6$ instead of $/12$. Or expanding the binomial instead of substituting.\n\n**Exam tip:**\nWhen the integrand is $(ax+b)^n$, always try $u=ax+b$ first — it is faster than IBP or expansion for any positive integer $n$.",
-      "explanation_he": "**למה זה נכון:**\n$\\int(2x+1)^5\\,dx$ — u-sub עם $u=2x+1$. $du=2\\,dx$, $dx=du/2$, לכן $\\int u^5\\,du/2=(2x+1)^6/12+C$. חוק החזקות ב-$u$ אחרי תיקון הגורם החסר 2.\n\n**איך לחשוב על זה:**\nפתיחה ידנית של $(2x+1)^5$ — דקות וטעויות; הצבה מצמצמת חמישה איברים לאינטגרל חזקה אחד.\n\n**טעות נפוצה:**\nשכחת $1/2$ מ-$du=2\\,dx$ → $(2x+1)^6/6$ במקום $/12$. או פתיחת בינום במקום הצבה.\n\n**טיפ לבחינה:**\nכש-$(ax+b)^n$, נסו $u=ax+b$ קודם — מהיר מ-IBP או פתיחה.\n\n**טיפ לבחינה:** כתבו את שם השיטה בשוליים לפני החישוב — מקבלים נקודות שיטה גם כשיש טעות חשבונית, ובדקו בגזירה בסוף.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_0^1 2x(x^2+1)^2\\,dx$ by substitution.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^1 2x(x^2+1)^2\\,dx$ בעזרת הצבה.",
+      "explanation_en": "**Step 1 — Substitute.** $u=x^2+1$, $du=2x\\,dx$; bounds $u:1\\to 2$.\n\n**Step 2 — Rewrite.** $\\int_1^2 u^2\\,du$.\n\n**Step 3 — Integrate.** $\\left[\\dfrac{u^3}{3}\\right]_1^2=\\dfrac{8-1}{3}=\\dfrac{7}{3}$.\n\n**Answer:** $\\dfrac{7}{3}\\approx 2.3333$.",
+      "explanation_he": "**שלב 1 — הצבה.** $u=x^2+1$, $du=2x\\,dx$; גבולות $1\\to 2$.\n\n**שלב 2 — כתיבה מחדש.** $\\int_1^2 u^2\\,du$.\n\n**שלב 3 — אינטגרציה.** $\\dfrac{8-1}{3}=\\dfrac{7}{3}$.\n\n**תשובה:** $\\approx 2.3333$.",
       "skill_atoms": [
-        "u_substitution",
-        "integration_by_parts"
-      ]
+        "substitution"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Substitute.** $u=x^2+1$, $du=2x\\,dx$; bounds $u:1\\to 2$.",
+          "**Step 2 — Rewrite.** $\\int_1^2 u^2\\,du$.",
+          "**Step 3 — Integrate.** $\\left[\\dfrac{u^3}{3}\\right]_1^2=\\dfrac{8-1}{3}=\\dfrac{7}{3}$.",
+          "**Answer:** $\\dfrac{7}{3}\\approx 2.3333$."
+        ],
+        "steps_he": [
+          "**שלב 1 — הצבה.** $u=x^2+1$, $du=2x\\,dx$; גבולות $1\\to 2$.",
+          "**שלב 2 — כתיבה מחדש.** $\\int_1^2 u^2\\,du$.",
+          "**שלב 3 — אינטגרציה.** $\\dfrac{8-1}{3}=\\dfrac{7}{3}$.",
+          "**תשובה:** $\\approx 2.3333$."
+        ]
+      },
+      "source_item_id": "d337711f-dc88-5a19-b1e2-329ce6ac6f71",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "$\\int xe^{x^2}\\,dx$ (u-sub)",
-      "stem_he": "$\\int xe^{x^2}\\,dx$",
-      "answer_payload": {
-        "acceptable_answers": [
-          "e^{x^2}/2+C",
-          "e^{x^2}/2 + C",
-          "$\\frac{e^{x^2}}{2}+C$",
-          "u=x^2, e^u/2+C"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\n$\\int xe^{x^2}\\,dx$: the exponent $x^2$ has derivative $2x$, and $x\\,dx$ is half of that. Let $u=x^2$, $du=2x\\,dx$, so $\\int e^u\\,du/2=e^u/2+C=e^{x^2}/2+C$.\n\n**How to think about it:**\nScan for $e^{g(x)}$ times something proportional to $g'(x)$. Pull out missing constants before integrating — here divide by 2.\n\n**Common slip:**\nAnswering $e^{x^2}+C$ (forgot the $1/2$) or trying IBP (creates a harder product). Another slip: $u=e^{x^2}$ instead of $u=x^2$.\n\n**Exam tip:**\nFor $e^{x^2}$, $e^{\\sin x}$, $e^{x^3}$ stems, ask immediately: is the other factor the inner derivative? That single question routes u-sub vs IBP correctly.",
-      "explanation_he": "**למה זה נכון:**\n$\\int xe^{x^2}\\,dx$: המעריך $x^2$ נגזרתו $2x$, ו-$x\\,dx$ הוא חצי מזה. $u=x^2$, $du=2x\\,dx$, $\\int e^u\\,du/2=e^{x^2}/2+C$.\n\n**איך לחשוב על זה:**\nחפשו $e^{g(x)}$ כפול משהו פרופורציונלי ל-$g'(x)$. הוציאו קבועים חסרים לפני אינטגרציה — כאן חלקו ב-2.\n\n**טעות נפוצה:**\n$e^{x^2}+C$ (שכחת $1/2$) או IBP (מקשה). $u=e^{x^2}$ במקום $u=x^2$.\n\n**טיפ לבחינה:**\nל-$e^{x^2}$, $e^{\\sin x}$ — שאלו: האם הגורם השני נגזרת פנימית? שאלה אחת מנתבת u-sub מול IBP.\n\n**טיפ לבחינה:** כתבו את שם השיטה בשוליים לפני החישוב — מקבלים נקודות שיטה גם כשיש טעות חשבונית, ובדקו בגזירה בסוף.",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: $\\displaystyle\\int_0^2 (x-1)\\,dx = 0$.",
+      "stem_he": "נכון או לא נכון: $\\displaystyle\\int_0^2 (x-1)\\,dx = 0$.",
+      "explanation_en": "**$\\left[\\dfrac{x^2}{2}-x\\right]_0^2=(2-2)-0=0$ — **true**.",
+      "explanation_he": "**$\\left[\\dfrac{x^2}{2}-x\\right]_0^2=0$ — **נכון**.",
       "skill_atoms": [
-        "u_substitution",
-        "integration_by_parts"
-      ]
+        "definite_integral"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "05244dad-621e-54e2-a49b-487476ef170c",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 5,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "$\\int xe^x\\,dx$ (IBP)",
-      "stem_he": "$\\int xe^x\\,dx$ (IBP)",
-      "answer_payload": {
-        "acceptable_answers": [
-          "(x-1)e^x+C",
-          "(x-1)e^x + C",
-          "xe^x - e^x + C"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nIBP with LIATE: $u=x$, $dv=e^x\\,dx$, $du=dx$, $v=e^x$. Then $\\int xe^x\\,dx=xe^x-\\int e^x\\,dx=xe^x-e^x+C=(x-1)e^x+C$.\n\n**How to think about it:**\nPolynomial times exponential → differentiate the polynomial side repeatedly in harder problems; here one IBP suffices.\n\n**Common slip:**\nSign error on $\\int e^x\\,dx$ after IBP, or choosing $u=e^x$ which produces $\\int x^2 e^x\\,dx/2$ — harder, not simpler.\n\n**Exam tip:**\nAfter IBP, always ask: is $\\int v\\,du$ easier than the original? If not, swap $u$ and $dv$ using LIATE again before continuing.",
-      "explanation_he": "**למה זה נכון:**\nIBP עם LIATE: $u=x$, $dv=e^x\\,dx$, $du=dx$, $v=e^x$. $\\int xe^x\\,dx=xe^x-e^x+C=(x-1)e^x+C$.\n\n**איך לחשוב על זה:**\nפולינום כפול מעריך → גזרו את הפולינום (חוזר בבעיות קשות יותר); כאן IBP אחד מספיק.\n\n**טעות נפוצה:**\nטעות סימן אחרי IBP, או $u=e^x$ שנותן $\\int x^2 e^x\\,dx/2$ — קשה יותר.\n\n**טיפ לבחינה:**\nאחרי IBP שאלו: האם $\\int v\\,du$ פשוט יותר? אם לא — החלף לפי LIATE.\n\n**טיפ לבחינה:** כתבו את שם השיטה בשוליים לפני החישוב — מקבלים נקודות שיטה גם כשיש טעות חשבונית, ובדקו בגזירה בסוף.",
+      "stem_en": "Compute $\\displaystyle\\int_0^3 5\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^3 5\\,dx$.",
+      "explanation_en": "**$[5x]_0^3 = 15$.**\n\n**Answer:** $15$.",
+      "explanation_he": "**$[5x]_0^3 = 15$.**\n\n**תשובה:** $15$.",
       "skill_atoms": [
-        "u_substitution",
-        "integration_by_parts"
-      ]
+        "linearity"
+      ],
+      "answer_payload": {
+        "value": 15
+      },
+      "source_item_id": "15abe09c-a762-5fca-99a5-ea9219c101b0",
+      "points_level_min": "5pt",
+      "correct_answer": "15"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "$\\int \\frac{2x}{x^2+5}\\,dx$",
-      "stem_he": "$\\int 2x/(x^2+5)\\,dx$",
-      "answer_payload": {
-        "acceptable_answers": [
-          "ln(x^2+5)+C",
-          "ln|x^2+5|+C",
-          "\\ln(x^2+5)+C"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\n$\\int \\frac{2x}{x^2+5}\\,dx$ matches $\\int f'(x)/f(x)\\,dx$. Let $u=x^2+5$, $du=2x\\,dx$. Then $\\int \\frac{1}{u}\\,du=\\ln|u|+C=\\ln(x^2+5)+C$ (absolute value optional since $x^2+5>0$).\n\n**How to think about it:**\nWhen the numerator is the derivative of the denominator (up to sign), think logarithm immediately — faster than partial fractions.\n\n**Common slip:**\nUsing partial fractions on $1/(x^2+5)$ (irreducible quadratic — wrong tool) or forgetting that $\\int 1/u\\,du=\\ln|u|$, not $u$.\n\n**Exam tip:**\nCircle the denominator before choosing technique: if its derivative sits in the numerator, u-sub to $\\ln$ beats every other method.",
-      "explanation_he": "**למה זה נכון:**\n$\\int \\frac{2x}{x^2+5}\\,dx$ תואם $\\int f'(x)/f(x)\\,dx$. $u=x^2+5$, $du=2x\\,dx$, $\\int \\frac{1}{u}\\,du=\\ln(x^2+5)+C$ ($x^2+5>0$ תמיד).\n\n**איך לחשוב על זה:**\nכשהמונה נגזרת המכנה — חשבו לוג מיד; מהיר משברים חלקיים.\n\n**טעות נפוצה:**\nשברים חלקיים על $1/(x^2+5)$ (ריבועי בלתי ניתן) או $\\int 1/u=u$.\n\n**טיפ לבחינה:**\nהקיפו את המכנה: אם נגזרתו במונה — u-sub ל-$\\ln$.\n\n**טיפ לבחינה:** כתבו את שם השיטה בשוליים לפני החישוב — מקבלים נקודות שיטה גם כשיש טעות חשבונית, ובדקו בגזירה בסוף.\n\n**טיפ לבחינה:** כתבו u-sub / IBP / שברים חלקיים בשוליים לפני החישוב — נקודות שיטה חשובות.",
+      "stem_en": "Compute $\\displaystyle\\int_1^2 6x\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_1^2 6x\\,dx$.",
+      "explanation_en": "**$[3x^2]_1^2 = 12-3 = 9$.**\n\n**Answer:** $9$.",
+      "explanation_he": "**$[3x^2]_1^2 = 9$.**\n\n**תשובה:** $9$.",
       "skill_atoms": [
-        "u_substitution",
-        "integration_by_parts"
-      ]
+        "linearity"
+      ],
+      "answer_payload": {
+        "value": 9
+      },
+      "source_item_id": "584b4b6d-7e77-58f7-9664-eccf780b12f1",
+      "points_level_min": "5pt",
+      "correct_answer": "9"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "$\\int x^2e^x\\,dx$ (IBP twice)",
-      "stem_he": "$\\int x^2e^x\\,dx$ (IBP פעמיים)",
-      "answer_payload": {
-        "acceptable_answers": [
-          "(x^2-2x+2)e^x+C",
-          "(x^2-2x+2)e^x + C"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nTwo IBP steps: first $u=x^2$, $dv=e^x\\,dx$ yields $x^2e^x-2\\int xe^x\\,dx$. Second IBP on $\\int xe^x\\,dx$ with $u=x$ gives $(x-1)e^x$. Combine: $(x^2-2x+2)e^x+C$.\n\n**How to think about it:**\nFor $\\int x^n e^x\\,dx$, expect $n$ IBP applications (or tabular IBP). Track the coefficient from each differentiation of $x^n$.\n\n**Common slip:**\nLosing the factor of 2 from the first IBP, or stopping after one IBP at $x^2e^x-2xe^x$ without integrating the remainder.\n\n**Exam tip:**\nSet up a small table: column 1 differentiate $x^2\\to 2x\\to 2\\to 0$, column 2 integrate $e^x$ repeatedly — alternating signs prevent coefficient errors on timed exams.",
-      "explanation_he": "**למה זה נכון:**\nשני IBP: ראשון $u=x^2$ → $x^2e^x-2\\int xe^x\\,dx$. שני $u=x$ → $(x-1)e^x$. צירוף: $(x^2-2x+2)e^x+C$.\n\n**איך לחשוב על זה:**\nל-$\\int x^n e^x\\,dx$, צפו $n$ יישומי IBP (או טבלה). עקבו אחר המקדם מכל גזירה של $x^n$.\n\n**טעות נפוצה:**\nאיבוד גורם 2 מ-IBP ראשון, או עצירה אחרי IBP אחד.\n\n**טיפ לבחינה:**\nטבלה: עמודה 1 גזור $x^2\\to 2x\\to 2\\to 0$, עמודה 2 אינטגרל $e^x$ — סימןים מתחלפים מונעים טעויות מקדם.\n\n**טיפ לבחינה:** כתבו את שם השיטה בשוליים לפני החישוב — מקבלים נקודות שיטה גם כשיש טעות חשבונית, ובדקו בגזירה בסוף.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int_0^2 (x+2)\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^2 (x+2)\\,dx$.",
+      "explanation_en": "**$\\left[\\dfrac{x^2}{2}+2x\\right]_0^2 = 2+4 = 6$.**\n\n**Answer:** $6$.",
+      "explanation_he": "**$\\left[\\dfrac{x^2}{2}+2x\\right]_0^2 = 6$.**\n\n**תשובה:** $6$.",
       "skill_atoms": [
-        "u_substitution",
-        "integration_by_parts"
-      ]
+        "linearity"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "b26991dc-497a-57de-b273-6ea354019346",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "$\\int \\frac{1}{x^2-4}\\,dx$ (partial fractions)",
-      "stem_he": "$\\int 1/(x^2-4)\\,dx$ (שברים חלקיים)",
-      "answer_payload": {
-        "acceptable_answers": [
-          "(1/4)ln|(x-2)/(x+2)|+C",
-          "1/4 ln|(x-2)/(x+2)|+C",
-          "\\frac{1}{4}\\ln\\left|\\frac{x-2}{x+2}\\right|+C"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\n$\\frac{1}{x^2-4}=\\frac{1}{(x-2)(x+2)}$. Partial fractions: $\\frac{A}{x-2}+\\frac{B}{x+2}$ with $A=1/4$, $B=-1/4$ by cover-up. Integrate: $\\frac{1}{4}\\ln|x-2|-\\frac{1}{4}\\ln|x+2|+C=\\frac{1}{4}\\ln\\left|\\frac{x-2}{x+2}\\right|+C$.\n\n**How to think about it:**\nQuadratic denominator that factors over $\\mathbb{R}$ → partial fractions, not trig sub. Degree of numerator 0 < degree of denominator 2 — proper.\n\n**Common slip:**\nSign error on $B=-1/4$, or writing $\\ln(x-2)-\\ln(x+2)$ without the $1/4$ factor from correct cover-up.\n\n**Exam tip:**\nAfter partial fractions, combine log terms into one quotient log — graders prefer $\\ln|(x-2)/(x+2)|$ form and it is easier to differentiate for self-check.",
-      "explanation_he": "**למה זה נכון:**\n$\\frac{1}{x^2-4}=\\frac{1}{(x-2)(x+2)}$. שברים חלקיים: $A=1/4$, $B=-1/4$ (cover-up). אינטגרציה: $\\frac{1}{4}\\ln\\left|\\frac{x-2}{x+2}\\right|+C$.\n\n**איך לחשוב על זה:**\nמכנה ריבועי שמתפרק מעל $\\mathbb{R}$ → שברים חלקיים, לא הצבה טריג. מונה דרגה 0 < מכנה דרגה 2 — ראוי.\n\n**טעות נפוצה:**\nטעות סימן ב-$B=-1/4$, או $\\ln(x-2)-\\ln(x+2)$ בלי גורם $1/4$.\n\n**טיפ לבחינה:**\nאחרי פירוק, שלבו לוגריתמים למנה אחת — קל יותר לגזור ולאימות.\n\n**טיפ לבחינה:** כתבו את שם השיטה בשוליים לפני החישוב — מקבלים נקודות שיטה גם כשיש טעות חשבונית, ובדקו בגזירה בסוף.",
+      "stem_en": "$\\displaystyle\\int \\frac{1}{x}\\,dx$ equals:",
+      "stem_he": "$\\displaystyle\\int \\frac{1}{x}\\,dx$ שווה ל:",
+      "explanation_en": "**$\\int x^{-1}dx=\\ln|x|+C$** — the one power the reverse-power-rule misses.\n\n**Answer:** $\\ln|x|+C$.",
+      "explanation_he": "**$\\int x^{-1}dx=\\ln|x|+C$.**\n\n**תשובה:** $\\ln|x|+C$.",
       "skill_atoms": [
-        "u_substitution",
-        "integration_by_parts"
-      ]
+        "log_integral"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\ln|x|+C$",
+          "$\\frac{1}{x^2}+C$",
+          "$-\\frac{1}{x^2}+C$",
+          "$x\\ln x+C$"
+        ],
+        "options_he": [
+          "$\\ln|x|+C$",
+          "$\\frac{1}{x^2}+C$",
+          "$-\\frac{1}{x^2}+C$",
+          "$x\\ln x+C$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "cef8836c-a6d4-569e-94ad-51af1f743912",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\ln|x|+C$",
+        "$\\frac{1}{x^2}+C$",
+        "$-\\frac{1}{x^2}+C$",
+        "$x\\ln x+C$"
+      ],
+      "options_he": [
+        "$\\ln|x|+C$",
+        "$\\frac{1}{x^2}+C$",
+        "$-\\frac{1}{x^2}+C$",
+        "$x\\ln x+C$"
+      ],
+      "correct_index": 0
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_0^1 2x(x^2+1)\\,dx$ (let $u=x^2+1$).",
+      "stem_he": "חשבו $\\displaystyle\\int_0^1 2x(x^2+1)\\,dx$ (הציבו $u=x^2+1$).",
+      "explanation_en": "**$u=x^2+1,\\ du=2x\\,dx$.** Bounds $u:1\\to 2$.\n\n**$\\int_1^2 u\\,du=\\left[\\dfrac{u^2}{2}\\right]_1^2=\\dfrac{4-1}{2}=\\dfrac32$.**\n\n**Answer:** $1.5$.",
+      "explanation_he": "**$u=x^2+1$, גבולות $1\\to 2$.**\n\n**$\\int_1^2 u\\,du=\\dfrac32$.**\n\n**תשובה:** $1.5$.",
+      "skill_atoms": [
+        "substitution"
+      ],
+      "answer_payload": {
+        "value": 1.5
+      },
+      "source_item_id": "93590710-88a3-5263-a436-5d677cc2cdb2",
+      "points_level_min": "5pt",
+      "correct_answer": "1.5"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_0^1 (2x+1)^2\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^1 (2x+1)^2\\,dx$.",
+      "explanation_en": "**$u=2x+1$, $du=2dx$.** $\\int \\dfrac{u^2}{2}du=\\dfrac{u^3}{6}$.\n\n**$\\left[\\dfrac{(2x+1)^3}{6}\\right]_0^1=\\dfrac{27-1}{6}=\\dfrac{13}{3}$.**\n\n**Answer:** $\\dfrac{13}{3}\\approx 4.3333$.",
+      "explanation_he": "**$u=2x+1$.** $\\dfrac{(2x+1)^3}{6}$.\n\n**$\\dfrac{27-1}{6}=\\dfrac{13}{3}$.**\n\n**תשובה:** $\\approx 4.3333$.",
+      "skill_atoms": [
+        "substitution"
+      ],
+      "answer_payload": {
+        "value": 4.333333
+      },
+      "source_item_id": "27aec00d-9f3e-5037-8f29-a3da0574e4ab",
+      "points_level_min": "5pt",
+      "correct_answer": "4.333333"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_0^1 4x(x^2+3)\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^1 4x(x^2+3)\\,dx$.",
+      "explanation_en": "**$\\dfrac{d}{dx}(x^2+3)^2=4x(x^2+3)$**, so antiderivative $=(x^2+3)^2$.\n\n**$[(x^2+3)^2]_0^1=16-9=7$.**\n\n**Answer:** $7$.",
+      "explanation_he": "**פונקציה קדומה** $(x^2+3)^2$.\n\n**$[(x^2+3)^2]_0^1=7$.**\n\n**תשובה:** $7$.",
+      "skill_atoms": [
+        "substitution"
+      ],
+      "answer_payload": {
+        "value": 7
+      },
+      "source_item_id": "11279054-1e27-586b-a210-44ff429071f8",
+      "points_level_min": "5pt",
+      "correct_answer": "7"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_1^2 (6x^2-2x)\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_1^2 (6x^2-2x)\\,dx$.",
+      "explanation_en": "**Antiderivative** $2x^3-x^2$.\n\n**$[2x^3-x^2]_1^2=(16-4)-(2-1)=11$.**\n\n**Answer:** $11$.",
+      "explanation_he": "**פונקציה קדומה** $2x^3-x^2$.\n\n**$[2x^3-x^2]_1^2=11$.**\n\n**תשובה:** $11$.",
+      "skill_atoms": [
+        "linearity"
+      ],
+      "answer_payload": {
+        "value": 11
+      },
+      "source_item_id": "91261cf2-247c-59fc-a467-d46914546755",
+      "points_level_min": "5pt",
+      "correct_answer": "11"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_0^1 3x^2(x^3+2)\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^1 3x^2(x^3+2)\\,dx$.",
+      "explanation_en": "**$u=x^3+2$, $du=3x^2dx$.** Bounds $u:2\\to 3$.\n\n**$\\int_2^3 u\\,du=\\left[\\dfrac{u^2}{2}\\right]_2^3=\\dfrac{9-4}{2}=\\dfrac52$.**\n\n**Answer:** $2.5$.",
+      "explanation_he": "**$u=x^3+2$, גבולות $2\\to 3$.**\n\n**$\\dfrac{9-4}{2}=\\dfrac52$.**\n\n**תשובה:** $2.5$.",
+      "skill_atoms": [
+        "substitution"
+      ],
+      "answer_payload": {
+        "value": 2.5
+      },
+      "source_item_id": "c3716bfb-fa77-5354-a36f-f66c33ba6c1b",
+      "points_level_min": "5pt",
+      "correct_answer": "2.5"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_0^1 (2x+1)(x^2+x)\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^1 (2x+1)(x^2+x)\\,dx$.",
+      "explanation_en": "**$u=x^2+x$, $du=(2x+1)dx$.** Bounds $u:0\\to 2$.\n\n**$\\int_0^2 u\\,du=\\left[\\dfrac{u^2}{2}\\right]_0^2=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**$u=x^2+x$, גבולות $0\\to 2$.**\n\n**$\\int_0^2 u\\,du=2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "substitution"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "7db216ed-5073-5ced-958d-ce2fdc5bd28c",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_{-1}^{1} (x^3-x)\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_{-1}^{1} (x^3-x)\\,dx$.",
+      "explanation_en": "**Both $x^3$ and $x$ are odd**, so the integral over $[-1,1]$ is $0$.\n\n**Answer:** $0$.",
+      "explanation_he": "**$x^3$ ו-$x$ אי-זוגיות**, ולכן האינטגרל על $[-1,1]$ הוא $0$.\n\n**תשובה:** $0$.",
+      "skill_atoms": [
+        "definite_integral"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "a96b302c-9580-5733-9277-cf484530f4be",
+      "points_level_min": "5pt",
+      "correct_answer": "0"
     }
   ],
   "est_minutes": 50,

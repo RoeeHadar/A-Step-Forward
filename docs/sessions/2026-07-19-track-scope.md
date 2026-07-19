@@ -373,10 +373,33 @@ triangles` was also initially miscounted at 14 and got one more medium item.
 Difficulty spread ≈ 33/40/27, 4 kinds per lesson. Math + strict + track-scope
 audits and the 207/207 seed dry-run all green.
 
+## Batch O — shipped
+
+The **integral-calculus + vectors + analytic-geometry + trig-identities strand**
+expanded to **15 CAS-verified items each** (6 lessons, 90 items, 0 rejections):
+
+- `integrals_intro` (calc1/5pt) — definite integrals via the power rule, FTC,
+  linearity, odd-symmetry shortcut. A new `defint` module helper runs each item
+  through the CAS `integral_definite` check (real ground-truth, not a tautology).
+- `integrals_techniques` (calc1/5pt) — u-substitution, linearity, $\int 1/x$,
+  reverse-chain patterns, odd-symmetry.
+- `vectors_plane` (4pt) — magnitude, dot product, components, scalar multiple,
+  angle/perpendicularity, unit vector, projection, 2D cross-area.
+- `vectors_dot_product_3d` (5pt) — 3D magnitude, dot product, angle, parallel/
+  perpendicular tests, unit vector, projection.
+- `analytic_geometry` (4pt/5pt) — slope, midpoint, distance, intercepts, line
+  equations, parallel/perpendicular slopes, circle center & radius.
+- `trigonometry_identities` (4pt/5pt) — special angles, Pythagorean identity,
+  double-angle & sum identities, quotient identity — all verified numerically at
+  concrete angles via the CAS `truth`/`value` checks (KaTeX-safe, no HE in math).
+
+Difficulty spread 5/6/4 (≈33/40/27), 4 kinds per lesson. Math + strict +
+track-scope audits all green. Zero rejections on the first pipeline pass.
+
 ## Corpus progress
 
-Verified 15+ item banks now cover **72 math lessons** (Batches B, D, E, F, G, H,
-I, J, K, L, M, N + exponents): the entire 3pt/4pt algebra & functions foundation
+Verified 15+ item banks now cover **78 math lessons** (Batches B, D, E, F, G, H,
+I, J, K, L, M, N, O + exponents): the entire 3pt/4pt algebra & functions foundation
 (incl. alternate syllabus IDs, algebra review, quadratic model fitting), sequences,
 the core + coordinate geometry foundation (distance/midpoint/slope, circle
 equations, vectors, solids/mensuration, plane-angle geometry, Law of Sines/Cosines
