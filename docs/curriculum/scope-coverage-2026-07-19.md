@@ -37,9 +37,8 @@ curriculum tracks. Authority: official MoE Bagrut syllabus (new 172/371/372,
 Only aliased where the target lesson's level matches the served track. The other
 raw "gaps" fall into two categories that must NOT be alias-redirected:
 
-- **Depth-mismatch gaps** (HS concept, only university lesson exists):
-  `capacitors_parallel_plate`, `em_waves`, `normal_distribution_basics`,
-  `normal_distribution_z_scores`.
+- **Depth-mismatch gaps** (HS concept, only university lesson existed) — now closed
+  by authoring dedicated HS lessons; see section D.
 - **Intentional titled stubs** (deliberately lesson-less calc-1 theory concepts,
   guarded by `learn-routes.test.ts` — they render a titled concept page and are
   tutor-handled): `extreme_value_theorem`, `intermediate_value_theorem`,
@@ -65,19 +64,30 @@ un-gated and `math_track` corrected.
 level the lesson gates out) is caught in future authoring. Currently **OK (0
 under-served)**.
 
-## Remaining honest gaps (need level-appropriate authoring — NOT mis-aliased)
+### D. HS-level lessons authored to close depth-mismatch gaps (4)
 
-These were intentionally left un-aliased: the only candidate lessons are
-**university-level**, and redirecting HS learners there would violate "in depth
-appropriate for level" (`capacitors_parallel_plate` / `em_waves` are guarded by
-`lesson-concept-resolve.test.ts`). They currently render as titled concept stubs.
+Rather than mis-alias HS concepts to university lessons, four new bilingual,
+level-appropriate lessons were authored (each: ≥1 theory section, 3 worked
+examples, ≥15 questions across ≥3 kinds with easy/medium/hard spread, structured
+`agent_hints`, every taught skill-atom exercised, 0 math-render issues). The
+file name matches the catalog `concept_id`, so coverage now resolves **directly**
+(no alias needed).
 
-| Concept | Level(s) needing it | Only existing lesson | Recommendation |
-| ------- | ------------------- | -------------------- | -------------- |
-| `capacitors_parallel_plate` | HS Physics (electricity) | `capacitors_dielectrics` (university) | Author HS-level capacitors lesson |
-| `em_waves` | HS Physics (radiation & matter) | `em_waves_propagation` (university) | Author HS-level EM-waves lesson |
-| `normal_distribution_basics` | Bagrut 3pt | `statistics_inference` (university) | Verify 372 truly requires normal distribution; if so author HS-basic lesson, else prune from 3pt catalog |
-| `normal_distribution_z_scores` | Bagrut 4pt (+ makhina/stats) | `statistics_inference` (university) | Author an HS-level normal-distribution + z-scores lesson serving 4pt/makhina/stats |
+| New lesson | Level / track | Core content |
+| ---------- | ------------- | ------------ |
+| `capacitors_parallel_plate.json` | HS Physics (electricity) | $C=Q/V$, $C=\varepsilon_0 A/d$, $E=V/d$, energy $\tfrac12CV^2$, series/parallel, connected-vs-disconnected |
+| `em_waves.json` | HS Physics (radiation & matter) | EM wave nature, $c=f\lambda$, the spectrum ordered by frequency, photon energy $E=hf=hc/\lambda$ |
+| `normal_distribution_basics.json` | Bagrut 3pt (+4pt) | Bell shape, symmetry, mean=median=mode, empirical 68–95–99.7 rule, reading proportions |
+| `normal_distribution_z_scores.json` | Bagrut 4pt (+5pt/makhina/stats) | Standardizing $z=\frac{x-\mu}{\sigma}$, standard normal table $\Phi(z)$, $P(a<X<b)$, comparing distributions, inverse (percentile→value) |
+
+Decision on 3pt normal distribution: the new-372 statistics unit's treatment of
+the normal distribution is qualitative, so `normal_distribution_basics` is
+authored at a genuinely basic (empirical-rule-only, no z-table) level and kept in
+the 3pt catalog rather than pruned; z-score machinery lives in the 4pt lesson.
+
+**Result: 0 remaining depth-mismatch gaps.** All catalog concepts now resolve to
+a level-appropriate authored lesson (directly or via the single
+`photoelectric_effect` alias).
 
 ### Intentional titled stubs (leave as-is)
 
@@ -107,7 +117,7 @@ without a dedicated verification.
 
 ## Depth status
 
-All 207 lessons already satisfy the structural depth bar from prior passes: ≥1
-theory section, ≥2 worked examples, ≥15 questions, ≥3 question kinds, easy/hard
-spread, 0 math-render issues. This pass adds the **per-level visible-depth**
-guarantee on top of the corpus-wide depth guarantee.
+All 211 lessons (207 prior + 4 authored this pass) satisfy the structural depth
+bar: ≥1 theory section, ≥2 worked examples, ≥15 questions, ≥3 question kinds,
+easy/hard spread, 0 math-render issues. This pass adds the **per-level
+visible-depth** guarantee on top of the corpus-wide depth guarantee.

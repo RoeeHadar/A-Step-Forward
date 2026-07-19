@@ -1,0 +1,504 @@
+{
+  "concept_id": "normal_distribution_z_scores",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": [
+    "4pt",
+    "5pt"
+  ],
+  "title_en": "Z-Scores & the Standard Normal Distribution",
+  "title_he": "ציוני תקן וההתפלגות הנורמלית הסטנדרטית",
+  "summary_en": "Standardizing any normal value with $z=\\frac{x-\\mu}{\\sigma}$, reading probabilities from the standard normal table $\\Phi(z)$, computing $P(a<X<b)$, comparing values across distributions, and the inverse problem (percentile to value).",
+  "summary_he": "תקנון כל ערך נורמלי בעזרת $z=\\frac{x-\\mu}{\\sigma}$, קריאת הסתברויות מטבלת ההתפלגות הנורמלית הסטנדרטית $\\Phi(z)$, חישוב $P(a<X<b)$, השוואת ערכים בין התפלגויות, והבעיה ההפוכה (מאחוזון לערך).",
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "One Ruler for Every Bell Curve",
+      "title_he": "סרגל אחד לכל עקומת פעמון",
+      "body_en_md": "A student scores $80$ in Math (class mean $70$, standard deviation $5$) and $85$ in History (class mean $75$, standard deviation $10$). In which subject did she do *relatively* better? Raw scores cannot answer this — the two exams have different means and spreads.\n\nThe **z-score** solves the problem by measuring **how many standard deviations a value is from its mean**. It converts any normal distribution into one common scale — the **standard normal distribution**, with mean $0$ and standard deviation $1$. Once values are standardized, a single table gives the proportion below any point, so you can compare across subjects, populations, or units.\n\nThis is the engine behind percentile ranks, the psychometric score scale, quality control limits, and every confidence interval you will meet in `concept:statistics_inference`.",
+      "body_he_md": "תלמידה מקבלת $80$ במתמטיקה (ממוצע כיתה $70$, סטיית תקן $5$) ו-$85$ בהיסטוריה (ממוצע כיתה $75$, סטיית תקן $10$). באיזה מקצוע הצטיינה *יחסית* יותר? ציונים גולמיים אינם יכולים לענות — לשני המבחנים ממוצעים ופיזורים שונים.\n\n**ציון התקן** ($z$) פותר את הבעיה: הוא מודד **כמה סטיות תקן ערך רחוק מהממוצע שלו**. הוא ממיר כל התפלגות נורמלית לסולם משותף אחד — **ההתפלגות הנורמלית הסטנדרטית**, עם ממוצע $0$ וסטיית תקן $1$. לאחר התקנון, טבלה אחת נותנת את השיעור מתחת לכל נקודה, וכך אפשר להשוות בין מקצועות, אוכלוסיות או יחידות.\n\nזהו המנוע שמאחורי דירוגי אחוזונים, סולם הציון הפסיכומטרי, גבולות בקרת איכות, וכל רווח סמך שתפגשו ב-`concept:statistics_inference`."
+    },
+    {
+      "kind": "definition",
+      "title_en": "The Z-Score and the Standard Normal",
+      "title_he": "ציון התקן וההתפלגות הסטנדרטית",
+      "body_en_md": "**Z-score (standard score):** for a value $x$ from a normal distribution with mean $\\mu$ and standard deviation $\\sigma$,\n$$z=\\frac{x-\\mu}{\\sigma}.$$\nIt is the signed number of standard deviations $x$ lies from the mean: $z>0$ above the mean, $z<0$ below, $z=0$ at the mean.\n\n**Standard normal distribution $Z\\sim N(0,1)$:** the normal distribution with $\\mu=0$ and $\\sigma=1$. Standardizing turns any $X\\sim N(\\mu,\\sigma)$ into $Z$.\n\n**Cumulative function $\\Phi(z)$:** $\\Phi(z)=P(Z<z)$ is the area under the standard normal curve to the **left** of $z$. This is what a standard normal table gives.\n\n**The three area rules (from symmetry):**\n- $P(Z<z)=\\Phi(z)$.\n- $P(Z>z)=1-\\Phi(z)$.\n- $P(a<Z<b)=\\Phi(b)-\\Phi(a)$.\n- Symmetry: $\\Phi(-z)=1-\\Phi(z)$.",
+      "body_he_md": "**ציון תקן (ציון סטנדרטי):** עבור ערך $x$ מהתפלגות נורמלית עם ממוצע $\\mu$ וסטיית תקן $\\sigma$,\n$$z=\\frac{x-\\mu}{\\sigma}.$$\nזהו מספר סטיות התקן (עם סימן) שבהן $x$ רחוק מהממוצע: $z>0$ מעל הממוצע, $z<0$ מתחת, $z=0$ בממוצע.\n\n**ההתפלגות הנורמלית הסטנדרטית $Z\\sim N(0,1)$:** ההתפלגות הנורמלית עם $\\mu=0$ ו-$\\sigma=1$. תקנון הופך כל $X\\sim N(\\mu,\\sigma)$ ל-$Z$.\n\n**הפונקציה המצטברת $\\Phi(z)$:** $\\Phi(z)=P(Z<z)$ הוא השטח מתחת לעקומה הסטנדרטית משמאל ל-$z$. זהו הערך שטבלת ההתפלגות הנורמלית הסטנדרטית נותנת.\n\n**שלושת כללי השטח (מסימטריה):**\n- $P(Z<z)=\\Phi(z)$.\n- $P(Z>z)=1-\\Phi(z)$.\n- $P(a<Z<b)=\\Phi(b)-\\Phi(a)$.\n- סימטריה: $\\Phi(-z)=1-\\Phi(z)$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Reading the Standard Normal Table",
+      "title_he": "קריאת טבלת ההתפלגות הנורמלית הסטנדרטית",
+      "body_en_md": "The table below gives $\\Phi(z)=P(Z<z)$ for common $z$ values. Use it for every probability question in this lesson.\n\n| $z$ | $\\Phi(z)=P(Z<z)$ |\n|---|---|\n| $0.00$ | $0.5000$ |\n| $0.50$ | $0.6915$ |\n| $1.00$ | $0.8413$ |\n| $1.28$ | $0.9000$ |\n| $1.50$ | $0.9332$ |\n| $1.645$ | $0.9500$ |\n| $1.96$ | $0.9750$ |\n| $2.00$ | $0.9772$ |\n| $2.50$ | $0.9938$ |\n| $3.00$ | $0.9987$ |\n\n**Three standard tasks:**\n1. **$P(X<x)$:** standardize $z=\\frac{x-\\mu}{\\sigma}$, then read $\\Phi(z)$.\n2. **$P(X>x)$:** compute $1-\\Phi(z)$.\n3. **$P(a<X<b)$:** standardize both ends and subtract, $\\Phi(z_b)-\\Phi(z_a)$.\n\n**Negative z-values** use symmetry: $\\Phi(-z)=1-\\Phi(z)$. For example $\\Phi(-1)=1-0.8413=0.1587$.\n\n**The inverse problem.** Sometimes you are given a probability (a percentile) and must find the value. Reverse the steps: look up the $z$ whose $\\Phi(z)$ matches the required area, then un-standardize with $x=\\mu+z\\sigma$. For the top $5\\%$, $\\Phi(z)=0.95$ gives $z=1.645$, so the cutoff is $x=\\mu+1.645\\sigma$.",
+      "body_he_md": "הטבלה שלהלן נותנת $\\Phi(z)=P(Z<z)$ עבור ערכי $z$ נפוצים. השתמשו בה בכל שאלת הסתברות בשיעור זה.\n\n| $z$ | $\\Phi(z)=P(Z<z)$ |\n|---|---|\n| $0.00$ | $0.5000$ |\n| $0.50$ | $0.6915$ |\n| $1.00$ | $0.8413$ |\n| $1.28$ | $0.9000$ |\n| $1.50$ | $0.9332$ |\n| $1.645$ | $0.9500$ |\n| $1.96$ | $0.9750$ |\n| $2.00$ | $0.9772$ |\n| $2.50$ | $0.9938$ |\n| $3.00$ | $0.9987$ |\n\n**שלוש משימות סטנדרטיות:**\n1. **$P(X<x)$:** תקננו $z=\\frac{x-\\mu}{\\sigma}$, ואז קראו $\\Phi(z)$.\n2. **$P(X>x)$:** חשבו $1-\\Phi(z)$.\n3. **$P(a<X<b)$:** תקננו את שני הקצוות והחסירו, $\\Phi(z_b)-\\Phi(z_a)$.\n\n**ערכי $z$ שליליים** משתמשים בסימטריה: $\\Phi(-z)=1-\\Phi(z)$. לדוגמה $\\Phi(-1)=1-0.8413=0.1587$.\n\n**הבעיה ההפוכה.** לעיתים נתונה הסתברות (אחוזון) ויש למצוא את הערך. הפכו את הצעדים: מצאו את $z$ שעבורו $\\Phi(z)$ שווה לשטח הנדרש, ואז בטלו את התקנון עם $x=\\mu+z\\sigma$. עבור $5\\%$ העליונים, $\\Phi(z)=0.95$ נותן $z=1.645$, ולכן הסף הוא $x=\\mu+1.645\\sigma$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Standardize and Read a Probability",
+      "title_he": "דוגמה פתורה 1 — תקנון וקריאת הסתברות",
+      "body_en_md": "**Problem.** Battery life is normal with $\\mu=40$ h and $\\sigma=5$ h. What fraction of batteries last less than $45$ h?\n\n### Move 1 — Standardize the value\n$$z=\\frac{x-\\mu}{\\sigma}=\\frac{45-40}{5}=1.$$\nSo $45$ h is exactly one standard deviation above the mean.\n\n### Move 2 — Read the table\n$P(X<45)=\\Phi(1)=0.8413$.\n\n### Move 3 — Interpret\nAbout $84.13\\%$ of the batteries last less than $45$ h.\n\n**Exam tip:** always write the standardization formula with the numbers substituted before reaching for the table — it makes sign errors obvious.",
+      "body_he_md": "**בעיה.** חיי סוללה נורמליים עם $\\mu=40$ שעות ו-$\\sigma=5$ שעות. איזה שיעור מהסוללות מחזיק פחות מ-$45$ שעות?\n\n### צעד 1 — תקננו את הערך\n$$z=\\frac{x-\\mu}{\\sigma}=\\frac{45-40}{5}=1.$$\nכלומר $45$ שעות הן בדיוק סטיית תקן אחת מעל הממוצע.\n\n### צעד 2 — קראו מהטבלה\n$P(X<45)=\\Phi(1)=0.8413$.\n\n### צעד 3 — פרשו\nכ-$84.13\\%$ מהסוללות מחזיקות פחות מ-$45$ שעות.\n\n**טיפ לבחינה:** תמיד כתבו את נוסחת התקנון עם המספרים המוצבים לפני שפונים לטבלה — כך טעויות סימן בולטות."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Adult heights are normal with $\\mu=170$ cm and $\\sigma=8$ cm. What fraction of adults are taller than $186$ cm? (Use $\\Phi(2)=0.9772$.)",
+      "body_he_md": "גבהי מבוגרים נורמליים עם $\\mu=170$ cm ו-$\\sigma=8$ cm. איזה שיעור מהמבוגרים גבוהים מ-$186$ cm? (השתמשו ב-$\\Phi(2)=0.9772$.)",
+      "checkpoint_solution_en": "### Move 1 — Standardize\n$z=\\frac{186-170}{8}=\\frac{16}{8}=2$.\n\n### Move 2 — 'Greater than' means the right tail\n$P(X>186)=P(Z>2)=1-\\Phi(2)=1-0.9772=0.0228$.\n\n**Answer:** about $2.28\\%$ of adults are taller than $186$ cm.",
+      "checkpoint_solution_he": "### צעד 1 — תקנון\n$z=\\frac{186-170}{8}=\\frac{16}{8}=2$.\n\n### צעד 2 — 'גדול מ' הוא הזנב הימני\n$P(X>186)=P(Z>2)=1-\\Phi(2)=1-0.9772=0.0228$.\n\n**תשובה:** כ-$2.28\\%$ מהמבוגרים גבוהים מ-$186$ cm."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Probability Between Two Values",
+      "title_he": "דוגמה פתורה 2 — הסתברות בין שני ערכים",
+      "body_en_md": "**Problem.** Exam scores are normal with $\\mu=60$ and $\\sigma=10$. What fraction of students scored between $65$ and $80$?\n\n### Move 1 — Standardize both endpoints\n$$z_1=\\frac{65-60}{10}=0.5,\\qquad z_2=\\frac{80-60}{10}=2.$$\n\n### Move 2 — Write as a difference of areas\n$$P(65<X<80)=\\Phi(2)-\\Phi(0.5).$$\n\n### Move 3 — Substitute table values\n$$=0.9772-0.6915=0.2857.$$\n\n### Move 4 — Interpret\nAbout $28.57\\%$ of students scored between $65$ and $80$.\n\n**Exam tip:** for a 'between' question, standardize both ends and subtract the smaller area from the larger — never subtract the raw scores.",
+      "body_he_md": "**בעיה.** ציוני מבחן נורמליים עם $\\mu=60$ ו-$\\sigma=10$. איזה שיעור מהתלמידים קיבלו בין $65$ ל-$80$?\n\n### צעד 1 — תקננו את שני הקצוות\n$$z_1=\\frac{65-60}{10}=0.5,\\qquad z_2=\\frac{80-60}{10}=2.$$\n\n### צעד 2 — כתבו כהפרש שטחים\n$$P(65<X<80)=\\Phi(2)-\\Phi(0.5).$$\n\n### צעד 3 — הציבו ערכי טבלה\n$$=0.9772-0.6915=0.2857.$$\n\n### צעד 4 — פרשו\nכ-$28.57\\%$ מהתלמידים קיבלו בין $65$ ל-$80$.\n\n**טיפ לבחינה:** בשאלת 'בין', תקננו את שני הקצוות והחסירו את השטח הקטן מהגדול — אף פעם לא מחסירים ציונים גולמיים."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — The Inverse Problem (Percentile to Value)",
+      "title_he": "דוגמה פתורה 3 — הבעיה ההפוכה (מאחוזון לערך)",
+      "body_en_md": "**Problem.** A university admits only the top $5\\%$ of applicants on an entrance exam that is normal with $\\mu=500$ and $\\sigma=100$. What is the minimum score required?\n\n### Move 1 — Translate 'top 5%' into an area\nTop $5\\%$ means $P(X>x)=0.05$, so $P(X<x)=0.95$. We need the $z$ with $\\Phi(z)=0.95$.\n\n### Move 2 — Look up the z-value\nFrom the table, $\\Phi(1.645)=0.95$, so $z=1.645$.\n\n### Move 3 — Un-standardize\nSolve $z=\\frac{x-\\mu}{\\sigma}$ for $x$: \n$$x=\\mu+z\\sigma=500+1.645\\times100=500+164.5=664.5.$$\n\n### Move 4 — Interpret\nAn applicant needs at least about $665$ points to be in the top $5\\%$.\n\n**Exam tip:** the inverse problem runs the standardization backwards — find $z$ from the area first, then use $x=\\mu+z\\sigma$. Decide whether the area you want is a left area ($\\Phi$) before looking up $z$.",
+      "body_he_md": "**בעיה.** אוניברסיטה מקבלת רק את $5\\%$ המובילים במבחן כניסה שמתפלג נורמלית עם $\\mu=500$ ו-$\\sigma=100$. מהו הציון המינימלי הנדרש?\n\n### צעד 1 — תרגמו '5% עליונים' לשטח\n$5\\%$ עליונים פירושם $P(X>x)=0.05$, ולכן $P(X<x)=0.95$. דרוש $z$ שעבורו $\\Phi(z)=0.95$.\n\n### צעד 2 — מצאו את ערך ה-z\nמהטבלה, $\\Phi(1.645)=0.95$, לכן $z=1.645$.\n\n### צעד 3 — בטלו את התקנון\nפתרו את $z=\\frac{x-\\mu}{\\sigma}$ עבור $x$:\n$$x=\\mu+z\\sigma=500+1.645\\times100=500+164.5=664.5.$$\n\n### צעד 4 — פרשו\nמועמד זקוק לכ-$665$ נקודות לפחות כדי להיות ב-$5\\%$ המובילים.\n\n**טיפ לבחינה:** הבעיה ההפוכה מריצה את התקנון לאחור — מצאו $z$ מהשטח קודם, ואז השתמשו ב-$x=\\mu+z\\sigma$. החליטו אם השטח הרצוי הוא שטח שמאלי ($\\Phi$) לפני חיפוש $z$."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Z-Score Problems",
+      "title_he": "מדריך שיטה — בעיות ציון תקן",
+      "body_en_md": "| Question type | Steps |\n|---|---|\n| $P(X<x)$ | $z=\\frac{x-\\mu}{\\sigma}$; answer $=\\Phi(z)$ |\n| $P(X>x)$ | $z=\\frac{x-\\mu}{\\sigma}$; answer $=1-\\Phi(z)$ |\n| $P(a<X<b)$ | standardize both; answer $=\\Phi(z_b)-\\Phi(z_a)$ |\n| negative $z$ | $\\Phi(-z)=1-\\Phi(z)$ |\n| compare values | larger $z$ = more standard deviations above mean = relatively better |\n| percentile → value | find $z$ from $\\Phi(z)$; then $x=\\mu+z\\sigma$ |\n\n**Workflow:** sketch the bell → shade the region asked → standardize → read $\\Phi$ → combine (subtract or $1-\\Phi$) as the sketch shows.\n\n**Tip:** if your final probability is negative or above $1$, you subtracted in the wrong order — swap and re-check.",
+      "body_he_md": "| סוג שאלה | צעדים |\n|---|---|\n| $P(X<x)$ | $z=\\frac{x-\\mu}{\\sigma}$; תשובה $=\\Phi(z)$ |\n| $P(X>x)$ | $z=\\frac{x-\\mu}{\\sigma}$; תשובה $=1-\\Phi(z)$ |\n| $P(a<X<b)$ | תקננו את שניהם; תשובה $=\\Phi(z_b)-\\Phi(z_a)$ |\n| $z$ שלילי | $\\Phi(-z)=1-\\Phi(z)$ |\n| השוואת ערכים | $z$ גדול יותר = יותר סטיות תקן מעל הממוצע = טוב יותר יחסית |\n| אחוזון → ערך | מצאו $z$ מ-$\\Phi(z)$; ואז $x=\\mu+z\\sigma$ |\n\n**תהליך:** שרטטו פעמון → צבעו את האזור → תקננו → קראו $\\Phi$ → שלבו (חיסור או $1-\\Phi$) לפי השרטוט.\n\n**טיפ:** אם ההסתברות הסופית שלילית או מעל $1$, חיסרתם בסדר שגוי — החליפו ובדקו שוב."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "Use the standard normal table from the theory section. Sketch and shade before computing.",
+      "body_he_md": "השתמשו בטבלת ההתפלגות הנורמלית הסטנדרטית מסעיף התיאוריה. שרטטו וצבעו לפני החישוב.",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Compute the z-score of $x=68$ when $\\mu=50$ and $\\sigma=6$.",
+          "body_he": "חשבו את ציון התקן של $x=68$ כאשר $\\mu=50$ ו-$\\sigma=6$.",
+          "solution_en": "$z=\\frac{68-50}{6}=\\frac{18}{6}=3$.",
+          "solution_he": "$z=\\frac{68-50}{6}=\\frac{18}{6}=3$."
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "For $\\mu=50$, $\\sigma=6$, find $P(X<56)$. (Use $\\Phi(1)=0.8413$.)",
+          "body_he": "עבור $\\mu=50$, $\\sigma=6$, מצאו $P(X<56)$. (השתמשו ב-$\\Phi(1)=0.8413$.)",
+          "solution_en": "$z=\\frac{56-50}{6}=1$, so $P=\\Phi(1)=0.8413$.",
+          "solution_he": "$z=\\frac{56-50}{6}=1$, לכן $P=\\Phi(1)=0.8413$."
+        },
+        {
+          "id": "e3",
+          "difficulty": "medium",
+          "body_en": "For $\\mu=50$, $\\sigma=6$, find $P(X>56)$.",
+          "body_he": "עבור $\\mu=50$, $\\sigma=6$, מצאו $P(X>56)$.",
+          "solution_en": "$P(X>56)=1-\\Phi(1)=1-0.8413=0.1587$.",
+          "solution_he": "$P(X>56)=1-\\Phi(1)=1-0.8413=0.1587$."
+        },
+        {
+          "id": "e4",
+          "difficulty": "medium",
+          "body_en": "For $\\mu=100$, $\\sigma=20$, find $P(80<X<130)$. (Use $\\Phi(1.5)=0.9332$, $\\Phi(-1)=0.1587$.)",
+          "body_he": "עבור $\\mu=100$, $\\sigma=20$, מצאו $P(80<X<130)$. (השתמשו ב-$\\Phi(1.5)=0.9332$, $\\Phi(-1)=0.1587$.)",
+          "solution_en": "$z_1=\\frac{80-100}{20}=-1$, $z_2=\\frac{130-100}{20}=1.5$. $P=\\Phi(1.5)-\\Phi(-1)=0.9332-0.1587=0.7745$.",
+          "solution_he": "$z_1=\\frac{80-100}{20}=-1$, $z_2=\\frac{130-100}{20}=1.5$. $P=\\Phi(1.5)-\\Phi(-1)=0.9332-0.1587=0.7745$."
+        },
+        {
+          "id": "e5",
+          "difficulty": "hard",
+          "body_en": "On a test with $\\mu=500$, $\\sigma=100$, what score marks the top $2.5\\%$? (Use $\\Phi(1.96)=0.975$.)",
+          "body_he": "במבחן עם $\\mu=500$, $\\sigma=100$, איזה ציון מסמן את $2.5\\%$ העליונים? (השתמשו ב-$\\Phi(1.96)=0.975$.)",
+          "solution_en": "Top $2.5\\%$: $\\Phi(z)=0.975\\Rightarrow z=1.96$. $x=500+1.96\\times100=696$.",
+          "solution_he": "$2.5\\%$ עליונים: $\\Phi(z)=0.975\\Rightarrow z=1.96$. $x=500+1.96\\times100=696$."
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Sign errors in standardizing.** $z=\\frac{x-\\mu}{\\sigma}$: values below the mean give **negative** $z$. Do not drop the sign.\n\n2. **Forgetting $1-\\Phi$ for a right tail.** The table gives the area to the *left*. For $P(X>x)$ you must compute $1-\\Phi(z)$.\n\n3. **Subtracting raw scores instead of areas.** For $P(a<X<b)$, standardize each endpoint and subtract $\\Phi$ values, not the $x$-values.\n\n4. **Wrong direction on the inverse problem.** 'Top $10\\%$' means $\\Phi(z)=0.90$, giving $z=1.28$ — not $\\Phi(z)=0.10$.\n\n**Example misconception:** '$P(X>x)=\\Phi(z)$.'\n\n**Fix:** $\\Phi(z)$ is the left area, $P(X<x)$. The right tail is $P(X>x)=1-\\Phi(z)$.",
+      "body_he_md": "1. **טעויות סימן בתקנון.** $z=\\frac{x-\\mu}{\\sigma}$: ערכים מתחת לממוצע נותנים $z$ **שלילי**. אל תשמיטו את הסימן.\n\n2. **שכחת $1-\\Phi$ לזנב ימני.** הטבלה נותנת את השטח *משמאל*. עבור $P(X>x)$ יש לחשב $1-\\Phi(z)$.\n\n3. **חיסור ציונים גולמיים במקום שטחים.** עבור $P(a<X<b)$, תקננו כל קצה והחסירו ערכי $\\Phi$, לא את ערכי $x$.\n\n4. **כיוון שגוי בבעיה ההפוכה.** '$10\\%$ עליונים' פירושו $\\Phi(z)=0.90$, שנותן $z=1.28$ — לא $\\Phi(z)=0.10$.\n\n**דוגמת טעות:** '$P(X>x)=\\Phi(z)$.'\n\n**תיקון:** $\\Phi(z)$ הוא השטח השמאלי, $P(X<x)$. הזנב הימני הוא $P(X>x)=1-\\Phi(z)$."
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "The z-score is the bridge from a single bell curve to all of inferential statistics.\n\n**You will use this to unlock:**\n- `concept:statistics_inference` **Statistical Inference** (applies_to) — confidence intervals are $\\bar{x}\\pm z\\cdot\\frac{\\sigma}{\\sqrt{n}}$.\n- `concept:hypothesis_testing` **Hypothesis Testing** (applies_to) — the test statistic is a z-score and the p-value is a tail area.\n- `concept:probability_basic` **Probability** (builds_on) — areas under the curve are probabilities.\n\n**Builds on:** `concept:normal_distribution_basics` — the empirical rule is just the z-scores $\\pm1,\\pm2,\\pm3$ read off the same table.\n\n**Why it matters for exams:** 4–5 unit statistics questions almost always require standardizing, reading a table, and sometimes reversing the process. Master the four table rules and the inverse step and this entire question family becomes mechanical.",
+      "body_he_md": "ציון התקן הוא הגשר מעקומת פעמון בודדת אל כל ההסקה הסטטיסטית.\n\n**תשתמשו בזה כדי להתקדם ל:**\n- `concept:statistics_inference` **הסקה סטטיסטית** (applies_to) — רווחי סמך הם $\\bar{x}\\pm z\\cdot\\frac{\\sigma}{\\sqrt{n}}$.\n- `concept:hypothesis_testing` **בדיקת השערות** (applies_to) — סטטיסטי המבחן הוא ציון תקן וה-p-value הוא שטח זנב.\n- `concept:probability_basic` **הסתברות** (builds_on) — שטחים מתחת לעקומה הם הסתברויות.\n\n**מבוסס על:** `concept:normal_distribution_basics` — כלל האצבע הוא בסך הכל ציוני התקן $\\pm1,\\pm2,\\pm3$ הנקראים מאותה טבלה.\n\n**למה זה חשוב לבחינות:** שאלות סטטיסטיקה ב-4–5 יחידות כמעט תמיד דורשות תקנון, קריאת טבלה, ולעיתים היפוך התהליך. שלטו בארבעת כללי הטבלה ובצעד ההפוך וכל משפחת השאלות הזו הופכת מכנית."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "- Standardize: $z=\\frac{x-\\mu}{\\sigma}$ (negative below the mean).\n- $\\Phi(z)=P(Z<z)$ = left area from the table.\n- $P(X>x)=1-\\Phi(z)$; $P(a<X<b)=\\Phi(z_b)-\\Phi(z_a)$; $\\Phi(-z)=1-\\Phi(z)$.\n- Inverse: find $z$ with the required $\\Phi(z)$, then $x=\\mu+z\\sigma$.\n- Key z-values: $\\Phi(1.28)=0.90$, $\\Phi(1.645)=0.95$, $\\Phi(1.96)=0.975$, $\\Phi(2)=0.9772$.\n- Compare across distributions by comparing z-scores.\n\n**Last review:** solve one 'less than', one 'greater than', and one inverse problem without looking.",
+      "body_he_md": "- תקנון: $z=\\frac{x-\\mu}{\\sigma}$ (שלילי מתחת לממוצע).\n- $\\Phi(z)=P(Z<z)$ = שטח שמאלי מהטבלה.\n- $P(X>x)=1-\\Phi(z)$; $P(a<X<b)=\\Phi(z_b)-\\Phi(z_a)$; $\\Phi(-z)=1-\\Phi(z)$.\n- הפוך: מצאו $z$ עם $\\Phi(z)$ הנדרש, ואז $x=\\mu+z\\sigma$.\n- ערכי $z$ מרכזיים: $\\Phi(1.28)=0.90$, $\\Phi(1.645)=0.95$, $\\Phi(1.96)=0.975$, $\\Phi(2)=0.9772$.\n- השוו בין התפלגויות בעזרת השוואת ציוני תקן.\n\n**חזרה אחרונה:** פתרו בעיה אחת של 'קטן מ', אחת של 'גדול מ', ואחת הפוכה בלי להסתכל."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- The z-score $z=\\frac{x-\\mu}{\\sigma}$ measures standard deviations from the mean and standardizes any normal to $N(0,1)$.\n- $\\Phi(z)=P(Z<z)$ is the left area from the standard normal table.\n- Right tail: $1-\\Phi(z)$; between: $\\Phi(z_b)-\\Phi(z_a)$; symmetry: $\\Phi(-z)=1-\\Phi(z)$.\n- Inverse: area → $z$ → $x=\\mu+z\\sigma$.\n- Compare values from different distributions by their z-scores.\n\n**Takeaway:** standardize, sketch, read the table, and combine areas the way the picture tells you.",
+      "body_he_md": "- ציון התקן $z=\\frac{x-\\mu}{\\sigma}$ מודד סטיות תקן מהממוצע ומתקנן כל נורמלית ל-$N(0,1)$.\n- $\\Phi(z)=P(Z<z)$ הוא השטח השמאלי מטבלת ההתפלגות הסטנדרטית.\n- זנב ימני: $1-\\Phi(z)$; בין: $\\Phi(z_b)-\\Phi(z_a)$; סימטריה: $\\Phi(-z)=1-\\Phi(z)$.\n- הפוך: שטח → $z$ → $x=\\mu+z\\sigma$.\n- השוו ערכים מהתפלגויות שונות לפי ציוני התקן שלהם.\n\n**מסקנה:** תקננו, שרטטו, קראו את הטבלה, ושלבו שטחים לפי מה שהתמונה מראה."
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "The z-score z=(x-mu)/sigma counts standard deviations from the mean and standardizes any normal to N(0,1).",
+      "Phi(z)=P(Z<z) is the LEFT area; right tail is 1-Phi(z); between is Phi(z_b)-Phi(z_a).",
+      "The inverse problem goes area -> z -> x = mu + z*sigma."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "P(X>x) equals Phi(z)",
+        "correction": "Phi(z) is the left area P(X<x). The right tail is 1-Phi(z).",
+        "detect_phrase_en": "greater than equals phi",
+        "detect_phrase_he": "גדול מ שווה פי"
+      }
+    ],
+    "tutor_pacing_hint": "Teach the standardization formula first, then the three table rules, then the inverse problem last. Always sketch and shade before computing.",
+    "skill_atoms_unlocked": [
+      "compute_z_score",
+      "standard_normal",
+      "use_z_table",
+      "compare_z_scores",
+      "inverse_normal"
+    ],
+    "next_recommended": [
+      "statistics_inference",
+      "hypothesis_testing"
+    ]
+  },
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute the z-score of $x=80$ when $\\mu=70$ and $\\sigma=5$. (Number only.)",
+      "stem_he": "חשבו את ציון התקן של $x=80$ כאשר $\\mu=70$ ו-$\\sigma=5$. (מספר בלבד.)",
+      "explanation_en": "$z=\\frac{x-\\mu}{\\sigma}=\\frac{80-70}{5}=\\frac{10}{5}=2$.\n\n**Answer:** $2$.",
+      "explanation_he": "$z=\\frac{x-\\mu}{\\sigma}=\\frac{80-70}{5}=\\frac{10}{5}=2$.\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "compute_z_score"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "correct_answer": "2"
+    },
+    {
+      "ord": 2,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute the z-score of $x=65$ when $\\mu=70$ and $\\sigma=5$. (Number only.)",
+      "stem_he": "חשבו את ציון התקן של $x=65$ כאשר $\\mu=70$ ו-$\\sigma=5$. (מספר בלבד.)",
+      "explanation_en": "$z=\\frac{65-70}{5}=\\frac{-5}{5}=-1$. Below the mean gives a negative z-score.\n\n**Answer:** $-1$.",
+      "explanation_he": "$z=\\frac{65-70}{5}=\\frac{-5}{5}=-1$. ערך מתחת לממוצע נותן ציון תקן שלילי.\n\n**תשובה:** $-1$.",
+      "skill_atoms": [
+        "compute_z_score"
+      ],
+      "answer_payload": {
+        "value": -1
+      },
+      "correct_answer": "-1"
+    },
+    {
+      "ord": 3,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "stem_en": "True or False: The standard normal distribution has mean $0$ and standard deviation $1$.",
+      "stem_he": "נכון או לא נכון: להתפלגות הנורמלית הסטנדרטית ממוצע $0$ וסטיית תקן $1$.",
+      "explanation_en": "By definition $Z\\sim N(0,1)$: mean $0$, standard deviation $1$. **True.**",
+      "explanation_he": "לפי ההגדרה $Z\\sim N(0,1)$: ממוצע $0$, סטיית תקן $1$. **נכון.**",
+      "skill_atoms": [
+        "standard_normal"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "correct_bool": true
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Which formula gives the z-score of a value $x$?",
+      "stem_he": "איזו נוסחה נותנת את ציון התקן של ערך $x$?",
+      "explanation_en": "The z-score is the deviation from the mean divided by the standard deviation: $z=\\frac{x-\\mu}{\\sigma}$.\n\n**Answer:** $z=\\frac{x-\\mu}{\\sigma}$.",
+      "explanation_he": "ציון התקן הוא הסטייה מהממוצע חלקי סטיית התקן: $z=\\frac{x-\\mu}{\\sigma}$.\n\n**תשובה:** $z=\\frac{x-\\mu}{\\sigma}$.",
+      "skill_atoms": [
+        "compute_z_score",
+        "standard_normal"
+      ],
+      "options_en": [
+        "$z=\\frac{x-\\mu}{\\sigma}$",
+        "$z=\\frac{\\mu-x}{\\sigma}$",
+        "$z=\\frac{x-\\sigma}{\\mu}$",
+        "$z=(x-\\mu)\\sigma$"
+      ],
+      "options_he": [
+        "$z=\\frac{x-\\mu}{\\sigma}$",
+        "$z=\\frac{\\mu-x}{\\sigma}$",
+        "$z=\\frac{x-\\sigma}{\\mu}$",
+        "$z=(x-\\mu)\\sigma$"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "$z=\\frac{x-\\mu}{\\sigma}$",
+          "$z=\\frac{\\mu-x}{\\sigma}$",
+          "$z=\\frac{x-\\sigma}{\\mu}$",
+          "$z=(x-\\mu)\\sigma$"
+        ],
+        "options_he": [
+          "$z=\\frac{x-\\mu}{\\sigma}$",
+          "$z=\\frac{\\mu-x}{\\sigma}$",
+          "$z=\\frac{x-\\sigma}{\\mu}$",
+          "$z=(x-\\mu)\\sigma$"
+        ],
+        "correct_index": 0
+      }
+    },
+    {
+      "ord": 5,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "IQ is normal with $\\mu=100$, $\\sigma=15$. What is the z-score of an IQ of $115$? (Number only.)",
+      "stem_he": "מנת משכל נורמלית עם $\\mu=100$, $\\sigma=15$. מהו ציון התקן של מנת משכל $115$? (מספר בלבד.)",
+      "explanation_en": "$z=\\frac{115-100}{15}=\\frac{15}{15}=1$.\n\n**Answer:** $1$.",
+      "explanation_he": "$z=\\frac{115-100}{15}=\\frac{15}{15}=1$.\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "compute_z_score"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "correct_answer": "1"
+    },
+    {
+      "ord": 6,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Using $\\Phi(1)=0.8413$, find $P(Z<1)$. (Number only, four decimals.)",
+      "stem_he": "בעזרת $\\Phi(1)=0.8413$, מצאו $P(Z<1)$. (מספר בלבד, ארבע ספרות.)",
+      "explanation_en": "$P(Z<1)=\\Phi(1)=0.8413$ directly.\n\n**Answer:** $0.8413$.",
+      "explanation_he": "$P(Z<1)=\\Phi(1)=0.8413$ ישירות.\n\n**תשובה:** $0.8413$.",
+      "skill_atoms": [
+        "use_z_table"
+      ],
+      "answer_payload": {
+        "value": 0.8413,
+        "tolerance": 0.001
+      },
+      "correct_answer": "0.8413"
+    },
+    {
+      "ord": 7,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Using $\\Phi(1)=0.8413$, find $P(Z>1)$. (Number only, four decimals.)",
+      "stem_he": "בעזרת $\\Phi(1)=0.8413$, מצאו $P(Z>1)$. (מספר בלבד, ארבע ספרות.)",
+      "explanation_en": "The right tail is $P(Z>1)=1-\\Phi(1)=1-0.8413=0.1587$.\n\n**Answer:** $0.1587$.",
+      "explanation_he": "הזנב הימני הוא $P(Z>1)=1-\\Phi(1)=1-0.8413=0.1587$.\n\n**תשובה:** $0.1587$.",
+      "skill_atoms": [
+        "use_z_table"
+      ],
+      "answer_payload": {
+        "value": 0.1587,
+        "tolerance": 0.001
+      },
+      "correct_answer": "0.1587"
+    },
+    {
+      "ord": 8,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Heights are normal with $\\mu=170$, $\\sigma=8$. Find $P(X<186)$ using $\\Phi(2)=0.9772$. (Number only, four decimals.)",
+      "stem_he": "גבהים נורמליים עם $\\mu=170$, $\\sigma=8$. מצאו $P(X<186)$ בעזרת $\\Phi(2)=0.9772$. (מספר בלבד, ארבע ספרות.)",
+      "explanation_en": "$z=\\frac{186-170}{8}=2$, so $P(X<186)=\\Phi(2)=0.9772$.\n\n**Answer:** $0.9772$.",
+      "explanation_he": "$z=\\frac{186-170}{8}=2$, לכן $P(X<186)=\\Phi(2)=0.9772$.\n\n**תשובה:** $0.9772$.",
+      "skill_atoms": [
+        "compute_z_score",
+        "use_z_table"
+      ],
+      "answer_payload": {
+        "value": 0.9772,
+        "tolerance": 0.001
+      },
+      "correct_answer": "0.9772"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Using $\\Phi(1)=0.8413$, find $P(0<Z<1)$. (Number only, four decimals.)",
+      "stem_he": "בעזרת $\\Phi(1)=0.8413$, מצאו $P(0<Z<1)$. (מספר בלבד, ארבע ספרות.)",
+      "explanation_en": "$P(0<Z<1)=\\Phi(1)-\\Phi(0)=0.8413-0.5=0.3413$.\n\n**Answer:** $0.3413$.",
+      "explanation_he": "$P(0<Z<1)=\\Phi(1)-\\Phi(0)=0.8413-0.5=0.3413$.\n\n**תשובה:** $0.3413$.",
+      "skill_atoms": [
+        "use_z_table"
+      ],
+      "answer_payload": {
+        "value": 0.3413,
+        "tolerance": 0.001
+      },
+      "correct_answer": "0.3413"
+    },
+    {
+      "ord": 10,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: A negative z-score means the value is below the mean.",
+      "stem_he": "נכון או לא נכון: ציון תקן שלילי מציין שהערך נמצא מתחת לממוצע.",
+      "explanation_en": "Since $z=\\frac{x-\\mu}{\\sigma}$ and $\\sigma>0$, a negative $z$ means $x<\\mu$. **True.**",
+      "explanation_he": "מכיוון ש-$z=\\frac{x-\\mu}{\\sigma}$ ו-$\\sigma>0$, ערך $z$ שלילי פירושו $x<\\mu$. **נכון.**",
+      "skill_atoms": [
+        "compute_z_score",
+        "compare_z_scores"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "correct_bool": true
+    },
+    {
+      "ord": 11,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "A student scores $80$ in Math ($\\mu=70$, $\\sigma=5$) and $85$ in History ($\\mu=75$, $\\sigma=10$). Use z-scores to decide in which subject she performed relatively better.",
+      "stem_he": "תלמידה מקבלת $80$ במתמטיקה ($\\mu=70$, $\\sigma=5$) ו-$85$ בהיסטוריה ($\\mu=75$, $\\sigma=10$). השתמשו בציוני תקן כדי לקבוע באיזה מקצוע הצטיינה יחסית יותר.",
+      "explanation_en": "**Math:** $z=\\frac{80-70}{5}=2$. **History:** $z=\\frac{85-75}{10}=1$. The Math z-score ($2$) exceeds the History z-score ($1$), so she performed relatively better in Math — she is two standard deviations above the class mean there versus one in History.",
+      "explanation_he": "**מתמטיקה:** $z=\\frac{80-70}{5}=2$. **היסטוריה:** $z=\\frac{85-75}{10}=1$. ציון התקן במתמטיקה ($2$) גדול מזה שבהיסטוריה ($1$), ולכן הצטיינה יחסית יותר במתמטיקה — שם היא שתי סטיות תקן מעל ממוצע הכיתה לעומת אחת בהיסטוריה.",
+      "skill_atoms": [
+        "compute_z_score",
+        "compare_z_scores"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "Math z-score: (80-70)/5 = 2.",
+          "History z-score: (85-75)/10 = 1.",
+          "Larger z-score means more standard deviations above the mean.",
+          "2 > 1, so she did relatively better in Math."
+        ],
+        "steps_he": [
+          "ציון תקן במתמטיקה: $(80-70)/5=2$.",
+          "ציון תקן בהיסטוריה: $(85-75)/10=1$.",
+          "ציון תקן גדול יותר = יותר סטיות תקן מעל הממוצע.",
+          "$2>1$, ולכן הצטיינה יחסית יותר במתמטיקה."
+        ]
+      },
+      "rubric_en": "Full marks: both z-scores correct (2 and 1) and concludes Math. Partial: one z-score correct or correct method with a slip.",
+      "rubric_he": "ניקוד מלא: שני ציוני התקן נכונים ($2$ ו-$1$) ומסקנה מתמטיקה. חלקי: ציון תקן אחד נכון או שיטה נכונה עם טעות."
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Using $\\Phi(1)=0.8413$ and $\\Phi(2)=0.9772$, find $P(1<Z<2)$. (Number only, four decimals.)",
+      "stem_he": "בעזרת $\\Phi(1)=0.8413$ ו-$\\Phi(2)=0.9772$, מצאו $P(1<Z<2)$. (מספר בלבד, ארבע ספרות.)",
+      "explanation_en": "$P(1<Z<2)=\\Phi(2)-\\Phi(1)=0.9772-0.8413=0.1359$.\n\n**Answer:** $0.1359$.",
+      "explanation_he": "$P(1<Z<2)=\\Phi(2)-\\Phi(1)=0.9772-0.8413=0.1359$.\n\n**תשובה:** $0.1359$.",
+      "skill_atoms": [
+        "use_z_table"
+      ],
+      "answer_payload": {
+        "value": 0.1359,
+        "tolerance": 0.001
+      },
+      "correct_answer": "0.1359"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "A machine fills bottles with volume normal at $\\mu=50$ ml, $\\sigma=8$ ml. Find $P(X<66)$ using $\\Phi(2)=0.9772$. (Number only, four decimals.)",
+      "stem_he": "מכונה ממלאת בקבוקים בנפח נורמלי עם $\\mu=50$ ml, $\\sigma=8$ ml. מצאו $P(X<66)$ בעזרת $\\Phi(2)=0.9772$. (מספר בלבד, ארבע ספרות.)",
+      "explanation_en": "$z=\\frac{66-50}{8}=\\frac{16}{8}=2$, so $P(X<66)=\\Phi(2)=0.9772$.\n\n**Answer:** $0.9772$.",
+      "explanation_he": "$z=\\frac{66-50}{8}=\\frac{16}{8}=2$, לכן $P(X<66)=\\Phi(2)=0.9772$.\n\n**תשובה:** $0.9772$.",
+      "skill_atoms": [
+        "compute_z_score",
+        "use_z_table"
+      ],
+      "answer_payload": {
+        "value": 0.9772,
+        "tolerance": 0.001
+      },
+      "correct_answer": "0.9772"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "An exam is normal with $\\mu=500$, $\\sigma=100$. The top $5\\%$ receive a prize. Using $\\Phi(1.645)=0.95$, find the minimum prize-winning score. (Number only.)",
+      "stem_he": "מבחן נורמלי עם $\\mu=500$, $\\sigma=100$. $5\\%$ העליונים מקבלים פרס. בעזרת $\\Phi(1.645)=0.95$, מצאו את הציון המינימלי לזכייה. (מספר בלבד.)",
+      "explanation_en": "Top $5\\%$: $\\Phi(z)=0.95\\Rightarrow z=1.645$. Then $x=\\mu+z\\sigma=500+1.645\\times100=664.5$.\n\n**Answer:** $664.5$.",
+      "explanation_he": "$5\\%$ עליונים: $\\Phi(z)=0.95\\Rightarrow z=1.645$. ואז $x=\\mu+z\\sigma=500+1.645\\times100=664.5$.\n\n**תשובה:** $664.5$.",
+      "skill_atoms": [
+        "inverse_normal",
+        "use_z_table"
+      ],
+      "answer_payload": {
+        "value": 664.5,
+        "tolerance": 0.5
+      },
+      "correct_answer": "664.5"
+    },
+    {
+      "ord": 15,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "Value A has z-score $-2.1$; value B has z-score $+1.5$. Which is more extreme (further from its mean)?",
+      "stem_he": "לערך A ציון תקן $-2.1$; לערך B ציון תקן $+1.5$. איזה מהם קיצוני יותר (רחוק יותר מהממוצע שלו)?",
+      "explanation_en": "Distance from the mean is the **absolute value** of the z-score: $|-2.1|=2.1$ versus $|1.5|=1.5$. Value A is $2.1$ SDs away, so it is more extreme.\n\n**Answer:** value A.",
+      "explanation_he": "המרחק מהממוצע הוא ה**ערך המוחלט** של ציון התקן: $|-2.1|=2.1$ מול $|1.5|=1.5$. ערך A רחוק $2.1$ סטיות תקן, ולכן קיצוני יותר.\n\n**תשובה:** ערך A.",
+      "skill_atoms": [
+        "compare_z_scores"
+      ],
+      "options_en": [
+        "Value A (|z| = 2.1)",
+        "Value B (|z| = 1.5)",
+        "They are equally extreme",
+        "Cannot be determined"
+      ],
+      "options_he": [
+        "ערך A ($|z|=2.1$)",
+        "ערך B ($|z|=1.5$)",
+        "שניהם קיצוניים באותה מידה",
+        "לא ניתן לקבוע"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "Value A (|z| = 2.1)",
+          "Value B (|z| = 1.5)",
+          "They are equally extreme",
+          "Cannot be determined"
+        ],
+        "options_he": [
+          "ערך A ($|z|=2.1$)",
+          "ערך B ($|z|=1.5$)",
+          "שניהם קיצוניים באותה מידה",
+          "לא ניתן לקבוע"
+        ],
+        "correct_index": 0
+      }
+    }
+  ],
+  "est_minutes": 45,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
+}
