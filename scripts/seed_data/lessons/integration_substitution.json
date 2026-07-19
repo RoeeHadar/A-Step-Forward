@@ -230,153 +230,380 @@
       "body_he_md": "- החלפת $u$ היא כלל השרשרת הפוך: $u=g(x)$, $du=g'(x)\\,dx$, המרה, אינטגרציה, הצבה חזרה.\n- האות המרכזית: האינטגרנד הוא מכפלה של פונקציה פנימית ו(כפולה של) נגזרתה.\n- לאינטגרל מסוים: שנו גבולות לערכי $u$ או הציבו חזרה והשתמשו בגבולות המקוריים.\n- תמיד אמתו על-ידי גזירת התשובה — עשר שניות שתופסות טעויות סימן.\n- כאשר ההחלפה נכשלת — נסו IBP, שברים חלקיים, או הצבה טריגונומטרית לפי הדפוס."
     }
   ],
-  "agent_hints": "When a learner is stuck on u-substitution, ask: 'What is the inner function? What is its derivative — does it appear in the integrand?' If yes, let u equal the inner function. Require the learner to always change dx to du explicitly.",
+  "agent_hints": {
+    "socratic_prompt": "When a learner is stuck on u-substitution, ask: 'What is the inner function? What is its derivative — does it appear in the integrand?' If yes, let u equal the inner function. Require the learner to always change dx to du explicitly.",
+    "key_insights": [],
+    "common_misconceptions": [],
+    "skill_atoms_unlocked": [
+      "u_substitution"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "Compute $\\displaystyle\\int (2x+3)^5\\,dx$.",
-      "stem_he": "חשבו $\\displaystyle\\int(2x+3)^5\\,dx$.",
+      "stem_en": "In $u$-substitution with $u=g(x)$, we have $du=$:",
+      "stem_he": "בהצבה $u=g(x)$, מתקיים $du=$:",
+      "explanation_en": "**Differentiate $u=g(x)$: $du=g'(x)\\,dx$.**\n\n**Answer:** $g'(x)\\,dx$.",
+      "explanation_he": "**גוזרים $u=g(x)$: $du=g'(x)\\,dx$.**\n\n**תשובה:** $g'(x)\\,dx$.",
+      "skill_atoms": [
+        "u_substitution"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "\\frac{(2x+3)^6}{12}+C",
-          "$\\frac{(2x+3)^6}{12}+C$",
-          "(2x+3)^6/12 + C",
-          "(2x+3)^6/12+C"
+        "options_en": [
+          "$g'(x)\\,dx$",
+          "$g(x)\\,dx$",
+          "$dx$",
+          "$g''(x)\\,dx$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$g'(x)\\,dx$",
+          "$g(x)\\,dx$",
+          "$dx$",
+          "$g''(x)\\,dx$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nThe integrand $(2x+3)^5$ is a linear inner function raised to a power. Let $u=2x+3$, so $du=2\\,dx$ and $dx=du/2$.\n$$\\int u^5\\,\\frac{du}{2}=\\frac{1}{2}\\cdot\\frac{u^6}{6}+C=\\frac{(2x+3)^6}{12}+C.$$\n\n**How to think about it:**\nAny $f(ax+b)$ form calls for $u=ax+b$ with a factor of $1/a$ from adjusting $dx$. This is the simplest u-sub pattern — no product of unrelated functions.\n\n**Common slip:**\nForgetting the $1/2$ when converting $dx=du/2$, giving $(2x+3)^6/6$ instead of $/12$. Or expanding the binomial — far slower on an exam.\n\n**Exam tip:**\nDifferentiate: $\\frac{d}{dx}\\frac{(2x+3)^6}{12}=6(2x+3)^5\\cdot 2/12=(2x+3)^5$ ✓. Always verify linear substitutions with one derivative.\n\n**Self-check:** Differentiate your answer and compare to the integrand — ten seconds that prevent costly exam errors. **Transfer:** This u-sub pattern recurs in harder Calc I problems and physics courses.",
-      "explanation_he": "**למה זה נכון:**\nהאינטגרנד $(2x+3)^5$ הוא פונקציה לינארית פנימית בחזקה. $u=2x+3$, $du=2\\,dx$, $dx=du/2$.\n$$\\int u^5\\,\\frac{du}{2}=\\frac{(2x+3)^6}{12}+C.$$\n\n**איך לחשוב על זה:**\nכל צורה $f(ax+b)$ קוראת ל-$u=ax+b$ עם גורם $1/a$ מהתאמת $dx$. זה דפוס u-sub הפשוט ביותר.\n\n**טעות נפוצה:**\nשכחת $1/2$ בהמרת $dx=du/2$ — מקבלים $(2x+3)^6/6$ במקום $/12$. או פירוק הבינום — איטי בהרבה בבחינה.\n\n**טיפ לבחינה:**\nגזרו: $\\frac{d}{dx}\\frac{(2x+3)^6}{12}=(2x+3)^5$ ✓. תמיד אמתו החלפות לינאריות בגזירה אחת.\n\n**בדיקה עצמית:** גזרו את התשובה והשוו לאינטגרנד — עשר שניות שחוסכות טעויות יקרות בבחינה. **העברה:** דפוס u-sub זה חוזר בבעיות מורכבות יותר בחשבון 1 ובקורסי פיזיקה. כתבו $u$ ו-$du$ בשוליים לפני שמתחילים — נקודות שיטה חשובות גם כשיש טעות חשבונית קטנה.",
-      "skill_atoms": []
+      "source_item_id": "4dd86084-4a4b-5934-8cac-cac59e9025c4",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$g'(x)\\,dx$",
+        "$g(x)\\,dx$",
+        "$dx$",
+        "$g''(x)\\,dx$"
+      ],
+      "options_he": [
+        "$g'(x)\\,dx$",
+        "$g(x)\\,dx$",
+        "$dx$",
+        "$g''(x)\\,dx$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Compute $\\displaystyle\\int e^{3x}\\,dx$.",
-      "stem_he": "חשבו $\\displaystyle\\int e^{3x}\\,dx$.",
+      "stem_en": "Find $\\displaystyle\\int_0^1 2x(x^2+1)^2\\,dx$ (let $u=x^2+1$).",
+      "stem_he": "מצאו את $\\displaystyle\\int_0^1 2x(x^2+1)^2\\,dx$ (בחרו $u=x^2+1$).",
+      "explanation_en": "**$\\tfrac{(x^2+1)^3}{3}$ from $0$ to $1 = \\tfrac{8}{3}-\\tfrac{1}{3}=\\tfrac{7}{3}$.**\n\n**Answer:** $\\tfrac{7}{3}$.",
+      "explanation_he": "**$\\tfrac{(x^2+1)^3}{3}$ מ-$0$ עד $1$ נותן $\\tfrac{7}{3}$.**\n\n**תשובה:** $\\tfrac{7}{3}$.",
+      "skill_atoms": [
+        "u_substitution"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "\\frac{e^{3x}}{3}+C",
-          "$\\frac{e^{3x}}{3}+C$",
-          "e^(3x)/3 + C"
-        ],
-        "case_sensitive": false
+        "value": 2.333333
       },
-      "explanation_en": "**Why this is correct:**\nThe integrand $e^{3x}$ has inner function $3x$. Let $u=3x$, $du=3\\,dx$, so $dx=du/3$.\n$$\\int e^u\\,\\frac{du}{3}=\\frac{e^{3x}}{3}+C.$$\n\n**How to think about it:**\nExponentials $e^{g(x)}$ always suggest $u=g(x)$ when $g'(x)$ appears (here as the constant 3 inside $dx$). Same pattern as $\\int e^{ax}\\,dx$.\n\n**Common slip:**\nWriting $e^{3x}/3$ without $+C$, or missing the $1/3$ factor and answering $e^{3x}+C$.\n\n**Exam tip:**\nMemorize the template: $\\int e^{ax}\\,dx=\\frac{e^{ax}}{a}+C$. u-sub is just the general version with $u=g(x)$.\n\n**Self-check:** Differentiate your answer and compare to the integrand — ten seconds that prevent costly exam errors. **Transfer:** This u-sub pattern recurs in harder Calc I problems and physics courses.",
-      "explanation_he": "**למה זה נכון:**\nהאינטגרנד $e^{3x}$ עם פונקציה פנימית $3x$. $u=3x$, $du=3\\,dx$, $dx=du/3$.\n$$\\int e^u\\,\\frac{du}{3}=\\frac{e^{3x}}{3}+C.$$\n\n**איך לחשוב על זה:**\nמעריכים $e^{g(x)}$ מציעים $u=g(x)$ כש-$g'(x)$ מופיע (כאן הקבוע 3 בתוך $dx$). אותו דפוס כמו $\\int e^{ax}\\,dx$.\n\n**טעות נפוצה:**\nכתיבת $e^{3x}/3$ בלי $+C$, או חסר גורם $1/3$ — תשובה $e^{3x}+C$.\n\n**טיפ לבחינה:**\nשיננו: $\\int e^{ax}\\,dx=\\frac{e^{ax}}{a}+C$. u-sub הוא הגרסה הכללית עם $u=g(x)$.\n\n**בדיקה עצמית:** גזרו את התשובה והשוו לאינטגרנד — עשר שניות שחוסכות טעויות יקרות בבחינה. **העברה:** דפוס u-sub זה חוזר בבעיות מורכבות יותר בחשבון 1 ובקורסי פיזיקה. כתבו $u$ ו-$du$ בשוליים לפני שמתחילים — נקודות שיטה חשובות גם כשיש טעות חשבונית קטנה.",
-      "skill_atoms": []
+      "source_item_id": "3a13f02b-ed43-51b2-9f53-49c45279cc14",
+      "points_level_min": "5pt",
+      "correct_answer": "2.333333"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "Compute $\\displaystyle\\int\\sin(4x)\\,dx$.",
-      "stem_he": "חשבו $\\displaystyle\\int\\sin(4x)\\,dx$.",
+      "stem_en": "True or False: $u$-substitution reverses the chain rule.",
+      "stem_he": "נכון או לא נכון: הצבה $u$ הופכת את כלל השרשרת.",
+      "explanation_en": "**Substitution undoes the chain rule** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**ההצבה הופכת את כלל השרשרת** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "u_substitution"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "-\\frac{\\cos(4x)}{4}+C",
-          "$-\\frac{\\cos(4x)}{4}+C$",
-          "-cos(4x)/4 + C"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why this is correct:**\nLet $u=4x$, $du=4\\,dx$, so $dx=du/4$.\n$$\\int \\sin u\\,\\frac{du}{4}=-\\frac{\\cos u}{4}+C=-\\frac{\\cos(4x)}{4}+C.$$\n\n**How to think about it:**\nTrigonometric composites $\\sin(g(x))$ and $\\cos(g(x))$ use $u=g(x)$ with a $1/g'(0)$ factor. Here $g'(x)=4$.\n\n**Common slip:**\nSign error: $\\int \\sin u\\,du=-\\cos u$, not $+\\cos u$. Or forgetting the $1/4$ and writing $-\\cos(4x)$.\n\n**Exam tip:**\nPair this with $\\int \\cos(4x)\\,dx=\\sin(4x)/4+C$ — same structure, opposite trig antiderivative sign.\n\n**Self-check:** Differentiate your answer and compare to the integrand — ten seconds that prevent costly exam errors. **Transfer:** This u-sub pattern recurs in harder Calc I problems and physics courses.",
-      "explanation_he": "**למה זה נכון:**\n$u=4x$, $du=4\\,dx$, $dx=du/4$.\n$$\\int \\sin u\\,\\frac{du}{4}=-\\frac{\\cos(4x)}{4}+C.$$\n\n**איך לחשוב על זה:**\nקומפוזיציות $\\sin(g(x))$ ו-$\\cos(g(x))$ משתמשות ב-$u=g(x)$ עם גורם $1/g'(0)$. כאן $g'(x)=4$.\n\n**טעות נפוצה:**\nטעות סימן: $\\int \\sin u\\,du=-\\cos u$, לא $+\\cos u$. או שכחת $1/4$.\n\n**טיפ לבחינה:**\nזוגו עם $\\int \\cos(4x)\\,dx=\\sin(4x)/4+C$ — אותה מבנה, סימן הפוך באינטגרל הטריג.\n\n**בדיקה עצמית:** גזרו את התשובה והשוו לאינטגרנד — עשר שניות שחוסכות טעויות יקרות בבחינה. **העברה:** דפוס u-sub זה חוזר בבעיות מורכבות יותר בחשבון 1 ובקורסי פיזיקה. כתבו $u$ ו-$du$ בשוליים לפני שמתחילים — נקודות שיטה חשובות גם כשיש טעות חשבונית קטנה.",
-      "skill_atoms": []
+      "source_item_id": "7fab4364-c032-51a2-b424-b54f6b16a265",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Compute $\\displaystyle\\int\\frac{1}{3x+1}\\,dx$.",
-      "stem_he": "חשבו $\\displaystyle\\int\\frac{1}{3x+1}\\,dx$.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Find $\\displaystyle\\int \\dfrac{x}{\\sqrt{x^2+1}}\\,dx$.",
+      "stem_he": "מצאו את $\\displaystyle\\int \\dfrac{x}{\\sqrt{x^2+1}}\\,dx$.",
+      "explanation_en": "**Step 1 — Substitute.** $u=x^2+1$, $du=2x\\,dx$, so $x\\,dx=\\tfrac{1}{2}du$.\n\n**Step 2 — Rewrite.** $\\tfrac{1}{2}\\int u^{-1/2}\\,du = u^{1/2}$.\n\n**Step 3 — Back-substitute.** $\\sqrt{x^2+1}+C$.\n\n**Answer:** $\\sqrt{x^2+1}+C$.",
+      "explanation_he": "**שלב 1 — הצבה.** $u=x^2+1$, $du=2x\\,dx$, ולכן $x\\,dx=\\tfrac{1}{2}du$.\n\n**שלב 2 — כתיבה מחדש.** $\\tfrac{1}{2}\\int u^{-1/2}\\,du = u^{1/2}$.\n\n**שלב 3 — חזרה למשתנה.** $\\sqrt{x^2+1}+C$.\n\n**תשובה:** $\\sqrt{x^2+1}+C$.",
+      "skill_atoms": [
+        "u_substitution"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "\\frac{1}{3}\\ln|3x+1|+C",
-          "$\\frac{\\ln|3x+1|}{3}+C$",
-          "ln|3x+1|/3 + C"
+        "steps_en": [
+          "**Step 1 — Substitute.** $u=x^2+1$, $du=2x\\,dx$, so $x\\,dx=\\tfrac{1}{2}du$.",
+          "**Step 2 — Rewrite.** $\\tfrac{1}{2}\\int u^{-1/2}\\,du = u^{1/2}$.",
+          "**Step 3 — Back-substitute.** $\\sqrt{x^2+1}+C$.",
+          "**Answer:** $\\sqrt{x^2+1}+C$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — הצבה.** $u=x^2+1$, $du=2x\\,dx$, ולכן $x\\,dx=\\tfrac{1}{2}du$.",
+          "**שלב 2 — כתיבה מחדש.** $\\tfrac{1}{2}\\int u^{-1/2}\\,du = u^{1/2}$.",
+          "**שלב 3 — חזרה למשתנה.** $\\sqrt{x^2+1}+C$.",
+          "**תשובה:** $\\sqrt{x^2+1}+C$."
+        ]
       },
-      "explanation_en": "**Why this is correct:**\nThis is $\\int f'(x)/f(x)\\,dx$ with $f(x)=3x+1$. Let $u=3x+1$, $du=3\\,dx$.\n$$\\int \\frac{1}{u}\\,\\frac{du}{3}=\\frac{1}{3}\\ln|u|+C=\\frac{\\ln|3x+1|}{3}+C.$$\n\n**How to think about it:**\nWhen the numerator is the derivative of the denominator (up to a constant), the answer is a logarithm. u-sub makes the pattern explicit.\n\n**Common slip:**\nWriting $\\ln|3x+1|+C$ without the $1/3$, or treating this as partial fractions — overkill for a linear denominator.\n\n**Exam tip:**\nCircle the denominator first: if its derivative sits in the numerator, u-sub to $\\ln$ is almost always the fastest path.\n\n**Self-check:** Differentiate your answer and compare to the integrand — ten seconds that prevent costly exam errors. **Transfer:** This u-sub pattern recurs in harder Calc I problems and physics courses.",
-      "explanation_he": "**למה זה נכון:**\nזה $\\int f'(x)/f(x)\\,dx$ עם $f(x)=3x+1$. $u=3x+1$, $du=3\\,dx$.\n$$\\int \\frac{1}{u}\\,\\frac{du}{3}=\\frac{\\ln|3x+1|}{3}+C.$$\n\n**איך לחשוב על זה:**\nכשהמונה נגזרת המכנה (עד קבוע), התשובה לוגריתם. u-sub מבהיר את הדפוס.\n\n**טעות נפוצה:**\n$\\ln|3x+1|+C$ בלי $1/3$, או שברים חלקיים על מכנה לינארי — מיותר.\n\n**טיפ לבחינה:**\nהקיפו את המכנה: אם נגזרתו במונה — u-sub ל-$\\ln$ הוא הנתיב המהיר.\n\n**בדיקה עצמית:** גזרו את התשובה והשוו לאינטגרנד — עשר שניות שחוסכות טעויות יקרות בבחינה. **העברה:** דפוס u-sub זה חוזר בבעיות מורכבות יותר בחשבון 1 ובקורסי פיזיקה. כתבו $u$ ו-$du$ בשוליים לפני שמתחילים — נקודות שיטה חשובות גם כשיש טעות חשבונית קטנה.",
-      "skill_atoms": []
+      "source_item_id": "1f8cca92-0fcc-5abd-85d3-3bff445e5d5d",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Compute $\\displaystyle\\int x^2 e^{x^3}\\,dx$.",
-      "stem_he": "חשבו $\\displaystyle\\int x^2 e^{x^3}\\,dx$.",
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "For $\\int (2x+1)^5\\,dx$, choose $u=$:",
+      "stem_he": "עבור $\\int (2x+1)^5\\,dx$, בחרו $u=$:",
+      "explanation_en": "**The inner function $2x+1$ is $u$.**\n\n**Answer:** $u=2x+1$.",
+      "explanation_he": "**הפונקציה הפנימית $2x+1$ היא $u$.**\n\n**תשובה:** $u=2x+1$.",
+      "skill_atoms": [
+        "u_substitution"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "\\frac{e^{x^3}}{3}+C",
-          "$\\frac{e^{x^3}}{3}+C$",
-          "e^(x^3)/3 + C"
+        "options_en": [
+          "$2x+1$",
+          "$x^5$",
+          "$2x$",
+          "$5$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$2x+1$",
+          "$x^5$",
+          "$2x$",
+          "$5$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nInner function $x^3$ with derivative $3x^2$ nearby. $u=x^3$, $du=3x^2\\,dx$, so $x^2\\,dx=du/3$.\n$$\\int e^u\\,\\frac{du}{3}=\\frac{e^{x^3}}{3}+C.$$\n\n**How to think about it:**\nComposed exponentials $e^{g(x)}$ paired with $g'(x)$ (up to a constant) are classic u-sub — do not use IBP here.\n\n**Common slip:**\nChoosing $u=e^{x^3}$ instead of $u=x^3$ — the inner **algebraic** function must be $u$, not the outer exponential.\n\n**Exam tip:**\nVerify: $\\frac{d}{dx}\\frac{e^{x^3}}{3}=e^{x^3}\\cdot x^2$ ✓. This exact pattern appears in Gaussian integrals and probability.\n\n**Self-check:** Differentiate your answer and compare to the integrand — ten seconds that prevent costly exam errors. **Transfer:** This u-sub pattern recurs in harder Calc I problems and physics courses.",
-      "explanation_he": "**למה זה נכון:**\nפונקציה פנימית $x^3$ עם נגזרת $3x^2$ בקרבת מקום. $u=x^3$, $x^2\\,dx=du/3$.\n$$\\int e^u\\,\\frac{du}{3}=\\frac{e^{x^3}}{3}+C.$$\n\n**איך לחשוב על זה:**\nמעריכים מורכבים $e^{g(x)}$ עם $g'(x)$ — u-sub קלאסי; אל תנסו IBP.\n\n**טעות נפוצה:**\nבחירת $u=e^{x^3}$ במקום $u=x^3$ — הפונקציה **האלגברית הפנימית** חייבת להיות $u$.\n\n**טיפ לבחינה:**\nאימות: $\\frac{d}{dx}\\frac{e^{x^3}}{3}=x^2 e^{x^3}$ ✓. דפוס זה חוזר בהסתברות.\n\n**בדיקה עצמית:** גזרו את התשובה והשוו לאינטגרנד — עשר שניות שחוסכות טעויות יקרות בבחינה. **העברה:** דפוס u-sub זה חוזר בבעיות מורכבות יותר בחשבון 1 ובקורסי פיזיקה. כתבו $u$ ו-$du$ בשוליים לפני שמתחילים — נקודות שיטה חשובות גם כשיש טעות חשבונית קטנה.",
-      "skill_atoms": []
+      "source_item_id": "5da103da-ac5a-56f0-bd74-fe98e900dcaa",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$2x+1$",
+        "$x^5$",
+        "$2x$",
+        "$5$"
+      ],
+      "options_he": [
+        "$2x+1$",
+        "$x^5$",
+        "$2x$",
+        "$5$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Compute $\\displaystyle\\int\\frac{\\cos x}{\\sin^3 x}\\,dx$.",
-      "stem_he": "חשבו $\\displaystyle\\int\\frac{\\cos x}{\\sin^3 x}\\,dx$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find $\\displaystyle\\int_0^1 3x^2(x^3+1)^2\\,dx$ (let $u=x^3+1$).",
+      "stem_he": "מצאו את $\\displaystyle\\int_0^1 3x^2(x^3+1)^2\\,dx$ (בחרו $u=x^3+1$).",
+      "explanation_en": "**$\\tfrac{(x^3+1)^3}{3}$ from $0$ to $1 = \\tfrac{8}{3}-\\tfrac{1}{3}=\\tfrac{7}{3}$.**\n\n**Answer:** $\\tfrac{7}{3}$.",
+      "explanation_he": "**$\\tfrac{(x^3+1)^3}{3}$ מ-$0$ עד $1$ נותן $\\tfrac{7}{3}$.**\n\n**תשובה:** $\\tfrac{7}{3}$.",
+      "skill_atoms": [
+        "u_substitution"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "-\\frac{1}{2\\sin^2 x}+C",
-          "$-\\frac{1}{2\\sin^2 x}+C$",
-          "-1/(2 sin^2 x) + C"
-        ],
-        "case_sensitive": false
+        "value": 2.333333
       },
-      "explanation_en": "**Why this is correct:**\nLet $u=\\sin x$, $du=\\cos x\\,dx$. The integrand becomes $u^{-3}$.\n$$\\int u^{-3}\\,du=\\frac{u^{-2}}{-2}+C=-\\frac{1}{2\\sin^2 x}+C.$$\n\n**How to think about it:**\nWhen you see $\\cos x$ in the numerator and a power of $\\sin x$ in the denominator, set $u=\\sin x$. Negative powers integrate via the power rule.\n\n**Common slip:**\nSign error on $\\int u^{-3}\\,du$ — the exponent $-2$ divided by $-2$ gives $-1/(2u^2)$, not $+1/(2u^2)$.\n\n**Exam tip:**\nRewrite as $\\int \\cos x\\cdot \\sin^{-3}x\\,dx$ before choosing $u$ — makes the inner function obvious.\n\n**Self-check:** Differentiate your answer and compare to the integrand — ten seconds that prevent costly exam errors. **Transfer:** This u-sub pattern recurs in harder Calc I problems and physics courses.",
-      "explanation_he": "**למה זה נכון:**\n$u=\\sin x$, $du=\\cos x\\,dx$. האינטגרנד הופך ל-$u^{-3}$.\n$$\\int u^{-3}\\,du=-\\frac{1}{2\\sin^2 x}+C.$$\n\n**איך לחשוב על זה:**\n$\\cos x$ במונה וחזקה של $\\sin x$ במכנה — $u=\\sin x$. חזקות שלילות מצטמצמות לחוק החזקות.\n\n**טעות נפוצה:**\nטעות סימן ב-$\\int u^{-3}\\,du$ — חילוק ב-$-2$ נותן $-1/(2u^2)$.\n\n**טיפ לבחינה:**\nכתבו $\\int \\cos x\\cdot \\sin^{-3}x\\,dx$ לפני בחירת $u$ — הפונקציה הפנימית ברורה.\n\n**בדיקה עצמית:** גזרו את התשובה והשוו לאינטגרנד — עשר שניות שחוסכות טעויות יקרות בבחינה. **העברה:** דפוס u-sub זה חוזר בבעיות מורכבות יותר בחשבון 1 ובקורסי פיזיקה. כתבו $u$ ו-$du$ בשוליים לפני שמתחילים — נקודות שיטה חשובות גם כשיש טעות חשבונית קטנה.",
-      "skill_atoms": []
+      "source_item_id": "1d94df4c-c432-50d5-83e6-6f3c8d3ab509",
+      "points_level_min": "5pt",
+      "correct_answer": "2.333333"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "Compute $\\displaystyle\\int_0^1 2x\\sqrt{x^2+1}\\,dx$.",
-      "stem_he": "חשבו $\\displaystyle\\int_0^1 2x\\sqrt{x^2+1}\\,dx$.",
+      "stem_en": "For $\\int x\\sqrt{x^2+1}\\,dx$, choose $u=$:",
+      "stem_he": "עבור $\\int x\\sqrt{x^2+1}\\,dx$, בחרו $u=$:",
+      "explanation_en": "**The radicand $x^2+1$ is $u$; $du=2x\\,dx$ matches the $x$.**\n\n**Answer:** $u=x^2+1$.",
+      "explanation_he": "**הביטוי תחת השורש $x^2+1$ הוא $u$; $du=2x\\,dx$ מתאים ל-$x$.**\n\n**תשובה:** $u=x^2+1$.",
+      "skill_atoms": [
+        "u_substitution"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "\\frac{2(2\\sqrt{2}-1)}{3}",
-          "$\\frac{2(2\\sqrt{2}-1)}{3}$",
-          "2(2sqrt2 - 1)/3"
+        "options_en": [
+          "$x^2+1$",
+          "$x$",
+          "$\\sqrt{x}$",
+          "$x^2$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$x^2+1$",
+          "$x$",
+          "$\\sqrt{x}$",
+          "$x^2$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nLet $u=x^2+1$, $du=2x\\,dx$. The factor $2x\\,dx$ matches $du$ exactly.\nChange limits: $x=0\\Rightarrow u=1$; $x=1\\Rightarrow u=2$.\n$$\\int_1^2\\sqrt{u}\\,du=\\left[\\frac{2u^{3/2}}{3}\\right]_1^2=\\frac{2(2\\sqrt{2}-1)}{3}.$$\n\n**How to think about it:**\nDefinite integrals with perfect $g'(x)$ factors are ideal for limit change — skip back-substitution entirely.\n\n**Common slip:**\nUsing $x$-limits 0 and 1 on $\\frac{2u^{3/2}}{3}$, or forgetting to update limits after $u=x^2+1$.\n\n**Exam tip:**\nAlways write $u(0)$ and $u(1)$ in the margin before integrating — one line prevents the most costly definite-integral error.\n\n**Self-check:** Differentiate your answer and compare to the integrand — ten seconds that prevent costly exam errors. **Transfer:** This u-sub pattern recurs in harder Calc I problems and physics courses.",
-      "explanation_he": "**למה זה נכון:**\n$u=x^2+1$, $du=2x\\,dx$. הגורם $2x\\,dx$ תואם ל-$du$.\nשינוי גבולות: $x=0\\Rightarrow u=1$; $x=1\\Rightarrow u=2$.\n$$\\int_1^2\\sqrt{u}\\,du=\\frac{2(2\\sqrt{2}-1)}{3}.$$\n\n**איך לחשוב על זה:**\nאינטגרלים מסוימים עם $g'(x)$ מושלם — אידיאליים לשינוי גבולות; דלגו על הצבה חזרה.\n\n**טעות נפוצה:**\nשימוש בגבולות $x$ 0 ו-1 על $\\frac{2u^{3/2}}{3}$, או שכחת עדכון גבולות.\n\n**טיפ לבחינה:**\nכתבו $u(0)$ ו-$u(1)$ בשוליים לפני האינטגרציה — שורה אחת מונעת את הטעות היקרה ביותר.\n\n**בדיקה עצמית:** גזרו את התשובה והשוו לאינטגרנד — עשר שניות שחוסכות טעויות יקרות בבחינה. **העברה:** דפוס u-sub זה חוזר בבעיות מורכבות יותר בחשבון 1 ובקורסי פיזיקה. כתבו $u$ ו-$du$ בשוליים לפני שמתחילים — נקודות שיטה חשובות גם כשיש טעות חשבונית קטנה.",
-      "skill_atoms": []
+      "source_item_id": "9e428aa0-5377-520b-ab3b-571d89b17820",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$x^2+1$",
+        "$x$",
+        "$\\sqrt{x}$",
+        "$x^2$"
+      ],
+      "options_he": [
+        "$x^2+1$",
+        "$x$",
+        "$\\sqrt{x}$",
+        "$x^2$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "Compute $\\displaystyle\\int\\tan x\\,dx$ by writing $\\tan x = \\sin x/\\cos x$.",
-      "stem_he": "חשבו $\\displaystyle\\int\\tan x\\,dx$ תוך כתיבה $\\tan x=\\sin x/\\cos x$.",
+      "stem_en": "Find $\\displaystyle\\int_0^1 2x e^{x^2}\\,dx$ (let $u=x^2$).",
+      "stem_he": "מצאו את $\\displaystyle\\int_0^1 2x e^{x^2}\\,dx$ (בחרו $u=x^2$).",
+      "explanation_en": "**$e^{x^2}$ from $0$ to $1 = e-1$.**\n\n**Answer:** $e-1$.",
+      "explanation_he": "**$e^{x^2}$ מ-$0$ עד $1$ נותן $e-1$.**\n\n**תשובה:** $e-1$.",
+      "skill_atoms": [
+        "u_substitution"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "-\\ln|\\cos x|+C",
-          "\\ln|\\sec x|+C",
-          "$\\ln|\\sec x|+C$",
-          "-ln|cos x| + C"
-        ],
-        "case_sensitive": false
+        "value": 1.718282
       },
-      "explanation_en": "**Why this is correct:**\nWrite $\\tan x=\\sin x/\\cos x$. Let $u=\\cos x$, $du=-\\sin x\\,dx$.\n$$\\int\\frac{\\sin x}{\\cos x}\\,dx=-\\int\\frac{1}{u}\\,du=-\\ln|\\cos x|+C=\\ln|\\sec x|+C.$$\n\n**How to think about it:**\nTangent integrals reduce to $-\\ln|\\cos x|$ via $u=\\cos x$. The minus from $du$ is essential — track it on the same line as $u$.\n\n**Common slip:**\nDropping the minus sign and getting $+\\ln|\\cos x|+C$, or integrating without rewriting $\\tan x$ as a fraction first.\n\n**Exam tip:**\nBoth $-\\ln|\\cos x|+C$ and $\\ln|\\sec x|+C$ are correct (differ by a constant). Either form earns full credit if the derivative checks out.\n\n**Self-check:** Differentiate your answer and compare to the integrand — ten seconds that prevent costly exam errors. **Transfer:** This u-sub pattern recurs in harder Calc I problems and physics courses.",
-      "explanation_he": "**למה זה נכון:**\nכתבו $\\tan x=\\sin x/\\cos x$. $u=\\cos x$, $du=-\\sin x\\,dx$.\n$$\\int\\frac{\\sin x}{\\cos x}\\,dx=-\\ln|\\cos x|+C=\\ln|\\sec x|+C.$$\n\n**איך לחשוב על זה:**\nאינטגרלים של $\\tan x$ מצטמצמים ל-$-\\ln|\\cos x|$ עם $u=\\cos x$. המינוס מ-$du$ חיוני — עקבו אחריו באותה שורה.\n\n**טעות נפוצה:**\nהשמטת המינוס — $+\\ln|\\cos x|+C$, או אינטגרציה בלי לכתוב $\\tan x$ כשבר תחילה.\n\n**טיפ לבחינה:**\nגם $-\\ln|\\cos x|+C$ וגם $\\ln|\\sec x|+C$ נכונים (שונים בקבוע). כל צורה מקבלת ניקוד מלא אם הגזירה תואמת.\n\n**בדיקה עצמית:** גזרו את התשובה והשוו לאינטגרנד — עשר שניות שחוסכות טעויות יקרות בבחינה. **העברה:** דפוס u-sub זה חוזר בבעיות מורכבות יותר בחשבון 1 ובקורסי פיזיקה. כתבו $u$ ו-$du$ בשוליים לפני שמתחילים — נקודות שיטה חשובות גם כשיש טעות חשבונית קטנה.",
-      "skill_atoms": []
+      "source_item_id": "52cfdb50-7817-5a06-9eea-68cd706c9d0f",
+      "points_level_min": "5pt",
+      "correct_answer": "1.718282"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find $\\displaystyle\\int_0^1 \\dfrac{2x}{x^2+1}\\,dx$ (let $u=x^2+1$).",
+      "stem_he": "מצאו את $\\displaystyle\\int_0^1 \\dfrac{2x}{x^2+1}\\,dx$ (בחרו $u=x^2+1$).",
+      "explanation_en": "**$\\ln(x^2+1)$ from $0$ to $1 = \\ln 2$.**\n\n**Answer:** $\\ln 2$.",
+      "explanation_he": "**$\\ln(x^2+1)$ מ-$0$ עד $1$ נותן $\\ln 2$.**\n\n**תשובה:** $\\ln 2$.",
+      "skill_atoms": [
+        "u_substitution"
+      ],
+      "answer_payload": {
+        "value": 0.693147
+      },
+      "source_item_id": "16e2422d-e633-5597-a2f0-eaaaf4c9457b",
+      "points_level_min": "5pt",
+      "correct_answer": "0.693147"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find $\\displaystyle\\int_0^1 \\dfrac{3x^2}{x^3+1}\\,dx$.",
+      "stem_he": "מצאו את $\\displaystyle\\int_0^1 \\dfrac{3x^2}{x^3+1}\\,dx$.",
+      "explanation_en": "**$\\ln(x^3+1)$ from $0$ to $1 = \\ln 2$.**\n\n**Answer:** $\\ln 2$.",
+      "explanation_he": "**$\\ln(x^3+1)$ מ-$0$ עד $1$ נותן $\\ln 2$.**\n\n**תשובה:** $\\ln 2$.",
+      "skill_atoms": [
+        "u_substitution"
+      ],
+      "answer_payload": {
+        "value": 0.693147
+      },
+      "source_item_id": "596d77ac-956c-5e85-8ebd-4cfe5e967934",
+      "points_level_min": "5pt",
+      "correct_answer": "0.693147"
+    },
+    {
+      "ord": 11,
+      "kind": "open",
+      "difficulty": "medium",
+      "stem_en": "Find $\\displaystyle\\int 2x(x^2+1)^3\\,dx$.",
+      "stem_he": "מצאו את $\\displaystyle\\int 2x(x^2+1)^3\\,dx$.",
+      "explanation_en": "**Step 1 — Substitute.** $u=x^2+1$, $du=2x\\,dx$.\n\n**Step 2 — Rewrite.** $\\int u^3\\,du = \\tfrac{u^4}{4}$.\n\n**Step 3 — Back-substitute.** $\\tfrac{(x^2+1)^4}{4}+C$.\n\n**Answer:** $\\tfrac{(x^2+1)^4}{4}+C$.",
+      "explanation_he": "**שלב 1 — הצבה.** $u=x^2+1$, $du=2x\\,dx$.\n\n**שלב 2 — כתיבה מחדש.** $\\int u^3\\,du = \\tfrac{u^4}{4}$.\n\n**שלב 3 — חזרה למשתנה.** $\\tfrac{(x^2+1)^4}{4}+C$.\n\n**תשובה:** $\\tfrac{(x^2+1)^4}{4}+C$.",
+      "skill_atoms": [
+        "u_substitution"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Substitute.** $u=x^2+1$, $du=2x\\,dx$.",
+          "**Step 2 — Rewrite.** $\\int u^3\\,du = \\tfrac{u^4}{4}$.",
+          "**Step 3 — Back-substitute.** $\\tfrac{(x^2+1)^4}{4}+C$.",
+          "**Answer:** $\\tfrac{(x^2+1)^4}{4}+C$."
+        ],
+        "steps_he": [
+          "**שלב 1 — הצבה.** $u=x^2+1$, $du=2x\\,dx$.",
+          "**שלב 2 — כתיבה מחדש.** $\\int u^3\\,du = \\tfrac{u^4}{4}$.",
+          "**שלב 3 — חזרה למשתנה.** $\\tfrac{(x^2+1)^4}{4}+C$.",
+          "**תשובה:** $\\tfrac{(x^2+1)^4}{4}+C$."
+        ]
+      },
+      "source_item_id": "6759ab7a-80d0-5092-a8ff-60407166c9f4",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: $\\int e^{2x}\\,dx = \\tfrac{1}{2}e^{2x}+C$.",
+      "stem_he": "נכון או לא נכון: $\\int e^{2x}\\,dx = \\tfrac{1}{2}e^{2x}+C$.",
+      "explanation_en": "**Differentiating $\\tfrac12 e^{2x}$ gives $e^{2x}$** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**גזירת $\\tfrac12 e^{2x}$ נותנת $e^{2x}$** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "u_substitution"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "d5beda24-aa63-54f3-b57f-b6044ad456b4",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find $\\displaystyle\\int_0^1 x e^{x^2}\\,dx$.",
+      "stem_he": "מצאו את $\\displaystyle\\int_0^1 x e^{x^2}\\,dx$.",
+      "explanation_en": "**$\\tfrac12 e^{x^2}$ from $0$ to $1 = \\tfrac{e-1}{2}$.**\n\n**Answer:** $\\tfrac{e-1}{2}$.",
+      "explanation_he": "**$\\tfrac12 e^{x^2}$ מ-$0$ עד $1$ נותן $\\tfrac{e-1}{2}$.**\n\n**תשובה:** $\\tfrac{e-1}{2}$.",
+      "skill_atoms": [
+        "u_substitution"
+      ],
+      "answer_payload": {
+        "value": 0.859141
+      },
+      "source_item_id": "e9583b5a-77f4-575e-a8f1-47947360da35",
+      "points_level_min": "5pt",
+      "correct_answer": "0.859141"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find $\\displaystyle\\int_1^2 \\dfrac{2x}{x^2+1}\\,dx$.",
+      "stem_he": "מצאו את $\\displaystyle\\int_1^2 \\dfrac{2x}{x^2+1}\\,dx$.",
+      "explanation_en": "**$\\ln(x^2+1)$ from $1$ to $2 = \\ln 5-\\ln 2=\\ln\\tfrac{5}{2}$.**\n\n**Answer:** $\\ln\\tfrac{5}{2}$.",
+      "explanation_he": "**$\\ln(x^2+1)$ מ-$1$ עד $2$ נותן $\\ln\\tfrac{5}{2}$.**\n\n**תשובה:** $\\ln\\tfrac{5}{2}$.",
+      "skill_atoms": [
+        "u_substitution"
+      ],
+      "answer_payload": {
+        "value": 0.916291
+      },
+      "source_item_id": "d3475898-b935-5464-8b04-90a4ee1a9615",
+      "points_level_min": "5pt",
+      "correct_answer": "0.916291"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find $\\displaystyle\\int_0^1 \\dfrac{4x^3}{x^4+1}\\,dx$ (let $u=x^4+1$).",
+      "stem_he": "מצאו את $\\displaystyle\\int_0^1 \\dfrac{4x^3}{x^4+1}\\,dx$ (בחרו $u=x^4+1$).",
+      "explanation_en": "**$\\ln(x^4+1)$ from $0$ to $1 = \\ln 2$.**\n\n**Answer:** $\\ln 2$.",
+      "explanation_he": "**$\\ln(x^4+1)$ מ-$0$ עד $1$ נותן $\\ln 2$.**\n\n**תשובה:** $\\ln 2$.",
+      "skill_atoms": [
+        "u_substitution"
+      ],
+      "answer_payload": {
+        "value": 0.693147
+      },
+      "source_item_id": "9d998a14-8cd8-565a-8ea8-8a8796075835",
+      "points_level_min": "5pt",
+      "correct_answer": "0.693147"
     }
   ],
   "est_minutes": 55,

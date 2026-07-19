@@ -230,151 +230,356 @@
       "body_he_md": "- **נקודות קריטיות** ($f'=0$ או לא קיימת) הן מועמדות — תמיד אמתו מקסימום מול מינימום.\n- **מבחן נגזרת ראשונה:** שינוי סימן $f'$ ב-$c$ מסווג קיצון מקומי.\n- **מבחן נגזרת שנייה:** $f''(c)>0$ → מין, $f''(c)<0$ → מקס; $f''(c)=0$ → אין מסקנה.\n- **קיצון מוחלט על $[a,b]$:** השוו קריטיות פנימיות עם קצוות $a,b$.\n- **אופטימיזציה שימושית:** תרשים → אילוץ → מטרה → משתנה אחד → גזירה → מבחן → תשובה עם יחידות.\n- התשובה הסופית חייבת לכלול ממדים מיטביים וערך מספרי מיטבי."
     }
   ],
-  "agent_hints": "For applied optimization: guide the learner to (1) draw a diagram, (2) name variables, (3) write the constraint, (4) write the objective function, (5) reduce to one variable using the constraint, (6) find the critical point. Many learners skip step 3.",
+  "agent_hints": {
+    "socratic_prompt": "For applied optimization: guide the learner to (1) draw a diagram, (2) name variables, (3) write the constraint, (4) write the objective function, (5) reduce to one variable using the constraint, (6) find the critical point. Many learners skip step 3.",
+    "key_insights": [],
+    "common_misconceptions": [],
+    "skill_atoms_unlocked": [
+      "optimization"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "Find all local extrema of $f(x)=x^3-6x^2+9x$.",
-      "stem_he": "מצאו את כל הקיצונים המקומיים של $f(x)=x^3-6x^2+9x$.",
+      "stem_en": "At a smooth interior maximum or minimum, the derivative equals:",
+      "stem_he": "בנקודת מקסימום או מינימום פנימית וחלקה, הנגזרת שווה ל:",
+      "explanation_en": "**Extrema of smooth functions have $f'=0$.**\n\n**Answer:** $0$.",
+      "explanation_he": "**בנקודות קיצון של פונקציה חלקה $f'=0$.**\n\n**תשובה:** $0$.",
+      "skill_atoms": [
+        "optimization"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$f'(x)=3x^2-12x+9=3(x-1)(x-3)=0\\Rightarrow x=1,3$. $f''(1)=-6<0$: local max $f(1)=4$. $f''(3)=6>0$: local min $f(3)=0$",
-          "0$",
-          "0"
+        "options_en": [
+          "$0$",
+          "$1$",
+          "$\\infty$",
+          "$-1$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$0$",
+          "$1$",
+          "$\\infty$",
+          "$-1$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nDifferentiate: $f'(x)=3x^2-12x+9=3(x-1)(x-3)=0$ gives $x=1$ and $x=3$. Second derivative $f''(x)=6x-12$: at $x=1$, $f''(1)=-6<0$ so local max with $f(1)=4$; at $x=3$, $f''(3)=6>0$ so local min with $f(3)=0$.\n\n**How to think about it:**\nFor polynomial extrema: factor $f'$ if possible, solve for critical points, then apply the second derivative test when $f''$ is easy. A sign chart for $f'$ confirms the classification.\n\n**Common slip:**\nClassifying using $f'$ sign at only one side of the critical point, or reporting critical points without values $f(1)=4$ and $f(3)=0$.\n\n**Exam tip:**\nOn Bagrut function investigation, always state both the $x$-location and the function value at each extremum. Examiners deduct for missing $f(c)$.",
-      "explanation_he": "**למה זה נכון:**\nגזירה: $f'(x)=3x^2-12x+9=3(x-1)(x-3)=0$ נותן $x=1$ ו-$x=3$. נגזרת שנייה $f''(x)=6x-12$: ב-$x=1$, $f''(1)=-6<0$ — מקסימום מקומי $f(1)=4$; ב-$x=3$, $f''(3)=6>0$ — מינימום $f(3)=0$.\n\n**איך לחשוב על זה:**\nלקיצוני פולינום: פירקו $f'$ אם אפשר, מצאו קריטיות, והפעילו מבחן נגזרת שנייה כש-$f''$ נוח. טבלת סימנים של $f'$ מאשרת.\n\n**טעות נפוצה:**\nסיווג לפי סימן $f'$ מצד אחד בלבד, או דיווח על קריטיות בלי ערכים $f(1)=4$ ו-$f(3)=0$.\n\n**טיפ לבחינה:**\nבחקירת פונקציה בבגרות, ציינו מיקום $x$ וערך $f(c)$ בכל קיצון. בוחנים מורידים נקודות על $f(c)$ חסר.",
-      "skill_atoms": []
+      "source_item_id": "47499b2e-7c0b-5e10-8660-66cc72036e98",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$0$",
+        "$1$",
+        "$\\infty$",
+        "$-1$"
+      ],
+      "options_he": [
+        "$0$",
+        "$1$",
+        "$\\infty$",
+        "$-1$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Find the absolute maximum and minimum of $f(x)=x^3-3x$ on $[-2,2]$.",
-      "stem_he": "מצאו מקסימום ומינימום מוחלטים של $f(x)=x^3-3x$ על $[-2,2]$.",
+      "stem_en": "A rectangle has perimeter $20$. Its maximum area is achieved by a square of side $5$. Find that area.",
+      "stem_he": "למלבן היקף $20$. השטח המרבי מתקבל בריבוע בעל צלע $5$. מצאו שטח זה.",
+      "explanation_en": "**Max area is $5\\cdot 5=25$.**\n\n**Answer:** $25$.",
+      "explanation_he": "**השטח המרבי הוא $5\\cdot 5=25$.**\n\n**תשובה:** $25$.",
+      "skill_atoms": [
+        "optimization"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$f'=3x^2-3=0\\Rightarrow x=\\pm 1$. $f(-2)=-2$, $f(-1)=2$, $f(1)=-2$, $f(2)=2$. Max: $2$. Min: $-2$",
-          "2$. Max: $2$. Min: $-2$",
-          "-2"
-        ],
-        "case_sensitive": false
+        "value": 25
       },
-      "explanation_en": "**Why this is correct:**\nOn $[-2,2]$: $f'(x)=3x^2-3=0$ gives $x=\\pm 1$. Evaluate: $f(-2)=-2$, $f(-1)=2$, $f(1)=-2$, $f(2)=2$. Maximum value is $2$ (at $x=-1$ and $x=2$); minimum is $-2$ (at $x=-2$ and $x=1$).\n\n**How to think about it:**\nClosed-interval absolute extrema require a candidate table: all critical points inside the interval plus both endpoints. Never assume the interior critical point wins.\n\n**Common slip:**\nUsing only $x=\\pm 1$ and forgetting endpoints $f(-2)$ and $f(2)$, or reporting $x=-1$ as the only maximum location when $f(2)=2$ ties.\n\n**Exam tip:**\nDraw a quick table with four rows — endpoints first, then critical points. Ties are common on cubic functions; list all locations where the extremum value occurs.",
-      "explanation_he": "**למה זה נכון:**\nעל $[-2,2]$: $f'(x)=3x^2-3=0$ נותן $x=\\pm 1$. הערכה: $f(-2)=-2$, $f(-1)=2$, $f(1)=-2$, $f(2)=2$. מקסימום $2$ (ב-$x=-1$ ו-$x=2$); מינימום $-2$ (ב-$x=-2$ ו-$x=1$).\n\n**איך לחשוב על זה:**\nקיצון מוחלט על קטע סגור דורש טבלת מועמדים: כל קריטית בתוך הקטע ושני הקצוות. אל תניחו שהקריטית הפנימית מנצחת.\n\n**טעות נפוצה:**\nשימוש רק ב-$x=\\pm 1$ ושכחת קצוות $f(-2)$ ו-$f(2)$, או דיווח $x=-1$ כמיקום מקסימום יחיד כש-$f(2)=2$ שווה.\n\n**טיפ לבחינה:**\nשרטטו טבלה עם ארבע שורות — קצוות תחילה, אחר כך קריטיות. שוויון נפוץ בפונקציות מעוקביות; רשמו כל מיקום של ערך הקיצון.",
-      "skill_atoms": []
+      "source_item_id": "71388c2f-9c2a-5fd4-b12d-943c1d1b9822",
+      "points_level_min": "5pt",
+      "correct_answer": "25"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "Find the value of $x>0$ that minimizes $f(x) = x + \\dfrac{1}{x}$.",
-      "stem_he": "מצאו $x>0$ שממזער את $f(x)=x+\\dfrac{1}{x}$.",
+      "stem_en": "True or False: critical points occur where $f'(x)=0$ or $f'$ is undefined.",
+      "stem_he": "נכון או לא נכון: נקודות קריטיות נמצאות היכן ש-$f'(x)=0$ או ש-$f'$ אינה מוגדרת.",
+      "explanation_en": "**That is the definition of a critical point** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**זו הגדרת נקודה קריטית** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "optimization"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$f'(x)=1-1/x^2=0\\Rightarrow x=1$ (positive root). $f''(1)=2>0$: minimum. $f(1)=2$",
-          "2$",
-          "2"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why this is correct:**\nFor $f(x)=x+1/x$ on $x>0$: $f'(x)=1-1/x^2=0$ gives $x=\\pm 1$; only $x=1$ is in the domain. $f''(1)=2>0$ confirms a minimum. $f(1)=1+1=2$.\n\n**How to think about it:**\nWhen the domain restricts $x>0$, discard negative roots from $f'(x)=0$ before testing. The AM-GM intuition ($x+1/x\\geq 2$) supports the calculus answer.\n\n**Common slip:**\nAccepting $x=-1$ despite $x>0$ in the stem, or stopping at $x=1$ without computing $f(1)=2$.\n\n**Exam tip:**\nClassic minimization template: set derivative to zero, apply domain filter, verify with $f''>0$, state the minimum value — not just the $x$-coordinate.",
-      "explanation_he": "**למה זה נכון:**\nעבור $f(x)=x+1/x$ ב-$x>0$: $f'(x)=1-1/x^2=0$ נותן $x=\\pm 1$; רק $x=1$ בתחום. $f''(1)=2>0$ מאשר מינימום. $f(1)=2$.\n\n**איך לחשוב על זה:**\nכשהתחום מגביל $x>0$, זרקו שורשים שליליים לפני המבחן. אינטואיציית AM-GM ($x+1/x\\geq 2$) תומכת בתשובה. זו תבנית קלאסית בבחינות.\n\n**טעות נפוצה:**\nקבלת $x=-1$ למרות $x>0$ בניסוח, או עצירה ב-$x=1$ בלי $f(1)=2$.\n\n**טיפ לבחינה:**\nתבנית מינימום קלאסית: נגזרת לאפס, סינון תחום, $f''>0$, ציון ערך מינימלי — לא רק קואורדינטת $x$. כתבו את שלושת השלבים בבחינה.",
-      "skill_atoms": []
+      "source_item_id": "aaad6a12-f95a-576c-8aac-f0f130a3ded7",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Use the second derivative test to classify the critical point of $f(x)=e^x-x$.",
-      "stem_he": "השתמשו במבחן נגזרת שנייה לסיווג נקודה קריטית של $f(x)=e^x-x$.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Two numbers sum to $10$. Maximize their product.",
+      "stem_he": "סכום שני מספרים הוא $10$. מקסמו את מכפלתם.",
+      "explanation_en": "**Step 1 — Model.** Let numbers be $x$ and $10-x$; $P=x(10-x)=10x-x^2$.\n\n**Step 2 — Differentiate.** $P'=10-2x=0\\Rightarrow x=5$.\n\n**Step 3 — Evaluate.** $P=5\\cdot 5=25$.\n\n**Answer:** maximum product $25$.",
+      "explanation_he": "**שלב 1 — מידול.** המספרים $x$ ו-$10-x$; $P=10x-x^2$.\n\n**שלב 2 — גזירה.** $P'=10-2x=0\\Rightarrow x=5$.\n\n**שלב 3 — הצבה.** $P=25$.\n\n**תשובה:** מכפלה מרבית $25$.",
+      "skill_atoms": [
+        "optimization"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$f'(x)=e^x-1=0\\Rightarrow x=0$. $f''(x)=e^x>0$ everywhere, so $x=0$ is a minimum. $f(0)=1$",
-          "1$",
-          "1"
+        "steps_en": [
+          "**Step 1 — Model.** Let numbers be $x$ and $10-x$; $P=x(10-x)=10x-x^2$.",
+          "**Step 2 — Differentiate.** $P'=10-2x=0\\Rightarrow x=5$.",
+          "**Step 3 — Evaluate.** $P=5\\cdot 5=25$.",
+          "**Answer:** maximum product $25$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — מידול.** המספרים $x$ ו-$10-x$; $P=10x-x^2$.",
+          "**שלב 2 — גזירה.** $P'=10-2x=0\\Rightarrow x=5$.",
+          "**שלב 3 — הצבה.** $P=25$.",
+          "**תשובה:** מכפלה מרבית $25$."
+        ]
       },
-      "explanation_en": "**Why this is correct:**\n$f'(x)=e^x-1=0$ gives $x=0$. Since $f''(x)=e^x>0$ for all $x$, the graph is always concave up and $x=0$ is a global minimum with $f(0)=e^0-0=1$.\n\n**How to think about it:**\nExponential-minus-linear functions have at most one critical point. When $f''=e^x>0$ everywhere, the second derivative test at the sole critical point immediately gives a minimum.\n\n**Common slip:**\nSaying 'inconclusive' because $f'(0)=0$, or forgetting that $e^x>0$ means $f''(0)=1>0$.\n\n**Exam tip:**\nFor $e^x$ minus a polynomial, $f''=e^x$ is always positive — cite this once and skip the first derivative test entirely.",
-      "explanation_he": "**למה זה נכון:**\n$f'(x)=e^x-1=0$ נותן $x=0$. כיוון $f''(x)=e^x>0$ לכל $x$, הגרף תמיד קעור למעלה ו-$x=0$ מינימום גלובלי עם $f(0)=1$.\n\n**איך לחשוב על זה:**\nפונקציות מעריכית פחות לינארית יש לכל היותר קריטית אחת. כש-$f''=e^x>0$ בכל מקום, מבחן שני בקריטית היחידה נותן מיד מינימום — אין צורך בטבלת סימנים.\n\n**טעות נפוצה:**\nלומר 'אין מסקנה' כי $f'(0)=0$, או שכחה ש-$e^x>0$ אומר $f''(0)=1>0$.\n\n**טיפ לבחינה:**\nל-$e^x$ פחות פולינום, $f''=e^x$ תמיד חיובי — צטטו פעם אחת ודלגו על מבחן ראשון. זו שאלה מהירה של נקודה אחת בבחינה.",
-      "skill_atoms": []
+      "source_item_id": "eb423515-442b-590e-ba0c-e0bcbf1fda5c",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "A wire of length $L$ is cut into two pieces. One piece is bent into a square, the other into a circle. How should the wire be cut to minimize the total area?",
-      "stem_he": "חוט באורך $L$ נחתך לשני חלקים. חלק אחד מקופל לריבוע, השני למעגל. כיצד לחתוך למינימום שטח כולל?",
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "To find candidate optima of $f$, first solve:",
+      "stem_he": "כדי למצוא מועמדים לקיצון של $f$, ראשית פותרים:",
+      "explanation_en": "**Set the first derivative to zero.**\n\n**Answer:** $f'(x)=0$.",
+      "explanation_he": "**משווים את הנגזרת הראשונה לאפס.**\n\n**תשובה:** $f'(x)=0$.",
+      "skill_atoms": [
+        "optimization"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Let $x$ = length used for square, $L-x$ for circle. Square side $=x/4$, area $=x^2/16$. Circle radius $=\\frac{L-x}{2\\pi}$, area $=\\frac{(L-x)^2}{4\\pi}$. Total: $A(x)=\\frac{x^2}{16}+\\frac{(L-x)^2}{4\\pi}$. $A'=x/8-\\frac{L-x}{2\\pi}=0\\Rightarrow x=\\frac{4L}{\\pi+4}$. Second derivative $>0$: minimum",
-          "\\frac{4L}{\\pi+4}$. Second derivative $>0$: minimum",
-          "0"
+        "options_en": [
+          "$f'(x)=0$",
+          "$f(x)=0$",
+          "$f''(x)=0$",
+          "$f(x)=1$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$f'(x)=0$",
+          "$f(x)=0$",
+          "$f''(x)=0$",
+          "$f(x)=1$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nLet $x$ = wire for square, $L-x$ for circle. Square side $x/4$, area $x^2/16$. Circle radius $(L-x)/(2\\pi)$, area $(L-x)^2/(4\\pi)$. Total $A(x)=x^2/16+(L-x)^2/(4\\pi)$. Setting $A'=0$: $x/8-(L-x)/(2\\pi)=0$ gives $x=4L/(\\pi+4)$. $A''>0$ confirms minimum.\n\n**How to think about it:**\nWire-partition problems: express each shape's area in terms of its allocated length, sum for total area, differentiate once. The $\\pi$ in the circle perimeter $2\\pi r$ is the usual algebra trap.\n\n**Common slip:**\nUsing radius $L-x$ instead of $(L-x)/(2\\pi)$, or maximizing when the question asks to minimize total area.\n\n**Exam tip:**\nWrite the circle area as $\\pi r^2$ with $r=(L-x)/(2\\pi)$ explicitly — graders check the perimeter-to-radius step before the derivative.",
-      "explanation_he": "**למה זה נכון:**\nנסמן $x$ = חוט לריבוע, $L-x$ למעגל. צלע ריבוע $x/4$, שטח $x^2/16$. רדיוס $(L-x)/(2\\pi)$, שטח $(L-x)^2/(4\\pi)$. סה\"כ $A(x)=x^2/16+(L-x)^2/(4\\pi)$. $A'=0$ נותן $x=4L/(\\pi+4)$. $A''>0$ — מינימום.\n\n**איך לחשוב על זה:**\nבעיות חלוקת חוט: ביטוי שטח כל צורה לפי אורך שהוקצה, סכום, גזירה. $\\pi$ בהיקף מעגל $2\\pi r$ — מלכודת אלגברה נפוצה.\n\n**טעות נפוצה:**\nשימוש ברדיוס $L-x$ במקום $(L-x)/(2\\pi)$, או מקסימום כשמבקשים מינימום שטח.\n\n**טיפ לבחינה:**\nכתבו שטח מעגל $\\pi r^2$ עם $r=(L-x)/(2\\pi)$ במפורש — בוחנים בודקים מעבר מהיקף לרדיוס לפני הנגזרת.",
-      "skill_atoms": []
+      "source_item_id": "7ca854ca-8d13-511a-82fa-66797cb6001f",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$f'(x)=0$",
+        "$f(x)=0$",
+        "$f''(x)=0$",
+        "$f(x)=1$"
+      ],
+      "options_he": [
+        "$f'(x)=0$",
+        "$f(x)=0$",
+        "$f''(x)=0$",
+        "$f(x)=1$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Find the point on the line $y=2x+1$ closest to the origin.",
-      "stem_he": "מצאו את הנקודה על $y=2x+1$ הקרובה ביותר לראשית.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the minimum value of $f(x)=x^2-4x+7$.",
+      "stem_he": "מצאו את הערך המינימלי של $f(x)=x^2-4x+7$.",
+      "explanation_en": "**Vertex at $x=2$: $f(2)=4-8+7=3$.**\n\n**Answer:** $3$.",
+      "explanation_he": "**קדקוד ב-$x=2$: $f(2)=3$.**\n\n**תשובה:** $3$.",
+      "skill_atoms": [
+        "optimization"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Distance squared: $D(x)=x^2+(2x+1)^2=5x^2+4x+1$. $D'=10x+4=0\\Rightarrow x=-2/5$. $y=2(-2/5)+1=1/5$. Point: $(-2/5,1/5)$. Distance: $\\sqrt{4/25+1/25}=1/\\sqrt{5}$",
-          "1/\\sqrt{5}$",
-          "5"
-        ],
-        "case_sensitive": false
+        "value": 3
       },
-      "explanation_en": "**Why this is correct:**\nMinimize distance by minimizing $D^2=x^2+(2x+1)^2=5x^2+4x+1$ (same minimizer, no square root). $D'=10x+4=0$ gives $x=-2/5$, $y=1/5$. Point $(-2/5,1/5)$; distance $\\sqrt{1/25+4/25}=1/\\sqrt{5}$.\n\n**How to think about it:**\nDistance-to-line problems: substitute the line equation into the distance formula, square to remove the root, differentiate the quadratic. The closest point always exists for a non-vertical line.\n\n**Common slip:**\nDifferentiating $\\sqrt{5x^2+4x+1}$ directly (messy chain rule) instead of squaring first, or finding $x$ but not computing $y=2x+1$.\n\n**Exam tip:**\nSquaring distance is standard on exams — state 'minimize $D^2$ since $D\\geq 0$' for one method point before differentiating.",
-      "explanation_he": "**למה זה נכון:**\nממזערים מרחק ע\"י $D^2=x^2+(2x+1)^2=5x^2+4x+1$. $D'=10x+4=0$ נותן $x=-2/5$, $y=1/5$. נקודה $(-2/5,1/5)$; מרחק $1/\\sqrt{5}$.\n\n**איך לחשוב על זה:**\nמרחק לישר: הציבו משוואת הישר, רבעו להסרת שורש, גזרו את הריבוע. הנקודה הקרובה תמיד קיימת לישר לא אנכי. זו תבנית חוזרת בבחינות אוניברסיטאיות.\n\n**טעות נפוצה:**\nגזירה ישירה של $\\sqrt{5x^2+4x+1}$ במקום ריבוע, או מציאת $x$ בלי $y=2x+1$.\n\n**טיפ לבחינה:**\nריבוע מרחק הוא סטנדרט — כתבו 'ממזערים $D^2$ כי $D\\geq 0$' לנקודת שיטה לפני גזירה. ציינו גם את המרחק הסופי.",
-      "skill_atoms": []
+      "source_item_id": "fb2587be-0b78-5dc6-8e90-eeeb931f7137",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "A cylindrical can must hold $V=1000$ cm$^3$. Find the radius and height that minimize the total surface area.",
-      "stem_he": "פחית גלילית חייבת להכיל $V=1000$ ס\"מ³. מצאו רדיוס וגובה שממזערים שטח פנים כולל.",
+      "stem_en": "Find the minimum value of $f(x)=x^2-6x+11$.",
+      "stem_he": "מצאו את הערך המינימלי של $f(x)=x^2-6x+11$.",
+      "explanation_en": "**$f'(x)=2x-6=0\\Rightarrow x=3$; $f(3)=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**$f'(x)=2x-6=0\\Rightarrow x=3$; $f(3)=2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "optimization"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$V=\\pi r^2 h=1000\\Rightarrow h=1000/(\\pi r^2)$. Surface: $A=2\\pi r^2+2\\pi rh=2\\pi r^2+2000/r$. $A'=4\\pi r-2000/r^2=0\\Rightarrow r^3=500/\\pi\\Rightarrow r=(500/\\pi)^{1/3}$. $h=2r$ (height = diameter for optimal can)",
-          "diameter for optimal can)",
-          "2"
-        ],
-        "case_sensitive": false
+        "value": 2
       },
-      "explanation_en": "**Why this is correct:**\nVolume $V=\\pi r^2 h=1000$ gives $h=1000/(\\pi r^2)$. Surface $A=2\\pi r^2+2\\pi rh=2\\pi r^2+2000/r$. $A'=4\\pi r-2000/r^2=0$ yields $r^3=500/\\pi$, so $r=(500/\\pi)^{1/3}$ and $h=2r$. Optimal cans have height equal to diameter.\n\n**How to think about it:**\nCylinder surface area has two parts: $2\\pi r^2$ (top and bottom) plus $2\\pi rh$ (side). Substitute the volume constraint before differentiating — never treat $h$ as independent.\n\n**Common slip:**\nUsing $A=\\pi r^2+2\\pi rh$ (forgetting both circular ends) or leaving $h$ and $r$ as two variables without substitution.\n\n**Exam tip:**\nThe $h=2r$ result is worth memorizing: for fixed volume, minimum surface area occurs when height equals diameter. Check $A''>0$ at your critical $r$.",
-      "explanation_he": "**למה זה נכון:**\nנפח $V=\\pi r^2 h=1000$ נותן $h=1000/(\\pi r^2)$. שטח $A=2\\pi r^2+2000/r$. $A'=4\\pi r-2000/r^2=0$ נותן $r^3=500/\\pi$, $r=(500/\\pi)^{1/3}$, $h=2r$. פחיות מיטביות: גובה = קוטר.\n\n**איך לחשוב על זה:**\nשטח גליל: $2\\pi r^2$ (שני בסיסים) + $2\\pi rh$ (צד). הציבו אילוץ נפח לפני גזירה — $h$ לא בלתי תלוי. זו בעיה קלאסית בחשבון 1.\n\n**טעות נפוצה:**\nשימוש ב-$A=\\pi r^2+2\\pi rh$ (שכחת בסיס תחתון) או השארת $h$ ו-$r$ בלי הצבה.\n\n**טיפ לבחינה:**\nתוצאת $h=2r$ שווה לזכור: לנפח קבוע, שטח מינימלי כשגובה = קוטר. בדקו $A''>0$ ב-$r$ הקריטי.",
-      "skill_atoms": []
+      "source_item_id": "9d2c97c7-c570-5732-b76c-40fa64cb77da",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "Find the dimensions of the rectangle with largest area that can be inscribed in a circle of radius $R$.",
-      "stem_he": "מצאו ממדי המלבן בשטח גדול ביותר שניתן לחרוט בעיגול ברדיוס $R$.",
+      "stem_en": "A rectangle has perimeter $40$. Find its maximum area.",
+      "stem_he": "למלבן היקף $40$. מצאו את שטחו המרבי.",
+      "explanation_en": "**Square of side $10$: area $=100$.**\n\n**Answer:** $100$.",
+      "explanation_he": "**ריבוע בעל צלע $10$: שטח $=100$.**\n\n**תשובה:** $100$.",
+      "skill_atoms": [
+        "optimization"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Let half-diagonal $=R$, half-sides $x,y$ with $x^2+y^2=R^2$. Area $=4xy$. Maximize $A=4xy$ with $y=\\sqrt{R^2-x^2}$: $A^2=16x^2(R^2-x^2)$. Maximum at $x=y=R/\\sqrt{2}$: the rectangle is a square with side $R\\sqrt{2}$",
-          "R/\\sqrt{2}$: the rectangle is a square with side $R\\sqrt{2}$",
-          "2"
-        ],
-        "case_sensitive": false
+        "value": 100
       },
-      "explanation_en": "**Why this is correct:**\nInscribed rectangle with half-sides $x,y$ on a circle of radius $R$: constraint $x^2+y^2=R^2$, area $A=4xy$. Substitute $y=\\sqrt{R^2-x^2}$ and maximize $A^2=16x^2(R^2-x^2)$. Symmetry gives $x=y=R/\\sqrt{2}$ — a square with side $R\\sqrt{2}$.\n\n**How to think about it:**\nCircle-inscription problems use the Pythagorean relation from the radius as diagonal half-length. Maximizing $A^2$ avoids square roots while preserving the maximizer.\n\n**Common slip:**\nMaximizing $x+y$ instead of $xy$, or forgetting the factor of 4 when converting half-sides to full rectangle dimensions.\n\n**Exam tip:**\nWhen the answer is a square inscribed in a circle, side length is always $R\\sqrt{2}$ — quick sanity check on multiple-choice exams.",
-      "explanation_he": "**למה זה נכון:**\nמלבן חרוט עם חצי-צלעות $x,y$ בעיגול רדיוס $R$: $x^2+y^2=R^2$, שטח $A=4xy$. הצבה $y=\\sqrt{R^2-x^2}$, מקסימום $A^2=16x^2(R^2-x^2)$. סימטריה: $x=y=R/\\sqrt{2}$ — ריבוע צלע $R\\sqrt{2}$.\n\n**איך לחשוב על זה:**\nחריטה בעיגול: יחס פיתגורס מהרדיוס כחצי אלכסון. מקסימום $A^2$ נמנע משורשים ושומר על המקסימום. תוצאת הריבוע היא תבנית מוכרת.\n\n**טעות נפוצה:**\nמקסימום $x+y$ במקום $xy$, או שכחת גורם 4 בהמרה מחצי-צלעות למלבן מלא.\n\n**טיפ לבחינה:**\nכשהתשובה ריבוע חרוט בעיגול, צלע = $R\\sqrt{2}$ — בדיקת sanity מהירה בבחינה. כתבו גם את שתי הצלעות $R/\\sqrt{2}$.",
-      "skill_atoms": []
+      "source_item_id": "8d60559f-271e-56c5-b115-c651ad59cf00",
+      "points_level_min": "5pt",
+      "correct_answer": "100"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Two numbers sum to $12$. Find their maximum product.",
+      "stem_he": "סכום שני מספרים הוא $12$. מצאו את המכפלה המרבית שלהם.",
+      "explanation_en": "**Equal values $6,6$ maximize the product: $36$.**\n\n**Answer:** $36$.",
+      "explanation_he": "**ערכים שווים $6,6$ ממקסמים את המכפלה: $36$.**\n\n**תשובה:** $36$.",
+      "skill_atoms": [
+        "optimization"
+      ],
+      "answer_payload": {
+        "value": 36
+      },
+      "source_item_id": "129e2d3a-5be0-5606-b493-e33d3ebeaa28",
+      "points_level_min": "5pt",
+      "correct_answer": "36"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Two positive numbers sum to $20$. Minimize the sum of their squares.",
+      "stem_he": "סכום שני מספרים חיוביים הוא $20$. מזערו את סכום ריבועיהם.",
+      "explanation_en": "**Equal values $10,10$: $100+100=200$.**\n\n**Answer:** $200$.",
+      "explanation_he": "**ערכים שווים $10,10$: $200$.**\n\n**תשובה:** $200$.",
+      "skill_atoms": [
+        "optimization"
+      ],
+      "answer_payload": {
+        "value": 200
+      },
+      "source_item_id": "450836e6-db6f-5f51-acfc-c0d95730d8d8",
+      "points_level_min": "5pt",
+      "correct_answer": "200"
+    },
+    {
+      "ord": 11,
+      "kind": "open",
+      "difficulty": "medium",
+      "stem_en": "Minimize $f(x)=x^2+\\dfrac{16}{x}$ for $x>0$.",
+      "stem_he": "מזערו את $f(x)=x^2+\\dfrac{16}{x}$ עבור $x>0$.",
+      "explanation_en": "**Step 1 — Differentiate.** $f'(x)=2x-\\dfrac{16}{x^2}$.\n\n**Step 2 — Set to zero.** $2x=\\dfrac{16}{x^2}\\Rightarrow x^3=8\\Rightarrow x=2$.\n\n**Step 3 — Evaluate.** $f(2)=4+8=12$.\n\n**Answer:** minimum value $12$.",
+      "explanation_he": "**שלב 1 — גזירה.** $f'(x)=2x-\\dfrac{16}{x^2}$.\n\n**שלב 2 — השוואה לאפס.** $x^3=8\\Rightarrow x=2$.\n\n**שלב 3 — הצבה.** $f(2)=4+8=12$.\n\n**תשובה:** ערך מינימלי $12$.",
+      "skill_atoms": [
+        "optimization"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Differentiate.** $f'(x)=2x-\\dfrac{16}{x^2}$.",
+          "**Step 2 — Set to zero.** $2x=\\dfrac{16}{x^2}\\Rightarrow x^3=8\\Rightarrow x=2$.",
+          "**Step 3 — Evaluate.** $f(2)=4+8=12$.",
+          "**Answer:** minimum value $12$."
+        ],
+        "steps_he": [
+          "**שלב 1 — גזירה.** $f'(x)=2x-\\dfrac{16}{x^2}$.",
+          "**שלב 2 — השוואה לאפס.** $x^3=8\\Rightarrow x=2$.",
+          "**שלב 3 — הצבה.** $f(2)=4+8=12$.",
+          "**תשובה:** ערך מינימלי $12$."
+        ]
+      },
+      "source_item_id": "42dcd75f-6cae-5f20-9def-f8f5206b938e",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: if $f''(c)>0$ at a critical point $c$, then $c$ is a local minimum.",
+      "stem_he": "נכון או לא נכון: אם $f''(c)>0$ בנקודה קריטית $c$, אז $c$ היא מינימום מקומי.",
+      "explanation_en": "**Positive concavity means a local minimum** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**קעירות חיובית פירושה מינימום מקומי** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "optimization"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "dfb127c5-5b5a-5e09-b19b-4266886955b4",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Minimize $f(x)=x+\\dfrac{4}{x}$ for $x>0$.",
+      "stem_he": "מזערו את $f(x)=x+\\dfrac{4}{x}$ עבור $x>0$.",
+      "explanation_en": "**$f'=1-\\tfrac{4}{x^2}=0\\Rightarrow x=2$; $f(2)=2+2=4$.**\n\n**Answer:** $4$.",
+      "explanation_he": "**$f'=1-\\tfrac{4}{x^2}=0\\Rightarrow x=2$; $f(2)=4$.**\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "optimization"
+      ],
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "ff6415f4-fc0d-5e86-aa47-a7e34156fb45",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "A rectangular field against a wall uses $100\\,\\text{m}$ of fence on three sides. Find the maximum area.",
+      "stem_he": "שדה מלבני נשען על קיר ומשתמש ב-$100\\,\\text{m}$ גדר לשלושה צדדים. מצאו את השטח המרבי.",
+      "explanation_en": "**$x+2y=100$; $A=xy$ max at $x=50,y=25$: $1250$.**\n\n**Answer:** $1250\\,\\text{m}^2$.",
+      "explanation_he": "**$x+2y=100$; $A=xy$ מרבי ב-$x=50,y=25$: $1250$.**\n\n**תשובה:** $1250\\,\\text{m}^2$.",
+      "skill_atoms": [
+        "optimization"
+      ],
+      "answer_payload": {
+        "value": 1250
+      },
+      "source_item_id": "e3a42dc8-12cb-5bf4-84a9-599307e3fe2a",
+      "points_level_min": "5pt",
+      "correct_answer": "1250"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the minimum value of $f(x)=x^2-8x+20$.",
+      "stem_he": "מצאו את הערך המינימלי של $f(x)=x^2-8x+20$.",
+      "explanation_en": "**$f'=2x-8=0\\Rightarrow x=4$; $f(4)=4$.**\n\n**Answer:** $4$.",
+      "explanation_he": "**$f'=2x-8=0\\Rightarrow x=4$; $f(4)=4$.**\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "optimization"
+      ],
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "db26592a-4c56-5f6c-a701-f72d7cb806e3",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
     }
   ],
   "est_minutes": 65,
