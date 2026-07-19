@@ -128,6 +128,14 @@ export function numericClose(a: string, b: string): boolean {
   const na = Number.parseFloat(strip(a));
   const nb = Number.parseFloat(strip(b));
   if (Number.isNaN(na) || Number.isNaN(nb)) return false;
-  const tol = Math.max(1e-3, Math.abs(nb) * 0.01);
+  const scale = Math.abs(nb);
+  // For tiny-magnitude answers (e.g. photon energy 6.6e-19 J, fields ~1e-5 T),
+  // a fixed 1e-3 absolute floor would accept 0 or any near-zero garbage as
+  // "correct". Use a purely relative tolerance below 1e-3 so those answers are
+  // actually graded; keep the forgiving 1e-3 / 1% floor for normal magnitudes.
+  let tol: number;
+  if (scale === 0) tol = 1e-12;
+  else if (scale < 1e-3) tol = scale * 0.05;
+  else tol = Math.max(1e-3, scale * 0.01);
   return Math.abs(na - nb) <= tol;
 }
