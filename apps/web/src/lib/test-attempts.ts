@@ -14,6 +14,7 @@
  */
 import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
+import { logger } from '@/lib/logger';
 
 neonConfig.fetchConnectionCache = true;
 
@@ -100,9 +101,15 @@ async function ensureTable(): Promise<boolean> {
     await sql`CREATE INDEX IF NOT EXISTS ix_test_attempts_learner ON test_attempts (learner_id, created_at DESC)`;
     ensured = true;
     return true;
-  } catch {
-    // Concurrent DDL or insufficient perms — reads/writes may still work.
-    return true;
+  } catch (err) {
+    // Real DDL failure (e.g. migration never ran + creation blocked). Previously
+    // this returned `true`, so the caller's INSERT then threw "relation does not
+    // exist" and was silently swallowed — the Tests archive stayed permanently
+    // empty with zero signal. Surface it and skip the write so it's diagnosable.
+    logger.error('[test-attempts] ensureTable failed — attempt will not be archived', {
+      err: String(err),
+    });
+    return false;
   }
 }
 
@@ -140,7 +147,11 @@ export async function recordTestAttempt(input: RecordTestAttemptInput): Promise<
       RETURNING id::text
     `) as Array<{ id: string }>;
     return rows[0]?.id ?? null;
-  } catch {
+  } catch (err) {
+    logger.error('[test-attempts] recordTestAttempt insert failed', {
+      err: String(err),
+      kind: input.kind ?? 'weekly_gate',
+    });
     return null;
   }
 }
