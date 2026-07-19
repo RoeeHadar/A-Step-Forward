@@ -77,6 +77,22 @@
       "body_he_md": "**חשבו** $\\displaystyle\\lim_{x\\to 0}\\frac{\\sin(3x)-3\\sin x}{x^3}$.\n\nגבול זה משלב זהויות טריגונומטריות עם לופיטל חוזר או פיתוח טיילור — בסיס בבחינות חדו\"א שנה א'.\n\n---\n\n### שיטה א': כלל לופיטל (שלוש פעמים)\n\n### צעד 1 — אימות $0/0$\nהצבה נותנת $\\frac{0-0}{0}=\\frac{0}{0}$. ✓ לופיטal חל.\n\n**מחילים לופיטal פעם ראשונה** (גוזרים מונה ומכנה בנפרד, לא כלל מנה):\n$$\\frac{3\\cos(3x)-3\\cos x}{3x^2}.$$\nמציבים $x=0$: $\\frac{3-3}{0}=\\frac{0}{0}$. עדיין בלתי-קצוב.\n\n**מחילים לופיטal פעם שנייה:**\n$$\\frac{-9\\sin(3x)+3\\sin x}{6x}.$$\nמציבים $x=0$: $\\frac{0}{0}$. עדיין בלתי-קצוב.\n\n**מחילים לופיטal פעם שלישית:**\n$$\\frac{-27\\cos(3x)+3\\cos x}{6}.$$\nמציבים $x=0$:\n$$\\frac{-27\\cdot 1+3\\cdot 1}{6} = \\frac{-24}{6} = \\boxed{-4}.$$\n\n---\n\n### שיטה ב': פיתוח טיילור (מהיר יותר)\n\nנזכיר $\\sin u = u - \\frac{u^3}{6} + O(u^5)$.\n\n$$\\sin(3x) = 3x - \\frac{27x^3}{6} + O(x^5), \\quad 3\\sin x = 3x - \\frac{3x^3}{6} + O(x^5).$$\n\nהפרש: $-4x^3 + O(x^5)$. חלוקה ב-$x^3$ וגבול נותנים $\\boxed{-4}$.\n\n**שתי השיטות מסכימות.** בבחינה, כל גישה מקבלת ניקוד מלא אם כל שלב מוצג.\n\n*הערת בחינה:* אחרי כל שלב לופיטal, בדקו שוב את הצורה הבלתי-קצובה. עצירה מוקדמת — הטעות הנפוצה ביותר."
     },
     {
+      "kind": "theory",
+      "title_en": "Algebraic Limit Toolkit (No Epsilon–Delta)",
+      "title_he": "ארגז כלים אלגברי לגבולות (בלי אפסילון–דלתא)",
+      "body_en_md": "## High-School Limit Moves\n\nOn the Israeli Bagrut (4pt/5pt), limits are evaluated with algebra — never with a university $\\varepsilon$–$\\delta$ proof. The standard toolkit:\n\n1. **Direct substitution** when the expression is continuous at the point.\n2. **Factor and cancel** common $(x-a)$ factors for $0/0$ forms.\n3. **Rationalize** conjugates for roots in numerator or denominator.\n4. **Divide by the highest power of $x$** for limits at infinity of rational functions.\n5. **Standard trig limits** such as $\\lim_{\\theta \\to 0} \\dfrac{\\sin \\theta}{\\theta} = 1$ (in radians).\n\n### Indeterminate forms you will see\nThe exam mainly uses $0/0$ and $\\infty/\\infty$. Treat them as signals to rewrite, not as answers. After rewriting, substitute again.\n\n### One-sided limits\nWhen a radical, absolute value, or piecewise definition appears, check $x \\to a^+$ and $x \\to a^-$ separately. The two-sided limit exists only when both sides agree.\n\n### Connection to continuity\nA function is continuous at $a$ when $\\lim_{x \\to a} f(x) = f(a)$. Many \"does the limit exist?\" items are secretly continuity checks after algebraic simplification.",
+      "body_he_md": "## מהלכי גבול בתיכון\n\nבבגרות (4/5 יח\"ל) מחשבים גבולות באלגברה — לא בהוכחת $\\varepsilon$–$\\delta$ אוניברסיטאית. ארגז הכלים:\n\n1. **הצבה ישירה** כשהביטוי רציף בנקודה.\n2. **פירוק וצמצום** של גורמי $(x-a)$ בצורות $0/0$.\n3. **רציונליזציה** עם צמוד לשורשים במונה או במכנה.\n4. **חילוק בחזקה הגבוהה של $x$** לגבולות באינסוף של פונקציות רציונליות.\n5. **גבולות טריג סטנדרטיים** כמו $\\lim_{\\theta \\to 0} \\dfrac{\\sin \\theta}{\\theta} = 1$ (ברדיאנים).\n\n### צורות לא מוגדרות שתראו\nהבחינה משתמשת בעיקר ב-$0/0$ ו-$\\infty/\\infty$. הן אות לשכתוב, לא תשובה. אחרי שכתוב — הציבו שוב.\n\n### גבולות חד-צדדיים\nכשמופיעים שורש, ערך מוחלט או הגדרה מקוטעת, בדקו $x \\to a^+$ ו-$x \\to a^-$ בנפרד. גבול דו-צדדי קיים רק כששני הצדדים מסכימים.\n\n### קשר לרציפות\nפונקציה רציפה ב-$a$ כאשר $\\lim_{x \\to a} f(x) = f(a)$. פריטי \"האם הגבול קיים?\" הם לעיתים בדיקת רציפות אחרי פישוט."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — Factor a $0/0$ Limit",
+      "title_he": "דוגמה פתורה 4 — פירוק גבול $0/0$",
+      "body_en_md": "### Problem\nEvaluate $\\displaystyle\\lim_{x \\to 3} \\dfrac{x^2 - 9}{x - 3}$.\n\n### Move 1: Diagnose\nDirect substitution gives $0/0$ — indeterminate, so rewrite.\n\n### Move 2: Factor\n$$x^2 - 9 = (x-3)(x+3),$$\nso for $x \\neq 3$,\n$$\\dfrac{x^2-9}{x-3} = x+3.$$\n\n### Move 3: Substitute\n$$\\lim_{x \\to 3}(x+3) = 6.$$\n\n### Move 4: Interpretation\nThe hole at $x=3$ does not change the limit. Continuity of the simplified polynomial finishes the argument — still no $\\varepsilon$–$\\delta$.\n\n### Exam tip\nWrite \"indeterminate $0/0$ → factor\" as a one-line plan before algebra.",
+      "body_he_md": "### בעיה\nחשבו $\\displaystyle\\lim_{x \\to 3} \\dfrac{x^2 - 9}{x - 3}$.\n\n### צעד 1: אבחון\nהצבה נותנת $0/0$ — לא מוגדר, לכן משכתבים.\n\n### צעד 2: פירוק\n$$x^2 - 9 = (x-3)(x+3),$$\nולכן עבור $x \\neq 3$: $\\dfrac{x^2-9}{x-3} = x+3$.\n\n### צעד 3: הצבה\n$$\\lim_{x \\to 3}(x+3) = 6.$$\n\n### צעד 4: פרשנות\nהחור ב-$x=3$ אינו משנה את הגבול. רציפות הפולינום המפושט מסיימת — בלי $\\varepsilon$–$\\delta$.\n\n### טיפ לבחינה\nכתבו \"לא מוגדר $0/0$ → פירוק\" כתוכנית של שורה לפני האלגברה."
+    },
+    {
       "kind": "method_guide",
       "title_en": "Method Guide — How to Choose the Right Technique",
       "title_he": "מדריך שיטות — איך לבחור את הטכניקה הנכונה",
@@ -235,8 +251,8 @@
       "difficulty": "easy",
       "stem_en": "Compute $\\lim_{x \\to 1} (x^2 + 2x + 1)$.",
       "stem_he": "חשבו את $\\lim_{x \\to 1} (x^2 + 2x + 1)$.",
-      "explanation_en": "**Substitute.** $1 + 2 + 1 = 4$.\n\n**Answer:** $4$.",
-      "explanation_he": "**הצבה.** $1 + 2 + 1 = 4$.\n\n**תשובה:** $4$.",
+      "explanation_en": "**Substitute.** $1 + 2 + 1 = 4$.\n\n**Answer:** $4$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**הצבה.** $1 + 2 + 1 = 4$.\n\n**תשובה:** $4$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "limit_substitution"
       ],
@@ -245,7 +261,12 @@
       },
       "source_item_id": "0e25b999-7443-5cc7-a7ad-02b0b36498a9",
       "points_level_min": "5pt",
-      "correct_answer": "4"
+      "correct_answer": "4",
+      "archetypes": [
+        "application",
+        "procedural",
+        "graphical"
+      ]
     },
     {
       "ord": 2,
@@ -253,8 +274,8 @@
       "difficulty": "hard",
       "stem_en": "Compute $\\lim_{x \\to 0} \\dfrac{\\tan(2x)}{x}$.",
       "stem_he": "חשבו את $\\lim_{x \\to 0} \\dfrac{\\tan(2x)}{x}$.",
-      "explanation_en": "**Step 1 — Rewrite.** $\\dfrac{\\tan 2x}{x} = 2\\cdot\\dfrac{\\sin 2x}{2x}\\cdot\\dfrac{1}{\\cos 2x}$.\n\n**Step 2 — Take the limit.** $2\\cdot 1\\cdot 1 = 2$.\n\n**Answer:** $2$.",
-      "explanation_he": "**שלב 1 — כתיבה מחדש.** $2\\cdot\\dfrac{\\sin 2x}{2x}\\cdot\\dfrac{1}{\\cos 2x}$.\n\n**שלב 2 — גבול.** $2\\cdot 1\\cdot 1 = 2$.\n\n**תשובה:** $2$.",
+      "explanation_en": "**Step 1 — Rewrite.** $\\dfrac{\\tan 2x}{x} = 2\\cdot\\dfrac{\\sin 2x}{2x}\\cdot\\dfrac{1}{\\cos 2x}$.\n\n**Step 2 — Take the limit.** $2\\cdot 1\\cdot 1 = 2$.\n\n**Answer:** $2$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** Show every algebraic rearrangement; partial credit tracks the method.",
+      "explanation_he": "**שלב 1 — כתיבה מחדש.** $2\\cdot\\dfrac{\\sin 2x}{2x}\\cdot\\dfrac{1}{\\cos 2x}$.\n\n**שלב 2 — גבול.** $2\\cdot 1\\cdot 1 = 2$.\n\n**תשובה:** $2$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** הציגו כל סידור אלגברי; ניקוד חלקי עוקב אחרי השיטה.",
       "skill_atoms": [
         "special_limit"
       ],
@@ -273,7 +294,13 @@
       "source_item_id": "5c5ab999-62c1-5d38-89b3-637d115309c2",
       "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
       "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
-      "points_level_min": "5pt"
+      "points_level_min": "5pt",
+      "archetypes": [
+        "application",
+        "conceptual",
+        "proof"
+      ],
+      "needs_review": true
     },
     {
       "ord": 3,
@@ -281,8 +308,8 @@
       "difficulty": "hard",
       "stem_en": "True or False: $\\lim_{x \\to 0} \\dfrac{1}{x^2}$ grows without bound (equals $+\\infty$).",
       "stem_he": "נכון או לא נכון: $\\lim_{x \\to 0} \\dfrac{1}{x^2}$ גדל ללא גבול (שווה $+\\infty$).",
-      "explanation_en": "**Both sides.** $\\tfrac{1}{x^2} > 0$ and $\\to +\\infty$ from both sides — **true**.",
-      "explanation_he": "**שני הצדדים.** $\\tfrac{1}{x^2} > 0$ ו-$\\to +\\infty$ משני הצדדים — **נכון**.",
+      "explanation_en": "**Both sides.** $\\tfrac{1}{x^2} > 0$ and $\\to +\\infty$ from both sides — **true**.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**שני הצדדים.** $\\tfrac{1}{x^2} > 0$ ו-$\\to +\\infty$ משני הצדדים — **נכון**.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "one_sided_limit"
       ],
@@ -291,7 +318,12 @@
       },
       "source_item_id": "7e98cfb5-db7d-5e27-ac32-c1a7d9185a02",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "application",
+        "conceptual",
+        "error_analysis"
+      ]
     },
     {
       "ord": 4,
@@ -299,8 +331,8 @@
       "difficulty": "medium",
       "stem_en": "What is $\\lim_{x \\to 0} \\dfrac{\\tan x}{x}$?",
       "stem_he": "מהו $\\lim_{x \\to 0} \\dfrac{\\tan x}{x}$?",
-      "explanation_en": "**Rewrite.** $\\dfrac{\\tan x}{x} = \\dfrac{\\sin x}{x}\\cdot\\dfrac{1}{\\cos x} \\to 1\\cdot 1$.\n\n**Answer:** $1$.",
-      "explanation_he": "**כתיבה מחדש.** $\\dfrac{\\tan x}{x} = \\dfrac{\\sin x}{x}\\cdot\\dfrac{1}{\\cos x} \\to 1$.\n\n**תשובה:** $1$.",
+      "explanation_en": "**Rewrite.** $\\dfrac{\\tan x}{x} = \\dfrac{\\sin x}{x}\\cdot\\dfrac{1}{\\cos x} \\to 1\\cdot 1$.\n\n**Answer:** $1$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**כתיבה מחדש.** $\\dfrac{\\tan x}{x} = \\dfrac{\\sin x}{x}\\cdot\\dfrac{1}{\\cos x} \\to 1$.\n\n**תשובה:** $1$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "special_limit"
       ],
@@ -333,7 +365,12 @@
         "$\\infty$",
         "$\\tfrac12$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "application",
+        "conceptual",
+        "error_analysis"
+      ]
     },
     {
       "ord": 5,
@@ -341,8 +378,8 @@
       "difficulty": "easy",
       "stem_en": "Compute $\\lim_{x \\to 4} (2x - 3)$.",
       "stem_he": "חשבו את $\\lim_{x \\to 4} (2x - 3)$.",
-      "explanation_en": "**Substitute.** $8 - 3 = 5$.\n\n**Answer:** $5$.",
-      "explanation_he": "**הצבה.** $8 - 3 = 5$.\n\n**תשובה:** $5$.",
+      "explanation_en": "**Substitute.** $8 - 3 = 5$.\n\n**Answer:** $5$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**הצבה.** $8 - 3 = 5$.\n\n**תשובה:** $5$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "limit_substitution"
       ],
@@ -351,7 +388,12 @@
       },
       "source_item_id": "8a6476e6-db71-56ab-9455-349c86d978ea",
       "points_level_min": "5pt",
-      "correct_answer": "5"
+      "correct_answer": "5",
+      "archetypes": [
+        "application",
+        "procedural",
+        "graphical"
+      ]
     },
     {
       "ord": 6,
@@ -359,8 +401,8 @@
       "difficulty": "medium",
       "stem_en": "What is $\\lim_{x \\to \\infty} \\dfrac{2x^2 + 1}{x^2 + 3}$?",
       "stem_he": "מהו $\\lim_{x \\to \\infty} \\dfrac{2x^2 + 1}{x^2 + 3}$?",
-      "explanation_en": "**Ratio of leading coefficients.** $\\tfrac{2}{1} = 2$.\n\n**Answer:** $2$.",
-      "explanation_he": "**יחס מקדמים מובילים.** $\\tfrac{2}{1} = 2$.\n\n**תשובה:** $2$.",
+      "explanation_en": "**Ratio of leading coefficients.** $\\tfrac{2}{1} = 2$.\n\n**Answer:** $2$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**יחס מקדמים מובילים.** $\\tfrac{2}{1} = 2$.\n\n**תשובה:** $2$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "limit_at_infinity"
       ],
@@ -393,7 +435,12 @@
         "$\\infty$",
         "$1$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "application",
+        "conceptual",
+        "error_analysis"
+      ]
     },
     {
       "ord": 7,
@@ -401,8 +448,8 @@
       "difficulty": "medium",
       "stem_en": "Compute $\\lim_{x \\to 0} \\dfrac{\\sin x}{x}$.",
       "stem_he": "חשבו את $\\lim_{x \\to 0} \\dfrac{\\sin x}{x}$.",
-      "explanation_en": "**Fundamental trig limit.** $\\lim_{x\\to0}\\tfrac{\\sin x}{x} = 1$.\n\n**Answer:** $1$.",
-      "explanation_he": "**גבול טריגונומטרי יסודי.** $\\lim_{x\\to0}\\tfrac{\\sin x}{x} = 1$.\n\n**תשובה:** $1$.",
+      "explanation_en": "**Fundamental trig limit.** $\\lim_{x\\to0}\\tfrac{\\sin x}{x} = 1$.\n\n**Answer:** $1$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**גבול טריגונומטרי יסודי.** $\\lim_{x\\to0}\\tfrac{\\sin x}{x} = 1$.\n\n**תשובה:** $1$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "special_limit"
       ],
@@ -411,7 +458,12 @@
       },
       "source_item_id": "edebf9eb-d565-5413-bac4-76e1c342632f",
       "points_level_min": "5pt",
-      "correct_answer": "1"
+      "correct_answer": "1",
+      "archetypes": [
+        "application",
+        "procedural",
+        "graphical"
+      ]
     },
     {
       "ord": 8,
@@ -419,8 +471,8 @@
       "difficulty": "medium",
       "stem_en": "Compute $\\lim_{x \\to 0} \\dfrac{\\sin(5x)}{x}$.",
       "stem_he": "חשבו את $\\lim_{x \\to 0} \\dfrac{\\sin(5x)}{x}$.",
-      "explanation_en": "**Rewrite.** $\\dfrac{\\sin 5x}{x} = 5\\cdot\\dfrac{\\sin 5x}{5x} \\to 5\\cdot 1$.\n\n**Answer:** $5$.",
-      "explanation_he": "**כתיבה מחדש.** $\\dfrac{\\sin 5x}{x} = 5\\cdot\\dfrac{\\sin 5x}{5x} \\to 5$.\n\n**תשובה:** $5$.",
+      "explanation_en": "**Rewrite.** $\\dfrac{\\sin 5x}{x} = 5\\cdot\\dfrac{\\sin 5x}{5x} \\to 5\\cdot 1$.\n\n**Answer:** $5$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**כתיבה מחדש.** $\\dfrac{\\sin 5x}{x} = 5\\cdot\\dfrac{\\sin 5x}{5x} \\to 5$.\n\n**תשובה:** $5$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "special_limit"
       ],
@@ -429,7 +481,12 @@
       },
       "source_item_id": "cb3864f2-a824-57d2-8fa2-8c958b63e7d3",
       "points_level_min": "5pt",
-      "correct_answer": "5"
+      "correct_answer": "5",
+      "archetypes": [
+        "application",
+        "procedural",
+        "graphical"
+      ]
     },
     {
       "ord": 9,
@@ -437,8 +494,8 @@
       "difficulty": "medium",
       "stem_en": "Compute $\\lim_{x \\to 2} \\dfrac{x^2 - 4}{x - 2}$.",
       "stem_he": "חשבו את $\\lim_{x \\to 2} \\dfrac{x^2 - 4}{x - 2}$.",
-      "explanation_en": "**Factor and cancel.** $x + 2 \\to 4$.\n\n**Answer:** $4$.",
-      "explanation_he": "**פירוק וצמצום.** $x + 2 \\to 4$.\n\n**תשובה:** $4$.",
+      "explanation_en": "**Factor and cancel.** $x + 2 \\to 4$.\n\n**Answer:** $4$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**פירוק וצמצום.** $x + 2 \\to 4$.\n\n**תשובה:** $4$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "limit_indeterminate",
         "factoring"
@@ -448,7 +505,12 @@
       },
       "source_item_id": "c667a95f-cbd0-51fc-9068-be9471d03b97",
       "points_level_min": "5pt",
-      "correct_answer": "4"
+      "correct_answer": "4",
+      "archetypes": [
+        "application",
+        "procedural",
+        "graphical"
+      ]
     },
     {
       "ord": 10,
@@ -456,8 +518,8 @@
       "difficulty": "medium",
       "stem_en": "Compute $\\lim_{x \\to 3} \\dfrac{x^2 - 9}{x - 3}$.",
       "stem_he": "חשבו את $\\lim_{x \\to 3} \\dfrac{x^2 - 9}{x - 3}$.",
-      "explanation_en": "**Factor and cancel.** $x + 3 \\to 6$.\n\n**Answer:** $6$.",
-      "explanation_he": "**פירוק וצמצום.** $x + 3 \\to 6$.\n\n**תשובה:** $6$.",
+      "explanation_en": "**Factor and cancel.** $x + 3 \\to 6$.\n\n**Answer:** $6$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**פירוק וצמצום.** $x + 3 \\to 6$.\n\n**תשובה:** $6$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "limit_indeterminate",
         "factoring"
@@ -467,7 +529,12 @@
       },
       "source_item_id": "cf52c051-82a0-5c9b-a824-1f8e1027680e",
       "points_level_min": "5pt",
-      "correct_answer": "6"
+      "correct_answer": "6",
+      "archetypes": [
+        "application",
+        "procedural",
+        "graphical"
+      ]
     },
     {
       "ord": 11,
@@ -475,8 +542,8 @@
       "difficulty": "medium",
       "stem_en": "True or False: $\\lim_{x \\to 0} \\dfrac{\\sin x}{x} = 1$.",
       "stem_he": "נכון או לא נכון: $\\lim_{x \\to 0} \\dfrac{\\sin x}{x} = 1$.",
-      "explanation_en": "**Fundamental trig limit** — **true**.",
-      "explanation_he": "**גבול טריגונומטרי יסודי** — **נכון**.",
+      "explanation_en": "**Fundamental trig limit** — **true**.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**גבול טריגונומטרי יסודי** — **נכון**.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "special_limit"
       ],
@@ -485,7 +552,12 @@
       },
       "source_item_id": "0dec24e1-a357-5300-8455-3ad7fd7b4cc6",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "application",
+        "conceptual",
+        "error_analysis"
+      ]
     },
     {
       "ord": 12,
@@ -493,8 +565,8 @@
       "difficulty": "hard",
       "stem_en": "Compute $\\lim_{x \\to 0} \\dfrac{1 - \\cos x}{x^2}$.",
       "stem_he": "חשבו את $\\lim_{x \\to 0} \\dfrac{1 - \\cos x}{x^2}$.",
-      "explanation_en": "**Known limit.** $\\lim_{x\\to0}\\dfrac{1-\\cos x}{x^2} = \\tfrac12$.\n\n**Answer:** $\\tfrac12$.",
-      "explanation_he": "**גבול ידוע.** $\\lim_{x\\to0}\\dfrac{1-\\cos x}{x^2} = \\tfrac12$.\n\n**תשובה:** $\\tfrac12$.",
+      "explanation_en": "**Known limit.** $\\lim_{x\\to0}\\dfrac{1-\\cos x}{x^2} = \\tfrac12$.\n\n**Answer:** $\\tfrac12$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**גבול ידוע.** $\\lim_{x\\to0}\\dfrac{1-\\cos x}{x^2} = \\tfrac12$.\n\n**תשובה:** $\\tfrac12$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "special_limit"
       ],
@@ -503,7 +575,12 @@
       },
       "source_item_id": "e287d6a1-5ae7-5981-8cf9-41c1602afc3e",
       "points_level_min": "5pt",
-      "correct_answer": "0.5"
+      "correct_answer": "0.5",
+      "archetypes": [
+        "application",
+        "procedural",
+        "graphical"
+      ]
     },
     {
       "ord": 13,
@@ -511,8 +588,8 @@
       "difficulty": "hard",
       "stem_en": "Compute $\\lim_{x \\to 0} \\dfrac{\\sin(3x)}{\\sin(2x)}$.",
       "stem_he": "חשבו את $\\lim_{x \\to 0} \\dfrac{\\sin(3x)}{\\sin(2x)}$.",
-      "explanation_en": "**Rewrite.** $\\dfrac{\\sin 3x}{\\sin 2x} = \\dfrac{3}{2}\\cdot\\dfrac{\\sin 3x /3x}{\\sin 2x /2x} \\to \\tfrac32$.\n\n**Answer:** $\\tfrac32$.",
-      "explanation_he": "**כתיבה מחדש.** $\\to \\dfrac{3}{2}$.\n\n**תשובה:** $\\tfrac32$.",
+      "explanation_en": "**Rewrite.** $\\dfrac{\\sin 3x}{\\sin 2x} = \\dfrac{3}{2}\\cdot\\dfrac{\\sin 3x /3x}{\\sin 2x /2x} \\to \\tfrac32$.\n\n**Answer:** $\\tfrac32$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**כתיבה מחדש.** $\\to \\dfrac{3}{2}$.\n\n**תשובה:** $\\tfrac32$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "special_limit"
       ],
@@ -521,7 +598,12 @@
       },
       "source_item_id": "8405a347-e561-5c8a-9530-2d17b5a8b0be",
       "points_level_min": "5pt",
-      "correct_answer": "1.5"
+      "correct_answer": "1.5",
+      "archetypes": [
+        "application",
+        "procedural",
+        "graphical"
+      ]
     },
     {
       "ord": 14,
@@ -529,8 +611,8 @@
       "difficulty": "hard",
       "stem_en": "Compute $\\lim_{x \\to 0} \\dfrac{e^{x} - 1}{x}$.",
       "stem_he": "חשבו את $\\lim_{x \\to 0} \\dfrac{e^{x} - 1}{x}$.",
-      "explanation_en": "**Known limit.** $\\lim_{x\\to0}\\dfrac{e^x - 1}{x} = 1$ (the slope of $e^x$ at $0$).\n\n**Answer:** $1$.",
-      "explanation_he": "**גבול ידוע.** $\\lim_{x\\to0}\\dfrac{e^x - 1}{x} = 1$ (השיפוע של $e^x$ ב-$0$).\n\n**תשובה:** $1$.",
+      "explanation_en": "**Known limit.** $\\lim_{x\\to0}\\dfrac{e^x - 1}{x} = 1$ (the slope of $e^x$ at $0$).\n\n**Answer:** $1$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**גבול ידוע.** $\\lim_{x\\to0}\\dfrac{e^x - 1}{x} = 1$ (השיפוע של $e^x$ ב-$0$).\n\n**תשובה:** $1$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "special_limit"
       ],
@@ -539,7 +621,12 @@
       },
       "source_item_id": "46fb83c5-c284-5040-9da9-d09331d65b6d",
       "points_level_min": "5pt",
-      "correct_answer": "1"
+      "correct_answer": "1",
+      "archetypes": [
+        "application",
+        "procedural",
+        "graphical"
+      ]
     },
     {
       "ord": 15,
@@ -547,8 +634,8 @@
       "difficulty": "hard",
       "stem_en": "Compute $\\lim_{x \\to 0} \\dfrac{\\sin x}{3x}$.",
       "stem_he": "חשבו את $\\lim_{x \\to 0} \\dfrac{\\sin x}{3x}$.",
-      "explanation_en": "**Rewrite.** $\\dfrac{1}{3}\\cdot\\dfrac{\\sin x}{x} \\to \\tfrac13$.\n\n**Answer:** $\\tfrac13$.",
-      "explanation_he": "**כתיבה מחדש.** $\\dfrac{1}{3}\\cdot\\dfrac{\\sin x}{x} \\to \\tfrac13$.\n\n**תשובה:** $\\tfrac13$.",
+      "explanation_en": "**Rewrite.** $\\dfrac{1}{3}\\cdot\\dfrac{\\sin x}{x} \\to \\tfrac13$.\n\n**Answer:** $\\tfrac13$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**כתיבה מחדש.** $\\dfrac{1}{3}\\cdot\\dfrac{\\sin x}{x} \\to \\tfrac13$.\n\n**תשובה:** $\\tfrac13$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "special_limit"
       ],
@@ -557,7 +644,370 @@
       },
       "source_item_id": "a1098189-8d3d-54d8-9a56-ce8d722eda17",
       "points_level_min": "5pt",
-      "correct_answer": "0.333333"
+      "correct_answer": "0.333333",
+      "archetypes": [
+        "application",
+        "procedural",
+        "graphical"
+      ]
+    },
+    {
+      "ord": 16,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "In words: the first attempt on a polynomial limit at a finite point is usually what?",
+      "stem_he": "במילים: הניסיון הראשון בגבול פולינום בנקודה סופית הוא בדרך כלל מה?",
+      "explanation_en": "**Step 1.** Continuous functions allow direct substitution.\n\n**Step 2.** Polynomials are continuous everywhere.\n\n**Step 3.** Answer: direct substitution (or plug-in).\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut limits item, name the theorem/identity before computing.",
+      "explanation_he": "**שלב 1.** פונקציות רציפות מאפשרות הצבה ישירה.\n\n**שלב 2.** פולינומים רציפים בכל מקום.\n\n**שלב 3.** תשובה: הצבה ישירה.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בפריט בגרות בגבולות, ציינו את המשפט/זהות לפני החישוב.",
+      "skill_atoms": [
+        "limit_substitution"
+      ],
+      "answer_payload": {
+        "acceptable_answers": [
+          "direct substitution",
+          "substitution",
+          "plug in",
+          "plug-in",
+          "evaluate"
+        ],
+        "case_sensitive": false
+      },
+      "source_item_id": "8998b8e6-24ef-4331-a917-6e4ed50707b0",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "conceptual",
+        "procedural"
+      ],
+      "correct_answer": "direct substitution"
+    },
+    {
+      "ord": 17,
+      "kind": "fill_blank",
+      "difficulty": "easy",
+      "stem_en": "Fill: $\\lim_{x\\to 2}\\dfrac{x^2-4}{x-2}$ is initially the indeterminate form ___ / ___.",
+      "stem_he": "השלימו: $\\lim_{x\\to 2}\\dfrac{x^2-4}{x-2}$ הוא בהתחלה הצורה הלא מוגדרת ___ / ___.",
+      "explanation_en": "**Step 1.** Plug $x=2$: numerator $0$, denominator $0$.\n\n**Step 2.** Form $0/0$.\n\n**Step 3.** Then factor — still no $\\varepsilon$–$\\delta$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut limits item, name the theorem/identity before computing.",
+      "explanation_he": "**שלב 1.** הצבה: $0/0$.\n\n**שלב 2.** הצורה $0/0$.\n\n**שלב 3.** אחר כך מפרקים — בלי אפסילון–דלתא.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בפריט בגרות בגבולות, ציינו את המשפט/זהות לפני החישוב.",
+      "skill_atoms": [
+        "limit_indeterminate"
+      ],
+      "answer_payload": {
+        "acceptable_answers": [
+          "0/0",
+          "0 / 0"
+        ],
+        "case_sensitive": false
+      },
+      "source_item_id": "e08282c9-7f72-4637-893a-1da1bea0069d",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "procedural"
+      ],
+      "correct_answer": "0/0"
+    },
+    {
+      "ord": 18,
+      "kind": "mcq_multi",
+      "difficulty": "medium",
+      "stem_en": "Which belong to the high-school algebraic limit toolkit? (Select all.)",
+      "stem_he": "מה שייך לארגז הכלים האלגברי לגבולות בתיכון? (בחרו הכול.)",
+      "explanation_en": "**Step 1.** Factoring and rationalizing are core.\n\n**Step 2.** Degree comparison at infinity is core.\n\n**Step 3.** Formal $\\varepsilon$–$\\delta$ proofs are university — not selected.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut limits item, name the theorem/identity before computing.",
+      "explanation_he": "**שלב 1.** פירוק ורציונליזציה ליבה.\n\n**שלב 2.** השוואת מעלות באינסוף ליבה.\n\n**שלב 3.** הוכחות $\\varepsilon$–$\\delta$ אינן לבגרות.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בפריט בגרות בגבולות, ציינו את המשפט/זהות לפני החישוב.",
+      "skill_atoms": [
+        "factoring",
+        "limit_at_infinity"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "Factor and cancel for $0/0$",
+          "Rationalize conjugates",
+          "Write a full $\\varepsilon$–$\\delta$ proof",
+          "Divide by highest power of $x$ at infinity"
+        ],
+        "options_he": [
+          "פירוק וצמצום ל-$0/0$",
+          "רציונליזציה עם צמוד",
+          "הוכחת $\\varepsilon$–$\\delta$ מלאה",
+          "חילוק בחזקה הגבוהה של $x$ באינסוף"
+        ],
+        "correct_indices": [
+          0,
+          1,
+          3
+        ]
+      },
+      "source_item_id": "19bf32a3-f54d-43dd-bf84-4025669d4e8f",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "correct_indices": [
+        0,
+        1,
+        3
+      ]
+    },
+    {
+      "ord": 19,
+      "kind": "match",
+      "difficulty": "medium",
+      "stem_en": "Match symptom to technique.",
+      "stem_he": "התאימו סימפטום לטכניקה.",
+      "explanation_en": "**Step 1.** $0/0$ polynomial → factor.\n\n**Step 2.** Root conjugates → rationalize.\n\n**Step 3.** Infinity rational → dominant terms.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut limits item, name the theorem/identity before computing.",
+      "explanation_he": "**שלב 1.** $0/0$ פולינומי → פירוק.\n\n**שלב 2.** שורשים → רציונליזציה.\n\n**שלב 3.** אינסוף רציונלי → איברים שולטים.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בפריט בגרות בגבולות, ציינו את המשפט/זהות לפני החישוב.",
+      "skill_atoms": [
+        "factoring",
+        "limit_at_infinity",
+        "limit_at_infinity"
+      ],
+      "answer_payload": {
+        "left_en": [
+          "$0/0$ with polynomials",
+          "Root in numerator, $0/0$",
+          "Rational as $x\\to\\infty$"
+        ],
+        "left_he": [
+          "$0/0$ עם פולינומים",
+          "שורש במונה, $0/0$",
+          "רציונלי כאשר $x\\to\\infty$"
+        ],
+        "right_en": [
+          "Factor and cancel",
+          "Multiply by conjugate",
+          "Divide by highest $x$ power"
+        ],
+        "right_he": [
+          "פירוק וצמצום",
+          "הכפלה בצמוד",
+          "חילוק בחזקת $x$ הגבוהה"
+        ],
+        "correct_pairs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "source_item_id": "e02bfff2-bb22-461d-8475-d56da3f45ddd",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "application",
+        "graphical",
+        "conceptual"
+      ]
+    },
+    {
+      "ord": 20,
+      "kind": "ordering",
+      "difficulty": "medium",
+      "stem_en": "Order steps for $\\lim_{x\\to 3}\\dfrac{x^2-9}{x-3}$.",
+      "stem_he": "סדרו צעדים עבור $\\lim_{x\\to 3}\\dfrac{x^2-9}{x-3}$.",
+      "explanation_en": "**Step 1.** Spot $0/0$.\n\n**Step 2.** Factor.\n\n**Step 3.** Cancel and substitute.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut limits item, name the theorem/identity before computing.",
+      "explanation_he": "**שלב 1.** זהו $0/0$.\n\n**שלב 2.** פרקו.\n\n**שלב 3.** צמצמו והציבו.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בפריט בגרות בגבולות, ציינו את המשפט/זהות לפני החישוב.",
+      "skill_atoms": [
+        "factoring",
+        "limit_indeterminate"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "Recognize indeterminate $0/0$",
+          "Factor numerator as $(x-3)(x+3)$",
+          "Cancel $(x-3)$ for $x\\neq 3$",
+          "Substitute to get $6$"
+        ],
+        "steps_he": [
+          "זהו צורה לא מוגדרת $0/0$",
+          "פרקו מונה $(x-3)(x+3)$",
+          "צמצמו $(x-3)$ עבור $x\\neq 3$",
+          "הציבו לקבלת $6$"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "source_item_id": "25e2007a-5c76-4c4b-a06c-7f1f6a76a935",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "procedural",
+        "conceptual"
+      ]
+    },
+    {
+      "ord": 21,
+      "kind": "derivation",
+      "difficulty": "hard",
+      "stem_en": "Explain in steps why continuity of polynomials lets you evaluate $\\lim_{x\\to a}p(x)$ by $p(a)$ without $\\varepsilon$–$\\delta$.",
+      "stem_he": "הסבירו בשלבים מדוע רציפות פולינומים מאפשרת לחשב $\\lim_{x\\to a}p(x)$ על ידי $p(a)$ בלי $\\varepsilon$–$\\delta$.",
+      "explanation_en": "**Step 1.** Bagrut treats polynomials as continuous on $\\mathbb{R}$.\n\n**Step 2.** Continuity means limit equals value.\n\n**Step 3.** Therefore substitution is justified at high-school level.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** Show every algebraic rearrangement; partial credit tracks the method.",
+      "explanation_he": "**שלב 1.** בבגרות פולינומים רציפים על הממשיים.\n\n**שלב 2.** רציפות פירושה גבול = ערך.\n\n**שלב 3.** לכן הצבה מוצדקת ברמת תיכון.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** הציגו כל סידור אלגברי; ניקוד חלקי עוקב אחרי השיטה.",
+      "skill_atoms": [
+        "limit_substitution"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "Invoke continuity of polynomials",
+          "Limit equals value",
+          "Substitute $p(a)$"
+        ],
+        "steps_he": [
+          "הפעילו רציפות פולינומים",
+          "גבול שווה לערך",
+          "הציבו $p(a)$"
+        ]
+      },
+      "source_item_id": "84260f22-278e-4152-819f-0a46a1202cc4",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "proof"
+      ],
+      "needs_review": true,
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה שלב-אחר-שלב ותשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון."
+    },
+    {
+      "ord": 22,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Evaluate $\\lim_{x\\to 2}(3x+1)$.",
+      "stem_he": "חשבו $\\lim_{x\\to 2}(3x+1)$.",
+      "explanation_en": "**Step 1.** Polynomial → direct substitution.\n\n**Step 2.** $3\\cdot 2+1=7$.\n\n**Step 3.** No indeterminate form appeared.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut limits item, name the theorem/identity before computing.",
+      "explanation_he": "**שלב 1.** פולינום → הצבה ישירה.\n\n**שלב 2.** $7$.\n\n**שלב 3.** לא הופיעה צורה לא מוגדרת.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בפריט בגרות בגבולות, ציינו את המשפט/זהות לפני החישוב.",
+      "skill_atoms": [
+        "limit_substitution"
+      ],
+      "answer_payload": {
+        "value": 7
+      },
+      "source_item_id": "fb0b5a73-4139-4345-b848-127006495b62",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "procedural",
+        "application"
+      ],
+      "verify": {
+        "expr": "3*2+1",
+        "expected": 7
+      },
+      "correct_answer": "7"
+    },
+    {
+      "ord": 23,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Evaluate $\\lim_{x\\to 3}\\dfrac{x^2-9}{x-3}$.",
+      "stem_he": "חשבו $\\lim_{x\\to 3}\\dfrac{x^2-9}{x-3}$.",
+      "explanation_en": "**Step 1.** $0/0$ → factor.\n\n**Step 2.** Cancel to $x+3$.\n\n**Step 3.** Limit $6$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut limits item, name the theorem/identity before computing.",
+      "explanation_he": "**שלב 1.** $0/0$ → פירוק.\n\n**שלב 2.** צמצום ל-$x+3$.\n\n**שלב 3.** גבול $6$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בפריט בגרות בגבולות, ציינו את המשפט/זהות לפני החישוב.",
+      "skill_atoms": [
+        "factoring",
+        "limit_indeterminate"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "a79cb1b4-b967-4f94-bd4e-5abc42a64c9e",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "verify": {
+        "expr": "3+3",
+        "expected": 6
+      },
+      "correct_answer": "6"
+    },
+    {
+      "ord": 24,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Explain with steps how you decide whether $\\lim_{x\\to 0}|x|/x$ exists (two-sided).",
+      "stem_he": "הסבירו בשלבים איך מחליטים אם $\\lim_{x\\to 0}|x|/x$ קיים (דו-צדדי).",
+      "explanation_en": "**Step 1.** Right side: for $x>0$, value $1$.\n\n**Step 2.** Left side: for $x<0$, value $-1$.\n\n**Step 3.** Sides disagree → two-sided limit does not exist.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** Show every algebraic rearrangement; partial credit tracks the method.",
+      "explanation_he": "**שלב 1.** מימין: $1$.\n\n**שלב 2.** משמאל: $-1$.\n\n**שלב 3.** הצדדים לא מסכימים → אין גבול דו-צדדי.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** הציגו כל סידור אלגברי; ניקוד חלקי עוקב אחרי השיטה.",
+      "skill_atoms": [
+        "one_sided_limit"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "Compute right limit",
+          "Compute left limit",
+          "Compare; conclude DNE"
+        ],
+        "steps_he": [
+          "חשבו גבול ימני",
+          "חשבו גבול שמאלי",
+          "השוו; הסיקו שאינו קיים"
+        ]
+      },
+      "source_item_id": "0db732ad-0cb4-44f4-98ec-95f44950fc4d",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "application",
+        "proof",
+        "conceptual"
+      ],
+      "needs_review": true,
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה שלב-אחר-שלב ותשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון."
+    },
+    {
+      "ord": 25,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "stem_en": "True or False: getting $0/0$ after substitution means the limit equals $0$.",
+      "stem_he": "נכון או לא נכון: קבלת $0/0$ אחרי הצבה פירושה שהגבול שווה $0$.",
+      "explanation_en": "**Step 1.** $0/0$ is indeterminate, not an answer.\n\n**Step 2.** You must rewrite algebraically.\n\n**Step 3.** Statement is false.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut limits item, name the theorem/identity before computing.",
+      "explanation_he": "**שלב 1.** $0/0$ לא מוגדר, לא תשובה.\n\n**שלב 2.** חייבים לשכתב.\n\n**שלב 3.** הטענה שגויה.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בפריט בגרות בגבולות, ציינו את המשפט/זהות לפני החישוב.",
+      "skill_atoms": [
+        "limit_indeterminate"
+      ],
+      "answer_payload": {
+        "value": false
+      },
+      "source_item_id": "6266344a-e093-429f-97e9-4bdf5e0ba90a",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "correct_bool": false
+    },
+    {
+      "ord": 26,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "In radians, $\\lim_{\\theta\\to 0}\\dfrac{\\sin\\theta}{\\theta}$ equals?",
+      "stem_he": "ברדיאנים, $\\lim_{\\theta\\to 0}\\dfrac{\\sin\\theta}{\\theta}$ שווה ל?",
+      "explanation_en": "**Step 1.** Standard Bagrut trig limit.\n\n**Step 2.** Value is $1$.\n\n**Step 3.** Degrees would break this — stay in radians.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut limits item, name the theorem/identity before computing.",
+      "explanation_he": "**שלב 1.** גבול טריג סטנדרטי בבגרות.\n\n**שלב 2.** הערך $1$.\n\n**שלב 3.** במעלות זה נשבר — הישארו ברדיאנים.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בפריט בגרות בגבולות, ציינו את המשפט/זהות לפני החישוב.",
+      "skill_atoms": [
+        "special_limit"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$1$",
+          "$0$",
+          "$\\infty$",
+          "$\\pi/180$"
+        ],
+        "options_he": [
+          "$1$",
+          "$0$",
+          "$\\infty$",
+          "$\\pi/180$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "4cd24b0d-48bf-4b35-b125-f6c20b8fa253",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "conceptual"
+      ],
+      "correct_index": 0
     }
   ],
   "est_minutes": 50,

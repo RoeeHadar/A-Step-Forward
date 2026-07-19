@@ -77,6 +77,22 @@
       "body_he_md": "**חשבו** $\\displaystyle\\lim_{x\\to\\infty}\\left(\\frac{x+3}{x+1}\\right)^x$.\n\nבעיה סטנדרטית מסוג $1^\\infty$ — הבסיס מתקרב ל-$1$ והמעריך גדל, ולכן הצבה ישירה אינה קובעת.\n\n---\n\n### צעד 1: זיהוי הצורה הבלתי-קצובה\n\nכש-$x\\to\\infty$: $\\dfrac{x+3}{x+1}\\to 1$, והמעריך $x\\to\\infty$. צורה: $1^\\infty$.\n\n### צעד 2: לקיחת לוגריתם טבעי\n\nנגדיר $y=\\left(\\dfrac{x+3}{x+1}\\right)^x$. אז:\n$$\\ln y = x\\ln\\left(\\frac{x+3}{x+1}\\right).$$\n\nלוגריתם הופך חזקה לכפל — הכלי הסטנדרטי לצורות חזקה בלתי-קצובות.\n\n### צעד 3: שכתוב כשבר\n\n$$\\ln y = \\frac{\\ln\\left(1+\\frac{2}{x+1}\\right)}{1/x}.$$\n\nכש-$x\\to\\infty$: מונה $\\to 0$, מכנה $\\to 0$. צורה $0/0$.\n\n### צעד 4: גבול סטנדרטי\n\nנגדיר $t=2/(x+1)\\to 0$. אז:\n$$\\ln y \\approx 2\\cdot\\frac{\\ln(1+t)}{t}\\to 2\\cdot 1 = 2.$$\n\n*(שימוש ב-$\\lim_{t\\to 0}\\frac{\\ln(1+t)}{t}=1$.)*\n\n### צעד 5: העלאה ב-$e$\n\n$$\\lim_{x\\to\\infty}\\ln y = 2 \\quad\\Rightarrow\\quad \\lim_{x\\to\\infty}y = e^2.$$\n\n$$\\boxed{\\lim_{x\\to\\infty}\\left(\\frac{x+3}{x+1}\\right)^x = e^2.}$$\n\n**בדיקת sanity:** $\\frac{x+3}{x+1}=1+\\frac{2}{x+1}\\approx\\left(1+\\frac{2}{x}\\right)^x\\to e^2$. ✓\n\n**מסקנה מרכזית:** טריק $e^{\\ln}$ ממיר כל גבול חזקה $1^\\infty$ לבעיה $0/0$ או $0\\cdot\\infty$ — תמיד ציינו את הצורה לפני לקיחת לוגריתם."
     },
     {
+      "kind": "theory",
+      "title_en": "Dominant Terms and Horizontal Asymptotes",
+      "title_he": "איברים שולטים ואסימפטוטות אופקיות",
+      "body_en_md": "## Limits at Infinity on the Bagrut\n\nFor rational $f(x) = \\dfrac{p(x)}{q(x)}$, divide numerator and denominator by the highest power of $x$ appearing in the denominator (or compare degrees):\n\n- $\\deg p < \\deg q$ → $\\lim_{x \\to \\infty} f(x) = 0$ (horizontal asymptote $y=0$).\n- $\\deg p = \\deg q$ → limit is the ratio of leading coefficients.\n- $\\deg p > \\deg q$ → limit is $\\pm\\infty$ (sign from leading terms); there may be an oblique asymptote, but many 4pt items only ask the infinite limit.\n\n### Indeterminate $\\infty/\\infty$\nDividing by $x^n$ resolves $\\infty/\\infty$ without L'Hôpital. Bagrut 4pt rarely requires L'Hôpital; prefer algebraic dominance.\n\n### Sequences vs functions\nThe same degree rules apply to $a_n = \\dfrac{an^2+\\cdots}{bn^2+\\cdots}$. Write $\\lim_{n \\to \\infty}$ with the same leading-coefficient logic.\n\n### Graphical reading\nA horizontal asymptote $y=L$ means the graph approaches height $L$ as $x \\to \\pm\\infty$, even if the function never equals $L$. Do not confuse with a vertical asymptote at a finite root of the denominator.",
+      "body_he_md": "## גבולות באינסוף בבגרות\n\nלפונקציה רציונלית $f(x) = \\dfrac{p(x)}{q(x)}$, חלקו מונה ומכנה בחזקה הגבוהה של $x$ במכנה (או השוו מעלות):\n\n- $\\deg p < \\deg q$ → הגבול $0$ (אסימפטוטה $y=0$).\n- $\\deg p = \\deg q$ → יחס מקדמים מובילים.\n- $\\deg p > \\deg q$ → $\\pm\\infty$ לפי הסימן; ייתכן אסימפטוטה משופעת, אך פריטי 4 יח\"ל רבים שואלים רק את הגבול האינסופי.\n\n### צורה $\\infty/\\infty$\nחילוק ב-$x^n$ פותר $\\infty/\\infty$ בלי לופיטל. ב-4 יח\"ל עדיף שליטה אלגברית.\n\n### סדרות מול פונקציות\nאותם כללי מעלות חלים על $a_n = \\dfrac{an^2+\\cdots}{bn^2+\\cdots}$.\n\n### קריאה גרפית\nאסימפטוטה אופקית $y=L$ פירושה שהגרף מתקרב לגובה $L$ כאשר $x \\to \\pm\\infty$, גם אם הפונקציה לעולם אינה שווה ל-$L$. אל תבלבלו עם אסימפטוטה אנכית בשורש סופי של המכנה."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — Equal-Degree Rational Limit",
+      "title_he": "דוגמה פתורה 4 — גבול רציונלי שווה-מעלה",
+      "body_en_md": "### Problem\nFind $\\displaystyle\\lim_{x \\to \\infty} \\dfrac{6x^2 - x + 1}{2x^2 + 5}$.\n\n### Move 1: Compare degrees\nBoth degree $2$ → limit = ratio of leading coefficients.\n\n### Move 2: Divide by $x^2$\n$$\\dfrac{6 - 1/x + 1/x^2}{2 + 5/x^2} \\to \\dfrac{6}{2} = 3.$$\n\n### Move 3: Report\nHorizontal asymptote $y=3$. No need for L'Hôpital or $\\varepsilon$ language.\n\n### Exam tip\nState \"equal degree → leading coefficient ratio\" in words for method marks.",
+      "body_he_md": "### בעיה\nמצאו $\\displaystyle\\lim_{x \\to \\infty} \\dfrac{6x^2 - x + 1}{2x^2 + 5}$.\n\n### צעד 1: השוואת מעלות\nשתיהן מעלה $2$ → הגבול = יחס מקדמים מובילים.\n\n### צעד 2: חילוק ב-$x^2$\n$$\\dfrac{6 - 1/x + 1/x^2}{2 + 5/x^2} \\to 3.$$\n\n### צעד 3: דיווח\nאסימפטוטה אופקית $y=3$. אין צורך בלופיטל.\n\n### טיפ לבחינה\nכתבו במילים \"מעלות שוות → יחס מקדמים\" לנקודות שיטה."
+    },
+    {
       "kind": "method_guide",
       "title_en": "Method Guide — Handling Indeterminate Forms at Infinity",
       "title_he": "מדריך שיטות — טיפול בצורות בלתי-קצובות באינסוף",
@@ -214,8 +230,8 @@
       "difficulty": "easy",
       "stem_en": "Compute $\\lim_{x \\to \\infty} \\dfrac{1}{x}$.",
       "stem_he": "חשבו את $\\lim_{x \\to \\infty} \\dfrac{1}{x}$.",
-      "explanation_en": "**As $x$ grows, $\\tfrac1x$ shrinks to $0$.**\n\n**Answer:** $0$.",
-      "explanation_he": "**ככל ש-$x$ גדל, $\\tfrac1x$ שואף ל-$0$.**\n\n**תשובה:** $0$.",
+      "explanation_en": "**As $x$ grows, $\\tfrac1x$ shrinks to $0$.**\n\n**Answer:** $0$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**ככל ש-$x$ גדל, $\\tfrac1x$ שואף ל-$0$.**\n\n**תשובה:** $0$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "limit_at_infinity"
       ],
@@ -224,7 +240,12 @@
       },
       "source_item_id": "d4741a6e-4a27-52c4-b8fb-6fa422af7439",
       "points_level_min": "5pt",
-      "correct_answer": "0"
+      "correct_answer": "0",
+      "archetypes": [
+        "application",
+        "procedural",
+        "graphical"
+      ]
     },
     {
       "ord": 2,
@@ -232,8 +253,8 @@
       "difficulty": "hard",
       "stem_en": "Find the horizontal asymptote of $y = \\dfrac{3x^2 - 1}{x^2 + 4}$.",
       "stem_he": "מצאו את האסימפטוטה האופקית של $y = \\dfrac{3x^2 - 1}{x^2 + 4}$.",
-      "explanation_en": "**Step 1 — Compare degrees.** Both numerator and denominator are degree $2$.\n\n**Step 2 — Ratio of leading coefficients.** $\\tfrac{3}{1} = 3$.\n\n**Answer:** $y = 3$.",
-      "explanation_he": "**שלב 1 — השוואת מעלות.** המונה והמכנה ממעלה $2$.\n\n**שלב 2 — יחס מקדמים מובילים.** $\\tfrac{3}{1} = 3$.\n\n**תשובה:** $y = 3$.",
+      "explanation_en": "**Step 1 — Compare degrees.** Both numerator and denominator are degree $2$.\n\n**Step 2 — Ratio of leading coefficients.** $\\tfrac{3}{1} = 3$.\n\n**Answer:** $y = 3$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** Show every algebraic rearrangement; partial credit tracks the method.",
+      "explanation_he": "**שלב 1 — השוואת מעלות.** המונה והמכנה ממעלה $2$.\n\n**שלב 2 — יחס מקדמים מובילים.** $\\tfrac{3}{1} = 3$.\n\n**תשובה:** $y = 3$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** הציגו כל סידור אלגברי; ניקוד חלקי עוקב אחרי השיטה.",
       "skill_atoms": [
         "limit_at_infinity"
       ],
@@ -252,7 +273,13 @@
       "source_item_id": "1e1d46f6-82a4-512c-82b9-e5aaff15e9c8",
       "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
       "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
-      "points_level_min": "5pt"
+      "points_level_min": "5pt",
+      "archetypes": [
+        "application",
+        "conceptual",
+        "proof"
+      ],
+      "needs_review": true
     },
     {
       "ord": 3,
@@ -260,8 +287,8 @@
       "difficulty": "medium",
       "stem_en": "What is $\\lim_{x \\to \\infty} \\dfrac{3x^2 - x}{2x^2 + 5}$?",
       "stem_he": "מהו $\\lim_{x \\to \\infty} \\dfrac{3x^2 - x}{2x^2 + 5}$?",
-      "explanation_en": "**Equal degrees.** Ratio of leading coefficients $\\tfrac{3}{2}$.\n\n**Answer:** $\\tfrac{3}{2}$.",
-      "explanation_he": "**מעלות שוות.** יחס מקדמים מובילים $\\tfrac{3}{2}$.\n\n**תשובה:** $\\tfrac{3}{2}$.",
+      "explanation_en": "**Equal degrees.** Ratio of leading coefficients $\\tfrac{3}{2}$.\n\n**Answer:** $\\tfrac{3}{2}$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**מעלות שוות.** יחס מקדמים מובילים $\\tfrac{3}{2}$.\n\n**תשובה:** $\\tfrac{3}{2}$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "limit_at_infinity"
       ],
@@ -294,7 +321,12 @@
         "$0$",
         "$\\infty$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "application",
+        "conceptual",
+        "error_analysis"
+      ]
     },
     {
       "ord": 4,
@@ -302,8 +334,8 @@
       "difficulty": "medium",
       "stem_en": "True or False: $\\lim_{x \\to \\infty} \\dfrac{x}{x^2 + 1} = 0$.",
       "stem_he": "נכון או לא נכון: $\\lim_{x \\to \\infty} \\dfrac{x}{x^2 + 1} = 0$.",
-      "explanation_en": "**Denominator degree is larger** $\\Rightarrow$ limit $0$ — **true**.",
-      "explanation_he": "**מעלת המכנה גבוהה יותר** $\\Rightarrow$ הגבול $0$ — **נכון**.",
+      "explanation_en": "**Denominator degree is larger** $\\Rightarrow$ limit $0$ — **true**.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**מעלת המכנה גבוהה יותר** $\\Rightarrow$ הגבול $0$ — **נכון**.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "limit_at_infinity"
       ],
@@ -312,7 +344,12 @@
       },
       "source_item_id": "94de0c38-7b27-5b81-bada-66a61c5de5b4",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "application",
+        "conceptual",
+        "error_analysis"
+      ]
     },
     {
       "ord": 5,
@@ -320,8 +357,8 @@
       "difficulty": "easy",
       "stem_en": "Compute $\\lim_{x \\to \\infty} \\left(7 - \\dfrac{1}{x}\\right)$.",
       "stem_he": "חשבו את $\\lim_{x \\to \\infty} \\left(7 - \\dfrac{1}{x}\\right)$.",
-      "explanation_en": "**$\\tfrac1x \\to 0$.** So $7 - 0 = 7$.\n\n**Answer:** $7$.",
-      "explanation_he": "**$\\tfrac1x \\to 0$.** ולכן $7 - 0 = 7$.\n\n**תשובה:** $7$.",
+      "explanation_en": "**$\\tfrac1x \\to 0$.** So $7 - 0 = 7$.\n\n**Answer:** $7$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**$\\tfrac1x \\to 0$.** ולכן $7 - 0 = 7$.\n\n**תשובה:** $7$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "limit_at_infinity"
       ],
@@ -330,7 +367,12 @@
       },
       "source_item_id": "1066d243-c481-5c58-ab21-2f3f10a3bece",
       "points_level_min": "5pt",
-      "correct_answer": "7"
+      "correct_answer": "7",
+      "archetypes": [
+        "application",
+        "procedural",
+        "graphical"
+      ]
     },
     {
       "ord": 6,
@@ -338,8 +380,8 @@
       "difficulty": "easy",
       "stem_en": "Compute $\\lim_{x \\to \\infty} \\dfrac{3}{x^2}$.",
       "stem_he": "חשבו את $\\lim_{x \\to \\infty} \\dfrac{3}{x^2}$.",
-      "explanation_en": "**Denominator grows** $\\Rightarrow$ the fraction $\\to 0$.\n\n**Answer:** $0$.",
-      "explanation_he": "**המכנה גדל** $\\Rightarrow$ השבר $\\to 0$.\n\n**תשובה:** $0$.",
+      "explanation_en": "**Denominator grows** $\\Rightarrow$ the fraction $\\to 0$.\n\n**Answer:** $0$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**המכנה גדל** $\\Rightarrow$ השבר $\\to 0$.\n\n**תשובה:** $0$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "limit_at_infinity"
       ],
@@ -348,7 +390,12 @@
       },
       "source_item_id": "c543fe0b-6f3a-5340-9cb3-9b934bf50ddf",
       "points_level_min": "5pt",
-      "correct_answer": "0"
+      "correct_answer": "0",
+      "archetypes": [
+        "application",
+        "procedural",
+        "graphical"
+      ]
     },
     {
       "ord": 7,
@@ -356,8 +403,8 @@
       "difficulty": "medium",
       "stem_en": "The horizontal asymptote of $y = \\dfrac{4x - 1}{2x + 3}$ is:",
       "stem_he": "האסימפטוטה האופקית של $y = \\dfrac{4x - 1}{2x + 3}$ היא:",
-      "explanation_en": "**Equal degrees.** $\\tfrac{4}{2} = 2$, so $y = 2$.\n\n**Answer:** $y = 2$.",
-      "explanation_he": "**מעלות שוות.** $\\tfrac{4}{2} = 2$, ולכן $y = 2$.\n\n**תשובה:** $y = 2$.",
+      "explanation_en": "**Equal degrees.** $\\tfrac{4}{2} = 2$, so $y = 2$.\n\n**Answer:** $y = 2$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**מעלות שוות.** $\\tfrac{4}{2} = 2$, ולכן $y = 2$.\n\n**תשובה:** $y = 2$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "limit_at_infinity"
       ],
@@ -390,7 +437,12 @@
         "$y = 0$",
         "$y = \\tfrac12$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "application",
+        "conceptual",
+        "error_analysis"
+      ]
     },
     {
       "ord": 8,
@@ -398,8 +450,8 @@
       "difficulty": "medium",
       "stem_en": "What is $\\lim_{x \\to \\infty} \\dfrac{2x^2 + 3x}{5x^2}$?",
       "stem_he": "מהו $\\lim_{x \\to \\infty} \\dfrac{2x^2 + 3x}{5x^2}$?",
-      "explanation_en": "**Ratio of leading coefficients.** $\\tfrac{2}{5}$.\n\n**Answer:** $\\tfrac{2}{5}$.",
-      "explanation_he": "**יחס מקדמים מובילים.** $\\tfrac{2}{5}$.\n\n**תשובה:** $\\tfrac{2}{5}$.",
+      "explanation_en": "**Ratio of leading coefficients.** $\\tfrac{2}{5}$.\n\n**Answer:** $\\tfrac{2}{5}$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**יחס מקדמים מובילים.** $\\tfrac{2}{5}$.\n\n**תשובה:** $\\tfrac{2}{5}$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "limit_at_infinity"
       ],
@@ -432,7 +484,12 @@
         "$0$",
         "$\\infty$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "application",
+        "conceptual",
+        "error_analysis"
+      ]
     },
     {
       "ord": 9,
@@ -440,8 +497,8 @@
       "difficulty": "medium",
       "stem_en": "Compute $\\lim_{x \\to \\infty} \\dfrac{5x + 2}{x - 1}$.",
       "stem_he": "חשבו את $\\lim_{x \\to \\infty} \\dfrac{5x + 2}{x - 1}$.",
-      "explanation_en": "**Equal degrees.** $\\tfrac{5}{1} = 5$.\n\n**Answer:** $5$.",
-      "explanation_he": "**מעלות שוות.** $\\tfrac{5}{1} = 5$.\n\n**תשובה:** $5$.",
+      "explanation_en": "**Equal degrees.** $\\tfrac{5}{1} = 5$.\n\n**Answer:** $5$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**מעלות שוות.** $\\tfrac{5}{1} = 5$.\n\n**תשובה:** $5$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "limit_at_infinity"
       ],
@@ -450,7 +507,12 @@
       },
       "source_item_id": "39ad2e2c-f1f4-50ca-b797-31b5a4f972df",
       "points_level_min": "5pt",
-      "correct_answer": "5"
+      "correct_answer": "5",
+      "archetypes": [
+        "application",
+        "procedural",
+        "graphical"
+      ]
     },
     {
       "ord": 10,
@@ -458,8 +520,8 @@
       "difficulty": "medium",
       "stem_en": "Compute $\\lim_{x \\to \\infty} \\dfrac{x^2 + 1}{x^3 + x}$.",
       "stem_he": "חשבו את $\\lim_{x \\to \\infty} \\dfrac{x^2 + 1}{x^3 + x}$.",
-      "explanation_en": "**Denominator has higher degree.** The limit is $0$.\n\n**Answer:** $0$.",
-      "explanation_he": "**מעלת המכנה גבוהה יותר.** הגבול הוא $0$.\n\n**תשובה:** $0$.",
+      "explanation_en": "**Denominator has higher degree.** The limit is $0$.\n\n**Answer:** $0$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**מעלת המכנה גבוהה יותר.** הגבול הוא $0$.\n\n**תשובה:** $0$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "limit_at_infinity"
       ],
@@ -468,7 +530,12 @@
       },
       "source_item_id": "949d8be9-70ea-55ce-8b55-407c6c798649",
       "points_level_min": "5pt",
-      "correct_answer": "0"
+      "correct_answer": "0",
+      "archetypes": [
+        "application",
+        "procedural",
+        "graphical"
+      ]
     },
     {
       "ord": 11,
@@ -476,8 +543,8 @@
       "difficulty": "medium",
       "stem_en": "Compute $\\lim_{x \\to -\\infty} \\dfrac{3x + 1}{x - 2}$.",
       "stem_he": "חשבו את $\\lim_{x \\to -\\infty} \\dfrac{3x + 1}{x - 2}$.",
-      "explanation_en": "**Equal degrees.** $\\tfrac{3}{1} = 3$ (same both directions).\n\n**Answer:** $3$.",
-      "explanation_he": "**מעלות שוות.** $\\tfrac{3}{1} = 3$ (זהה בשני הכיוונים).\n\n**תשובה:** $3$.",
+      "explanation_en": "**Equal degrees.** $\\tfrac{3}{1} = 3$ (same both directions).\n\n**Answer:** $3$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**מעלות שוות.** $\\tfrac{3}{1} = 3$ (זהה בשני הכיוונים).\n\n**תשובה:** $3$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "limit_at_infinity"
       ],
@@ -486,7 +553,12 @@
       },
       "source_item_id": "7250548b-250c-5a9c-b8cb-97fc57e2a0a2",
       "points_level_min": "5pt",
-      "correct_answer": "3"
+      "correct_answer": "3",
+      "archetypes": [
+        "application",
+        "procedural",
+        "graphical"
+      ]
     },
     {
       "ord": 12,
@@ -494,8 +566,8 @@
       "difficulty": "medium",
       "stem_en": "Compute $\\lim_{x \\to \\infty} \\dfrac{6x^3 + 1}{2x^3 - x}$.",
       "stem_he": "חשבו את $\\lim_{x \\to \\infty} \\dfrac{6x^3 + 1}{2x^3 - x}$.",
-      "explanation_en": "**Equal degrees.** $\\tfrac{6}{2} = 3$.\n\n**Answer:** $3$.",
-      "explanation_he": "**מעלות שוות.** $\\tfrac{6}{2} = 3$.\n\n**תשובה:** $3$.",
+      "explanation_en": "**Equal degrees.** $\\tfrac{6}{2} = 3$.\n\n**Answer:** $3$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**מעלות שוות.** $\\tfrac{6}{2} = 3$.\n\n**תשובה:** $3$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "limit_at_infinity"
       ],
@@ -504,7 +576,12 @@
       },
       "source_item_id": "46a31b89-f387-5e2d-b1e7-fe2236e2fd99",
       "points_level_min": "5pt",
-      "correct_answer": "3"
+      "correct_answer": "3",
+      "archetypes": [
+        "application",
+        "procedural",
+        "graphical"
+      ]
     },
     {
       "ord": 13,
@@ -512,8 +589,8 @@
       "difficulty": "medium",
       "stem_en": "True or False: $\\lim_{x \\to \\infty} \\dfrac{x^2}{x + 1} = \\infty$.",
       "stem_he": "נכון או לא נכון: $\\lim_{x \\to \\infty} \\dfrac{x^2}{x + 1} = \\infty$.",
-      "explanation_en": "**Numerator degree is larger** $\\Rightarrow$ grows without bound — **true**.",
-      "explanation_he": "**מעלת המונה גבוהה יותר** $\\Rightarrow$ גדל ללא גבול — **נכון**.",
+      "explanation_en": "**Numerator degree is larger** $\\Rightarrow$ grows without bound — **true**.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**מעלת המונה גבוהה יותר** $\\Rightarrow$ גדל ללא גבול — **נכון**.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "limit_at_infinity"
       ],
@@ -522,7 +599,12 @@
       },
       "source_item_id": "ca5fec05-2daf-54b3-81d0-fcc8b651ac93",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "application",
+        "conceptual",
+        "error_analysis"
+      ]
     },
     {
       "ord": 14,
@@ -530,8 +612,8 @@
       "difficulty": "hard",
       "stem_en": "Compute $\\lim_{x \\to \\infty} \\dfrac{2x^2}{x^2 + 1}$.",
       "stem_he": "חשבו את $\\lim_{x \\to \\infty} \\dfrac{2x^2}{x^2 + 1}$.",
-      "explanation_en": "**Equal degrees.** $\\tfrac{2}{1} = 2$.\n\n**Answer:** $2$.",
-      "explanation_he": "**מעלות שוות.** $\\tfrac{2}{1} = 2$.\n\n**תשובה:** $2$.",
+      "explanation_en": "**Equal degrees.** $\\tfrac{2}{1} = 2$.\n\n**Answer:** $2$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**מעלות שוות.** $\\tfrac{2}{1} = 2$.\n\n**תשובה:** $2$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "limit_at_infinity"
       ],
@@ -540,7 +622,12 @@
       },
       "source_item_id": "83c2b362-44f9-572e-8894-825a2066435f",
       "points_level_min": "5pt",
-      "correct_answer": "2"
+      "correct_answer": "2",
+      "archetypes": [
+        "application",
+        "procedural",
+        "graphical"
+      ]
     },
     {
       "ord": 15,
@@ -548,8 +635,8 @@
       "difficulty": "hard",
       "stem_en": "Compute $\\lim_{x \\to \\infty} \\left(\\sqrt{x^2 + 1} - x\\right)$.",
       "stem_he": "חשבו את $\\lim_{x \\to \\infty} \\left(\\sqrt{x^2 + 1} - x\\right)$.",
-      "explanation_en": "**Multiply by the conjugate.** $\\dfrac{1}{\\sqrt{x^2+1}+x} \\to 0$.\n\n**Answer:** $0$.",
-      "explanation_he": "**הכפלה בצמוד.** $\\dfrac{1}{\\sqrt{x^2+1}+x} \\to 0$.\n\n**תשובה:** $0$.",
+      "explanation_en": "**Multiply by the conjugate.** $\\dfrac{1}{\\sqrt{x^2+1}+x} \\to 0$.\n\n**Answer:** $0$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut, name the rule/identity before substituting numbers.",
+      "explanation_he": "**הכפלה בצמוד.** $\\dfrac{1}{\\sqrt{x^2+1}+x} \\to 0$.\n\n**תשובה:** $0$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בבגרות ציינו את הכלל/הזהות לפני הצבת מספרים.",
       "skill_atoms": [
         "limit_at_infinity"
       ],
@@ -558,7 +645,363 @@
       },
       "source_item_id": "bcbcb05a-a5c6-5380-8a85-2223290d033f",
       "points_level_min": "5pt",
+      "correct_answer": "0",
+      "archetypes": [
+        "application",
+        "procedural",
+        "graphical"
+      ]
+    },
+    {
+      "ord": 16,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "In words: if deg(numerator) < deg(denominator), the limit at infinity of a rational is?",
+      "stem_he": "במילים: אם מעלת המונה קטנה ממעלת המכנה, הגבול באינסוף של רציונלית הוא?",
+      "explanation_en": "**Step 1.** Denominator grows faster.\n\n**Step 2.** Fraction → $0$.\n\n**Step 3.** Horizontal asymptote $y=0$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut limits at infinity item, name the theorem/identity before computing.",
+      "explanation_he": "**שלב 1.** המכנה גדל מהר יותר.\n\n**שלב 2.** השבר → $0$.\n\n**שלב 3.** אסימפטוטה $y=0$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בפריט בגרות בגבולות באינסוף, ציינו את המשפט/זהות לפני החישוב.",
+      "skill_atoms": [
+        "limit_at_infinity"
+      ],
+      "answer_payload": {
+        "acceptable_answers": [
+          "0",
+          "zero"
+        ],
+        "case_sensitive": false
+      },
+      "source_item_id": "e823a9fb-c631-4fa0-a5aa-3bedd66ea407",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "conceptual",
+        "procedural"
+      ],
       "correct_answer": "0"
+    },
+    {
+      "ord": 17,
+      "kind": "fill_blank",
+      "difficulty": "easy",
+      "stem_en": "Fill: equal-degree rationals → limit is ratio of ___ coefficients.",
+      "stem_he": "השלימו: מעלות שוות → הגבול הוא יחס המקדמים ה___.",
+      "explanation_en": "**Step 1.** Leading terms dominate.\n\n**Step 2.** Blank: leading.\n\n**Step 3.** No L'Hôpital required.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut limits at infinity item, name the theorem/identity before computing.",
+      "explanation_he": "**שלב 1.** איברים מובילים שולטים.\n\n**שלב 2.** הריק: מובילים / leading.\n\n**שלב 3.** אין צורך בלופיטל.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בפריט בגרות בגבולות באינסוף, ציינו את המשפט/זהות לפני החישוב.",
+      "skill_atoms": [
+        "limit_at_infinity"
+      ],
+      "answer_payload": {
+        "acceptable_answers": [
+          "leading",
+          "leading coefficients",
+          "מובילים"
+        ],
+        "case_sensitive": false
+      },
+      "source_item_id": "569d7b8f-b726-44f4-844a-93dd8d00d74d",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "procedural"
+      ],
+      "correct_answer": "leading"
+    },
+    {
+      "ord": 18,
+      "kind": "mcq_multi",
+      "difficulty": "medium",
+      "stem_en": "Which are correct for limits at infinity? (Select all.)",
+      "stem_he": "מה נכון לגבולות באינסוף? (בחרו הכול.)",
+      "explanation_en": "**Step 1.** Degree rules are correct.\n\n**Step 2.** $\\infty/\\infty$ needs rewriting, not \"equals infinity\".\n\n**Step 3.** Reject the false claim that every rational → $\\infty$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut limits at infinity item, name the theorem/identity before computing.",
+      "explanation_he": "**שלב 1.** כללי המעלות נכונים.\n\n**שלב 2.** $\\infty/\\infty$ דורש שכתוב.\n\n**שלב 3.** לא כל רציונלית שואפת לאינסוף.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בפריט בגרות בגבולות באינסוף, ציינו את המשפט/זהות לפני החישוב.",
+      "skill_atoms": [
+        "limit_at_infinity"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "Lower numerator degree → limit $0$",
+          "Equal degrees → leading coefficient ratio",
+          "Every rational tends to $\\infty$",
+          "Divide by highest power of $x$ to resolve $\\infty/\\infty$"
+        ],
+        "options_he": [
+          "מעלת מונה נמוכה → גבול $0$",
+          "מעלות שוות → יחס מקדמים מובילים",
+          "כל רציונלית שואפת ל-$\\infty$",
+          "חילוק בחזקה הגבוהה פותר $\\infty/\\infty$"
+        ],
+        "correct_indices": [
+          0,
+          1,
+          3
+        ]
+      },
+      "source_item_id": "8019a1b9-47af-4a78-8b72-c131da007a02",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "correct_indices": [
+        0,
+        1,
+        3
+      ]
+    },
+    {
+      "ord": 19,
+      "kind": "match",
+      "difficulty": "medium",
+      "stem_en": "Match degree relation to limit behavior as $x\\to\\infty$.",
+      "stem_he": "התאימו יחס מעלות להתנהגות הגבול כאשר $x\\to\\infty$.",
+      "explanation_en": "**Step 1.** Lower num → $0$.\n\n**Step 2.** Equal → coefficient ratio.\n\n**Step 3.** Higher num → $\\pm\\infty$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut limits at infinity item, name the theorem/identity before computing.",
+      "explanation_he": "**שלב 1.** מונה נמוך → $0$.\n\n**שלב 2.** שווה → יחס מקדמים.\n\n**שלב 3.** מונה גבוה → $\\pm\\infty$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בפריט בגרות בגבולות באינסוף, ציינו את המשפט/זהות לפני החישוב.",
+      "skill_atoms": [
+        "limit_at_infinity"
+      ],
+      "answer_payload": {
+        "left_en": [
+          "deg num < deg den",
+          "deg num = deg den",
+          "deg num > deg den"
+        ],
+        "left_he": [
+          "מעלת מונה < מכנה",
+          "מעלות שוות",
+          "מעלת מונה > מכנה"
+        ],
+        "right_en": [
+          "Limit $0$",
+          "Leading coeff ratio",
+          "Infinite limit ($\\pm$)"
+        ],
+        "right_he": [
+          "גבול $0$",
+          "יחס מקדמים מובילים",
+          "גבול אינסופי ($\\pm$)"
+        ],
+        "correct_pairs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "source_item_id": "ca7e680d-17e0-421e-9619-b5af0f50fe31",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "application",
+        "graphical",
+        "conceptual"
+      ]
+    },
+    {
+      "ord": 20,
+      "kind": "ordering",
+      "difficulty": "medium",
+      "stem_en": "Order steps for $\\lim_{x\\to\\infty}\\dfrac{6x^2+1}{2x^2+5}$.",
+      "stem_he": "סדרו צעדים עבור $\\lim_{x\\to\\infty}\\dfrac{6x^2+1}{2x^2+5}$.",
+      "explanation_en": "**Step 1.** Compare degrees.\n\n**Step 2.** Divide by $x^2$.\n\n**Step 3.** Read off $6/2=3$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut limits at infinity item, name the theorem/identity before computing.",
+      "explanation_he": "**שלב 1.** השוו מעלות.\n\n**שלב 2.** חלקו ב-$x^2$.\n\n**שלב 3.** קבלו $3$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בפריט בגרות בגבולות באינסוף, ציינו את המשפט/זהות לפני החישוב.",
+      "skill_atoms": [
+        "limit_at_infinity"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "Note both degrees are $2$",
+          "Divide num and den by $x^2$",
+          "Let $1/x\\to 0$",
+          "Conclude limit $3$"
+        ],
+        "steps_he": [
+          "שימו לב ששתי המעלות $2$",
+          "חלקו מונה ומכנה ב-$x^2$",
+          "העבירו $1/x\\to 0$",
+          "הסיקו גבול $3$"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "source_item_id": "197b9e8c-abec-49c3-9156-37b434d63653",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "procedural",
+        "conceptual"
+      ]
+    },
+    {
+      "ord": 21,
+      "kind": "derivation",
+      "difficulty": "hard",
+      "stem_en": "Derive briefly why equal-degree rationals tend to the ratio of leading coefficients as $x\\to\\infty$.",
+      "stem_he": "גזרו בקצרה מדוע רציונליות שוות-מעלה שואפות ליחס המקדמים המובילים כאשר $x\\to\\infty$.",
+      "explanation_en": "**Step 1.** Factor $x^n$ from num and den.\n\n**Step 2.** Remaining lower terms / $x^k \\to 0$.\n\n**Step 3.** Left with $a_n/b_n$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** Show every algebraic rearrangement; partial credit tracks the method.",
+      "explanation_he": "**שלב 1.** הוציאו $x^n$ ממונה ומכנה.\n\n**שלב 2.** איברים נמוכים / $x^k \\to 0$.\n\n**שלב 3.** נשאר $a_n/b_n$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** הציגו כל סידור אלגברי; ניקוד חלקי עוקב אחרי השיטה.",
+      "skill_atoms": [
+        "limit_at_infinity"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "Factor highest power",
+          "Lower terms vanish",
+          "Leading ratio remains"
+        ],
+        "steps_he": [
+          "הוציאו חזקה גבוהה",
+          "איברים נמוכים נעלמים",
+          "נשאר יחס מובילים"
+        ]
+      },
+      "source_item_id": "e44bc377-e211-42f4-9106-06c489180e4c",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "proof"
+      ],
+      "needs_review": true,
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה שלב-אחר-שלב ותשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון."
+    },
+    {
+      "ord": 22,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Evaluate $\\lim_{x\\to\\infty}\\dfrac{6x^2-x}{2x^2+5}$.",
+      "stem_he": "חשבו $\\lim_{x\\to\\infty}\\dfrac{6x^2-x}{2x^2+5}$.",
+      "explanation_en": "**Step 1.** Equal degree $2$.\n\n**Step 2.** Ratio $6/2=3$.\n\n**Step 3.** Horizontal asymptote $y=3$.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut limits at infinity item, name the theorem/identity before computing.",
+      "explanation_he": "**שלב 1.** מעלות שוות $2$.\n\n**שלב 2.** יחס $3$.\n\n**שלב 3.** אסימפטוטה $y=3$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בפריט בגרות בגבולות באינסוף, ציינו את המשפט/זהות לפני החישוב.",
+      "skill_atoms": [
+        "limit_at_infinity"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "80cc042d-15db-4880-93fb-5d39ea6eff27",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "procedural",
+        "application"
+      ],
+      "verify": {
+        "expr": "6/2",
+        "expected": 3
+      },
+      "correct_answer": "3"
+    },
+    {
+      "ord": 23,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Evaluate $\\lim_{x\\to\\infty}\\dfrac{5x+1}{x^2+4}$ (finite answer).",
+      "stem_he": "חשבו $\\lim_{x\\to\\infty}\\dfrac{5x+1}{x^2+4}$ (תשובה סופית).",
+      "explanation_en": "**Step 1.** deg num $1$ < deg den $2$.\n\n**Step 2.** Limit $0$.\n\n**Step 3.** Graph flattens to the $x$-axis.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut limits at infinity item, name the theorem/identity before computing.",
+      "explanation_he": "**שלב 1.** מעלת מונה קטנה ממכנה.\n\n**שלב 2.** גבול $0$.\n\n**שלב 3.** הגרף נשטח לציר $x$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בפריט בגרות בגבולות באינסוף, ציינו את המשפט/זהות לפני החישוב.",
+      "skill_atoms": [
+        "limit_at_infinity"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "2710ff65-ca59-4480-a036-ad7434739381",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "verify": {
+        "expr": "0",
+        "expected": 0
+      },
+      "correct_answer": "0"
+    },
+    {
+      "ord": 24,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "With steps: explain whether $\\lim_{x\\to\\infty}\\dfrac{x^3+1}{2x^2-1}$ is finite, and why.",
+      "stem_he": "בשלבים: הסבירו האם $\\lim_{x\\to\\infty}\\dfrac{x^3+1}{2x^2-1}$ סופי, ומדוע.",
+      "explanation_en": "**Step 1.** deg num $3$ > deg den $2$.\n\n**Step 2.** Dominant $x^3/(2x^2)=x/2\\to\\infty$.\n\n**Step 3.** Limit is infinite (not a finite horizontal asymptote).\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** Show every algebraic rearrangement; partial credit tracks the method.",
+      "explanation_he": "**שלב 1.** מעלת מונה גדולה יותר.\n\n**שלב 2.** $x/2\\to\\infty$.\n\n**שלב 3.** הגבול אינסופי.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** הציגו כל סידור אלגברי; ניקוד חלקי עוקב אחרי השיטה.",
+      "skill_atoms": [
+        "limit_at_infinity"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "Compare degrees",
+          "Simplify dominant terms",
+          "Conclude infinite"
+        ],
+        "steps_he": [
+          "השוו מעלות",
+          "פשטו איברים שולטים",
+          "הסיקו אינסוף"
+        ]
+      },
+      "source_item_id": "b41f9912-c4d9-493a-b550-1620c07cb6e8",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "application",
+        "proof",
+        "conceptual"
+      ],
+      "needs_review": true,
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה שלב-אחר-שלב ותשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון."
+    },
+    {
+      "ord": 25,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "stem_en": "True or False: a horizontal asymptote $y=L$ requires the function to equal $L$ for some finite $x$.",
+      "stem_he": "נכון או לא נכון: אסימפטוטה אופקית $y=L$ דורשת שהפונקציה תשווה ל-$L$ ב-$x$ סופי כלשהו.",
+      "explanation_en": "**Step 1.** Asymptote is about end behavior.\n\n**Step 2.** Function need never equal $L$.\n\n**Step 3.** False.\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut limits at infinity item, name the theorem/identity before computing.",
+      "explanation_he": "**שלב 1.** אסימפטוטה היא על התנהגות בקצה.\n\n**שלב 2.** הפונקציה לא חייבת להגיע ל-$L$.\n\n**שלב 3.** לא נכון.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בפריט בגרות בגבולות באינסוף, ציינו את המשפט/זהות לפני החישוב.",
+      "skill_atoms": [
+        "limit_at_infinity"
+      ],
+      "answer_payload": {
+        "value": false
+      },
+      "source_item_id": "642cf93a-cc8b-43af-8a36-3f061f334f9d",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "conceptual"
+      ],
+      "correct_bool": false
+    },
+    {
+      "ord": 26,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "$\\lim_{x\\to\\infty}\\dfrac{4x^2}{8x^2+1}$ equals?",
+      "stem_he": "$\\lim_{x\\to\\infty}\\dfrac{4x^2}{8x^2+1}$ שווה ל?",
+      "explanation_en": "**Step 1.** Equal degree.\n\n**Step 2.** $4/8=1/2$.\n\n**Step 3.** Not $0$ (that would need lower numerator degree).\n\n**Step review.** Name the rule from this lesson before substituting numbers.\n\n**Wrong path.** Skipping the rule name is the most common Bagrut mark loss.\n\n**Exam tip.** On the Bagrut limits at infinity item, name the theorem/identity before computing.",
+      "explanation_he": "**שלב 1.** מעלות שוות.\n\n**שלב 2.** $1/2$.\n\n**שלב 3.** לא $0$.\n\n**סקירת שלבים.** ציינו את הכלל מהשיעור לפני הצבת מספרים.\n\n**דרך שגויה.** דילוג על שם הכלל הוא אובדן נקודות נפוץ בבגרות.\n\n**טיפ לבחינה.** בפריט בגרות בגבולות באינסוף, ציינו את המשפט/זהות לפני החישוב.",
+      "skill_atoms": [
+        "limit_at_infinity"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$1/2$",
+          "$0$",
+          "$4$",
+          "$\\infty$"
+        ],
+        "options_he": [
+          "$1/2$",
+          "$0$",
+          "$4$",
+          "$\\infty$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "fd1b3a80-148c-4aee-814a-2ca087ddae77",
+      "points_level_min": "4pt",
+      "archetypes": [
+        "conceptual",
+        "graphical"
+      ],
+      "correct_index": 0
     }
   ],
   "est_minutes": 45,
