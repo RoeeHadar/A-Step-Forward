@@ -110,6 +110,17 @@ export function goalKeyToPointsGroup(key: string | undefined | null): string | n
   return ONBOARDING_GOALS.find((g) => g.key === key)?.points_group ?? null;
 }
 
+/** Bilingual label for an onboarding/plan goal key (falls back to the raw key). */
+export function goalKeyLabel(
+  key: string | null | undefined,
+  locale: 'he' | 'en' = 'he',
+): string {
+  if (!key?.trim()) return '';
+  const found = ONBOARDING_GOALS.find((g) => g.key === key);
+  if (!found) return key.replace(/_/g, ' ');
+  return locale === 'he' ? found.label_he : found.label_en;
+}
+
 /** Validate + normalize an AI plan-update payload before writing to Neon. */
 export function sanitizePlanUpdatePayload(
   payload: PlanUpdatePayload,

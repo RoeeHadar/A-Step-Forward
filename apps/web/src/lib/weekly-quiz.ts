@@ -9,7 +9,7 @@
 import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import { randomUUID } from 'node:crypto';
-import { getConceptMastery, getLearnerProfile } from './neon-db';
+import { appendLearnerPersonaLine, getConceptMastery, getLearnerProfile } from './neon-db';
 import { evaluateGatePass, hasFrontier } from './plan-pacing';
 import { countGateAttempts, GATE_PASS_THRESHOLD, recordTestAttempt } from './test-attempts';
 import {
@@ -787,6 +787,18 @@ export async function submitWeeklyQuizForUser(
       chosen: answerByItem.get(q.id) ?? '',
     })),
   }).catch(() => null);
+
+  // Keep Memory "About me" current — Hebrew-default line about this gate attempt.
+  const pct = Math.round(score * 100);
+  const personaLine =
+    locale === 'en'
+      ? `Week ${row.week_num ?? args.weekNum} gate: scored ${pct}% (${passed ? 'passed' : 'needs remediation'}). Weak topics: ${weakForRemediation.slice(0, 4).join(', ') || 'none'}.`
+      : `שער שבוע ${row.week_num ?? args.weekNum}: ציון ${pct}% (${passed ? 'עבר/ה' : 'דורש חיזוק'}). נושאים חלשים: ${weakForRemediation.slice(0, 4).join(', ') || 'אין'}.`;
+  void appendLearnerPersonaLine(
+    userId,
+    locale === 'en' ? 'Recent observations' : 'תצפיות אחרונות',
+    personaLine,
+  ).catch(() => null);
 
   let planAdvanced = false;
   if (passed) {

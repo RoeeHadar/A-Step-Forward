@@ -26,7 +26,11 @@ import {
   type PacingResult,
 } from './plan-pacing';
 import { computeReadiness } from './readiness';
-import { countGateAttempts, getLatestGateWeakConcepts } from './test-attempts';
+import {
+  countGateAttempts,
+  ensureTestAttemptsTable,
+  getLatestGateWeakConcepts,
+} from './test-attempts';
 import { goalKeyToPointsGroup, sanitizeConceptIds } from './plan-catalog';
 import {
   buildFastPlanConceptOrder,
@@ -986,11 +990,13 @@ export async function persistDiagnosticSummary(
     WHERE learner_id = ${learnerId}
   `;
 
+  // Hebrew-default product: persist the HE brief into the learner-facing persona.
+  // English brief stays in mental_state.diagnostic_summary for agents / EN UI.
   const personaLine =
-    `${summary.agent_brief_en.slice(0, 600)} ` +
-    `(Weak: ${summary.weak_concepts.slice(0, 4).join(', ') || 'none'}; ` +
-    `Strong: ${summary.strong_concepts.slice(0, 3).join(', ') || 'none'})`;
-  await appendLearnerPersonaLine(learnerId, 'Diagnostic calibration', personaLine);
+    `${summary.agent_brief_he.slice(0, 600)} ` +
+    `(חלש: ${summary.weak_concepts.slice(0, 4).join(', ') || 'אין'}; ` +
+    `חזק: ${summary.strong_concepts.slice(0, 3).join(', ') || 'אין'})`;
+  await appendLearnerPersonaLine(learnerId, 'כיול אבחון', personaLine);
 }
 
 // ── Plan generation ──────────────────────────────────────────────────────────
@@ -3315,6 +3321,7 @@ export async function getLearnerStreak(learnerId: string): Promise<LearnerStreak
     };
   }
   try {
+    await ensureTestAttemptsTable().catch(() => false);
     const rows = (await sql`
       WITH days AS (
         SELECT DISTINCT date_trunc('day', created_at)::date AS d
@@ -3325,6 +3332,9 @@ export async function getLearnerStreak(learnerId: string): Promise<LearnerStreak
         UNION
         SELECT DISTINCT date_trunc('day', last_practiced)::date
         FROM skill_practice WHERE learner_id = ${learnerId} AND last_practiced IS NOT NULL
+        UNION
+        SELECT DISTINCT date_trunc('day', created_at)::date
+        FROM test_attempts WHERE learner_id = ${learnerId}
       ),
       ordered AS (
         SELECT d, ROW_NUMBER() OVER (ORDER BY d) AS rn FROM days
@@ -3397,6 +3407,7 @@ export async function getRecentActivity(
 ): Promise<RecentActivityItem[]> {
   if (!sql) return [];
   try {
+    await ensureTestAttemptsTable().catch(() => false);
     const rows = (await sql`
       WITH unioned AS (
         SELECT 'chat'::text AS kind, agent::text AS agent, NULL::text AS concept_id,
@@ -3417,8 +3428,15 @@ export async function getRecentActivity(
                last_practiced AS created_at
         FROM skill_practice
         WHERE learner_id = ${learnerId} AND last_practiced IS NOT NULL
+        UNION ALL
+        SELECT 'quiz'::text AS kind, NULL::text AS agent, NULL::text AS concept_id,
+               'test ' || COALESCE(kind, 'quiz')
+                 || ' (score ' || ROUND(COALESCE(score, 0)::numeric * 100)::text || '%)' AS detail,
+               created_at
+        FROM test_attempts
+        WHERE learner_id = ${learnerId}
       )
-      SELECT kind, agent, concept_id, detail, created_at
+      SELECT kind, agent, concept_id, detail, created_at::text AS created_at
       FROM unioned
       ORDER BY created_at DESC
       LIMIT ${limit}
@@ -3457,6 +3475,7 @@ export async function getDailyActivity(
 ): Promise<DailyActivity[]> {
   if (!sql) return [];
   try {
+    await ensureTestAttemptsTable().catch(() => false);
     const rows = (await sql`
       WITH series AS (
         SELECT generate_series(
@@ -3485,13 +3504,21 @@ export async function getDailyActivity(
         WHERE learner_id = ${learnerId} AND last_practiced IS NOT NULL
           AND last_practiced >= CURRENT_DATE - (${days - 1}::int)
         GROUP BY 1
+      ),
+      test_d AS (
+        SELECT date_trunc('day', created_at)::date AS d, COUNT(*)::int AS n
+        FROM test_attempts
+        WHERE learner_id = ${learnerId}
+          AND created_at >= CURRENT_DATE - (${days - 1}::int)
+        GROUP BY 1
       )
       SELECT to_char(s.d, 'YYYY-MM-DD') AS date,
-             (COALESCE(c.n, 0) + COALESCE(m.n, 0) + COALESCE(a.n, 0))::int AS count
+             (COALESCE(c.n, 0) + COALESCE(m.n, 0) + COALESCE(a.n, 0) + COALESCE(t.n, 0))::int AS count
       FROM series s
       LEFT JOIN chat_d c ON c.d = s.d
       LEFT JOIN mastery_d m ON m.d = s.d
       LEFT JOIN atom_d a ON a.d = s.d
+      LEFT JOIN test_d t ON t.d = s.d
       ORDER BY s.d ASC
     `) as DailyActivity[];
     return rows;
@@ -3867,9 +3894,30 @@ function emptyProgressSnapshot(): ProgressSnapshot {
  * — rough but consistent across both pages. There is no explicit session-time
  * column yet.
  */
+/** Coerce Neon timestamp (string | Date) to YYYY-MM-DD; never throws. */
+function toIsoDateKey(value: unknown): string | null {
+  if (value == null || value === '') return null;
+  try {
+    if (typeof value === 'string') {
+      const s = value.trim();
+      if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0, 10);
+      const d = new Date(s);
+      return Number.isFinite(d.getTime()) ? d.toISOString().slice(0, 10) : null;
+    }
+    if (value instanceof Date) {
+      return Number.isFinite(value.getTime()) ? value.toISOString().slice(0, 10) : null;
+    }
+    const d = new Date(value as string | number);
+    return Number.isFinite(d.getTime()) ? d.toISOString().slice(0, 10) : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function getProgressFromNeon(learnerId: string): Promise<ProgressSnapshot> {
   if (!sql) return emptyProgressSnapshot();
   try {
+    await ensureTestAttemptsTable().catch(() => false);
     const [
       streak,
       masteryRowsRaw,
@@ -3882,7 +3930,7 @@ export async function getProgressFromNeon(learnerId: string): Promise<ProgressSn
     ] = await Promise.all([
       getLearnerStreak(learnerId).catch(() => ({ ...EMPTY_STREAK })),
       sql`
-        SELECT concept_id, score::float AS score, last_activity
+        SELECT concept_id, score::float AS score, last_activity::text AS last_activity
         FROM concept_mastery
         WHERE learner_id = ${learnerId}
         ORDER BY last_activity DESC NULLS LAST
@@ -3942,14 +3990,13 @@ export async function getProgressFromNeon(learnerId: string): Promise<ProgressSn
         } catch {
           // Defensive: a single unresolved concept must never blank the page.
         }
+        const dateKey = toIsoDateKey(r.last_activity);
         return {
           concept_id: r.concept_id,
           concept_name: titleEn,
           concept_name_he: titleHe,
           current_score: Number(r.score),
-          history: r.last_activity
-            ? [{ date: r.last_activity.slice(0, 10), score: Number(r.score) }]
-            : [],
+          history: dateKey ? [{ date: dateKey, score: Number(r.score) }] : [],
         };
       });
 
@@ -4091,6 +4138,9 @@ export interface LearnerMemorySnapshot {
   recentChatTurns: LearnerMemoryChatTurn[];
   /** Most recent memory write (note, persona rebuild, or chat turn). Null when empty. */
   lastUpdated: string | null;
+  /** Latest diagnostic briefs (from mental_state) for locale-aware About-me display. */
+  diagnosticBriefHe: string | null;
+  diagnosticBriefEn: string | null;
 }
 
 const MEMORY_TAB_AGENTS = ['tutor', 'mentor', 'coach', 'reviewer'] as const;
@@ -4124,6 +4174,8 @@ function emptyMemorySnapshot(): LearnerMemorySnapshot {
     activeWeekConceptIds: [],
     recentChatTurns: [],
     lastUpdated: null,
+    diagnosticBriefHe: null,
+    diagnosticBriefEn: null,
   };
 }
 
@@ -4198,6 +4250,11 @@ export async function getLearnerMemorySnapshot(
       ...notes.map((n) => n.created_at),
     ]);
 
+    const diag = (profile?.mental_state as { diagnostic_summary?: {
+      agent_brief_he?: string;
+      agent_brief_en?: string;
+    } } | null)?.diagnostic_summary;
+
     return {
       profile: profile
         ? {
@@ -4225,6 +4282,8 @@ export async function getLearnerMemorySnapshot(
       activeWeekConceptIds,
       recentChatTurns: chatTurns.reverse(),
       lastUpdated,
+      diagnosticBriefHe: diag?.agent_brief_he?.trim() || null,
+      diagnosticBriefEn: diag?.agent_brief_en?.trim() || null,
     };
   } catch (err) {
     if (process.env.NODE_ENV !== 'production') {

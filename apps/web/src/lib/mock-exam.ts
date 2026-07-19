@@ -4,6 +4,7 @@
 import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import { randomUUID } from 'node:crypto';
+import { appendLearnerPersonaLine } from './neon-db';
 import { recordTestAttempt } from './test-attempts';
 
 neonConfig.fetchConnectionCache = true;
@@ -399,6 +400,15 @@ export async function submitMockExam(
       chosen: String(chosen ?? ''),
     })),
   }).catch(() => null);
+
+  // Memory "About me" — Hebrew-default observation so Progress/Memory stay in sync.
+  const pct = Math.round(mockScore * 100);
+  const passedMock = mockScore >= MOCK_PASS_THRESHOLD;
+  void appendLearnerPersonaLine(
+    userId,
+    'תצפיות אחרונות',
+    `מבחן לדוגמה: ${scoreMcq}/${maxMcq} בשאלות רב-ברירה (${pct}%) — ${passedMock ? 'עבר את רף המוכנות' : 'מתחת לרף המוכנות'}.`,
+  ).catch(() => null);
 
   return { score_mcq: scoreMcq, max_mcq: maxMcq, feedback_by_question: feedback };
 }

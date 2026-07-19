@@ -74,6 +74,12 @@ export interface TestAttemptDetail extends TestAttemptListItem {
 }
 
 let ensured = false;
+
+/** Ensure `test_attempts` exists (lazy DDL). Safe to call from Progress reads. */
+export async function ensureTestAttemptsTable(): Promise<boolean> {
+  return ensureTable();
+}
+
 async function ensureTable(): Promise<boolean> {
   if (!sql) return false;
   if (ensured) return true;

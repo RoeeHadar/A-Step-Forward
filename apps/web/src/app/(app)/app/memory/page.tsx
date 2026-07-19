@@ -27,6 +27,8 @@ export default async function MemoryPage() {
           activeWeekConceptIds: [],
           recentChatTurns: [],
           lastUpdated: null,
+          diagnosticBriefHe: null,
+          diagnosticBriefEn: null,
         }
       }
     />

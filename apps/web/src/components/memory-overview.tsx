@@ -18,6 +18,7 @@ import { Input } from '@asf/ui/input';
 import { cn } from '@asf/ui';
 import { MarkdownReader } from '@/components/markdown-reader';
 import { pickConceptTitle, resolveConceptTitles } from '@/lib/concept-display-names';
+import { goalKeyLabel } from '@/lib/plan-catalog';
 import { subjectLabel } from '@/lib/subject-labels';
 import type { LearnerMemorySnapshot, LearnerMemoryNote } from '@/lib/neon-db';
 import { useI18n } from '@/providers/i18n-provider';
@@ -55,9 +56,52 @@ function preferredStyleLabel(
   return style.replace(/_/g, ' ');
 }
 
-/** Swap English persona H2 headers for Hebrew when the UI locale is HE. */
-function localizePersonaMarkdown(text: string, locale: 'he' | 'en'): string {
-  if (locale !== 'he' || !text.trim()) return text;
+/** Common next-test name slugs stored in English from onboarding. */
+function localizeNextTestName(name: string | null | undefined, locale: 'he' | 'en'): string | null {
+  if (!name?.trim()) return null;
+  if (locale !== 'he') return name;
+  const key = name.trim().toLowerCase();
+  if (key === 'bagrut' || key === 'בגרות') return 'בגרות';
+  if (key === 'midterm') return 'מבחן אמצע';
+  if (key === 'final' || key === 'final exam') return 'מבחן סוף';
+  if (key === 'quiz') return 'בוחן';
+  return name;
+}
+
+/**
+ * Prefer the Hebrew diagnostic brief for the About-me section when the UI is HE
+ * but the stored persona still has English "Diagnostic calibration" dumps
+ * (written before we switched persistDiagnosticSummary to Hebrew-default).
+ */
+function localizePersonaMarkdown(
+  text: string,
+  locale: 'he' | 'en',
+  diagnosticBriefHe?: string | null,
+  diagnosticBriefEn?: string | null,
+): string {
+  if (!text.trim()) return text;
+
+  let out = text;
+
+  if (locale === 'he' && diagnosticBriefHe) {
+    const heSection = `## כיול אבחון\n- ${diagnosticBriefHe.trim()}`;
+    const replaced = out.replace(
+      /##\s*Diagnostic calibration[\s\S]*?(?=##\s|\s*$)/i,
+      `${heSection}\n\n`,
+    );
+    if (replaced !== out) {
+      out = replaced;
+    } else if (/Diagnostic calibration/i.test(out)) {
+      // Bullets mention diagnostic calibration without a clean H2 — surface HE brief on top.
+      out = `${heSection}\n\n${out}`;
+    }
+  } else if (locale === 'en' && diagnosticBriefEn && /כיול אבחון/.test(out)) {
+    const enSection = `## Diagnostic calibration\n- ${diagnosticBriefEn.trim()}`;
+    out = out.replace(/##\s*כיול אבחון[\s\S]*?(?=##\s|\s*$)/, `${enSection}\n\n`);
+  }
+
+  if (locale !== 'he') return out;
+
   const map: Array<[RegExp, string]> = [
     [/^##\s*How they talk\s*$/gim, '## איך הם מדברים'],
     [/^##\s*How I talk\s*$/gim, '## איך אני מדבר/ת'],
@@ -67,8 +111,8 @@ function localizePersonaMarkdown(text: string, locale: 'he' | 'en'): string {
     [/^##\s*Recent durable observations.*$/gim, '## תצפיות יציבות אחרונות'],
     [/^##\s*Recent observations.*$/gim, '## תצפיות אחרונות'],
     [/^##\s*About me\s*$/gim, '## עליי'],
+    [/^##\s*Diagnostic calibration\s*$/gim, '## כיול אבחון'],
   ];
-  let out = text;
   for (const [re, he] of map) out = out.replace(re, he);
   return out;
 }
@@ -294,7 +338,10 @@ export function MemoryOverview({ snapshot }: { snapshot: LearnerMemorySnapshot }
               description={t.profileSectionDesc}
             >
               <dl className="grid gap-3 sm:grid-cols-2">
-                <ProfileField label={t.fieldGoal} value={snapshot.profile.goal} />
+                <ProfileField
+                  label={t.fieldGoal}
+                  value={goalKeyLabel(snapshot.profile.goal, lang) || snapshot.profile.goal}
+                />
                 <ProfileField
                   label={t.fieldSubjects}
                   value={
@@ -319,17 +366,17 @@ export function MemoryOverview({ snapshot }: { snapshot: LearnerMemorySnapshot }
                 />
                 <ProfileField
                   label={t.fieldNextTest}
-                  value={
-                    snapshot.profile.next_test_name
-                      ? `${snapshot.profile.next_test_name}${
-                          snapshot.profile.next_test_date
-                            ? ` · ${formatDate(snapshot.profile.next_test_date, lang)}`
-                            : ''
-                        }`
-                      : snapshot.profile.next_test_date
-                        ? formatDate(snapshot.profile.next_test_date, lang)
-                        : null
-                  }
+                  value={(() => {
+                    const testName = localizeNextTestName(snapshot.profile.next_test_name, lang);
+                    if (testName) {
+                      return snapshot.profile.next_test_date
+                        ? `${testName} · ${formatDate(snapshot.profile.next_test_date, lang)}`
+                        : testName;
+                    }
+                    return snapshot.profile.next_test_date
+                      ? formatDate(snapshot.profile.next_test_date, lang)
+                      : null;
+                  })()}
                 />
                 <ProfileField
                   label={t.fieldFinalGoal}
@@ -366,7 +413,12 @@ export function MemoryOverview({ snapshot }: { snapshot: LearnerMemorySnapshot }
               ) : null}
               <div className="prose prose-sm max-w-none dark:prose-invert">
                 <MarkdownReader
-                  content={localizePersonaMarkdown(snapshot.persona.text ?? '', lang)}
+                  content={localizePersonaMarkdown(
+                    snapshot.persona.text ?? '',
+                    lang,
+                    snapshot.diagnosticBriefHe,
+                    snapshot.diagnosticBriefEn,
+                  )}
                 />
               </div>
             </SectionCard>
@@ -387,7 +439,9 @@ export function MemoryOverview({ snapshot }: { snapshot: LearnerMemorySnapshot }
               description={t.planSectionDesc}
             >
               {snapshot.activePlanGoal ? (
-                <p className="mb-3 text-sm font-medium">{snapshot.activePlanGoal}</p>
+                <p className="mb-3 text-sm font-medium">
+                  {goalKeyLabel(snapshot.activePlanGoal, lang) || snapshot.activePlanGoal}
+                </p>
               ) : null}
               {snapshot.activeWeekConceptIds.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
