@@ -274,15 +274,42 @@ not push the new question banks to Neon. **Correct trigger for shipping question
 `target=all` Neo4j KG step also fails when the Aura free instance is paused, but
 that is unrelated to learner-facing question content.)
 
+## Batch K — shipped
+
+The **3pt/4pt applied-foundation strand** expanded to **15 CAS-verified items
+each** (6 lessons, 90 items, 0 rejections after a one-item fix):
+
+- `fractions_and_ratios` (3pt/4pt/5pt) — add/sub/mul/div, simplify, compare,
+  ratio-division, proportion, map scale, and two word problems.
+- `percentages_applications` (3pt) — percent-of, discount, increase/reverse,
+  VAT, simple & compound interest, markup, successive-change traps.
+- `basic_statistics_3pt` (3pt) — mean/median/mode/range, weighted average,
+  missing-value, combined-group averages, outlier robustness.
+- `word_problems` (3pt/4pt) — distance-rate-time, mixture, work-rate, age,
+  sum/difference systems, average-speed trap.
+- `plane_trigonometry_right_triangle` (4pt/5pt) — Law of Sines, Law of Cosines,
+  area $\tfrac12 ab\sin C$, Heron's formula, parallelogram area.
+- `descriptive_stats` (3pt/4pt/5pt) — mean/median/mode/range plus population
+  variance, standard deviation, quartiles and IQR (exclusive method).
+
+**Fix during authoring:** one `descriptive_stats` variance-invariance T/F item
+had a wrong shifted-mean in its verify predicate (`1+5-6` should be the shifted
+value $6$ with mean $7$); corrected, purged the stale store entries, regenerated,
+and re-baked to 15/15 auto-verified. Difficulty spread ≈ 33% easy / 40% medium /
+27% hard, 4 kinds per lesson. Math + strict + track-scope audits and the 207/207
+seed dry-run all green (Batch K adds no new strict/track violations).
+
 ## Corpus progress
 
-Verified 15+ item banks now cover **48 math lessons** (Batches B, D, E, F, G, H,
-I, J + exponents): the entire 3pt/4pt algebra & functions foundation (incl.
-alternate syllabus IDs), sequences, the core geometry/trig foundation, the 3pt
-probability & statistics foundation, the full 5pt calculus + advanced-topic core,
-and the HS calculus track-variant + intro core. Remaining thin lessons (8
-questions): advanced 4pt/5pt geometry/trig/vectors/combinatorics/complex,
-statistics beyond 3pt, and university/makhina strands.
+Verified 15+ item banks now cover **54 math lessons** (Batches B, D, E, F, G, H,
+I, J, K + exponents): the entire 3pt/4pt algebra & functions foundation (incl.
+alternate syllabus IDs), sequences, the core geometry/trig foundation (now incl.
+Law of Sines/Cosines & Heron), the 3pt probability & statistics foundation plus
+descriptive statistics (variance/SD/IQR), fractions/ratios/percentages/word
+problems, the full 5pt calculus + advanced-topic core, and the HS calculus
+track-variant + intro core. Remaining thin lessons (8 questions): advanced
+4pt/5pt geometry/conics/vectors/combinatorics/complex, inferential statistics,
+and university/makhina strands.
 
 ## Pending (not yet done this window)
 
