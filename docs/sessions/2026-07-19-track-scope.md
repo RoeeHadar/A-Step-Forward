@@ -615,6 +615,22 @@ CAS-verified, 0 rejections, 15/15 first pass, lint 0/207:
 - `rotational_dynamics` — $\tau=I\alpha$, $I=mr^2$, $L=I\omega$, disk inertia
   $\tfrac12mr^2$, rotational KE $\tfrac12I\omega^2$.
 
+## Batch Z — shipped (physics electricity)
+
+Fourth physics cluster to 15 verified items each (spread 5/6/4, 4 kinds), all
+CAS-verified, 0 rejections, lint 0/207. Coulomb/field/potential items use
+$k=9\times10^9$ with charges as exact `10**-6` rationals (no float drift):
+
+- `electrostatics` — like/unlike charges, charge conservation, inverse-square
+  force scaling.
+- `electrostatics_coulomb` — $F=kq_1q_2/r^2$ explicit + scaling, Coulomb constant.
+- `electric_field` — $E=F/q$, $F=qE$, $E=kQ/r^2$, conductor interior, N/C unit.
+- `electric_potential` — $W=qV$, $V=kQ/r$, $V=Ed$, volt = J/C, $1/r$ scaling.
+- `electric_circuits` — $V=IR$, $P=VI$, $P=I^2R$, $P=V^2/R$, series/parallel,
+  energy $E=Pt$.
+- `capacitors_dielectrics` — $Q=CV$, $C=Q/V$, $E=\tfrac12CV^2$, parallel/series
+  combination, dielectric effect.
+
 ## Batch V — shipped (math corpus complete)
 
 The final six thin math lessons expanded to 15 verified items each (spread 5/6/4,

@@ -237,152 +237,344 @@
       "body_he_md": "- **חוק אוהם:** $V = IR$\n- **טור:** $R_{\\text{eq}} = R_1+R_2+\\cdots$ (אותו $I$)\n- **מקביל:** $1/R_{\\text{eq}} = 1/R_1+1/R_2+\\cdots$ (אותו $V$)\n- **הספק:** $P = IV = I^2R = V^2/R$\n- **KCL:** $\\sum I_{\\text{in}} = \\sum I_{\\text{out}}$\n- **KVL:** $\\sum V = 0$ בלולאה\n- **מתח מסוף:** $V_t = \\varepsilon - Ir$\n- **גשר ווטסטון:** $R_1/R_2 = R_3/R_X$\n\n**סיכום שיטה:** לכל מעגל, שאלו: האם ניתן לפשט לטור/מקביל? אם כן — מצאו $R_{\\text{eq}}$ וחזרו אחורה. אם לא — חוקי קירכהוף. תמיד אמתו עם KVL ואיזון הספק. זכרו: מתח בטור מסתכם, זרם במקביל מסתכם.\n\n**המשך:** תרגלו מעגלים מעורבים — שרטטו מחדש אחרי כל שלב פישוט, ואמתו עם KVL ואיזון הספק."
     }
   ],
-  "agent_hints": {},
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "ohms_law",
+      "parallel_circuits",
+      "power",
+      "series_circuits"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "A 12 V battery drives a current of 3 A through a resistor. Find the resistance.",
-      "stem_he": "סוללה 12 V מניעה זרם 3 A דרך נגד. מצא ההתנגדות.",
+      "stem_en": "Ohm's law states:",
+      "stem_he": "חוק אוהם קובע:",
+      "explanation_en": "**Voltage $=$ current $\\times$ resistance.**\n\n**Answer:** $V=IR$.",
+      "explanation_he": "**מתח $=$ זרם $\\times$ התנגדות.**\n\n**תשובה:** $V=IR$.",
+      "skill_atoms": [
+        "ohms_law"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$R = V/I = 12/3 = 4\\,\\Omega$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "4\\,\\Omega$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "4"
+        "options_en": [
+          "$V=IR$",
+          "$V=I/R$",
+          "$V=R/I$",
+          "$V=I+R$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$V=IR$",
+          "$V=I/R$",
+          "$V=R/I$",
+          "$V=I+R$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "Ohm's law relates voltage, current, and resistance in a single resistor: $V = IR$. When a battery drives current through a resistor, the resistance determines how much current flows for a given voltage.\n\n**Solution:** $R = V/I = 12/3 = \\boxed{4\\,\\Omega}$.\n\nRearrange to $R = V/I$ because resistance is the ratio of voltage drop to current through that element. With $V = 12$ V and $I = 3$ A, $R = 4\\,\\Omega$.\n\n**Common wrong path:** Dividing $I/V$ instead of $V/I$, giving $0.25\\,\\Omega$ — resistance must have units of volts per ampere (ohms).\n\n**Exam tip:** Always write $R = V/I$ first, substitute, then check: $V = IR = 4 \\times 3 = 12$ V ✓. Bagrut electricity questions often give two of three quantities; identify which form of Ohm's law to use.",
-      "explanation_he": "חוק אוהם מקשר מתח, זרם והתנגדות בנגד בודד: $V = IR$. כשסוללה מניעה זרם דרך נגד, ההתנגדות קובעת כמה זרם יזרום למתח נתון.\n\n**פתרון:** $R = V/I = 12/3 = \\boxed{4\\,\\Omega}$.\n\nמסדרים ל-$R = V/I$ כי התנגדות היא יחס נפילת מתח לזרם. עם $V = 12$ V ו-$I = 3$ A, $R = 4\\,\\Omega$.\n\n**טעות נפוצה:** חלוקת $I/V$ במקום $V/I$ — התנגדות חייבת להיות ביחידות וולט/אמפר (אוהם).\n\n**טיפ לבחינה:** כתבו $R = V/I$, הציבו, ובדקו: $V = IR = 4 \\times 3 = 12$ V ✓. בשאלון 2 נותנים לעיתים שני מתוך שלושה — זהו איזו צורה של חוק אוהם ליישם.",
-      "skill_atoms": []
+      "source_item_id": "8b10560f-8914-5f8e-be5d-9d97e190bbd2",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$V=IR$",
+        "$V=I/R$",
+        "$V=R/I$",
+        "$V=I+R$"
+      ],
+      "options_he": [
+        "$V=IR$",
+        "$V=I/R$",
+        "$V=R/I$",
+        "$V=I+R$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Find the power dissipated by a $10\\,\\Omega$ resistor carrying 2 A.",
-      "stem_he": "מצא הספק שמתפזר בנגד $10\\,\\Omega$ הנושא זרם 2 A.",
+      "stem_en": "A current of $2\\,\\text{A}$ flows through $5\\,\\Omega$. Find the voltage ($V=IR$).",
+      "stem_he": "זרם של $2\\,\\text{A}$ זורם דרך $5\\,\\Omega$. מצאו את המתח ($V=IR$).",
+      "explanation_en": "**$V=IR=2\\cdot 5=10\\,\\text{V}$.**\n\n**Answer:** $10\\,\\text{V}$.",
+      "explanation_he": "**$V=10\\,\\text{V}$.**\n\n**תשובה:** $10\\,\\text{V}$.",
+      "skill_atoms": [
+        "ohms_law"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$P = I^2R = 4 \\times 10 = 40\\text{ W}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "40\\text{ W}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "40"
-        ],
-        "case_sensitive": false
+        "value": 10
       },
-      "explanation_en": "Power dissipated in a resistor converts electrical energy to heat. When current $I$ and resistance $R$ are both known for the same resistor, $P = I^2 R$ is the safest formula — it uses quantities that belong to that single element.\n\n**Solution:** $P = I^2 R = 2^2 \\times 10 = 4 \\times 10 = \\boxed{40\\text{ W}}$.\n\nAlternative check: $V = IR = 20$ V, then $P = IV = 20 \\times 2 = 40$ W ✓.\n\n**Common wrong path:** Using $P = V^2/R$ with the battery voltage instead of the voltage across this specific resistor, or mixing branch current with total circuit voltage in $P = IV$.\n\n**Exam tip:** On Bagrut, write which power formula you choose and why. $P = I^2R$ avoids the \"wrong V\" trap when multiple resistors share a circuit.",
-      "explanation_he": "הספק המתפזר בנגד ממיר אנרגיה חשמלית לחום. כשזרם $I$ והתנגדות $R$ ידועים לאותו נגד, $P = I^2 R$ היא הנוסחה הבטוחה — משתמשת בגדלים של אותו רכיב.\n\n**פתרון:** $P = I^2 R = 4 \\times 10 = \\boxed{40\\text{ W}}$.\n\nבדיקה חלופית: $V = IR = 20$ V, אז $P = IV = 40$ W ✓.\n\n**טעות נפוצה:** שימוש ב-$P = V^2/R$ עם מתח הסוללה במקום מתח על הנגד, או ערבוב זרם ענף עם מתח כולל ב-$P = IV$.\n\n**טיפ לבחינה:** בבגרות, כתבו איזו נוסחת הספק בחרתם ולמה. $P = I^2R$ נמנעת ממלכודת \"מתח שגוי\" כשיש כמה נגדים. יחידות: וואט = אמפר² × אוהם. בדקו: $P=VI=20\\times2=40$ W ✓.",
-      "skill_atoms": []
+      "source_item_id": "d24d2983-fa80-5854-9013-04dc159f6b76",
+      "points_level_min": "5pt",
+      "correct_answer": "10"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "A 60 W bulb operates at 120 V. Find the current and resistance.",
-      "stem_he": "נורה 60 W פועלת ב-120 V. מצא זרם והתנגדות.",
+      "stem_en": "True or False: electric current is measured in amperes.",
+      "stem_he": "נכון או לא נכון: זרם חשמלי נמדד באמפרים.",
+      "explanation_en": "**Current unit is the ampere (A)** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**יחידת הזרם היא האמפר (A)** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "ohms_law"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$I=P/V=60/120=0.5\\text{ A}$. $R=V/I=120/0.5=240\\,\\Omega$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "240\\,\\Omega$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "240"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "A light bulb rated 60 W at 120 V means it dissipates 60 W when the voltage across it is 120 V. From $P = IV$, find current first; then Ohm's law gives resistance.\n\n**Step 1 — Current:** $I = P/V = 60/120 = \\boxed{0.5\\text{ A}}$.\n\n**Step 2 — Resistance:** $R = V/I = 120/0.5 = \\boxed{240\\,\\Omega}$.\n\n**Check:** $P = I^2 R = 0.25 \\times 240 = 60$ W ✓.\n\n**Common wrong path:** Computing $R = P/V = 0.5\\,\\Omega$ — that confuses power with voltage. Resistance is $V/I$, not $P/V$.\n\n**Exam tip:** Appliance ratings (\"60 W, 120 V\") appear frequently on Bagrut questionnaire 2. Always find $I$ from $P = IV$ before applying $R = V/I$.",
-      "explanation_he": "נורה המדורגת 60 W ב-120 V מתפזר בה 60 W כשהמתח עליה 120 V. מ-$P = IV$ מוצאים זרם קודם; אחר כך חוק אוהם נותן התנגדות.\n\n**שלב 1 — זרם:** $I = P/V = 60/120 = \\boxed{0.5\\text{ A}}$.\n\n**שלב 2 — התנגדות:** $R = V/I = 120/0.5 = \\boxed{240\\,\\Omega}$.\n\n**בדיקה:** $P = I^2 R = 0.25 \\times 240 = 60$ W ✓.\n\n**טעות נפוצה:** חישוב $R = P/V = 0.5\\,\\Omega$ — מבלבל הספק עם מתח. התנגדות היא $V/I$, לא $P/V$.\n\n**טיפ לבחינה:** דירוגי מכשירים (\"60 W, 120 V\") מופיעים הרבה בשאלון 2. תמיד מצאו $I$ מ-$P = IV$ לפני $R = V/I$. בדקו: $V=IR=0.5\\times240=120$ V ✓. אל תחלקו $P/V$ לקבלת $R$.",
-      "skill_atoms": []
+      "source_item_id": "cf6cc8a1-ed05-5b66-afda-30b53b0d00e1",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Find $R_{eq}$ for $R_1=2\\,\\Omega$, $R_2=3\\,\\Omega$, $R_3=6\\,\\Omega$ all in parallel.",
-      "stem_he": "מצא $R_{\\text{eq}}$ עבור $R_1=2\\,\\Omega$, $R_2=3\\,\\Omega$, $R_3=6\\,\\Omega$ כולם במקביל.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "A $24\\,\\text{V}$ battery is connected across $8\\,\\Omega$. Find the current.",
+      "stem_he": "סוללת $24\\,\\text{V}$ מחוברת על $8\\,\\Omega$. מצאו את הזרם.",
+      "explanation_en": "**Step 1 — Ohm's law.** $I=V/R$.\n\n**Step 2 — Substitute.** $I=\\dfrac{24}{8}$.\n\n**Step 3 — Evaluate.** $=3\\,\\text{A}$.\n\n**Answer:** $3\\,\\text{A}$.",
+      "explanation_he": "**שלב 1 — חוק אוהם.** $I=V/R$.\n\n**שלב 2 — הצבה.** $\\dfrac{24}{8}$.\n\n**שלב 3 — חישוב.** $3\\,\\text{A}$.\n\n**תשובה:** $3\\,\\text{A}$.",
+      "skill_atoms": [
+        "ohms_law"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$1/R_{eq}=1/2+1/3+1/6=3/6+2/6+1/6=6/6=1$ → $R_{eq}=1\\,\\Omega$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1\\,\\Omega$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1"
+        "steps_en": [
+          "**Step 1 — Ohm's law.** $I=V/R$.",
+          "**Step 2 — Substitute.** $I=\\dfrac{24}{8}$.",
+          "**Step 3 — Evaluate.** $=3\\,\\text{A}$.",
+          "**Answer:** $3\\,\\text{A}$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — חוק אוהם.** $I=V/R$.",
+          "**שלב 2 — הצבה.** $\\dfrac{24}{8}$.",
+          "**שלב 3 — חישוב.** $3\\,\\text{A}$.",
+          "**תשובה:** $3\\,\\text{A}$."
+        ]
       },
-      "explanation_en": "Resistors in parallel each provide an independent path for current. The equivalent resistance is always **smaller** than any individual resistor because more paths mean less overall opposition.\n\n**Formula:** $1/R_{\\text{eq}} = 1/R_1 + 1/R_2 + 1/R_3$.\n\n**Calculation:**\n$$\\frac{1}{R_{\\text{eq}}} = \\frac{1}{2} + \\frac{1}{3} + \\frac{1}{6} = \\frac{3}{6} + \\frac{2}{6} + \\frac{1}{6} = \\frac{6}{6} = 1 \\Rightarrow R_{\\text{eq}} = \\boxed{1\\,\\Omega}$$\n\n**Common wrong path:** Adding resistances directly ($2+3+6=11\\,\\Omega$) as if they were in series. Parallel uses reciprocals.\n\n**Exam tip:** For three resistors, find a common denominator for $1/R_1 + 1/R_2 + 1/R_3$. When all three values share a common multiple (2, 3, 6 → LCM 6), the arithmetic simplifies cleanly.\n\n**Self-check:** The equivalent $1\\,\\Omega$ is less than the smallest resistor ($2\\,\\Omega$) — always true for parallel combinations.",
-      "explanation_he": "נגדים במקביל נותנים לכל אחד מסלול זרם עצמאי. ההתנגדות השקולה תמיד **קטנה** מכל נגד בודד — יותר מסלולים = פחות התנגדות כוללת.\n\n**נוסחה:** $1/R_{\\text{eq}} = 1/R_1 + 1/R_2 + 1/R_3$.\n\n**חישוב:**\n$$\\frac{1}{R_{\\text{eq}}} = \\frac{1}{2} + \\frac{1}{3} + \\frac{1}{6} = \\frac{6}{6} = 1 \\Rightarrow R_{\\text{eq}} = \\boxed{1\\,\\Omega}$$\n\n**טעות נפוצה:** חיבור ישיר ($2+3+6=11\\,\\Omega$) כאילו בטור. במקביל משתמשים במנגדים.\n\n**טיפ לבחינה:** לשלושה נגדים, מצאו מכנה משותף ל-$1/R_1 + 1/R_2 + 1/R_3$. כש-2, 3, 6 חולקים כפולה משותפת (6), החשבון מתפשט.\n\n**בדיקה עצמית:** השקול $1\\,\\Omega$ קטן מהנגד הקטן ביותר ($2\\,\\Omega$) — תמיד נכון במקביל. זרם כולל יחלק בין הענפים לפי $I_i=V/R_i$ כשמתח המקור ידוע.",
-      "skill_atoms": []
+      "source_item_id": "b7ed6c92-87b2-5e73-9670-0923c1d612b8",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "$R_1=6\\,\\Omega$ and $R_2=12\\,\\Omega$ in series, then in parallel with $R_3=9\\,\\Omega$, connected to 18 V. Find total current.",
-      "stem_he": "$R_1=6\\,\\Omega$ ו-$R_2=12\\,\\Omega$ בטור, ואז במקביל עם $R_3=9\\,\\Omega$, מחוברים ל-18 V. מצא זרם כולל.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "A voltage of $12\\,\\text{V}$ is applied across $4\\,\\Omega$. Find the current ($I=V/R$).",
+      "stem_he": "מתח של $12\\,\\text{V}$ מופעל על $4\\,\\Omega$. מצאו את הזרם ($I=V/R$).",
+      "explanation_en": "**$I=\\dfrac{12}{4}=3\\,\\text{A}$.**\n\n**Answer:** $3\\,\\text{A}$.",
+      "explanation_he": "**$I=3\\,\\text{A}$.**\n\n**תשובה:** $3\\,\\text{A}$.",
+      "skill_atoms": [
+        "ohms_law"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "3\\text{ A}",
-          "3 A",
-          "3"
-        ],
-        "case_sensitive": false
+        "value": 3
       },
-      "explanation_en": "Mixed series-parallel circuits require simplifying from the inside out. First combine series groups, then parallel groups, until one $R_{\\text{eq}}$ remains.\n\n**Step 1 — Series pair:** $R_{12} = R_1 + R_2 = 6 + 12 = 18\\,\\Omega$.\n\n**Step 2 — Parallel with $R_3$:**\n$$R_{\\text{eq}} = \\frac{R_{12} \\cdot R_3}{R_{12} + R_3} = \\frac{18 \\times 9}{27} = \\boxed{6\\,\\Omega}$$\n\n**Step 3 — Total current:** $I = V/R_{\\text{eq}} = 18/6 = \\boxed{3\\text{ A}}$.\n\n**Common wrong path:** Adding all three resistances ($27\\,\\Omega$) or treating the series pair as parallel with $R_3$ using the wrong formula.\n\n**Exam tip:** Redraw the circuit after each simplification step. Bagrut graders award points for showing $R_{12}$ before $R_{\\text{eq}}$.\n\n**Verify:** The series pair and parallel branch both connect across the full 18 V source — parallel branches always share source voltage.",
-      "explanation_he": "מעגלים מעורבי טור-מקביל דורשים פישוט מבפנים החוצה. קודם מצרפים קבוצות טור, אחר כך מקביל, עד שנשאר $R_{\\text{eq}}$ אחד.\n\n**שלב 1 — זוג בטור:** $R_{12} = 6 + 12 = 18\\,\\Omega$.\n\n**שלב 2 — מקביל עם $R_3$:**\n$$R_{\\text{eq}} = \\frac{18 \\times 9}{27} = \\boxed{6\\,\\Omega}$$\n\n**שלב 3 — זרם כולל:** $I = 18/6 = \\boxed{3\\text{ A}}$.\n\n**טעות נפוצה:** חיבור שלושת הנגדים ($27\\,\\Omega$) או טיפול בזוג הטור כמקביל עם נוסחה שגויה.\n\n**טיפ לבחינה:** שרטטו מחדש אחרי כל שלב פישוט. בבגרות נותנים נקודות על הצגת $R_{12}$ לפני $R_{\\text{eq}}$.\n\n**אימות:** זוג הטור והענף המקביל מחוברים שניהם ל-18 V — ענפים מקבילים תמיד חולקים מתח מקור.",
-      "skill_atoms": []
+      "source_item_id": "fb3a3da6-ff16-5bee-a677-74374335bfe9",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "A battery (EMF=12 V, internal resistance $r=1\\,\\Omega$) is connected to external $R=5\\,\\Omega$. Find: (a) current, (b) terminal voltage.",
-      "stem_he": "סוללה (כ\"א=12 V, $r=1\\,\\Omega$) מחוברת ל-$R=5\\,\\Omega$. מצא (א) זרם, (ב) מתח מסוף.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "A voltage of $20\\,\\text{V}$ drives a current of $5\\,\\text{A}$. Find the resistance ($R=V/I$).",
+      "stem_he": "מתח של $20\\,\\text{V}$ מניע זרם של $5\\,\\text{A}$. מצאו את ההתנגדות ($R=V/I$).",
+      "explanation_en": "**$R=\\dfrac{20}{5}=4\\,\\Omega$.**\n\n**Answer:** $4\\,\\Omega$.",
+      "explanation_he": "**$R=4\\,\\Omega$.**\n\n**תשובה:** $4\\,\\Omega$.",
+      "skill_atoms": [
+        "ohms_law"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "10\\text{ V}",
-          "10 V",
-          "10"
-        ],
-        "case_sensitive": false
+        "value": 4
       },
-      "explanation_en": "Real batteries have internal resistance $r$. The EMF $\\varepsilon$ is the ideal voltage; under load, terminal voltage drops by $Ir$.\n\n**Step 1 — Current:** Total resistance is external plus internal:\n$$I = \\frac{\\varepsilon}{R + r} = \\frac{12}{5 + 1} = \\boxed{2\\text{ A}}$$\n\n**Step 2 — Terminal voltage:**\n$$V_{\\text{term}} = \\varepsilon - Ir = 12 - 2(1) = \\boxed{10\\text{ V}}$$\n\nAlternative: $V_{\\text{term}} = IR = 2 \\times 5 = 10$ V ✓.\n\n**Common wrong path:** Using $\\varepsilon$ alone in $I = V/R$ (ignoring $r$), or computing terminal voltage as $\\varepsilon + Ir$ instead of minus.\n\n**Exam tip:** When a stem mentions \"internal resistance,\" immediately add $r$ to the total resistance in the denominator. Terminal voltage is always less than EMF when the battery supplies current.\n\n**Physical meaning:** The 2 V drop ($12-10$) occurs across internal resistance: $Ir = 2 \\times 1 = 2$ V. The battery loses this voltage internally.",
-      "explanation_he": "לסוללות אמיתיות יש התנגדות פנימית $r$. כ\"א $\\varepsilon$ הוא המתח האידיאלי; תחת עומס, מתח המסוף יורד ב-$Ir$.\n\n**שלב 1 — זרם:** התנגדות כוללת = חיצונית + פנימית:\n$$I = \\frac{\\varepsilon}{R + r} = \\frac{12}{6} = \\boxed{2\\text{ A}}$$\n\n**שלב 2 — מתח מסוף:**\n$$V_{\\text{terminal}} = \\varepsilon - Ir = 12 - 2 = \\boxed{10\\text{ V}}$$\n\nחלופה: $V_{\\text{terminal}} = IR = 10$ V ✓.\n\n**טעות נפוצה:** שימוש ב-$\\varepsilon$ בלבד ב-$I = V/R$ (התעלמות מ-$r$), או חישוב $\\varepsilon + Ir$ במקום מינוס.\n\n**טיפ לבחינה:** כשמוזכרת \"התנגדות פנימית\", הוסיפו $r$ למכנה. מתח מסוף תמיד קטן מ-EMF כשהסוללה מספקת זרם.\n\n**משמעות פיזיקלית:** ירידת 2 V ($12-10$) על ההתנגדות הפנימית: $Ir = 2$ V. הסוללה מאבדת מתח זה בפנים.",
-      "skill_atoms": []
+      "source_item_id": "92f4ce1f-6894-5f08-9a34-9afc0e139c6d",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "Three identical $6\\,\\Omega$ resistors are connected: two in parallel, then the combination in series with the third. Battery: 24 V. Find current through the third resistor and power dissipated in it.",
-      "stem_he": "שלושה נגדים זהים $6\\,\\Omega$: שניים במקביל, ואז בטור עם השלישי. סוללה 24 V. מצא זרם דרך השלישי והספק.",
+      "stem_en": "The SI unit of resistance is:",
+      "stem_he": "יחידת ה-SI של התנגדות היא:",
+      "explanation_en": "**Resistance is measured in ohms $(\\Omega)$.**\n\n**Answer:** $\\Omega$.",
+      "explanation_he": "**התנגדות נמדדת באוהם $(\\Omega)$.**\n\n**תשובה:** $\\Omega$.",
+      "skill_atoms": [
+        "ohms_law"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "42.7\\text{ W}",
-          "42.7 W",
-          "42.7",
-          "8/3\\text{ A}"
+        "options_en": [
+          "$\\Omega$",
+          "$\\text{A}$",
+          "$\\text{V}$",
+          "$\\text{W}$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$\\Omega$",
+          "$\\text{A}$",
+          "$\\text{V}$",
+          "$\\text{W}$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "This problem combines parallel and series simplification. Two identical $6\\,\\Omega$ resistors in parallel give half the individual value; the third resistor is in series with that combination.\n\n**Step 1 — Parallel pair:** $R_{\\parallel} = \\frac{6 \\times 6}{6 + 6} = 3\\,\\Omega$.\n\n**Step 2 — Total resistance:** $R_{\\text{eq}} = 3 + 6 = 9\\,\\Omega$ (series with third resistor).\n\n**Step 3 — Current through third resistor:** In series, the same current flows everywhere: $I = V/R_{\\text{eq}} = 24/9 = \\boxed{8/3\\text{ A}}$.\n\n**Step 4 — Power in third resistor:** $P = I^2 R = (8/3)^2 \\times 6 \\approx \\boxed{42.7\\text{ W}}$.\n\n**Common wrong path:** Using $I = V/R = 24/6 = 4$ A (ignoring the parallel pair's contribution to total resistance).\n\n**Exam tip:** After finding $I$, work backward to get branch currents and voltages across the parallel section if the question asks for them.",
-      "explanation_he": "בעיה זו משלבת פישוט מקביל וטור. שני נגדים זהים $6\\,\\Omega$ במקביל נותנים חצי מהערך; הנגד השלישי בטור עם השילוב.\n\n**שלב 1 — זוג מקביל:** $R_{\\parallel} = 3\\,\\Omega$.\n\n**שלב 2 — התנגדות כוללת:** $R_{\\text{eq}} = 3 + 6 = 9\\,\\Omega$.\n\n**שלב 3 — זרם דרך השלישי:** בטור, אותו זרם בכל מקום: $I = 24/9 = \\boxed{8/3\\text{ A}}$.\n\n**שלב 4 — הספק בנגד השלישי:** $P = I^2 R \\approx \\boxed{42.7\\text{ W}}$.\n\n**טעות נפוצה:** $I = 24/6 = 4$ A — התעלמות מתרומת זוג המקביל.\n\n**טיפ לבחינה:** אחרי מציאת $I$, חזרו אחורה לזרמי ענפים ומתחים בקטע המקביל אם נדרש. זרם בזוג המקביל: $I_{\\parallel}=V/R_{\\parallel}=24/3=8$ A (שני ענפים של 4 A).",
-      "skill_atoms": []
+      "source_item_id": "6e8480bc-008b-51d8-8444-14562dd8b8fd",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\Omega$",
+        "$\\text{A}$",
+        "$\\text{V}$",
+        "$\\text{W}$"
+      ],
+      "options_he": [
+        "$\\Omega$",
+        "$\\text{A}$",
+        "$\\text{V}$",
+        "$\\text{W}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "Use KVL: a loop with two resistors $R_1=4\\,\\Omega$, $R_2=8\\,\\Omega$ and two batteries $\\varepsilon_1=12\\text{ V}$, $\\varepsilon_2=6\\text{ V}$ (opposing). Find the current.",
-      "stem_he": "KVL: לולאה עם $R_1=4\\,\\Omega$, $R_2=8\\,\\Omega$ ושתי סוללות $\\varepsilon_1=12\\text{ V}$, $\\varepsilon_2=6\\text{ V}$ (נגדיות). מצא זרם.",
+      "stem_en": "A device runs at $10\\,\\text{V}$ and $2\\,\\text{A}$. Find the power ($P=VI$).",
+      "stem_he": "התקן פועל ב-$10\\,\\text{V}$ ו-$2\\,\\text{A}$. מצאו את ההספק ($P=VI$).",
+      "explanation_en": "**$P=VI=10\\cdot 2=20\\,\\text{W}$.**\n\n**Answer:** $20\\,\\text{W}$.",
+      "explanation_he": "**$P=20\\,\\text{W}$.**\n\n**תשובה:** $20\\,\\text{W}$.",
+      "skill_atoms": [
+        "power"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "0.5\\text{ A}",
-          "0.5 A",
-          "0.5"
-        ],
-        "case_sensitive": false
+        "value": 20
       },
-      "explanation_en": "When two batteries oppose each other in a single loop, the net EMF is the difference, not the sum. KVL accounts for each voltage rise and drop consistently around the closed path.\n\n**Setup:** Assume current $I$ flows in the direction of $\\varepsilon_1$. Both resistors are in series with $I$.\n\n**KVL (clockwise):**\n$$\\varepsilon_1 - \\varepsilon_2 = I(R_1 + R_2)$$\n$$12 - 6 = I(4 + 8) \\Rightarrow 6 = 12I \\Rightarrow I = \\boxed{0.5\\text{ A}}$$\n\nThe positive result confirms current flows in the assumed direction (dominated by the larger battery).\n\n**Common wrong path:** Adding both EMFs ($18$ V) instead of subtracting, or forgetting that opposing batteries reduce net driving voltage.\n\n**Exam tip:** Label battery terminals and mark each EMF as $+\\varepsilon$ or $-\\varepsilon$ based on traversal direction. Sign errors in KVL are the top reason for lost points on Bagrut loop problems.",
-      "explanation_he": "כששתי סוללות מתנגדות בלולאה אחת, כ\"א נטו הוא ההפרש, לא הסכום. KVL מחשב כל עלייה וירידת מתח סביב המסלול הסגור.\n\n**הכנה:** נניח זרם $I$ בכיוון $\\varepsilon_1$. שני הנגדים בטור עם $I$.\n\n**KVL (עם כיוון השעון):**\n$$\\varepsilon_1 - \\varepsilon_2 = I(R_1 + R_2)$$\n$$12 - 6 = 12I \\Rightarrow I = \\boxed{0.5\\text{ A}}$$\n\nתוצאה חיובית — הזרם בכיוון ההנחה (מונע על ידי הסוללה הגדולה).\n\n**טעות נפוצה:** חיבור שני כ\"א ($18$ V) במקום חיסור, או שכחה שסוללות נגדיות מקטינות מתח מניע.\n\n**טיפ לבחינה:** סמנו קטבי סוללה ו-$+\\varepsilon$/$-\\varepsilon$ לפי כיוון המעבר. שגיאות סימן ב-KVL — הסיבה העיקרית לאובדן נקודות בבגרות.",
-      "skill_atoms": []
+      "source_item_id": "ecfdeced-36fa-577a-b9e8-b3920986ed42",
+      "points_level_min": "5pt",
+      "correct_answer": "20"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Three resistors $3\\,\\Omega$, $5\\,\\Omega$, $2\\,\\Omega$ are in series. Find the total resistance.",
+      "stem_he": "שלושה נגדים $3\\,\\Omega$, $5\\,\\Omega$, $2\\,\\Omega$ מחוברים בטור. מצאו את ההתנגדות הכוללת.",
+      "explanation_en": "**$R=3+5+2=10\\,\\Omega$.**\n\n**Answer:** $10\\,\\Omega$.",
+      "explanation_he": "**$R=10\\,\\Omega$.**\n\n**תשובה:** $10\\,\\Omega$.",
+      "skill_atoms": [
+        "series_circuits"
+      ],
+      "answer_payload": {
+        "value": 10
+      },
+      "source_item_id": "0d8140fd-6e19-5abd-9a9f-e64416395225",
+      "points_level_min": "5pt",
+      "correct_answer": "10"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "A current of $3\\,\\text{A}$ flows through $4\\,\\Omega$. Find the power dissipated ($P=I^2R$).",
+      "stem_he": "זרם של $3\\,\\text{A}$ זורם דרך $4\\,\\Omega$. מצאו את ההספק המתפזר ($P=I^2R$).",
+      "explanation_en": "**$P=I^2R=9\\cdot 4=36\\,\\text{W}$.**\n\n**Answer:** $36\\,\\text{W}$.",
+      "explanation_he": "**$P=36\\,\\text{W}$.**\n\n**תשובה:** $36\\,\\text{W}$.",
+      "skill_atoms": [
+        "power"
+      ],
+      "answer_payload": {
+        "value": 36
+      },
+      "source_item_id": "9dce69fe-9fb8-5f50-a687-68ef3c151932",
+      "points_level_min": "5pt",
+      "correct_answer": "36"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Two $6\\,\\Omega$ resistors are in parallel. Find the equivalent resistance ($R=\\tfrac{R_1R_2}{R_1+R_2}$).",
+      "stem_he": "שני נגדים $6\\,\\Omega$ מחוברים במקביל. מצאו את ההתנגדות השקולה ($R=\\tfrac{R_1R_2}{R_1+R_2}$).",
+      "explanation_en": "**$R=\\dfrac{36}{12}=3\\,\\Omega$.**\n\n**Answer:** $3\\,\\Omega$.",
+      "explanation_he": "**$R=3\\,\\Omega$.**\n\n**תשובה:** $3\\,\\Omega$.",
+      "skill_atoms": [
+        "parallel_circuits"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "856c8ec5-9f2d-5fb7-b3f7-bca6e02e758d",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: in a series circuit the current is the same through every component.",
+      "stem_he": "נכון או לא נכון: במעגל טורי הזרם זהה בכל רכיב.",
+      "explanation_en": "**One path means one current** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**מסלול יחיד פירושו זרם יחיד** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "series_circuits"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "6f7f38d7-e0c9-5fd0-8b70-2cced681f3f1",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "A $12\\,\\text{V}$ supply drives $6\\,\\Omega$. Find the power ($P=V^2/R$).",
+      "stem_he": "מקור $12\\,\\text{V}$ מניע $6\\,\\Omega$. מצאו את ההספק ($P=V^2/R$).",
+      "explanation_en": "**$P=\\dfrac{12^2}{6}=\\dfrac{144}{6}=24\\,\\text{W}$.**\n\n**Answer:** $24\\,\\text{W}$.",
+      "explanation_he": "**$P=\\dfrac{144}{6}=24\\,\\text{W}$.**\n\n**תשובה:** $24\\,\\text{W}$.",
+      "skill_atoms": [
+        "power"
+      ],
+      "answer_payload": {
+        "value": 24
+      },
+      "source_item_id": "5b745258-a10c-50e7-ad7e-7d9e1529d1c5",
+      "points_level_min": "5pt",
+      "correct_answer": "24"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "A $100\\,\\text{W}$ device runs for $60\\,\\text{s}$. Find the energy used ($E=Pt$).",
+      "stem_he": "התקן $100\\,\\text{W}$ פועל $60\\,\\text{s}$. מצאו את האנרגיה שנצרכה ($E=Pt$).",
+      "explanation_en": "**$E=Pt=100\\cdot 60=6000\\,\\text{J}$.**\n\n**Answer:** $6000\\,\\text{J}$.",
+      "explanation_he": "**$E=6000\\,\\text{J}$.**\n\n**תשובה:** $6000\\,\\text{J}$.",
+      "skill_atoms": [
+        "power"
+      ],
+      "answer_payload": {
+        "value": 6000
+      },
+      "source_item_id": "4cd72581-520e-5840-b16b-763721352c76",
+      "points_level_min": "5pt",
+      "correct_answer": "6000"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "A $6\\,\\Omega$ and a $4\\,\\Omega$ resistor are in series across $20\\,\\text{V}$. Find the current.",
+      "stem_he": "נגד $6\\,\\Omega$ ונגד $4\\,\\Omega$ מחוברים בטור על $20\\,\\text{V}$. מצאו את הזרם.",
+      "explanation_en": "**$R=10\\,\\Omega$; $I=\\dfrac{20}{10}=2\\,\\text{A}$.**\n\n**Answer:** $2\\,\\text{A}$.",
+      "explanation_he": "**$R=10\\,\\Omega$; $I=2\\,\\text{A}$.**\n\n**תשובה:** $2\\,\\text{A}$.",
+      "skill_atoms": [
+        "series_circuits"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "a1978dfa-b08c-5165-9253-9b62cdbb6b6e",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
     }
   ],
   "est_minutes": 42,
