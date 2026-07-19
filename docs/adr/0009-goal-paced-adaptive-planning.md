@@ -253,13 +253,22 @@ Consolidated defaults so nothing is left hand-wavy. All are reversible engineeri
     protect core + morale; ahead → offer stretch). Reuses the mastery already
     loaded on the chat path (no extra DB call). Read-only framing.
   - Verified: typecheck + lint + production build green.
-- Deferred / owner-gated (asked, user delegated to judgment):
-  - **First-plan SELECTION** left on current goal-keyed entry points (no
-    onboarding regression); frontier drives the agent + overlay layers instead.
-  - **Week-gates + Tests archive + planning-state persistence** need a
-    production Neon migration — not run autonomously. Migration scripts + code
-    to be authored for owner execution when prioritized.
-- Streams 3b (gates), 4 (tests archive), 5 (schema), 6 (evals): pending.
+- **Stream 5 (schema/migration) — authored, owner-gated apply (2026-07-19):**
+  - `scripts/run-migration-0019.mjs` (Neon HTTP path) + `infra/alembic/versions/0019_test_attempts.py` (Alembic parity) create `test_attempts` — the durable archive of every graded quiz (score, `passed`, `pass_threshold`, `per_topic`, `weak_concepts`, `questions` snapshot, `answers`, `feedback` slot). **Idempotent** (CREATE TABLE / INDEX IF NOT EXISTS); safe to re-run.
+  - **Graceful degradation:** the app layer (`apps/web/src/lib/test-attempts.ts`) also creates the table lazily on first write (house style, mirrors `weekly_quizzes_ai` / `mock_exams`) and wraps every read/write so a missing table or DB error is a no-op (writes skip, reads return `[]`/`null`). So the feature ships live and functional **before** the owner runs the migration; running it just gives the canonical, indexed, Alembic-tracked version.
+- **Stream 3b (week-gate signal) — partial, done (2026-07-19):**
+  - `submitWeeklyQuizForUser()` now records each attempt via `recordTestAttempt()` and returns `passed` (score ≥ `GATE_PASS_THRESHOLD` = 0.75), `pass_threshold`, and `attempt_id`. `quizSubmitResponseSchema` extended with these optional fields.
+  - Quiz result screen uses the server `passed` gate (falls back to the legacy 0.6 encouragement threshold for old payloads) and links to the archived attempt.
+  - **Not yet wired:** hard week-advance gating. Consistent with the chosen **remediation + soft-override** policy, advancement stays available; the gate result is recorded and surfaced to drive remediation. Carry-forward remediation on gate-fail + goal-critical hard-block remain a follow-up (needs frontier criticality lookup inside `advanceRollingPlanWindow`).
+- **Stream 4 (Tests archive) — done (2026-07-19):**
+  - `GET /api/tests` (list) + `GET /api/tests/[id]` (detail) read via `listTestAttempts` / `getTestAttempt` (graceful).
+  - Bilingual `/app/tests` (list) + `/app/tests/[id]` (per-question review: learner answer vs correct, per-topic bars, pass badge) with a `My Tests` sidebar entry. Uses `MarkdownMath` for LaTeX stems/options.
+  - Verified: lint + standalone `tsc --noEmit` + 75 unit tests (pacing + frontier) green. Full `next build` type-check + compile passed; only the offline Google-Fonts fetch fails locally (env, not code) — CI/Vercel authoritative.
+- Deferred / owner-gated:
+  - **First-plan SELECTION** left on current goal-keyed entry points (no onboarding regression); frontier drives the agent + overlay layers instead. Needs goal-level baseline mastery seeding (curriculum decision).
+  - **Run migration 0019** against production Neon (`DATABASE_URL=... node scripts/run-migration-0019.mjs`) to move `test_attempts` from lazy-created to Alembic-tracked. Optional — the feature already works without it.
+  - **Hard advancement gating** (carry-forward remediation + goal-critical block) — follow-up in `advanceRollingPlanWindow`.
+- Stream 6 (evals): pending.
 
 ## Related
 

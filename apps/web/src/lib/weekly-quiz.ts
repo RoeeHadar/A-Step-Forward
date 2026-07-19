@@ -14,6 +14,7 @@ import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import { randomUUID } from 'node:crypto';
 import { getConceptMastery, getLearnerProfile } from './neon-db';
+import { GATE_PASS_THRESHOLD, recordTestAttempt } from './test-attempts';
 import { llmCompleteJson } from '@/lib/llm-provider';
 import kg from './kg-data.json';
 import type {
@@ -530,6 +531,36 @@ export async function submitWeeklyQuizForUser(
     }
   }
 
+  // Week-gate signal + Tests-archive record (ADR-0009). Best-effort; a missing
+  // test_attempts table degrades to a no-op and never blocks grading.
+  const passed = score >= GATE_PASS_THRESHOLD;
+  const answerByItem = new Map(
+    args.answers.map((a) => [a.item_id, a.chosen.trim().toUpperCase()]),
+  );
+  const attemptId = await recordTestAttempt({
+    learnerId: userId,
+    kind: 'weekly_gate',
+    planId: row.plan_id ?? args.planId,
+    weekNum: row.week_num ?? args.weekNum,
+    quizId,
+    score,
+    passThreshold: GATE_PASS_THRESHOLD,
+    perTopic: per_topic,
+    weakConcepts: weak_concepts,
+    questions: stored.map((q) => ({
+      id: q.id,
+      topic: q.topic,
+      subject: q.subject,
+      stem: q.stem,
+      options: q.options,
+      correct: q.correct,
+    })),
+    answers: stored.map((q) => ({
+      item_id: q.id,
+      chosen: answerByItem.get(q.id) ?? '',
+    })),
+  }).catch(() => null);
+
   return {
     quiz_id: quizId,
     score,
@@ -537,6 +568,9 @@ export async function submitWeeklyQuizForUser(
     weak_concepts,
     plan_adapted: false,
     next_week_concepts: null,
+    passed,
+    pass_threshold: GATE_PASS_THRESHOLD,
+    attempt_id: attemptId,
   };
 }
 

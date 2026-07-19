@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@asf/ui/button';
 import { Badge } from '@asf/ui/badge';
@@ -45,6 +46,7 @@ const STR = {
     plan_adapted: 'תכנית הלימוד שלך עודכנה בעקבות תוצאות המבחן.',
     next_up: (cs: string) => ` הבא בתור: ${cs}.`,
     review_concepts: 'מושגים לחזרה:',
+    view_in_tests: 'צפייה במבחן בארכיון',
   },
   en: {
     title: (n: number) => `Week ${n} Quiz`,
@@ -63,6 +65,7 @@ const STR = {
     plan_adapted: 'Your learning plan has been updated based on your quiz results.',
     next_up: (cs: string) => ` Next up: ${cs}.`,
     review_concepts: 'Concepts to review:',
+    view_in_tests: 'View this test in your archive',
   },
 } as const;
 
@@ -156,7 +159,9 @@ function ResultView({
   const t = STR[lang];
   const isHe = lang === 'he';
   const pct = Math.round(result.score * 100);
-  const passed = result.score >= 0.6;
+  // Week-gate pass (ADR-0009): use the server's gate result when present,
+  // falling back to the legacy encouragement threshold for older payloads.
+  const passed = result.passed ?? result.score >= 0.6;
 
   return (
     <div className="space-y-6" dir={isHe ? 'rtl' : 'ltr'}>
@@ -239,6 +244,14 @@ function ResultView({
       <Button className="w-full" onClick={onGoToDashboard}>
         {t.back_to_dashboard}
       </Button>
+      {result.attempt_id ? (
+        <Link
+          href={`/app/tests/${result.attempt_id}`}
+          className="block text-center text-sm text-primary hover:underline"
+        >
+          {t.view_in_tests}
+        </Link>
+      ) : null}
       <AgentSidePanel
         topic={result.weak_concepts[0]}
         fabLabel={{ he: 'שאל את הסוכן על המבחן', en: 'Ask an agent about this test' }}

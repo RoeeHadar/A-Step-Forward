@@ -10,6 +10,7 @@ import {
   Brain,
   TrendingUp,
   ClipboardCheck,
+  FileClock,
 } from 'lucide-react';
 import { cn } from '@asf/ui';
 import { useI18n } from '@/providers/i18n-provider';
@@ -20,6 +21,7 @@ const items = [
   { href: '/learn', icon: BookOpen, labelKey: 'learn' as const, match: '/learn' },
   { href: '/app/chat/tutor', icon: MessageSquare, labelKey: 'chat' as const, match: '/app/chat' },
   { href: '/app/quiz', icon: ClipboardCheck, labelKey: 'quiz' as const, match: '/app/quiz' },
+  { href: '/app/tests', icon: FileClock, labelKey: 'tests' as const, match: '/app/tests' },
   { href: '/app/memory', icon: Brain, labelKey: 'memory' as const },
   { href: '/app/progress', icon: TrendingUp, labelKey: 'progress' as const },
 ];

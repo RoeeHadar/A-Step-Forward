@@ -97,6 +97,10 @@ export const quizSubmitResponseSchema = z.object({
   weak_concepts: z.array(z.string()),
   plan_adapted: z.boolean(),
   next_week_concepts: z.array(z.string()).nullable().optional(),
+  // Week-gate signal (ADR-0009). Optional so older payloads still validate.
+  passed: z.boolean().optional(),
+  pass_threshold: z.number().optional(),
+  attempt_id: z.string().nullable().optional(),
 });
 
 export type PlanConcept = z.infer<typeof planConceptSchema>;
