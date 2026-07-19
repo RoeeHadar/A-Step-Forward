@@ -240,11 +240,9 @@
       }
     ],
     "skill_atoms_unlocked": [
+      "dot_product",
       "orthogonal_matrix",
-      "rotation_matrix",
-      "reflection_matrix",
-      "det_orthogonal",
-      "norm_preservation"
+      "vector_norm"
     ],
     "tutor_pacing_hint": "Definition + verification first, then rotation/reflection examples, then properties.",
     "next_recommended": [
@@ -257,174 +255,331 @@
       "ord": 1,
       "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "$Q^TQ=I$ means:",
-      "stem_he": "$Q^TQ=I$ פירושו:",
+      "stem_en": "An orthogonal matrix has columns that are:",
+      "stem_he": "למטריצה אורתוגונלית יש עמודות שהן:",
+      "explanation_en": "**Columns are mutually orthogonal unit vectors.**\n\n**Answer:** orthonormal.",
+      "explanation_he": "**העמודות הן וקטורי יחידה מאונכים הדדית.**\n\n**תשובה:** אורתונורמליות.",
+      "skill_atoms": [
+        "orthogonal_matrix"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\text{orthonormal}$",
+          "$\\text{all equal}$",
+          "$\\text{all zero}$",
+          "$\\text{parallel}$"
+        ],
+        "options_he": [
+          "$\\text{orthonormal}$",
+          "$\\text{all equal}$",
+          "$\\text{all zero}$",
+          "$\\text{parallel}$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "b7b49f5b-d711-58bf-befb-f42998b6150d",
+      "points_level_min": "5pt",
       "options_en": [
-        "$Q$ is diagonal",
-        "$Q$ is orthogonal",
-        "$Q=Q^T$",
-        "$Q=I$"
+        "$\\text{orthonormal}$",
+        "$\\text{all equal}$",
+        "$\\text{all zero}$",
+        "$\\text{parallel}$"
       ],
       "options_he": [
-        "$Q$ אלכסונית",
-        "$Q$ אורתוגונלית",
-        "$Q=Q^T$",
-        "$Q=I$"
+        "$\\text{orthonormal}$",
+        "$\\text{all equal}$",
+        "$\\text{all zero}$",
+        "$\\text{parallel}$"
       ],
-      "correct_index": 1,
-      "explanation_en": "The condition $Q^TQ=I$ is the **definition** of an orthogonal matrix: multiplying $Q$ by its transpose (on either side) yields the identity. This is equivalent to $Q^{-1}=Q^T$, meaning the inverse is free — just transpose.\n\n**Why option 2 is correct:** \"Orthogonal\" is the standard name for matrices satisfying $Q^TQ=I$. The columns then form an orthonormal basis.\n\n**Common wrong paths:** Choosing \"$Q=Q^T$\" confuses orthogonal with symmetric — a $90°$ rotation is orthogonal but not symmetric. Choosing \"$Q=I$\" is far too restrictive (only the identity matrix). Choosing \"diagonal\" ignores that most orthogonal matrices are not diagonal.\n\n**Exam tip:** When you see $Q^TQ=I$ in a problem statement, immediately write $Q^{-1}=Q^T$ and check whether $\\det(Q)=\\pm1$ to classify the transformation.",
-      "explanation_he": "התנאי $Q^TQ=I$ הוא **ההגדרה** של מטריצה אורתוגונלית: כפל $Q$ בטרנספוז שלה (מכל צד) נותן את מטריצת היחידה. זה שקול ל-$Q^{-1}=Q^T$, כלומר ההופכית מיידית — רק טרנספוז.\n\n**למה אפשרות 2 נכונה:** \"אורתוגונלית\" הוא השם הסטנדרטי למטריצות שמקיימות $Q^TQ=I$. העמודות אז יוצרות בסיס אורתונורמלי.\n\n**דרכים שגויות נפוצות:** בחירה ב-\"$Q=Q^T$\" מבלבלת אורתוגונלית עם סימטרית — סיבוב $90°$ אורתוגונלי אך לא סימטרי. בחירה ב-\"$Q=I$\" מגבילה מדי (רק מטריצת היחידה). בחירה ב\"אלכסונית\" מתעלמת מכך שרוב המטריצות האורתוגונליות אינן אלכסוניות.\n\n**טיפ לבחינה:** כשאתם רואים $Q^TQ=I$ בניסוח, כתבו מיד $Q^{-1}=Q^T$ ובדקו $\\det(Q)=\\pm1$ כדי לסווג את הטרנספורמציה.",
-      "skill_atoms": [
-        "orthogonal_matrix",
-        "definition"
-      ]
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "$Q=\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$. Is it orthogonal? What transformation?",
-      "stem_he": "$Q=\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$. אורתוגונלית? טרנספורמציה?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "$Q^TQ=\\begin{pmatrix}0&1\\\\-1&0\\end{pmatrix}\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}=I$ ✓. $\\det=1$: rotation by $90°$",
-          "1$: rotation by $90°$",
-          "90"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Compute $Q^T=\\begin{pmatrix}0&1\\\\-1&0\\end{pmatrix}$, then $Q^TQ=\\begin{pmatrix}0&1\\\\-1&0\\end{pmatrix}\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}=I$. So $Q$ is orthogonal. $\\det(Q)=0\\cdot0-(-1)\\cdot1=1$, confirming a **rotation** (not reflection).\n\n**Why $90°$:** Applying $Q$ to $(1,0)^T$ gives $(0,1)^T$ — the standard basis vector on the $x$-axis rotates to the $y$-axis, which is exactly $90°$ counter-clockwise.\n\n**Common wrong path:** Answering \"reflection\" because the matrix looks like it swaps coordinates. Reflections have $\\det=-1$; here $\\det=+1$.\n\n**Exam tip:** For $2\\times2$ orthogonal matrices, compute $\\det$ first: $+1$ rotation, $-1$ reflection. Then verify $Q^TQ=I$ if the question asks explicitly.",
-      "explanation_he": "חשבו $Q^T=\\begin{pmatrix}0&1\\\\-1&0\\end{pmatrix}$, ואז $Q^TQ=\\begin{pmatrix}0&1\\\\-1&0\\end{pmatrix}\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}=I$. לכן $Q$ אורתוגונלית. $\\det(Q)=1$, מאשר **סיבוב** (לא שיקוף).\n\n**למה $90°$:** החלת $Q$ על $(1,0)^T$ נותנת $(0,1)^T$ — וקטור הבסיס על ציר $x$ מסתובב לציר $y$, כלומר $90°$ נגד כיוון השעון.\n\n**דרך שגויה נפוצה:** תשובה \"שיקוף\" כי המטריצה נראית כמו החלפת קואורדינטות. לשיקופים $\\det=-1$; כאן $\\det=+1$.\n\n**טיפ לבחינה:** במטריצות $2\\times2$ אורתוגונליות, חשבו $\\det$ תחילה: $+1$ סיבוב, $-1$ שיקוף. ואז אמתו $Q^TQ=I$ אם השאלה דורשת במפורש. זכרו: מטריצה עם $\\det=+1$ שומרת על כיוון, ואילו $\\det=-1$ הופכת אותו — זה הבדל המרכזי בין סיבוב לשיקוף בבחינות.",
+      "stem_en": "Compute the dot product $(1,0)\\cdot(0,1)$.",
+      "stem_he": "חשבו את המכפלה הסקלרית $(1,0)\\cdot(0,1)$.",
+      "explanation_en": "**$0+0=0$ — the standard basis vectors are orthogonal.**\n\n**Answer:** $0$.",
+      "explanation_he": "**$0$ — וקטורי הבסיס הסטנדרטי מאונכים.**\n\n**תשובה:** $0$.",
       "skill_atoms": [
-        "orthogonal_matrix",
-        "rotation_matrix"
-      ]
+        "dot_product"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "056e0bd6-3d3d-5aee-b197-bf685f9ebd92",
+      "points_level_min": "5pt",
+      "correct_answer": "0"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "$Q=\\begin{pmatrix}1&0\\\\0&-1\\end{pmatrix}$. $\\det(Q)$? What transformation?",
-      "stem_he": "$\\det\\begin{pmatrix}1&0\\\\0&-1\\end{pmatrix}$? טרנספורמציה?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "$\\det=-1$: reflection over $x$-axis",
-          "-1$: reflection over $x$-axis",
-          "-1"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "$\\det(Q)=1\\cdot(-1)-0\\cdot0=-1$. Since $\\det=-1$, this is an **improper orthogonal** matrix — a reflection, not a rotation. It maps $(x,y)\\mapsto(x,-y)$, flipping the $y$-coordinate.\n\n**Why reflection over $x$-axis:** The matrix leaves $x$ unchanged and negates $y$. Geometrically, every point reflects across the horizontal axis. You can verify $Q^TQ=\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}=I$, so $Q$ is indeed orthogonal.\n\n**Common wrong path:** Answering \"rotation by $180°$\" — a $180°$ rotation has $\\det=+1$, not $-1$. Another trap: saying \"not orthogonal\" because $\\det\\ne1$.\n\n**Exam tip:** $\\det=-1$ always means orientation is reversed. Name the axis of reflection by checking which coordinate stays fixed and which is negated.",
-      "explanation_he": "$\\det(Q)=1\\cdot(-1)-0\\cdot0=-1$. מכיוון $\\det=-1$, זו מטריצה **אורתוגונלית לא-תקינה** — שיקוף, לא סיבוב. היא ממפה $(x,y)\\mapsto(x,-y)$, הופכת את קואורדינטת $y$.\n\n**למה שיקוף מעל ציר $x$:** המטריצה משאירה $x$ ללא שינוי ומנגטיבת $y$. מבחינה גאומטרית, כל נקודה משתקפת מעל הציר האופקי. אפשר לאמת $Q^TQ=I$, ולכן $Q$ אכן אורתוגונלית.\n\n**דרך שגויה נפוצה:** תשובה \"סיבוב $180°$\" — סיבוב $180°$ בעל $\\det=+1$, לא $-1$. מלכודת נוספת: \"לא אורתוגונלית\" כי $\\det\\ne1$.\n\n**טיפ לבחינה:** $\\det=-1$ תמיד אומר שהכיוון מתהפך. זהו את ציר השיקוף על ידי בדיקה איזו קואורדינטה נשארת קבועה ואיזו מתהפכת.",
+      "stem_en": "True or False: for an orthogonal matrix $Q$, $Q^{T}Q=I$.",
+      "stem_he": "נכון או לא נכון: עבור מטריצה אורתוגונלית $Q$, מתקיים $Q^{T}Q=I$.",
+      "explanation_en": "**Orthonormal columns give $Q^{T}Q=I$** — **true**.",
+      "explanation_he": "**עמודות אורתונורמליות נותנות $Q^{T}Q=I$** — **נכון**.",
       "skill_atoms": [
-        "orthogonal_matrix",
-        "rotation_matrix"
-      ]
+        "orthogonal_matrix"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "e1f0342f-c0bb-5098-861d-c9b8f7590030",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "If $Q$ is orthogonal, what is $Q^{-1}$?",
-      "stem_he": "אם $Q$ אורתוגונלית, מה $Q^{-1}$?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "$Q^{-1}=Q^T$",
-          "Q^T",
-          "-1"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "From the definition $Q^TQ=I$, multiply both sides on the left by $Q^{-1}$: $Q^{-1}Q^TQ=Q^{-1}I$, giving $Q^T=Q^{-1}$. This is the most useful property of orthogonal matrices — inverting is free (just transpose).\n\n**Why $Q^T$ is correct:** The defining equation $Q^TQ=I$ literally says $Q^T$ is the left inverse, and since $Q$ is square, left and right inverses coincide.\n\n**Common wrong path:** Answering $Q^{-1}=Q$ (confusing with involutory matrices) or $Q^{-1}=I$ (confusing with the identity). Some students try row reduction — unnecessary here.\n\n**Exam tip:** Whenever a problem gives an orthogonal $Q$ and asks for $Q^{-1}v$, compute $Q^Tv$ instead. This saves significant time on $3\\times3$ or larger matrices.",
-      "explanation_he": "מההגדרה $Q^TQ=I$, הכפילו ב-$Q^{-1}$ משמאל: $Q^{-1}Q^TQ=Q^{-1}I$, ומקבלים $Q^T=Q^{-1}$. זו התכונה השימושית ביותר של מטריצות אורתוגונליות — היפוך הוא חינם (רק טרנספוז).\n\n**למה $Q^T$ נכון:** המשוואה המגדירה $Q^TQ=I$ אומרת ממש ש-$Q^T$ היא ההופכית השמאלית, ומכיוון $Q$ ריבועית, הופכיות שמאלית וימנית מתלכדות.\n\n**דרך שגויה נפוצה:** תשובה $Q^{-1}=Q$ (בלבול עם מטריצות involutory) או $Q^{-1}=I$ (בלבול עם היחידה). חלק מהתלמידים מנסים הפחתת שורות — מיותר כאן.\n\n**טיפ לבחינה:** בכל בעיה שנותנת $Q$ אורתוגונלית ושואלת $Q^{-1}v$, חשבו $Q^Tv$ במקום. זה חוסך זמן משמעותי במטריצות $3\\times3$ ומעלה.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Verify that $(3,4)$ and $(4,-3)$ are orthogonal.",
+      "stem_he": "אמתו ש-$(3,4)$ ו-$(4,-3)$ מאונכים.",
+      "explanation_en": "**Step 1 — Dot product.** $(3,4)\\cdot(4,-3)$.\n\n**Step 2 — Multiply.** $3\\cdot 4+4\\cdot(-3)$.\n\n**Step 3 — Add.** $12-12=0$; a zero dot product means orthogonal.\n\n**Answer:** $0$.",
+      "explanation_he": "**שלב 1 — מכפלה סקלרית.** $(3,4)\\cdot(4,-3)$.\n\n**שלב 2 — כפל.** $12+(-12)$.\n\n**שלב 3 — חיבור.** $0$ — מאונכים.\n\n**תשובה:** $0$.",
       "skill_atoms": [
-        "orthogonal_matrix",
-        "rotation_matrix"
-      ]
+        "dot_product"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Dot product.** $(3,4)\\cdot(4,-3)$.",
+          "**Step 2 — Multiply.** $3\\cdot 4+4\\cdot(-3)$.",
+          "**Step 3 — Add.** $12-12=0$; a zero dot product means orthogonal.",
+          "**Answer:** $0$."
+        ],
+        "steps_he": [
+          "**שלב 1 — מכפלה סקלרית.** $(3,4)\\cdot(4,-3)$.",
+          "**שלב 2 — כפל.** $12+(-12)$.",
+          "**שלב 3 — חיבור.** $0$ — מאונכים.",
+          "**תשובה:** $0$."
+        ]
+      },
+      "source_item_id": "634246e1-641d-55a5-ba69-d3bf02a6118b",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "$v=(1,0)^T$. $R_{45°}v=?$",
-      "stem_he": "$R_{45°}(1,0)^T=?$",
-      "answer_payload": {
-        "acceptable_answers": [
-          "$R_{45°}=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}$. $R_{45°}v=(1/\\sqrt{2},1/\\sqrt{2})^T$",
-          "(1/\\sqrt{2},1/\\sqrt{2})^T",
-          "2"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Build $R_{45°}=\\begin{pmatrix}\\cos45°&-\\sin45°\\\\ \\sin45°&\\cos45°\\end{pmatrix}=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}$. Then $R_{45°}v=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}\\begin{pmatrix}1\\\\0\\end{pmatrix}=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1\\\\1\\end{pmatrix}$.\n\n**Why $(1/\\sqrt{2},1/\\sqrt{2})^T$ is correct:** Both coordinates are equal and positive, placing the result at $45°$ from the $x$-axis with unit length $\\sqrt{1/2+1/2}=1$.\n\n**Common wrong path:** Forgetting the $1/\\sqrt{2}$ normalization, giving $(1,1)^T$ with length $\\sqrt{2}$ instead of $1$. Another trap: using $\\sin$ with the wrong sign.\n\n**Exam tip:** After rotating, verify $\\|Rv\\|=\\|v\\|$. Here $\\|v\\|=1$ and $\\|R_{45°}v\\|=\\sqrt{1/2+1/2}=1$ ✓. Norm preservation catches sign errors instantly. The vector $(1/\\sqrt{2},1/\\sqrt{2})^T$ lies at exactly $45°$ in the first quadrant — a quick sketch confirms you rotated counter-clockwise from the $x$-axis, not clockwise.",
-      "explanation_he": "בנו $R_{45°}=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}$. אז $R_{45°}v=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1\\\\1\\end{pmatrix}$.\n\n**למה $(1/\\sqrt{2},1/\\sqrt{2})^T$ נכון:** שתי הקואורדינטות שוות וחיוביות, מה שמניח את התוצאה בזווית $45°$ מציר $x$ באורך יחידה $\\sqrt{1/2+1/2}=1$.\n\n**דרך שגויה נפוצה:** שכחת הנרמול $1/\\sqrt{2}$, וקבלת $(1,1)^T$ באורך $\\sqrt{2}$ במקום $1$. מלכודת נוספת: $\\sin$ עם סימן שגוי.\n\n**טיפ לבחינה:** אחרי סיבוב, אמתו $\\|Rv\\|=\\|v\\|$. כאן $\\|v\\|=1$ ו-$\\|R_{45°}v\\|=1$ ✓. שימור נורמה תופס טעויות סימן מיד. הוקטור $(1/\\sqrt{2},1/\\sqrt{2})^T$ נמצא בדיוק בזווית $45°$ ברביע הראשון — סקיצה מהירה מאשרת שסובבתם נגד כיוון השעון מציר $x$, לא עם כיוון השעון.",
+      "stem_en": "Find $|\\det Q|$ for an orthogonal matrix $Q$.",
+      "stem_he": "מצאו $|\\det Q|$ עבור מטריצה אורתוגונלית $Q$.",
+      "explanation_en": "**$\\det Q=\\pm 1$, so $|\\det Q|=1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**$\\det Q=\\pm 1$, ולכן $|\\det Q|=1$.**\n\n**תשובה:** $1$.",
       "skill_atoms": [
-        "orthogonal_matrix",
-        "rotation_matrix"
-      ]
+        "orthogonal_matrix"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "3230cef0-e2bf-530a-b241-95feb4dfb5ad",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Verify $Q=\\frac{1}{5}\\begin{pmatrix}3&4\\\\-4&3\\end{pmatrix}$ is orthogonal. Find $\\det$ and identify.",
-      "stem_he": "בדוק ש-$Q=\\frac{1}{5}\\begin{pmatrix}3&4\\\\-4&3\\end{pmatrix}$ אורתוגונלית. $\\det$?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "Columns: $(3/5,−4/5)$, $(4/5,3/5)$. Norms: $\\sqrt{9+16}/5=1$. Dot: $(3\\cdot4+(-4)\\cdot3)/25=0$ ✓. $\\det=(9+16)/25=1$. Rotation by $\\theta=\\arctan(-4/3)$",
-          "\\arctan(-4/3)$",
-          "3"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Columns are $(3/5,-4/5)^T$ and $(4/5,3/5)^T$. Each has norm $\\sqrt{9+16}/5=1$. Dot product: $(3\\cdot4+(-4)\\cdot3)/25=0$. Columns are orthonormal, so $Q$ is orthogonal. $\\det(Q)=(9+16)/25=1$ — a proper rotation.\n\n**Why rotation:** $\\det=+1$ means orientation is preserved. The angle satisfies $\\cos\\theta=3/5$, $\\sin\\theta=-4/5$, so $\\theta=\\arctan(-4/3)$ (fourth quadrant).\n\n**Common wrong path:** Checking $Q^TQ$ with arithmetic errors in the $1/25$ scaling. Alternatively, computing $\\det=-1$ by using $ad-bc=9-16=-7$ without the $1/25$ factor squared.\n\n**Exam tip:** For normalized $2\\times2$ matrices, column-norm + dot-product check is faster than full matrix multiplication. Always compute $\\det$ to classify rotation versus reflection.",
-      "explanation_he": "העמודות הן $(3/5,-4/5)^T$ ו-$(4/5,3/5)^T$. לכל אחת נורמה $\\sqrt{9+16}/5=1$. מכפלה פנימית: $(3\\cdot4+(-4)\\cdot3)/25=0$. העמודות אורתונורמליות, ולכן $Q$ אורתוגונלית. $\\det(Q)=(9+16)/25=1$ — סיבוב תקין.\n\n**למה סיבוב:** $\\det=+1$ אומר שהכיוון נשמר. הזווית מקיימת $\\cos\\theta=3/5$, $\\sin\\theta=-4/5$, כלומר $\\theta=\\arctan(-4/3)$ (רביע ראשון).\n\n**דרך שגויה נפוצה:** בדיקת $Q^TQ$ עם טעויות חשבון בגורם $1/25$. לחלופין, חישוב $\\det=-1$ עם $ad-bc=9-16$ בלי לרבע את $1/25$.\n\n**טיפ לבחינה:** במטריצות $2\\times2$ מנורמלות, בדיקת נורמת עמודות + מכפלה פנימית מהירה מכפל מטריצות מלא. תמיד חשבו $\\det$ לסיווג סיבוב מול שיקוף.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute the dot product $(3,4)\\cdot(4,-3)$.",
+      "stem_he": "חשבו את המכפלה הסקלרית $(3,4)\\cdot(4,-3)$.",
+      "explanation_en": "**$12-12=0$ — orthogonal.**\n\n**Answer:** $0$.",
+      "explanation_he": "**$12-12=0$ — מאונכים.**\n\n**תשובה:** $0$.",
       "skill_atoms": [
-        "orthogonal_matrix",
-        "rotation_matrix"
-      ]
+        "dot_product"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "0948a909-d2b8-5a59-b622-3608d1358cbd",
+      "points_level_min": "5pt",
+      "correct_answer": "0"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "If $Q_1$ and $Q_2$ are orthogonal, is $Q_1Q_2$ orthogonal?",
-      "stem_he": "אם $Q_1,Q_2$ אורתוגונליות, האם $Q_1Q_2$ אורתוגונלית?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "$(Q_1Q_2)^T(Q_1Q_2)=Q_2^TQ_1^TQ_1Q_2=Q_2^TIQ_2=Q_2^TQ_2=I$. Yes.",
-          "I$. Yes.",
-          "2"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Yes. Compute $(Q_1Q_2)^T(Q_1Q_2)=Q_2^TQ_1^TQ_1Q_2$. Since $Q_1^TQ_1=I$ and $Q_2^TQ_2=I$, this equals $Q_2^TIQ_2=Q_2^TQ_2=I$. Therefore $Q_1Q_2$ is orthogonal.\n\n**Why this proof works:** The transpose of a product reverses order: $(AB)^T=B^TA^T$. Each factor contributes its own $Q^TQ=I$.\n\n**Common wrong path:** Claiming the product is not orthogonal because \"multiplying changes things.\" Another error: writing $(Q_1Q_2)^T=Q_1^TQ_2^T$ but then multiplying in the wrong order.\n\n**Exam tip:** This closure property means rotations compose as rotations (when both have $\\det=+1$) and the group $SO(n)$ is closed under multiplication. Use this to simplify $Q_1^TQ_2$ as a single rotation when both are rotation matrices.",
-      "explanation_he": "כן. חשבו $(Q_1Q_2)^T(Q_1Q_2)=Q_2^TQ_1^TQ_1Q_2$. מכיוון $Q_1^TQ_1=I$ ו-$Q_2^TQ_2=I$, זה שווה ל-$Q_2^TIQ_2=Q_2^TQ_2=I$. לכן $Q_1Q_2$ אורתוגונלית.\n\n**למה ההוכחה עובדת:** טרנספוז של מכפלה הופך סדר: $(AB)^T=B^TA^T$. כל גורם תורם את $Q^TQ=I$ שלו.\n\n**דרך שגויה נפוצה:** טענה שהמכפלה לא אורתוגונלית כי \"כפל משנה דברים\". טעות נוספת: כתיבת $(Q_1Q_2)^T=Q_1^TQ_2^T$ אך כפל בסדר שגוי.\n\n**טיפ לבחינה:** תכונת סגירה זו אומרת שסיבובים מתחברים לסיבובים (כשלשניהם $\\det=+1$) והחבורה $SO(n)$ סגורה תחת כפל. השתמשו בזה לפישוט $Q_1^TQ_2$ כסיבוב יחיד כששניהם מטריצות סיבוב. הוכחה זו מופיעה לעיתים קרובות כשאלה קצרה בבחינות — שיננו את שלוש השורות.",
+      "stem_en": "For an orthogonal matrix $Q$, its inverse equals:",
+      "stem_he": "עבור מטריצה אורתוגונלית $Q$, ההופכית שלה שווה ל:",
+      "explanation_en": "**$Q^{-1}=Q^{T}$.**\n\n**Answer:** $Q^{T}$.",
+      "explanation_he": "**$Q^{-1}=Q^{T}$.**\n\n**תשובה:** $Q^{T}$.",
       "skill_atoms": [
-        "orthogonal_matrix",
-        "rotation_matrix"
-      ]
+        "orthogonal_matrix"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$Q^{T}$",
+          "$Q$",
+          "$-Q$",
+          "$2Q$"
+        ],
+        "options_he": [
+          "$Q^{T}$",
+          "$Q$",
+          "$-Q$",
+          "$2Q$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "e9d4e49c-61a6-5d37-896f-04be2f52115d",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$Q^{T}$",
+        "$Q$",
+        "$-Q$",
+        "$2Q$"
+      ],
+      "options_he": [
+        "$Q^{T}$",
+        "$Q$",
+        "$-Q$",
+        "$2Q$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "$Q=\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\\\ \\sin\\theta&-\\cos\\theta\\end{pmatrix}$. $\\det(Q)$?",
-      "stem_he": "$Q=\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\\\ \\sin\\theta&-\\cos\\theta\\end{pmatrix}$. $\\det$?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "$\\det=-\\cos^2\\theta-\\sin^2\\theta=-1$. Reflection.",
-          "-1$. Reflection.",
-          "-1"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Using the $2\\times2$ formula: $\\det(Q)=\\cos\\theta\\cdot(-\\cos\\theta)-\\sin\\theta\\cdot\\sin\\theta=-\\cos^2\\theta-\\sin^2\\theta=-1$.\n\n**Why $-1$ means reflection:** The matrix has the form of a reflection over a line through the origin. One eigenvalue is $+1$ (the mirror axis direction) and the other is $-1$ (perpendicular direction). The product of eigenvalues equals the determinant: $(+1)(-1)=-1$.\n\n**Common wrong path:** Getting $\\det=+1$ by computing $\\cos^2\\theta+\\sin^2\\theta=1$ with the wrong sign on the anti-diagonal. Confusing this matrix with the rotation $R_\\theta$.\n\n**Exam tip:** Rotation has $\\cos\\theta$ on both diagonal entries with $-\\sin\\theta$ upper-right; reflection has $-\\cos\\theta$ lower-right and $+\\sin\\theta$ upper-right. Memorize the sign pattern.",
-      "explanation_he": "בנוסחת $2\\times2$: $\\det(Q)=\\cos\\theta\\cdot(-\\cos\\theta)-\\sin\\theta\\cdot\\sin\\theta=-\\cos^2\\theta-\\sin^2\\theta=-1$.\n\n**למה $-1$ פירושו שיקוף:** למטריצה צורת שיקוף מעל קו שעובר בראשית. ערך עצמי אחד הוא $+1$ (כיוון ציר השיקוף) והשני $-1$ (כיוון ניצב). מכפלת הערכים העצמיים שווה לדטרמיננטה: $(+1)(-1)=-1$.\n\n**דרך שגויה נפוצה:** קבלת $\\det=+1$ עם $\\cos^2\\theta+\\sin^2\\theta=1$ בסימן שגוי על האלכסון המשני. בלבול עם מטריצת הסיבוב $R_\\theta$.\n\n**טיפ לבחינה:** לסיבוב $\\cos\\theta$ בשני איברי האלכון עם $-\\sin\\theta$ למעלה-ימין; לשיקוף $-\\cos\\theta$ למטה-ימין ו-$+\\sin\\theta$ למעלה-ימין. שיננו את דפוס הסימנים. אם $\\det=-1$ ו-$Q^TQ=I$, הטרנספורמציה היא שיקוף — אל תנסו לכתוב אותה כסיבוב.",
+      "stem_en": "Find the norm $\\lVert(3,4)\\rVert$.",
+      "stem_he": "מצאו את הנורמה $\\lVert(3,4)\\rVert$.",
+      "explanation_en": "**$\\sqrt{9+16}=5$.**\n\n**Answer:** $5$.",
+      "explanation_he": "**$\\sqrt{25}=5$.**\n\n**תשובה:** $5$.",
       "skill_atoms": [
-        "orthogonal_matrix",
-        "rotation_matrix"
-      ]
+        "vector_norm"
+      ],
+      "answer_payload": {
+        "value": 5
+      },
+      "source_item_id": "0d9af8f7-02ca-5d5c-9654-198ed3a000d7",
+      "points_level_min": "5pt",
+      "correct_answer": "5"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find $\\det$ of the rotation matrix, $\\cos^2\\theta+\\sin^2\\theta$, at $\\theta=30^\\circ$.",
+      "stem_he": "מצאו את הדטרמיננטה של מטריצת הסיבוב, $\\cos^2\\theta+\\sin^2\\theta$, ב-$\\theta=30^\\circ$.",
+      "explanation_en": "**$\\cos^2\\theta+\\sin^2\\theta=1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**$\\cos^2\\theta+\\sin^2\\theta=1$.**\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "orthogonal_matrix"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "9147e434-0087-59d9-9089-d9f33f957ca1",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute the dot product $(1,2)\\cdot(2,-1)$.",
+      "stem_he": "חשבו את המכפלה הסקלרית $(1,2)\\cdot(2,-1)$.",
+      "explanation_en": "**$2-2=0$ — orthogonal.**\n\n**Answer:** $0$.",
+      "explanation_he": "**$2-2=0$ — מאונכים.**\n\n**תשובה:** $0$.",
+      "skill_atoms": [
+        "dot_product"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "30fdb236-e5a3-519e-a7fe-15e2316f0e66",
+      "points_level_min": "5pt",
+      "correct_answer": "0"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the norm $\\lVert(0,5)\\rVert$.",
+      "stem_he": "מצאו את הנורמה $\\lVert(0,5)\\rVert$.",
+      "explanation_en": "**$\\sqrt{25}=5$.**\n\n**Answer:** $5$.",
+      "explanation_he": "**$\\sqrt{25}=5$.**\n\n**תשובה:** $5$.",
+      "skill_atoms": [
+        "vector_norm"
+      ],
+      "answer_payload": {
+        "value": 5
+      },
+      "source_item_id": "2f16e9c9-f9c2-5488-8417-c99af9fb0036",
+      "points_level_min": "5pt",
+      "correct_answer": "5"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: orthogonal transformations preserve vector length.",
+      "stem_he": "נכון או לא נכון: העתקות אורתוגונליות שומרות על אורך וקטור.",
+      "explanation_en": "**$\\lVert Qx\\rVert=\\lVert x\\rVert$** — **true**.",
+      "explanation_he": "**$\\lVert Qx\\rVert=\\lVert x\\rVert$** — **נכון**.",
+      "skill_atoms": [
+        "orthogonal_matrix"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "93672089-e346-56d3-8d9d-527f4d664f5d",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute the dot product $(1,1,1)\\cdot(1,-1,0)$.",
+      "stem_he": "חשבו את המכפלה הסקלרית $(1,1,1)\\cdot(1,-1,0)$.",
+      "explanation_en": "**$1-1+0=0$ — orthogonal.**\n\n**Answer:** $0$.",
+      "explanation_he": "**$1-1+0=0$ — מאונכים.**\n\n**תשובה:** $0$.",
+      "skill_atoms": [
+        "dot_product"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "69bd5216-36c1-5f95-8a9d-20f9a265cf67",
+      "points_level_min": "5pt",
+      "correct_answer": "0"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the norm $\\lVert(1,2,2)\\rVert$.",
+      "stem_he": "מצאו את הנורמה $\\lVert(1,2,2)\\rVert$.",
+      "explanation_en": "**$\\sqrt{1+4+4}=3$.**\n\n**Answer:** $3$.",
+      "explanation_he": "**$\\sqrt{9}=3$.**\n\n**תשובה:** $3$.",
+      "skill_atoms": [
+        "vector_norm"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "505bd4d9-2b44-553d-bf21-908b49eaad8f",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find $\\det$ of the rotation matrix, $\\cos^2\\theta+\\sin^2\\theta$, at $\\theta=60^\\circ$.",
+      "stem_he": "מצאו את הדטרמיננטה של מטריצת הסיבוב, $\\cos^2\\theta+\\sin^2\\theta$, ב-$\\theta=60^\\circ$.",
+      "explanation_en": "**$\\cos^2\\theta+\\sin^2\\theta=1$ for all $\\theta$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**$\\cos^2\\theta+\\sin^2\\theta=1$.**\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "orthogonal_matrix"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "c68397f6-6682-56bd-bb40-8f9a5e951f62",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
     }
   ],
   "est_minutes": 40,

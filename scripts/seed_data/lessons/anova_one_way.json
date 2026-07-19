@@ -239,151 +239,346 @@
       "body_he_md": "- **ANOVA חד-כיווני** בודק $H_0: \\mu_1=\\cdots=\\mu_k$ במבחן אחד, ומונע בעיית השוואות מרובות כש-$k \\geq 3$.\n- **$F=\\text{MSB/MSW}$**: $F$ גדול משמעותו שהשונות הבין-קבוצתית גדולה מהתוך-קבוצתית; $F \\approx 1$ תומך בממוצעים שווים.\n- **טבלת ANOVA:** SST=SSB+SSW; $df_B=k-1$, $df_W=N-k$; תמיד חשבו MS לפני F.\n- **דחה $H_0$** אם $F > F_{\\alpha,k-1,N-k}$; השתמשו ב-post-hoc (Tukey, Bonferroni) לזיהוי הקבוצות השונות.\n- **$\\eta^2=\\text{SSB/SST}$** מודד גודל אפקט — חלק השונות הכוללת שמוסבר על ידי שיוך לקבוצה."
     }
   ],
-  "agent_hints": {},
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "anova",
+      "degrees_of_freedom",
+      "f_ratio",
+      "grand_mean",
+      "mean_square",
+      "sum_of_squares"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "What does ANOVA test? State $H_0$ for $k=4$ groups.",
-      "stem_he": "מה ANOVA בודק? נסח את $H_0$ עבור $k=4$ קבוצות.",
+      "stem_en": "One-way ANOVA compares the means of:",
+      "stem_he": "ANOVA חד-כיוונית משווה את התוחלות של:",
+      "explanation_en": "**ANOVA extends the $t$-test to $3+$ group means.**\n\n**Answer:** three or more groups.",
+      "explanation_he": "**ANOVA מרחיבה את מבחן $t$ ל-$3+$ קבוצות.**\n\n**תשובה:** שלוש קבוצות או יותר.",
+      "skill_atoms": [
+        "anova"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "ANOVA tests equality of group means",
-          "H_0: \\mu_1=\\mu_2=\\mu_3=\\mu_4",
-          "\\mu_1=\\mu_2=\\mu_3=\\mu_4"
+        "options_en": [
+          "$\\text{three or more groups}$",
+          "$\\text{exactly two groups}$",
+          "$\\text{one group}$",
+          "$\\text{a single variable}$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$\\text{three or more groups}$",
+          "$\\text{exactly two groups}$",
+          "$\\text{one group}$",
+          "$\\text{a single variable}$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nOne-way ANOVA tests whether the population means of $k$ groups are all equal. For $k=4$ groups, the null hypothesis is $H_0: \\mu_1 = \\mu_2 = \\mu_3 = \\mu_4$. The alternative is that at least two means differ — ANOVA does not specify which pair.\n\n**How to think about it:**\nIdentify the test purpose first: equality of means across groups. Write all $k$ means in $H_0$ with equals signs. The alternative is always \"at least two differ\" for one-way ANOVA.\n\n**Common slip:**\nWriting $H_1: \\mu_1 \\neq \\mu_2$ (pairwise) instead of the omnibus alternative. Stating $H_0: \\mu_1 = \\mu_2$ when there are four groups — omitting groups 3 and 4.\n\n**Exam tip:**\nHypothesis-statement items are quick points. Template: $H_0: \\mu_1=\\cdots=\\mu_k$; $H_1$: at least two means differ. Always match $k$ from the problem.",
-      "explanation_he": "**למה זה נכון:**\nANOVA חד-כיווני בודק אם ממוצעי האוכלוסייה של $k$ קבוצות שווים. ל-$k=4$ קבוצות, $H_0: \\mu_1 = \\mu_2 = \\mu_3 = \\mu_4$. החלופית: לפחות שני ממוצעים שונים — ANOVA לא מציין איזה זוג.\n\n**איך לחשוב על זה:**\nזהו קודם את מטרת המבחן: שוויון ממוצעים בין קבוצות. כתבו את כל $k$ הממוצעים ב-$H_0$ עם סימני שוויון. החלופית תמיד \"לפחות שניים שונים\" ב-ANOVA חד-כיווני.\n\n**טעות נפוצה:**\nכתיבת $H_1: \\mu_1 \\neq \\mu_2$ (זוגי) במקום חלופית אומניבוס. $H_0: \\mu_1 = \\mu_2$ כשיש ארבע קבוצות — השמטת קבוצות 3 ו-4.\n\n**טיפ לבחינה:**\nשאלות ניסוח השערות הן נקודות מהירות. תבנית: $H_0: \\mu_1=\\cdots=\\mu_k$; $H_1$: לפחות שני ממוצעים שונים. תמיד התאימו $k$ מהשאלה.",
-      "skill_atoms": []
+      "source_item_id": "aca23212-81bc-51d7-80ab-6fdd9d63e2b2",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{three or more groups}$",
+        "$\\text{exactly two groups}$",
+        "$\\text{one group}$",
+        "$\\text{a single variable}$"
+      ],
+      "options_he": [
+        "$\\text{three or more groups}$",
+        "$\\text{exactly two groups}$",
+        "$\\text{one group}$",
+        "$\\text{a single variable}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "An ANOVA has $k=3$ and $N=30$. Find $df_B$ and $df_W$.",
-      "stem_he": "ANOVA עם $k=3$ ו-$N=30$. מצא $df_B$ ו-$df_W$.",
+      "stem_en": "Find the grand mean of the group means $\\{2,4,6\\}$.",
+      "stem_he": "מצאו את הממוצע הכללי של ממוצעי הקבוצות $\\{2,4,6\\}$.",
+      "explanation_en": "**$\\dfrac{12}{3}=4$.**\n\n**Answer:** $4$.",
+      "explanation_he": "**$=4$.**\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "grand_mean"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "df_B = 2",
-          "df_W = 27",
-          "2 and 27"
-        ],
-        "case_sensitive": false
+        "value": 4
       },
-      "explanation_en": "**Why this is correct:**\nWith $k=3$ groups, $df_B = k-1 = 3-1 = 2$. With $N=30$ total observations, $df_W = N-k = 30-3 = 27$. These df values locate the critical F value and the sampling distribution of the test statistic.\n\n**How to think about it:**\nMemorize the pair: $df_B = k-1$ (between groups), $df_W = N-k$ (within/error). $k$ is the number of groups; $N$ is total sample size across all groups.\n\n**Common slip:**\nUsing $df_B = N-1$ or $df_W = k-1$ (swapping the formulas). Computing $df_W = 30-1 = 29$ by forgetting to subtract $k$.\n\n**Exam tip:**\ndf items appear before every F computation. Write both formulas on your formula card: $df_B=k-1$, $df_W=N-k$. Quick sanity: $df_B + df_W = N-1 = df_T$.",
-      "explanation_he": "**למה זה נכון:**\nעם $k=3$ קבוצות, $df_B = k-1 = 2$. עם $N=30$ תצפיות, $df_W = N-k = 27$. ערכי df אלה קובעים את ערך F הקריטי ואת התפלגות הסטטיסטיקה.\n\n**איך לחשוב על זה:**\nשיננו את הזוג: $df_B = k-1$ (בין קבוצות), $df_W = N-k$ (תוך/שגיאה). $k$ מספר הקבוצות; $N$ גודל המדגם הכולל בכל הקבוצות.\n\n**טעות נפוצה:**\nשימוש ב-$df_B = N-1$ או $df_W = k-1$ (החלפת נוסחאות). $df_W = 30-1 = 29$ בשכחת חיסור $k$.\n\n**טיפ לבחינה:**\nשאלות df מופיעות לפני כל חישוב F. רשמו: $df_B=k-1$, $df_W=N-k$. בדיקה: $df_B + df_W = N-1 = df_T$ — זהו תמיד.",
-      "skill_atoms": []
+      "source_item_id": "14cdc77c-610b-52e5-894e-afe09c53a628",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "SSB = 50, $k=3$, SSW = 120, $N=15$. Compute $F$.",
-      "stem_he": "SSB = 50, $k=3$, SSW = 120, $N=15$. חשב $F$.",
+      "stem_en": "True or False: one-way ANOVA uses the $F$-distribution.",
+      "stem_he": "נכון או לא נכון: ANOVA חד-כיוונית משתמשת בהתפלגות $F$.",
+      "explanation_en": "**The test statistic $F=MSB/MSW$ follows an $F$-distribution** — **true**.",
+      "explanation_he": "**הסטטיסטי $F=MSB/MSW$ מתפלג $F$** — **נכון**.",
+      "skill_atoms": [
+        "anova"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "F = 2.5",
-          "2.5",
-          "MSB=25, MSW=10, F=2.5"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why this is correct:**\nFirst find df: $df_B = k-1 = 2$, $df_W = N-k = 15-3 = 12$. Then $\\text{MSB} = 50/2 = 25$ and $\\text{MSW} = 120/12 = 10$. Finally $F = 25/10 = 2.5$.\n\n**How to think about it:**\nWork in order: identify $k$ and $N$ → compute df → divide SS by df to get MS → divide MSB by MSW. Never skip the df step — dividing SSB by SSW directly gives the wrong answer.\n\n**Common slip:**\nComputing $F = 50/120 \\approx 0.42$ using raw sums of squares. Using $df_W = N-1 = 14$ instead of $N-k = 12$.\n\n**Exam tip:**\nWhen given SSB and SSW directly, the exam still expects df and MS columns. Write the mini-table: MSB=25, MSW=10, F=2.5. If $F$ is between 1 and 5, it is plausible — always compare to the critical value next.",
-      "explanation_he": "**למה זה נכון:**\nקודם מצאו df: $df_B = 2$, $df_W = 15-3 = 12$. אז $\\text{MSB} = 50/2 = 25$ ו-$\\text{MSW} = 120/12 = 10$. לבסוף $F = 25/10 = 2.5$.\n\n**איך לחשוב על זה:**\nעבדו בסדר: זהו $k$ ו-$N$ → חשבו df → חלקו SS ב-df ל-MS → חלקו MSB ב-MSW. אל תדלגו על df — חלוקת SSB ב-SSW ישירות נותנת תשובה שגויה.\n\n**טעות נפוצה:**\n$F = 50/120 \\approx 0.42$ מסכומי ריבועים גולמיים. $df_W = N-1 = 14$ במקום $N-k = 12$.\n\n**טיפ לבחינה:**\nכשניתנים SSB ו-SSW, הבחינה עדיין מצפה ל-df ו-MS. כתבו: MSB=25, MSW=10, F=2.5. אם $F$ בין 1 ל-5, סביר — תמיד השוו לערך קריטי.",
-      "skill_atoms": []
+      "source_item_id": "202283bc-9e6a-5e15-a70f-105a4af063f5",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "If $F = 1.1$ and $F_{\\text{crit}} = 4.26$, what is the conclusion?",
-      "stem_he": "אם $F=1.1$ ו-$F_{\\text{crit}}=4.26$, מה המסקנה?",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Three groups have $SSB=36$ ($df=2$) and $SSW=27$ ($df=9$). Find $F$.",
+      "stem_he": "לשלוש קבוצות $SSB=36$ ($df=2$) ו-$SSW=27$ ($df=9$). מצאו $F$.",
+      "explanation_en": "**Step 1 — Mean squares.** $MSB=\\dfrac{36}{2}=18$, $MSW=\\dfrac{27}{9}=3$.\n\n**Step 2 — Ratio.** $F=\\dfrac{MSB}{MSW}=\\dfrac{18}{3}$.\n\n**Step 3 — Evaluate.** $=6$.\n\n**Answer:** $6$.",
+      "explanation_he": "**שלב 1 — ממוצעי ריבועים.** $MSB=18$, $MSW=3$.\n\n**שלב 2 — יחס.** $F=\\dfrac{18}{3}$.\n\n**שלב 3 — חישוב.** $6$.\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "f_ratio"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "fail to reject H_0",
-          "fail to reject",
-          "no significant difference between group means"
+        "steps_en": [
+          "**Step 1 — Mean squares.** $MSB=\\dfrac{36}{2}=18$, $MSW=\\dfrac{27}{9}=3$.",
+          "**Step 2 — Ratio.** $F=\\dfrac{MSB}{MSW}=\\dfrac{18}{3}$.",
+          "**Step 3 — Evaluate.** $=6$.",
+          "**Answer:** $6$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — ממוצעי ריבועים.** $MSB=18$, $MSW=3$.",
+          "**שלב 2 — יחס.** $F=\\dfrac{18}{3}$.",
+          "**שלב 3 — חישוב.** $6$.",
+          "**תשובה:** $6$."
+        ]
       },
-      "explanation_en": "**Why this is correct:**\nSince $F = 1.1 < F_{\\text{crit}} = 4.26$, we **fail to reject $H_0$**. The observed between-group variation is not large enough relative to within-group variation to conclude that group means differ at this significance level.\n\n**How to think about it:**\nDecision rule: reject if $F > F_{\\text{crit}}$; otherwise fail to reject. $F \\approx 1$ means MSB and MSW are similar — consistent with equal means. Never say \"accept $H_0$\" — use \"fail to reject.\"\n\n**Common slip:**\nRejecting because \"1.1 is close to 4.26\" without the inequality direction. Saying \"accept $H_0$\" instead of the proper frequentist language. Confusing $F < F_{\\text{crit}}$ with rejection.\n\n**Exam tip:**\nInterpretation questions give both statistics — no computation needed. Template: compare, state reject/fail to reject, add one context sentence. If $F$ is near 1, the answer is almost always fail to reject.",
-      "explanation_he": "**למה זה נכון:**\nמאחר ש-$F = 1.1 < F_{\\text{crit}} = 4.26$, **לא דוחים $H_0$**. השונות הבין-קבוצתית אינה גדולה מספיק ביחס לתוך-קבוצתית כדי להסיק שהממוצעים שונים.\n\n**איך לחשוב על זה:**\nכלל החלטה: דחו אם $F > F_{\\text{crit}}$; אחרת לא דוחים. $F \\approx 1$ משמע MSB ו-MSW דומים — עקבי עם ממוצעים שווים. לעולם אל תגידו \"מקבלים $H_0$\" — \"לא דוחים\".\n\n**טעות נפוצה:**\nדחייה כי \"1.1 קרוב ל-4.26\" בלי כיוון אי-השוויון. \"מקבלים $H_0$\" במקום הניסוח הנכון. בלבול $F < F_{\\text{crit}}$ עם דחייה.\n\n**טיפ לבחינה:**\nשאלות פרשנות נותנות שתי סטטיסטיקות — ללא חישוב. תבנית: השוו, ציינו דחייה/אי-דחייה, משפט הקשר. אם $F$ קרוב ל-1, התשובה כמעט תמיד אי-דחייה.",
-      "skill_atoms": []
+      "source_item_id": "242be0f0-74ee-573a-99c8-59631d379ed4",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Three groups (each $n=4$): Group 1 mean = 5, Group 2 mean = 8, Group 3 mean = 6. Grand mean = 6.33. Compute SSB.",
-      "stem_he": "שלוש קבוצות ($n=4$ כל אחת): ממוצעים 5, 8, 6. ממוצע כולל = 6.33. חשב SSB.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the between-groups degrees of freedom for $3$ groups.",
+      "stem_he": "מצאו את דרגות החופש בין הקבוצות עבור $3$ קבוצות.",
+      "explanation_en": "**$df_{\\text{between}}=k-1=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**$df_{\\text{between}}=2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "degrees_of_freedom"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "SSB = 18.68",
-          "18.68"
-        ],
-        "case_sensitive": false
+        "value": 2
       },
-      "explanation_en": "**Why this is correct:**\nSSB measures weighted squared deviations of group means from the grand mean: $\\text{SSB} = 4(5-6.33)^2 + 4(8-6.33)^2 + 4(6-6.33)^2 = 4(1.77) + 4(2.79) + 4(0.11) = 7.08 + 11.16 + 0.44 = 18.68$. Each group contributes $n_i(\\bar{x}_i - \\bar{x}_{..})^2$.\n\n**How to think about it:**\nWhen group sizes are equal ($n=4$), factor $n$ out: $\\text{SSB} = 4\\sum(\\bar{x}_i - \\bar{x}_{..})^2$. Compute each squared deviation first, then multiply by 4.\n\n**Common slip:**\nForgetting to multiply by $n_i$ — using $(\\bar{x}_i - \\bar{x}_{..})^2$ alone. Using the grand mean incorrectly (e.g., averaging the three group means without weighting by $n$).\n\n**Exam tip:**\nSSB from means-only problems are common exam items. Write the formula, substitute each group mean and the given grand mean, show one squared term before summing. Partial credit for correct setup.",
-      "explanation_he": "**למה זה נכון:**\nSSB מודד סטיות בריבוע משוקללות של ממוצעי קבוצות מהממוצע הכולל: $\\text{SSB} = 4(1.77) + 4(2.79) + 4(0.11) = 18.68$. כל קבוצה תורמת $n_i(\\bar{x}_i - \\bar{x}_{..})^2$.\n\n**איך לחשוב על זה:**\nכשגדלי קבוצות שווים ($n=4$), הוציאו $n$: $\\text{SSB} = 4\\sum(\\bar{x}_i - \\bar{x}_{..})^2$. חשבו כל סטייה בריבוע, ואז הכפילו ב-4.\n\n**טעות נפוצה:**\nשכחת הכפלה ב-$n_i$ — שימוש ב-$(\\bar{x}_i - \\bar{x}_{..})^2$ בלבד. ממוצע כולל שגוי (ממוצע פשוט של שלושה ממוצעי קבוצות בלי משקל $n$).\n\n**טיפ לבחינה:**\nשאלות SSB מממוצעים נפוצות בבחינה. כתבו נוסחה, הציבו ממוצעי קבוצות וממוצע כולל, הראו מונח אחד לפני סיכום. נקודות חלקיות על הכנה נכונה.",
-      "skill_atoms": []
+      "source_item_id": "bc5c25ad-a27a-54b1-8e3a-a223b1cbc62c",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Group A: 2, 4, 6. Group B: 5, 5, 5. Both have mean 4 and 5. Grand mean = 4.5. Compute SSW for each group.",
-      "stem_he": "קבוצה A: 2,4,6. קבוצה B: 5,5,5. ממוצעים 4 ו-5. ממוצע כולל = 4.5. חשב SSW לכל קבוצה.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the within-groups degrees of freedom for $N=12$ observations in $k=3$ groups.",
+      "stem_he": "מצאו את דרגות החופש בתוך הקבוצות עבור $N=12$ תצפיות ב-$k=3$ קבוצות.",
+      "explanation_en": "**$df_{\\text{within}}=N-k=9$.**\n\n**Answer:** $9$.",
+      "explanation_he": "**$df_{\\text{within}}=9$.**\n\n**תשובה:** $9$.",
+      "skill_atoms": [
+        "degrees_of_freedom"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "SSW = 8",
-          "SSW_A = 8",
-          "SSW_B = 0"
-        ],
-        "case_sensitive": false
+        "value": 9
       },
-      "explanation_en": "**Why this is correct:**\nSSW sums squared deviations within each group: $\\text{SSW}_A = (2-4)^2+(4-4)^2+(6-4)^2 = 4+0+4 = 8$. Group B has zero spread (all values equal 5), so $\\text{SSW}_B = 0$. Total $\\text{SSW} = 8$.\n\n**How to think about it:**\nSSW uses **group means**, not the grand mean. For each observation, subtract its own group mean before squaring. Constant groups contribute zero to SSW — a key insight for understanding F.\n\n**Common slip:**\nUsing the grand mean 4.5 instead of group means 4 and 5. Computing SSB instead of SSW. Missing that identical values within a group give zero within-group variance.\n\n**Exam tip:**\nThis problem tests whether you distinguish SSB (between) from SSW (within). Group B's zero SSW is intentional — it shows within-group spread can differ across groups while ANOVA still pools SSW.",
-      "explanation_he": "**למה זה נכון:**\nSSW מסכם סטיות בריבוע בתוך כל קבוצה: $\\text{SSW}_A = 4+0+4 = 8$. קבוצה B ללא פיזור (כל הערכים 5), $\\text{SSW}_B = 0$. סה\"כ $\\text{SSW} = 8$.\n\n**איך לחשוב על זה:**\nSSW משתמש ב**ממוצעי קבוצות**, לא בממוצע הכולל. לכל תצפית, חסרו ממוצע הקבוצה שלה לפני ריבוע. קבוצות קבועות תורמות אפס — תובנה מפתח להבנת F.\n\n**טעות נפוצה:**\nשימוש בממוצע כולל 4.5 במקום ממוצעי קבוצות 4 ו-5. חישוב SSB במקום SSW. החמצה שערכים זהים בקבוצה נותנים שונות תוך-קבוצתית אפס.\n\n**טיפ לבחינה:**\nתרגיל זה בודק הבחנה בין SSB (בין) ל-SSW (תוך). SSW=0 של קבוצה B מכוון — מראה שפיזור תוך-קבוצתי יכול להשתנות בין קבוצות.",
-      "skill_atoms": []
+      "source_item_id": "15134415-07c1-58df-9bb2-23ef4a8a378b",
+      "points_level_min": "5pt",
+      "correct_answer": "9"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "Given $F(2,18)=4.5$ and $F_{0.05,2,18}=3.55$, state the conclusion at 5% significance.",
-      "stem_he": "נתון $F(2,18)=4.5$ ו-$F_{0.05,2,18}=3.55$. ציין מסקנה ברמת מובהקות 5%.",
+      "stem_en": "In ANOVA, the total sum of squares equals:",
+      "stem_he": "ב-ANOVA, סכום הריבועים הכולל שווה ל:",
+      "explanation_en": "**$SST=SSB+SSW$ (variance partition).**\n\n**Answer:** $SSB+SSW$.",
+      "explanation_he": "**$SST=SSB+SSW$.**\n\n**תשובה:** $SSB+SSW$.",
+      "skill_atoms": [
+        "sum_of_squares"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "reject H_0",
-          "4.5 > 3.55",
-          "at least one group mean differs"
+        "options_en": [
+          "$SSB+SSW$",
+          "$SSB-SSW$",
+          "$SSB\\times SSW$",
+          "$\\dfrac{SSB}{SSW}$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$SSB+SSW$",
+          "$SSB-SSW$",
+          "$SSB\\times SSW$",
+          "$\\dfrac{SSB}{SSW}$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nThe observed $F(2,18) = 4.5$ exceeds the critical value $F_{0.05,2,18} = 3.55$, so we **reject $H_0$** at the 5% significance level. There is statistically significant evidence that at least one group mean differs.\n\n**How to think about it:**\nCompare the computed F to the critical F at the stated $\\alpha$ and df. The notation $F(2,18)$ means numerator df=2, denominator df=18. Reject when observed exceeds critical.\n\n**Common slip:**\nFailing to reject because 4.5 \"does not seem very large.\" Using the wrong df row in the F table. Concluding which specific groups differ — ANOVA only gives omnibus significance.\n\n**Exam tip:**\nWhen the exam gives $F(df_1, df_2)$ and $F_{\\alpha, df_1, df_2}$, it is pure comparison. Write: \"4.5 > 3.55, reject $H_0$.\" Add \"at least one mean differs\" — never name specific pairs without post-hoc.",
-      "explanation_he": "**למה זה נכון:**\n$F(2,18) = 4.5$ גדול מהקריטי $F_{0.05,2,18} = 3.55$, לכן **דוחים $H_0$** ברמת 5%. יש עדות מובהקת שלפחות ממוצע קבוצה אחד שונה.\n\n**איך לחשוב על זה:**\nהשוו F מחושב ל-F קריטי ב-$\\alpha$ ו-df נתונים. $F(2,18)$ משמע df מונה=2, מכנה=18. דחו כשהמחושב עולה על הקריטי.\n\n**טעות נפוצה:**\nאי-דחייה כי 4.5 \"לא נראה גדול\". שורה שגויה בטבלת F. מסקנה על קבוצות ספציפיות — ANOVA נותן רק מובהקות אומניבוס.\n\n**טיפ לבחינה:**\nכשהבחינה נותנת $F$ ו-$F_{\\alpha}$, זו השוואה טהורה. כתבו: \"4.5 > 3.55, דוחים $H_0$\". הוסיפו \"לפחות ממוצע אחד שונה\" — לעולם לא ציינו זוגות בלי post-hoc.",
-      "skill_atoms": []
+      "source_item_id": "587984c6-f2f2-501d-9202-2e987fd3bdbc",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$SSB+SSW$",
+        "$SSB-SSW$",
+        "$SSB\\times SSW$",
+        "$\\dfrac{SSB}{SSW}$"
+      ],
+      "options_he": [
+        "$SSB+SSW$",
+        "$SSB-SSW$",
+        "$SSB\\times SSW$",
+        "$\\dfrac{SSB}{SSW}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "Explain why running multiple t-tests instead of ANOVA inflates the Type I error.",
-      "stem_he": "הסבר מדוע ביצוע מבחני t מרובים במקום ANOVA מנפח את שגיאת סוג I.",
+      "stem_en": "Find $F=\\dfrac{MSB}{MSW}$ when $MSB=20$ and $MSW=5$.",
+      "stem_he": "מצאו $F=\\dfrac{MSB}{MSW}$ כאשר $MSB=20$ ו-$MSW=5$.",
+      "explanation_en": "**$F=\\dfrac{20}{5}=4$.**\n\n**Answer:** $4$.",
+      "explanation_he": "**$F=4$.**\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "f_ratio"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "family-wise Type I error",
-          "14%",
-          "1-(1-alpha)^c",
-          "ANOVA controls overall Type I error at alpha"
-        ],
-        "case_sensitive": false
+        "value": 4
       },
-      "explanation_en": "**Why this is correct:**\nFor $c$ independent tests each at significance $\\alpha$, the family-wise Type I error rate is approximately $1-(1-\\alpha)^c$. With 3 groups, there are 3 pairwise t-tests; at $\\alpha=0.05$: $1-(0.95)^3 \\approx 14.3\\%$, far above 5%. One-way ANOVA controls the overall error at $\\alpha$.\n\n**How to think about it:**\nCount comparisons: $\\binom{k}{2}$ pairs for $k$ groups. Each t-test has a 5% false-positive chance; the probability of **at least one** false positive grows with more tests. ANOVA replaces many tests with one.\n\n**Common slip:**\nSaying \"more tests means more power\" without mentioning inflated false positives. Computing $c\\alpha = 15\\%$ instead of $1-(1-\\alpha)^c$. Claiming ANOVA eliminates Type I error entirely.\n\n**Exam tip:**\nConceptual ANOVA questions often ask why not t-tests. Memorize: 3 groups → 3 tests → ~14% family-wise error. Mention ANOVA as the single-test solution controlling error at $\\alpha$.",
-      "explanation_he": "**למה זה נכון:**\nל-$c$ מבחנים בלתי-תלויים ברמת $\\alpha$, שגיאת סוג I המשפחתית $\\approx 1-(1-\\alpha)^c$. ל-3 קבוצות, 3 מבחני t; ב-$\\alpha=0.05$: $1-(0.95)^3 \\approx 14.3\\%$, הרבה מעל 5%. ANOVA שולט בשגיאה הכוללת ב-$\\alpha$.\n\n**איך לחשוב על זה:**\nספרו השוואות: $\\binom{k}{2}$ זוגות ל-$k$ קבוצות. כל t-test יש 5% סיכוי לחיובי שגוי; הסתברות **לפחות אחד** גדלה עם יותר מבחנים. ANOVA מחליף רבים במבחן אחד.\n\n**טעות נפוצה:**\n\"יותר מבחנים = יותר עוצמה\" בלי להזכיר חיוביים שגויים מנופחים. $c\\alpha = 15\\%$ במקום $1-(1-\\alpha)^c$. טענה ש-ANOVA מבטל לגמרי שגיאת סוג I.\n\n**טיפ לבחינה:**\nשאלות מושגיות ANOVA שואלות למה לא t-tests. שיננו: 3 קבוצות → 3 מבחנים → ~14% שגיאה משפחתית. ANOVA כפתרון מבחן יחיד בשליטה ב-$\\alpha$.",
-      "skill_atoms": []
+      "source_item_id": "1c8e188b-d851-5b4a-85b6-f09579fd8a01",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the total degrees of freedom for $N=15$ observations.",
+      "stem_he": "מצאו את דרגות החופש הכוללות עבור $N=15$ תצפיות.",
+      "explanation_en": "**$df_{\\text{total}}=N-1=14$.**\n\n**Answer:** $14$.",
+      "explanation_he": "**$df_{\\text{total}}=14$.**\n\n**תשובה:** $14$.",
+      "skill_atoms": [
+        "degrees_of_freedom"
+      ],
+      "answer_payload": {
+        "value": 14
+      },
+      "source_item_id": "3559b495-a0f9-5aa7-a991-d509b4f348be",
+      "points_level_min": "5pt",
+      "correct_answer": "14"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Group means are $3,6,9$ (grand mean $6$) with $n=2$ each. Find $SSB$.",
+      "stem_he": "ממוצעי הקבוצות $3,6,9$ (ממוצע כללי $6$) עם $n=2$ בכל אחת. מצאו $SSB$.",
+      "explanation_en": "**$SSB=n\\sum(\\bar x_i-\\bar x)^2=2(9+0+9)=36$.**\n\n**Answer:** $36$.",
+      "explanation_he": "**$SSB=2(9+0+9)=36$.**\n\n**תשובה:** $36$.",
+      "skill_atoms": [
+        "sum_of_squares"
+      ],
+      "answer_payload": {
+        "value": 36
+      },
+      "source_item_id": "8a808e39-3eeb-5149-9220-5699932e8427",
+      "points_level_min": "5pt",
+      "correct_answer": "36"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find $MSB=\\dfrac{SSB}{df_{\\text{between}}}$ for $SSB=36$, $df=2$.",
+      "stem_he": "מצאו $MSB=\\dfrac{SSB}{df_{\\text{between}}}$ עבור $SSB=36$, $df=2$.",
+      "explanation_en": "**$MSB=\\dfrac{36}{2}=18$.**\n\n**Answer:** $18$.",
+      "explanation_he": "**$MSB=18$.**\n\n**תשובה:** $18$.",
+      "skill_atoms": [
+        "mean_square"
+      ],
+      "answer_payload": {
+        "value": 18
+      },
+      "source_item_id": "8f325a60-6bd8-5aa0-b17f-3686f972f225",
+      "points_level_min": "5pt",
+      "correct_answer": "18"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: a larger $F$-ratio is more evidence that group means differ.",
+      "stem_he": "נכון או לא נכון: יחס $F$ גדול יותר הוא עדות חזקה יותר לכך שהתוחלות שונות.",
+      "explanation_en": "**Large $F$ means between-group variance dominates within-group** — **true**.",
+      "explanation_he": "**$F$ גדול משמעו שונות בין-קבוצתית גדולה** — **נכון**.",
+      "skill_atoms": [
+        "f_ratio"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "e65403e8-2a13-575e-8b7a-44c65a6b01b1",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find $MSW=\\dfrac{SSW}{df_{\\text{within}}}$ for $SSW=27$, $df=9$.",
+      "stem_he": "מצאו $MSW=\\dfrac{SSW}{df_{\\text{within}}}$ עבור $SSW=27$, $df=9$.",
+      "explanation_en": "**$MSW=\\dfrac{27}{9}=3$.**\n\n**Answer:** $3$.",
+      "explanation_he": "**$MSW=3$.**\n\n**תשובה:** $3$.",
+      "skill_atoms": [
+        "mean_square"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "ef41d32d-7027-5d6e-9868-5854c65a4f41",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "With $MSB=18$ and $MSW=3$, find $F$.",
+      "stem_he": "עם $MSB=18$ ו-$MSW=3$, מצאו $F$.",
+      "explanation_en": "**$F=\\dfrac{18}{3}=6$.**\n\n**Answer:** $6$.",
+      "explanation_he": "**$F=6$.**\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "f_ratio"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "7289a652-4ceb-5945-b8f0-bd29f0c9bcd6",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the between-groups degrees of freedom for $5$ groups.",
+      "stem_he": "מצאו את דרגות החופש בין הקבוצות עבור $5$ קבוצות.",
+      "explanation_en": "**$df_{\\text{between}}=5-1=4$.**\n\n**Answer:** $4$.",
+      "explanation_he": "**$df_{\\text{between}}=4$.**\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "degrees_of_freedom"
+      ],
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "27571441-e8cb-5653-a955-1ae591d1baf3",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
     }
   ],
   "est_minutes": 50,

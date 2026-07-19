@@ -526,10 +526,39 @@ Six more thin math lessons expanded to 15 verified items each (spread 5/6/4,
 
 All 15/15 on first pass — no collisions or lint hits. Corpus math lint 0/207.
 
+## Batch U — shipped
+
+Six more thin math lessons expanded to 15 verified items each (spread 5/6/4,
+4 kinds per lesson), all CAS-verified with 0 rejections:
+
+- `chi_square_tests` (statistics) — cell contributions $\tfrac{(O-E)^2}{E}$,
+  goodness-of-fit & contingency degrees of freedom ($k-1$, $(r-1)(c-1)$),
+  expected count $\tfrac{RC}{N}$, non-negativity.
+- `anova_one_way` (statistics) — grand mean, between/within/total df,
+  $SSB=n\sum(\bar x_i-\bar x)^2$, mean squares, $F=MSB/MSW$, variance partition
+  $SST=SSB+SSW$.
+- `triangles_congruence` (3pt/4pt/5pt) — SSS/SAS/ASA/AAS criteria vs invalid AAA,
+  corresponding-parts equality (sides/angles/perimeter/area), angle-sum
+  ($180^\circ$), isosceles/equilateral angles.
+- `matrix_representation` (linear algebra) — matrix-vector products component by
+  component (identity, scaling, swap, shear), columns as basis images,
+  composition = matrix multiplication.
+- `orthogonal_matrices` (linear algebra) — dot products / orthogonality, norms,
+  $|\det Q|=1$, $Q^TQ=I$, $Q^{-1}=Q^T$, rotation-matrix determinant
+  $\cos^2\theta+\sin^2\theta$, length preservation.
+- `spatial_reasoning` (3pt) — cube/box volume & surface area, faces/edges/vertices,
+  cross-sections & nets, cylinder volume ($\pi r^2h$), cube space diagonal
+  $s\sqrt3$.
+
+**Fix during authoring:** the `spatial_reasoning` open-worked box-volume item
+duplicated the medium $2\times3\times4$ item → deduped to 14; changed the worked
+example to a $3\times4\times5$ box ($V=60$) and re-baked to 15/15. Corpus math
+lint 0/207.
+
 ## Corpus progress
 
-Verified 15+ item banks now cover **108 math lessons** (Batches B, D, E, F, G, H,
-I, J, K, L, M, N, O, P, Q, R, S, T + exponents): the entire 3pt/4pt algebra & functions foundation
+Verified 15+ item banks now cover **114 math lessons** (Batches B, D, E, F, G, H,
+I, J, K, L, M, N, O, P, Q, R, S, T, U + exponents): the entire 3pt/4pt algebra & functions foundation
 (incl. alternate syllabus IDs, algebra review, quadratic model fitting), sequences,
 the core + coordinate geometry foundation (distance/midpoint/slope, circle
 equations, vectors, solids/mensuration, plane-angle geometry, Law of Sines/Cosines
