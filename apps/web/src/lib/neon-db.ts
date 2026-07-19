@@ -15,7 +15,14 @@ import type { LearnerDashboard } from '@asf/schemas/curriculum';
 import type { MemoryRecord } from '@asf/schemas/memory';
 import kg from './kg-data.json';
 import { resolveConceptTitles } from './concept-display-names';
-import { computePacing, hasFrontier, type PaceStatus } from './plan-pacing';
+import {
+  computePacing,
+  getFrontier,
+  hasFrontier,
+  MASTERY_THRESHOLD,
+  type PaceStatus,
+  type PacingResult,
+} from './plan-pacing';
 import { goalKeyToPointsGroup, sanitizeConceptIds } from './plan-catalog';
 import {
   buildFastPlanConceptOrder,
@@ -1631,30 +1638,81 @@ export async function advanceRollingPlanWindow(
     for (const c of w.concepts) usedConcepts.add(c.concept_id);
   }
 
-  const ordered = buildFastPlanConceptOrder({
-    profile,
-    mastery,
-    options: {
-      excludeConcepts: [...usedConcepts],
-      prependConcepts: [],
-      priorityConcepts: sanitizeConceptIds(profile.weak_concepts ?? []),
-    },
-  });
-  let nextConcepts = ordered
-    .filter((id) => !usedConcepts.has(id))
-    .slice(0, CONCEPTS_PER_ROLLING_WEEK);
-  if (nextConcepts.length === 0) {
-    nextConcepts = bootstrapConceptsForProfile(profile, mastery)
+  // Measured throughput from completed weeks → feeds the pacing 'ahead' signal so
+  // a fast learner's plan raises ambition (overflow) and a slow one re-paces down.
+  const completedWeeks = stub.weeks.filter((w) => w.status === 'completed');
+  let masteredInCompleted = 0;
+  for (const w of completedWeeks) {
+    for (const c of w.concepts) {
+      if ((mastery[c.concept_id] ?? 0) >= MASTERY_THRESHOLD) masteredInCompleted += 1;
+    }
+  }
+  const trailingVelocity =
+    completedWeeks.length > 0 ? masteredInCompleted / completedWeeks.length : null;
+
+  // Living re-pace (ADR-0009): when the goal has a derived frontier, the next week
+  // is the next unmastered slice of the topo-ordered frontier toward the goal
+  // terminal, sized by capacity + required velocity. This walks the plan end-to-end
+  // to the end goal, re-paced from real mastery every advance. Once the core is
+  // cleared we progress into the stretch frontier (raise ambition). Goals without a
+  // frontier (free-text / adult) fall back to the goal-keyed heuristic ordering.
+  const pacing = computeFullPacing(profile, mastery, { trailingVelocity });
+  let nextConcepts: string[];
+  if (pacing) {
+    const weeklyLoad = Math.max(1, pacing.weekly_load);
+    nextConcepts = pacing.remaining_ordered
+      .filter((id) => !usedConcepts.has(id))
+      .slice(0, weeklyLoad);
+    if (nextConcepts.length === 0) {
+      // Core frontier cleared → pull the stretch frontier (deepen / go one level up).
+      const frontier = getFrontier(pacing.goal_key);
+      nextConcepts = (frontier?.stretch ?? [])
+        .filter((id) => !usedConcepts.has(id) && (mastery[id] ?? 0) < MASTERY_THRESHOLD)
+        .slice(0, weeklyLoad);
+    }
+  } else {
+    const ordered = buildFastPlanConceptOrder({
+      profile,
+      mastery,
+      options: {
+        excludeConcepts: [...usedConcepts],
+        prependConcepts: [],
+        priorityConcepts: sanitizeConceptIds(profile.weak_concepts ?? []),
+      },
+    });
+    nextConcepts = ordered
       .filter((id) => !usedConcepts.has(id))
       .slice(0, CONCEPTS_PER_ROLLING_WEEK);
-  }
-  if (nextConcepts.length === 0) {
-    return { advanced: false, plan: stub };
+    if (nextConcepts.length === 0) {
+      nextConcepts = bootstrapConceptsForProfile(profile, mastery)
+        .filter((id) => !usedConcepts.has(id))
+        .slice(0, CONCEPTS_PER_ROLLING_WEEK);
+    }
   }
 
   const s = requireSql();
-  const nextWeekNumber = Math.max(...stub.weeks.map((w) => w.week_number)) + 1;
   const upcoming = stub.weeks.find((w) => w.status === 'upcoming');
+  const appendWeek = nextConcepts.length > 0;
+
+  // Goal reached (frontier + stretch exhausted) with no upcoming week to promote:
+  // wind the plan down at 100% readiness — complete the active week, add no new one.
+  if (!appendWeek && !upcoming) {
+    if (weekPastDue || active.status === 'completed') {
+      try {
+        await s.transaction([
+          s`UPDATE plan_weeks SET status = 'completed' WHERE id = ${active.id}::uuid`,
+          s`UPDATE learning_plans SET updated_at = NOW(), plan_last_adjusted_at = NOW(), plan_adjustment_kind = 'mastery' WHERE id = ${stub.id}::uuid`,
+        ]);
+      } catch (err) {
+        console.warn('[advanceRollingPlanWindow] goal-reached', err);
+        return { advanced: false, plan: stub };
+      }
+      return { advanced: true, plan: await loadActivePlanStub(learnerId) };
+    }
+    return { advanced: false, plan: stub };
+  }
+
+  const nextWeekNumber = Math.max(...stub.weeks.map((w) => w.week_number)) + 1;
   const weekId = randomUUID();
   const quizDue = new Date();
   quizDue.setDate(quizDue.getDate() + 7);
@@ -1679,13 +1737,17 @@ export async function advanceRollingPlanWindow(
           `,
         ]
       : []),
-    s`
-      INSERT INTO plan_weeks (id, plan_id, week_number, concepts, quiz_due_at, status)
-      VALUES (
-        ${weekId}, ${stub.id}::uuid, ${nextWeekNumber}, ${nextConcepts},
-        ${quizDueIso}, 'upcoming'
-      )
-    `,
+    ...(appendWeek
+      ? [
+          s`
+            INSERT INTO plan_weeks (id, plan_id, week_number, concepts, quiz_due_at, status)
+            VALUES (
+              ${weekId}, ${stub.id}::uuid, ${nextWeekNumber}, ${nextConcepts},
+              ${quizDueIso}, 'upcoming'
+            )
+          `,
+        ]
+      : []),
     s`
       UPDATE learning_plans
       SET updated_at = NOW(),
@@ -1988,14 +2050,19 @@ export async function getCurrentPlan(learnerId: string): Promise<LearningPlan | 
 }
 
 /**
- * Compute the read-only goal-pacing overlay for the dashboard (ADR-0009).
- * Pure over its inputs (delegates to plan-pacing). Returns null when the goal
- * has no derived frontier so the UI can hide the overlay gracefully.
+ * Full goal-pacing computation for a learner (ADR-0009). Returns the complete
+ * PacingResult (including `remaining_ordered`, `weekly_load`, `next_concepts`) so
+ * both the dashboard overlay AND the living rolling-window advancer can share one
+ * computation. Null when the goal has no derived frontier.
+ *
+ * `trailingVelocity` (measured concepts/week from history) enables the 'ahead'
+ * status so a fast learner's plan raises ambition / overflows.
  */
-export function computePlanPacing(
+export function computeFullPacing(
   profile: LearnerProfileRow | null,
   mastery: Record<string, number>,
-): PlanPacing | null {
+  opts?: { trailingVelocity?: number | null },
+): PacingResult | null {
   const goalKey =
     typeof (profile?.personality_profile as { goal_key?: unknown } | null)?.goal_key === 'string'
       ? ((profile!.personality_profile as { goal_key: string }).goal_key)
@@ -2008,13 +2075,26 @@ export function computePlanPacing(
       ? ((profile!.personality_profile as { attention_span_min: number }).attention_span_min)
       : (profile?.attention_span ?? null);
 
-  const p = computePacing({
+  return computePacing({
     goalKey: goalKey!,
     masteryScores: mastery,
     hoursPerWeek: profile?.hours_per_week ?? null,
     attentionSpanMin,
     deadlineISO: profile?.next_test_date ?? profile?.final_goal_date ?? null,
+    trailingVelocity: opts?.trailingVelocity ?? null,
   });
+}
+
+/**
+ * Compute the read-only goal-pacing overlay for the dashboard (ADR-0009).
+ * Pure over its inputs (delegates to plan-pacing). Returns null when the goal
+ * has no derived frontier so the UI can hide the overlay gracefully.
+ */
+export function computePlanPacing(
+  profile: LearnerProfileRow | null,
+  mastery: Record<string, number>,
+): PlanPacing | null {
+  const p = computeFullPacing(profile, mastery);
   if (!p) return null;
 
   return {

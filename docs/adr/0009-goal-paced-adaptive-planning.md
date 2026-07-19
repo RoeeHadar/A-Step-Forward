@@ -264,8 +264,14 @@ Consolidated defaults so nothing is left hand-wavy. All are reversible engineeri
   - `GET /api/tests` (list) + `GET /api/tests/[id]` (detail) read via `listTestAttempts` / `getTestAttempt` (graceful).
   - Bilingual `/app/tests` (list) + `/app/tests/[id]` (per-question review: learner answer vs correct, per-topic bars, pass badge) with a `My Tests` sidebar entry. Uses `MarkdownMath` for LaTeX stems/options.
   - Verified: lint + standalone `tsc --noEmit` + 75 unit tests (pacing + frontier) green. Full `next build` type-check + compile passed; only the offline Google-Fonts fetch fails locally (env, not code) — CI/Vercel authoritative.
+- **Living rolling-window re-pace — done (2026-07-19):**
+  - `advanceRollingPlanWindow()` now sources the next week from the **frontier + pacing engine** when the goal has a derived frontier (was: fixed 4-concept `buildFastPlanConceptOrder` slice). The next week = the next unmastered slice of the topo-ordered frontier toward the goal terminal, sized by `weekly_load` (capacity + required velocity), so the plan walks **end-to-end to the end goal**, re-paced from real mastery on every advance.
+  - **History-aware:** trailing throughput (concepts mastered in completed weeks ÷ completed weeks) feeds `trailingVelocity`, enabling the `ahead` status → a fast learner's window overflows / raises ambition; a slow one re-paces down.
+  - **Goal reached:** once the core frontier is cleared, the advancer pulls the **stretch frontier** (deepen / one level up). When core + stretch are exhausted it winds the plan down at 100% readiness (completes the active week, appends nothing) instead of scheduling filler.
+  - `computeFullPacing()` extracted in `neon-db.ts` so the dashboard overlay and the advancer share ONE pacing computation. Goals without a frontier (free-text / adult) keep the goal-keyed heuristic fallback.
+  - Verified: typecheck + lint + 83 unit tests (pacing 17, frontier 58, worklist 8) green.
 - Deferred / owner-gated:
-  - **First-plan SELECTION** left on current goal-keyed entry points (no onboarding regression); frontier drives the agent + overlay layers instead. Needs goal-level baseline mastery seeding (curriculum decision).
+  - **First-plan SELECTION (week 1)** left on current goal-keyed entry points (no onboarding regression); from week 2 the rolling advancer is fully frontier + mastery driven. Making week 1 frontier-driven needs goal-level baseline mastery seeding (curriculum decision) so advanced learners don't start at `arithmetic`.
   - **Run migration 0019** against production Neon (`DATABASE_URL=... node scripts/run-migration-0019.mjs`) to move `test_attempts` from lazy-created to Alembic-tracked. Optional — the feature already works without it.
   - **Hard advancement gating** (carry-forward remediation + goal-critical block) — follow-up in `advanceRollingPlanWindow`.
 - Stream 6 (evals): pending.
