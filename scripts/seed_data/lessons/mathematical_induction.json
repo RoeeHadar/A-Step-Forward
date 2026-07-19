@@ -271,203 +271,340 @@
     ],
     "tutor_pacing_hint": "Start with sum formulas (most concrete). Then divisibility. Inequality proofs (like 2ⁿ > n²) require more algebraic creativity — do last.",
     "skill_atoms_unlocked": [
-      "base_case",
-      "inductive_hypothesis",
-      "inductive_step",
-      "divisibility_induction",
-      "sum_formulas_induction",
-      "inequality_induction"
+      "induction_structure",
+      "sum_formula"
     ]
   },
   "questions": [
     {
-      "id": "q1",
+      "ord": 1,
       "kind": "mcq",
-      "difficulty": "medium",
+      "difficulty": "easy",
+      "stem_en": "Mathematical induction consists of a base case and a(n):",
+      "stem_he": "אינדוקציה מתמטית מורכבת ממקרה בסיס ו:",
+      "explanation_en": "**Base case + inductive step complete a proof by induction.**\n\n**Answer:** inductive step.",
+      "explanation_he": "**מקרה בסיס + צעד אינדוקטיבי.**\n\n**תשובה:** הצעד האינדוקטיבי.",
       "skill_atoms": [
-        "mathematical_induction",
-        "proof_structure"
+        "induction_structure"
       ],
-      "stem_en": "In a proof by mathematical induction, the inductive hypothesis is:",
-      "stem_he": "בהוכחת אינדוקציה, הנחת האינדוקציה (ה.א.) היא:",
       "answer_payload": {
         "options_en": [
-          "Proving $P(1)$",
-          "Assuming $P(k)$ is true for some arbitrary $k$",
-          "Proving $P(k)$ is true for all $k$",
-          "Showing $P(k+1)$ follows from nothing"
+          "$\\text{inductive step}$",
+          "$\\text{contradiction}$",
+          "$\\text{limit}$",
+          "$\\text{derivative}$"
         ],
         "options_he": [
-          "הוכחת $P(1)$",
-          "הנחת אמיתות $P(k)$ לערך $k$ שרירותי",
-          "הוכחת $P(k)$ לכל $k$",
-          "הצגת $P(k+1)$ ללא הנחות"
+          "$\\text{inductive step}$",
+          "$\\text{contradiction}$",
+          "$\\text{limit}$",
+          "$\\text{derivative}$"
         ],
-        "correct_index": 1
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:** The inductive hypothesis (IH) is the temporary assumption that $P(k)$ holds for some **arbitrary** fixed $k \\geq n_0$. You use it as a given to derive $P(k+1)$ — you do not prove $P(k)$ in the inductive step.\n\n**How to think about it:** Map each option to a proof phase. Option 0 is the **base case**. Option 2 describes proving $P(k)$ for all $k$ — that is the **conclusion**, not the IH. Option 3 skips the logical link entirely.\n\n**Common slip:** Confusing IH with the final claim — writing \"we proved $P(k)$\" when $P(k)$ was **assumed**, not derived.\n\n**Exam tip:** Label the four parts before reading options: base, IH, step, conclusion. The IH always contains \"assume\" and a single $k$, not \"all $n$.\"",
-      "explanation_he": "**למה זה נכון:** הנחת האינדוקציה (ה.א.) היא ההנחה הזמנית ש-$P(k)$ מתקיימת עבור $k$ **שרירותי** קבוע $\\geq n_0$. לא מוכיחים $P(k)$ בצעד — **משתמשים** בה כנתון כדי להסיק $P(k+1)$.\n\n**איך לחשוב על זה:** מיפוי כל אפשרות לשלב בהוכחה. אפשרות 0 היא **בסיס** ($P(1)$ או $P(n_0)$). אפשרות 2 מתארת הוכחה של $P(k)$ לכל $k$ — זו **המסקנה**, לא ה.א. אפשרות 3 מציעה $P(k+1)$ \"ללא הנחות\" — מדלג על הקשר הלוגי.\n\n**טעות נפוצה:** בלבול בין ה.א. לטענה הסופית. תלמידים כותבים \"הוכחנו $P(k)$\" — אבל $P(k)$ **הונחה**, לא נגזרה.\n\n**טיפ לבחינה:** בשאלות מבנה, סמנו ארבעה חלקים לפני קריאת האפשרויות: בסיס, ה.א., צעד, סיכום. בה.א. תמיד \"הניח\" ו-$k$ בודד, לא \"כל $n$\".",
-      "ord": 1,
+      "source_item_id": "65844f30-b29c-5754-ab8f-d480b9ba4be6",
+      "points_level_min": "5pt",
       "options_en": [
-        "Proving $P(1)$",
-        "Assuming $P(k)$ is true for some arbitrary $k$",
-        "Proving $P(k)$ is true for all $k$",
-        "Showing $P(k+1)$ follows from nothing"
+        "$\\text{inductive step}$",
+        "$\\text{contradiction}$",
+        "$\\text{limit}$",
+        "$\\text{derivative}$"
       ],
       "options_he": [
-        "הוכחת $P(1)$",
-        "הנחת אמיתות $P(k)$ לערך $k$ שרירותי",
-        "הוכחת $P(k)$ לכל $k$",
-        "הצגת $P(k+1)$ ללא הנחות"
+        "$\\text{inductive step}$",
+        "$\\text{contradiction}$",
+        "$\\text{limit}$",
+        "$\\text{derivative}$"
       ],
-      "correct_index": 1
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Verify the base case $n=1$ for the claim $\\sum_{i=1}^n (2i-1) = n^2$.",
-      "stem_he": "אמת בסיס $n=1$: $\\sum_{i=1}^n (2i-1) = n^2$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "LHS = $2(1)-1 = 1$. RHS = $1^2 = 1$. ✓",
-          "1$. ✓",
-          "1"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:** For $n = 1$, the sum has one term: $(2 \\cdot 1 - 1) = 1$. The right side gives $1^2 = 1$. Both sides match, so the base case is verified.\n\n**How to think about it:** A base case is a direct substitution — no induction yet. Write LHS and RHS separately, compute each, and show equality. For this claim, the first odd number is $1$, and $1^2 = 1$.\n\n**Common slip:** Substituting $n = 0$ (not in the domain) or summing multiple terms when $n = 1$ means just the first term. Another slip: verifying $n = 4$ when the question asks specifically for $n = 1$.\n\n**Exam tip:** Base-case checks are quick marks — always show both sides explicitly: \"LHS $= \\ldots$, RHS $= \\ldots$, equal ✓.\" Even one line earns method credit on proof questions.",
-      "explanation_he": "**למה זה נכון:** ל-$n = 1$, הסכום מכיל איבר אחד: $(2 \\cdot 1 - 1) = 1$. צד ימין: $1^2 = 1$. שני הצדדים שווים — הבסיס מאומת.\n\n**איך לחשוב על זה:** בסיס הוא הצבה ישירה — עדיין בלי אינדוקציה. כתבו שמאל וימין בנפרד, חשבו, והראו שוויון. כאן המספר האי-זוגי הראשון הוא $1$, ו-$1^2 = 1$.\n\n**טעות נפוצה:** הצבת $n = 0$ (מחוץ לתחום) או סכימת מספר איברים כש-$n = 1$ אומר רק איבר ראשון. גם אימות $n = 4$ כששואלים על $n = 1$.\n\n**טיפ לבחינה:** בדיקת בסיס = נקודות מהירות — הציגו שני צדדים: \"שמאל $= \\ldots$, ימין $= \\ldots$, שווים ✓.\" גם שורה אחת מזכה בנקודות שיטה.",
+      "stem_en": "Using $1+2+\\dots+n=\\dfrac{n(n+1)}{2}$, find the sum for $n=5$.",
+      "stem_he": "בעזרת $1+2+\\dots+n=\\dfrac{n(n+1)}{2}$, מצאו את הסכום עבור $n=5$.",
+      "explanation_en": "**$\\dfrac{5\\cdot 6}{2}=15$.**\n\n**Answer:** $15$.",
+      "explanation_he": "**$\\dfrac{5\\cdot 6}{2}=15$.**\n\n**תשובה:** $15$.",
       "skill_atoms": [
-        "base_case",
-        "inductive_hypothesis"
-      ]
+        "sum_formula"
+      ],
+      "answer_payload": {
+        "value": 15
+      },
+      "source_item_id": "57003eb6-0635-5b5e-b748-369d75db36f6",
+      "points_level_min": "5pt",
+      "correct_answer": "15"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "Write the inductive hypothesis for proving $\\sum_{i=1}^n 2^i = 2^{n+1} - 2$.",
-      "stem_he": "כתוב ה.א. עבור: $\\sum_{i=1}^n 2^i = 2^{n+1} - 2$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "IH: Assume $\\sum_{i=1}^k 2^i = 2^{k+1} - 2$ for some $k \\geq 1$",
-          "2^{k+1} - 2$ for some $k \\geq 1$",
-          "1"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:** The inductive hypothesis replaces $n$ with $k$ in the claim: assume $\\sum_{i=1}^k 2^i = 2^{k+1} - 2$ for some arbitrary $k \\geq 1$. This is the formula you are allowed to use when proving the case $n = k+1$.\n\n**How to think about it:** IH always mirrors the original claim but with $k$ instead of $n$, and includes \"assume\" or \"suppose.\" You are not proving this equality — you treat it as given for one fixed $k$.\n\n**Common slip:** Writing the IH with $k+1$ instead of $k$ (that is what you prove, not assume). Another: omitting \"for some $k \\geq 1$\" which signals arbitrariness.\n\n**Exam tip:** Copy the claim, replace every $n$ by $k$, and prefix with \"Assume\" or \"IH:\". This standardized line is worth marks on its own in Bagrut proof questions.",
-      "explanation_he": "**למה זה נכון:** ה.א. מחליפה $n$ ב-$k$ בטענה: מניחים $\\sum_{i=1}^k 2^i = 2^{k+1} - 2$ ל-$k$ שרירותי $\\geq 1$. זו הנוסחה שמותר להשתמש בה כשמוכיחים $n = k+1$.\n\n**איך לחשוב על זה:** ה.א. תמיד משקפת את הטענה המקורית עם $k$ במקום $n$, וכוללת \"הניח\" או \"נניח\". לא מוכיחים את השוויון — מתייחסים אליו כנתון ל-$k$ קבוע.\n\n**טעות נפוצה:** כתיבת ה.א. עם $k+1$ במקום $k$ (זה מה שמוכיחים, לא מניחים). גם השמטת \"ל-$k$ שרירותי $\\geq 1$\".\n\n**טיפ לבחינה:** העתיקו את הטענה, החליפו $n$ ב-$k$, והוסיפו \"הניח\" או \"ה.א.:\". השורה הסטנדרטית הזו שווה נקודות בבגרות.",
+      "stem_en": "True or False: the base case usually verifies the statement for $n=1$.",
+      "stem_he": "נכון או לא נכון: מקרה הבסיס בדרך כלל מאמת את הטענה עבור $n=1$.",
+      "explanation_en": "**The base case anchors the induction, usually at $n=1$** — **true**.",
+      "explanation_he": "**מקרה הבסיס מעגן את האינדוקציה, בדרך כלל ב-$n=1$** — **נכון**.",
       "skill_atoms": [
-        "base_case",
-        "inductive_hypothesis"
-      ]
+        "induction_structure"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "4a376a56-b207-5686-aceb-62c657fd24a2",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "What is the base case for proving $n^3 + 2n$ is divisible by 3?",
-      "stem_he": "מהו הבסיס להוכחה ש-$n^3 + 2n$ מתחלק ב-3?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "$n=1$: $1 + 2 = 3$. $3\\mid3$ ✓",
-          "3$. $3\\mid3$ ✓",
-          "3"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:** The base case is $n = 1$: compute $1^3 + 2(1) = 1 + 2 = 3$. Since $3 = 3 \\cdot 1$, we have $3 \\mid 3$, so divisibility holds for $n = 1$.\n\n**How to think about it:** Divisibility base cases evaluate the expression at the starting value and check whether the result is a multiple of the divisor. Here the divisor is 3, and the value is exactly 3.\n\n**Common slip:** Stopping at \"$1^3 + 2 = 3$\" without stating $3 \\mid 3$. Another: choosing $n = 0$ when the claim starts at $n = 1$.\n\n**Exam tip:** For \"$d \\mid f(n)$\" proofs, write the base as: \"$n = 1$: $f(1) = \\ldots = d \\cdot 1$, so $d \\mid f(1)$ ✓.\" The explicit multiple earns method marks.",
-      "explanation_he": "**למה זה נכון:** הבסיס הוא $n = 1$: $1^3 + 2(1) = 1 + 2 = 3$. מאחר ש-$3 = 3 \\cdot 1$, יש $3 \\mid 3$, ולכן החלוקה מתקיימת ל-$n = 1$.\n\n**איך לחשוב על זה:** בבסיס חלוקה מחשבים את הביטוי בערך ההתחלה ובודקים אם התוצאה כפולה של המחלק. כאן המחלק 3 והערך בדיוק 3.\n\n**טעות נפוצה:** לעצור ב-\"$1^3 + 2 = 3$\" בלי לציין $3 \\mid 3$. גם בחירת $n = 0$ כשהטענה מ-$n = 1$.\n\n**טיפ לבחינה:** בהוכחות \"$d \\mid f(n)$\", כתבו: \"$n = 1$: $f(1) = \\ldots = d \\cdot 1$, לכן $d \\mid f(1)$ ✓.\" המכפלה המפורשת מזכה בנקודות שיטה.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Using $1+2+\\dots+n=\\dfrac{n(n+1)}{2}$, evaluate the sum for $n=20$.",
+      "stem_he": "בעזרת $1+2+\\dots+n=\\dfrac{n(n+1)}{2}$, חשבו את הסכום עבור $n=20$.",
+      "explanation_en": "**Step 1 — Formula.** $\\dfrac{n(n+1)}{2}$.\n\n**Step 2 — Substitute.** $\\dfrac{20\\cdot 21}{2}$.\n\n**Step 3 — Evaluate.** $=210$.\n\n**Answer:** $210$.",
+      "explanation_he": "**שלב 1 — נוסחה.** $\\dfrac{n(n+1)}{2}$.\n\n**שלב 2 — הצבה.** $\\dfrac{20\\cdot 21}{2}$.\n\n**שלב 3 — חישוב.** $210$.\n\n**תשובה:** $210$.",
       "skill_atoms": [
-        "base_case",
-        "inductive_hypothesis"
-      ]
+        "sum_formula"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Formula.** $\\dfrac{n(n+1)}{2}$.",
+          "**Step 2 — Substitute.** $\\dfrac{20\\cdot 21}{2}$.",
+          "**Step 3 — Evaluate.** $=210$.",
+          "**Answer:** $210$."
+        ],
+        "steps_he": [
+          "**שלב 1 — נוסחה.** $\\dfrac{n(n+1)}{2}$.",
+          "**שלב 2 — הצבה.** $\\dfrac{20\\cdot 21}{2}$.",
+          "**שלב 3 — חישוב.** $210$.",
+          "**תשובה:** $210$."
+        ]
+      },
+      "source_item_id": "5524004e-47e8-5264-a18b-5e9032175279",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "The sum of first $n$ odd numbers equals $n^2$. Verify for $n = 4$.",
-      "stem_he": "סכום $n$ מספרים אי-זוגיים ראשונים = $n^2$. אמת ל-$n=4$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\nFirst 4 odds: $1+3+5+7 = 16 = 4^2$ ✓.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "4^2$ ✓.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:** The first four odd numbers are $1, 3, 5, 7$. Their sum is $1 + 3 + 5 + 7 = 16$, and $4^2 = 16$, so the formula holds for $n = 4$.\n\n**How to think about it:** This is a numerical check, not a full induction proof. It builds intuition that the claim $\\sum_{i=1}^n (2i-1) = n^2$ matches the pattern \"sum of first $n$ odds equals $n$ squared.\"\n\n**Common slip:** Arithmetic errors in the sum ($1+3+5+7 = 15$ instead of 16). Another: computing $4 \\cdot 2 - 1 = 7$ and forgetting to sum all four terms.\n\n**Exam tip:** Quick numerical verification before a proof helps you catch wrong formulas. If $n = 4$ failed, you would know the claim or your understanding is wrong before investing time in the inductive step.",
-      "explanation_he": "**למה זה נכון:** ארבעת המספרים האי-זוגיים הראשונים: $1, 3, 5, 7$. סכומם $1 + 3 + 5 + 7 = 16$, ו-$4^2 = 16$, ולכן הנוסחה מתקיימת ל-$n = 4$.\n\n**איך לחשוב על זה:** זו בדיקה מספרית, לא הוכחת אינדוקציה מלאה. היא בונה אינטואיציה שהטענה $\\sum_{i=1}^n (2i-1) = n^2$ תואמת \"סכום $n$ אי-זוגיים ראשונים = $n$ בריבוע\".\n\n**טעות נפוצה:** שגיאות חשבון ($1+3+5+7 = 15$). גם חישוב $4 \\cdot 2 - 1 = 7$ בלי לסכום את כל ארבעת האיברים.\n\n**טיפ לבחינה:** אימות מספרי לפני הוכחה עוזר לתפוס נוסחאות שגויות. אם $n = 4$ נכשל, תדעו שהטענה או ההבנה שגויה לפני שמשקיעים בצעד האינדוקציה.",
+      "stem_en": "Find $1+2+\\dots+10$.",
+      "stem_he": "מצאו $1+2+\\dots+10$.",
+      "explanation_en": "**$\\dfrac{10\\cdot 11}{2}=55$.**\n\n**Answer:** $55$.",
+      "explanation_he": "**$=55$.**\n\n**תשובה:** $55$.",
       "skill_atoms": [
-        "base_case",
-        "inductive_hypothesis"
-      ]
+        "sum_formula"
+      ],
+      "answer_payload": {
+        "value": 55
+      },
+      "source_item_id": "e24e5440-98c6-5da1-bc83-afb678d46f6d",
+      "points_level_min": "5pt",
+      "correct_answer": "55"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Prove by induction: $\\sum_{i=1}^n i(i+1) = \\dfrac{n(n+1)(n+2)}{3}$.",
-      "stem_he": "הוכח באינדוקציה: $\\sum_{i=1}^n i(i+1) = n(n+1)(n+2)/3$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "Base ($n=1$): $1\\cdot2 = 2 = 1\\cdot2\\cdot3/3 = 2$ ✓. IH: assume true for $k$. $\\sum_{i=1}^{k+1} i(i+1) = k(k+1)(k+2)/3 + (k+1)(k+2) = (k+1)(k+2)[k/3 + 1] = (k+1)(k+2)(k+3)/3$. ✓",
-          "(k+1)(k+2)(k+3)/3$. ✓",
-          "3"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:** Base ($n=1$): $1 \\cdot 2 = 2$ and RHS $= 1 \\cdot 2 \\cdot 3 / 3 = 2$ ✓. IH: assume $\\sum_{i=1}^k i(i+1) = k(k+1)(k+2)/3$. For $k+1$: split the sum, apply IH, add $(k+1)(k+2)$, factor $(k+1)(k+2)[k/3 + 1] = (k+1)(k+2)(k+3)/3$ — the formula with $n = k+1$.\n\n**How to think about it:** Sum-formula induction always follows: $\\sum^{k+1} = \\sum^k + \\text{new term}$, apply IH to $\\sum^k$, then factor. Here the new term is $(k+1)(k+2)$.\n\n**Common slip:** Forgetting to add the $(k+1)$-th term before applying IH. Another: algebra error when factoring — check by expanding back.\n\n**Exam tip:** Write the split explicitly as the first line of the inductive step. Examiners look for this pattern before awarding marks for the final factorization.",
-      "explanation_he": "**למה זה נכון:** בסיס ($n=1$): $1 \\cdot 2 = 2$ וימין $= 1 \\cdot 2 \\cdot 3 / 3 = 2$ ✓. ה.א.: $\\sum_{i=1}^k i(i+1) = k(k+1)(k+2)/3$. ל-$k+1$: פיצול, ה.א., הוספת $(k+1)(k+2)$, הוצאת גורם $(k+1)(k+2)(k+3)/3$ — הנוסחה עם $n = k+1$.\n\n**איך לחשוב על זה:** אינדוקציה על סכום: $\\sum^{k+1} = \\sum^k + \\text{new term}$, ה.א. על $\\sum^k$, ואז פירוק. כאן האיבר החדש $(k+1)(k+2)$.\n\n**טעות נפוצה:** שכחת הוספת איבר $(k+1)$ לפני ה.א. גם שגיאת אלגברה בפירוק — בדקו בהרחבה חזרה.\n\n**טיפ לבחינה:** כתבו את הפיצול כשורה ראשונה בצעד. בוחנים מחפשים דפוס זה לפני נקודות על הפירוק הסופי.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find $1+2+3+4$.",
+      "stem_he": "מצאו $1+2+3+4$.",
+      "explanation_en": "**$\\dfrac{4\\cdot 5}{2}=10$.**\n\n**Answer:** $10$.",
+      "explanation_he": "**$=10$.**\n\n**תשובה:** $10$.",
       "skill_atoms": [
-        "base_case",
-        "inductive_hypothesis"
-      ]
+        "sum_formula"
+      ],
+      "answer_payload": {
+        "value": 10
+      },
+      "source_item_id": "9737a5ee-c736-5fda-8013-c125c4a491c0",
+      "points_level_min": "5pt",
+      "correct_answer": "10"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "Prove by induction: $5^n - 1$ is divisible by 4 for all $n \\geq 1$.",
-      "stem_he": "הוכח: $5^n - 1$ מתחלק ב-4 לכל $n \\geq 1$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "Base: $5^1 - 1 = 4$. $4\\mid4$ ✓. IH: $4\\mid(5^k-1)$, so $5^k = 4m+1$. $5^{k+1} - 1 = 5\\cdot5^k - 1 = 5(4m+1) - 1 = 20m + 4 = 4(5m+1)$. ✓",
-          "4(5m+1)$. ✓",
-          "1"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:** Base: $5^1 - 1 = 4$, and $4 \\mid 4$ ✓. IH: $4 \\mid (5^k - 1)$, so $5^k = 4m + 1$. Then $5^{k+1} - 1 = 5(4m+1) - 1 = 20m + 4 = 4(5m+1)$, which is clearly divisible by 4.\n\n**How to think about it:** Divisibility induction rewrites $f(k)$ as $d \\cdot m$, then expands $f(k+1)$ to expose the same divisor. The trick $5 \\cdot 5^k - 1 = 5(5^k - 1) + 4$ is standard for expressions like $a^n - 1$.\n\n**Common slip:** Writing $5^k - 1 = 4m$ but then substituting $5^k = 4m$ instead of $5^k = 4m + 1$. The $+1$ matters after multiplying by 5.\n\n**Exam tip:** For $a^n - 1$ divisibility, memorize the rewrite $a \\cdot a^k - 1 = a(a^k - 1) + (a - 1)$. It appears in almost every such proof on Bagrut 5-unit exams.",
-      "explanation_he": "**למה זה נכון:** בסיס: $5^1 - 1 = 4$, ו-$4 \\mid 4$ ✓. ה.א.: $4 \\mid (5^k - 1)$, לכן $5^k = 4m + 1$. אז $5^{k+1} - 1 = 5(4m+1) - 1 = 20m + 4 = 4(5m+1)$ — ברור שמתחלק ב-4.\n\n**איך לחשוב על זה:** אינדוקציית חלוקה: $f(k) = d \\cdot m$, ואז מרחיבים $f(k+1)$ לחשוף אותו מחלק. הטריק $5 \\cdot 5^k - 1 = 5(5^k - 1) + 4$ סטנדרטי לביטויים כמו $a^n - 1$.\n\n**טעות נפוצה:** $5^k - 1 = 4m$ ואז $5^k = 4m$ במקום $5^k = 4m + 1$. ה-$+1$ חשוב אחרי הכפלה ב-5.\n\n**טיפ לבחינה:** לחלוקה של $a^n - 1$, שמרו $a \\cdot a^k - 1 = a(a^k - 1) + (a - 1)$. מופיע בכמעט כל הוכחה כזו בבגרות 5 יחידות. כתבו את שלב ההצבה $5^k = 4m + 1$ בשורה נפרדת — בוחנים מחפשים את הקשר בין $f(k)$ ל-$f(k+1)$ לפני הפירוק הסופי.",
+      "stem_en": "In the inductive step, we assume the statement holds for:",
+      "stem_he": "בצעד האינדוקטיבי, אנו מניחים שהטענה מתקיימת עבור:",
+      "explanation_en": "**Assume $P(k)$, then prove $P(k+1)$.**\n\n**Answer:** $n=k$.",
+      "explanation_he": "**מניחים $P(k)$, ומוכיחים $P(k+1)$.**\n\n**תשובה:** $n=k$.",
       "skill_atoms": [
-        "base_case",
-        "inductive_hypothesis"
-      ]
+        "induction_structure"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$n=k$",
+          "$\\text{all }n$",
+          "$n=0$",
+          "$n=k+2$"
+        ],
+        "options_he": [
+          "$n=k$",
+          "$\\text{all }n$",
+          "$n=0$",
+          "$n=k+2$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "0b24dfd7-d31d-5201-9b95-7e33870b3e5b",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$n=k$",
+        "$\\text{all }n$",
+        "$n=0$",
+        "$n=k+2$"
+      ],
+      "options_he": [
+        "$n=k$",
+        "$\\text{all }n$",
+        "$n=0$",
+        "$n=k+2$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "Prove by induction: $n! \\geq 2^{n-1}$ for all $n \\geq 1$.",
-      "stem_he": "הוכח: $n! \\geq 2^{n-1}$ לכל $n \\geq 1$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "Base ($n=1$): $1 \\geq 1$ ✓. IH: $k! \\geq 2^{k-1}$. $(k+1)! = (k+1)\\cdot k! \\geq (k+1)\\cdot2^{k-1} \\geq 2\\cdot2^{k-1} = 2^k$ (since $k+1 \\geq 2$ for $k \\geq 1$). ✓",
-          "2^k$ (since $k+1 \\geq 2$ for $k \\geq 1$). ✓",
-          "1"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:** Base ($n=1$): $1! = 1$ and $2^{1-1} = 2^0 = 1$, so $1 \\geq 1$ ✓. IH: $k! \\geq 2^{k-1}$. Then $(k+1)! = (k+1) \\cdot k! \\geq (k+1) \\cdot 2^{k-1}$. Since $k \\geq 1$ implies $k+1 \\geq 2$, we get $(k+1) \\cdot 2^{k-1} \\geq 2 \\cdot 2^{k-1} = 2^k$.\n\n**How to think about it:** Inequality induction uses IH to bound the expression at $k+1$, then often needs a secondary fact (here: $k+1 \\geq 2$). Factorial grows fast because each step multiplies by a larger integer.\n\n**Common slip:** Using $k! \\geq 2^k$ as IH instead of $2^{k-1}$ — wrong exponent off by one. Another: forgetting that $k+1 \\geq 2$ is what upgrades $2^{k-1}$ to $2^k$.\n\n**Exam tip:** After applying IH, state the auxiliary inequality explicitly: \"Since $k \\geq 1$, we have $k+1 \\geq 2$, so ...\" Examiners award marks for this logical bridge.",
-      "explanation_he": "**למה זה נכון:** בסיס ($n=1$): $1! = 1$ ו-$2^{1-1} = 2^0 = 1$, לכן $1 \\geq 1$ ✓. ה.א.: $k! \\geq 2^{k-1}$. אז $(k+1)! = (k+1) \\cdot k! \\geq (k+1) \\cdot 2^{k-1}$. מאחר ש-$k \\geq 1$ נותן $k+1 \\geq 2$, מתקבל $(k+1) \\cdot 2^{k-1} \\geq 2 \\cdot 2^{k-1} = 2^k$.\n\n**איך לחשוב על זה:** אינדוקציית אי-שוויון: ה.א. חוסמת ב-$k+1$, ולעיתים צריך עובדה משנית (כאן: $k+1 \\geq 2$). עצרת גדלה מהר כי כל שלב מכפיל במספר שלם גדול יותר.\n\n**טעות נפוצה:** $k! \\geq 2^k$ כה.א. במקום $2^{k-1}$ — מעריך שגוי ב-1. גם שכחת ש-$k+1 \\geq 2$ מעלה $2^{k-1}$ ל-$2^k$.\n\n**טיפ לבחינה:** אחרי ה.א., ציינו במפורש: \"מאחר ש-$k \\geq 1$, יש $k+1 \\geq 2$, ולכן...\" בוחנים נותנים נקודות על הגשר הלוגי הזה.",
+      "stem_en": "The sum of the first $n$ odd numbers is $n^2$. Find it for $n=6$.",
+      "stem_he": "סכום $n$ המספרים האי-זוגיים הראשונים הוא $n^2$. מצאו עבור $n=6$.",
+      "explanation_en": "**$6^2=36$.**\n\n**Answer:** $36$.",
+      "explanation_he": "**$6^2=36$.**\n\n**תשובה:** $36$.",
       "skill_atoms": [
-        "base_case",
-        "inductive_hypothesis"
-      ]
+        "sum_formula"
+      ],
+      "answer_payload": {
+        "value": 36
+      },
+      "source_item_id": "c4afd9ea-fb51-5b23-84f0-feb8f92996aa",
+      "points_level_min": "5pt",
+      "correct_answer": "36"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find $1+2+\\dots+100$.",
+      "stem_he": "מצאו $1+2+\\dots+100$.",
+      "explanation_en": "**$\\dfrac{100\\cdot 101}{2}=5050$.**\n\n**Answer:** $5050$.",
+      "explanation_he": "**$=5050$.**\n\n**תשובה:** $5050$.",
+      "skill_atoms": [
+        "sum_formula"
+      ],
+      "answer_payload": {
+        "value": 5050
+      },
+      "source_item_id": "bf2370ac-31b2-5890-907a-23c37aa0c160",
+      "points_level_min": "5pt",
+      "correct_answer": "5050"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Using $\\sum_{k=1}^{n}k^2=\\dfrac{n(n+1)(2n+1)}{6}$, find it for $n=3$.",
+      "stem_he": "בעזרת $\\sum_{k=1}^{n}k^2=\\dfrac{n(n+1)(2n+1)}{6}$, מצאו עבור $n=3$.",
+      "explanation_en": "**$\\dfrac{3\\cdot 4\\cdot 7}{6}=14$.**\n\n**Answer:** $14$.",
+      "explanation_he": "**$=14$.**\n\n**תשובה:** $14$.",
+      "skill_atoms": [
+        "sum_formula"
+      ],
+      "answer_payload": {
+        "value": 14
+      },
+      "source_item_id": "54eb70fb-6298-5d9f-be2a-41a2c2d6bab4",
+      "points_level_min": "5pt",
+      "correct_answer": "14"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Using $\\sum_{k=1}^{n}k^2=\\dfrac{n(n+1)(2n+1)}{6}$, find it for $n=4$.",
+      "stem_he": "בעזרת $\\sum_{k=1}^{n}k^2=\\dfrac{n(n+1)(2n+1)}{6}$, מצאו עבור $n=4$.",
+      "explanation_en": "**$\\dfrac{4\\cdot 5\\cdot 9}{6}=30$.**\n\n**Answer:** $30$.",
+      "explanation_he": "**$=30$.**\n\n**תשובה:** $30$.",
+      "skill_atoms": [
+        "sum_formula"
+      ],
+      "answer_payload": {
+        "value": 30
+      },
+      "source_item_id": "1cfeeead-22c5-5136-a091-23af914bd48b",
+      "points_level_min": "5pt",
+      "correct_answer": "30"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: $1+3+5+7=4^2$.",
+      "stem_he": "נכון או לא נכון: $1+3+5+7=4^2$.",
+      "explanation_en": "**$1+3+5+7=16=4^2$** — **true**.",
+      "explanation_he": "**$1+3+5+7=16=4^2$** — **נכון**.",
+      "skill_atoms": [
+        "sum_formula"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "17f5d114-7990-5464-a1a1-8cb98c29cca4",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Using $\\sum_{k=1}^{n}k^3=\\left(\\dfrac{n(n+1)}{2}\\right)^2$, find it for $n=3$.",
+      "stem_he": "בעזרת $\\sum_{k=1}^{n}k^3=\\left(\\dfrac{n(n+1)}{2}\\right)^2$, מצאו עבור $n=3$.",
+      "explanation_en": "**$\\left(\\dfrac{3\\cdot 4}{2}\\right)^2=6^2=36$.**\n\n**Answer:** $36$.",
+      "explanation_he": "**$6^2=36$.**\n\n**תשובה:** $36$.",
+      "skill_atoms": [
+        "sum_formula"
+      ],
+      "answer_payload": {
+        "value": 36
+      },
+      "source_item_id": "c1633175-e977-58a4-9e0f-c6727e724dfa",
+      "points_level_min": "5pt",
+      "correct_answer": "36"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Using $\\sum_{k=1}^{n}k^3=\\left(\\dfrac{n(n+1)}{2}\\right)^2$, find it for $n=4$.",
+      "stem_he": "בעזרת $\\sum_{k=1}^{n}k^3=\\left(\\dfrac{n(n+1)}{2}\\right)^2$, מצאו עבור $n=4$.",
+      "explanation_en": "**$10^2=100$.**\n\n**Answer:** $100$.",
+      "explanation_he": "**$10^2=100$.**\n\n**תשובה:** $100$.",
+      "skill_atoms": [
+        "sum_formula"
+      ],
+      "answer_payload": {
+        "value": 100
+      },
+      "source_item_id": "fe868437-39b1-59cc-8489-44dbc23d75ea",
+      "points_level_min": "5pt",
+      "correct_answer": "100"
+    },
+    {
+      "ord": 15,
+      "kind": "true_false",
+      "difficulty": "hard",
+      "stem_en": "True or False: $1^3+2^3+3^3=(1+2+3)^2$.",
+      "stem_he": "נכון או לא נכון: $1^3+2^3+3^3=(1+2+3)^2$.",
+      "explanation_en": "**$36=6^2$** — **true** (sum of cubes identity).**",
+      "explanation_he": "**$36=6^2$** — **נכון**.",
+      "skill_atoms": [
+        "sum_formula"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "ee6dda69-b9ba-51cf-971d-85b1a57185ab",
+      "points_level_min": "5pt",
+      "correct_bool": true
     }
   ],
   "est_minutes": 50,

@@ -240,151 +240,345 @@
       "body_he_md": "כעת יש לכם ארגז כלים מלא לשם אופן שבו פונקציה נשברת בנקודה:\n\n- **סילוקית:** $\\lim_{x\\to x_0}f(x)=L$ קיים אך $f(x_0)$ חסר או $\\neq L$; תיקון: $f(x_0)=L$.\n- **קפיצה:** $L_-$ ו-$L_+$ סופיים אך שונים; גודל $|L_+-L_-|$; לא ניתנת לתיקון בנקודה אחת.\n- **אינסוטית:** לפחות גבול חד-צדדי $\\pm\\infty$ (התנהגות אסימפטוטה).\n- **מהותית:** גבול נכשל בלי אינסוף — אוסצילציה (למשל $\\sin(1/x)$ ב-$0$) או פתולוגיה מסוג דיריכלה.\n- **פונקציית דיריכלה** $D(x)$: אי-רציפה בכל מקום — כל נקודה מהותית.\n- **פונקציית תומא:** רציפה באי-רציונלים, קפיצות ברציונלים.\n- **פונקציות מונוטוניות** על קטע: קפיצות בלבד, לכל היותר בנות-מנייה."
     }
   ],
-  "agent_hints": {},
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "function_value",
+      "infinite_discontinuity",
+      "jump_discontinuity",
+      "limit_continuous",
+      "removable_discontinuity"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "Classify the discontinuity of $f(x)=\\dfrac{x^2-1}{x-1}$ at $x=1$ and fix it if possible.",
-      "stem_he": "סווג את אי-הרציפות של $f(x)=\\dfrac{x^2-1}{x-1}$ ב-$x=1$ ותקן אם אפשר.",
+      "stem_en": "A removable discontinuity appears on the graph as a:",
+      "stem_he": "אי-רציפות סליקה מופיעה בגרף כ:",
+      "explanation_en": "**A removable discontinuity is a single missing point — a hole.**\n\n**Answer:** hole.",
+      "explanation_he": "**אי-רציפות סליקה היא נקודה חסרה בודדת — חור.**\n\n**תשובה:** חור.",
+      "skill_atoms": [
+        "removable_discontinuity"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\lim_{x\\to 1}(x^2-1)/(x-1)=\\lim(x+1)=2$. $f(1)$ undefined. Removable. Fix: $f(1)=2$",
-          "2$",
-          "2"
+        "options_en": [
+          "$\\text{hole}$",
+          "$\\text{vertical asymptote}$",
+          "$\\text{jump}$",
+          "$\\text{corner}$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$\\text{hole}$",
+          "$\\text{vertical asymptote}$",
+          "$\\text{jump}$",
+          "$\\text{corner}$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nFactor $x^2-1=(x-1)(x+1)$. For $x\\neq 1$, the ratio simplifies to $x+1$, so $\\lim_{x\\to 1}f(x)=2$. The function is undefined at $x=1$, yet the limit exists and is finite — a **removable discontinuity**. Define $f(1)=2$ to repair it.\n\n**How to think about it:**\nAlways compute the limit first, then compare with $f(x_0)$. When the limit exists but the value is missing or wrong, the type is removable — not jump.\n\n**Common slip:**\nStopping after factoring without stating the type, or calling it a jump because $f(1)$ is undefined. Undefined alone does not imply a jump.\n\n**Exam tip:**\nFor rational functions, factor and cancel common factors before classifying. If cancellation works, expect a removable hole at the canceled zero.",
-      "explanation_he": "**למה זה נכון:**\nפירוק $x^2-1=(x-1)(x+1)$. עבור $x\\neq 1$ המנה מתפשטת ל-$x+1$, ולכן $\\lim_{x\\to 1}f(x)=2$. הפונקציה לא מוגדרת ב-$x=1$, אך הגבול קיים וסופי — **אי-רציפות סילוקית**. הגדר $f(1)=2$ לתיקון.\n\n**איך לחשוב על זה:**\nחשבו תמיד את הגבול קודם, ואז השוו ל-$f(x_0)$. כשהגבול קיים והערך חסר או שגוי — הסוג הוא סילוקית, לא קפיצה.\n\n**טעות נפוצה:**\nעצירה אחרי פירוק בלי לציין את הסוג, או קריאה לקפיצה רק כי $f(1)$ לא מוגדר. \"לא מוגדר\" לבדו אינו מספיק לקפיצה.\n\n**טיפ לבחינה:**\nבפונקציות רציונליות — פירוק וביטול גורמים משותפים לפני הסיווג. אם הביטול הצליח, צפו לחור סילוקי בנקודה שבוטלה.",
-      "skill_atoms": []
+      "source_item_id": "77e8308f-2544-5e0d-8621-3830717b9052",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{hole}$",
+        "$\\text{vertical asymptote}$",
+        "$\\text{jump}$",
+        "$\\text{corner}$"
+      ],
+      "options_he": [
+        "$\\text{hole}$",
+        "$\\text{vertical asymptote}$",
+        "$\\text{jump}$",
+        "$\\text{corner}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Is $f(x)=\\lfloor x\\rfloor$ (floor function) continuous at $x=3$? If not, classify.",
-      "stem_he": "האם $f(x)=\\lfloor x\\rfloor$ (פונקציית רצפה) רציפה ב-$x=3$? אם לא, סווג.",
+      "stem_en": "Evaluate $\\lim_{x\\to 2} x^2$.",
+      "stem_he": "חשבו $\\lim_{x\\to 2} x^2$.",
+      "explanation_en": "**$x^2$ is continuous, so the limit is $2^2=4$.**\n\n**Answer:** $4$.",
+      "explanation_he": "**$x^2$ רציפה, ולכן הגבול הוא $4$.**\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "limit_continuous"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\lim_{x\\to 3^-}\\lfloor x\\rfloor=2$, $\\lim_{x\\to 3^+}\\lfloor x\\rfloor=3$, $f(3)=3$. Jump discontinuity, jump $=1$",
-          "1$",
-          "1"
-        ],
-        "case_sensitive": false
+        "value": 4
       },
-      "explanation_en": "**Why this is correct:**\nNear $x=3$ from the left, $x\\in(2,3)$ so $\\lfloor x\\rfloor=2$. From the right, $x\\in(3,4)$ so $\\lfloor x\\rfloor=3$. Thus $L_-=2$, $L_+=3$, and $f(3)=3$. Both one-sided limits exist and are finite but unequal — a **jump discontinuity** of size $|3-2|=1$.\n\n**How to think about it:**\nThe floor function drops by $1$ at every integer. At an integer $n$, the left limit is $n-1$ and the right limit is $n$.\n\n**Common slip:**\nUsing $f(3)=3$ as the left limit, or claiming continuity because $f(3)$ equals the right limit only.\n\n**Exam tip:**\nFor $\\lfloor x\\rfloor$ at integer $n$: jump size is always $1$. Write $L_-$ and $L_+$ explicitly — graders award partial credit for correct limits even if the label is wrong.",
-      "explanation_he": "**למה זה נכון:**\nליד $x=3$ משמאל, $x\\in(2,3)$ ולכן $\\lfloor x\\rfloor=2$. מימין, $x\\in(3,4)$ ולכן $\\lfloor x\\rfloor=3$. כך $L_-=2$, $L_+=3$, ו-$f(3)=3$. שני הגבולות קיימים וסופיים אך שונים — **אי-רציפות קפיצה** בגודל $|3-2|=1$.\n\n**איך לחשוב על זה:**\nפונקציית הרצפה יורדת ב-$1$ בכל שלם. בשלם $n$: הגבול השמאלי $n-1$ והימני $n$.\n\n**טעות נפוצה:**\nשימוש ב-$f(3)=3$ כגבול שמאלי, או טענה לרציפות כי $f(3)$ שווה רק לגבול הימני.\n\n**טיפ לבחינה:**\nעבור $\\lfloor x\\rfloor$ בשלם $n$: גודל הקפיצה תמיד $1$. כתבו $L_-$ ו-$L_+$ במפורש — ניקוד חלקי לגבולות נכונים גם אם התווית שגויה.",
-      "skill_atoms": []
+      "source_item_id": "25baf34d-5042-5296-afd7-cdbc47f16201",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "What type of discontinuity does $f(x)=\\tan x$ have at $x=\\pi/2$?",
-      "stem_he": "איזה סוג אי-רציפות יש ל-$f(x)=\\tan x$ ב-$x=\\pi/2$?",
+      "stem_en": "True or False: a jump discontinuity has different left- and right-hand limits.",
+      "stem_he": "נכון או לא נכון: באי-רציפות קפיצה, הגבולות מימין ומשמאל שונים.",
+      "explanation_en": "**A jump occurs exactly when $\\lim_{x\\to a^-}\\ne\\lim_{x\\to a^+}$** — **true**.",
+      "explanation_he": "**קפיצה מתרחשת כאשר הגבולות החד-צדדיים שונים** — **נכון**.",
+      "skill_atoms": [
+        "jump_discontinuity"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\lim_{x\\to (\\pi/2)^-}\\tan x=+\\infty$, $\\lim_{x\\to (\\pi/2)^+}\\tan x=-\\infty$. Infinite discontinuity",
-          "-\\infty$. Infinite discontinuity",
-          "2"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why this is correct:**\nAs $x\\to (\\pi/2)^-$, $\\cos x\\to 0^+$ so $\\tan x=\\sin x/\\cos x\\to +\\infty$. As $x\\to (\\pi/2)^+$, $\\cos x\\to 0^-$ so $\\tan x\\to -\\infty$. At least one one-sided limit is infinite — an **infinite discontinuity** at $x=\\pi/2$.\n\n**How to think about it:**\nInfinite type triggers when **either** side blows up to $\\pm\\infty$, even if the other side also diverges. You do not need both sides to agree.\n\n**Common slip:**\nCalling it essential because the two infinities have opposite signs, or calling it jump because both limits \"exist\" in an informal sense.\n\n**Exam tip:**\nFor $\\tan x$ at odd multiples of $\\pi/2$, memorize: vertical asymptote = infinite discontinuity. Check $\\cos x$ sign on each side to determine $+\\infty$ vs $-\\infty$.",
-      "explanation_he": "**למה זה נכון:**\nכאשר $x\\to (\\pi/2)^-$, $\\cos x\\to 0^+$ ולכן $\\tan x=\\sin x/\\cos x\\to +\\infty$. כאשר $x\\to (\\pi/2)^+$, $\\cos x\\to 0^-$ ולכן $\\tan x\\to -\\infty$. לפחות גבול חד-צדדי אחד אינסופי — **אי-רציפות אינסוטית** ב-$x=\\pi/2$.\n\n**איך לחשוב על זה:**\nסוג אינסוטי מופעל כש**אחד** הצדדים מתפוצץ ל-$\\pm\\infty$, גם אם הצד השני מתנהג אחרת. אין צורך שהצדדים יסכימו.\n\n**טעות נפוצה:**\nקריאה למהותית כי שני האינסופים בעלי סימנים שונים, או קריאה לקפיצה כי \"שני הגבולות קיימים\" במובן לא פורמלי.\n\n**טיפ לבחינה:**\nעבור $\\tan x$ בכפולות אי-זוגיות של $\\pi/2$: אסימפטוטה אנכית = אינסוטית. בדקו סימן $\\cos x$ מכל צד כדי לקבוע $+\\infty$ לעומת $-\\infty$.",
-      "skill_atoms": []
+      "source_item_id": "a6122264-a250-51c2-94a6-38e69b9d4c29",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Define $f(x)=x\\sin(1/x)$ for $x\\neq 0$. Can we define $f(0)$ to make $f$ continuous at 0?",
-      "stem_he": "הגדר $f(x)=x\\sin(1/x)$ עבור $x\\neq 0$. האם ניתן להגדיר $f(0)$ כדי ש-$f$ תהיה רציפה ב-0?",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Find $\\lim_{x\\to 3}\\dfrac{x^2-9}{x-3}$.",
+      "stem_he": "מצאו $\\lim_{x\\to 3}\\dfrac{x^2-9}{x-3}$.",
+      "explanation_en": "**Step 1 — Factor.** $x^2-9=(x-3)(x+3)$.\n\n**Step 2 — Cancel.** $\\dfrac{(x-3)(x+3)}{x-3}=x+3$.\n\n**Step 3 — Substitute.** $3+3=6$.\n\n**Answer:** $6$.",
+      "explanation_he": "**שלב 1 — פירוק.** $(x-3)(x+3)$.\n\n**שלב 2 — צמצום.** $x+3$.\n\n**שלב 3 — הצבה.** $6$.\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "removable_discontinuity"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$|x\\sin(1/x)|\\leq|x|\\to 0$, so $\\lim_{x\\to 0}f(x)=0$. Removable: define $f(0)=0$",
-          "0$",
-          "0"
+        "steps_en": [
+          "**Step 1 — Factor.** $x^2-9=(x-3)(x+3)$.",
+          "**Step 2 — Cancel.** $\\dfrac{(x-3)(x+3)}{x-3}=x+3$.",
+          "**Step 3 — Substitute.** $3+3=6$.",
+          "**Answer:** $6$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — פירוק.** $(x-3)(x+3)$.",
+          "**שלב 2 — צמצום.** $x+3$.",
+          "**שלב 3 — הצבה.** $6$.",
+          "**תשובה:** $6$."
+        ]
       },
-      "explanation_en": "**Why this is correct:**\nUse the squeeze: $|x\\sin(1/x)|\\le |x|$ for $x\\neq 0$, and $|x|\\to 0$ as $x\\to 0$. Therefore $\\lim_{x\\to 0}x\\sin(1/x)=0$. The limit exists and is finite, so defining $f(0)=0$ removes the **removable discontinuity**.\n\n**How to think about it:**\nOscillation inside a factor that goes to zero often yields a removable hole — contrast with $\\sin(1/x)$ alone (no $x$ factor), which is essential.\n\n**Common slip:**\nClaiming essential discontinuity because $\\sin(1/x)$ oscillates wildly. The bounding factor $|x|$ forces the whole product to zero.\n\n**Exam tip:**\nWhen you see $x\\sin(1/x)$ or $x^2\\sin(1/x)$ at $0$, reach for squeeze immediately. The power of $x$ tells you how fast the envelope shrinks.",
-      "explanation_he": "**למה זה נכון:**\nמסקנת היד: $|x\\sin(1/x)|\\le |x|$ עבור $x\\neq 0$, ו-$|x|\\to 0$ כאשר $x\\to 0$. לכן $\\lim_{x\\to 0}x\\sin(1/x)=0$. הגבול קיים וסופי, ולכן הגדרת $f(0)=0$ סוגרת **אי-רציפות סילוקית**.\n\n**איך לחשוב על זה:**\nאוסצילציה בתוך גורם ששואף לאפס לעיתים נותנת חור סילוקי — בניגוד ל-$\\sin(1/x)$ לבד (ללא גורם $x$), שהוא מהותי.\n\n**טעות נפוצה:**\nטענה למהותית כי $\\sin(1/x)$ מתנדנד חזק. גורם ההקפה $|x|$ מכריח את המכפלה כולה לאפס.\n\n**טיפ לבחינה:**\nכשמופיע $x\\sin(1/x)$ או $x^2\\sin(1/x)$ ב-$0$ — השתמשו במסקנת היד מיד. חזקת $x$ קובעת כמה מהר המעטפת מתכווצת. השוו תמיד ל-$\\sin(1/x)$ ללא גורם $x$.",
-      "skill_atoms": []
+      "source_item_id": "44c36e38-6ed0-5cf2-a6de-7a578fdfa3cd",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "For $f(x)=\\begin{cases}(x^2-9)/(x-3) & x\\neq 3 \\\\ 7 & x=3\\end{cases}$, is $f$ continuous at $x=3$? Fix if not.",
-      "stem_he": "עבור $f(x)=\\begin{cases}(x^2-9)/(x-3) & x\\neq3\\\\7 & x=3\\end{cases}$, האם $f$ רציפה ב-$x=3$? תקן אם לא.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "For $f(x)=x+1$, find $f(3)$.",
+      "stem_he": "עבור $f(x)=x+1$, מצאו $f(3)$.",
+      "explanation_en": "**$f(3)=4$.**\n\n**Answer:** $4$.",
+      "explanation_he": "**$f(3)=4$.**\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "function_value"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Not continuous. Removable discontinuity. Limit is 6 but f(3)=7. Fix: f(3)=6",
-          "removable",
-          "6"
-        ],
-        "case_sensitive": false
+        "value": 4
       },
-      "explanation_en": "**Why this is correct:**\nFor $x\\neq 3$, $(x^2-9)/(x-3)=x+3$, so $\\lim_{x\\to 3}f(x)=6$. But the definition gives $f(3)=7\\neq 6$. The limit exists (finite) while the value is wrong — **removable discontinuity**. Redefine $f(3)=6$ for continuity.\n\n**How to think about it:**\nThis is the classic \"wrong dot\" pattern: the graph has a hole at $(3,6)$ but the piecewise rule placed the point at $(3,7)$.\n\n**Common slip:**\nSaying the function is continuous because the limit \"almost\" matches, or trying to find a parameter $k$ when the issue is simply a wrong constant.\n\n**Exam tip:**\nOn piecewise questions, compute the limit from the $x\\neq a$ formula first, then compare to the explicit $f(a)$ value. Mismatch with existing limit = removable.",
-      "explanation_he": "**למה זה נכון:**\nעבור $x\\neq 3$, $(x^2-9)/(x-3)=x+3$, ולכן $\\lim_{x\\to 3}f(x)=6$. אך ההגדרה נותנת $f(3)=7\\neq 6$. הגבול קיים (סופי) והערך שגוי — **אי-רציפות סילוקית**. הגדר $f(3)=6$ לרציפות.\n\n**איך לחשוב על זה:**\nזה דפוס \"הנקודה השגויה\": הגרף עם חור ב-$(3,6)$ אך ההגדרה שמה את הנקודה ב-$(3,7)$.\n\n**טעות נפוצה:**\nטענה לרציפות כי הגבול \"כמעט\" תואם, או חיפוש פרמטר $k$ כשהבעיה היא פשוט קבוע שגוי.\n\n**טיפ לבחינה:**\nבשאלות מקוטעות — חשבו גבול מהנוסחה $x\\neq a$ קודם, והשוו ל-$f(a)$. אי-התאמה עם גבול קיים = סילוקית. כתבו שלוש שורות: $L$, $f(a)$, וסוג.",
-      "skill_atoms": []
+      "source_item_id": "546522bd-943d-59f7-9c90-7a35a699f283",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Classify the discontinuity of $f(x)=e^{1/x}$ at $x=0$.",
-      "stem_he": "סווג את אי-הרציפות של $f(x)=e^{1/x}$ ב-$x=0$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Evaluate $\\lim_{x\\to 0} (x^2+1)$.",
+      "stem_he": "חשבו $\\lim_{x\\to 0} (x^2+1)$.",
+      "explanation_en": "**$=0+1=1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**$=1$.**\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "limit_continuous"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\lim_{x\\to 0^+}e^{1/x}=e^{+\\infty}=+\\infty$. $\\lim_{x\\to 0^-}e^{1/x}=e^{-\\infty}=0$. Left limit $=0$ (finite), right limit $=+\\infty$ (infinite). Infinite discontinuity",
-          "+\\infty$ (infinite). Infinite discontinuity",
-          "0"
-        ],
-        "case_sensitive": false
+        "value": 1
       },
-      "explanation_en": "**Why this is correct:**\nAs $x\\to 0^+$, $1/x\\to +\\infty$ so $e^{1/x}\\to +\\infty$. As $x\\to 0^-$, $1/x\\to -\\infty$ so $e^{1/x}\\to 0$. The right limit is infinite while the left is finite — classification is **infinite discontinuity**, not jump.\n\n**How to think about it:**\nJump requires **both** one-sided limits finite and unequal. If either side is $\\pm\\infty$, the infinite category takes priority.\n\n**Common slip:**\nLabeling as jump because $L_-=0$ and $L_+=+\\infty$ \"look like a step.\" Infinity disqualifies jump classification.\n\n**Exam tip:**\n$e^{1/x}$ at $0$ is a standard trap on exams. Write both one-sided limits on separate lines before naming the type — the right-hand blow-up is the decisive fact.",
-      "explanation_he": "**למה זה נכון:**\nכאשר $x\\to 0^+$, $1/x\\to +\\infty$ ולכן $e^{1/x}\\to +\\infty$. כאשר $x\\to 0^-$, $1/x\\to -\\infty$ ולכן $e^{1/x}\\to 0$. הגבול הימני אינסופי והשמאלי סופי — הסיווג **אינסוטית**, לא קפיצה.\n\n**איך לחשוב על זה:**\nקפיצה דורשת ש**שני** הגבולות החד-צדדיים סופיים ושונים. אם צד אחד $\\pm\\infty$ — קטגוריית האינסוטית גוברת.\n\n**טעות נפוצה:**\nתיוג כקפיצה כי $L_-=0$ ו-$L_+=+\\infty$ \"נראים כמו מדרגה\". אינסוף פוסל סיווג קפיצה.\n\n**טיפ לבחינה:**\n$e^{1/x}$ ב-$0$ הוא מלכודת קלאסית. כתבו שני גבולות חד-צדדיים בשורות נפרדות לפני שם הסוג — ההתפוצצות מימין היא העובדה המכריעה. זכרו: אינסוף בצד אחד מספיק.",
-      "skill_atoms": []
+      "source_item_id": "aa1df5fc-2d08-5af1-95b4-af274837fc75",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "Show that $f(x)=|x|/x$ for $x\\neq 0$ has a jump discontinuity at 0, and determine the jump.",
-      "stem_he": "הראה ש-$f(x)=|x|/x$ עבור $x\\neq 0$ מציגה אי-רציפות קפיצה ב-0, וחשב את גודל הקפיצה.",
+      "stem_en": "At which value of $x$ is $f(x)=\\dfrac{1}{x-3}$ discontinuous?",
+      "stem_he": "באיזה ערך של $x$ הפונקציה $f(x)=\\dfrac{1}{x-3}$ אינה רציפה?",
+      "explanation_en": "**The denominator is $0$ at $x=3$.**\n\n**Answer:** $x=3$.",
+      "explanation_he": "**המכנה מתאפס ב-$x=3$.**\n\n**תשובה:** $x=3$.",
+      "skill_atoms": [
+        "infinite_discontinuity"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\lim_{x\\to 0^-}|x|/x=\\lim(-x/x)=-1$. $\\lim_{x\\to 0^+}|x|/x=1$. Both finite, but $-1\\neq 1$: jump discontinuity, jump $=2$",
-          "2$",
-          "2"
+        "options_en": [
+          "$3$",
+          "$0$",
+          "$-3$",
+          "$1$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$3$",
+          "$0$",
+          "$-3$",
+          "$1$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nFor $x<0$, $|x|=-x$ so $|x|/x=-1$. For $x>0$, $|x|=x$ so $|x|/x=1$. Thus $\\lim_{x\\to 0^-}f=-1$ and $\\lim_{x\\to 0^+}f=1$. Both finite but $-1\\neq 1$ — **jump discontinuity** with jump size $|1-(-1)|=2$.\n\n**How to think about it:**\n$|x|/x$ equals the sign function on $\\mathbb{R}\\setminus\\{0\\}$. It cannot be made continuous at $0$ by any single definition.\n\n**Common slip:**\nComputing only one side, or reporting jump size $1$ instead of $|L_+-L_-|=2$.\n\n**Exam tip:**\nWhen absolute value splits the domain, rewrite $|x|/x$ as $\\pm 1$ on each side before taking limits. Jump size is always the absolute difference of the one-sided limits.",
-      "explanation_he": "**למה זה נכון:**\nעבור $x<0$, $|x|=-x$ ולכן $|x|/x=-1$. עבור $x>0$, $|x|=x$ ולכן $|x|/x=1$. כך $\\lim_{x\\to 0^-}f=-1$ ו-$\\lim_{x\\to 0^+}f=1$. שניהם סופיים אך $-1\\neq 1$ — **קפיצה** בגודל $|1-(-1)|=2$.\n\n**איך לחשוב על זה:**\n$|x|/x$ שווה לפונקציית הסימן על $\\mathbb{R}\\setminus\\{0\\}$. אין הגדרה ב-$0$ שתהפוך אותה לרציפה.\n\n**טעות נפוצה:**\nחישוב צד אחד בלבד, או דיווח על קפיצה $1$ במקום $|L_+-L_-|=2$.\n\n**טיפ לבחינה:**\nכשערך מוחלט מפצל תחום — כתבו $|x|/x$ כ-$\\pm 1$ בכל צד לפני גבולות. גודל קפיצה = הפרש מוחלט של הגבולות החד-צדדיים. דווחו תמיד $|L_+-L_-|$.",
-      "skill_atoms": []
+      "source_item_id": "4ba7a400-3baa-57c0-a2ba-f1e83b7288cd",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$3$",
+        "$0$",
+        "$-3$",
+        "$1$"
+      ],
+      "options_he": [
+        "$3$",
+        "$0$",
+        "$-3$",
+        "$1$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "Find all values of $a$ making $f(x)=\\begin{cases}ax+1 & x<1\\\\ x^2+2 & x\\geq 1\\end{cases}$ continuous at $x=1$.",
-      "stem_he": "מצא את כל ערכי $a$ הגורמים ל-$f(x)=\\begin{cases}ax+1 & x<1\\\\ x^2+2 & x\\geq1\\end{cases}$ להיות רציפה ב-$x=1$.",
+      "stem_en": "Evaluate $\\lim_{x\\to 3}\\dfrac{x^2-9}{x-3}$.",
+      "stem_he": "חשבו $\\lim_{x\\to 3}\\dfrac{x^2-9}{x-3}$.",
+      "explanation_en": "**Factor: $\\dfrac{(x-3)(x+3)}{x-3}=x+3\\to 6$.**\n\n**Answer:** $6$.",
+      "explanation_he": "**פירוק: $x+3\\to 6$.**\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "removable_discontinuity"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "a=2",
-          "2",
-          "a = 2"
-        ],
-        "case_sensitive": false
+        "value": 6
       },
-      "explanation_en": "**Why this is correct:**\nContinuity at $x=1$ requires $L_-=L_+=f(1)$. Left branch: $\\lim_{x\\to 1^-}(ax+1)=a+1$. Right branch and value: $\\lim_{x\\to 1^+}(x^2+2)=f(1)=3$. Set $a+1=3$, giving **$a=2$** as the unique solution.\n\n**How to think about it:**\nParameter-finding for continuity is always \"match the two sides.\" If $L_-\\neq L_+$ for all $a$, no value works — that signals a jump, not a missing parameter.\n\n**Common slip:**\nUsing $x<1$ formula at $x=1$ for the left limit (should approach from below), or forgetting that $f(1)$ comes from the $x\\geq 1$ branch.\n\n**Exam tip:**\nAfter solving, verify: with $a=2$, left limit $=3$, right limit $=3$, $f(1)=3$. Three equal numbers on your scratch paper = full marks.",
-      "explanation_he": "**למה זה נכון:**\nרציפות ב-$x=1$ דורשת $L_-=L_+=f(1)$. ענף שמאל: $\\lim_{x\\to 1^-}(ax+1)=a+1$. ענף ימין וערך: $\\lim_{x\\to 1^+}(x^2+2)=f(1)=3$. מהשוואה $a+1=3$, ולכן **$a=2$** — הפתרון היחיד.\n\n**איך לחשוב על זה:**\nמציאת פרמטר לרציפות = \"השוואת שני הצדדים\". אם $L_-\\neq L_+$ לכל $a$ — אין פתרון, וזו קפיצה, לא פרמטר חסר.\n\n**טעות נפוצה:**\nשימוש בנוסחת $x<1$ ב-$x=1$ לגבול שמאלי (צריך התקרבות מלמטה), או שכחת ש-$f(1)$ מגיע מענף $x\\geq 1$.\n\n**טיפ לבחינה:**\nאחרי הפתרון — אמתו: עם $a=2$, גבול שמאלי $=3$, ימני $=3$, $f(1)=3$. שלושה מספרים שווים על הטיוטה = ניקוד מלא.",
-      "skill_atoms": []
+      "source_item_id": "aa8a2f7e-c48b-5dff-99c7-4b8994604cbb",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $f(x)=\\dfrac{x^2-1}{x-1}$, find the value that removes the discontinuity at $x=1$.",
+      "stem_he": "עבור $f(x)=\\dfrac{x^2-1}{x-1}$, מצאו את הערך שמסלק את אי-הרציפות ב-$x=1$.",
+      "explanation_en": "**$\\dfrac{(x-1)(x+1)}{x-1}=x+1\\to 2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**$x+1\\to 2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "removable_discontinuity"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "538c3f93-36e6-5798-b552-65792b83489e",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Evaluate $\\lim_{x\\to 2}\\dfrac{x^2-4}{x-2}$.",
+      "stem_he": "חשבו $\\lim_{x\\to 2}\\dfrac{x^2-4}{x-2}$.",
+      "explanation_en": "**$\\dfrac{(x-2)(x+2)}{x-2}=x+2\\to 4$.**\n\n**Answer:** $4$.",
+      "explanation_he": "**$x+2\\to 4$.**\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "removable_discontinuity"
+      ],
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "51a21e38-71da-5bf6-81a6-5f8bb45d7f5c",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Evaluate $\\lim_{x\\to 1}\\dfrac{x^3-1}{x-1}$.",
+      "stem_he": "חשבו $\\lim_{x\\to 1}\\dfrac{x^3-1}{x-1}$.",
+      "explanation_en": "**$\\dfrac{(x-1)(x^2+x+1)}{x-1}=x^2+x+1\\to 3$.**\n\n**Answer:** $3$.",
+      "explanation_he": "**$x^2+x+1\\to 3$.**\n\n**תשובה:** $3$.",
+      "skill_atoms": [
+        "removable_discontinuity"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "63a11379-b501-5de1-b508-df0f66164980",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: $f(x)=\\dfrac{1}{x}$ has an infinite discontinuity at $x=0$.",
+      "stem_he": "נכון או לא נכון: לפונקציה $f(x)=\\dfrac{1}{x}$ יש אי-רציפות אינסופית ב-$x=0$.",
+      "explanation_en": "**$1/x\\to\\pm\\infty$ near $0$ — an infinite discontinuity** — **true**.",
+      "explanation_he": "**$1/x\\to\\pm\\infty$ ליד $0$** — **נכון**.",
+      "skill_atoms": [
+        "infinite_discontinuity"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "869a3aeb-ea63-53a8-a4b4-43d47221fadd",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Evaluate $\\lim_{x\\to 2}\\dfrac{x^2-4}{x^2-2x}$.",
+      "stem_he": "חשבו $\\lim_{x\\to 2}\\dfrac{x^2-4}{x^2-2x}$.",
+      "explanation_en": "**$\\dfrac{(x-2)(x+2)}{x(x-2)}=\\dfrac{x+2}{x}\\to\\dfrac{4}{2}=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**$\\dfrac{x+2}{x}\\to 2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "removable_discontinuity"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "8aa4bbef-d64a-5081-b0ce-62d6b5dd230d",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the removable value of $\\dfrac{x^2-5x+6}{x-2}$ at $x=2$.",
+      "stem_he": "מצאו את הערך הסליק של $\\dfrac{x^2-5x+6}{x-2}$ ב-$x=2$.",
+      "explanation_en": "**$\\dfrac{(x-2)(x-3)}{x-2}=x-3\\to -1$.**\n\n**Answer:** $-1$.",
+      "explanation_he": "**$x-3\\to -1$.**\n\n**תשובה:** $-1$.",
+      "skill_atoms": [
+        "removable_discontinuity"
+      ],
+      "answer_payload": {
+        "value": -1
+      },
+      "source_item_id": "5b85655c-24e6-5667-8231-3bea888ad26a",
+      "points_level_min": "5pt",
+      "correct_answer": "-1"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the removable value of $\\dfrac{x^2-16}{x-4}$ at $x=4$.",
+      "stem_he": "מצאו את הערך הסליק של $\\dfrac{x^2-16}{x-4}$ ב-$x=4$.",
+      "explanation_en": "**$\\dfrac{(x-4)(x+4)}{x-4}=x+4\\to 8$.**\n\n**Answer:** $8$.",
+      "explanation_he": "**$x+4\\to 8$.**\n\n**תשובה:** $8$.",
+      "skill_atoms": [
+        "removable_discontinuity"
+      ],
+      "answer_payload": {
+        "value": 8
+      },
+      "source_item_id": "e6f71126-be8d-5061-ae68-375663219bf3",
+      "points_level_min": "5pt",
+      "correct_answer": "8"
     }
   ],
   "est_minutes": 45,

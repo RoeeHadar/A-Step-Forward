@@ -267,203 +267,341 @@
     ],
     "tutor_pacing_hint": "Start with normal distribution visualization and the 68-95-99.7 rule. Build to standardization. Then confidence intervals before hypothesis tests — CIs are more intuitive. End with the subtle interpretation questions.",
     "skill_atoms_unlocked": [
-      "normal_distribution",
-      "standardization",
       "empirical_rule",
-      "central_limit_theorem",
-      "confidence_intervals",
-      "hypothesis_testing",
-      "p_values",
-      "type_i_type_ii_errors"
+      "standard_normal",
+      "z_score"
     ]
   },
   "questions": [
     {
-      "id": "q1",
+      "ord": 1,
       "kind": "mcq",
-      "difficulty": "hard",
+      "difficulty": "easy",
+      "stem_en": "The standard normal distribution has:",
+      "stem_he": "ההתפלגות הנורמלית הסטנדרטית בעלת:",
+      "explanation_en": "**$Z\\sim N(0,1)$.**\n\n**Answer:** mean $0$, sd $1$.",
+      "explanation_he": "**$Z\\sim N(0,1)$.**\n\n**תשובה:** תוחלת $0$, סטיית תקן $1$.",
       "skill_atoms": [
-        "z_standardization",
-        "confidence_intervals"
+        "standard_normal"
       ],
-      "stem_en": "$X \\sim N(100, 225)$ (σ=15). Find $P(85 < X < 115)$.",
-      "stem_he": "$X \\sim N(100, 225)$. מצא $P(85<X<115)$.",
       "answer_payload": {
         "options_en": [
-          "68%",
-          "95%",
-          "99.7%",
-          "90%"
+          "$\\text{mean }0,\\ \\text{sd }1$",
+          "$\\text{mean }1,\\ \\text{sd }0$",
+          "$\\text{mean }0,\\ \\text{sd }0$",
+          "$\\text{mean }1,\\ \\text{sd }1$"
         ],
         "options_he": [
-          "68%",
-          "95%",
-          "99.7%",
-          "90%"
+          "$\\text{mean }0,\\ \\text{sd }1$",
+          "$\\text{mean }1,\\ \\text{sd }0$",
+          "$\\text{mean }0,\\ \\text{sd }0$",
+          "$\\text{mean }1,\\ \\text{sd }1$"
         ],
         "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\n$X \\sim N(100, 225)$ means $\\mu=100$ and $\\sigma=15$. The interval $(85, 115)$ runs from $\\mu-\\sigma$ to $\\mu+\\sigma$. By the empirical 68–95–99.7 rule, about **68%** of values fall within one standard deviation of the mean.\n\n**How to think about it:**\nBefore computing, check whether the bounds are nice multiples of $\\sigma$ from $\\mu$. Here $85=100-15$ and $115=100+15$, so this is exactly a $\\pm 1\\sigma$ interval — no table lookup needed.\n\n**Common slip:**\nChoosing 95% because the interval \"looks wide.\" That corresponds to $\\pm 2\\sigma$, not $\\pm 1\\sigma$. Another error: using $\\sigma^2=225$ as if it were $\\sigma$.\n\n**Exam tip:**\nWhen endpoints are $\\mu\\pm k\\sigma$, map directly to the empirical rule. Only standardize when the bounds are not symmetric in $\\sigma$ units.",
-      "explanation_he": "**למה זה נכון:**\n$X \\sim N(100, 225)$ פירושו $\\mu=100$ ו-$\\sigma=15$. הקטע $(85, 115)$ נמשך מ-$\\mu-\\sigma$ עד $\\mu+\\sigma$. לפי כלל 68–95–99.7, כ-**68%** מהערכים נמצאים בתוך סטיית תקן אחת מהממוצע.\n\n**איך לחשוב על זה:**\nלפני חישוב, בדקו אם הגבולות הם כפולות נוחות של $\\sigma$ מ-$\\mu$. כאן $85=100-15$ ו-$115=100+15$ — זה בדיוק קטע $\\pm 1\\sigma$, בלי טבלה.\n\n**טעות נפוצה:**\nבחירה ב-95% כי הרווח \"נראה רחב.\" זה מתאים ל-$\\pm 2\\sigma$, לא $\\pm 1\\sigma$. טעות נוספת: שימוש ב-$\\sigma^2=225$ כאילו זה $\\sigma$.\n\n**טיפ לבחינה:**\nכשקצוות הם $\\mu\\pm k\\sigma$, מיפוי ישיר לכלל האמפירי. תקנון רק כשהגבולות לא סימטריים ביחידות $\\sigma$.",
-      "ord": 1,
+      "source_item_id": "936c3cc0-f53c-515f-a541-3aa2c643c7bf",
+      "points_level_min": "5pt",
       "options_en": [
-        "68%",
-        "95%",
-        "99.7%",
-        "90%"
+        "$\\text{mean }0,\\ \\text{sd }1$",
+        "$\\text{mean }1,\\ \\text{sd }0$",
+        "$\\text{mean }0,\\ \\text{sd }0$",
+        "$\\text{mean }1,\\ \\text{sd }1$"
       ],
       "options_he": [
-        "68%",
-        "95%",
-        "99.7%",
-        "90%"
+        "$\\text{mean }0,\\ \\text{sd }1$",
+        "$\\text{mean }1,\\ \\text{sd }0$",
+        "$\\text{mean }0,\\ \\text{sd }0$",
+        "$\\text{mean }1,\\ \\text{sd }1$"
       ],
       "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "If $X \\sim N(50, 16)$ (mean 50, std 4), find $P(X < 58)$.",
-      "stem_he": "$X \\sim N(50,16)$. מצא $P(X<58)$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$Z=(58-50)/4=2$. $P(Z<2)=0.9772$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.9772$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.9772"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nStandardize: $Z=(58-50)/4=2$. Then $P(X<58)=P(Z<2)=0.9772$ from the standard normal table. About 97.7% of values lie below 58.\n\n**How to think about it:**\nAlways identify $\\mu$ and $\\sigma$ first — here $\\sigma=4$ because $\\sigma^2=16$. Convert the $x$-value to a $Z$-score, then look up cumulative probability.\n\n**Common slip:**\nUsing $\\sigma=16$ instead of 4. Forgetting that $P(Z<2)$ is above 0.5 (since 58 is above the mean). Computing $P(Z>2)$ instead of $P(Z<2)$ for a \"less than\" question.\n\n**Exam tip:**\nDraw a quick sketch: 58 is two $\\sigma$ above 50, so the answer must be near 1. If you get 0.02, you likely used the wrong tail.",
-      "explanation_he": "**למה זה נכון:**\nתקנון: $Z=(58-50)/4=2$. אז $P(X<58)=P(Z<2)=0.9772$ מטבלת נורמל סטנדרטית. כ-97.7% מהערכים מתחת ל-58.\n\n**איך לחשוב על זה:**\nזיהו קודם $\\mu$ ו-$\\sigma$ — כאן $\\sigma=4$ כי $\\sigma^2=16$. המירו את $x$ לציון $Z$, ואז חפשו הסתברות מצטברת.\n\n**טעות נפוצה:**\nשימוש ב-$\\sigma=16$ במקום 4. שכחה ש-$P(Z<2)$ מעל 0.5 (58 מעל הממוצע). חישוב $P(Z>2)$ במקום $P(Z<2)$ לשאלת \"פחות מ-\".\n\n**טיפ לבחינה:**\nשרטוט מהיר: 58 הוא שתי $\\sigma$ מעל 50, אז התשובה קרובה ל-1. אם יצא 0.02 — כנראה זנב שגוי.",
+      "stem_en": "Find the $z$-score for $x=70$ with mean $60$ and standard deviation $5$.",
+      "stem_he": "מצאו את ציון ה-$z$ עבור $x=70$ עם תוחלת $60$ וסטיית תקן $5$.",
+      "explanation_en": "**$z=\\dfrac{70-60}{5}=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**$z=2$.**\n\n**תשובה:** $2$.",
       "skill_atoms": [
-        "normal_distribution",
-        "standardization"
-      ]
+        "z_score"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "13cac0b1-0b65-5f65-a424-efb1a84796de",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "State the empirical rule: what % of data falls within $\\pm2$ standard deviations of the mean?",
-      "stem_he": "כלל אמפירי: כמה אחוז נתונים בתוך $\\pm2$ סטיות תקן מהממוצע?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\nApproximately 95%.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "95"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nThe empirical rule states that approximately **95%** of data in a normal distribution falls within $\\pm 2$ standard deviations of the mean: $P(\\mu-2\\sigma < X < \\mu+2\\sigma) \\approx 0.95$.\n\n**How to think about it:**\nMemorize the triple: 68% ($\\pm 1\\sigma$), 95% ($\\pm 2\\sigma$), 99.7% ($\\pm 3\\sigma$). This question asks specifically for $\\pm 2\\sigma$, which maps to the middle value.\n\n**Common slip:**\nAnswering 68% (confusing with $\\pm 1\\sigma$) or 99.7% (confusing with $\\pm 3\\sigma$). Some students compute an exact integral instead of using the rule — unnecessary on timed exams.\n\n**Exam tip:**\nWhen a question mentions \"two standard deviations,\" respond 95% immediately unless exact computation is requested.",
-      "explanation_he": "**למה זה נכון:**\nהכלל האמפירי קובע שכ-**95%** מהנתונים בהתפלגות נורמלית נמצאים בתוך $\\pm 2$ סטיות תקן מהממוצע: $P(\\mu-2\\sigma < X < \\mu+2\\sigma) \\approx 0.95$.\n\n**איך לחשוב על זה:**\nשיננו את השלישייה: 68% ($\\pm 1\\sigma$), 95% ($\\pm 2\\sigma$), 99.7% ($\\pm 3\\sigma$). השאלה שואלת על $\\pm 2\\sigma$ — הערך האמצעי.\n\n**טעות נפוצה:**\nתשובה 68% (בלבול עם $\\pm 1\\sigma$) או 99.7% (בלבול עם $\\pm 3\\sigma$). חישוב אינטגרל מדויק במקום הכלל — מיותר בבחינה.\n\n**טיפ לבחינה:**\nכשמוזכרות \"שתי סטיות תקן,\" ענו 95% מיד אלא אם נדרש חישוב מדויק. בבגרות, הכלל האמפירי חוסך זמן רב לעומת חישוב אינטגרל מלא.",
+      "stem_en": "True or False: about $68\\%$ of data lies within one standard deviation of the mean.",
+      "stem_he": "נכון או לא נכון: כ-$68\\%$ מהנתונים נמצאים במרחק סטיית תקן אחת מהתוחלת.",
+      "explanation_en": "**The $68$–$95$–$99.7$ rule gives $\\approx 68\\%$ within $1\\sigma$** — **true**.",
+      "explanation_he": "**כלל $68$–$95$–$99.7$** — **נכון**.",
       "skill_atoms": [
-        "normal_distribution",
-        "standardization"
-      ]
+        "empirical_rule"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "049bcec5-e22a-55f5-abfd-13514976c7e9",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "A 95% CI for a mean is $(42, 58)$. What is the sample mean $\\bar{x}$?",
-      "stem_he": "רווח סמך 95% הוא $(42,58)$. מה ממוצע המדגם?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$\\bar{x} = (42+58)/2 = 50$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "50$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "50"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nA confidence interval is centered on $\\bar{x}$. For a symmetric interval $(42, 58)$, the sample mean is the midpoint: $\\bar{x}=(42+58)/2=50$.\n\n**How to think about it:**\nThe margin of error extends equally above and below $\\bar{x}$. If you know both endpoints, average them — no need for $z$ or $SE$ unless reconstructing the full interval.\n\n**Common slip:**\nSubtracting endpoints ($58-42=16$) and reporting 16 as the mean. Using 42 or 58 alone. Confusing $\\bar{x}$ with $\\mu$ — the interval estimates $\\mu$, but its center is always $\\bar{x}$.\n\n**Exam tip:**\nMidpoint formula $\\bar{x}=(L+U)/2$ appears frequently as a quick-check sub-question after CI construction.",
-      "explanation_he": "**למה זה נכון:**\nרווח סמך ממורכז סביב $\\bar{x}$. לקטע סימטרי $(42, 58)$, ממוצע המדגם הוא נקודת האמצע: $\\bar{x}=(42+58)/2=50$.\n\n**איך לחשוב על זה:**\nשגיאת הדגימה מתפשטת שווה מעל ומתחת ל-$\\bar{x}$. אם יודעים שני קצוות — ממוצע פשוט, בלי $z$ או $SE$.\n\n**טעות נפוצה:**\nחיסור קצוות ($58-42=16$) ודיווח 16 כממוצע. שימוש ב-42 או 58 בלבד. בלבול $\\bar{x}$ עם $\\mu$ — הרווח מעריך $\\mu$, אבל המרכז תמיד $\\bar{x}$.\n\n**טיפ לבחינה:**\nנוסחת אמצע $\\bar{x}=(L+U)/2$ מופיעה לעיתים כשאלת בדיקה מהירה אחרי בניית CI.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Find the $z$-score for $x=85$ with mean $75$ and standard deviation $5$.",
+      "stem_he": "מצאו את ציון ה-$z$ עבור $x=85$ עם תוחלת $75$ וסטיית תקן $5$.",
+      "explanation_en": "**Step 1 — Formula.** $z=\\dfrac{x-\\mu}{\\sigma}$.\n\n**Step 2 — Substitute.** $\\dfrac{85-75}{5}$.\n\n**Step 3 — Evaluate.** $=2$.\n\n**Answer:** $2$.",
+      "explanation_he": "**שלב 1 — נוסחה.** $z=\\dfrac{x-\\mu}{\\sigma}$.\n\n**שלב 2 — הצבה.** $\\dfrac{85-75}{5}$.\n\n**שלב 3 — חישוב.** $2$.\n\n**תשובה:** $2$.",
       "skill_atoms": [
-        "normal_distribution",
-        "standardization"
-      ]
+        "z_score"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Formula.** $z=\\dfrac{x-\\mu}{\\sigma}$.",
+          "**Step 2 — Substitute.** $\\dfrac{85-75}{5}$.",
+          "**Step 3 — Evaluate.** $=2$.",
+          "**Answer:** $2$."
+        ],
+        "steps_he": [
+          "**שלב 1 — נוסחה.** $z=\\dfrac{x-\\mu}{\\sigma}$.",
+          "**שלב 2 — הצבה.** $\\dfrac{85-75}{5}$.",
+          "**שלב 3 — חישוב.** $2$.",
+          "**תשובה:** $2$."
+        ]
+      },
+      "source_item_id": "a59ba8a2-c53c-5ddf-a710-eaa3d3f9bc5a",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "What is SE for $n=100$, $\\sigma=30$?",
-      "stem_he": "מה שגיאת תקן עבור $n=100$, $\\sigma=30$?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$SE = 30/\\sqrt{100} = 3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\n$SE=\\sigma/\\sqrt{n}=30/\\sqrt{100}=30/10=3$. The standard error measures how much $\\bar{X}$ varies across samples, not individual observations.\n\n**How to think about it:**\nIdentify $\\sigma$ and $n$, then apply $SE=\\sigma/\\sqrt{n}$. Here $\\sqrt{100}=10$ simplifies the arithmetic.\n\n**Common slip:**\nAnswering 30 (using $\\sigma$ instead of $SE$). Dividing by $n$ instead of $\\sqrt{n}$: $30/100=0.3$. Forgetting that larger $n$ means smaller $SE$.\n\n**Exam tip:**\nAfter computing $SE$, sanity-check: it must be smaller than $\\sigma$. If $SE \\ge \\sigma$, recheck the formula.",
-      "explanation_he": "**למה זה נכון:**\n$SE=\\sigma/\\sqrt{n}=30/\\sqrt{100}=30/10=3$. שגיאת התקן מודדת כמה $\\bar{X}$ משתנה בין מדגמים, לא תצפיות בודדות.\n\n**איך לחשוב על זה:**\nזיהו $\\sigma$ ו-$n$, והחילו $SE=\\sigma/\\sqrt{n}$. כאן $\\sqrt{100}=10$ מפשט את החשבון.\n\n**טעות נפוצה:**\nתשובה 30 (שימוש ב-$\\sigma$ במקום $SE$). חלוקה ב-$n$ במקום $\\sqrt{n}$: $30/100=0.3$. שכחה ש-$n$ גדול יותר → $SE$ קטן יותר.\n\n**טיפ לבחינה:**\nאחרי חישוב $SE$, בדיקה: חייב להיות קטן מ-$\\sigma$. אם $SE \\ge \\sigma$ — בדקו את הנוסחה. זכרו: $SE$ תמיד קטן מ-$\\sigma$ כי ממוצע מקטין שונות בין תצפיות.",
+      "stem_en": "Find the $z$-score for $x=50$ with mean $60$ and standard deviation $5$.",
+      "stem_he": "מצאו את ציון ה-$z$ עבור $x=50$ עם תוחלת $60$ וסטיית תקן $5$.",
+      "explanation_en": "**$z=\\dfrac{50-60}{5}=-2$.**\n\n**Answer:** $-2$.",
+      "explanation_he": "**$z=-2$.**\n\n**תשובה:** $-2$.",
       "skill_atoms": [
-        "normal_distribution",
-        "standardization"
-      ]
+        "z_score"
+      ],
+      "answer_payload": {
+        "value": -2
+      },
+      "source_item_id": "4f2a99c6-8c0a-5ea0-b827-8a24bd2fe18c",
+      "points_level_min": "5pt",
+      "correct_answer": "-2"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "A sample of $n=25$ has $\\bar{x}=80$, $\\sigma=10$ (known). Build a 95% CI.",
-      "stem_he": "$n=25$, $\\bar{x}=80$, $\\sigma=10$. בנה רווח סמך 95%.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$SE=10/5=2$. $80\\pm1.96\\times2 = (76.08, 83.92)$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "(76.08, 83.92)$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "83.92"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\n$SE=10/\\sqrt{25}=10/5=2$. The 95% CI is $80\\pm 1.96\\times 2=80\\pm 3.92$, giving $(76.08,\\ 83.92)$.\n\n**How to think about it:**\nFollow the CI recipe: compute $SE$, multiply by $z_{0.025}=1.96$, add/subtract from $\\bar{x}$. Since $\\sigma$ is known, use $z$ not $t$.\n\n**Common slip:**\nUsing $\\sigma=10$ directly as margin of error instead of $1.96\\times SE$. Using $z=2$ instead of 1.96. Forgetting to divide $\\sigma$ by $\\sqrt{n}$.\n\n**Exam tip:**\nWrite $(\\bar{x}-ME,\\ \\bar{x}+ME)$ and verify the center is exactly 80. Rounding to two decimals is standard on exams.",
-      "explanation_he": "**למה זה נכון:**\n$SE=10/\\sqrt{25}=10/5=2$. CI 95% הוא $80\\pm 1.96\\times 2=80\\pm 3.92$, כלומר $(76.08,\\ 83.92)$.\n\n**איך לחשוב על זה:**\nעקבו אחרי מתכון CI: חשבו $SE$, הכפילו ב-$z_{0.025}=1.96$, הוסיפו/החסירו מ-$\\bar{x}$. $\\sigma$ ידוע → $z$ ולא $t$.\n\n**טעות נפוצה:**\nשימוש ב-$\\sigma=10$ ישירות כשגיאת דגימה במקום $1.96\\times SE$. $z=2$ במקום 1.96. שכחה לחלק $\\sigma$ ב-$\\sqrt{n}$.\n\n**טיפ לבחינה:**\nכתבו $(\\bar{x}-ME,\\ \\bar{x}+ME)$ וודאו שהמרכז בדיוק 80. עיגול לשתי ספרות — סטנדרט בבחינה. כש-$n$ קטן יחסית, $SE$ גדול יותר ולכן הרווח רחב יותר — זה צפוי.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the $z$-score for $x=65$ with mean $60$ and standard deviation $5$.",
+      "stem_he": "מצאו את ציון ה-$z$ עבור $x=65$ עם תוחלת $60$ וסטיית תקן $5$.",
+      "explanation_en": "**$z=1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**$z=1$.**\n\n**תשובה:** $1$.",
       "skill_atoms": [
-        "normal_distribution",
-        "standardization"
-      ]
+        "z_score"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "6a9d98f3-4142-5376-a7c7-b6fa85bee615",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "Test $H_0: \\mu=100$ vs $H_1: \\mu > 100$ at $\\alpha=0.05$ with $\\bar{x}=105$, $\\sigma=20$, $n=100$.",
-      "stem_he": "מבחן $H_0:\\mu=100$ מול $H_1:\\mu>100$, $\\alpha=0.05$: $\\bar{x}=105$, $\\sigma=20$, $n=100$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$z=(105-100)/(20/10)=5/2=2.5$. Critical value: $z_{0.05}=1.645$. $2.5>1.645$ → reject $H_0$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1.645$. $2.5>1.645$ → reject $H_0$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\n$SE=20/\\sqrt{100}=2$. Test statistic: $z=(105-100)/2=2.5$. For a one-tailed test at $\\alpha=0.05$, the critical value is $z_{0.05}=1.645$. Since $2.5>1.645$, **reject $H_0$**.\n\n**How to think about it:**\nRead $H_1:\\mu>100$ — this is right-tailed, so compare $z$ to $+1.645$, not $\\pm 1.96$. The sample mean 105 exceeds the hypothesized 100 by 2.5 standard errors.\n\n**Common slip:**\nUsing two-tailed critical value 1.96 and incorrectly failing to reject. Computing $z=(105-100)/20$ without dividing by $SE$. Rejecting when $z$ is negative in a right-tailed test.\n\n**Exam tip:**\nCircle the direction in $H_1$ before any arithmetic. One-tailed tests are more powerful but only detect effects in the stated direction.",
-      "explanation_he": "**למה זה נכון:**\n$SE=20/\\sqrt{100}=2$. סטטיסטיקת מבחן: $z=(105-100)/2=2.5$. במבחן חד-צדדי ב-$\\alpha=0.05$, ערך קריטי $z_{0.05}=1.645$. כיוון $2.5>1.645$ → **דוחים $H_0$**.\n\n**איך לחשוב על זה:**\nקראו $H_1:\\mu>100$ — זנב ימין, השוו $z$ ל-$+1.645$, לא $\\pm 1.96$. ממוצע 105 עולה על 100 ב-2.5 שגיאות תקן.\n\n**טעות נפוצה:**\nערך קריטי דו-צדדי 1.96 ואי-דחייה בטעות. $z=(105-100)/20$ בלי $SE$. דחייה כש-$z$ שלילי במבחן חד-צדדי ימין.\n\n**טיפ לבחינה:**\nסמנו את כיוון $H_1$ לפני חישוב. מבחנים חד-צדדיים חזקים יותר אך מגלים רק אפקט בכיוון המצוין.",
+      "stem_en": "A larger absolute $z$-score means the value is:",
+      "stem_he": "ציון $z$ גדול יותר בערכו המוחלט משמעו שהערך:",
+      "explanation_en": "**$|z|$ measures distance from the mean in sd units.**\n\n**Answer:** farther from the mean.",
+      "explanation_he": "**$|z|$ מודד מרחק מהתוחלת ביחידות סטיית תקן.**\n\n**תשובה:** רחוק יותר מהתוחלת.",
       "skill_atoms": [
-        "normal_distribution",
-        "standardization"
-      ]
+        "z_score"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\text{farther from the mean}$",
+          "$\\text{closer to the mean}$",
+          "$\\text{equal to the mean}$",
+          "$\\text{negative}$"
+        ],
+        "options_he": [
+          "$\\text{farther from the mean}$",
+          "$\\text{closer to the mean}$",
+          "$\\text{equal to the mean}$",
+          "$\\text{negative}$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "80e7b4ac-c2eb-5796-8c7d-4b8a6b05dc35",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{farther from the mean}$",
+        "$\\text{closer to the mean}$",
+        "$\\text{equal to the mean}$",
+        "$\\text{negative}$"
+      ],
+      "options_he": [
+        "$\\text{farther from the mean}$",
+        "$\\text{closer to the mean}$",
+        "$\\text{equal to the mean}$",
+        "$\\text{negative}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "$P(Z < 1.645) = 0.95$. What is the 90% CI formula (one-sided)?",
-      "stem_he": "$P(Z<1.645)=0.95$. מה נוסחת רווח סמך 90% חד-צדדי?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nUpper bound: $\\bar{x} + 1.645 \\cdot SE$. For 90% two-sided: $\\bar{x} \\pm 1.645 \\cdot SE$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1.645"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\n$P(Z<1.645)=0.95$ means 1.645 is the 95th percentile — 5% in the upper tail. For a **one-sided 90% upper confidence bound**: $\\bar{x}+1.645\\cdot SE$. For a **two-sided 90% CI**: $\\bar{x}\\pm 1.645\\cdot SE$ (5% in each tail).\n\n**How to think about it:**\nMatch the probability statement to tail area. $P(Z<1.645)=0.95$ leaves 5% above, which corresponds to 90% central coverage for two-sided intervals.\n\n**Common slip:**\nConfusing one-sided and two-sided formulas. Using 1.96 because \"confidence intervals always use 1.96.\" Giving only the upper bound when the question asks for the one-sided formula specifically.\n\n**Exam tip:**\nLabel clearly: \"one-sided upper bound\" vs \"two-sided interval.\" The critical value 1.645 serves both 90% two-sided and 95% one-sided upper bounds.",
-      "explanation_he": "**למה זה נכון:**\n$P(Z<1.645)=0.95$ פירושו 1.645 הוא האחוזון ה-95 — 5% בזנב עליון. ל**גבול עליון חד-צדדי 90%**: $\\bar{x}+1.645\\cdot SE$. ל**CI דו-צדדי 90%**: $\\bar{x}\\pm 1.645\\cdot SE$ (5% בכל זנב).\n\n**איך לחשוב על זה:**\nהתאימו את הצהרת ההסתברות לשטח זנב. $P(Z<1.645)=0.95$ משאיר 5% למעלה — מתאים ל-90% כיסוי מרכזי בדו-צדדי.\n\n**טעות נפוצה:**\nבלבול נוסחאות חד-צדדי ודו-צדדי. 1.96 כי \"CI תמיד 1.96.\" גבול עליון בלבד כששואלים על נוסחה חד-צדדית.\n\n**טיפ לבחינה:**\nסמנו: \"גבול עליון חד-צדדי\" מול \"רווח דו-צדדי.\" 1.645 משמש גם 90% דו-צדדי וגם 95% חד-צדדי עליון.",
+      "stem_en": "With mean $100$ and sd $10$, find the value $x$ at $z=1.5$.",
+      "stem_he": "עם תוחלת $100$ וסטיית תקן $10$, מצאו את הערך $x$ עבור $z=1.5$.",
+      "explanation_en": "**$x=\\mu+z\\sigma=100+15=115$.**\n\n**Answer:** $115$.",
+      "explanation_he": "**$x=115$.**\n\n**תשובה:** $115$.",
       "skill_atoms": [
-        "normal_distribution",
-        "standardization"
-      ]
+        "z_score"
+      ],
+      "answer_payload": {
+        "value": 115
+      },
+      "source_item_id": "48f888bc-6605-5d7e-95d8-a89c42551163",
+      "points_level_min": "5pt",
+      "correct_answer": "115"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the $z$-score for $x=80$ with mean $70$ and standard deviation $4$.",
+      "stem_he": "מצאו את ציון ה-$z$ עבור $x=80$ עם תוחלת $70$ וסטיית תקן $4$.",
+      "explanation_en": "**$z=\\dfrac{10}{4}=2.5$.**\n\n**Answer:** $2.5$.",
+      "explanation_he": "**$z=2.5$.**\n\n**תשובה:** $2.5$.",
+      "skill_atoms": [
+        "z_score"
+      ],
+      "answer_payload": {
+        "value": 2.5
+      },
+      "source_item_id": "b91fa73c-27d1-5f2b-a251-b91528332e4d",
+      "points_level_min": "5pt",
+      "correct_answer": "2.5"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "With mean $50$ and sd $3$, find the value at $z=-2$.",
+      "stem_he": "עם תוחלת $50$ וסטיית תקן $3$, מצאו את הערך עבור $z=-2$.",
+      "explanation_en": "**$x=50-6=44$.**\n\n**Answer:** $44$.",
+      "explanation_he": "**$x=44$.**\n\n**תשובה:** $44$.",
+      "skill_atoms": [
+        "z_score"
+      ],
+      "answer_payload": {
+        "value": 44
+      },
+      "source_item_id": "6e0686b2-41bc-5f13-9f19-800ce1954797",
+      "points_level_min": "5pt",
+      "correct_answer": "44"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the $z$-score for $x=68$ with mean $68$ and standard deviation $4$.",
+      "stem_he": "מצאו את ציון ה-$z$ עבור $x=68$ עם תוחלת $68$ וסטיית תקן $4$.",
+      "explanation_en": "**$z=0$ (at the mean).**\n\n**Answer:** $0$.",
+      "explanation_he": "**$z=0$.**\n\n**תשובה:** $0$.",
+      "skill_atoms": [
+        "z_score"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "b17e6d38-71d6-532f-9905-3f508b64a74d",
+      "points_level_min": "5pt",
+      "correct_answer": "0"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: about $95\\%$ of data lies within two standard deviations of the mean.",
+      "stem_he": "נכון או לא נכון: כ-$95\\%$ מהנתונים נמצאים במרחק שתי סטיות תקן מהתוחלת.",
+      "explanation_en": "**The empirical rule gives $\\approx 95\\%$ within $2\\sigma$** — **true**.",
+      "explanation_he": "**כלל $68$–$95$–$99.7$** — **נכון**.",
+      "skill_atoms": [
+        "empirical_rule"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "8a36185c-0be2-5735-bada-eeeecaf52521",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "With mean $500$ and sd $100$, find the $z$-score for $x=650$.",
+      "stem_he": "עם תוחלת $500$ וסטיית תקן $100$, מצאו את ציון ה-$z$ עבור $x=650$.",
+      "explanation_en": "**$z=\\dfrac{150}{100}=1.5$.**\n\n**Answer:** $1.5$.",
+      "explanation_he": "**$z=1.5$.**\n\n**תשובה:** $1.5$.",
+      "skill_atoms": [
+        "z_score"
+      ],
+      "answer_payload": {
+        "value": 1.5
+      },
+      "source_item_id": "24e29c86-e46f-5351-ba06-bc0ec290d9d7",
+      "points_level_min": "5pt",
+      "correct_answer": "1.5"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "With mean $20$ and sd $2$, find the value at $z=3$.",
+      "stem_he": "עם תוחלת $20$ וסטיית תקן $2$, מצאו את הערך עבור $z=3$.",
+      "explanation_en": "**$x=20+6=26$.**\n\n**Answer:** $26$.",
+      "explanation_he": "**$x=26$.**\n\n**תשובה:** $26$.",
+      "skill_atoms": [
+        "z_score"
+      ],
+      "answer_payload": {
+        "value": 26
+      },
+      "source_item_id": "4b8709ea-dfc7-5fcc-8ea2-a69b33357b79",
+      "points_level_min": "5pt",
+      "correct_answer": "26"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "With mean $200$ and sd $20$, find the value at $z=-1.5$.",
+      "stem_he": "עם תוחלת $200$ וסטיית תקן $20$, מצאו את הערך עבור $z=-1.5$.",
+      "explanation_en": "**$x=200-30=170$.**\n\n**Answer:** $170$.",
+      "explanation_he": "**$x=170$.**\n\n**תשובה:** $170$.",
+      "skill_atoms": [
+        "z_score"
+      ],
+      "answer_payload": {
+        "value": 170
+      },
+      "source_item_id": "ff08f6c8-d0bb-5422-a7eb-79f9f8770e3a",
+      "points_level_min": "5pt",
+      "correct_answer": "170"
     }
   ],
   "est_minutes": 60,

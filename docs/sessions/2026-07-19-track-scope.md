@@ -499,10 +499,37 @@ by moving Hebrew out of `$...$`: `distributions` q5 ($P(\text{זוגי})$) and a
 pre-existing Batch-M carryover in `data_representation` q0 (relative-frequency
 fraction with Hebrew `\text{}`). Corpus-wide math lint now **0/207**.
 
+## Batch T — shipped
+
+Six more thin math lessons expanded to 15 verified items each (spread 5/6/4,
+4 kinds per lesson), all CAS-verified with 0 rejections:
+
+- `continuity_discontinuity` (calculus1) — removable limits via factor-and-cancel
+  $\tfrac{x^2-a^2}{x-a}\to 2a$, jump/infinite discontinuity identification,
+  point of discontinuity of $1/(x-3)$.
+- `differential_equations_intro` (calculus1/ODE) — separable IVPs
+  $y'=f(x),\ y(x_0)=y_0$, exponential $y'=ky$, solution verification
+  ($y=e^x\Rightarrow y'=y$; $y=\sin x\Rightarrow y''+y=0$), order/model concepts.
+- `mathematical_induction` (5pt) — closed forms $\tfrac{n(n+1)}{2}$, sum of odds
+  $n^2$, sum of squares $\tfrac{n(n+1)(2n+1)}{6}$, sum of cubes
+  $\left(\tfrac{n(n+1)}{2}\right)^2$ (verified numerically), base-case/inductive-step
+  structure.
+- `euclidean_geometry_circles` (4pt/5pt) — inscribed/central angle
+  ($\theta_{\text{insc}}=\tfrac12\theta_{\text{cent}}$), Thales, equal tangents,
+  cyclic-quadrilateral supplementary angles, intersecting-chords and
+  tangent-secant power-of-a-point.
+- `statistics_inference` (statistics) — $z=\tfrac{x-\mu}{\sigma}$ both directions,
+  $x=\mu+z\sigma$, the 68–95–99.7 empirical rule, standard-normal facts.
+- `power_series_radius` (calculus1/analysis) — radius via the ratio test
+  $R=\lim|a_n/a_{n+1}|$ for $\sum x^n/b^n$ ($R=b$) and $\sum b^n x^n$ ($R=1/b$),
+  center-shift invariance, endpoint/absolute-convergence concepts.
+
+All 15/15 on first pass — no collisions or lint hits. Corpus math lint 0/207.
+
 ## Corpus progress
 
-Verified 15+ item banks now cover **102 math lessons** (Batches B, D, E, F, G, H,
-I, J, K, L, M, N, O, P, Q, R, S + exponents): the entire 3pt/4pt algebra & functions foundation
+Verified 15+ item banks now cover **108 math lessons** (Batches B, D, E, F, G, H,
+I, J, K, L, M, N, O, P, Q, R, S, T + exponents): the entire 3pt/4pt algebra & functions foundation
 (incl. alternate syllabus IDs, algebra review, quadratic model fitting), sequences,
 the core + coordinate geometry foundation (distance/midpoint/slope, circle
 equations, vectors, solids/mensuration, plane-angle geometry, Law of Sines/Cosines

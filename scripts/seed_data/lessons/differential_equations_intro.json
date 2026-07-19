@@ -240,151 +240,344 @@
       "body_he_md": "- **ODE ספרית** $y'=g(x)h(y)$: הפרידו, אינטגרו, פתרו עבור $y$, IC בסוף.\n- **ODE לינארית** $y'+P(x)y=Q(x)$: צורה סטנדרטית, $\\mu=e^{\\int P\\,dx}$, $y=(\\int\\mu Q\\,dx+C)/\\mu$.\n- **גידול/ריקבון:** $y=y_0e^{kt}$; חצי-חיים $T_{1/2}=\\ln2/|k|$.\n- **קירור ניוטון:** $T(t)=T_e+(T_0-T_e)e^{-kt}$; $k$ מנקודת מדידה אחת.\n- תמיד $+C$ אחרי אינטגרציה; תנאי התחלה רק אחרי פתרון כללי.\n- בבעיות מידול: מצאו $k$ מנקודת נתונים לפני שאלת המשך."
     }
   ],
-  "agent_hints": {},
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "exponential_ode",
+      "ode_order",
+      "ode_verify",
+      "separable_ode"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "Solve $dy/dt=4y$, $y(0)=2$.",
-      "stem_he": "פתור $dy/dt=4y$, $y(0)=2$.",
+      "stem_en": "The order of the differential equation $\\dfrac{dy}{dx}=2x$ is:",
+      "stem_he": "הסדר של המשוואה הדיפרנציאלית $\\dfrac{dy}{dx}=2x$ הוא:",
+      "explanation_en": "**Highest derivative is $y'$, so first order.**\n\n**Answer:** first.",
+      "explanation_he": "**הנגזרת הגבוהה ביותר היא $y'$ — סדר ראשון.**\n\n**תשובה:** ראשון.",
+      "skill_atoms": [
+        "ode_order"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$y=Ae^{4t}$. $y(0)=2\\Rightarrow y=2e^{4t}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2e^{4t}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "4"
+        "options_en": [
+          "$\\text{first}$",
+          "$\\text{second}$",
+          "$\\text{third}$",
+          "$\\text{zero}$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$\\text{first}$",
+          "$\\text{second}$",
+          "$\\text{third}$",
+          "$\\text{zero}$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nThe ODE $dy/dt=4y$ is separable (or recognized as exponential growth with rate $k=4$). Separating: $dy/y=4\\,dt$, integrating gives $\\ln|y|=4t+C$, so $y=Ae^{4t}$. Applying $y(0)=2$ gives $A=2$.\n\n**How to think about it:**\nAny equation of the form $y'=ky$ has solution $y=y_0e^{kt}$ — memorize this pattern. Here $k=4>0$, so the quantity grows without bound.\n\n**Common slip:**\nForgetting the initial condition and leaving $A$ arbitrary, or integrating $dy/y$ without the absolute value and then mishandling negative values.\n\n**Exam tip:**\nWrite $y=Ae^{4t}$ first, then a one-line IC substitution. Verify: $y'=4Ae^{4t}=4y$ ✓.",
-      "explanation_he": "**למה זה נכון:**\nה-ODE $dy/dt=4y$ היא משוואה ספרית קלאסית — או שמזהים ישירות גידול מעריכי עם קבוע $k=4$. הפרדת משתנים: $dy/y=4\\,dt$, אינטגרציה משני הצדדים נותנת $\\ln|y|=4t+C$, ולכן $y=Ae^{4t}$. תנאי ההתחלה $y(0)=2$ קובע $A=2$.\n\n**איך לחשוב על זה:**\nכל משוואה מהצורה $y'=ky$ נפתרת מיד ב-$y=y_0e^{kt}$ — שווה לשינון. כאן $k=4>0$ ולכן הכמות גדלה ללא גבול. זו אותה משפחה כמו ריבית דריבית וגידול אוכלוסייה.\n\n**טעות נפוצה:**\nשכחת תנאי ההתחלה והשארת $A$ שרירותי, או טיפול שגוי ב-$\\ln|y|$ כש-$y$ שלילי. גם: שימוש ב-$y=4e^{4t}$ בלי קבוע אינטגרציה.\n\n**טיפ לבחינה:**\nכתבו קודם $y=Ae^{4t}$, הציבו IC בשורה אחת, ובדקו: $y'=4Ae^{4t}=4y$ ✓. כך מקבלים נקודות גם אם טעיתם בחישוב $A$.",
-      "skill_atoms": []
+      "source_item_id": "b0790dc2-48d6-542d-bc5d-dba258503c74",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{first}$",
+        "$\\text{second}$",
+        "$\\text{third}$",
+        "$\\text{zero}$"
+      ],
+      "options_he": [
+        "$\\text{first}$",
+        "$\\text{second}$",
+        "$\\text{third}$",
+        "$\\text{zero}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Solve $y'=y^2$ with $y(0)=1$.",
-      "stem_he": "פתור $y'=y^2$, $y(0)=1$.",
+      "stem_en": "Solve $\\dfrac{dy}{dx}=2x$ with $y(0)=1$, then find $y(2)$.",
+      "stem_he": "פתרו $\\dfrac{dy}{dx}=2x$ עם $y(0)=1$, ומצאו $y(2)$.",
+      "explanation_en": "**$y=x^2+1$, so $y(2)=5$.**\n\n**Answer:** $5$.",
+      "explanation_he": "**$y=x^2+1$, ולכן $y(2)=5$.**\n\n**תשובה:** $5$.",
+      "skill_atoms": [
+        "separable_ode"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$dy/y^2=dx$. $-1/y=x+C$. $y=-1/(x+C)$. $y(0)=1\\Rightarrow C=-1$. $y=1/(1-x)$",
-          "1/(1-x)$",
-          "1"
-        ],
-        "case_sensitive": false
+        "value": 5
       },
-      "explanation_en": "**Why this is correct:**\n$y'=y^2$ is separable: $dy/y^2=dx$. Integrating: $-1/y=x+C$, so $y=-1/(x+C)$. With $y(0)=1$: $1=-1/C$, hence $C=-1$ and $y=1/(1-x)$.\n\n**How to think about it:**\nWhen $h(y)=y^n$, the integral $\\int dy/y^n$ uses the power rule: $\\int y^{-2}dy=-y^{-1}$. Watch the sign carefully.\n\n**Common slip:**\nSign error on $-1/y$, giving $y=1/(x+C)$ without the minus — then IC fails. Also dividing by $y^2$ loses $y=0$ (not relevant here since $y(0)=1$).\n\n**Exam tip:**\nAfter finding $y=1/(1-x)$, note the **domain**: solution blows up at $x=1$ — mention this if the question asks about validity.",
-      "explanation_he": "**למה זה נכון:**\n$y'=y^2$ ספרית: $dy/y^2=dx$. אינטגרציה לפי חוק החזקות: $-1/y=x+C$, ולכן $y=-1/(x+C)$. תנאי $y(0)=1$ נותן $1=-1/C$, כלומר $C=-1$ ו-$y=1/(1-x)$.\n\n**איך לחשוב על זה:**\nכש-$h(y)=y^n$, האינטגרל $\\int dy/y^n$ הוא $\\int y^{-n}dy$. כאן $n=2$ ולכן $\\int y^{-2}dy=-y^{-1}$. הסימן שלילי — טעות נפוצה.\n\n**טעות נפוצה:**\nטעות סימן ב-$-1/y$ וקבלת $y=1/(x+C)$ בלי מינוס — אז IC נכשל. חלוקה ב-$y^2$ מאבדת $y=0$ (לא רלוונטי כי $y(0)=1$).\n\n**טיפ לבחינה:**\nאחרי $y=1/(1-x)$ ציינו **תחום תוקף**: הפתרון מתפוצץ ב-$x=1$. בבחינות אוניברסיטאיות מעריכים ציון מגבלות הפתרון.",
-      "skill_atoms": []
+      "source_item_id": "0fd47482-53bb-5cfe-b443-061cd00b90bb",
+      "points_level_min": "5pt",
+      "correct_answer": "5"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "A population doubles every 10 years. Write and solve the ODE for $P(t)$.",
-      "stem_he": "אוכלוסייה מכפילה את עצמה כל 10 שנים. כתוב ופתור ODE עבור $P(t)$.",
+      "stem_en": "True or False: $y=e^{x}$ satisfies $y'=y$.",
+      "stem_he": "נכון או לא נכון: $y=e^{x}$ מקיימת $y'=y$.",
+      "explanation_en": "**$\\dfrac{d}{dx}e^x=e^x$** — **true**.",
+      "explanation_he": "**$\\dfrac{d}{dx}e^x=e^x$** — **נכון**.",
+      "skill_atoms": [
+        "ode_verify"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$P'=kP$, $P=P_0e^{kt}$. $P(10)=2P_0\\Rightarrow e^{10k}=2\\Rightarrow k=\\ln2/10$. $P(t)=P_0\\cdot2^{t/10}$",
-          "P_0\\cdot2^{t/10}$",
-          "10"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why this is correct:**\nDoubling every 10 years means $P(10)=2P_0$. The model is $P'=kP$ with solution $P=P_0e^{kt}$. Substituting: $e^{10k}=2$, so $k=\\ln2/10$. Equivalently $P(t)=P_0\\cdot 2^{t/10}$.\n\n**How to think about it:**\n\"Doubles every $T$ years\" translates directly to $k=\\ln2/T$. This avoids solving the full ODE on timed exams.\n\n**Common slip:**\nUsing $k=2/10$ (linear growth) instead of exponential, or writing $P=2P_0e^{kt}$ without the initial factor $P_0$.\n\n**Exam tip:**\nBoth forms $P_0e^{kt}$ and $P_0\\cdot 2^{t/10}$ are acceptable — pick whichever simplifies the follow-up calculation.",
-      "explanation_he": "**למה זה נכון:**\nהכפלה כל 10 שנים פירושה $P(10)=2P_0$. המודל $P'=kP$ עם פתרון $P=P_0e^{kt}$. הצבה: $e^{10k}=2$, ולכן $k=\\ln2/10$. צורה שקולה: $P(t)=P_0\\cdot 2^{t/10}$.\n\n**איך לחשוב על זה:**\n\"מכפיל את עצמו כל $T$ שנים\" מתורגם ישירות ל-$k=\\ln2/T$ — חוסך פתרון מלא בזמן מוגבל. זו אותה משפחה כמו $y'=ky$ מהשיעור.\n\n**טעות נפוצה:**\nשימוש ב-$k=2/10$ (גידול לינארי) במקום מעריכי, או $P=2P_0e^{kt}$ בלי $P_0$. גם: בלבול בין כפל לינארי למעריכי.\n\n**טיפ לבחינה:**\nשתי הצורות $P_0e^{kt}$ ו-$P_0\\cdot 2^{t/10}$ תקינות — בחרו לפי הנוחות. כתבו $P'=kP$ בשוליים לפני החישוב.",
-      "skill_atoms": []
+      "source_item_id": "8332ede2-9f5a-527a-ac39-ff10725e1123",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Find the integrating factor for $y'+3y=6$.",
-      "stem_he": "מצא גורם אינטגרציה עבור $y'+3y=6$.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Solve $\\dfrac{dy}{dx}=2x$ with $y(1)=3$, then find $y(2)$.",
+      "stem_he": "פתרו $\\dfrac{dy}{dx}=2x$ עם $y(1)=3$, ומצאו $y(2)$.",
+      "explanation_en": "**Step 1 — Integrate.** $y=x^2+C$.\n\n**Step 2 — Apply IC.** $3=1+C\\Rightarrow C=2$.\n\n**Step 3 — Evaluate.** $y(2)=4+2=6$.\n\n**Answer:** $6$.",
+      "explanation_he": "**שלב 1 — אינטגרציה.** $y=x^2+C$.\n\n**שלב 2 — תנאי התחלה.** $C=2$.\n\n**שלב 3 — הצבה.** $6$.\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "separable_ode"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$P=3$. $\\mu=e^{\\int3\\,dx}=e^{3x}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "e^{3x}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3"
+        "steps_en": [
+          "**Step 1 — Integrate.** $y=x^2+C$.",
+          "**Step 2 — Apply IC.** $3=1+C\\Rightarrow C=2$.",
+          "**Step 3 — Evaluate.** $y(2)=4+2=6$.",
+          "**Answer:** $6$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — אינטגרציה.** $y=x^2+C$.",
+          "**שלב 2 — תנאי התחלה.** $C=2$.",
+          "**שלב 3 — הצבה.** $6$.",
+          "**תשובה:** $6$."
+        ]
       },
-      "explanation_en": "**Why this is correct:**\nThe equation $y'+3y=6$ is already in standard linear form with $P(x)=3$ and $Q(x)=6$. The integrating factor is $\\mu=e^{\\int 3\\,dx}=e^{3x}$ — not $e^{3}$ or $e^{3x}$ without integrating.\n\n**How to think about it:**\nFor constant $P$, $\\mu=e^{Px}$. Always identify $P$ from the coefficient of $y$ after ensuring $y'$ has coefficient 1.\n\n**Common slip:**\nComputing $\\mu=e^{3y}$ or forgetting to integrate $P$. Another error: using $\\mu=e^{3x}$ correctly but then not recognizing $d/dx[e^{3x}y]=6e^{3x}$.\n\n**Exam tip:**\nState \"$P=3$, $\\mu=e^{3x}$\" in the margin before any algebra — graders award method marks even if later arithmetic fails.",
-      "explanation_he": "**למה זה נכון:**\n$y'+3y=6$ כבר בצורה לינארית סטנדרטית: $P(x)=3$, $Q(x)=6$. גורם האינטגרציה $\\mu=e^{\\int 3\\,dx}=e^{3x}$ — לא $e^3$ ולא $e^{3x}$ בלי לבצע את האינטגרל של $P$.\n\n**איך לחשוב על זה:**\nכש-$P$ קבוע, $\\mu=e^{Px}$. תמיד זהו $P$ ממקדם $y$ **אחרי** שמקדם $y'$ שווה 1. כאן אין צורך לחלק — המשוואה כבר מוכנה.\n\n**טעות נפוצה:**\nחישוב $\\mu=e^{3y}$ (בלבול עם $y$), או שכחת לאינטגר את $P$. גם: $\\mu$ נכון אבל לא מזהים $d/dx[e^{3x}y]=6e^{3x}$.\n\n**טיפ לבחינה:**\nכתבו בשוליים \"$P=3$, $\\mu=e^{3x}$\" לפני כל חישוב — מקבלים נקודות שיטה גם אם החשבון נכשל בהמשך.",
-      "skill_atoms": []
+      "source_item_id": "aea30e75-848c-5931-b1d8-a93f82995af4",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Solve $y'+3y=6$ with $y(0)=1$.",
-      "stem_he": "פתור $y'+3y=6$, $y(0)=1$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Solve $\\dfrac{dy}{dx}=3$ with $y(0)=2$, then find $y(4)$.",
+      "stem_he": "פתרו $\\dfrac{dy}{dx}=3$ עם $y(0)=2$, ומצאו $y(4)$.",
+      "explanation_en": "**$y=3x+2$, so $y(4)=14$.**\n\n**Answer:** $14$.",
+      "explanation_he": "**$y=3x+2$, ולכן $y(4)=14$.**\n\n**תשובה:** $14$.",
+      "skill_atoms": [
+        "separable_ode"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\mu=e^{3x}$. $d/dx[e^{3x}y]=6e^{3x}$. $e^{3x}y=2e^{3x}+C$. $y=2+Ce^{-3x}$. $y(0)=1\\Rightarrow C=-1$. $y=2-e^{-3x}$",
-          "2-e^{-3x}$",
-          "-3"
-        ],
-        "case_sensitive": false
+        "value": 14
       },
-      "explanation_en": "**Why this is correct:**\nLinear ODE with $P=3$, $Q=6$. Integrating factor $\\mu=e^{3x}$. Then $d/dx[e^{3x}y]=6e^{3x}$, integrate to get $e^{3x}y=2e^{3x}+C$, so $y=2+Ce^{-3x}$. IC $y(0)=1$ gives $1=2+C$, $C=-1$, hence $y=2-e^{-3x}$.\n\n**How to think about it:**\nThe steady-state solution $y=2$ (where $y'=0$) is visible before applying IC — use it as a sanity check: final answer should approach 2 as $x\\to\\infty$.\n\n**Common slip:**\nArithmetic error integrating $6e^{3x}$ (forgetting factor $1/3$), or applying IC before isolating $y$.\n\n**Exam tip:**\nVerify IC: $y(0)=2-e^0=2-1=1$ ✓. Also verify ODE by quick substitution if time allows.",
-      "explanation_he": "**למה זה נכון:**\nODE לינארית: $P=3$, $Q=6$. $\\mu=e^{3x}$. אז $d/dx[e^{3x}y]=6e^{3x}$, אינטגרציה: $e^{3x}y=2e^{3x}+C$, ולכן $y=2+Ce^{-3x}$. תנאי $y(0)=1$ נותן $1=2+C$, $C=-1$, $y=2-e^{-3x}$.\n\n**איך לחשוב על זה:**\nפתרון מצב יציב $y=2$ (כש-$y'=0$ ו-$Q/P$) — בדיקת sanity: התשובה שואפת ל-2 כש-$x\\to\\infty$. זה עוזר לתפוס טעויות סימן.\n\n**טעות נפוצה:**\nטעות ב-$\\int 6e^{3x}\\,dx$ (שכחת גורם $1/3$), או הצבת IC לפני בידוד $y$. גם: $C=-1$ במקום $C=1$.\n\n**טיפ לבחינה:**\nבדיקת IC: $y(0)=2-e^0=1$ ✓. הציבו ב-ODE: $y'=-3e^{-3x}$, $y'+3y=-3e^{-3x}+6-3e^{-3x}$... בדקו במהירות.",
-      "skill_atoms": []
+      "source_item_id": "12d13768-11d2-5fa2-8149-241073000590",
+      "points_level_min": "5pt",
+      "correct_answer": "14"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Solve $y'=xy/(1+x^2)$, $y(0)=2$.",
-      "stem_he": "פתור $y'=xy/(1+x^2)$, $y(0)=2$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "If $\\dfrac{dy}{dx}=0$ and $y(1)=5$, find $y(10)$.",
+      "stem_he": "אם $\\dfrac{dy}{dx}=0$ ו-$y(1)=5$, מצאו $y(10)$.",
+      "explanation_en": "**$y$ is constant $=5$.**\n\n**Answer:** $5$.",
+      "explanation_he": "**$y$ קבועה $=5$.**\n\n**תשובה:** $5$.",
+      "skill_atoms": [
+        "separable_ode"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nSeparate: $dy/y=x/(1+x^2)\\,dx$. $\\ln|y|=\\frac{1}{2}\\ln(1+x^2)+C$. $y=A\\sqrt{1+x^2}$. $y(0)=A=2$. $y=2\\sqrt{1+x^2}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2\\sqrt{1+x^2}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
-        ],
-        "case_sensitive": false
+        "value": 5
       },
-      "explanation_en": "**Why this is correct:**\nThe ODE $y'=xy/(1+x^2)$ is separable: $dy/y=x/(1+x^2)\\,dx$. Left side: $\\ln|y|$. Right side: $\\int x/(1+x^2)\\,dx=\\frac{1}{2}\\ln(1+x^2)+C$. So $y=A\\sqrt{1+x^2}$. With $y(0)=2$: $A=2$.\n\n**How to think about it:**\nThe integral $\\int x/(1+x^2)\\,dx$ is a classic u-sub with $u=1+x^2$, $du=2x\\,dx$ — or recognize it as $\\frac{1}{2}d[\\ln(1+x^2)]$.\n\n**Common slip:**\nMissing the factor $1/2$ when integrating $x/(1+x^2)$, giving $y=A(1+x^2)$ instead of $y=A\\sqrt{1+x^2}$.\n\n**Exam tip:**\nAlways apply IC to the **general** solution before simplifying radicals — here $y(0)=A=2$ fixes the sign and magnitude of $A$.",
-      "explanation_he": "**למה זה נכון:**\n$y'=xy/(1+x^2)$ ספרית: $dy/y=x/(1+x^2)\\,dx$. צד שמאל: $\\ln|y|$. צד ימין: $\\int x/(1+x^2)\\,dx=\\frac{1}{2}\\ln(1+x^2)+C$. לכן $y=A\\sqrt{1+x^2}$. $y(0)=2$ נותן $A=2$.\n\n**איך לחשוב על זה:**\n$\\int x/(1+x^2)\\,dx$ — u-sub עם $u=1+x^2$, $du=2x\\,dx$, או $\\frac{1}{2}d[\\ln(1+x^2)]$. גורם $1/2$ קריטי — בלעדיו מקבלים $y$ בחזקה 1 במקום שורש.\n\n**טעות נפוצה:**\nחסר $1/2$ באינטגרציה → $y=A(1+x^2)$ במקום $y=A\\sqrt{1+x^2}$. גם: IC על ביטוי לא מפושט.\n\n**טיפ לבחינה:**\nהציבו IC על **פתרון כללי** לפני פישוט שורש — $y(0)=A=2$ קובע סימן וגודל. בדקו: $y'=xy/(1+x^2)$ ✓.",
-      "skill_atoms": []
+      "source_item_id": "6f0f2f82-7c70-5093-b133-227291f40c52",
+      "points_level_min": "5pt",
+      "correct_answer": "5"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "A radioactive substance has half-life 5 years. If $100g$ initially, find the amount after 15 years.",
-      "stem_he": "לחומר רדיואקטיבי חצי-חיים של 5 שנים. אם התחלנו עם $100g$, כמה נשאר לאחר 15 שנים?",
+      "stem_en": "The equation $\\dfrac{dy}{dx}=ky$ models:",
+      "stem_he": "המשוואה $\\dfrac{dy}{dx}=ky$ מתארת:",
+      "explanation_en": "**Its solution $y=Ce^{kx}$ is exponential.**\n\n**Answer:** exponential growth/decay.",
+      "explanation_he": "**הפתרון $y=Ce^{kx}$ מעריכי.**\n\n**תשובה:** גדילה/דעיכה מעריכית.",
+      "skill_atoms": [
+        "exponential_ode"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$k=\\ln2/5$. $m(t)=100e^{-kt}$. $m(15)=100e^{-3\\ln2}=100/2^3=100/8=12.5$ g.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "12.5$ g.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "12.5"
+        "options_en": [
+          "$\\text{exponential growth/decay}$",
+          "$\\text{linear growth}$",
+          "$\\text{oscillation}$",
+          "$\\text{constant}$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$\\text{exponential growth/decay}$",
+          "$\\text{linear growth}$",
+          "$\\text{oscillation}$",
+          "$\\text{constant}$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nHalf-life 5 years means $k=\\ln2/5$ for decay $m(t)=100e^{-kt}$. After 15 years = 3 half-lives: $m(15)=100/2^3=12.5$ g. Direct calculation: $100e^{-3\\ln2}=100/8=12.5$.\n\n**How to think about it:**\nCount half-lives: $15/5=3$, so divide by $2^3=8$. This is faster than computing exponentials on a non-calculator exam.\n\n**Common slip:**\nUsing $k=5$ or $k=1/5$ instead of $k=\\ln2/5$, or computing $100e^{-15/5}$ without converting to half-lives.\n\n**Exam tip:**\nMemorize: $n$ half-lives → multiply initial amount by $(1/2)^n$. Here $100\\times(1/2)^3=12.5$ g in one line.",
-      "explanation_he": "**למה זה נכון:**\nחצי-חיים 5 שנים → $k=\\ln2/5$ לריקבון $m(t)=100e^{-kt}$. 15 שנים = שלושה חצי-חיים: $m(15)=100/2^3=12.5$ ג'. חישוב ישיר: $100e^{-3\\ln2}=100/8=12.5$.\n\n**איך לחשוב על זה:**\nספרו חצי-חיים: $15/5=3$, חלקו ב-$2^3=8$. מהיר יותר מחשבון מעריכים בבחינה ללא מחשבון. שלושה חצי-חיים = הכמות מתחלקת ב-8.\n\n**טעות נפוצה:**\n$k=5$ או $k=1/5$ במקום $k=\\ln2/5$, או $100e^{-15/5}$ בלי המרה לחצי-חיים. גם: $100/3$ במקום $100/8$.\n\n**טיפ לבחינה:**\n$n$ חצי-חיים → $(1/2)^n$. $100\\times(1/2)^3=12.5$ ג' בשורה אחת. כתבו $k=\\ln2/5$ בשוליים. נוסחה מהירה: $100/2^3=12.5$ ג'.",
-      "skill_atoms": []
+      "source_item_id": "d2303dcf-5aea-55d1-81fd-e80fde745d10",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{exponential growth/decay}$",
+        "$\\text{linear growth}$",
+        "$\\text{oscillation}$",
+        "$\\text{constant}$"
+      ],
+      "options_he": [
+        "$\\text{exponential growth/decay}$",
+        "$\\text{linear growth}$",
+        "$\\text{oscillation}$",
+        "$\\text{constant}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "Solve $xy'+y=x\\cos x$.",
-      "stem_he": "פתור $xy'+y=x\\cos x$.",
+      "stem_en": "Solve $\\dfrac{dy}{dx}=x$ with $y(0)=0$, then find $y(4)$.",
+      "stem_he": "פתרו $\\dfrac{dy}{dx}=x$ עם $y(0)=0$, ומצאו $y(4)$.",
+      "explanation_en": "**$y=\\dfrac{x^2}{2}$, so $y(4)=8$.**\n\n**Answer:** $8$.",
+      "explanation_he": "**$y=\\dfrac{x^2}{2}$, ולכן $y(4)=8$.**\n\n**תשובה:** $8$.",
+      "skill_atoms": [
+        "separable_ode"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Rewrite: $y'+y/x=\\cos x$. $P=1/x$, $\\mu=x$. $d/dx[xy]=x\\cos x$. $xy=\\int x\\cos x\\,dx=x\\sin x+\\cos x+C$. $y=\\sin x+\\cos(x)/x+C/x$",
-          "\\sin x+\\cos(x)/x+C/x$",
-          "1"
-        ],
-        "case_sensitive": false
+        "value": 8
       },
-      "explanation_en": "**Why this is correct:**\nDivide by $x$: $y'+y/x=\\cos x$ (linear, $P=1/x$, $Q=\\cos x$). Integrating factor $\\mu=e^{\\int 1/x\\,dx}=x$. Then $d/dx[xy]=x\\cos x$. Integration by parts: $\\int x\\cos x\\,dx=x\\sin x+\\cos x+C$. So $y=\\sin x+\\cos x/x+C/x$.\n\n**How to think about it:**\nAlways rewrite to standard form before choosing a method. Here division by $x$ is essential — the equation is not separable as written.\n\n**Common slip:**\nSign error in IBP for $\\int x\\cos x\\,dx$ (answer should be $x\\sin x+\\cos x$, not $x\\sin x-\\cos x$), or forgetting $+C$ before dividing by $x$.\n\n**Exam tip:**\nLinear ODE + non-constant $P$ often leads to IBP on the right side — budget extra time and write the IBP choice ($u=x$, $dv=\\cos x\\,dx$) explicitly.",
-      "explanation_he": "**למה זה נכון:**\nחלקו ב-$x$: $y'+y/x=\\cos x$ (לינארית, $P=1/x$, $Q=\\cos x$). $\\mu=e^{\\int 1/x\\,dx}=x$. $d/dx[xy]=x\\cos x$. IBP: $\\int x\\cos x\\,dx=x\\sin x+\\cos x+C$. $y=\\sin x+\\cos x/x+C/x$.\n\n**איך לחשוב על זה:**\nכתבו צורה סטנדרטית לפני בחירת שיטה. חלוקה ב-$x$ חיונית — המשוואה **לא** ספרית כפי שכתובה. IBP עם $u=x$, $dv=\\cos x\\,dx$.\n\n**טעות נפוצה:**\nטעות סימן ב-IBP ($x\\sin x+\\cos x$ לא $x\\sin x-\\cos x$), או $+C$ לפני חלוקה ב-$x$. גם: שכחת לחלק ב-$x$ בתחילה.\n\n**טיפ לבחינה:**\nODE לינארית + $P$ לא קבוע → IBP בצד ימין — כתבו $u=x$, $dv=\\cos x\\,dx$ במפורש. בדקו IC אם ניתן.",
-      "skill_atoms": []
+      "source_item_id": "797466bf-c2c3-5d69-b4fe-3f07ba07e1fd",
+      "points_level_min": "5pt",
+      "correct_answer": "8"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Solve $\\dfrac{dy}{dx}=y$ with $y(0)=1$, then find $y(1)$ (round to 4).",
+      "stem_he": "פתרו $\\dfrac{dy}{dx}=y$ עם $y(0)=1$, ומצאו $y(1)$ (עגלו ל-4).",
+      "explanation_en": "**$y=e^{x}$, so $y(1)=e\\approx 2.7183$.**\n\n**Answer:** $\\approx 2.7183$.",
+      "explanation_he": "**$y=e^{x}$, ולכן $y(1)=e\\approx 2.7183$.**\n\n**תשובה:** $\\approx 2.7183$.",
+      "skill_atoms": [
+        "exponential_ode"
+      ],
+      "answer_payload": {
+        "value": 2.718282
+      },
+      "source_item_id": "62fcd1d5-3bb1-576d-adea-a745dff3354c",
+      "points_level_min": "5pt",
+      "correct_answer": "2.718282"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Solve $\\dfrac{dy}{dx}=e^{x}$ with $y(0)=0$, then find $y(1)$ (round to 4).",
+      "stem_he": "פתרו $\\dfrac{dy}{dx}=e^{x}$ עם $y(0)=0$, ומצאו $y(1)$ (עגלו ל-4).",
+      "explanation_en": "**$y=e^{x}-1$, so $y(1)=e-1\\approx 1.7183$.**\n\n**Answer:** $\\approx 1.7183$.",
+      "explanation_he": "**$y=e^{x}-1$, ולכן $y(1)\\approx 1.7183$.**\n\n**תשובה:** $\\approx 1.7183$.",
+      "skill_atoms": [
+        "separable_ode"
+      ],
+      "answer_payload": {
+        "value": 1.718282
+      },
+      "source_item_id": "64a4cb69-f3b2-5993-8184-730afe96ea80",
+      "points_level_min": "5pt",
+      "correct_answer": "1.718282"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Solve $\\dfrac{dy}{dx}=\\dfrac{1}{x}$ with $y(1)=0$, then find $y(e)$.",
+      "stem_he": "פתרו $\\dfrac{dy}{dx}=\\dfrac{1}{x}$ עם $y(1)=0$, ומצאו $y(e)$.",
+      "explanation_en": "**$y=\\ln x$, so $y(e)=1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**$y=\\ln x$, ולכן $y(e)=1$.**\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "separable_ode"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "73582e48-1a3c-58ec-b8d2-a6186944fdad",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: $y=\\sin x$ satisfies $y''+y=0$.",
+      "stem_he": "נכון או לא נכון: $y=\\sin x$ מקיימת $y''+y=0$.",
+      "explanation_en": "**$y''=-\\sin x$, so $y''+y=0$** — **true**.",
+      "explanation_he": "**$y''=-\\sin x$, ולכן $y''+y=0$** — **נכון**.",
+      "skill_atoms": [
+        "ode_verify"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "a1a68b36-774a-52de-948d-3a14a32915ec",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $y=Ce^{-2t}$ with $y(0)=5$, find $y(1)$ (round to 4).",
+      "stem_he": "עבור $y=Ce^{-2t}$ עם $y(0)=5$, מצאו $y(1)$ (עגלו ל-4).",
+      "explanation_en": "**$C=5$, so $y(1)=5e^{-2}\\approx 0.6767$.**\n\n**Answer:** $\\approx 0.6767$.",
+      "explanation_he": "**$C=5$, ולכן $y(1)=5e^{-2}\\approx 0.6767$.**\n\n**תשובה:** $\\approx 0.6767$.",
+      "skill_atoms": [
+        "exponential_ode"
+      ],
+      "answer_payload": {
+        "value": 0.676676
+      },
+      "source_item_id": "1f58738f-54f1-50a9-b4ed-30a2f8b1ebd8",
+      "points_level_min": "5pt",
+      "correct_answer": "0.676676"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Solve $\\dfrac{dy}{dx}=2x+1$ with $y(0)=0$, then find $y(3)$.",
+      "stem_he": "פתרו $\\dfrac{dy}{dx}=2x+1$ עם $y(0)=0$, ומצאו $y(3)$.",
+      "explanation_en": "**$y=x^2+x$, so $y(3)=12$.**\n\n**Answer:** $12$.",
+      "explanation_he": "**$y=x^2+x$, ולכן $y(3)=12$.**\n\n**תשובה:** $12$.",
+      "skill_atoms": [
+        "separable_ode"
+      ],
+      "answer_payload": {
+        "value": 12
+      },
+      "source_item_id": "2aad3491-b11d-514c-84dc-08de47a171b5",
+      "points_level_min": "5pt",
+      "correct_answer": "12"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Solve $\\dfrac{dy}{dx}=\\cos x$ with $y(0)=0$, then find $y\\!\\left(\\tfrac{\\pi}{2}\\right)$.",
+      "stem_he": "פתרו $\\dfrac{dy}{dx}=\\cos x$ עם $y(0)=0$, ומצאו $y\\!\\left(\\tfrac{\\pi}{2}\\right)$.",
+      "explanation_en": "**$y=\\sin x$, so $y(\\tfrac{\\pi}{2})=1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**$y=\\sin x$, ולכן $=1$.**\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "separable_ode"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "1187fef7-4f1b-5538-a4ae-7c8c5b720607",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
     }
   ],
   "est_minutes": 60,
