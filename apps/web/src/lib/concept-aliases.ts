@@ -45,6 +45,19 @@ export const CONCEPT_ID_ALIASES: Record<string, string> = {
   logarithmic_equations: 'logarithms',
   chi_square_goodness_of_fit: 'statistics_inference',
   central_limit_theorem: 'statistics_inference',
+  // Syllabus concepts that map to an existing depth-appropriate lesson
+  // (close catalog coverage gaps — see docs/curriculum/scope-coverage-2026-07-19.md).
+  // NOTE: only aliased where the target lesson's level matches the served track.
+  // capacitors_parallel_plate / em_waves / normal_distribution_basics are NOT
+  // aliased: their only candidate lessons are university-level, which would
+  // over-serve HS learners. They remain documented gaps pending HS authoring.
+  normal_distribution_z_scores: 'statistics_inference',
+  photoelectric_effect: 'modern_physics_intro',
+  extreme_value_theorem: 'absolute_extrema',
+  intermediate_value_theorem: 'continuity',
+  sequences_monotone_bounded: 'series_convergence_tests',
+  series_absolute_convergence: 'series_convergence_advanced',
+  convergence_divergence_integrals: 'improper_integrals',
   // University track (KG syllabus ids → existing authored lessons)
   uni_functions_review: 'function_basics_uni',
   uni_limits: 'limits',
