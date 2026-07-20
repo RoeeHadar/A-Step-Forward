@@ -239,6 +239,13 @@
       "body_he_md": "**קיצונים מוחלטים על $[a,b]$ — רשימת בחינה:**\n1. מצאו כל $x$ ב-$(a,b)$ שבהם $f'(x)=0$ או $f'(x)$ לא קיימת.\n2. חשבו $f(x)$ בכל קריטית ובקצוות $a,b$.\n3. הגדול ביותר = מקסימום מוחלט; הקטן = מינימום. ציינו מיקום.\n\n**מבחן נגזרת שנייה — כללים:**\n- $f'(c)=0$, $f''(c)>0$ → **מינימום** מקומי.\n- $f'(c)=0$, $f''(c)<0$ → **מקסימום** מקומי.\n- $f''(c)=0$ → **אין מסקנה**; מבחן ראשון.\n\n**אופטימיזציה שימושית — לפני הגשה:**\n- [ ] תרשים עם משתנים.\n- [ ] משוואת אילוץ ואלימינציה.\n- [ ] פונקציית מטרה במשתנה אחד + תחום.\n- [ ] נקודות קריטיות; שורשים מחוץ לתחום נזרקו.\n- [ ] מקס/מין אומת (סימן $f''$ או טבלה).\n- [ ] תשובה: ממדים **וגם** ערך עם יחידות.\n\n**ניהול זמן:** הקדישו זמן דומה להכנה ולחשבון — תרשים מהיר גורם לאובדן הנקודות הגדול ביותר."
     },
     {
+      "kind": "theory",
+      "title_en": "Optimization archetypes: geometry, real-world, functional",
+      "title_he": "ארכיטיפי אופטימיזציה: גאומטריה, עולם אמיתי, פונקציונלי",
+      "body_en_md": "<!-- EXAM_OPT_ARCH -->\n**opt_geometry.** Max/min area, perimeter, or distance in a geometric figure (rectangle in triangle, cylinder in sphere, path reflection).\n\n**opt_real_world.** Cost, profit, material, time — same calculus, with units and domain constraints from the story.\n\n**opt_functional.** Maximize/minimize a pure function value: max slope on a curve, max vertical distance between $f$ and $g$, max $|f(x)-L|$.",
+      "body_he_md": "**opt_geometry.** מקסימום/מינימום שטח, היקף או מרחק באיור גאומטרי.\n\n**opt_real_world.** עלות, רווח, חומר, זמן — אותו חשבון דיפרנציאלי עם יחידות ואילוצי תחום.\n\n**opt_functional.** מקסימום שיפוע, מרחק אנכי מקסימלי בין $f$ ל-$g$, מקסימום $|f(x)-L|$."
+    },
+    {
       "kind": "summary",
       "title_en": "Summary",
       "title_he": "סיכום",
@@ -1021,6 +1028,63 @@
         "correct_index": 0
       },
       "ord": 25
+    },
+    {
+      "kind": "open",
+      "difficulty": "hard",
+      "facets": [
+        "opt_geometry"
+      ],
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "stem_en": "A rectangle is inscribed in a right triangle with legs 6 and 8, with sides parallel to the legs. Maximize the rectangle area: set $A(x)$, find critical points, and justify the maximum.",
+      "stem_he": "מלבן חסום במשולש ישר-זווית עם ניצבים 6 ו-8, צלעות מקבילות לניצבים. מקסמו את שטח המלבן: הציבו $A(x)$, מצאו נקודות קריטיות והצדיקו מקסימום.",
+      "correct_answer": "A(x)=x*(8-8x/6); A'=0; endpoint check",
+      "explanation_en": "Geometry optimization: similar triangles give height in terms of width $x$, area $A(x)=x\\cdot h(x)$, solve $A'(x)=0$, compare endpoints. Sketch first — opt_geometry stems fail when the figure constraint is wrong.",
+      "explanation_he": "אופטימיזציה גאומטרית: דמיון משולשים נותן גובה במונחי $x$, $A(x)=x\\cdot h(x)$, $A'=0$, השוואת קצוות. סקצו תחילה.",
+      "id": "optimization_problems-opt-arch-26",
+      "ord": 26,
+      "skill_atoms": []
+    },
+    {
+      "kind": "open",
+      "difficulty": "medium",
+      "facets": [
+        "opt_real_world"
+      ],
+      "archetypes": [
+        "procedural",
+        "conceptual"
+      ],
+      "stem_en": "A manufacturer’s cost is $C(x)=x^3-6x^2+20x$ for $x$ units (domain $x\\ge 0$). Find the production level that minimizes average cost $C(x)/x$ on $(0,\\infty)$, interpreting units.",
+      "stem_he": "עלות יצרן $C(x)=x^3-6x^2+20x$ ל-$x$ יחידות. מצאו רמת ייצור שמזערת עלות ממוצעת $C(x)/x$ ב-$(0,\\infty)$, עם יחידות.",
+      "correct_answer": "minimize A(x)=x^2-6x+20; A'=2x-6=0 => x=3",
+      "explanation_en": "Real-world optimization: average cost $A(x)=C(x)/x=x^2-6x+20$, $A'(x)=2x-6=0\\Rightarrow x=3$. Check $A''>0$. State that $x$ is units produced — units matter in the story.",
+      "explanation_he": "אופטימיזציה מהעולם האמיתי: $A(x)=C/x$, $A'=0$ ב-$x=3$. ציינו יחידות.",
+      "id": "optimization_problems-opt-arch-27",
+      "ord": 27,
+      "skill_atoms": []
+    },
+    {
+      "kind": "open",
+      "difficulty": "hard",
+      "facets": [
+        "opt_functional"
+      ],
+      "archetypes": [
+        "procedural",
+        "proof"
+      ],
+      "stem_en": "For $f(x)=x^2$ and $g(x)=2x$ on $[0,2]$, maximize the vertical distance $|f(x)-g(x)|$. Also state where the slope of $f$ is maximized on the interval.",
+      "stem_he": "עבור $f(x)=x^2$ ו-$g(x)=2x$ ב-$[0,2]$, מקסמו את המרחק האנכי $|f-g|$. ציינו גם היכן שיפוע $f$ מקסימלי בקטע.",
+      "correct_answer": "h=x^2-2x; critical at x=1; slope of f is 2x max at x=2",
+      "explanation_en": "Functional optimization: maximize $|f-g|$ via $h=f-g$ critical points; max slope of $f$ is $\\max f'$ on the interval (here $f'=2x$, max at right endpoint). These are pure function-value / derivative extrema — not a story problem.",
+      "explanation_he": "אופטימיזציה פונקציונלית: מקסמו $|f-g|$ דרך קריטיים של $h=f-g$; שיפוע מקסימלי = מקס׳ $f'$ בקטע.",
+      "id": "optimization_problems-opt-arch-28",
+      "ord": 28,
+      "skill_atoms": []
     }
   ],
   "est_minutes": 65,

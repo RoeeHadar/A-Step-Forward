@@ -126,6 +126,14 @@ jobs:
       - name: Facet checklist audit (piloted concept families)
         run: node scripts/audit-lesson-facets.mjs --strict
 
+      - name: Exam topic coverage (enforced tracks: 3pt/4pt/5pt/physics/makhina/uni)
+        run: node scripts/audit-exam-topic-coverage.mjs --strict
+
+      - name: Catalog shelving + empty learn targets
+        run: |
+          node scripts/audit-catalog-shelving.mjs --strict
+          node scripts/audit-empty-learn-targets.mjs --strict
+
       - name: Rewrite-bar audit (per-lesson depth floors for rewritten lessons)
         run: node scripts/audit-lesson-rewrite-bar.mjs --allowlist=scripts/seed_data/rewrite-bar-allowlist.json --strict
 

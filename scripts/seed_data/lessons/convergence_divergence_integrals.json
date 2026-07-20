@@ -1,0 +1,1090 @@
+{
+  "concept_id": "convergence_divergence_integrals",
+  "subject": "calculus_1",
+  "level": "advanced",
+  "math_track": [
+    "university",
+    "calc1"
+  ],
+  "title_en": "Convergence & Divergence of Improper Integrals",
+  "title_he": "התכנסות והתבדרות של אינטגרלים מוכללים",
+  "summary_en": "Classify $\\int_a^\\infty f$ and $\\int_a^b$ with endpoint singularities as convergent or divergent via limits of proper integrals and comparison.",
+  "summary_he": "מסווגים $\\int_a^\\infty f$ ואינטגרלים עם סינגולריות בקצה כמתכנסים או מתבדרים דרך גבולות של אינטגרלים רגילים והשוואה.",
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "Convergence & Divergence of Improper Integrals",
+      "title_he": "התכנסות והתבדרות של אינטגרלים מוכללים",
+      "body_en_md": "An improper integral **converges** when the defining limit of proper integrals exists and is finite; otherwise it **diverges**. Split at singularities; compare with $p$-integrals.",
+      "body_he_md": "אינטגרל מוכלל **מתכנס** כאשר גבול האינטגרלים הרגילים קיים וסופי; אחרת **מתבדר**. פצלו בסינגולריות; השוו לאינטגרלי $p$."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Formal Definitions",
+      "title_he": "הגדרות פורמליות",
+      "body_en_md": "**Type I — Infinite limits:**\n$$\\int_a^\\infty f(x)\\,dx = \\lim_{b\\to\\infty} \\int_a^b f(x)\\,dx.$$\n$$\\int_{-\\infty}^b f(x)\\,dx = \\lim_{a\\to-\\infty} \\int_a^b f(x)\\,dx.$$\n$$\\int_{-\\infty}^\\infty f(x)\\,dx = \\int_{-\\infty}^c f(x)\\,dx + \\int_c^\\infty f(x)\\,dx.$$\nBoth halves must converge independently for the full integral to converge.\n\n**Type II — Unbounded integrand at $x=c \\in [a,b]$:**\n- Discontinuity at the **right** endpoint: $\\int_a^b f\\,dx = \\lim_{t\\to b^-}\\int_a^t f\\,dx$.\n- Discontinuity at the **left** endpoint: $\\int_a^b f\\,dx = \\lim_{t\\to a^+}\\int_t^b f\\,dx$.\n- Discontinuity in the **interior**: split at $c$ and handle each piece.\n\n**Convergence:** If the limit exists and is finite, the integral **converges**. Otherwise it **diverges** (the limit is infinite or does not exist).\n\n**Absolute convergence:** If $\\int |f|\\,dx$ converges, then $\\int f\\,dx$ converges — useful when oscillatory integrands appear.\n\n**Exam habit:** never apply the Fundamental Theorem directly across $\\infty$ or a singularity; always introduce $b$ or $t$ first.\n\n**Mixed type example:** $\\int_0^\\infty \\frac{1}{x^2}\\,dx$ has both an infinite limit and a singularity at $x=0$. Split at any interior point (say $x=1$) and analyze each piece separately — both must converge for the whole integral to converge.",
+      "body_he_md": "**טיפוס I — גbולות אינסופיים:**\n$$\\int_a^\\infty f(x)\\,dx = \\lim_{b\\to\\infty} \\int_a^b f(x)\\,dx.$$\n$$\\int_{-\\infty}^b f(x)\\,dx = \\lim_{a\\to-\\infty} \\int_a^b f(x)\\,dx.$$\n$$\\int_{-\\infty}^\\infty f(x)\\,dx = \\int_{-\\infty}^c f\\,dx + \\int_c^\\infty f\\,dx.$$\nשני החצאים חייבים להתכנס בנפרד כדי שהאינטegral המלא יתכנס.\n\n**טיפוס II — אינטegrand לא חסום ב-$x=c \\in [a,b]$:**\n- אי-רציפות ב**קצה ימין**: $\\int_a^b f\\,dx = \\lim_{t\\to b^-}\\int_a^t f\\,dx$.\n- אי-רציפות ב**קצה שמאל**: $\\int_a^b f\\,dx = \\lim_{t\\to a^+}\\int_t^b f\\,dx$.\n- אי-רציפות **בפnים**: פצלו ב-$c$ וטפלו בכל חלק.\n\n**התכנסות:** אם הגbול קיים וסופי, האינטegral **מתכנס**. אחרת הוא **מתbדר** (הגbול אינסופי או לא קיים).\n\n**התכנסות מוחלטת:** אם $\\int |f|\\,dx$ מתכנס, אז $\\int f\\,dx$ מתכנס — שימושי כשמופיעים אינטegralים מתנdדים.\n\n**הרגל לבחינה:** לעולם אל תיישמו את משפט היסוד ישירות על $\\infty$ או על singularity; הציגu תחילה $b$ או $t$.\n\n**דוגמה מעורbת:** $\\int_0^\\infty \\frac{1}{x^2}\\,dx$ כולל גbול אינסופי ו-singularity ב-$x=0$. פצלו בנקודה פnימית (למשל $x=1$) ונתחu כל חלק בנפרד — שניהם חייבים להתכנס כדי שהאינtegral המלא יתכנס."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Convergence Tests and Key Results",
+      "title_he": "מבחני התכנסות ותוצאות מרכזיות",
+      "body_en_md": "**$p$-integral (Type I):** $\\int_1^\\infty x^{-p}\\,dx$ converges if and only if $p > 1$.\n\nFor $p \\ne 1$: $\\int_1^b x^{-p}\\,dx = \\frac{b^{1-p}-1}{1-p} \\to \\frac{1}{p-1}$ as $b\\to\\infty$ when $p>1$. For $p = 1$: $\\int_1^\\infty 1/x\\,dx = \\ln b \\to \\infty$ — diverges.\n\n**$p$-integral (Type II):** $\\int_0^1 x^{-p}\\,dx$ converges if and only if $p < 1$. The thresholds are **reversed** compared to Type I.\n\n**Comparison test (direct):** If $0 \\le f(x) \\le g(x)$ for all $x \\ge a$:\n- $\\int_a^\\infty g\\,dx$ converges $\\Rightarrow$ $\\int_a^\\infty f\\,dx$ converges.\n- $\\int_a^\\infty f\\,dx$ diverges $\\Rightarrow$ $\\int_a^\\infty g\\,dx$ diverges.\n\n**Limit comparison:** If $\\lim_{x\\to\\infty} f(x)/g(x) = L > 0$, then $\\int_a^\\infty f\\,dx$ and $\\int_a^\\infty g\\,dx$ either both converge or both diverge. Compare to $1/x^p$ or $e^{-ax}$.\n\n**Exponential decay:** For $a>0$, $\\int_0^\\infty e^{-ax}\\,dx = 1/a$ converges because $e^{-ax}$ beats any power as $x\\to\\infty$.\n\n**Exam memory aid:** Type I on $[1,\\infty)$ needs $p>1$ to tame the tail; Type II on $(0,1]$ needs $p<1$ to tame the spike near zero.\n\n**Log-comparison integrals:** Integrals of the form $\\int_e^\\infty \\frac{1}{x(\\ln x)^p}\\,dx$ reduce to $p$-integrals via $u=\\ln x$. They converge iff $p>1$, exactly like Type I $p$-integrals — a favorite university exam twist.\n\n**Oscillatory integrals:** For $\\int_1^\\infty \\frac{\\sin x}{x}\\,dx$, direct comparison fails because the integrand changes sign. Use absolute convergence or Dirichlet's test instead.",
+      "body_he_md": "**$p$-אינטegral (טיפוס I):** $\\int_1^\\infty x^{-p}\\,dx$ מתכנס אם ורק אם $p > 1$.\n\nעבור $p \\ne 1$: $\\int_1^b x^{-p}\\,dx = \\frac{b^{1-p}-1}{1-p} \\to \\frac{1}{p-1}$ כאשר $b\\to\\infty$ ו-$p>1$. עבור $p = 1$: $\\int_1^\\infty 1/x\\,dx = \\ln b \\to \\infty$ — מתbדר.\n\n**$p$-אינטegral (טיפוס II):** $\\int_0^1 x^{-p}\\,dx$ מתכנס אם ורק אם $p < 1$. הסף **הפוך** לעומת טיפוס I.\n\n**מבחן השוואה (ישיר):** אם $0 \\le f(x) \\le g(x)$ לכל $x \\ge a$:\n- $\\int_a^\\infty g\\,dx$ מתכנס $\\Rightarrow$ $\\int_a^\\infty f\\,dx$ מתכנס.\n- $\\int_a^\\infty f\\,dx$ מתbדר $\\Rightarrow$ $\\int_a^\\infty g\\,dx$ מתbדר.\n\n**השוואת גbולות:** אם $\\lim_{x\\to\\infty} f(x)/g(x) = L > 0$, אז $\\int f\\,dx$ ו-$\\int g\\,dx$ מתנהגים זהה — שניהם מתכנסים או שניהם מתbדרים. השוו ל-$1/x^p$ או $e^{-ax}$.\n\n**דעיכה מעריכית:** עבור $a>0$, $\\int_0^\\infty e^{-ax}\\,dx = 1/a$ מתכנס כי $e^{-ax}$ גובר על כל חזקה כאשר $x\\to\\infty$.\n\n**עזר זיכרון לבחינה:** טיפוס I על $[1,\\infty)$ דורש $p>1$ כדי לרסן את הזנb; טיפוס II על $(0,1]$ דורש $p<1$ כדי לרסן את הקיצון ליד אפס.\n\n**אינtegralים עם לוג:** אינtegralים מהצורה $\\int_e^\\infty \\frac{1}{x(\\ln x)^p}\\,dx$ מצטמצמים ל-$p$-אינtegralים דרך $u=\\ln x$. הם מתכנסים אמ\"מ $p>1$ — טריק אהוב בבחינות אוניברסיטאיות.\n\n**אינtegralים מתנdדים:** עבור $\\int_1^\\infty \\frac{\\sin x}{x}\\,dx$, השוואה ישירה נכשלת כי האינtegrand משנה סימן. השתמשu בהתכנסות מוחלטת או במבחן דירichlet במקום."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Type I Integral",
+      "title_he": "דוגמה פתורה 1 — אינטגרל טיפוס I",
+      "body_en_md": "**Evaluate:** $\\int_1^\\infty \\frac{1}{x^2}\\,dx$.\n\nThis is a Type I improper integral — the upper limit is $\\infty$. The integrand $x^{-2}$ is continuous and bounded on every finite interval $[1,b]$, so we only need to handle the infinite endpoint.\n\n### Move 1: Write as a limit.\nReplace $\\infty$ with a parameter $b$ and take the limit last:\n$$\\int_1^\\infty \\frac{1}{x^2}\\,dx = \\lim_{b\\to\\infty} \\int_1^b x^{-2}\\,dx.$$\n\n### Move 2: Evaluate the definite integral.\nUse the power rule for $n=-2$:\n$$\\int_1^b x^{-2}\\,dx = \\left[\\frac{x^{-1}}{-1}\\right]_1^b = -\\frac{1}{b} + \\frac{1}{1} = 1 - \\frac{1}{b}.$$\n\n### Move 3: Take the limit.\nAs $b\\to\\infty$, the term $1/b\\to 0$:\n$$\\lim_{b\\to\\infty} \\left(1 - \\frac{1}{b}\\right) = 1.$$\n\nThe integral **converges** to $1$. This matches the $p$-test with $p=2>1$. **Self-check:** the tail area under $1/x^2$ is finite because $1/x^2$ decays faster than $1/x$. **Exam tip:** always state \"converges to 1\" rather than just writing $1$ — convergence language earns full marks on university rubrics.",
+      "body_he_md": "**חשבו:** $\\int_1^\\infty \\frac{1}{x^2}\\,dx$.\n\nזהו אינטegral לא אמיתי מטיפוס I — הגbול העליון הוא $\\infty$. האינטegrand $x^{-2}$ רציף וחסום בכל קטע סופי $[1,b]$, לכן נדרש לטפל רק בקצה האינסופי.\n\n### צעד 1: כתיבה כגbול.\nהחליפu את $\\infty$ בפרמטר $b$ וקחu את הגbול בסוף:\n$$\\int_1^\\infty \\frac{1}{x^2}\\,dx = \\lim_{b\\to\\infty} \\int_1^b x^{-2}\\,dx.$$\n\n### צעד 2: חישוב האינטegral המסויים.\nהשתמשu בחוק חזקות עבור $n=-2$:\n$$\\int_1^b x^{-2}\\,dx = \\left[\\frac{x^{-1}}{-1}\\right]_1^b = -\\frac{1}{b} + 1 = 1 - \\frac{1}{b}.$$\n\n### צעד 3: לקיחת הגbול.\nכאשר $b\\to\\infty$, האיבר $1/b\\to 0$:\n$$\\lim_{b\\to\\infty} \\left(1 - \\frac{1}{b}\\right) = 1.$$\n\nהאינטegral **מתכנס** ל-$1$. זה תואם $p$-מבחן עם $p=2>1$. **בדיקה:** שטח הזנb מתחת ל-$1/x^2$ סופי כי $1/x^2$ דועך מהר יותר מ-$1/x$. **טיפ לבחינה:** כתbו \"מתכנס ל-$1$\" ולא רק $1$ — ניסוח התכנסות מרוויח נקודות מלאות בבחינות."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Evaluate or determine convergence: $\\int_1^\\infty \\frac{1}{\\sqrt{x}}\\,dx$.",
+      "body_he_md": "חשבו או קבעו התכנסות: $\\int_1^\\infty x^{-1/2}\\,dx$.",
+      "checkpoint_solution_en": "For $x \\ge 1$: $x^2+3 > x^2$, so $\\frac{1}{x^2+3} < \\frac{1}{x^2}$.\n\nBoth integrands are non-negative on $[1,\\infty)$, so the direct comparison test applies. We know $\\int_1^\\infty \\frac{1}{x^2}\\,dx = 1$ converges ($p=2>1$).\n\nSince $0 \\le \\frac{1}{x^2+3} \\le \\frac{1}{x^2}$ and the larger integral converges, the smaller integral $\\int_1^\\infty \\frac{1}{x^2+3}\\,dx$ also **converges**.\n\nWe do not need the exact value — convergence is enough here.",
+      "checkpoint_solution_he": "עבור $x \\ge 1$: $x^2+3 > x^2$, לכן $\\frac{1}{x^2+3} < \\frac{1}{x^2}$.\n\nשני האינטegrandים אינם שליליים על $[1,\\infty)$, לכן מבחן ההשוואה הישיר חל. ידוע ש-$\\int_1^\\infty \\frac{1}{x^2}\\,dx = 1$ מתכנס ($p=2>1$).\n\nמכיוון ש-$0 \\le \\frac{1}{x^2+3} \\le \\frac{1}{x^2}$ והאינטegral הגדול יותר מתכנס, גם האינטegral הקטן יותר $\\int_1^\\infty \\frac{1}{x^2+3}\\,dx$ **מתכנס**.\n\nאין צורך בערך המדויק — כאן מספיקה התכנסות."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Type II Integral",
+      "title_he": "דוגמה פתורה 2 — אינטגרל טיפוס II",
+      "body_en_md": "**Evaluate:** $\\int_0^1 \\frac{1}{\\sqrt{x}}\\,dx$.\n\nThis is Type II: the integrand $f(x)=x^{-1/2}$ is unbounded at $x=0$ (vertical asymptote). The interval $[0,1]$ is finite, but we must replace the left endpoint with a parameter before integrating.\n\n### Move 1: Identify the singularity and write as a limit.\nThe blow-up occurs at the left endpoint $x=0$:\n$$\\int_0^1 x^{-1/2}\\,dx = \\lim_{t\\to 0^+} \\int_t^1 x^{-1/2}\\,dx.$$\n\n### Move 2: Evaluate the antiderivative on $[t,1]$.\nPower rule with $n=-1/2$ gives antiderivative $2\\sqrt{x}$:\n$$\\int_t^1 x^{-1/2}\\,dx = [2\\sqrt{x}]_t^1 = 2\\sqrt{1} - 2\\sqrt{t} = 2 - 2\\sqrt{t}.$$\n\n### Move 3: Take the limit as $t\\to 0^+$.\nSince $\\sqrt{t}\\to 0$:\n$$\\lim_{t\\to 0^+} (2 - 2\\sqrt{t}) = 2.$$\n\nThe integral **converges** to $2$. Here $p=1/2<1$, confirming the Type II $p$-test. **Common slip:** plugging $x=0$ directly into $2\\sqrt{x}$ without the limit. **Exam tip:** for endpoint singularities, always approach from inside the interval ($t\\to 0^+$, not $t=0$). **Self-check:** substitution $u=\\sqrt{x}$ converts this to a bounded integral on $[0,1]$, confirming the area is finite.",
+      "body_he_md": "**חשבו:** $\\int_0^1 \\frac{1}{\\sqrt{x}}\\,dx$.\n\nזהו טיפוס II: האינטegrand $f(x)=x^{-1/2}$ לא חסום ב-$x=0$ (אסימptוטה אנכית). הקטע $[0,1]$ סופי, אך יש להחליף את הקצה השמאלי בפרמטר לפני האינטegrציה.\n\n### צעד 1: זיהוי singularity וכתיבה כגbול.\nהפיצוץ מתרחש בקצה השמאלי $x=0$:\n$$\\int_0^1 x^{-1/2}\\,dx = \\lim_{t\\to 0^+} \\int_t^1 x^{-1/2}\\,dx.$$\n\n### צעד 2: חישוב האינטegral על $[t,1]$.\nחוק חזקות עם $n=-1/2$ נותן primitive $2\\sqrt{x}$:\n$$\\int_t^1 x^{-1/2}\\,dx = [2\\sqrt{x}]_t^1 = 2 - 2\\sqrt{t}.$$\n\n### צעד 3: גbול כאשר $t\\to 0^+$.\nמכיוון ש-$\\sqrt{t}\\to 0$:\n$$\\lim_{t\\to 0^+} (2 - 2\\sqrt{t}) = 2.$$\n\nהאינטegral **מתכנס** ל-$2$. כאן $p=1/2<1$, מאשר $p$-מבחן לטיפוס II. **טעות נפוצה:** הצבת $x=0$ ישירות ב-$2\\sqrt{x}$ בלי הגbול. **טיפ לבחינה:** ל-singularities בקצה, תמיד התקרbו מתוך הקטע ($t\\to 0^+$, לא $t=0$). **בדיקה:** הצבה $u=\\sqrt{x}$ ממירה לאינטegral חסום על $[0,1]$, מאשרת שהשטח סופי."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Use the comparison test to determine if $\\int_1^\\infty \\frac{1}{x^2 + 3}\\,dx$ converges.",
+      "body_he_md": "השתמשו במבחן ההשוואה לקביעת התכנסות $\\int_1^\\infty \\frac{1}{x^2+3}\\,dx$.",
+      "checkpoint_solution_en": "For $x \\ge 1$: $x^2+3 > x^2$, so $\\frac{1}{x^2+3} < \\frac{1}{x^2}$.\n\nBoth integrands are non-negative on $[1,\\infty)$, so the direct comparison test applies. We know $\\int_1^\\infty \\frac{1}{x^2}\\,dx = 1$ converges ($p=2>1$).\n\nSince $0 \\le \\frac{1}{x^2+3} \\le \\frac{1}{x^2}$ and the larger integral converges, the smaller integral $\\int_1^\\infty \\frac{1}{x^2+3}\\,dx$ also **converges**.\n\nWe do not need the exact value — convergence is enough here.",
+      "checkpoint_solution_he": "עבור $x \\ge 1$: $x^2+3 > x^2$, לכן $\\frac{1}{x^2+3} < \\frac{1}{x^2}$.\n\nשני האינטegrandים אינם שליליים על $[1,\\infty)$, לכן מבחן ההשוואה הישיר חל. ידוע ש-$\\int_1^\\infty \\frac{1}{x^2}\\,dx = 1$ מתכנס ($p=2>1$).\n\nמכיוון ש-$0 \\le \\frac{1}{x^2+3} \\le \\frac{1}{x^2}$ והאינטegral הגדול יותר מתכנס, גם האינטegral הקטן יותר $\\int_1^\\infty \\frac{1}{x^2+3}\\,dx$ **מתכנס**.\n\nאין צורך בערך המדויק — כאן מספיקה התכנסות."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Laplace Transform / Gamma Function (Exam Level)",
+      "title_he": "דוגמה פתורה 3 — פונקציית גמא (רמת בחינה)",
+      "body_en_md": "**Show** that $\\int_0^\\infty e^{-x}\\,dx = 1$ and evaluate $\\int_0^\\infty x e^{-x}\\,dx$ (the gamma function value $\\Gamma(2)$).\n\nBoth are Type I integrals on $[0,\\infty)$ with exponential decay — a standard exam pattern linking improper integrals to integration by parts and factorial identities. These appear frequently on university Calc I finals and in probability normalization problems.\n\n**Part 1 — Base case:**\n$$\\int_0^\\infty e^{-x}\\,dx = \\lim_{b\\to\\infty}\\int_0^b e^{-x}\\,dx = \\lim_{b\\to\\infty}[-e^{-x}]_0^b = \\lim_{b\\to\\infty}(-e^{-b}+1) = 0+1 = 1.$$\n\n**Part 2 — Integration by parts:** Set $u=x$, $dv=e^{-x}\\,dx$, so $du=dx$ and $v=-e^{-x}$:\n$$\\int_0^b xe^{-x}\\,dx = [-xe^{-x}]_0^b + \\int_0^b e^{-x}\\,dx = -be^{-b} + 0 + [-e^{-x}]_0^b = -be^{-b} + 1 - e^{-b}.$$\n\nAs $b\\to\\infty$: $be^{-b}\\to0$ (L'Hôpital or growth comparison) and $e^{-b}\\to0$. Each boundary term vanishes because exponential decay dominates polynomial growth. Therefore:\n$$\\int_0^\\infty xe^{-x}\\,dx = 1 = (2-1)! = \\Gamma(2).$$\n\n**Exam tip:** for $\\int_0^\\infty x^n e^{-ax}\\,dx$, repeated IBP reduces the power by one each time until you reach Part 1. **Self-check:** $\\Gamma(n)=(n-1)!$ gives $\\Gamma(2)=1!=1$ ✓. The pattern generalizes: $\\int_0^\\infty x^n e^{-x}\\,dx = n!$ for every non-negative integer $n$.",
+      "body_he_md": "**הוכיחu** ש-$\\int_0^\\infty e^{-x}\\,dx = 1$ וחשbו $\\int_0^\\infty x e^{-x}\\,dx$ (ערך פונקציית גמא $\\Gamma(2)$).\n\nשניהם אינטegralים מטיפוס I על $[0,\\infty)$ עם דעיכה מעריכית — דפוס בחינה סטנדרטי שמקשר אינטegralים לא אמיתיים לאינטegrציה בחלקים ולזהויות עצרת. אלה מופיעים לעתים קרובות בבחינות סופיות בחשבון ובבעיות נורmalizציה בהסתברות.\n\n**חלק 1 — מקרה בסיס:**\n$$\\int_0^\\infty e^{-x}\\,dx = \\lim_{b\\to\\infty}\\int_0^b e^{-x}\\,dx = \\lim_{b\\to\\infty}[-e^{-x}]_0^b = \\lim_{b\\to\\infty}(-e^{-b}+1) = 1.$$\n\n**חלק 2 — אינטegrציה בחלקים:** $u=x$, $dv=e^{-x}\\,dx$, כלומר $du=dx$ ו-$v=-e^{-x}$:\n$$\\int_0^b xe^{-x}\\,dx = [-xe^{-x}]_0^b + \\int_0^b e^{-x}\\,dx = -be^{-b} + 1 - e^{-b}.$$\n\nכאשר $b\\to\\infty$: $be^{-b}\\to0$ (L'Hôpital או השוואת צמיחה) ו-$e^{-b}\\to0$. כל איבר גbול מתאפס כי דעיכה מעריכית גוברת על צמיחת פולינום. לכן:\n$$\\int_0^\\infty xe^{-x}\\,dx = 1 = (2-1)! = \\Gamma(2).$$\n\n**טיפ לבחינה:** עבור $\\int_0^\\infty x^n e^{-ax}\\,dx$, IBP חוזר מוריד חזקה בכל פעם עד שמגיעים לחלק 1. **בדיקה:** $\\Gamma(n)=(n-1)!$ נותן $\\Gamma(2)=1!=1$ ✓. הדpוס מתgeneralize: $\\int_0^\\infty x^n e^{-x}\\,dx = n!$ לכל שלם $n$ לא שלילי."
+    },
+    {
+      "kind": "theory",
+      "title_en": "The p-Test and Comparison — Deciding Convergence Without Integrating",
+      "title_he": "מבחן ה-p וההשוואה — הכרעת התכנסות בלי לאנטגרל",
+      "body_en_md": "Often you don't need the *value* of an improper integral — only whether it is finite. Two ideas answer that fast.\n\n### The p-test: the benchmark family\nThe cleanest reference integrals are the powers $1/x^p$. On $[1,\\infty)$:\n$$\\int_1^{\\infty}\\frac{dx}{x^p} \\;\\text{converges} \\iff p>1.$$\nIntuition: the antiderivative is $\\frac{x^{1-p}}{1-p}$; the exponent $1-p$ must be **negative** for $x^{1-p}\\to 0$ as $x\\to\\infty$, i.e. $p>1$. The borderline $p=1$ gives $\\ln x\\to\\infty$ — divergent. Near a singularity, the test flips: $\\int_0^1 \\frac{dx}{x^p}$ converges $\\iff p<1$, because now the danger is at $x\\to 0^+$.\n\n### The tail is all that matters\nConvergence of a Type I integral depends only on the **behaviour as $x\\to\\infty$** (or, for Type II, near the singular point). A finite chunk of a continuous function always contributes a finite area, so you may ignore everything except the tail when judging convergence.\n\n### The comparison test: bound, don't compute\nIf $0\\le f(x)\\le g(x)$ for large $x$:\n- $\\int g$ converges $\\Rightarrow \\int f$ converges (a smaller positive area under a finite one is finite).\n- $\\int f$ diverges $\\Rightarrow \\int g$ diverges (bigger than infinite is infinite).\n\nExample: $\\dfrac{1}{x^2+1}\\le\\dfrac{1}{x^2}$ and $\\int_1^\\infty x^{-2}$ converges ($p=2>1$), so $\\int_1^\\infty\\frac{dx}{x^2+1}$ converges — no antiderivative required.\n\n### Limit comparison for messy integrands\nWhen a clean inequality is awkward, compare *growth rates*: if $\\lim_{x\\to\\infty} f(x)/g(x) = L$ with $0<L<\\infty$, then $\\int f$ and $\\int g$ share the same fate. This turns 'does it converge?' into 'which power of $x$ does the integrand ultimately behave like?' — usually a one-line answer.",
+      "body_he_md": "לעיתים קרובות אין צורך ב*ערך* של אינטגרל לא אמיתי — רק בשאלה אם הוא סופי. שני רעיונות עונים על כך מהר.\n\n### מבחן ה-p: משפחת הייחוס\nאינטגרלי הייחוס הנקיים ביותר הם החזקות $1/x^p$. על $[1,\\infty)$:\n$$\\int_1^{\\infty}\\frac{dx}{x^p} \\;\\text{converges} \\iff p>1.$$\nאינטואיציה: הפונקציה הקדומה היא $\\frac{x^{1-p}}{1-p}$; המעריך $1-p$ חייב להיות **שלילי** כדי ש-$x^{1-p}\\to 0$ כאשר $x\\to\\infty$, כלומר $p>1$. הגבול $p=1$ נותן $\\ln x\\to\\infty$ — מתבדר. ליד נקודת סינגולריות המבחן מתהפך: $\\int_0^1 \\frac{dx}{x^p}$ מתכנס $\\iff p<1$, כי כעת הסכנה היא ב-$x\\to 0^+$.\n\n### רק הזנב קובע\nהתכנסות אינטגרל מסוג I תלויה רק ב**התנהגות כאשר $x\\to\\infty$** (או, בסוג II, ליד הנקודה הסינגולרית). קטע סופי של פונקציה רציפה תמיד תורם שטח סופי, ולכן אפשר להתעלם מהכול פרט לזנב בבואנו להכריע על התכנסות.\n\n### מבחן ההשוואה: חסמו, אל תחשבו\nאם $0\\le f(x)\\le g(x)$ עבור $x$ גדול:\n- $\\int g$ מתכנס $\\Rightarrow \\int f$ מתכנס (שטח חיובי קטן יותר מתחת לשטח סופי הוא סופי).\n- $\\int f$ מתבדר $\\Rightarrow \\int g$ מתבדר (גדול מאינסוף הוא אינסוף).\n\nדוגמה: $\\dfrac{1}{x^2+1}\\le\\dfrac{1}{x^2}$ ו-$\\int_1^\\infty x^{-2}$ מתכנס ($p=2>1$), ולכן $\\int_1^\\infty\\frac{dx}{x^2+1}$ מתכנס — ללא צורך בפונקציה קדומה.\n\n### השוואת גבול לאינטגרנדים מסובכים\nכשאי-שוויון נקי מסורבל, השוו *קצבי גדילה*: אם $\\lim_{x\\to\\infty} f(x)/g(x) = L$ עם $0<L<\\infty$, אז ל-$\\int f$ ול-$\\int g$ אותו גורל. זה הופך את 'האם מתכנס?' ל'לאיזו חזקה של $x$ האינטגרנד דומה בסופו של דבר?' — לרוב תשובה של שורה אחת."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — Deciding Convergence by Comparison",
+      "title_he": "דוגמה פתורה 4 — הכרעת התכנסות בהשוואה",
+      "body_en_md": "**Determine** whether $\\displaystyle\\int_1^{\\infty}\\frac{x}{x^3+2}\\,dx$ converges. If it does, you need not find its value.\n\n### Move 1: Find the tail behaviour\nFor large $x$, the $+2$ is negligible: $\\dfrac{x}{x^3+2}\\approx\\dfrac{x}{x^3}=\\dfrac{1}{x^2}$. This suggests convergence ($p=2>1$) — now prove it rigorously.\n\n### Move 2: Set up a clean comparison\nFor $x\\ge 1$, $x^3+2 > x^3$, so\n$$0 < \\frac{x}{x^3+2} < \\frac{x}{x^3} = \\frac{1}{x^2}.$$\n\n### Move 3: Invoke the p-test on the bound\n$\\displaystyle\\int_1^{\\infty}\\frac{dx}{x^2}$ converges because $p=2>1$.\n\n### Move 4: Conclude by the comparison test\nA nonnegative function trapped below a convergent integral has a convergent integral:\n$$\\int_1^{\\infty}\\frac{x}{x^3+2}\\,dx \\text{ converges.}$$\n\n### Move 5: Why we didn't integrate\nAn antiderivative of $\\frac{x}{x^3+2}$ is genuinely messy (it needs partial fractions over a cubic). The comparison test answered the actual question — *does it converge?* — in four lines. **Reach for comparison whenever the integrand's tail resembles a power of $x$ but the antiderivative is ugly.**\n\n**Answer:** Converges.",
+      "body_he_md": "**קבעו** אם $\\displaystyle\\int_1^{\\infty}\\frac{x}{x^3+2}\\,dx$ מתכנס. אם כן, אין צורך למצוא את ערכו.\n\n### צעד 1: מצאו את התנהגות הזנב\nעבור $x$ גדול, ה-$+2$ זניח: $\\dfrac{x}{x^3+2}\\approx\\dfrac{x}{x^3}=\\dfrac{1}{x^2}$. זה מרמז על התכנסות ($p=2>1$) — כעת נוכיח בקפדנות.\n\n### צעד 2: בנו השוואה נקייה\nעבור $x\\ge 1$, $x^3+2 > x^3$, ולכן\n$$0 < \\frac{x}{x^3+2} < \\frac{x}{x^3} = \\frac{1}{x^2}.$$\n\n### צעד 3: הפעילו את מבחן ה-p על החוסם\n$\\displaystyle\\int_1^{\\infty}\\frac{dx}{x^2}$ מתכנס כי $p=2>1$.\n\n### צעד 4: הסיקו לפי מבחן ההשוואה\nפונקציה אי-שלילית הכלואה מתחת לאינטגרל מתכנס — האינטגרל שלה מתכנס:\n$$\\int_1^{\\infty}\\frac{x}{x^3+2}\\,dx \\text{ converges.}$$\n\n### צעד 5: למה לא אינטגרלנו\nפונקציה קדומה של $\\frac{x}{x^3+2}$ מסובכת באמת (דורשת שברים חלקיים מעל שלישון). מבחן ההשוואה ענה על השאלה האמיתית — *האם מתכנס?* — בארבע שורות. **פנו להשוואה בכל פעם שזנב האינטגרנד דומה לחזקה של $x$ אך הפונקציה הקדומה מכוערת.**\n\n**תשובה:** מתכנס."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Improper Integrals",
+      "title_he": "מדריך שיטה — אינטגרלים לא אמיתיים",
+      "body_en_md": "**Step 1: Identify the type.**\n- **Type I:** an endpoint is $\\pm\\infty$.\n- **Type II:** the integrand is undefined or infinite at some $c \\in [a,b]$.\n- **Mixed:** both features — handle each separately.\n\n**Step 2: Split if necessary.**\n- Two infinite limits: $\\int_{-\\infty}^\\infty = \\int_{-\\infty}^c + \\int_c^\\infty$.\n- Interior singularity: $\\int_a^b = \\int_a^c + \\int_c^b$.\nEvery piece must converge for the whole to converge.\n\n**Step 3: Replace the problematic limit with a parameter.** Evaluate the ordinary definite integral, then take the limit.\n\n**Step 4: Use comparison when direct evaluation is hard.** Compare to $1/x^p$ or $e^{-ax}$.\n\n| Integral | Converges | Diverges |\n|---|---|---|\n| $\\int_1^\\infty x^{-p}\\,dx$ | $p>1$ | $p\\le1$ |\n| $\\int_0^1 x^{-p}\\,dx$ | $p<1$ | $p\\ge1$ |\n| $\\int_0^\\infty e^{-ax}\\,dx$ | $a>0$ | $a\\le0$ |",
+      "body_he_md": "**שלב 1: זהו את הטיפוס.**\n- **טיפוס I:** קצה הוא $\\pm\\infty$.\n- **טיפוס II:** האינטegrand לא מוגדר או אינסופי ב-$c \\in [a,b]$.\n- **מעורb:** שני המאפיינים — טפלו בכל אחד בנפרד.\n\n**שלב 2: פצלו במידת הצורך.**\n- שני גbולות אינסופיים: $\\int_{-\\infty}^\\infty = \\int_{-\\infty}^c + \\int_c^\\infty$.\n- singularity בפnים: $\\int_a^b = \\int_a^c + \\int_c^b$.\nכל חלק חייב להתכנס כדי שהשלם יתכנס.\n\n**שלב 3: החליפו את הגbול הבעייתי בפרמטר.** חשbו את האינטegral המסויים הרגיל, ואז קחu גbול.\n\n**שלב 4: השתמשu בהשוואה כשחישוב ישיר קשה.** השוו ל-$1/x^p$ או $e^{-ax}$.\n\n| אינטegral | מתכנס | מתbדר |\n|---|---|---|\n| $\\int_1^\\infty x^{-p}\\,dx$ | $p>1$ | $p\\le1$ |\n| $\\int_0^1 x^{-p}\\,dx$ | $p<1$ | $p\\ge1$ |\n| $\\int_0^\\infty e^{-ax}\\,dx$ | $a>0$ | $a\\le0$ |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Evaluate $\\int_2^\\infty \\frac{1}{x^3}\\,dx$.",
+          "body_he": "חשבו $\\int_2^\\infty x^{-3}\\,dx$.",
+          "solution_en": "**Solution:**\n\n$[x^{-2}/(-2)]_2^\\infty=0-(-1/8)=1/8$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$1/8$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Does $\\int_1^\\infty \\frac{1}{x}\\,dx$ converge?",
+          "body_he": "האם $\\int_1^\\infty x^{-1}\\,dx$ מתכנס?",
+          "solution_en": "**Solution:**\n\n$[\\ln x]_1^\\infty = \\infty$. **Diverges.** ($p=1$)\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$\\ln b\\to\\infty$. **מתבדר.**\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Evaluate $\\int_0^\\infty e^{-3x}\\,dx$.",
+          "body_he": "חשבו $\\int_0^\\infty e^{-3x}\\,dx$.",
+          "solution_en": "**Solution:**\n\n$\\lim_{b\\to\\infty}[-e^{-3x}/3]_0^b=0+1/3=1/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$1/3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Evaluate $\\int_0^4 \\frac{1}{\\sqrt{4-x}}\\,dx$.",
+          "body_he": "חשבו $\\int_0^4 (4-x)^{-1/2}\\,dx$.",
+          "solution_en": "Singularity at $x=4$. $\\lim_{t\\to4^-}[-2\\sqrt{4-x}]_0^t=0-(-4)=4$.",
+          "solution_he": "**פתרון:**\n\n$\\lim_{t\\to4^-}[-2\\sqrt{4-x}]_0^t=4$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Use the comparison test: does $\\int_1^\\infty \\frac{\\sin^2x}{x^2}\\,dx$ converge?",
+          "body_he": "מבחן השוואה: האם $\\int_1^\\infty \\sin^2x/x^2\\,dx$ מתכנס?",
+          "solution_en": "$0\\le\\sin^2x\\le1$, so $\\sin^2x/x^2\\le1/x^2$. Since $\\int_1^\\infty 1/x^2\\,dx=1<\\infty$, by comparison **converges**.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$0\\le\\sin^2x/x^2\\le1/x^2$. $\\int 1/x^2$ מתכנס ⟹ **מתכנס**.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Evaluate $\\int_0^\\infty x^2 e^{-x}\\,dx$ (= $\\Gamma(3) = 2!$).",
+          "body_he": "חשבו $\\int_0^\\infty x^2 e^{-x}\\,dx$ ($=\\Gamma(3)=2!$).",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nIBP twice: $\\int_0^\\infty x^2e^{-x}\\,dx=2\\int_0^\\infty xe^{-x}\\,dx=2\\cdot1=2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nאינטגרציה בחלקים פעמיים: $2\\int_0^\\infty xe^{-x}\\,dx=2\\cdot1=2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Determine convergence of $\\int_1^\\infty \\frac{\\ln x}{x^2}\\,dx$.",
+          "body_he": "קבעו התכנסות $\\int_1^\\infty (\\ln x)/x^2\\,dx$.",
+          "solution_en": "IBP: $u=\\ln x$, $dv=x^{-2}\\,dx$. Result: $[-\\ln x/x]_1^\\infty+\\int_1^\\infty x^{-2}\\,dx=0+1=1$. **Converges** to $1$.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nאינטגרציה בחלקים. תוצאה: $1$. **מתכנס**.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Does $\\int_{-\\infty}^\\infty \\frac{1}{1+x^2}\\,dx$ converge? Evaluate it.",
+          "body_he": "האם $\\int_{-\\infty}^\\infty 1/(1+x^2)\\,dx$ מתכנס? חשבו.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\int_{-\\infty}^\\infty\\frac{1}{1+x^2}\\,dx=[\\arctan x]_{-\\infty}^\\infty=\\pi/2-(-\\pi/2)=\\pi$. **Converges** to $\\pi$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$[\\arctan x]_{-\\infty}^\\infty=\\pi/2+\\pi/2=\\pi$. **מתכנס**.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Does $\\int_0^1 \\frac{1}{x^2}\\,dx$ converge?",
+          "body_he": "האם $\\int_0^1 x^{-2}\\,dx$ מתכנס?",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\lim_{t\\to0^+}[-1/x]_t^1=-1-(−1/t)=−1+1/t\\to\\infty$. **Diverges.** ($p=2>1$)\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$-1+1/t\\to\\infty$. **מתבדר.**\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "For which values of $p$ does $\\int_e^\\infty \\frac{1}{x(\\ln x)^p}\\,dx$ converge?",
+          "body_he": "לאילו $p$ מתכנס $\\int_e^\\infty 1/(x(\\ln x)^p)\\,dx$?",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nSub $u=\\ln x$, $du=dx/x$. Becomes $\\int_1^\\infty u^{-p}\\,du$. By $p$-test: **converges iff $p>1$**.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nהצבה $u=\\ln x$: $\\int_1^\\infty u^{-p}\\,du$. מתכנס אמ\"מ $p>1$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Show that $\\int_1^\\infty e^{-x}/x\\,dx$ converges by comparison.",
+          "body_he": "הראו שמתכנס $\\int_1^\\infty e^{-x}/x\\,dx$ על ידי השוואה.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nFor $x\\ge1$: $e^{-x}/x\\le e^{-x}$. $\\int_1^\\infty e^{-x}\\,dx=e^{-1}<\\infty$. By comparison **converges**.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$e^{-x}/x\\le e^{-x}$. $\\int_1^\\infty e^{-x}\\,dx=e^{-1}$. לכן **מתכנס**.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Evaluate $\\int_0^\\infty \\frac{1}{(1+x)^3}\\,dx$.",
+          "body_he": "חשבו $\\int_0^\\infty (1+x)^{-3}\\,dx$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$[-(1+x)^{-2}/2]_0^\\infty=0+1/2=1/2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$1/2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Determine if $\\int_0^1 x^{-1/3}(1-x)^{-2/3}\\,dx$ converges. (Hint: Beta function — treat singularities at both ends.)",
+          "body_he": "קבעו התכנסות $\\int_0^1 x^{-1/3}(1-x)^{-2/3}\\,dx$ (פונקציית בטא — אי-רציפויות בשני קצוות).",
+          "solution_en": "Split at $1/2$. Near $x=0$: integrand $\\approx x^{-1/3}$, $p=1/3<1$ → converges. Near $x=1$: integrand $\\approx (1-x)^{-2/3}$, $p=2/3<1$ → converges. **Both parts converge**, so the integral converges. (This equals $B(2/3,1/3)=\\pi/\\sin(\\pi/3)=2\\pi/\\sqrt{3}$.)",
+          "solution_he": "פצלו ב-$1/2$. ליד $0$: $\\approx x^{-1/3}$, $p=1/3<1$ ✓. ליד $1$: $\\approx(1-x)^{-2/3}$, $p=2/3<1$ ✓. **מתכנס**."
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Missing an interior singularity.** $\\int_{-1}^1 \\frac{1}{x^2}\\,dx$ looks harmless on a finite interval, but $1/x^2$ blows up at $x=0$ inside the domain. Split at $0$ before evaluating — otherwise you apply FTC across a discontinuity illegally.\n\n2. **Symmetric limits vs. improper integral.** $\\int_{-\\infty}^\\infty f\\,dx$ requires splitting at a finite point; it is **not** the same as $\\lim_{R\\to\\infty}\\int_{-R}^R f\\,dx$ in general (that latter object is the Cauchy principal value).\n\n3. **$p$-test direction confusion.** Type I on $[1,\\infty)$: converges iff $p>1$. Type II on $(0,1]$: converges iff $p<1$. The inequalities are **opposite**.\n\n4. **Applying FTC without a limit parameter.** Never write $[\\ln x]_0^2$ — $\\ln 0$ is undefined. Always introduce $t\\to 0^+$ first.\n\n**Fix for all four:** scan the interval for $\\infty$ endpoints AND points where the denominator vanishes before integrating.",
+      "body_he_md": "1. **פספוס singularity בפnים הקטע.** $\\int_{-1}^1 \\frac{1}{x^2}\\,dx$ נראה תמים על קטע סופי, אך $1/x^2$ מתפוצץ ב-$x=0$ בתוך התחום. פצלו ב-$0$ לפני החישוב — אחרת מיישמים FTC על אי-רציפות בצורה לא חוקית.\n\n2. **גbולות סימטריים לעומת אינטegral לא אמיתי.** $\\int_{-\\infty}^\\infty f\\,dx$ דורש פיצול בנקודה סופית; זה **לא** זהה ל-$\\lim_{R\\to\\infty}\\int_{-R}^R f\\,dx$ בכלל (האובייקt האחרון הוא ערך ראשי קושי).\n\n3. **בלבול בכיוון $p$-מבחן.** טיפוס I על $[1,\\infty)$: מתכנס אמ\"מ $p>1$. טיפוס II על $(0,1]$: מתכנס אמ\"מ $p<1$. אי-השוויונות **הפוכים**.\n\n4. **יישום FTC בלי פרמטר גbול.** לעולם אל תכתbו $[\\ln x]_0^2$ — $\\ln 0$ לא מוגדר. הציגu תחילה $t\\to 0^+$.\n\n**תיקון לכל ארbaע:** סרקu את הקטע לקצוות $\\infty$ ולנקודות שבהן המכנה מתאפס לפני האינטegrציה."
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "Improper integrals are the bridge between finite Riemann sums and continuous models on unbounded domains — probability, physics, and signal processing all depend on them.\n\nThe same convergence-vs-divergence logic reappears when you study **infinite series** in `concept:series_convergence_advanced`: the $p$-integral test for series is essentially the same $p$-test you learned here.\n\n**Partial fractions** (`concept:integration_partial_fractions`) often produce integrands that need improper evaluation after decomposition.\n\nOn university exams, improper integrals appear as standalone problems and as steps inside Laplace transforms, gamma-function identities, and normalization of continuous distributions.",
+      "body_he_md": "אינטegralים לא אמיתיים הם הגשר בין סכומי רימן סופיים לבין מודלים רציפים על תחומים לא חסומים — הסתברות, פיזיקה ועיבוד אותות תלויים בהם.\n\nאותה לוגיקה של התכנסות מול התbדרות חוזרת בלימוד **טורי אינסוף** ב-`concept:series_convergence_advanced`: מבחן $p$-אינטegral לטורים הוא בעצם אותו $p$-מבחן שלמדתם כאן.\n\n**שברים חלקיים** (`concept:integration_partial_fractions`) לעתים קרובות מייצרים אינטegrand שדורש הערכה לא אמיתית לאחר הפירוק.\n\nבבחינות אוניברסיטאיות, אינטegralים לא אמיתיים מופיעים כשאלות עצמאיות וכשלבים בתוך טrנספורמציית לפלס, זהויות פונקציית גמא, ונורmalizציה של התפלגויות רציפות."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Checklist before you submit:**\n- [ ] Did you scan for singularities **inside** the interval, not just at endpoints?\n- [ ] Type I $p$-test: $\\int_1^\\infty x^{-p}$ converges iff $p>1$.\n- [ ] Type II $p$-test: $\\int_0^1 x^{-p}$ converges iff $p<1$.\n- [ ] Comparison test: both functions must be non-negative on the tail.\n- [ ] $\\int_{-\\infty}^\\infty$: split at any finite $c$; **both** halves must converge.\n- [ ] Did you write the limit parameter before applying FTC?\n\n**Quick comparisons to memorize:**\n- $e^{-x}$ decays faster than any power $x^{-n}$ as $x\\to\\infty$.\n- Near $x=0$: compare to $x^{-p}$ with $p<1$ for convergence.",
+      "body_he_md": "**רשימת בדיקה לפני הגשה:**\n- [ ] האם סרקתם singularities **בתוך** הקטע, לא רק בקצוות?\n- [ ] $p$-מבחן טיפוס I: $\\int_1^\\infty x^{-p}$ מתכנס אמ\"מ $p>1$.\n- [ ] $p$-מבחן טיפוס II: $\\int_0^1 x^{-p}$ מתכנס אמ\"מ $p<1$.\n- [ ] מבחן השוואה: שתי הפונקציות חייבות להיות לא שליליות על הזנb.\n- [ ] $\\int_{-\\infty}^\\infty$: פצלו ב-$c$ סופי; **שני** החצאים חייבים להתכנס.\n- [ ] האם כתbתם פרמטר גbול לפני יישום FTC?\n\n**השוואות מהירות לזכור:**\n- $e^{-x}$ דועך מהר יותר מכל חזקה $x^{-n}$ כאשר $x\\to\\infty$.\n- ליד $x=0$: השוו ל-$x^{-p}$ עם $p<1$ להתכנסות."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Limit definition and comparison",
+      "title_he": "הגדרת גבול והשוואה",
+      "body_en_md": "<!-- STUB_CORE_convergence_divergence_integrals -->\nWrite $\\int_a^\\infty f=\\lim_{B\\to\\infty}\\int_a^B f$. For $\\int_0^1 x^{-p}\\,dx$, converge iff $p<1$. Use comparison and limit-comparison with known $p$-integrals.",
+      "body_he_md": "כתבו גבול של אינטגרלים רגילים. ל-$\\int_0^1 x^{-p}$, התכנסות אמ״ם $p<1$. השתמשו בהשוואה."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- **Type I:** replace $\\infty$ with parameter $b$, integrate on $[a,b]$, then take $b\\to\\infty$ (or the analogous limit at $-\\infty$).\n- **Type II:** replace the singular endpoint with $t$, integrate, then take $t\\to$ the singularity.\n- **$p$-test:** $\\int_1^\\infty x^{-p}$ converges iff $p>1$; $\\int_0^1 x^{-p}$ converges iff $p<1$.\n- **Comparison:** bound your integrand between known convergent or divergent benchmarks.\n- **Always** locate every singularity and infinite endpoint before integrating — missing one invalidates the entire solution.",
+      "body_he_md": "- **טיפוס I:** החליפו $\\infty$ בפרמטר $b$, אינtegralו על $[a,b]$, ואז $b\\to\\infty$ (או גbול אנalog ב-$-\\infty$).\n- **טיפוס II:** החליפו קצה singular ב-$t$, אינtegralו, ואז $t\\to$ נקודת האי-רציפות.\n- **$p$-מבחן:** $\\int_1^\\infty x^{-p}$ מתכנס אמ\"מ $p>1$; $\\int_0^1 x^{-p}$ מתכנס אמ\"מ $p<1$.\n- **השוואה:** כbסu את האינtegrand בין benchmarks ידועים שמתכנסים או מתbדרים.\n- **תמיד** אתרu כל singularity וקצה אינסופי לפני האינtegrציה — פספוס אחד מבטל את כל הפתרון."
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Always write as a limit first before evaluating.",
+      "$p$-test: $\\int_1^\\infty$ converges iff $p>1$; $\\int_0^1$ converges iff $p<1$.",
+      "Comparison test: $f\\le g$, $\\int g$ converges → $\\int f$ converges.",
+      "Handle all singularities inside intervals too."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Direct FTC without limit",
+        "correction": "Always introduce parameter (b or t), compute integral with finite limits, then take the limit.",
+        "detect_phrase_en": "just apply fundamental theorem improper",
+        "detect_phrase_he": "ישירות FTC לא אמיתי"
+      }
+    ],
+    "skill_atoms_unlocked": [
+      "convergence",
+      "improper_integral",
+      "p_test"
+    ],
+    "tutor_pacing_hint": "Start with Type I, clear $p$-integral cases. Then Type II. Then comparison for 'harder' functions.",
+    "next_recommended": [
+      "series_convergence_advanced",
+      "integration_partial_fractions"
+    ]
+  },
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "The integral $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x}\\,dx$:",
+      "stem_he": "האינטגרל $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x}\\,dx$:",
+      "explanation_en": "**$\\int_1^{\\infty}\\tfrac1x=\\lim \\ln b=\\infty$ — it diverges.**\n\n**Answer:** diverges.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$\\int_1^{\\infty}\\tfrac1x$ מתבדר.**\n\n**תשובה:** מתבדר.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "convergence"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\text{diverges}$",
+          "$=1$",
+          "$=0$",
+          "$=\\ln 2$"
+        ],
+        "options_he": [
+          "$\\text{diverges}$",
+          "$=1$",
+          "$=0$",
+          "$=\\ln 2$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "05225dc2-edb2-5f75-892e-0fbafc684989",
+      "points_level_min": "course",
+      "options_en": [
+        "$\\text{diverges}$",
+        "$=1$",
+        "$=0$",
+        "$=\\ln 2$"
+      ],
+      "options_he": [
+        "$\\text{diverges}$",
+        "$=1$",
+        "$=0$",
+        "$=\\ln 2$"
+      ],
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
+    },
+    {
+      "ord": 2,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^2}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^2}\\,dx$.",
+      "explanation_en": "**$\\left[-\\dfrac{1}{x}\\right]_1^{\\infty}=0-(-1)=1$.**\n\n**Answer:** $1$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$\\left[-\\dfrac{1}{x}\\right]_1^{\\infty}=1$.**\n\n**תשובה:** $1$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "c278e2f1-d9d4-551b-bd5b-7728ee81bc61",
+      "points_level_min": "course",
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 3,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^2}\\,dx$ using a limit.",
+      "stem_he": "חשבו $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^2}\\,dx$ בעזרת גבול.",
+      "explanation_en": "**Step 1 — Rewrite as a limit.** $\\displaystyle\\lim_{b\\to\\infty}\\int_1^{b}x^{-2}\\,dx$.\n\n**Step 2 — Antiderivative.** $\\left[-\\dfrac{1}{x}\\right]_1^{b}=-\\dfrac{1}{b}+1$.\n\n**Step 3 — Take the limit.** $\\lim_{b\\to\\infty}\\left(1-\\dfrac{1}{b}\\right)=1$.\n\n**Answer:** $1$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1 — כתיבה כגבול.** $\\lim_{b\\to\\infty}\\int_1^{b}x^{-2}\\,dx$.\n\n**שלב 2 — פונקציה קדומה.** $1-\\dfrac1b$.\n\n**שלב 3 — גבול.** $=1$.\n\n**תשובה:** $1$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Rewrite as a limit.** $\\displaystyle\\lim_{b\\to\\infty}\\int_1^{b}x^{-2}\\,dx$.",
+          "**Step 2 — Antiderivative.** $\\left[-\\dfrac{1}{x}\\right]_1^{b}=-\\dfrac{1}{b}+1$.",
+          "**Step 3 — Take the limit.** $\\lim_{b\\to\\infty}\\left(1-\\dfrac{1}{b}\\right)=1$.",
+          "**Answer:** $1$."
+        ],
+        "steps_he": [
+          "**שלב 1 — כתיבה כגבול.** $\\lim_{b\\to\\infty}\\int_1^{b}x^{-2}\\,dx$.",
+          "**שלב 2 — פונקציה קדומה.** $1-\\dfrac1b$.",
+          "**שלב 3 — גבול.** $=1$.",
+          "**תשובה:** $1$."
+        ]
+      },
+      "source_item_id": "12eca33e-5221-5fdb-8ec0-0e675a9ee5bc",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "course",
+      "archetypes": [
+        "application"
+      ],
+      "needs_review": true
+    },
+    {
+      "ord": 4,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: an improper integral can converge to a finite value.",
+      "stem_he": "נכון או לא נכון: אינטגרל לא אמיתי יכול להתכנס לערך סופי.",
+      "explanation_en": "**Yes — e.g. $\\int_1^{\\infty}x^{-2}=1$** — **true**.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**כן — למשל $\\int_1^{\\infty}x^{-2}=1$** — **נכון**.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "convergence"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "fcd0d1e9-8789-5031-8489-6a9bb16c52b7",
+      "points_level_min": "course",
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
+    },
+    {
+      "ord": 5,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^3}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^3}\\,dx$.",
+      "explanation_en": "**$\\left[-\\dfrac{1}{2x^2}\\right]_1^{\\infty}=0-(-\\tfrac12)=\\tfrac12$.**\n\n**Answer:** $0.5$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$=\\tfrac12$.**\n\n**תשובה:** $0.5$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 0.5
+      },
+      "source_item_id": "a872d782-3f8b-56dc-81d4-38aeec187189",
+      "points_level_min": "course",
+      "correct_answer": "0.5",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.5",
+        "expected": 0.5,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 6,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int_0^{\\infty} e^{-x}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{\\infty} e^{-x}\\,dx$.",
+      "explanation_en": "**$\\left[-e^{-x}\\right]_0^{\\infty}=0-(-1)=1$.**\n\n**Answer:** $1$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$=1$.**\n\n**תשובה:** $1$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "e5f566a8-02d0-57cb-a68d-226b0ebe3c39",
+      "points_level_min": "course",
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 7,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int_2^{\\infty}\\dfrac{1}{x^2}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_2^{\\infty}\\dfrac{1}{x^2}\\,dx$.",
+      "explanation_en": "**$\\left[-\\dfrac{1}{x}\\right]_2^{\\infty}=0-(-\\tfrac12)=\\tfrac12$.**\n\n**Answer:** $0.5$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$=\\tfrac12$.**\n\n**תשובה:** $0.5$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 0.5
+      },
+      "source_item_id": "e0b72ed6-95e8-5b9b-b43f-346d08ad271d",
+      "points_level_min": "course",
+      "correct_answer": "0.5",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.5",
+        "expected": 0.5,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 8,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "$\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^p}\\,dx$ converges when:",
+      "stem_he": "$\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^p}\\,dx$ מתכנס כאשר:",
+      "explanation_en": "**The $p$-test: converges iff $p>1$.**\n\n**Answer:** $p>1$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**מבחן ה-$p$: מתכנס אם ורק אם $p>1$.**\n\n**תשובה:** $p>1$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "p_test"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$p>1$",
+          "$p<1$",
+          "$p=1$",
+          "$p=0$"
+        ],
+        "options_he": [
+          "$p>1$",
+          "$p<1$",
+          "$p=1$",
+          "$p=0$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "7ca43613-26ac-519d-ab05-b37c9315dbff",
+      "points_level_min": "course",
+      "options_en": [
+        "$p>1$",
+        "$p<1$",
+        "$p=1$",
+        "$p=0$"
+      ],
+      "options_he": [
+        "$p>1$",
+        "$p<1$",
+        "$p=1$",
+        "$p=0$"
+      ],
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_0^{\\infty} 2e^{-x}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{\\infty} 2e^{-x}\\,dx$.",
+      "explanation_en": "**$2\\left[-e^{-x}\\right]_0^{\\infty}=2\\cdot 1=2$.**\n\n**Answer:** $2$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$=2$.**\n\n**תשובה:** $2$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "a75002b4-276e-53ea-9b65-b1bd8be78e4e",
+      "points_level_min": "course",
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^4}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^4}\\,dx$.",
+      "explanation_en": "**$\\left[-\\dfrac{1}{3x^3}\\right]_1^{\\infty}=\\tfrac13$.**\n\n**Answer:** $\\tfrac13\\approx 0.3333$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$=\\tfrac13$.**\n\n**תשובה:** $\\approx 0.3333$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 0.333333
+      },
+      "source_item_id": "8f0a8452-bdf0-53a5-adf7-9d79a475954d",
+      "points_level_min": "course",
+      "correct_answer": "0.333333",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.333333",
+        "expected": 0.333333,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_0^{\\infty} e^{-2x}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{\\infty} e^{-2x}\\,dx$.",
+      "explanation_en": "**$\\left[-\\dfrac{e^{-2x}}{2}\\right]_0^{\\infty}=\\tfrac12$.**\n\n**Answer:** $0.5$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$=\\tfrac12$.**\n\n**תשובה:** $0.5$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 0.5
+      },
+      "source_item_id": "f68d8b3b-d930-5f6f-b4e9-7f49f2da161c",
+      "points_level_min": "course",
+      "correct_answer": "0.5",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.5",
+        "expected": 0.5,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_3^{\\infty}\\dfrac{1}{x^2}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_3^{\\infty}\\dfrac{1}{x^2}\\,dx$.",
+      "explanation_en": "**$\\left[-\\dfrac{1}{x}\\right]_3^{\\infty}=\\tfrac13$.**\n\n**Answer:** $\\tfrac13\\approx 0.3333$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$=\\tfrac13$.**\n\n**תשובה:** $\\approx 0.3333$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 0.333333
+      },
+      "source_item_id": "20f361ed-ad0f-510c-bd73-2093ffb425cc",
+      "points_level_min": "course",
+      "correct_answer": "0.333333",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.333333",
+        "expected": 0.333333,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_0^{\\infty}\\dfrac{1}{x^2+1}\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{\\infty}\\dfrac{1}{x^2+1}\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**$[\\arctan x]_0^{\\infty}=\\dfrac{\\pi}{2}\\approx 1.5708$.**\n\n**Answer:** $\\approx 1.5708$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$[\\arctan x]_0^{\\infty}=\\dfrac{\\pi}{2}\\approx 1.5708$.**\n\n**תשובה:** $\\approx 1.5708$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 1.570796
+      },
+      "source_item_id": "9ea4e39d-e738-5fee-956e-15e7a090e080",
+      "points_level_min": "course",
+      "correct_answer": "1.570796",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1.570796",
+        "expected": 1.570796,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_0^{\\infty} x e^{-x}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{\\infty} x e^{-x}\\,dx$.",
+      "explanation_en": "**By parts (this is $\\Gamma(2)=1!$):** $=1$.\n\n**Answer:** $1$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**בחלקים (זהו $\\Gamma(2)=1!$):** $=1$.\n\n**תשובה:** $1$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "a3b0a7ef-23e4-5bfa-a3ec-abd5bb2170f9",
+      "points_level_min": "course",
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_1^{\\infty} e^{-x}\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_1^{\\infty} e^{-x}\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**$\\left[-e^{-x}\\right]_1^{\\infty}=e^{-1}\\approx 0.3679$.**\n\n**Answer:** $\\approx 0.3679$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$=e^{-1}\\approx 0.3679$.**\n\n**תשובה:** $\\approx 0.3679$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 0.367879
+      },
+      "source_item_id": "d0197581-30e2-508f-9092-6adb4385395f",
+      "points_level_min": "course",
+      "correct_answer": "0.367879",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.367879",
+        "expected": 0.367879,
+        "tol": 0.000001
+      }
+    },
+    {
+      "points_level_min": "university",
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "convergence",
+        "improper_integral",
+        "p_test"
+      ],
+      "stem_en": "The improper integral $\\int_1^\\infty x^{-p}\\,dx$ converges for $p=$ ____ (enter the threshold as a number; the integral converges when $p$ is greater than this).",
+      "stem_he": "האינטגרל המוכלל $\\int_1^\\infty x^{-p}\\,dx$ מתכנס עבור $p=$ ____ (הזינו את הסף; ההתכנסות כאשר $p$ גדול מערך זה).",
+      "explanation_en": "**Step 1.** Compute $\\int_1^R x^{-p}\\,dx$ and let $R\\to\\infty$.\n\n**Step 2.** For $p\\neq 1$ the antiderivative is $x^{1-p}/(1-p)$; the limit at $\\infty$ exists iff $1-p<0$, i.e. $p>1$.\n\n**Step 3.** The threshold value in the blank is $1$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** חשבו $\\int_1^R x^{-p}\\,dx$ וקחו $R\\to\\infty$.\n\n**שלב 2.** עבור $p\\neq 1$ הקדומה $x^{1-p}/(1-p)$; הגבול ב-$\\infty$ קיים אמ\"ם $p>1$.\n\n**שלב 3.** ערך הסף בריק הוא $1$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "value": "1"
+      },
+      "correct_answer": "1",
+      "ord": 16
+    },
+    {
+      "points_level_min": "university",
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "convergence",
+        "improper_integral",
+        "p_test"
+      ],
+      "stem_en": "Does $\\int_0^1 x^{-1/2}\\,dx$ converge? Answer 'yes' or 'no'.",
+      "stem_he": "האם $\\int_0^1 x^{-1/2}\\,dx$ מתכנס? ענו 'yes' או 'no'.",
+      "explanation_en": "**Step 1.** Singularity at $x=0$: compare to $p$-integrals near $0$.\n\n**Step 2.** $\\int_0^1 x^{-p}\\,dx$ converges for $p<1$; here $p=1/2<1$.\n\n**Step 3.** Explicitly $[2x^{1/2}]_0^1=2$. Answer: yes.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** הסינגולריות ב-$x=0$: השוו לאינטגרלי $p$ ליד $0$.\n\n**שלב 2.** $\\int_0^1 x^{-p}$ מתכנס ל-$p<1$; כאן $p=1/2$.\n\n**שלב 3.** במפורש $[2\\sqrt{x}]_0^1=2$. תשובה: yes.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "yes",
+          "Yes",
+          "כן"
+        ]
+      },
+      "acceptable_answers": [
+        "yes",
+        "Yes",
+        "כן"
+      ],
+      "ord": 17
+    },
+    {
+      "points_level_min": "university",
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "convergence",
+        "improper_integral",
+        "p_test"
+      ],
+      "stem_en": "Match each concept to the correct description.",
+      "stem_he": "התאימו כל מושג לתיאור הנכון.",
+      "explanation_en": "At infinity need $p>1$; at zero need $p<1$. The borderline $p=1$ cases diverge logarithmically in both regimes.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "באינסוף צריך $p>1$; באפס צריך $p<1$. מקרי הגבול $p=1$ מתבדרים לוגריתמית בשני המשטרים.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "left_en": [
+          "$\\int_1^\\infty x^{-2}\\,dx$",
+          "$\\int_1^\\infty x^{-1}\\,dx$",
+          "$\\int_0^1 x^{-1/2}\\,dx$",
+          "$\\int_0^1 x^{-2}\\,dx$"
+        ],
+        "left_he": [
+          "$\\int_1^\\infty x^{-2}\\,dx$",
+          "$\\int_1^\\infty x^{-1}\\,dx$",
+          "$\\int_0^1 x^{-1/2}\\,dx$",
+          "$\\int_0^1 x^{-2}\\,dx$"
+        ],
+        "right_en": [
+          "Converges (p>1 at ∞)",
+          "Diverges (harmonic at ∞)",
+          "Converges (p<1 at 0)",
+          "Diverges (p≥1 at 0)"
+        ],
+        "right_he": [
+          "מתכנס (p>1 ב-∞)",
+          "מתבדר (הרמוני ב-∞)",
+          "מתכנס (p<1 ב-0)",
+          "מתבדר (p≥1 ב-0)"
+        ],
+        "correct_pairs": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "ord": 18
+    },
+    {
+      "points_level_min": "university",
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "convergence",
+        "improper_integral",
+        "p_test"
+      ],
+      "stem_en": "Order the steps of the standard solution method for this topic.",
+      "stem_he": "סדרו את שלבי שיטת הפתרון הסטנדרטית לנושא זה.",
+      "explanation_en": "Improper integrals are defined as limits of proper ones. Skipping the limit step and writing $\\infty$ inside an antiderivative is not a valid evaluation.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "אינטגרלים מוכללים מוגדרים כגבולות של אינטגרלים ממשיים. דילוג על שלב הגבול וכתיבת $\\infty$ בתוך קדומה אינה הערכה תקפה.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "Identify the problematic endpoint (∞ or a finite singularity).",
+          "Replace it by a finite limit parameter R or ε.",
+          "Evaluate the proper integral in R or ε.",
+          "Take the limit; conclude converge/diverge."
+        ],
+        "steps_he": [
+          "זהו את הקצה הבעייתי (∞ או סינגולריות סופית).",
+          "החליפו בפרמטר גבול סופי R או ε.",
+          "חשבו את האינטגרל הממשי ב-R או ε.",
+          "קחו גבול; הסיקו התכנסות/התבדרות."
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "ord": 19
+    },
+    {
+      "points_level_min": "university",
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "convergence",
+        "improper_integral",
+        "p_test"
+      ],
+      "stem_en": "Select **all** correct statements.",
+      "stem_he": "סמנו את **כל** ההיגדים הנכונים.",
+      "explanation_en": "The $p=2$ tail converges; the harmonic integral diverges. Absolute ⇒ ordinary is general. Comparison tests are stated for nonnegative functions.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "זנב $p=2$ מתכנס; האינטגרל ההרמוני מתבדר. מוחלטת ⇒ רגילה כללי. מבחני השוואה מנוסחים לפונקציות אי-שליליות.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "options_en": [
+          "$\\int_1^\\infty\\frac{1}{x^2}\\,dx$ converges.",
+          "$\\int_1^\\infty\\frac{1}{x}\\,dx$ converges.",
+          "Absolute convergence of an improper integral implies ordinary convergence.",
+          "Comparison requires nonnegative integrands (or absolute values)."
+        ],
+        "options_he": [
+          "$\\int_1^\\infty\\frac{1}{x^2}\\,dx$ מתכנס.",
+          "$\\int_1^\\infty\\frac{1}{x}\\,dx$ מתכנס.",
+          "התכנסות מוחלטת של אינטגרל מוכלל גוררת התכנסות רגילה.",
+          "השוואה דורשת אינטגרנדים אי-שליליים (או ערכים מוחלטים)."
+        ],
+        "correct_indices": [
+          0,
+          2,
+          3
+        ]
+      },
+      "options_en": [
+        "$\\int_1^\\infty\\frac{1}{x^2}\\,dx$ converges.",
+        "$\\int_1^\\infty\\frac{1}{x}\\,dx$ converges.",
+        "Absolute convergence of an improper integral implies ordinary convergence.",
+        "Comparison requires nonnegative integrands (or absolute values)."
+      ],
+      "options_he": [
+        "$\\int_1^\\infty\\frac{1}{x^2}\\,dx$ מתכנס.",
+        "$\\int_1^\\infty\\frac{1}{x}\\,dx$ מתכנס.",
+        "התכנסות מוחלטת של אינטגרל מוכלל גוררת התכנסות רגילה.",
+        "השוואה דורשת אינטגרנדים אי-שליליים (או ערכים מוחלטים)."
+      ],
+      "correct_indices": [
+        0,
+        2,
+        3
+      ],
+      "ord": 20
+    },
+    {
+      "points_level_min": "university",
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "convergence",
+        "improper_integral",
+        "p_test"
+      ],
+      "needs_review": true,
+      "stem_en": "Decide whether $\\int_1^\\infty\\frac{1}{x\\sqrt{x}}\\,dx$ converges, and interpret the area under $y=x^{-3/2}$ for $x\\ge 1$.",
+      "stem_he": "קבעו אם $\\int_1^\\infty\\frac{1}{x\\sqrt{x}}\\,dx$ מתכנס, ופרשו את השטח מתחת ל-$y=x^{-3/2}$ עבור $x\\ge 1$.",
+      "explanation_en": "**Step 1.** $\\frac{1}{x\\sqrt{x}}=x^{-3/2}$.\n\n**Step 2.** $p=3/2>1$ ⇒ convergence at infinity.\n\n**Step 3.** Value: $\\int_1^\\infty x^{-3/2}\\,dx=[ -2x^{-1/2}]_1^\\infty=2$. The infinite strip has finite area $2$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** $\\frac{1}{x\\sqrt{x}}=x^{-3/2}$.\n\n**שלב 2.** $p=3/2>1$ ⇒ התכנסות באינסוף.\n\n**שלב 3.** הערך $2$. לרצועה האינסופית יש שטח סופי $2$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "Rewrite as $x^{-3/2}$",
+          "p=3/2>1",
+          "Converges; area equals 2"
+        ],
+        "steps_he": [
+          "כתבו כ-$x^{-3/2}$",
+          "p=3/2>1",
+          "מתכנס; השטח שווה 2"
+        ]
+      },
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה שלב-אחר-שלב ותשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון.",
+      "ord": 21
+    },
+    {
+      "points_level_min": "university",
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof",
+        "parametric"
+      ],
+      "skill_atoms": [
+        "convergence",
+        "improper_integral",
+        "p_test"
+      ],
+      "needs_review": true,
+      "stem_en": "Prove that $\\int_1^\\infty\\frac{1}{x}\\,dx$ diverges by evaluating the limit definition, and contrast with $\\int_1^\\infty\\frac{1}{x^2}\\,dx$.",
+      "stem_he": "הוכיחו ש-$\\int_1^\\infty\\frac{1}{x}\\,dx$ מתבדר לפי הגדרת הגבול, והבחינו מ-$\\int_1^\\infty\\frac{1}{x^2}\\,dx$.",
+      "explanation_en": "**Step 1.** $\\int_1^R\\frac{1}{x}\\,dx=\\ln R\\to\\infty$.\n\n**Step 2.** Hence the improper integral diverges.\n\n**Step 3.** By contrast $\\int_1^R x^{-2}\\,dx=1-1/R\\to 1$, so $p=2$ converges. The logarithm is the borderline divergence.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** $\\int_1^R\\frac{1}{x}\\,dx=\\ln R\\to\\infty$.\n\n**שלב 2.** לכן האינטגרל המוכלל מתבדר.\n\n**שלב 3.** לעומת זאת $\\int_1^R x^{-2}\\,dx\\to 1$, אז $p=2$ מתכנס.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "lim R→∞ ln R = ∞",
+          "Diverges",
+          "For 1/x^2 limit is 1"
+        ],
+        "steps_he": [
+          "lim R→∞ ln R = ∞",
+          "מתבדר",
+          "עבור 1/x^2 הגבול הוא 1"
+        ]
+      },
+      "ord": 22
+    },
+    {
+      "points_level_min": "university",
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "convergence",
+        "improper_integral",
+        "p_test"
+      ],
+      "stem_en": "Evaluate $\\displaystyle\\int_1^\\infty x^{-2}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_1^\\infty x^{-2}\\,dx$.",
+      "explanation_en": "**Step 1.** $\\int_1^R x^{-2}\\,dx=1-1/R$.\n\n**Step 2.** Let $R\\to\\infty$: limit equals $1$.\n\n**Step 3.** Verify with $p$-test: $p=2>1$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** $\\int_1^R x^{-2}\\,dx=1-1/R$.\n\n**שלב 2.** $R\\to\\infty$ נותן $1$.\n\n**שלב 3.** במבחן $p$: $p=2>1$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "value": 1
+      },
+      "correct_answer": "1",
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.0001
+      },
+      "ord": 23
+    },
+    {
+      "points_level_min": "university",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "reverse"
+      ],
+      "skill_atoms": [
+        "convergence",
+        "improper_integral",
+        "p_test"
+      ],
+      "stem_en": "Which integral is improper at a finite endpoint?",
+      "stem_he": "איזה אינטגרל מוכלל בקצה סופי?",
+      "explanation_en": "Only $x^{-1/2}$ blows up at $x=0$. The others are continuous on compact intervals and are ordinary Riemann integrals.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "רק $x^{-1/2}$ מתפוצץ ב-$x=0$. האחרים רציפים בקטעים קומפקטיים ואינטגרלי רימן רגילים.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "options_en": [
+          "$\\int_0^1 x^{-1/2}\\,dx$",
+          "$\\int_1^2 x\\,dx$",
+          "$\\int_0^1 (x+1)\\,dx$",
+          "$\\int_{-1}^{1} x^2\\,dx$"
+        ],
+        "options_he": [
+          "$\\int_0^1 x^{-1/2}\\,dx$",
+          "$\\int_1^2 x\\,dx$",
+          "$\\int_0^1 (x+1)\\,dx$",
+          "$\\int_{-1}^{1} x^2\\,dx$"
+        ],
+        "correct_index": 0
+      },
+      "options_en": [
+        "$\\int_0^1 x^{-1/2}\\,dx$",
+        "$\\int_1^2 x\\,dx$",
+        "$\\int_0^1 (x+1)\\,dx$",
+        "$\\int_{-1}^{1} x^2\\,dx$"
+      ],
+      "options_he": [
+        "$\\int_0^1 x^{-1/2}\\,dx$",
+        "$\\int_1^2 x\\,dx$",
+        "$\\int_0^1 (x+1)\\,dx$",
+        "$\\int_{-1}^{1} x^2\\,dx$"
+      ],
+      "correct_index": 0,
+      "ord": 24
+    },
+    {
+      "points_level_min": "university",
+      "kind": "true_false",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "convergence",
+        "improper_integral",
+        "p_test"
+      ],
+      "stem_en": "True or False: if $0\\le f\\le g$ and $\\int_a^\\infty g$ converges, then $\\int_a^\\infty f$ converges.",
+      "stem_he": "נכון או לא נכון: אם $0\\le f\\le g$ ו-$\\int_a^\\infty g$ מתכנס, אז $\\int_a^\\infty f$ מתכנס.",
+      "explanation_en": "This is the direct comparison test for nonnegative improper integrals: a smaller nonnegative integrand inherits convergence from a larger convergent one.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "זהו מבחן ההשוואה הישיר לאינטגרלים מוכללים אי-שליליים: אינטגרנד קטן יותר יורש התכנסות מאינטגרנד גדול מתכנס.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "value": true
+      },
+      "correct_bool": true,
+      "ord": 25
+    },
+    {
+      "id": "convergence_divergence_integrals-core-1",
+      "ord": 26,
+      "kind": "open",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "proof"
+      ],
+      "stem_en": "State the main theorem of this lesson (Convergence & Divergence of Improper Integrals) with hypotheses and conclusion, then give one exam-style application.",
+      "stem_he": "נסחו את המשפט המרכזי של השיעור (התכנסות והתבדרות של אינטגרלים מוכללים) עם הנחות ומסקנה, ותנו יישום אחד בסגנון מבחן.",
+      "correct_answer": "see theory section",
+      "explanation_en": "Recall the hypotheses carefully, write the conclusion, then apply it once (existence, classification, or computation) as in the theory section.",
+      "explanation_he": "הזכירו את ההנחות, כתבו את המסקנה, ויישמו פעם אחת כבחלק התיאוריה.",
+      "skill_atoms": []
+    }
+  ],
+  "est_minutes": 45,
+  "author": "wave3-calc1-stubs",
+  "version": 2,
+  "level_focus": null,
+  "skill_atom_bank": null
+}

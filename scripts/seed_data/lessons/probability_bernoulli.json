@@ -1,0 +1,1162 @@
+{
+  "concept_id": "probability_bernoulli",
+  "subject": "math",
+  "level": "university",
+  "math_track": [
+    "5pt",
+    "stats"
+  ],
+  "title_en": "Bernoulli Trials & Binomial Setup",
+  "title_he": "ניסויי ברנולי והצבה בינומית",
+  "summary_en": "A Bernoulli trial is one success/failure with probability $p$. $n$ i.i.d. Bernoulli trials yield a binomial count — set up $n$, $p$, and $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$.",
+  "summary_he": "ניסוי ברנולי הוא הצלחה/כישלון עם $p$. $n$ ניסויים בלתי תלויים נותנים ספירה בינומית — מציבים $n$, $p$ ואת $P(X=k)$.",
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "Bernoulli Trials & Binomial Setup",
+      "title_he": "ניסויי ברנולי והצבה בינומית",
+      "body_en_md": "A **Bernoulli trial** has exactly two outcomes: success with probability $p$ and failure with $1-p$. Repeat independently $n$ times: the number of successes $X$ is **binomial**. MoE work is mostly **setup** — identify $n$ and $p$, then write $P(X=k)$ or a cumulative sum.",
+      "body_he_md": "**ניסוי ברנולי** הוא הצלחה בהסתברות $p$ וכישלון ב-$1-p$. חזרה בלתי תלויה $n$ פעמים: מספר ההצלחות $X$ הוא **בינומי**. העבודה היא בעיקר **הצבה** — זיהוי $n$ ו-$p$, ואז כתיבת $P(X=k)$."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Bernoulli Trials and the Binomial Formula",
+      "title_he": "ניסויי ברנולי והנוסחה הבינומית",
+      "body_en_md": "**Bernoulli trial:** A single random experiment with exactly two outcomes. Label one outcome \"success\" with probability $p$ and the other \"failure\" with $q=1-p$. Examples: flip heads ($p=0.5$), pass an exam ($p=0.7$), item defective ($p=0.05$).\n\n**Binomial random variable $X \\sim B(n,p)$:** Let $X$ count the number of successes in $n$ independent Bernoulli trials, each with the same success probability $p$. The support is $k=0,1,\\ldots,n$.\n\n**BINS conditions** — all four must hold:\n- **B**inary: exactly two outcomes per trial.\n- **I**ndependent: one trial does not change probabilities for others.\n- **N**umber: trial count $n$ is fixed before observing results.\n- **S**ame: every trial uses the same $p$.\n\n**PMF:**\n$$P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}, \\quad k=0,1,\\ldots,n$$\nwhere $\\binom{n}{k}=\\dfrac{n!}{k!(n-k)!}$ counts orderings with exactly $k$ successes.\n\n**Mean and spread:**\n$$\\mu=E[X]=np, \\qquad \\sigma^2=\\text{Var}(X)=np(1-p), \\qquad \\sigma=\\sqrt{np(1-p)}.$$\n\n**Interpretation:** The binomial coefficient counts unordered selections of which $k$ trials succeed; multiplying by $p^k(1-p)^{n-k}$ assigns probability to each specific success/failure pattern.",
+      "body_he_md": "**ניסוי ברנולי:** ניסוי מקרי בודד עם בדיוק שני תוצאות. מסמנים \"הצלחה\" בהסתברות $p$ ו\"כישלון\" ב-$q=1-p$. דוגמאות: עץ במטבע ($p=0.5$), מעבר מבחן ($p=0.7$), פריט פגום ($p=0.05$).\n\n**משתנה בינומי $X\\sim B(n,p)$:** $X$ סופר הצלחות ב-$n$ ניסויי ברנולי בלתי-תלויים עם אותו $p$. תחום: $k=0,1,\\ldots,n$.\n\n**תנאי BINS** — כל ארבעתם חייבים להתקיים:\n- **B**inary — שני תוצאות בניסוי.\n- **I**ndependent — ניסוי אחד לא משנה הסתברויות באחרים.\n- **N**umber — $n$ קבוע לפני צפייה בתוצאות.\n- **S**ame — אותו $p$ בכל ניסוי.\n\n**PMF:**\n$$P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}, \\quad k=0,1,\\ldots,n$$\nכאשר $\\binom{n}{k}$ סופר סידורים עם בדיוק $k$ הצלחות.\n\n**ממוצע ופיזור:**\n$$\\mu=E[X]=np, \\qquad \\sigma^2=np(1-p), \\qquad \\sigma=\\sqrt{np(1-p)}.$$\n\n**פרשנות:** המקדם הבינומי סופר בחירות לא-מסודרות של אילו $k$ ניסויים מצליחים; הכפלה ב-$p^k(1-p)^{n-k}$ מקצה הסתברות לכל דפוס הצלחה/כישלון ספציפי.\n\n**הערה:** המודל מניח שכל ניסוי זהה למשנהו ושההסתברות $p$ אינה משתנה לאורך הרצף — אחרת יש לבחור מודל אחר (היפרגיאומטרי, גיאומטרי או פואסון)."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Shape and Cumulative Probabilities",
+      "title_he": "צורת הפילוג והסתברויות מצטברות",
+      "body_en_md": "**Shape of the binomial distribution:**\n- $p=0.5$: symmetric about $n/2$; $\\binom{n}{k}=\\binom{n}{n-k}$.\n- $p<0.5$: right-skewed — most probability mass at small $k$.\n- $p>0.5$: left-skewed — mass concentrates near $n$.\n- As $n$ increases, the PMF approaches a bell curve (normal limit / CLT).\n\n**Mode:** For integer $np$, the mode is $\\lfloor np\\rfloor$ or $\\lceil np\\rceil$; for $p=0.5$ and even $n$, the peak is at $k=n/2$.\n\n**Cumulative probabilities:**\n$$P(X\\leq k)=\\sum_{j=0}^{k}\\binom{n}{j}p^j(1-p)^{n-j}$$\n$$P(X\\geq k)=1-P(X\\leq k-1)$$\n$$P(a\\leq X\\leq b)=P(X\\leq b)-P(X\\leq a-1)$$\n\n**Complement shortcuts (exam speed):**\n- $P(X\\geq1)=1-(1-p)^n$ (at least one success)\n- $P(X=0)=(1-p)^n$ (all fail)\n- $P(X=n)=p^n$ (all succeed)\n\n**Symmetry trick:** If $X\\sim B(n,p)$, then $n-X\\sim B(n,1-p)$. Compute the smaller tail when $p$ is far from $0.5$.\n\n**Normal approximation preview:** When $np\\geq5$ and $n(1-p)\\geq5$, $X\\approx N(np,np(1-p))$ with continuity correction for cumulative probabilities — covered fully in `lesson:discrete_distributions_binomial_poisson`.\n\n**Worked strategy for tails:** If $p$ is small, compute $P(X\\leq k)$ directly. If $p$ is near $0.5$ and $n$ is moderate, symmetry reduces work. For \"at least one,\" always try the complement first before summing.",
+      "body_he_md": "**צורת הפילוג הבינומי:**\n- $p=0.5$: סימטרי סביב $n/2$; $\\binom{n}{k}=\\binom{n}{n-k}$.\n- $p<0.5$: מוטה ימינה — רוב המסה ב-$k$ קטנים.\n- $p>0.5$: מוטה שמאלה — מסה מתרכזת ליד $n$.\n- ככל ש-$n$ גדל, ה-PMF מתקרב לעקומת פעמון (גבול נורמלי / CLT).\n\n**שכיח:** כש-$np$ שלם, השכיח הוא $\\lfloor np\\rfloor$ או $\\lceil np\\rceil$; ל-$p=0.5$ ו-$n$ זוגי, השיא ב-$k=n/2$.\n\n**הסתברויות מצטברות:**\n$$P(X\\leq k)=\\sum_{j=0}^{k}\\binom{n}{j}p^j(1-p)^{n-j}$$\n$$P(X\\geq k)=1-P(X\\leq k-1)$$\n$$P(a\\leq X\\leq b)=P(X\\leq b)-P(X\\leq a-1)$$\n\n**קיצורי משלים (מהירות בבחינה):**\n- $P(X\\geq1)=1-(1-p)^n$\n- $P(X=0)=(1-p)^n$\n- $P(X=n)=p^n$\n\n**טריק סימטריה:** אם $X\\sim B(n,p)$, אז $n-X\\sim B(n,1-p)$. חשבו את הזנב הקטן יותר כש-$p$ רחוק מ-$0.5$.\n\n**תצוגה מקדימה של קירוב נורמלי:** כש-$np\\geq5$ ו-$n(1-p)\\geq5$, $X\\approx N(np,np(1-p))$ עם תיקון רציפות — ב-`lesson:discrete_distributions_binomial_poisson`.\n\n**אסטרטגיה לזנבות:** $p$ קטן — חשבו $P(X\\leq k)$ ישירות. $p$ קרוב ל-$0.5$ — סימטריה חוסכת. ב\"לפחות אחד\" — נסו משלים לפני סכימה.\n\n**טיפ לבחינה:** זיהוי מהיר של סימטריה ($p=0.5$) או של משלים (\"לפחות אחד\") חוסך דקות יקרות מתחת ללחץ זמן — אל תסכמו PMF ידנית כשיש קיצור ברור."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Direct Binomial Probability",
+      "title_he": "דוגמה פתורה 1 — הסתברות בינומית ישירה",
+      "body_en_md": "A multiple-choice quiz has 5 questions, each with 4 options (one correct). A student guesses randomly. What is the probability of getting exactly 2 correct?\n\n### Move 1: Verify BINS and identify parameters.\nEach question: success = correct guess, $p=1/4$. Fixed $n=5$, independent guesses. So $X\\sim B(5,0.25)$ and we want $P(X=2)$.\n\n### Move 2: Write the PMF.\n$$P(X=2)=\\binom{5}{2}(0.25)^2(0.75)^3.$$\n\n### Move 3: Evaluate.\n$$\\binom{5}{2}=10, \\quad (0.25)^2=0.0625, \\quad (0.75)^3=0.421875.$$\n$$P(X=2)=10\\times0.0625\\times0.421875=0.2637.$$\n\n**Mean check:** $\\mu=np=5\\times0.25=1.25$ correct answers expected by guessing — $k=2$ is above average but plausible.\n\n**Exam habit:** State what counts as success before substituting into the PMF.\n\n**Why $\\binom{5}{2}=10$?** Choose which 2 of the 5 questions are answered correctly; each such pattern has probability $(0.25)^2(0.75)^3$. **Wrong path:** Using $p=0.75$ — that is the failure rate, not success.\n\n**BINS check:** Fixed $n=5$ questions, independent guesses, same $p=1/4$ each. Reporting $0.2637$ to four decimals is standard. If questions were linked, independence would fail and the binomial model would not apply.\n\n**Extra note:** $\\binom{5}{2}=10$ counts which two of five questions are correct; each pattern has weight $(0.25)^2(0.75)^3$.",
+      "body_he_md": "חידון בחירה מרובה: 5 שאלות, 4 אפשרויות בכל אחת. תלמיד מנחש. מה ההסתברות לקבל בדיוק 2 נכונות?\n\n### צעד 1: אימות BINS וזיהוי פרמטרים.\nבכל שאלה: הצלחה = ניחוש נכון, $p=1/4$. $n=5$ קבוע, ניחושים בלתי-תלויים. לכן $X\\sim B(5,0.25)$ ורוצים $P(X=2)$.\n\n### צעד 2: כתיבת PMF.\n$$P(X=2)=\\binom{5}{2}(0.25)^2(0.75)^3.$$\n\n### צעד 3: חישוב.\n$$\\binom{5}{2}=10, \\quad P(X=2)=10\\times0.0625\\times0.421875=0.2637.$$\n\n**בדיקת ממוצע:** $\\mu=1.25$ — $k=2$ מעל הממוצע אך סביר.\n\n**הרגל לבחינה:** הגדירו מה נחשב הצלחה לפני הצבה ב-PMF.\n\n**למה $\\binom{5}{2}=10$?** בוחרים אילו 2 מתוך 5 שאלות נענות נכון; לכל דפוס כזה הסתברות $(0.25)^2(0.75)^3$. **מסלול שגוי:** שימוש ב-$p=0.75$ — זו הסתברות כישלון, לא הצלחה.\n\n**בדיקת BINS:** $n=5$ קבוע, ניחושים בלתי-תלויים, אותו $p=1/4$. דיווח $0.2637$ ל-ארבע ספרות עשרוניות הוא סטנדרט. אם השאלות היו קשורות, בלתי-תלות נכשלת והמודל הבינומי לא חל.\n\n**הערה נוספת:** $\\binom{5}{2}=10$ סופר כמה דרכים לבחור שתי שאלות נכונות מתוך חמש. כל דפוס כזה מקבל משקל $(0.25)^2(0.75)^3$. בדקו שהגדרתם הצלחה כ\"ניחוש נכון\".\n\n**הערה:** $\\binom{5}{2}=10$ סופר כמה דרכים לבחור שתי שאלות נכונות מתוך חמש; כל דפוס כזה מקבל משקל $(0.25)^2(0.75)^3$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A basketball player hits 70% of free throws. She shoots 4. Find $P(X=4)$ (all four in).",
+      "body_he_md": "שחקנית כדורסל מכניסה 70% מהזריקות החופשיות. היא זורקת 4 פעמים. מצא $P(X=4)$.",
+      "checkpoint_solution_en": "**Step 1 — Model:** Each free throw is a Bernoulli trial with $p=0.7$. Four independent throws: $X\\sim B(4,0.7)$.\n\n**Step 2 — All four in means $k=4$:**\n$$P(X=4)=\\binom{4}{4}(0.7)^4(0.3)^0=(0.7)^4=0.2401.$$\n\n**Check:** $\\binom{4}{4}=1$ and $(0.3)^0=1$, so only $p^4$ remains. Mean $\\mu=2.8$ — getting all four is above average but not extreme.",
+      "checkpoint_solution_he": "**שלב 1 — מודל:** כל זריקה = ניסוי ברנולי עם $p=0.7$. 4 זריקות בלתי-תלויות: $X\\sim B(4,0.7)$.\n\n**שלב 2 — כולן נכנסות = $k=4$:**\n$$P(X=4)=(0.7)^4=0.2401.$$\n\n**בדיקה:** $\\binom{4}{4}=1$ ו-$(0.3)^0=1$, נשאר רק $p^4$. ממוצע $\\mu=2.8$ — כולן נכנסות מעל הממוצע אך לא קיצוני."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Cumulative Binomial Probability",
+      "title_he": "דוגמה פתורה 2 — הסתברות בינומית מצטברת",
+      "body_en_md": "A quality inspector checks 8 items. Each item has a 20% chance of being defective. Find the probability that **at most 2** are defective.\n\n### Move 1: Model.\n$X\\sim B(8,0.2)$ with success = defective. Want $P(X\\leq2)=P(X=0)+P(X=1)+P(X=2)$.\n\n### Move 2: Compute each PMF term.\n$$P(X=0)=(0.8)^8=0.1678.$$\n$$P(X=1)=\\binom{8}{1}(0.2)^1(0.8)^7=8\\times0.2\\times0.2097=0.3355.$$\n$$P(X=2)=\\binom{8}{2}(0.2)^2(0.8)^6=28\\times0.04\\times0.2621=0.2936.$$\n\n### Move 3: Sum.\n$$P(X\\leq2)=0.1678+0.3355+0.2936=0.7969.$$\n\n**Conclusion:** About 79.7% chance at most 2 defective. **Sanity check:** With $p=0.2$, mean $\\mu=1.6$ — most mass at 0, 1, 2.\n\n**Alternative:** $P(X\\geq3)=1-P(X\\leq2)\\approx0.203$ — the complement of what we computed. **Exam tip:** \"At most 2\" always means add $P(X=0)$ through $P(X=2)$; do not stop after one term.\n\n**Context:** Expected defects $\\mu=1.6$. Summing three terms is manageable; for larger $n$ use tables or normal approximation. Write $P(X=0)+P(X=1)+P(X=2)$ explicitly before adding — method marks require the setup.\n\n**Extra note:** \"At most 2\" includes 0, 1, and 2 — not \"exactly 2.\" With $p=0.2$, most mass is at low counts, consistent with $\\mu=1.6$.",
+      "body_he_md": "מפקח בודק 8 פריטים. כל פריט בהסתברות 20% פגום. מצא הסתברות ש**לכל היותר 2** פגומים.\n\n### צעד 1: מודל.\n$X\\sim B(8,0.2)$, הצלחה = פגום. $P(X\\leq2)=P(X=0)+P(X=1)+P(X=2)$.\n\n### צעד 2: חישוב כל איבר.\n$$P(X=0)=0.8^8=0.1678.$$\n$$P(X=1)=8\\times0.2\\times0.8^7=0.3355.$$\n$$P(X=2)=28\\times0.04\\times0.8^6=0.2936.$$\n\n### צעד 3: סכום.\n$$P(X\\leq2)=0.7969.$$\n\n**מסקנה:** כ-79.7% לכל היותר 2 פגומים. **בדיקה:** $\\mu=1.6$ — רוב המסה ב-0,1,2.\n\n**חלופה:** $P(X\\geq3)=1-P(X\\leq2)\\approx0.203$ — משלים למה שחישבנו. **טיפ לבחינה:** \"לכל היותר 2\" = סכום $P(X=0)$ עד $P(X=2)$; אל תעצרו אחרי איבר אחד.\n\n**הקשר:** $\\mu=1.6$. סכימת שלושה איברים סבירה; ל-$n$ גדול השתמשו בטבלאות. כתבו $P(X=0)+P(X=1)+P(X=2)$ לפני חיבור — נקודות שיטה תלויות בהצגת הסכום.\n\n**הערה נוספת:** \"לכל היותר 2\" אינו \"בדיוק 2\" — חובה לכלול גם $P(X=0)$ ו-$P(X=1)$. עם $p=0.2$ רוב ההסתברות בשלושת הערכים הנמוכים; זה תואם $\\mu=1.6$.\n\n**הקשר:** עם $p=0.2$ ו-$\\mu=1.6$, רוב ההסתברות מרוכזת ב-$k=0,1,2$ — לכן סכימת שלושה איברים מספיקה; ל-$n$ גדול יותר השתמשו בטבלאות או בקירוב נורמלי."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "$X \\sim B(6, 0.3)$. Find $P(X \\geq 1)$ using the complement rule.",
+      "body_he_md": "$X\\sim B(6,0.3)$. מצא $P(X\\geq1)$ בעזרת כלל המשלים.",
+      "checkpoint_solution_en": "**Step 1 — Model:** $X\\sim B(6,0.3)$ counts successes in 6 trials.\n\n**Step 2 — Complement for \"at least one\":**\n$$P(X\\geq1)=1-P(X=0)=1-(0.7)^6=1-0.1176=0.8824.$$\n\n**Check:** $P(X=0)$ is the probability all six fail — much faster than summing five terms.",
+      "checkpoint_solution_he": "**שלב 1 — מודל:** $X\\sim B(6,0.3)$ סופר הצלחות ב-6 ניסויים.\n\n**שלב 2 — משלים ל\"לפחות אחת\":**\n$$P(X\\geq1)=1-(0.7)^6=0.8824.$$\n\n**בדיקה:** $P(X=0)$ = כולם נכשלים — מהיר הרבה יותר מסכימת חמישה איברים."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Finding p from Given Probabilities",
+      "title_he": "דוגמה פתורה 3 — מציאת p מהסתברויות נתונות",
+      "body_en_md": "A coin is flipped 4 times. The probability of **exactly 3 heads** equals the probability of **exactly 2 heads**. Find $p$.\n\n### Move 1: Write PMF expressions.\n$$P(X=3)=\\binom{4}{3}p^3(1-p)=4p^3(1-p).$$\n$$P(X=2)=\\binom{4}{2}p^2(1-p)^2=6p^2(1-p)^2.$$\n\n### Move 2: Set equal and simplify.\n$$4p^3(1-p)=6p^2(1-p)^2.$$\nFor $0<p<1$, divide by $2p^2(1-p)$: $2p=3(1-p)$.\n\n### Move 3: Solve.\n$$5p=3 \\Rightarrow p=0.6.$$\n\n**Check:** $P(X=3)=P(X=2)=0.3456$. ✓\n\n**Exam note:** When equating PMFs, cancel common factors carefully — exclude $p=0$ and $p=1$ as non-physical solutions.\n\n**Verify both sides:** $P(X=3)=4(0.6)^3(0.4)=0.3456$ and $P(X=2)=6(0.6)^2(0.4)^2=0.3456$. This inverse problem type appears when calibrating a biased coin from observed symmetry of two counts.\n\n**General pattern:** Cancel common factors of $p$ and $(1-p)$ after equating PMFs. Verify $p\\in(0,1)$ and substitute back. The same idea finds $n$ when $\\binom{n}{2}=\\binom{n}{3}$ at $p=0.5$ — another exam favourite.\n\n**Extra note:** After finding $p=0.6$, substitute back into both PMFs to verify equality — standard exam check.",
+      "body_he_md": "מטבע מוטל 4 פעמים. $P(X=3)=P(X=2)$. מצא $p$.\n\n### צעד 1: כתיבת PMF.\n$$P(X=3)=4p^3(1-p), \\quad P(X=2)=6p^2(1-p)^2.$$\n\n### צעד 2: השוואה ופישוט.\n$$4p^3(1-p)=6p^2(1-p)^2.$$\nל-$0<p<1$, חלוקה ב-$2p^2(1-p)$: $2p=3(1-p)$.\n\n### צעד 3: פתרון.\n$$p=0.6.$$\n\n**בדיקה:** $P(X=3)=P(X=2)=0.3456$. ✓\n\n**הערת בחינה:** בטלו גורמים משותפים בזהירות — דחו $p=0,1$.\n\n**אימות שני הצדדים:** $P(X=3)=4(0.6)^3(0.4)=0.3456$ ו-$P(X=2)=6(0.6)^2(0.4)^2=0.3456$. סוג בעיה זה מופיע בכיול מטבע מוטה מסימטריה של שני ספירים.\n\n**תבנית כללית:** לאחר השוואת PMF צמצמו גורמים משותפים של $p$ ו-$(1-p)$. אמתו $p\\in(0,1)$ והציבו חזרה. אותה רעיון מוצאת $n$ כש-$\\binom{n}{2}=\\binom{n}{3}$ ב-$p=0.5$.\n\n**הערה נוספת:** לאחר $p=0.6$, הציבו חזרה ל-$P(X=3)$ ו-$P(X=2)$ — שוויון מלא מאשר נכונות. בעיות כיול מטבע מופיעות לעיתים קרובות בבחינות.\n\n**תבנית כללית:** לאחר השוואת PMF צמצמו גורמים משותפים של $p$ ו-$(1-p)$, אמתו $p\\in(0,1)$ והציבו חזרה — בעיות כיול מטבע מופיעות לעיתים קרובות בבחינות."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Binomial Calculations",
+      "title_he": "מדריך שיטה — חישובים בינומיים",
+      "body_en_md": "**Binomial problem protocol:**\n1. **Verify BINS** — write one line per letter; stop if any fails.\n2. **Identify** $n$, $p$, and what counts as success.\n3. **Classify** the question: exact $P(X=k)$, cumulative $P(X\\leq k)$, tail $P(X\\geq k)$, or interval $P(a\\leq X\\leq b)$.\n4. **Choose method:** direct PMF, sum terms, complement, or symmetry $n-X$.\n5. **Compute** and sanity-check against $\\mu=np$.\n\n| Problem type | Method |\n|---|---|\n| Exactly $k$ | PMF formula |\n| At most $k$ | Sum $P(X=0)+\\cdots+P(X=k)$ |\n| At least 1 | $1-(1-p)^n$ |\n| Between $a$ and $b$ | Sum or $P(X\\leq b)-P(X\\leq a-1)$ |\n\n**Useful identities:** $\\binom{n}{0}=\\binom{n}{n}=1$; $\\binom{n}{1}=n$; $\\binom{n}{2}=n(n-1)/2$; $\\binom{n}{k}=\\binom{n}{n-k}$.",
+      "body_he_md": "**פרוטוקול בעיות בינומיות:**\n1. **אמת BINS** — שורה לכל אות; עצרו אם אחד נכשל.\n2. **זהו** $n$, $p$ ומה נחשב הצלחה.\n3. **סווגו:** מדויק $P(X=k)$, מצטבר $P(X\\leq k)$, זנב $P(X\\geq k)$, או טווח $P(a\\leq X\\leq b)$.\n4. **בחרו שיטה:** PMF ישיר, סכימה, משלים, או סימטריה $n-X$.\n5. **חשבו** ובדקו מול $\\mu=np$.\n\n| סוג בעיה | שיטה |\n|---|---|\n| בדיוק $k$ | נוסחת PMF |\n| לכל היותר $k$ | סכום $P(X=0)+\\cdots+P(X=k)$ |\n| לפחות 1 | $1-(1-p)^n$ |\n| בין $a$ ל-$b$ | סכום או $P(X\\leq b)-P(X\\leq a-1)$ |\n\n**זהויות שימושיות:** $\\binom{n}{0}=1$; $\\binom{n}{1}=n$; $\\binom{n}{2}=n(n-1)/2$; $\\binom{n}{k}=\\binom{n}{n-k}$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Where the Binomial Formula Comes From — Counting Times Probability",
+      "title_he": "מהיכן נוסחת הבינום מגיעה — ספירה כפול הסתברות",
+      "body_en_md": "The binomial formula $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$ looks intimidating, but it's just two ideas you already know multiplied together: **the probability of one specific sequence of outcomes**, times **how many such sequences there are.** Build it from those pieces and it becomes obvious rather than memorized.\n\n### The setting: repeated identical yes/no trials\nA binomial situation has four features (remember them as *BINS*): a fixed number of trials $n$, each trial is a **B**inary success/failure (a Bernoulli trial), the trials are **I**ndependent, and the success probability $p$ is the same every time. Coin flips, free throws, defective-part checks — all binomial.\n\n### Piece 1: the probability of one particular arrangement\nSuppose you want exactly $k$ successes in $n$ trials. Consider one specific order — say success, success, …, then failure, failure. Because the trials are independent, multiply their probabilities: $k$ successes each contribute $p$, and the $n-k$ failures each contribute $(1-p)$:\n$$p^k(1-p)^{n-k}.$$\nCrucially, **every** arrangement with $k$ successes has this *same* probability — the order of the multiplication doesn't change the product. That's the key that makes the next step a simple multiplication.\n\n### Piece 2: how many arrangements have k successes\nThe $k$ successes could fall in many different positions among the $n$ trials. The number of ways to choose *which* $k$ of the $n$ trials are the successes is exactly a combination — order doesn't matter, we just pick the positions:\n$$\\binom{n}{k}=\\frac{n!}{k!\\,(n-k)!}.$$\nThis is the link back to combinatorics: the binomial coefficient is literally \"how many places the successes can go.\"\n\n### Multiply the two pieces\nEach of the $\\binom{n}{k}$ arrangements is equally likely with probability $p^k(1-p)^{n-k}$, and they're mutually exclusive (a run of trials produces exactly one arrangement). By the OR rule you *add* equal terms — which is the same as multiplying:\n$$P(X=k)=\\binom{n}{k}\\,p^k(1-p)^{n-k}.$$\nThat's the whole formula: **count the arrangements, multiply by the probability of each.**\n\n### The shape and its summary numbers\nBecause it's a genuine probability distribution, all the terms sum to $1$ — they're exactly the terms of the expansion of $(p+(1-p))^n=1^n=1$, which is why it's called *binomial*. Its center and spread are clean:\n$$\\text{mean}=np,\\qquad \\text{variance}=np(1-p).$$\nThe mean $np$ is pure intuition — flip a coin $100$ times and expect about $50$ heads.\n\n### Why this matters\nThe binomial is the foundation of statistical testing (is a coin fair? is a treatment better than chance?), quality control, and — via the Central Limit Theorem — the reason the bell curve appears everywhere: pile up enough independent yes/no trials and the binomial smooths into a normal distribution. Understanding it as *counting × probability* rather than a magic formula is what lets you adapt it to any \"how many successes?\" question.",
+      "body_he_md": "נוסחת הבינום $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$ נראית מאיימת, אך היא רק שני רעיונות שכבר מכירים מוכפלים יחד: **ההסתברות לרצף תוצאות ספציפי אחד**, כפול **כמה רצפים כאלה קיימים.** בנו אותה מהחלקים האלה והיא הופכת למובנת מאליה במקום משוננת.\n\n### המערך: ניסויים זהים חוזרים של כן/לא\nמצב בינומי בעל ארבעה מאפיינים: מספר קבוע של ניסויים $n$, כל ניסוי הוא בינארי הצלחה/כישלון (ניסוי ברנולי), הניסויים בלתי תלויים, והסתברות ההצלחה $p$ זהה בכל פעם. הטלות מטבע, זריקות עונשין, בדיקות פגמים — כולם בינומיים.\n\n### חלק 1: ההסתברות לסידור מסוים אחד\nנניח שרוצים בדיוק $k$ הצלחות ב-$n$ ניסויים. שקלו סדר ספציפי אחד — נניח הצלחה, הצלחה, …, ואז כישלון, כישלון. כיוון שהניסויים בלתי תלויים, מכפילים את הסתברויותיהם: $k$ הצלחות כל אחת תורמת $p$, ו-$n-k$ הכישלונות כל אחד תורם $(1-p)$:\n$$p^k(1-p)^{n-k}.$$\nחשוב: ל**כל** סידור עם $k$ הצלחות יש את *אותה* הסתברות — סדר הכפל אינו משנה את המכפלה. זהו המפתח שהופך את הצעד הבא לכפל פשוט.\n\n### חלק 2: כמה סידורים בעלי k הצלחות\n$k$ ההצלחות יכולות ליפול במיקומים שונים רבים בין $n$ הניסויים. מספר הדרכים לבחור *אילו* $k$ מתוך $n$ הניסויים הם ההצלחות הוא בדיוק צירוף — הסדר אינו משנה, פשוט בוחרים את המיקומים:\n$$\\binom{n}{k}=\\frac{n!}{k!\\,(n-k)!}.$$\nזהו הקישור בחזרה לקומבינטוריקה: מקדם הבינום הוא פשוטו כמשמעו \"לכמה מקומות ההצלחות יכולות ללכת.\"\n\n### הכפילו את שני החלקים\nכל אחד מ-$\\binom{n}{k}$ הסידורים שווה בסבירותו עם הסתברות $p^k(1-p)^{n-k}$, והם זרים (רצף ניסויים מייצר בדיוק סידור אחד). לפי כלל ה'או' *מחברים* איברים שווים — וזה שקול להכפלה:\n$$P(X=k)=\\binom{n}{k}\\,p^k(1-p)^{n-k}.$$\nזו כל הנוסחה: **ספרו את הסידורים, הכפילו בהסתברות של כל אחד.**\n\n### הצורה ומספרי הסיכום שלה\nכיוון שזו התפלגות הסתברות אמיתית, כל האיברים מסתכמים ל-$1$ — הם בדיוק איברי הפיתוח של $(p+(1-p))^n=1^n=1$, ולכן היא נקראת *בינומית*. המרכז והפיזור שלה נקיים — התוחלת היא $np$ והשונות היא $np(1-p)$.\n\nהתוחלת $np$ היא אינטואיציה טהורה — הטילו מטבע $100$ פעמים וצפו לכ-$50$ עץ.\n\n### מדוע זה חשוב\nהבינומית היא היסוד לבדיקות סטטיסטיות (האם מטבע הוגן? האם טיפול טוב מהמקרה?), בקרת איכות, ו — דרך משפט הגבול המרכזי — הסיבה שעקומת הפעמון מופיעה בכל מקום: ערמו מספיק ניסויי כן/לא בלתי תלויים והבינומית מתמזגת להתפלגות נורמלית. הבנתה כ*ספירה × הסתברות* ולא כנוסחת קסם היא מה שמאפשר להתאים אותה לכל שאלת \"כמה הצלחות?\""
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — Free Throws: Building a Binomial Probability From Its Pieces",
+      "title_he": "דוגמה פתורה 4 — זריקות עונשין: בניית הסתברות בינומית מחלקיה",
+      "body_en_md": "**Problem.** A player makes each free throw with probability $p=0.8$. In $5$ attempts, find (a) $P(\\text{exactly 4 made})$, and (b) the expected number made.\n\n### Step 1: Confirm it's binomial\nFixed $n=5$ attempts, each a success/failure, independent, constant $p=0.8$. Binomial with $n=5$, $p=0.8$, and we want $k=4$.\n\n### Step 2: Probability of one arrangement with 4 makes\nFour makes contribute $p^4$ and one miss contributes $(1-p)^1$:\n$$p^4(1-p)^{1}=(0.8)^4(0.2)^1=(0.4096)(0.2)=0.08192.$$\n\n### Step 3: Count the arrangements\nThe single miss could be any of the $5$ attempts, so\n$$\\binom{5}{4}=\\frac{5!}{4!\\,1!}=5.$$\n\n### Step 4: Multiply count times probability\n$$P(X=4)=\\binom{5}{4}(0.8)^4(0.2)^1=5\\times 0.08192=0.4096\\approx 0.41.$$\n\n### Step 5: Expected number made\n$$\\text{mean}=np=5\\times 0.8=4.0.$$\nSo on average the player makes $4$ of $5$ — consistent with the high probability of exactly $4$ we just found.\n\n**Answer:** (a) $P(X=4)\\approx 0.41$; (b) expected makes $=4.0$.",
+      "body_he_md": "**בעיה.** שחקן קולע כל זריקת עונשין בהסתברות $p=0.8$. ב-$5$ ניסיונות, מצאו (א) את ההסתברות לקלוע בדיוק $4$, ו-(ב) את מספר הקליעות הצפוי.\n\n### שלב 1: אמתו שזה בינומי\nמספר קבוע $n=5$ ניסיונות, כל אחד הצלחה/כישלון, בלתי תלויים, $p=0.8$ קבוע. בינומי עם $n=5$, $p=0.8$, ואנו רוצים $k=4$.\n\n### שלב 2: הסתברות לסידור אחד עם 4 קליעות\nארבע קליעות תורמות $p^4$ והחטאה אחת תורמת $(1-p)^1$:\n$$p^4(1-p)^{1}=(0.8)^4(0.2)^1=(0.4096)(0.2)=0.08192.$$\n\n### שלב 3: ספרו את הסידורים\nההחטאה היחידה יכולה להיות בכל אחד מ-$5$ הניסיונות, ולכן\n$$\\binom{5}{4}=\\frac{5!}{4!\\,1!}=5.$$\n\n### שלב 4: הכפילו ספירה בהסתברות\n$$P(X=4)=\\binom{5}{4}(0.8)^4(0.2)^1=5\\times 0.08192=0.4096\\approx 0.41.$$\n\n### שלב 5: מספר הקליעות הצפוי\nהתוחלת היא $np=5\\times 0.8=4.0$.\nכך שבממוצע השחקן קולע $4$ מתוך $5$ — עקבי עם ההסתברות הגבוהה לבדיוק $4$ שזה עתה מצאנו.\n\n**תשובה:** (א) $P(X=4)\\approx 0.41$; (ב) קליעות צפויות $=4.0$."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "$X \\sim B(6, 0.5)$. Find $P(X=3)$.",
+          "body_he": "$X\\sim B(6,0.5)$. מצא $P(X=3)$.",
+          "solution_en": "**Solution:**\n\nModel: $X\\sim B(6,0.5)$ with $k=3$ successes.\n$$P(X=3)=\\binom{6}{3}(0.5)^6=20\\times\\frac{1}{64}=\\frac{20}{64}=0.3125.$$\n\n**Check:** With $p=0.5$, the distribution is symmetric; $P(X=3)=P(X=3)$ and $\\mu=3$ sits at the centre.",
+          "solution_he": "**פתרון:**\n\nמודל: $X\\sim B(6,0.5)$ עם $k=3$ הצלחות.\n$$P(X=3)=\\binom{6}{3}(0.5)^6=20/64=0.3125.$$\n\n**בדיקה:** עם $p=0.5$ הפילוג סימטרי; $\\mu=3$ במרכז — $20/64$ הגיוני.",
+          "points": 4
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "A test has 10 true/false questions. A student guesses all. Find the expected number correct.",
+          "body_he": "מבחן עם 10 שאלות נכון/לא-נכון. תלמיד מנחש הכל. מצא את מספר הנכונות הצפוי.",
+          "solution_en": "**Solution:**\n\nEach true/false question is a Bernoulli trial with $p=0.5$. With $n=10$ independent guesses, $X\\sim B(10,0.5)$.\n$$E[X]=\\mu=np=10\\times0.5=5.$$\n\n**Check:** The question asks for expected count, not $P(X=5)$. On average, half the guesses succeed.",
+          "solution_he": "**פתרון:**\n\nכל שאלת נכון/לא-נכון = ניסוי ברנולי עם $p=0.5$. עם $n=10$ ניחושים בלתי-תלויים, $X\\sim B(10,0.5)$.\n$$E[X]=\\mu=np=10\\times0.5=5.$$\n\n**בדיקה:** השאלה מבקשת תוחלת, לא $P(X=5)$ — בממוצע חצי מהניחושים מצליחים.",
+          "points": 4
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "$X \\sim B(3, 0.4)$. Find $P(X=0)$.",
+          "body_he": "$X\\sim B(3,0.4)$. מצא $P(X=0)$.",
+          "solution_en": "**Solution:**\n\nFor $X\\sim B(3,0.4)$, zero successes means all three trials fail.\n$$P(X=0)=(1-p)^3=(0.6)^3=0.216.$$\n\n**Check:** When $k=0$, $\\binom{3}{0}=1$ and only the failure probability remains. Do not use $0.4^3$.",
+          "solution_he": "**פתרון:**\n\nעבור $X\\sim B(3,0.4)$, אפס הצלחות = שלושה כישלונות.\n$$P(X=0)=(1-p)^3=(0.6)^3=0.216.$$\n\n**בדיקה:** כש-$k=0$, $\\binom{3}{0}=1$ — נשאר רק $(1-p)^n$. אל תשתמשו ב-$0.4^3$.",
+          "points": 4
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "$X \\sim B(5, 0.6)$. State the variance.",
+          "body_he": "$X\\sim B(5,0.6)$. ציין את השונות.",
+          "solution_en": "**Solution:**\n\nFor $X\\sim B(5,0.6)$, use the variance formula directly:\n$$\\sigma^2=\\text{Var}(X)=np(1-p)=5\\times0.6\\times0.4=1.2.$$\n\n**Check:** Mean is $\\mu=3$; variance $1.2$ gives $\\sigma\\approx1.1$. Report $\\sigma^2$, not $\\sigma$, when variance is asked.",
+          "solution_he": "**פתרון:**\n\nעבור $X\\sim B(5,0.6)$, נוסחת השונות:\n$$\\sigma^2=np(1-p)=5\\times0.6\\times0.4=1.2.$$\n\n**בדיקה:** ממוצע $\\mu=3$; שונות $1.2$ נותנת $\\sigma\\approx1.1$. כשמבקשים שונות — דווחו $\\sigma^2$, לא $\\sigma$.",
+          "points": 4
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "A factory produces items with 10% defect rate. In 7 items, find $P(X \\leq 1)$.",
+          "body_he": "מפעל עם שיעור פגמים 10%. ב-7 פריטים, מצא $P(X\\leq1)$.",
+          "solution_en": "**Solution:**\n\nDefective = success: $X\\sim B(7,0.1)$. \"At most one defective\" means $P(X\\leq1)=P(X=0)+P(X=1)$.\n$$P(X=0)=0.9^7\\approx0.4783,\\quad P(X=1)=7\\times0.1\\times0.9^6\\approx0.3720.$$\n$$P(X\\leq1)\\approx0.4783+0.3720=0.8503.$$\n\n**Check:** With $\\mu=0.7$, most mass is at $k=0$ and $k=1$ — include both terms.",
+          "solution_he": "**פתרון:**\n\nפגום = הצלחה: $X\\sim B(7,0.1)$. \"לכל היותר אחד\" = $P(X\\leq1)=P(X=0)+P(X=1)$.\n$$P(X=0)=0.9^7\\approx0.4783,\\quad P(X=1)=7\\times0.1\\times0.9^6\\approx0.3720.$$\n$$P(X\\leq1)\\approx0.8503.$$\n\n**בדיקה:** עם $\\mu=0.7$, רוב המסה ב-$0$ ו-$1$ — חובה לכלול שני איברים.",
+          "points": 6
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "$X \\sim B(10, 0.3)$. Find $P(X \\geq 1)$.",
+          "body_he": "$X\\sim B(10,0.3)$. מצא $P(X\\geq1)$.",
+          "solution_en": "**Solution:**\n\n$X\\sim B(10,0.3)$. Use the complement for \"at least one success\":\n$$P(X\\geq1)=1-P(X=0)=1-(0.7)^{10}=1-0.0282=0.9718.$$\n\n**Check:** Summing nine PMF terms gives the same answer but is slower. $(0.7)^{10}\\approx2.8\\%$ — all failures is rare.",
+          "solution_he": "**פתרון:**\n\n$X\\sim B(10,0.3)$. משלים ל\"לפחות אחת\":\n$$P(X\\geq1)=1-P(X=0)=1-(0.7)^{10}=0.9718.$$\n\n**בדיקה:** סכימת תשעה איברי PMF נותנת אותה תשובה אך איטית. $(0.7)^{10}\\approx2.8\\%$ — כולם נכשלים נדיר.",
+          "points": 6
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "$X \\sim B(8, 0.5)$. Find $P(3 \\leq X \\leq 5)$.",
+          "body_he": "$X\\sim B(8,0.5)$. מצא $P(3\\leq X\\leq5)$.",
+          "solution_en": "**Solution:**\n\n$X\\sim B(8,0.5)$. Inclusive interval $3\\leq X\\leq5$:\n$$P(X=3)=\\binom{8}{3}/256=56/256,\\quad P(X=4)=70/256,\\quad P(X=5)=56/256.$$\n$$P(3\\leq X\\leq5)=(56+70+56)/256=182/256\\approx0.711.$$\n\n**Check:** Symmetry gives $P(X=3)=P(X=5)$. Most mass sits near $k=4=n/2$.",
+          "solution_he": "**פתרון:**\n\n$X\\sim B(8,0.5)$. טווח כולל $3\\leq X\\leq5$:\n$$P(X=3)=56/256,\\quad P(X=4)=70/256,\\quad P(X=5)=56/256.$$\n$$P(3\\leq X\\leq5)=182/256\\approx0.711.$$\n\n**בדיקה:** סימטריה: $P(X=3)=P(X=5)$. רוב המסה ליד $k=4=n/2$.",
+          "points": 6
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "List all BINS conditions for the binomial model. Which ones are most commonly violated?",
+          "body_he": "רשום את כל תנאי BINS. אילו מהם מופרים בתדירות הגבוהה ביותר?",
+          "solution_en": "**B**inary outcomes, **I**ndependent trials, fixed **N**umber $n$, **S**ame $p$ each trial.\n\nMost commonly violated: **Independence** (sampling without replacement from a finite population → hypergeometric) and **Same $p$** (conditions change mid-experiment).\n\n**Check:** One failed letter disqualifies the binomial model — write BINS before calculating.",
+          "solution_he": "**B**inary — שני תוצאות, **I**ndependent — בלתי-תלות, **N**umber — $n$ קבוע, **S**ame — אותו $p$.\n\nמופרים בתדירות: **בלתי-תלות** (דגימה ללא החזרה → היפרגיאומטרי) ו-**Same $p$** (תנאים משתנים).\n\n**בדיקה:** אות אחת מופרת — פסלו את המודל הבינומי לפני חישוב.",
+          "points": 6
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "If $X \\sim B(n, 0.5)$ and $P(X=2) = P(X=3)$, find $n$.",
+          "body_he": "אם $X\\sim B(n,0.5)$ ו-$P(X=2)=P(X=3)$, מצא $n$.",
+          "solution_en": "**Solution:**\n\nWith $p=0.5$, powers of $p$ cancel in both PMFs. Set $\\binom{n}{2}=\\binom{n}{3}$:\n$$\\frac{n(n-1)}{2}=\\frac{n(n-1)(n-2)}{6}.$$\nFor $n>1$, divide by $n(n-1)$: $1/2=(n-2)/6$, so $n-2=3$ and $n=5$.\n\n**Check:** Verify $\\binom{5}{2}=\\binom{5}{3}=10$ at $p=0.5$.",
+          "solution_he": "**פתרון:**\n\nעם $p=0.5$, חזקות $p$ מתבטלות. השוו $\\binom{n}{2}=\\binom{n}{3}$:\n$$\\frac{n(n-1)}{2}=\\frac{n(n-1)(n-2)}{6}.$$\nל-$n>1$, חלוקה ב-$n(n-1)$: $1/2=(n-2)/6$, ולכן $n=5$.\n\n**בדיקה:** $\\binom{5}{2}=\\binom{5}{3}=10$ ב-$p=0.5$ — מאשר נכונות.",
+          "points": 6
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Show that $\\sum_{k=0}^n \\binom{n}{k}p^k(1-p)^{n-k} = 1$ (the binomial PMF sums to 1).",
+          "body_he": "הראה ש-$\\sum_{k=0}^n\\binom{n}{k}p^k(1-p)^{n-k}=1$ (PMF הבינומי מסתכם ל-1).",
+          "solution_en": "**Proof:**\n\nBy the Binomial Theorem, expand $(a+b)^n$ with $a=p$ and $b=1-p$:\n$$(p+(1-p))^n=\\sum_{k=0}^{n}\\binom{n}{k}p^k(1-p)^{n-k}.$$\nBut $p+(1-p)=1$, so the left side equals $1^n=1$. Hence the PMF sums to 1. $\\blacksquare$\n\n**Check:** This identity is why $(p+q)^n$ appears in combinatorics and probability.",
+          "solution_he": "**הוכחה:**\n\nממשפט הבינום, פתחו $(a+b)^n$ עם $a=p$ ו-$b=1-p$:\n$$(p+(1-p))^n=\\sum_{k=0}^{n}\\binom{n}{k}p^k(1-p)^{n-k}.$$\nאבל $p+(1-p)=1$, ולכן הצד השמאלי $=1^n=1$. ה-PMF מסתכם ל-1. $\\blacksquare$\n\n**בדיקה:** זהות זו מקשרת בין $(p+q)^n$ לבין הסתברות בינומית.",
+          "points": 8
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "A player succeeds each attempt with probability 0.8. She needs at least 3 successes in 5 tries. Find the probability.",
+          "body_he": "שחקן מצליח בכל ניסיון בהסתברות 0.8. הוא צריך לפחות 3 הצלחות ב-5 ניסיונות. מצא את ההסתברות.",
+          "solution_en": "**Solution:**\n\n$X\\sim B(5,0.8)$. \"At least 3 successes\" means $P(X\\geq3)=P(X=3)+P(X=4)+P(X=5)$.\n$$P(X=3)=\\binom{5}{3}(0.8)^3(0.2)^2=10\\times0.512\\times0.04=0.2048.$$\n$$P(X=4)=5\\times(0.8)^4(0.2)=0.4096,\\quad P(X=5)=(0.8)^5=0.3277.$$\n$$P(X\\geq3)=0.2048+0.4096+0.3277=0.9421.$$\n\n**Check:** With $p=0.8$, high success rate makes $\\geq3$ very likely — $94\\%$ passes sanity.",
+          "solution_he": "**פתרון:**\n\n$X\\sim B(5,0.8)$. \"לפחות 3\" = $P(X\\geq3)=P(X=3)+P(X=4)+P(X=5)$.\n$$P(X=3)=10\\times(0.8)^3(0.2)^2=0.2048,\\quad P(X=4)=0.4096,\\quad P(X=5)=0.3277.$$\n$$P(X\\geq3)=0.9421.$$\n\n**בדיקה:** עם $p=0.8$, $\\geq3$ סביר מאוד — $94\\%$ עובר בדיקת הגיון.",
+          "points": 8
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Prove that $\\text{Var}(X) = np(1-p)$ for $X \\sim B(n,p)$ using the identity $\\text{Var}(X) = E[X^2] - (E[X])^2$.",
+          "body_he": "הוכח ש-$\\text{Var}(X)=np(1-p)$ עבור $X\\sim B(n,p)$ באמצעות $\\text{Var}(X)=E[X^2]-(E[X])^2$.",
+          "solution_en": "**Proof:**\n\nKnown: $E[X]=np$. Compute $E[X(X-1)]=\\sum_{k=2}^{n}k(k-1)\\binom{n}{k}p^k q^{n-k}$.\nFor $k\\geq2$: $k(k-1)\\binom{n}{k}=n(n-1)\\binom{n-2}{k-2}$, so $E[X(X-1)]=n(n-1)p^2$.\nThen $E[X^2]=E[X(X-1)]+E[X]=n(n-1)p^2+np$.\n$$\\text{Var}(X)=n(n-1)p^2+np-(np)^2=np[(n-1)p+1-np]=np(1-p).\\ \\blacksquare$$\n\n**Check:** Variance is zero when $p=0$ or $p=1$ — all trials identical.",
+          "solution_he": "**הוכחה:**\n\nידוע: $E[X]=np$. מחשבים $E[X(X-1)]=n(n-1)p^2$ (בדומה לחישוב $E[X]$).\nאז $E[X^2]=n(n-1)p^2+np$.\n$$\\text{Var}(X)=E[X^2]-(np)^2=np(1-p).\\ \\blacksquare$$\n\n**בדיקה:** שונות אפס כש-$p=0$ או $p=1$ — כל הניסויים זהים.",
+          "points": 8
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "The probability of passing an exam is $p=0.7$. A student retakes it until passing. What is the probability of needing more than 3 attempts?",
+          "body_he": "הסתברות לעבור מבחן $p=0.7$. תלמיד ניגש שוב ושוב עד שעובר. מה ההסתברות שיצטרך יותר מ-3 ניסיונות?",
+          "solution_en": "**Solution:**\n\nRetaking until pass is a **geometric** model, not binomial — $n$ is not fixed. \"More than 3 attempts\" means failing the first 3 tries:\n$$P(\\text{more than 3})=P(\\text{fail 3 times})=(1-0.7)^3=(0.3)^3=0.027.$$\n\n**Check:** BINS fails here because trial count is random. Recognise geometric vs binomial before choosing a formula.",
+          "solution_he": "**פתרון:**\n\nהגשה חוזרת עד מעבר = מודל **גיאומטרי**, לא בינומי — $n$ אינו קבוע. \"יותר מ-3 ניסיונות\" = כישלון בשלושה הראשונים:\n$$P(>3)=(1-0.7)^3=(0.3)^3=0.027.$$\n\n**בדיקה:** BINS נכשל כי מספר הניסויים אקראי. הבחינו גיאומטרי מול בינומי לפני בחירת נוסחה.",
+          "points": 8
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Forgetting $\\binom{n}{k}$.** The PMF is not just $p^k(1-p)^{n-k}$ — you must count how many arrangements produce exactly $k$ successes.\n\n2. **Sampling without replacement.** Drawing from a small finite population without replacement violates independence → use the **hypergeometric** distribution, not binomial.\n\n3. **Confusing $P(X=k)$ with $P(X\\leq k)$.** Underline \"exactly,\" \"at most,\" \"at least,\" or \"between\" before calculating.\n\n4. **Skipping the complement.** $P(X\\geq1)=1-(1-p)^n$ saves time; summing $P(X=1)+\\cdots+P(X=n)$ invites arithmetic errors.\n\n5. **Reversed exponents.** $P(X=k)=p^k(1-p)^{n-k}$: $k$ successes, $n-k$ failures — not the other way.\n\n6. **Using binomial when $n$ is not fixed.** If trials continue until a success (geometric) or events arrive in time (Poisson), BINS fails.",
+      "body_he_md": "1. **שכחת $\\binom{n}{k}$.** ה-PMF הוא לא רק $p^k(1-p)^{n-k}$ — חובה לספור כמה סידורים נותנים בדיוק $k$ הצלחות.\n\n2. **דגימה ללא החזרה.** שליפה מאוכלוסייה סופית קטנה ללא החזרה מפרה בלתי-תלות → **פילוג היפרגיאומטרי**, לא בינומי.\n\n3. **בלבול $P(X=k)$ עם $P(X\\leq k)$.** סמנו \"בדיוק\", \"לכל היותר\", \"לפחות\" או \"בין\" לפני החישוב.\n\n4. **דילוג על המשלים.** $P(X\\geq1)=1-(1-p)^n$ חוסך זמן; סכימת $P(X=1)+\\cdots$ מזמינה טעויות חשבון.\n\n5. **חזקות הפוכות.** $P(X=k)=p^k(1-p)^{n-k}$: $k$ הצלחות, $n-k$ כישלונות.\n\n6. **בינומי כש-$n$ לא קבוע.** אם הניסויים ממשיכים עד הצלחה (גיאומטרי) או אירועים בזמן (פואסון), BINS נכשל.\n\n**זכרו:** BINS הוא שער — אות אחת מופרת פוסלת את המודל הבינומי לחלוטין."
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "The binomial model is the workhorse of **count data** across science and industry. Quality engineers use $B(n,p)$ to set acceptance sampling rules; clinical researchers model treatment success rates across fixed cohorts; pollsters estimate vote shares from yes/no survey responses.\n\n**Connections in the KG:**\n- `lesson:probability_basics_3pt` — sample spaces and independence underpin BINS.\n- `lesson:discrete_distributions_binomial_poisson` — Poisson limit and normal approximation.\n- `lesson:statistics_inference` — confidence intervals and tests for proportions use $\\hat p$ and $B(n,p)$ logic.\n\n**Exam transfer:** Every word problem starts by asking \"Is this a fixed-$n$ count of successes?\" If yes, write $X\\sim B(n,p)$ before any arithmetic.",
+      "body_he_md": "המודל הבינומי הוא כלי העבודה של **נתוני ספירה** במדע ובתעשייה. מהנדסי איכות משתמשים ב-$B(n,p)$ לכללי דגימת קבלה; חוקרים קליניים מדגמים שיעורי הצלחת טיפול בקבוצות קבועות; סוקרים מעריכים נתחי הצבעה מתשובות כן/לא.\n\n**קשרים ב-KG:**\n- `lesson:probability_basics_3pt` — מרחבי מדגם ובלתי-תלות תומכים ב-BINS.\n- `lesson:discrete_distributions_binomial_poisson` — גבול פואסון וקירוב נורמלי.\n- `lesson:statistics_inference` — רווחי סמך ובדיקות לפרופורציות.\n\n**העברה בבחינה:** כל בעיה מילולית מתחילה ב\"האם זו ספירת הצלחות ב-$n$ קבוע?\" אם כן — כתבו $X\\sim B(n,p)$ לפני כל חישוב.\n\n**במילים פשוטות:** כל פעם שסופרים הצלחות ב-$n$ קבוע — מטבעות, בדיקות איכות, סקרים — הבינומי הוא המודל הראשון לבדיקה."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formula card:**\n- $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$\n- $\\mu=np$, $\\sigma^2=np(1-p)$, $\\sigma=\\sqrt{np(1-p)}$\n- $P(X\\geq1)=1-(1-p)^n$; $P(X=0)=(1-p)^n$; $P(X=n)=p^n$\n- $P(a\\leq X\\leq b)=P(X\\leq b)-P(X\\leq a-1)$\n\n**Exam patterns:**\n- Direct PMF for given $k$.\n- Cumulative $P(X\\leq k)$ or tail $P(X\\geq k)$ — sum or complement.\n- Find unknown $p$ or $n$ from equal probabilities.\n- Verify BINS; identify when hypergeometric or Poisson applies instead.\n\n**Last review:** Recite formulas once, then solve both checkpoints without notes.\n\n**Time savers:** Memorize $P(X=0)$ and $P(X\\geq1)$ complements. For symmetric $p=0.5$, keep probabilities as fractions over $2^n$. Always label success explicitly on your scratch paper before plugging into the PMF.",
+      "body_he_md": "**גיליון נוסחאות:**\n- $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$\n- $\\mu=np$, $\\sigma^2=np(1-p)$\n- $P(X\\geq1)=1-(1-p)^n$; $P(X=0)=(1-p)^n$; $P(X=n)=p^n$\n- $P(a\\leq X\\leq b)=P(X\\leq b)-P(X\\leq a-1)$\n\n**דגשי מבחן:**\n- PMF ישיר ל-$k$ נתון.\n- מצטבר $P(X\\leq k)$ או זנב $P(X\\geq k)$ — סכום או משלים.\n- מציאת $p$ או $n$ מהשוואת הסתברויות.\n- אימות BINS; מתי היפרגיאומטרי או פואסון.\n\n**חזרה אחרונה:** אמרו נוסחאות פעם אחת, ואז פתרו את שני ה-checkpoints בלי רשימות.\n\n**חיסכון בזמן:** שיננו משלמי $P(X=0)$ ו-$P(X\\geq1)$. ל-$p=0.5$ סימטרי — שמרו הסתברויות כשברים מ-$2^n$. סמנו הצלחה במפורש על הנייר לפני הצבה ב-PMF."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Bernoulli trials and binomial setup",
+      "title_he": "ניסויי ברנולי והצבה בינומית",
+      "body_en_md": "<!-- BERNOULLI_CORE -->\n**Bernoulli.** One trial: $P(\\text{success})=p$, $P(\\text{failure})=1-p$. Mean $p$, variance $p(1-p)$.\n\n**Binomial setup.** $n$ independent Bernoulli($p$) trials $\\Rightarrow X\\sim\\mathrm{Bin}(n,p)$ with $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$. Checklist: fixed $n$, same $p$, independence, success/failure coding.",
+      "body_he_md": "**ברנולי.** ניסוי אחד: $P(\\text{הצלחה})=p$. תוחלת $p$, שונות $p(1-p)$.\n\n**הצבה בינומית.** $n$ ניסויי Bernoulli בלתי תלויים $\\Rightarrow X\\sim\\mathrm{Bin}(n,p)$. רשימת בדיקה: $n$ קבוע, אותו $p$, אי-תלות, קידוד הצלחה/כישלון."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Related tool: three-way tables vs Bernoulli setup",
+      "title_he": "כלי קשור: טבלאות תלת־ממדיות מול הצבת ברנולי",
+      "body_en_md": "<!-- THREE_WAY_BRIDGE -->\nWhen data arrive as a **three-way table** (for example track × gender × pass), you can still extract a success probability $p$ for a Bernoulli/binomial model by fixing two factors and reading the pass rate from the remaining two-way slice. Tree diagrams and three-way tables organize the same joint information; Bernoulli setup begins only after $p$ (and $n$) are identified.",
+      "body_he_md": "כשהנתונים מגיעים כ**טבלה תלת־ממדית** (למשל מסלול × מגדר × עבר), אפשר עדיין לחלץ הסתברות הצלחה $p$ למודל ברנולי/בינומי על ידי קיבוע שני גורמים וקריאת שיעור העברה מהשכבה הדו־ממדית שנותרה. דיאגרמות עץ וטבלאות תלת־ממדיות מארגנות את אותו מידע משותף; הצבת ברנולי מתחילה רק אחרי שזיהיתם את $p$ (ואת $n$)."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Bernoulli trial:** one experiment, success probability $p$, failure $1-p$.\n- **Binomial $B(n,p)$:** counts successes in $n$ independent identical trials.\n- **PMF:** $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$; mean $np$; variance $np(1-p)$.\n- **Cumulative:** sum PMF terms, use complement, or interval formula $P(X\\leq b)-P(X\\leq a-1)$.\n- **BINS** must hold; otherwise consider hypergeometric, geometric, or Poisson models.\n- **Shape:** symmetric at $p=0.5$; skewed otherwise; approaches normal as $n$ grows.\n\n**Next step:** When $n$ is large, graduate to normal approximation and Poisson limits rather than summing many PMF terms by hand.",
+      "body_he_md": "- **ניסוי ברנולי:** ניסוי בודד, הצלחה $p$, כישלון $1-p$.\n- **בינומי $B(n,p)$:** ספירת הצלחות ב-$n$ ניסויים בלתי-תלויים זהים.\n- **PMF:** $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$; ממוצע $np$; שונות $np(1-p)$.\n- **מצטבר:** סכום איברי PMF, משלים, או $P(X\\leq b)-P(X\\leq a-1)$.\n- **BINS** חייבים להתקיים; אחרת — היפרגיאומטרי, גיאומטרי או פואסון.\n- **צורה:** סימטרי ב-$p=0.5$; מוטה אחרת; מתקרב לנורמלי כש-$n$ גדל.\n\n**צעד הבא:** כש-$n$ גדול — עברו לקירוב נורמלי וגבול פואסון במקום סכימת PMF ידנית."
+    }
+  ],
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "bernoulli",
+      "binomial_coefficient",
+      "binomial_mean",
+      "binomial_pmf",
+      "binomial_variance"
+    ]
+  },
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "A single Bernoulli trial has how many possible outcomes?",
+      "stem_he": "לניסוי ברנולי בודד כמה תוצאות אפשריות?",
+      "explanation_en": "**Success or failure — exactly $2$ outcomes.**\n\n**Answer:** $2$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**הצלחה או כישלון — $2$ תוצאות.**\n\n**תשובה:** $2$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "bernoulli"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$2$",
+          "$1$",
+          "$3$",
+          "$n$"
+        ],
+        "options_he": [
+          "$2$",
+          "$1$",
+          "$3$",
+          "$n$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "50d6f7eb-5f13-581d-8013-9f68345b375a",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$2$",
+        "$1$",
+        "$3$",
+        "$n$"
+      ],
+      "options_he": [
+        "$2$",
+        "$1$",
+        "$3$",
+        "$n$"
+      ],
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
+    },
+    {
+      "ord": 2,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\binom{5}{2}$.",
+      "stem_he": "חשבו $\\binom{5}{2}$.",
+      "explanation_en": "**$\\dfrac{5!}{2!\\,3!}=10$.**\n\n**Answer:** $10$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\binom{5}{2}=10$.**\n\n**תשובה:** $10$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "binomial_coefficient"
+      ],
+      "answer_payload": {
+        "value": 10
+      },
+      "source_item_id": "099f538e-5d0c-506b-9884-695a0e447c6b",
+      "points_level_min": "5pt",
+      "correct_answer": "10",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "10",
+        "expected": 10,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 3,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "For $n=5,p=0.4$, find $P(X=2)$.",
+      "stem_he": "עבור $n=5,p=0.4$, מצאו את $P(X=2)$.",
+      "explanation_en": "**Step 1 — Coefficient.** $\\binom{5}{2}=10$.\n\n**Step 2 — Powers.** $(0.4)^2=0.16$, $(0.6)^3=0.216$.\n\n**Step 3 — Multiply.** $10\\cdot 0.16\\cdot 0.216=0.3456$.\n\n**Answer:** $0.3456$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1 — מקדם.** $\\binom{5}{2}=10$.\n\n**שלב 2 — חזקות.** $0.16$ ו-$0.216$.\n\n**שלב 3 — כפל.** $0.3456$.\n\n**תשובה:** $0.3456$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Coefficient.** $\\binom{5}{2}=10$.",
+          "**Step 2 — Powers.** $(0.4)^2=0.16$, $(0.6)^3=0.216$.",
+          "**Step 3 — Multiply.** $10\\cdot 0.16\\cdot 0.216=0.3456$.",
+          "**Answer:** $0.3456$."
+        ],
+        "steps_he": [
+          "**שלב 1 — מקדם.** $\\binom{5}{2}=10$.",
+          "**שלב 2 — חזקות.** $0.16$ ו-$0.216$.",
+          "**שלב 3 — כפל.** $0.3456$.",
+          "**תשובה:** $0.3456$."
+        ]
+      },
+      "source_item_id": "f196f984-b34a-5e43-954d-67dc205bb440",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt",
+      "archetypes": [
+        "application"
+      ],
+      "needs_review": true
+    },
+    {
+      "ord": 4,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: the variance of a binomial variable is $np(1-p)$.",
+      "stem_he": "נכון או לא נכון: השונות של משתנה בינומי היא $np(1-p)$.",
+      "explanation_en": "**Yes — $\\text{Var}(X)=np(1-p)$** — **true**.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**כן — $\\text{Var}(X)=np(1-p)$** — **נכון**.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "binomial_variance"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "3ce668db-46e7-5a0a-8ae0-3d683e4e0a18",
+      "points_level_min": "5pt",
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
+    },
+    {
+      "ord": 5,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the mean of a $\\text{Binomial}(n=10,p=0.5)$ variable.",
+      "stem_he": "מצאו את התוחלת של משתנה $\\text{Binomial}(n=10,p=0.5)$.",
+      "explanation_en": "**$E[X]=np=10\\cdot 0.5=5$.**\n\n**Answer:** $5$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$E[X]=np=5$.**\n\n**תשובה:** $5$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "binomial_mean"
+      ],
+      "answer_payload": {
+        "value": 5
+      },
+      "source_item_id": "689be26e-1662-54c1-ab65-50879ee49ae3",
+      "points_level_min": "5pt",
+      "correct_answer": "5",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "5",
+        "expected": 5,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 6,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the variance of $\\text{Binomial}(n=10,p=0.5)$.",
+      "stem_he": "מצאו את השונות של $\\text{Binomial}(n=10,p=0.5)$.",
+      "explanation_en": "**$\\text{Var}=np(1-p)=10\\cdot 0.5\\cdot 0.5=2.5$.**\n\n**Answer:** $2.5$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\text{Var}=2.5$.**\n\n**תשובה:** $2.5$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "binomial_variance"
+      ],
+      "answer_payload": {
+        "value": 2.5
+      },
+      "source_item_id": "f93d1b00-9838-514a-9a48-ab2b21725e68",
+      "points_level_min": "5pt",
+      "correct_answer": "2.5",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2.5",
+        "expected": 2.5,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 7,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\binom{4}{0}$.",
+      "stem_he": "חשבו $\\binom{4}{0}$.",
+      "explanation_en": "**$\\binom{4}{0}=1$ (one way to choose nothing).**\n\n**Answer:** $1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\binom{4}{0}=1$.**\n\n**תשובה:** $1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "binomial_coefficient"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "a2f68fa4-1f83-5ac1-bcef-2831ad00fb35",
+      "points_level_min": "5pt",
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 8,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $n=3,p=0.5$, find $P(X=2)$.",
+      "stem_he": "עבור $n=3,p=0.5$, מצאו את $P(X=2)$.",
+      "explanation_en": "**$\\binom{3}{2}(0.5)^2(0.5)^1=3\\cdot 0.125=0.375$.**\n\n**Answer:** $0.375$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$=3\\cdot 0.125=0.375$.**\n\n**תשובה:** $0.375$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "answer_payload": {
+        "value": 0.375
+      },
+      "source_item_id": "325d2974-c232-5efc-ae4d-1c4813ed9621",
+      "points_level_min": "5pt",
+      "correct_answer": "0.375",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.375",
+        "expected": 0.375,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $n=4,p=0.5$, find $P(X=0)$.",
+      "stem_he": "עבור $n=4,p=0.5$, מצאו את $P(X=0)$.",
+      "explanation_en": "**$(0.5)^4=0.0625$.**\n\n**Answer:** $0.0625$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$(0.5)^4=0.0625$.**\n\n**תשובה:** $0.0625$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "answer_payload": {
+        "value": 0.0625
+      },
+      "source_item_id": "f50d32a8-7305-55f8-8430-6f860ac59db4",
+      "points_level_min": "5pt",
+      "correct_answer": "0.0625",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.0625",
+        "expected": 0.0625,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the mean of $\\text{Binomial}(n=20,p=0.3)$.",
+      "stem_he": "מצאו את התוחלת של $\\text{Binomial}(n=20,p=0.3)$.",
+      "explanation_en": "**$E[X]=20\\cdot 0.3=6$.**\n\n**Answer:** $6$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$E[X]=6$.**\n\n**תשובה:** $6$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "binomial_mean"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "2b446a9e-d296-5e02-bfff-49fa01c3ac73",
+      "points_level_min": "5pt",
+      "correct_answer": "6",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "6",
+        "expected": 6,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $n=3,p=0.5$, find $P(X=3)$ (all successes).",
+      "stem_he": "עבור $n=3,p=0.5$, מצאו את $P(X=3)$ (כל ההצלחות).",
+      "explanation_en": "**$(0.5)^3=0.125$.**\n\n**Answer:** $0.125$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$(0.5)^3=0.125$.**\n\n**תשובה:** $0.125$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "answer_payload": {
+        "value": 0.125
+      },
+      "source_item_id": "f98036b9-71e2-5406-8a3a-fbb310fb0aac",
+      "points_level_min": "5pt",
+      "correct_answer": "0.125",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.125",
+        "expected": 0.125,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\binom{6}{2}$.",
+      "stem_he": "חשבו $\\binom{6}{2}$.",
+      "explanation_en": "**$\\dfrac{6\\cdot 5}{2}=15$.**\n\n**Answer:** $15$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$=15$.**\n\n**תשובה:** $15$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "binomial_coefficient"
+      ],
+      "answer_payload": {
+        "value": 15
+      },
+      "source_item_id": "ac232494-c4a5-5880-8fc1-bfc05b4638f6",
+      "points_level_min": "5pt",
+      "correct_answer": "15",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "15",
+        "expected": 15,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $n=4,p=0.25$, find $P(X=1)$.",
+      "stem_he": "עבור $n=4,p=0.25$, מצאו את $P(X=1)$.",
+      "explanation_en": "**$4\\cdot 0.25\\cdot (0.75)^3=0.421875$.**\n\n**Answer:** $0.421875$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$=0.421875$.**\n\n**תשובה:** $0.421875$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "answer_payload": {
+        "value": 0.421875
+      },
+      "source_item_id": "e446ec72-ed7a-5175-b181-46dbeefd1e96",
+      "points_level_min": "5pt",
+      "correct_answer": "0.421875",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.421875",
+        "expected": 0.421875,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the variance of $\\text{Binomial}(n=100,p=0.2)$.",
+      "stem_he": "מצאו את השונות של $\\text{Binomial}(n=100,p=0.2)$.",
+      "explanation_en": "**$\\text{Var}=100\\cdot 0.2\\cdot 0.8=16$.**\n\n**Answer:** $16$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\text{Var}=16$.**\n\n**תשובה:** $16$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "binomial_variance"
+      ],
+      "answer_payload": {
+        "value": 16
+      },
+      "source_item_id": "c8d57420-a96c-54e6-82ab-ad4ce7d21e4a",
+      "points_level_min": "5pt",
+      "correct_answer": "16",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2^4",
+        "expected": 16,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $n=3,p=0.5$, find $P(X\\ge 1)=1-P(X=0)$.",
+      "stem_he": "עבור $n=3,p=0.5$, מצאו את $P(X\\ge 1)=1-P(X=0)$.",
+      "explanation_en": "**$1-(0.5)^3=1-0.125=0.875$.**\n\n**Answer:** $0.875$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$1-0.125=0.875$.**\n\n**תשובה:** $0.875$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "answer_payload": {
+        "value": 0.875
+      },
+      "source_item_id": "1149de62-b360-5829-a596-1ceb18eeae1b",
+      "points_level_min": "5pt",
+      "correct_answer": "0.875",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.875",
+        "expected": 0.875,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 16,
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "points_level_min": "university",
+      "stem_en": "A Bernoulli trial has exactly ____ outcomes (success/failure).",
+      "stem_he": "ניסוי ברנולי כולל בדיוק ____ תוצאות (הצלחה/כישלון).",
+      "explanation_en": "**Step 1.** Recall the definition from this lesson.\n\n**Step 2.** The missing token completes the standard formula.\n\n**Step 3.** Answer: 2.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** נזכרים בהגדרה מהשיעור.\n\n**שלב 2.** המילה החסרה משלימה את הנוסחה.\n\n**שלב 3.** תשובה: 2.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "2",
+          "two",
+          "Two"
+        ]
+      }
+    },
+    {
+      "ord": 17,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Is Var(X)=np(1-p) for X~Bin(n,p)? (yes/no)",
+      "stem_he": "האם Var(X)=np(1-p) עבור X~Bin(n,p)? (yes/no)",
+      "explanation_en": "**Step 1.** Apply the core definition carefully.\n\n**Step 2.** Avoid the common misconception named in the stem.\n\n**Step 3.** Answer: yes.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** מפעילים את ההגדרה בזהירות.\n\n**שלב 2.** נמנעים מהטעות הנפוצה.\n\n**שלב 3.** תשובה: yes.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "yes",
+          "Yes"
+        ]
+      }
+    },
+    {
+      "ord": 18,
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Match each concept to the correct description.",
+      "stem_he": "התאימו כל מושג לתיאור הנכון.",
+      "explanation_en": "Matching separates definitions that students often conflate on exams.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "ההתאמה מפרידה הגדרות שסטודנטים מערבבים לעיתים בבחינה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "pairs_en": [
+          {
+            "left": "Bernoulli",
+            "right": "single 0/1 trial"
+          },
+          {
+            "left": "Binomial",
+            "right": "sum of n i.i.d. Bernoulli"
+          },
+          {
+            "left": "Mean",
+            "right": "np"
+          },
+          {
+            "left": "PMF factor",
+            "right": "C(n,k)"
+          }
+        ],
+        "pairs_he": [
+          {
+            "left": "ברנולי",
+            "right": "ניסוי 0/1 יחיד"
+          },
+          {
+            "left": "בינומי",
+            "right": "סכום n ברנולי i.i.d."
+          },
+          {
+            "left": "תוחלת",
+            "right": "np"
+          },
+          {
+            "left": "מקדם PMF",
+            "right": "C(n,k)"
+          }
+        ]
+      }
+    },
+    {
+      "ord": 19,
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Order the steps of the standard solution method for this topic.",
+      "stem_he": "סדרו את שלבי שיטת הפתרון הסטנדרטית לנושא זה.",
+      "explanation_en": "A stable step order prevents algebra-before-setup mistakes.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "סדר שלבים יציב מונע טעויות אלגברה-לפני-הצבה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "order_en": [
+          "Identify $n$ and $p$",
+          "Choose $k$ of interest",
+          "Compute $C(n,k) p^k (1-p)^{n-k}$",
+          "Interpret as probability"
+        ],
+        "order_he": [
+          "זהו $n$ ו-$p$",
+          "בחרו $k$",
+          "חשבו $C(n,k) p^k (1-p)^{n-k}$",
+          "פרשו כהסתברות"
+        ]
+      }
+    },
+    {
+      "ord": 20,
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Select **all** correct statements.",
+      "stem_he": "סמנו את **כל** ההיגדים הנכונים.",
+      "explanation_en": "Each false option encodes a standard exam misconception for this topic.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "כל אפשרות שגויה מקודדת טעות בחינה אופיינית לנושא.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "Trials are independent in the binomial model",
+        "Each trial has the same success probability p",
+        "E[X]=np for X~Bin(n,p)",
+        "Binomial requires continuous outcomes"
+      ],
+      "options_he": [
+        "הניסויים בלתי תלויים במודל הבינומי",
+        "לכל ניסוי אותה הסתברות הצלחה p",
+        "E[X]=np ל-X~Bin(n,p)",
+        "בינומי דורש תוצאות רציפות"
+      ],
+      "correct_indices": [
+        0,
+        1,
+        2
+      ],
+      "answer_payload": {
+        "options_en": [
+          "Trials are independent in the binomial model",
+          "Each trial has the same success probability p",
+          "E[X]=np for X~Bin(n,p)",
+          "Binomial requires continuous outcomes"
+        ],
+        "options_he": [
+          "הניסויים בלתי תלויים במודל הבינומי",
+          "לכל ניסוי אותה הסתברות הצלחה p",
+          "E[X]=np ל-X~Bin(n,p)",
+          "בינומי דורש תוצאות רציפות"
+        ],
+        "correct_indices": [
+          0,
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "ord": 21,
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof",
+        "parametric"
+      ],
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "points_level_min": "university",
+      "needs_review": true,
+      "stem_en": "Derive E[X]=np for X=sum of n i.i.d. Bernoulli(p) random variables.",
+      "stem_he": "גזרו E[X]=np עבור X=סכום n משתני ברנולי i.i.d.",
+      "explanation_en": "**Step 1.** Write hypotheses.\n\n**Step 2.** Apply the lesson’s main theorem.\n\n**Step 3.** Finish the derivation to the claimed identity.\n\n**Step 4.** Box the final statement and note any hypotheses used.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** כתבו הנחות.\n\n**שלב 2.** הפעילו את משפט השיעור.\n\n**שלב 3.** סיימו את הגזירה.\n\n**שלב 4.** סמנו את הטענה הסופית וציינו הנחות.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "State hypotheses / setup.",
+          "Apply the key theorem or identity.",
+          "Carry out the algebraic derivation.",
+          "Conclude with the boxed result."
+        ],
+        "steps_he": [
+          "ציינו הנחות / הצבה.",
+          "הפעילו את המשפט או הזהות.",
+          "בצעו את הגזירה האלגברית.",
+          "סיימו עם התוצאה המסומנת."
+        ]
+      },
+      "rubric_en": "Full marks: clear derivation with hypotheses stated and a justified conclusion.",
+      "rubric_he": "ניקוד מלא: גזירה ברורה עם הנחות ומסקנה מנומקת."
+    },
+    {
+      "ord": 22,
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application"
+      ],
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "points_level_min": "university",
+      "needs_review": true,
+      "stem_en": "Compute P(X=2) for X~Bin(4,1/2).",
+      "stem_he": "חשבו P(X=2) עבור X~Bin(4,1/2).",
+      "explanation_en": "**Step 1.** Set up from definitions.\n\n**Step 2.** Compute carefully.\n\n**Step 3.** Final answer: 6/16=3/8.\n\n**Step 4.** State what the number means in the model.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** הציבו מההגדרות.\n\n**שלב 2.** חשבו בזהירות.\n\n**שלב 3.** תשובה: 6/16=3/8.\n\n**שלב 4.** פרשו את המספר במודל.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "Set up using the lesson definition.",
+          "Compute intermediate quantities.",
+          "Obtain 6/16=3/8.",
+          "Interpret briefly in context."
+        ],
+        "steps_he": [
+          "הציבו לפי הגדרת השיעור.",
+          "חשבו כמויות ביניים.",
+          "קבלו 6/16=3/8.",
+          "פרשו בקצרה בהקשר."
+        ]
+      },
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה שלב-אחר-שלב ותשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון."
+    },
+    {
+      "ord": 23,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Support of Bin(n,p) is:",
+      "stem_he": "התומך של Bin(n,p) הוא:",
+      "explanation_en": "**Reasoning.** The correct option matches the definition used throughout the lesson.\n\n**Answer index:** 0.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**נימוק.** האפשרות הנכונה תואמת את ההגדרה בשיעור.\n\n**אינדקס:** 0.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "{0,1,...,n}",
+        "all reals",
+        "only {0,1}",
+        "{1,...,n}"
+      ],
+      "options_he": [
+        "{0,1,...,n}",
+        "כל הממשיים",
+        "רק {0,1}",
+        "{1,...,n}"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "{0,1,...,n}",
+          "all reals",
+          "only {0,1}",
+          "{1,...,n}"
+        ],
+        "options_he": [
+          "{0,1,...,n}",
+          "כל הממשיים",
+          "רק {0,1}",
+          "{1,...,n}"
+        ],
+        "correct_index": 0
+      }
+    },
+    {
+      "ord": 24,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "points_level_min": "university",
+      "stem_en": "C(5,2) equals?",
+      "stem_he": "כמה שווה C(5,2)?",
+      "explanation_en": "**Step 1.** Identify the formula.\n\n**Step 2.** Substitute values.\n\n**Step 3.** Result 10.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** זהו את הנוסחה.\n\n**שלב 2.** הציבו ערכים.\n\n**שלב 3.** התוצאה 10.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": "10",
+      "answer_payload": {
+        "value": 10
+      },
+      "verify": {
+        "expr": "choose(5,2)",
+        "expected": 10,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 25,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Bernoulli is the Bin(1,p) special case.",
+      "stem_he": "ברנולי הוא המקרה הפרטי Bin(1,p).",
+      "explanation_en": "**Evaluation.** The statement is true by the lesson’s definitions.\n\n**Key point.** Check hypotheses before accepting slogans.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**הערכה.** ההיגד נכון לפי הגדרות השיעור.\n\n**נקודה.** בדקו הנחות לפני שמקבלים סיסמאות.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": true,
+      "answer_payload": {
+        "correct": true
+      }
+    },
+    {
+      "ord": 26,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural",
+        "reverse"
+      ],
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Mean of Bin(8,1/4)?",
+      "stem_he": "תוחלת Bin(8,1/4)?",
+      "explanation_en": "**Step 1.** Rearrange or evaluate the defining expression.\n\n**Step 2.** Use powers carefully (e.g. a^b in verify).\n\n**Step 3.** Result 2.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** סדרו מחדש או העריכו את הביטוי.\n\n**שלב 2.** זהירות בחזקות.\n\n**שלב 3.** התוצאה 2.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": "2",
+      "answer_payload": {
+        "value": 2
+      },
+      "verify": {
+        "expr": "8*(1/4)",
+        "expected": 2,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 27,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "archetypes": [
+        "application",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "points_level_min": "university",
+      "stem_en": "If p=0.5 and n increases, the PMF shape becomes:",
+      "stem_he": "אם p=0.5 ו-n גדל, צורת ה-PMF:",
+      "explanation_en": "**Picture the situation.** The best choice aligns with the geometric/statistical intuition from the worked examples.\n\n**Answer index:** 0.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university binomial probability, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**דמיינו את המצב.** הבחירה הטובה תואמת את האינטואיציה מהדוגמאות.\n\n**אינדקס:** 0.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסתברות בינומית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "more concentrated around n/2 (relatively)",
+        "uniform on reals",
+        "always skewed right",
+        "degenerate at 0"
+      ],
+      "options_he": [
+        "מרוכזת יותר סביב n/2 (יחסית)",
+        "אחידה על הממשיים",
+        "תמיד מוטה ימינה",
+        "מנוונת ב-0"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "more concentrated around n/2 (relatively)",
+          "uniform on reals",
+          "always skewed right",
+          "degenerate at 0"
+        ],
+        "options_he": [
+          "מרוכזת יותר סביב n/2 (יחסית)",
+          "אחידה על הממשיים",
+          "תמיד מוטה ימינה",
+          "מנוונת ב-0"
+        ],
+        "correct_index": 0
+      }
+    },
+    {
+      "kind": "open",
+      "difficulty": "easy",
+      "facets": [
+        "bernoulli_trials",
+        "bernoulli"
+      ],
+      "archetypes": [
+        "conceptual",
+        "procedural"
+      ],
+      "stem_en": "A single quiz item is correct with probability $p=0.7$. Model it as a Bernoulli trial: state success, failure, $p$, and $1-p$.",
+      "stem_he": "שאלה במבחן נכונה בהסתברות $p=0.7$. מדלו כניסוי ברנולי: ציינו הצלחה, כישלון, $p$ ו-$1-p$.",
+      "correct_answer": "success=correct, p=0.7, failure=0.3",
+      "explanation_en": "Success = correct answer with $p=0.7$; failure = incorrect with $1-p=0.3$. One trial, two outcomes — that is the Bernoulli model.",
+      "explanation_he": "הצלחה = תשובה נכונה עם $p=0.7$; כישלון עם $0.3$. ניסוי אחד, שני תוצאים — זה מודל ברנולי.",
+      "id": "probability_bernoulli-exam-28",
+      "ord": 28,
+      "skill_atoms": [
+        "bernoulli",
+        "binomial"
+      ]
+    },
+    {
+      "kind": "open",
+      "difficulty": "medium",
+      "facets": [
+        "binomial_setup",
+        "binomial"
+      ],
+      "archetypes": [
+        "procedural",
+        "conceptual"
+      ],
+      "stem_en": "A student answers 5 independent true/false items with $P(\\text{correct})=0.5$. Set up $X\\sim\\mathrm{Bin}(n,p)$ and write $P(X=3)$.",
+      "stem_he": "תלמיד עונה על 5 שאלות נכון/לא נכון בלתי תלויות עם $P(\\text{נכון})=0.5$. הציבו $X\\sim\\mathrm{Bin}(n,p)$ וכתבו $P(X=3)$.",
+      "correct_answer": "Bin(5,0.5); P(X=3)=C(5,3)(0.5)^5",
+      "explanation_en": "$n=5$, $p=0.5$, independence OK. $P(X=3)=\\binom{5}{3}(0.5)^3(0.5)^2=\\binom{5}{3}(0.5)^5$. The binomial setup is naming $n$ and $p$ before computing.",
+      "explanation_he": "$n=5$, $p=0.5$. $P(X=3)=\\binom{5}{3}(0.5)^5$. ההצבה הבינומית היא מתן שם ל-$n$ ו-$p$ לפני החישוב.",
+      "id": "probability_bernoulli-exam-29",
+      "ord": 29,
+      "skill_atoms": [
+        "bernoulli",
+        "binomial"
+      ]
+    }
+  ],
+  "est_minutes": 40,
+  "author": "cursor-claude-2026",
+  "version": 2,
+  "level_focus": "Bernoulli trials and binomial setup at MoE depth",
+  "skill_atom_bank": [
+    "bernoulli",
+    "binomial",
+    "p_success",
+    "independent_trials"
+  ]
+}

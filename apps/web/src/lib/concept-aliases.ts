@@ -38,7 +38,8 @@ export const CONCEPT_ID_ALIASES: Record<string, string> = {
   sequences_limits: 'sequences_arithmetic',
   eigenvalues_eigenvectors: 'la_eigenvalues',
   probability_conditional_bayes: 'probability_basic',
-  trigonometry_plane_sine_cosine_law: 'trigonometry_ratios',
+  trigonometry_plane_sine_cosine_law: 'trigonometry_sine_cosine_laws',
+  analytic_geometry_conics: 'analytic_geometry_parabola',
   hypothesis_testing_z_t: 'hypothesis_testing',
   correlation_coefficient: 'descriptive_stats',
   analytic_geometry_lines_circles: 'analytic_geometry',
@@ -52,10 +53,10 @@ export const CONCEPT_ID_ALIASES: Record<string, string> = {
   // NOT aliased (documented gaps / intentional stubs instead):
   //   - capacitors_parallel_plate, em_waves, normal_distribution_*: only
   //     university-level lessons exist; aliasing would over-serve HS learners.
-  //   - extreme_value_theorem, intermediate_value_theorem,
-  //     sequences_monotone_bounded, series_absolute_convergence,
-  //     convergence_divergence_integrals: deliberate titled calc-1 stubs
-  //     (guarded by learn-routes.test.ts) — leave as concept pages.
+  // Wave 3: extreme_value_theorem, intermediate_value_theorem,
+  //   sequences_monotone_bounded, series_absolute_convergence,
+  //   convergence_divergence_integrals are now authored university lessons
+  //   (still listed in learn-routes.test.ts catalog guards).
   photoelectric_effect: 'modern_physics_intro',
   // University track (KG syllabus ids → existing authored lessons)
   uni_functions_review: 'function_basics_uni',

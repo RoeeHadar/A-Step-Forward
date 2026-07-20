@@ -1,0 +1,1094 @@
+{
+  "concept_id": "series_absolute_convergence",
+  "subject": "calculus",
+  "level": "advanced",
+  "math_track": [
+    "university",
+    "calc1"
+  ],
+  "title_en": "Absolute Convergence of Series",
+  "title_he": "התכנסות בהחלט של טורים",
+  "summary_en": "Absolute convergence ($\\sum|a_n|<\\infty$) implies convergence; conditional convergence is the gap case. Ratio/root tests target absolute convergence.",
+  "summary_he": "התכנסות בהחלט ($\\sum|a_n|<\\infty$) גוררת התכנסות; התכנסות בתנאי היא מקרה הביניים. מבחני יחס/שורש מכוונים להתכנסות בהחלט.",
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "Absolute Convergence of Series",
+      "title_he": "התכנסות בהחלט של טורים",
+      "body_en_md": "A series $\\sum a_n$ **converges absolutely** when $\\sum|a_n|$ converges. Absolute convergence $\\Rightarrow$ ordinary convergence. If $\\sum a_n$ converges but $\\sum|a_n|$ diverges, the convergence is **conditional**.",
+      "body_he_md": "טור **מתכנס בהחלט** כאשר $\\sum|a_n|$ מתכנס. התכנסות בהחלט ⟹ התכנסות רגילה. אם $\\sum a_n$ מתכנס אבל $\\sum|a_n|$ מתבדר — **התכנסות בתנאי**."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Convergence, Divergence, and the Main Tests",
+      "title_he": "התכנסות, התבדרות והמבחנים העיקריים",
+      "body_en_md": "**Partial sums.** For $\\sum_{n=1}^{\\infty} a_n$, define $S_N = \\sum_{n=1}^N a_n$. The series **converges** if $\\lim_{N\\to\\infty} S_N = L$ (finite); otherwise it **diverges**.\n\n**Test 1 — Divergence Test (nth-term test).** If $\\lim_{n\\to\\infty} a_n \\neq 0$ (or the limit does not exist), the series diverges. If $\\lim_{n\\to\\infty} a_n = 0$, the test is **inconclusive** — you must try another test.\n\n**Test 2 — Integral Test.** If $f$ is positive, continuous, and decreasing on $[1,\\infty)$ with $f(n)=a_n$, then $\\sum a_n$ and $\\int_1^{\\infty} f(x)\\,dx$ both converge or both diverge.\n\n**Test 3 — p-Series.** $\\sum_{n=1}^{\\infty} \\frac{1}{n^p}$ converges if and only if $p > 1$.\n\n**Test 4 — Direct Comparison.** If $0 \\leq a_n \\leq b_n$ for all sufficiently large $n$: if $\\sum b_n$ converges then $\\sum a_n$ converges; if $\\sum a_n$ diverges then $\\sum b_n$ diverges.\n\n**Test 5 — Limit Comparison.** If $a_n, b_n > 0$ and $\\lim_{n\\to\\infty} \\frac{a_n}{b_n} = L$ with $0 < L < \\infty$, then $\\sum a_n$ and $\\sum b_n$ share the same convergence behavior.\n\n**Test 6 — Ratio Test.** Let $L = \\lim_{n\\to\\infty} \\left|\\frac{a_{n+1}}{a_n}\\right|$. If $L < 1$: converges absolutely. If $L > 1$: diverges. If $L = 1$: inconclusive.\n\n**Test 7 — Root Test.** Let $L = \\lim_{n\\to\\infty} \\sqrt[n]{|a_n|}$. Same three-way conclusion as the ratio test.\n\n**Test 8 — Alternating Series (Leibniz).** For $\\sum (-1)^{n+1} b_n$ with $b_n > 0$: converges if $b_n$ is decreasing and $\\lim_{n\\to\\infty} b_n = 0$.\n\n**Absolute vs conditional convergence.** $\\sum a_n$ is **absolutely convergent** if $\\sum |a_n|$ converges (which implies $\\sum a_n$ converges). It is **conditionally convergent** if $\\sum a_n$ converges but $\\sum |a_n|$ diverges.",
+      "body_he_md": "**סכומים חלקיים.** עבור $\\sum_{n=1}^{\\infty} a_n$, נגדיר $S_N = \\sum_{n=1}^N a_n$. הטור **מתכנס** אם $\\lim_{N\\to\\infty} S_N = L$ (סופי); אחרת הוא **מתבדר**.\n\n**מבחן 1 — מבחן הגבול (nth-term).** אם $\\lim_{n\\to\\infty} a_n \\neq 0$ (או שהגבול לא קיים), הטור מתבדר. אם $\\lim_{n\\to\\infty} a_n = 0$, המבחן **לא מסייע** — יש לנסות מבחן אחר.\n\n**מבחן 2 — מבחן האינטגרל.** אם $f$ חיובית, רציפה ויורדת ב-$[1,\\infty)$ עם $f(n)=a_n$, אז $\\sum a_n$ ו-$\\int_1^{\\infty} f(x)\\,dx$ שניהם מתכנסים או שניהם מתבדרים.\n\n**מבחן 3 — טורי p.** $\\sum_{n=1}^{\\infty} \\frac{1}{n^p}$ מתכנס אם ורק אם $p > 1$.\n\n**מבחן 4 — השוואה ישירה.** אם $0 \\leq a_n \\leq b_n$ לכל $n$ גדול מספיק: $\\sum b_n$ מתכנס $\\Rightarrow$ $\\sum a_n$ מתכנס; $\\sum a_n$ מתבדר $\\Rightarrow$ $\\sum b_n$ מתבדר.\n\n**מבחן 5 — השוואת גבולות.** אם $a_n, b_n > 0$ ו-$\\lim_{n\\to\\infty} \\frac{a_n}{b_n} = L \\in (0,\\infty)$, לשני הטורים אותו גורל התכנסות.\n\n**מבחן 6 — מבחן המנה.** $L = \\lim\\left|\\frac{a_{n+1}}{a_n}\\right|$. $L<1$: מתכנס בהחלט. $L>1$: מתבדר. $L=1$: לא מכריע.\n\n**מבחן 7 — מבחן השורש.** $L = \\lim \\sqrt[n]{|a_n|}$. אותה מסקנה תלת-כיוונית כמו במבחן המנה.\n\n**מבחן 8 — לייבניץ (מתחלפים).** עבור $\\sum (-1)^{n+1} b_n$ עם $b_n > 0$: מתכנס אם $b_n$ יורד ו-$\\lim_{n\\to\\infty} b_n = 0$.\n\n**התכנסות מוחלטת לעומת מותנית.** $\\sum a_n$ **מתכנס בהחלט** אם $\\sum |a_n|$ מתכנס (ומשתמע מכך $\\sum a_n$ מתכנס). **מותנית** אם $\\sum a_n$ מתכנס אך $\\sum |a_n|$ מתבדר."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Key Intuitions",
+      "title_he": "אינטואיציות מרכזיות",
+      "body_en_md": "**Ratio test and factorials/exponentials.** The ratio test shines when $a_n$ involves $n!$ or $r^n$: these factors cancel cleanly in $a_{n+1}/a_n$. Stirling's approximation $n! \\approx (n/e)^n\\sqrt{2\\pi n}$ explains why factorials lose to exponentials with base $> e$.\n\n**Root test and $n$th powers.** When $a_n = (f(n))^n$, the root test collapses the power in one step: $\\sqrt[n]{|a_n|} = |f(n)|$. Use this instead of the ratio test when the entire term is raised to the $n$th power.\n\n**p-series as the benchmark.** The most common strategy for rational terms in $n$ is: identify the effective power $p$ (highest degree in denominator minus numerator) and compare with $\\sum 1/n^p$ via limit comparison.\n\n**Alternating series caution.** Leibniz proves convergence but NOT absolute convergence. Always test $\\sum |a_n|$ separately — e.g. $\\sum (-1)^n/\\sqrt{n}$ converges by Leibniz but $\\sum 1/\\sqrt{n}$ diverges ($p = 1/2$), so convergence is conditional.\n\n**Divergence test is never enough for convergence.** $a_n \\to 0$ is necessary but not sufficient: the harmonic series has $a_n \\to 0$ yet diverges. When the divergence test is inconclusive, the real work begins — and $L = 1$ in the ratio/root tests creates the same \"inconclusive\" pause.",
+      "body_he_md": "**מבחן המנה ועצרות/חזקות.** המבחן מצטיין כש-$a_n$ כולל $n!$ או $r^n$: גורמים אלה מתבטלים יפה ב-$a_{n+1}/a_n$. קירוב סטירלינג $n! \\approx (n/e)^n\\sqrt{2\\pi n}$ מסביר מדוע עצרות מפסידות לאקסponנציאל עם בסיס $> e$.\n\n**מבחן השורש וחזקות ה-$n$.** כש-$a_n = (f(n))^n$, מבחן השורש מקרי את החזקה בצעד אחד: $\\sqrt[n]{|a_n|} = |f(n)|$. השתמשו בו במקום מבחן המנה כשכל האיבר מועלה בחזקת $n$.\n\n**טורי p כאמת מידה.** האסטרטגיה הנפוצה לביטויים רציונליים ב-$n$: זיהוי המדרגה האפקטивית $p$ (מכנה פחות מונה) והשוואה ל-$\\sum 1/n^p$ בהשוואת גבולות.\n\n**אזהרת טורים מתחלפים.** לייבניץ מוכיח התכנסות אך לא התכנסות מוחלטת. תמיד בדקו $\\sum |a_n|$ בנפרד — למשל $\\sum (-1)^n/\\sqrt{n}$ מתכנס בלייבניץ אך $\\sum 1/\\sqrt{n}$ מתבדר ($p = 1/2$), כלומר ההתכנסות מותנית.\n\n**מבחן הגבול לעולם לא מספיק להוכחת התכנסות.** $a_n \\to 0$ הכרחי אך לא מספיק: הטור ההרמוני שואף לאפס ומתבדר. כשמבחן הגבול לא מסייע, העבודה האמיתית מתחילה — ו-$L = 1$ במבחני מנה/שורש יוצר את אותה \"הפסקה\" לא מכריעה."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — p-Series Test",
+      "title_he": "דוגמה פתורה 1 — מבחן טורי p",
+      "body_en_md": "**Does $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{1}{n^2}$ converge?**\n\nThis is the Basel problem — one of the most famous convergent series. We will classify it using the standard exam workflow: divergence test first, then p-series.\n\n### Move 1 — Divergence test\n$a_n = 1/n^2 \\to 0$. The test is **inconclusive** — terms going to zero does not prove convergence.\n\n### Move 2 — Recognize the form\nThe series is $\\sum \\frac{1}{n^p}$ with $p = 2$.\n\n### Move 3 — p-Series test\nSince $p = 2 > 1$, the series **converges**.\n\n### Move 4 — Known sum (bonus)\nEuler showed $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{1}{n^2} = \\frac{\\pi^2}{6}$. We proved convergence without needing the exact value — classification and summation are separate skills.\n\n**Conclusion:** $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{1}{n^2}$ **converges** (p-series, $p = 2 > 1$).\n\n**Sanity check:** Compare with $\\sum 1/n$ (diverges, $p=1$) and $\\sum 1/n^3$ (converges, $p=3$). Our series sits between them with $p=2$, consistent with convergence. On exams, write the p-value explicitly before stating the conclusion.",
+      "body_he_md": "**האם $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{1}{n^2}$ מתכנס?**\n\nזו בעיית באזל — אחד הטורים המתכנסים המפורסמים ביותר. נסווג אותו לפי תבנית הבחינה: מבחן הגבול תחילה, ואז טור p.\n\n### צעד 1 — מבחן הגבול\n$a_n = 1/n^2 \\to 0$. המבחן **לא מסייע** — שאיפה לאפס לא מוכיחה התכנסות.\n\n### צעד 2 — זיהוי הצורה\nהטור הוא $\\sum \\frac{1}{n^p}$ עם $p = 2$.\n\n### צעד 3 — מבחן טורי p\nמכיוון ש-$p = 2 > 1$, הטור **מתכנס**.\n\n### צעד 4 — סכום ידוע (בונוס)\nאוילר הראה $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{1}{n^2} = \\frac{\\pi^2}{6}$. הוכחנו התכנסות בלי הערך המדויק — סיווג וחישוב סכום הם מיומנויות נפרדות.\n\n**סיכום:** $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{1}{n^2}$ **מתכנס** (טור p, $p = 2 > 1$).\n\n**בדיקת הגיון:** השוו ל-$\\sum 1/n$ (מתבדר, $p=1$) ול-$\\sum 1/n^3$ (מתכנס, $p=3$). הטור שלנו ביניהם עם $p=2$, עקבי עם התכנסות."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Determine whether each series converges or diverges using the p-series test:\n\n(a) $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{1}{n^{3/2}}$   (b) $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{1}{\\sqrt{n}}$",
+      "body_he_md": "קבעו אם כל טור מתכנס או מתבדר על ידי מבחן טורי p:\n\n(א) $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{1}{n^{3/2}}$   (ב) $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{1}{\\sqrt{n}}$",
+      "checkpoint_solution_en": "**(a)** $\\sum \\frac{1}{n^{3/2}} = \\sum \\frac{1}{n^p}$ with $p = 3/2$. Since $p = 3/2 > 1$, the p-series test gives **converges**.\n\n**(b)** $\\sum \\frac{1}{\\sqrt{n}} = \\sum \\frac{1}{n^{1/2}}$ with $p = 1/2$. Since $p = 1/2 < 1$, the p-series test gives **diverges**.\n\n**Self-check:** (a) terms shrink faster than $1/n$ (which diverges); (b) slower than $1/n^2$ (which converges).",
+      "checkpoint_solution_he": "**(א)** $\\sum \\frac{1}{n^{3/2}} = \\sum \\frac{1}{n^p}$ עם $p = 3/2$. מכיוון $p = 3/2 > 1$, מבחן טורי p: **מתכנס**.\n\n**(ב)** $\\sum \\frac{1}{\\sqrt{n}} = \\sum \\frac{1}{n^{1/2}}$ עם $p = 1/2$. מכיוון $p = 1/2 < 1$, מבחן טורי p: **מתבדר**.\n\n**בדיקה:** (א) האיברים קטנים מהר מ-$1/n$ (שמתבדר); (ב) לאט מ-$1/n^2$ (שמתכנס)."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Ratio Test with Factorials",
+      "title_he": "דוגמה פתורה 2 — מבחן המנה עם עצרות",
+      "body_en_md": "**Does $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{n!}{n^n}$ converge?**\n\nFactorials in the numerator suggest the ratio test. We first check the divergence test, then compute $L = \\lim |a_{n+1}/a_n|$.\n\n### Move 1 — Divergence test\n$a_n = n!/n^n$. By Stirling, $a_n \\approx (1/e)^n \\sqrt{2\\pi n} \\to 0$. Inconclusive.\n\n### Move 2 — Choose the ratio test\nFactorial structure in $a_n$ is the standard signal for the ratio test.\n\n### Move 3 — Compute the ratio\n$$\\frac{a_{n+1}}{a_n} = \\frac{(n+1)!}{(n+1)^{n+1}} \\cdot \\frac{n^n}{n!} = \\frac{n^n}{(n+1)^n}.$$\n\n### Move 4 — Evaluate the limit\n$$L = \\lim_{n\\to\\infty} \\left(\\frac{n}{n+1}\\right)^n = \\lim_{n\\to\\infty} \\left(1 - \\frac{1}{n+1}\\right)^n = e^{-1} = \\frac{1}{e}.$$\n\n### Move 5 — Conclusion\n$L = 1/e < 1$. By the ratio test, the series **converges absolutely**.\n\n**Exam note:** Exponentials with base $e$ beat factorial growth — a recurring theme in Calc II series problems.\n\n**Alternative check:** Limit comparison with $\\sum (1/e)^n$ (geometric, $|r|=1/e<1$) also shows convergence, confirming the ratio-test answer from a different angle. Both tests agree because factorial decay is slower than exponential decay with base $1/e$.",
+      "body_he_md": "**האם $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{n!}{n^n}$ מתכנס?**\n\nעצרות במונה מרמזות על מבחן המנה. נבדוק תחילה מבחן הגבול, ואז נחשב $L = \\lim |a_{n+1}/a_n|$.\n\n### צעד 1 — מבחן הגבול\n$a_n = n!/n^n$. לפי סטירלינג, $a_n \\approx (1/e)^n \\sqrt{2\\pi n} \\to 0$. לא מסייע.\n\n### צעד 2 — בחירת מבחן המנה\nמבנה עצרת ב-$a_n$ הוא הסימן הסטנדרטי למבחן המנה.\n\n### צעד 3 — חישוב המנה\n$$\\frac{a_{n+1}}{a_n} = \\frac{(n+1)!}{(n+1)^{n+1}} \\cdot \\frac{n^n}{n!} = \\frac{n^n}{(n+1)^n}.$$\n\n### צעד 4 — חישוב הגבול\n$$L = \\lim_{n\\to\\infty} \\left(\\frac{n}{n+1}\\right)^n = e^{-1} = \\frac{1}{e}.$$\n\n### צעד 5 — מסקנה\n$L = 1/e < 1$. לפי מבחן המנה, הטור **מתכנס בהחלט**.\n\n**הערה לבחינה:** אקסponנציאל עם בסיס $e$ מנצח גידול עצרת — נושא חוזר בבעיות טורים בחשבון 2.\n\n**בדיקה חלופית:** השוואת גבולות עם $\\sum (1/e)^n$ (הנדסי, $|r|=1/e<1$) גם מראה התכנסות, ומאשרת את תשובת מבחן המנה מזווית אחרת. שני המבחנים מסכימים כי דעיכת עצרת איטית מדעיכה אקסponנציאלית עם בסיס $1/e$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Apply the ratio test to $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{2^n}{n!}$. What is $L$? Does the series converge?",
+      "body_he_md": "הפעל את מבחן המנה על $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{2^n}{n!}$. מהו $L$? האם הטור מתכנס?",
+      "checkpoint_solution_en": "**Step 1 — Set up the ratio:** $a_n = 2^n / n!$, so\n$$\\frac{a_{n+1}}{a_n} = \\frac{2^{n+1}}{(n+1)!} \\cdot \\frac{n!}{2^n} = \\frac{2}{n+1}.$$\n\n**Step 2 — Limit:** $L = \\lim_{n\\to\\infty} \\frac{2}{n+1} = 0$.\n\n**Step 3 — Conclusion:** Since $L = 0 < 1$, the series **converges absolutely** by the ratio test. Factorial in the denominator dominates the exponential numerator.",
+      "checkpoint_solution_he": "**שלב 1 — הגדרת המנה:** $a_n = 2^n / n!$, לכן\n$$\\frac{a_{n+1}}{a_n} = \\frac{2^{n+1}}{(n+1)!} \\cdot \\frac{n!}{2^n} = \\frac{2}{n+1}.$$\n\n**שלב 2 — גבול:** $L = \\lim_{n\\to\\infty} \\frac{2}{n+1} = 0$.\n\n**שלב 3 — מסקנה:** מכיוון $L = 0 < 1$, הטור **מתכנס בהחלט** לפי מבחן המנה. העצרת במכנה שולטת על האקסponנציאל במונה."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Conditional vs Absolute Convergence",
+      "title_he": "דוגמה פתורה 3 — התכנסות מותנית לעומת מוחלטת",
+      "body_en_md": "**Show that $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{(-1)^n}{\\sqrt{n}}$ is conditionally convergent.**\n\nAlternating series require a two-part analysis: prove convergence with Leibniz, then test absolute convergence separately.\n\n**Part A — Convergence (Leibniz test).**\n\nWrite $\\sum (-1)^n b_n$ with $b_n = 1/\\sqrt{n} > 0$.\n- **Condition 1:** $b_n = 1/\\sqrt{n}$ is strictly decreasing ($\\sqrt{n}$ increases).\n- **Condition 2:** $\\lim_{n\\to\\infty} b_n = 0$.\n\nBoth hold, so by the **Alternating Series Test**, the series **converges**.\n\n**Part B — Absolute convergence fails.**\n\n$\\displaystyle\\sum_{n=1}^{\\infty} \\left|\\frac{(-1)^n}{\\sqrt{n}}\\right| = \\sum_{n=1}^{\\infty} \\frac{1}{n^{1/2}}$ — a p-series with $p = 1/2 < 1$, so it **diverges**.\n\n**Conclusion:** The series **converges conditionally** — Leibniz gives convergence, but absolute convergence fails. Rearranging terms could change the sum (Riemann's theorem).\n\n**Exam tip:** Always report the three-way classification: absolute, conditional, or divergent.\n\n**Numerical preview:** Partial sums of the alternating series oscillate and shrink: $S_1=-1$, $S_2\\approx -0.293$, $S_3\\approx -0.871$, … approaching roughly $-0.82$. The limit exists (conditional convergence) even though absolute values sum to infinity.",
+      "body_he_md": "**הראה ש-$\\displaystyle\\sum_{n=1}^{\\infty} \\frac{(-1)^n}{\\sqrt{n}}$ מתכנס מותנית.**\n\nטורים מתחלפים דורשים ניתוח דו-שלבי: הוכחת התכנסות בלייבניץ, ואז בדיקת התכנסות מוחלטת בנפרד.\n\n**חלק א — התכנסות (לייבניץ).**\n\nכתבו $\\sum (-1)^n b_n$ עם $b_n = 1/\\sqrt{n} > 0$.\n- **תנאי 1:** $b_n = 1/\\sqrt{n}$ יורד קפדנית ($\\sqrt{n}$ עולה).\n- **תנאי 2:** $\\lim_{n\\to\\infty} b_n = 0$.\n\nשניהם מתקיימים, לכן לפי **מבחן לייבניץ** הטור **מתכנס**.\n\n**חלק ב — כישלון התכנסות מוחלטת.**\n\n$\\displaystyle\\sum \\frac{1}{n^{1/2}}$ — טור p עם $p = 1/2 < 1$, לכן **מתבדר**.\n\n**מסקנה:** הטור **מתכנס מותנית** — לייבניץ נותן התכנסות, אך התכנסות מוחלטת נכשלת. סידור מחדש עלול לשנות את הסכום (משפט רימן).\n\n**טיפ לבחינה:** דווחו תמיד על סיווג תלת-כיווני: מוחלטת, מותנית, או מתבדר.\n\n**תצוגה מקדימה מספרית:** סכומים חלקיים של הטור המתחלף מתנדנדים ומתכווצים: $S_1=-1$, $S_2\\approx -0.293$, $S_3\\approx -0.871$, … מתקרבים לכ-$-0.82$. הגבול קיים (התכנסות מותנית) גם כשערכים מוחלטים מסתכמים לאינסוף."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Choosing Tests: Limit Comparison and Alternating Series",
+      "title_he": "בחירת מבחנים: השוואת גבול וטור מתחלף",
+      "body_en_md": "After the $p$-series and ratio tests, two workhorses finish most university homework.\n\n**Limit comparison.** For positive $a_n,b_n$, if\n$$\nL=\\lim_{n\\to\\infty}\\frac{a_n}{b_n}\n$$\nexists in $(0,\\infty)$, then $\\sum a_n$ and $\\sum b_n$ either both converge or both diverge. Choose $b_n$ as the dominant-term model (often a $p$-series). Polynomial-over-polynomial tails behave like $n^{\\deg(\\mathrm{num})-\\deg(\\mathrm{den})}$.\n\n**Alternating series (Leibniz).** If $b_n\\ge 0$ is eventually decreasing and $b_n\\to 0$, then $\\sum (-1)^n b_n$ converges. Absolute convergence ($\\sum |a_n|$ converges) implies ordinary convergence; the converse fails — $\\sum (-1)^{n+1}/n$ converges conditionally.\n\n**Root test.** If $L=\\limsup |a_n|^{1/n}$, then $L<1$ ⇒ absolute convergence, $L>1$ ⇒ divergence, $L=1$ ⇒ inconclusive (same trichotomy as the ratio test).\n\n**Workflow.** (1) Check $a_n\\not\\to 0$ (immediate divergence). (2) Recognize geometric / $p$-series. (3) Try ratio/root for factorials and exponentials. (4) Use limit comparison for rational-like terms. (5) Use alternating-series for sign patterns. Never apply ratio blindly when $L=1$.",
+      "body_he_md": "אחרי מבחן $p$ ומבחן היחס, שני כלים מסיימים את רוב שיעורי הבית באוניברסיטה.\n\n**השוואת גבול.** ל-$a_n,b_n$ חיוביים, אם\n$$\nL=\\lim_{n\\to\\infty}\\frac{a_n}{b_n}\n$$\nקיים ב-$(0,\\infty)$, אז $\\sum a_n$ ו-$\\sum b_n$ מתכנסים יחד או מתבדרים יחד. בחרו $b_n$ כמודל האיבר הדומיננטי (לרוב טור $p$). זנבות פולינום-על-פולינום מתנהגים כמו $n^{\\deg(\\mathrm{num})-\\deg(\\mathrm{den})}$.\n\n**טור מתחלף (לייבניץ).** אם $b_n\\ge 0$ יורד לבסוף ו-$b_n\\to 0$, אז $\\sum (-1)^n b_n$ מתכנס. התכנסות מוחלטת ($\\sum |a_n|$ מתכנס) גוררת התכנסות רגילה; ההפך נכשל — $\\sum (-1)^{n+1}/n$ מתכנס בתנאי.\n\n**מבחן השורש.** אם $L=\\limsup |a_n|^{1/n}$, אז $L<1$ ⇒ התכנסות מוחלטת, $L>1$ ⇒ התבדרות, $L=1$ ⇒ לא חד-משמעי (אותה חלוקה כמו מבחן היחס).\n\n**זרימת עבודה.** (1) בדקו $a_n\\not\\to 0$ (התבדרות מיידית). (2) זהו גיאומטרי / טור $p$. (3) נסו יחס/שורש לעצרות ואקספוננטים. (4) השתמשו בהשוואת גבול לאיברים דמויי-רציונליים. (5) השתמשו בטור מתחלף לדפוסי סימן. אל תפעילו יחס בעיוורון כאשר $L=1$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — Limit Comparison with a p-Series",
+      "title_he": "דוגמה פתורה 4 — השוואת גבול עם טור p",
+      "body_en_md": "**Determine convergence of** $\\displaystyle\\sum_{n=1}^{\\infty}\\frac{3n^2+1}{n^4+5n}$.\n\n### Move 1: Guess the model.\nDominant terms: numerator $\\sim 3n^2$, denominator $\\sim n^4$, so $a_n\\sim 3/n^2$. Take $b_n=1/n^2$ (convergent $p$-series with $p=2>1$).\n\n### Move 2: Limit comparison.\n$$\nL=\\lim_{n\\to\\infty}\\frac{a_n}{b_n}\n=\\lim_{n\\to\\infty}\\frac{(3n^2+1)/(n^4+5n)}{1/n^2}\n=\\lim_{n\\to\\infty}\\frac{n^2(3n^2+1)}{n^4+5n}\n=\\lim_{n\\to\\infty}\\frac{3n^4+n^2}{n^4+5n}=3\\in(0,\\infty).\n$$\n\n### Move 3: Conclude.\nSince $\\sum b_n$ converges and $L\\in(0,\\infty)$, $\\sum a_n$ **converges** (absolutely, as terms are positive).\n\n**Answer:** converges.\n\n**Pitfall:** comparing to $1/n$ would also give a finite positive $L$ relative to a divergent series and wrongly suggest divergence — the model must match the true degree gap.",
+      "body_he_md": "**קבעו התכנסות של** $\\displaystyle\\sum_{n=1}^{\\infty}\\frac{3n^2+1}{n^4+5n}$.\n\n### צעד 1: ניחוש המודל.\nאיברים דומיננטיים: מונה $\\sim 3n^2$, מכנה $\\sim n^4$, ולכן $a_n\\sim 3/n^2$. ניקח $b_n=1/n^2$ (טור $p$ מתכנס עם $p=2>1$).\n\n### צעד 2: השוואת גבול.\n$$\nL=\\lim_{n\\to\\infty}\\frac{a_n}{b_n}=3\\in(0,\\infty).\n$$\n\n### צעד 3: מסקנה.\nמכיוון ש-$\\sum b_n$ מתכנס ו-$L\\in(0,\\infty)$, גם $\\sum a_n$ **מתכנס** (מוחלט, כי האיברים חיוביים).\n\n**תשובה:** מתכנס.\n\n**מלכודת:** השוואה ל-$1/n$ עלולה לתת $L$ חיובי סופי מול טור מתבדר ולהציע בטעות התבדרות — המודל חייב להתאים לפער הדרגות האמיתי."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Which Convergence Test to Use",
+      "title_he": "מדריך שיטה — איזה מבחן להשתמש?",
+      "body_en_md": "**Decision strategy (apply in order):**\n\n1. **First: Divergence test.** Is $\\lim a_n \\neq 0$? If yes → diverges. If no → continue.\n\n2. **Alternating series?** Does $a_n = (-1)^n b_n$ with $b_n > 0$? Apply Leibniz. Also test $\\sum b_n$ for absolute convergence.\n\n3. **Contains $n!$ or $a^n$?** Ratio test. (Especially when both appear.)\n\n4. **Contains $(f(n))^n$?** Root test.\n\n5. **Looks like $1/n^p$ (possibly with polynomial tweaks)?** p-Series directly, or limit comparison with $1/n^p$.\n\n6. **Can you bound it above/below by a known series?** Direct comparison.\n\n7. **Has an easy antiderivative?** Integral test.\n\n| Series form | Best test |\n|---|---|\n| $\\sum 1/n^p$ | p-Series |\n| $\\sum r^n$, $\\sum n!/n^n$ | Ratio |\n| $\\sum (f(n))^n$ | Root |\n| $\\sum (-1)^n b_n$ | Leibniz + $\\sum b_n$ |\n| Rational in $n$ | Limit comparison with $1/n^p$ |\n| $\\sum a_n \\leq \\sum b_n$ known | Direct comparison |\n| Easy antiderivative | Integral test |\n\n**When $L = 1$:** Switch tests — try limit comparison with a p-series benchmark. The ratio and root tests cannot distinguish $\\sum 1/n$ from $\\sum 1/n^2$.",
+      "body_he_md": "**אסטרטגיית החלטה (הפעל בסדר):**\n\n1. **ראשון: מבחן הגבול.** $\\lim a_n \\neq 0$? אם כן → מתבדר. אם לא → המשך.\n\n2. **טור מתחלף?** $a_n = (-1)^n b_n$ עם $b_n > 0$? הפעל לייבניץ. גם בדוק $\\sum b_n$ להתכנסות מוחלטית.\n\n3. **מכיל $n!$ או $a^n$?** מבחן המנה.\n\n4. **מכיל $(f(n))^n$?** מבחן השורש.\n\n5. **נראה כ-$1/n^p$?** טורי p, או השוואת גבולות עם $1/n^p$.\n\n6. **ניתן לחסום מעל/מתחת לטור ידוע?** השוואה ישירה.\n\n7. **יש פונקציה ראשונית פשוטה?** מבחן האינטגרל.\n\n| צורת הטור | המבחן הטוב ביותר |\n|---|---|\n| $\\sum 1/n^p$ | טורי p |\n| $\\sum r^n$, $\\sum n!/n^n$ | מנה |\n| $\\sum (f(n))^n$ | שורש |\n| $\\sum (-1)^n b_n$ | לייבניץ + $\\sum b_n$ |\n| רציונלי ב-$n$ | השוואת גבולות עם $1/n^p$ |\n| $\\sum a_n \\leq \\sum b_n$ | השוואה ישירה |\n| פונקציה ראשונית פשוטה | אינטגרל |\n\n**כש-$L = 1$:** החליפו מבחן — נסו השוואת גבולות עם אמת מידה מטור p. מבחני מנה ושורש לא מבחינים בין $\\sum 1/n$ ל-$\\sum 1/n^2$."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Does $\\sum_{n=1}^{\\infty} \\frac{1}{n^3}$ converge? State the test used.",
+          "body_he": "האם $\\sum_{n=1}^{\\infty} \\frac{1}{n^3}$ מתכנס? ציין את המבחן.",
+          "solution_en": "**Solution:**\n\np-Series with $p=3>1$. **Converges.**\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "טורי p עם $p=3>1$. **מתכנס.**",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Does $\\sum_{n=1}^{\\infty} \\frac{1}{n}$ converge?",
+          "body_he": "האם $\\sum_{n=1}^{\\infty} \\frac{1}{n}$ מתכנס?",
+          "solution_en": "Harmonic series: p-Series with $p=1$. **Diverges.**",
+          "solution_he": "הטור ההרמוני: p-Series עם $p=1$. **מתבדר.**",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Does $\\sum_{n=1}^{\\infty} \\frac{n}{n+1}$ converge? (Use the divergence test.)",
+          "body_he": "האם $\\sum_{n=1}^{\\infty} \\frac{n}{n+1}$ מתכנס? (השתמש במבחן הגבול.)",
+          "solution_en": "$\\lim_{n\\to\\infty} \\frac{n}{n+1} = 1 \\neq 0$. By divergence test: **diverges.**",
+          "solution_he": "$\\lim \\frac{n}{n+1} = 1 \\neq 0$. מבחן הגבול: **מתבדר.**",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Does $\\sum_{n=1}^{\\infty} \\left(\\frac{1}{3}\\right)^n$ converge?",
+          "body_he": "האם $\\sum_{n=1}^{\\infty} \\left(\\frac{1}{3}\\right)^n$ מתכנס?",
+          "solution_en": "Geometric series with ratio $r=1/3<1$. **Converges** to $\\frac{1/3}{1-1/3}=\\frac{1}{2}$.",
+          "solution_he": "טור הנדסי עם $r=1/3<1$. **מתכנס** לסכום $1/2$.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Apply the ratio test to $\\sum_{n=1}^{\\infty} \\frac{n^2}{2^n}$. Does it converge?",
+          "body_he": "הפעל את מבחן המנה על $\\sum_{n=1}^{\\infty} \\frac{n^2}{2^n}$. האם מתכנס?",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\frac{a_{n+1}}{a_n} = \\frac{(n+1)^2}{2^{n+1}} \\cdot \\frac{2^n}{n^2} = \\frac{(n+1)^2}{2n^2} \\to \\frac{1}{2}$. $L = 1/2 < 1$ — **converges.**\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\frac{a_{n+1}}{a_n} = \\frac{(n+1)^2}{2n^2} \\to \\frac{1}{2}$. $L = 1/2 < 1$ — **מתכנס.**\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 7
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Use limit comparison to test $\\sum_{n=1}^{\\infty} \\frac{3n^2+1}{n^4-2}$ for convergence.",
+          "body_he": "השתמש בהשוואת גבולות כדי לבדוק $\\sum_{n=1}^{\\infty} \\frac{3n^2+1}{n^4-2}$.",
+          "solution_en": "Compare with $b_n = 1/n^2$ (dominant terms: $3n^2/n^4 = 3/n^2$). $\\lim \\frac{a_n}{b_n} = \\lim \\frac{(3n^2+1)/n^2}{(n^4-2)/n^4} \\cdot n^2 = 3$. Since $L=3 \\in (0,\\infty)$ and $\\sum 1/n^2$ converges ($p=2>1$): **converges.**",
+          "solution_he": "השווה ל-$b_n=1/n^2$. $\\lim a_n/b_n = 3 \\in (0,\\infty)$. $\\sum 1/n^2$ מתכנס. לכן: **מתכנס.**",
+          "points": 7
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Test $\\sum_{n=2}^{\\infty} \\frac{1}{n\\ln n}$ using the integral test.",
+          "body_he": "בדוק $\\sum_{n=2}^{\\infty} \\frac{1}{n\\ln n}$ בעזרת מבחן האינטגרל.",
+          "solution_en": "$f(x) = 1/(x\\ln x)$ is positive, continuous, decreasing on $[2,\\infty)$. $\\int_2^{\\infty} \\frac{dx}{x\\ln x} = \\Big[\\ln(\\ln x)\\Big]_2^{\\infty} = \\infty$. Since the integral diverges: **diverges.**",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\int_2^{\\infty} \\frac{dx}{x \\ln x} = \\ln(\\ln x)\\big|_2^{\\infty} = \\infty$. האינטגרל מתבדר — הטור **מתבדר.**\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 7
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Apply the root test to $\\sum_{n=1}^{\\infty} \\left(\\frac{n}{2n+1}\\right)^n$.",
+          "body_he": "הפעל את מבחן השורש על $\\sum_{n=1}^{\\infty} \\left(\\frac{n}{2n+1}\\right)^n$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\sqrt[n]{|a_n|} = \\frac{n}{2n+1} \\to \\frac{1}{2}$. $L = 1/2 < 1$ — **converges.**\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\sqrt[n]{|a_n|} = \\frac{n}{2n+1} \\to \\frac{1}{2}$. $L = 1/2 < 1$ — **מתכנס.**\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 7
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Does $\\sum_{n=1}^{\\infty} \\frac{(-1)^n}{n^2+1}$ converge? Is it absolute or conditional?",
+          "body_he": "האם $\\sum_{n=1}^{\\infty} \\frac{(-1)^n}{n^2+1}$ מתכנס? מוחלט או מותנה?",
+          "solution_en": "$b_n = 1/(n^2+1)$ is decreasing and $\\to 0$: converges by Leibniz. Also $\\sum 1/(n^2+1)$ converges by limit comparison with $1/n^2$. Therefore: **absolutely convergent.**",
+          "solution_he": "לייבניץ: מתכנס. $\\sum 1/(n^2+1)$ מתכנס (השוואה עם $1/n^2$). לכן: **מתכנס בהחלט.**",
+          "points": 7
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Test $\\sum_{n=1}^{\\infty} \\frac{n^n}{e^n \\cdot n!}$ for convergence using the ratio test.",
+          "body_he": "בדוק $\\sum_{n=1}^{\\infty} \\frac{n^n}{e^n \\cdot n!}$ בעזרת מבחן המנה.",
+          "solution_en": "$\\frac{a_{n+1}}{a_n} = \\frac{(n+1)^{n+1}}{e^{n+1}(n+1)!} \\cdot \\frac{e^n \\cdot n!}{n^n} = \\frac{(n+1)^n}{e \\cdot n^n} = \\frac{1}{e}\\left(1+\\frac{1}{n}\\right)^n \\to \\frac{1}{e}\\cdot e = 1$. The ratio test is **inconclusive** ($L=1$). (In fact, by Stirling, $a_n \\sim 1/\\sqrt{2\\pi n} \\to 0$, but more careful analysis shows the series diverges.)",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$\\frac{a_{n+1}}{a_n} = \\frac{1}{e}\\left(1+\\frac{1}{n}\\right)^n \\to \\frac{1}{e}\\cdot e = 1$. מבחן המנה **לא מכריע** ($L=1$). (ניתוח מדויק יותר מראה שהטור מתבדר.)\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Prove that if $\\sum a_n$ converges absolutely, then $\\sum a_n$ converges.",
+          "body_he": "הוכח שאם $\\sum a_n$ מתכנס בהחלט, אז $\\sum a_n$ מתכנס.",
+          "solution_en": "Since $\\sum |a_n|$ converges, it satisfies the Cauchy criterion: for any $\\varepsilon>0$, $\\exists N$ such that $m>n\\geq N \\Rightarrow \\sum_{k=n+1}^m |a_k| < \\varepsilon$. Then $|S_m - S_n| = |\\sum_{k=n+1}^m a_k| \\leq \\sum_{k=n+1}^m |a_k| < \\varepsilon$. So $\\{S_n\\}$ is Cauchy, hence convergent. $\\blacksquare$",
+          "solution_he": "$\\sum |a_n|$ מתכנס $\\Rightarrow$ קריטריון קושי: $|S_m-S_n| \\leq \\sum_{k=n+1}^m |a_k| < \\varepsilon$. סדרת הסכומים החלקיים קושי — לכן מתכנסת. $\\blacksquare$",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Test $\\sum_{n=1}^{\\infty} (-1)^n \\frac{\\ln n}{n}$ for convergence. Classify as absolute or conditional.",
+          "body_he": "בדוק $\\sum_{n=1}^{\\infty} (-1)^n \\frac{\\ln n}{n}$. סווג כמוחלט או מותנה.",
+          "solution_en": "Leibniz: $b_n = \\ln n / n$. For $n \\geq 3$, $b_n' = (1-\\ln n)/n^2 < 0$ so $b_n$ is decreasing. Also $\\lim b_n = 0$ (L'Hopital). By Leibniz: **converges**. Absolute: $\\sum (\\ln n)/n > \\sum 1/n$ diverges (comparison). Therefore: **conditionally convergent**.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nלייבניץ: $b_n=\\ln n/n$ יורדת ל-0 (לופיטל). מתכנס. מוחלט: $\\sum (\\ln n)/n > \\sum 1/n$ מתבדר. לכן: **מתכנס מותנית**.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Show that the ratio test is inconclusive for $\\sum 1/n$ and $\\sum 1/n^2$, then distinguish them by p-series.",
+          "body_he": "הראה שמבחן המנה לא מכריע עבור $\\sum 1/n$ ו-$\\sum 1/n^2$, ואז הבחן ביניהם בטורי p.",
+          "solution_en": "For both: $a_{n+1}/a_n = n/(n+1) \\to 1$. Ratio test gives $L=1$ — inconclusive for both. p-Series: $\\sum 1/n$ has $p=1$ — **diverges**. $\\sum 1/n^2$ has $p=2>1$ — **converges**. This shows $L=1$ in the ratio test cannot distinguish them.",
+          "solution_he": "לשניהם: $a_{n+1}/a_n \\to 1$. $L=1$ — לא מכריע. טורי p: $p=1$ מתבדר; $p=2$ מתכנס. ה-$L=1$ לא מבחין ביניהם.",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Misusing the divergence test.** If $\\lim a_n = 0$, the series MIGHT converge or diverge. The test only proves divergence, never convergence. Students who stop after $a_n \\to 0$ and declare \"converges\" lose marks on harmonic-type problems.\n\n2. **Ratio/root test when $L=1$.** When either test gives $L=1$, it is completely inconclusive. Many students incorrectly conclude convergence. You must switch to comparison or integral tests.\n\n3. **Confusing conditional and absolute convergence.** Proving $\\sum a_n$ converges (e.g., by Leibniz) does NOT prove absolute convergence. Always test $\\sum |a_n|$ separately and report the three-way classification.\n\n4. **Forgetting Leibniz conditions.** Both must hold: $b_n$ **decreasing** (not just $b_n \\to 0$) and $b_n > 0$. A sequence that oscillates toward zero may fail the decreasing requirement.\n\n5. **Wrong comparison direction.** In direct comparison, $a_n \\leq b_n$ with divergent $\\sum a_n$ does NOT imply $\\sum b_n$ diverges. You need a lower bound: $a_n \\geq c_n$ with divergent $\\sum c_n$.",
+      "body_he_md": "1. **שימוש שגוי במבחן הגבול.** $\\lim a_n = 0$ לא מוכיח התכנסות — הטור עלול להתכנס או להתבדר. המבחן מוכיח רק התבדרות. סטודנטים שעוצרים אחרי $a_n \\to 0$ ומכריזים \"מתכנס\" מאבדים נקודות בבעיות הרמוניות.\n\n2. **מבחן מנה/שורש כש-$L=1$.** $L=1$ לא מסייע כלל — חייבים מבחן אחר. תלמידים רבים טועים וסוגרים שהטור מתכנס. עברו להשוואה או לאינטגרל.\n\n3. **בלבול מוחלטת ומותנית.** הוכחת $\\sum a_n$ מתכנס (לייבניץ) לא מוכיחה התכנסות מוחלטת. תמיד בדקו $\\sum |a_n|$ בנפרד ודווחו על סיווג תלת-כיווני.\n\n4. **שכחת תנאי לייבניץ.** שני התנאים חייבים: $b_n$ **יורד** (לא רק $b_n\\to 0$) ו-$b_n > 0$. סדרה שמתנדנדת לכיוון אפס עלולה לא לעמוד בדרישת הירידה.\n\n5. **כיוון שגוי בהשוואה.** $a_n \\leq b_n$ עם $\\sum a_n$ מתבדר לא מסיק ש-$\\sum b_n$ מתבדר. צריך חסם מלרע: $a_n \\geq c_n$ עם $\\sum c_n$ מתבדר."
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "Convergence tests are the gatekeeper for everything that follows in Calc II: power series, Taylor expansions, and Fourier analysis all assume you can prove a series converges before you differentiate or integrate it term-by-term.\n\n**Connection to `concept:series_convergence_advanced`:** Once you classify convergence here, the advanced lesson asks *how* series converge (absolute vs conditional) and finds intervals of convergence for $\\sum a_n (x-c)^n$.\n\n**Why it matters for exams:** Israeli Technion/HU/TAU calculus finals typically include 2–3 series classification problems worth 15–20 points combined. Partial credit goes to correct test identification even when the limit computation has an arithmetic slip.\n\n**Physics link:** Perturbation series in quantum mechanics and asymptotic expansions in engineering require knowing when an infinite sum represents a finite physical quantity — divergent series are not just mathematical curiosities; they signal a broken model.",
+      "body_he_md": "מבחני התכנסות הם שער לכל מה שבא אחר כך בחשבון 2: טורי חזקות, טורי טיילור וניתוח פורייה — כולם מניחים שאתם יכולים להוכיח התכנסות לפני גזירה או אינטגרציה איבר-איבר.\n\n**קשר ל-`concept:series_convergence_advanced`:** אחרי שסיווגתם התכנסות כאן, השיעור המתקדם שואל *כיצד* הטור מתכנס (מוחלטת לעומת מותנית) ומוצא תחומי התכנסות ל-$\\sum a_n (x-c)^n$.\n\n**למה זה חשוב לבחינות:** בבחינות סופיות בטכניון/HU/TAU יש בדרך כלל 2–3 בעיות סיווג טורים ששוות 15–20 נקודות. נקודות חלקיות על זיהוי מבחן נכון גם כשיש טעת חישוב.\n\n**קשר לפיזיקה:** טורי perturbation במכניקת קוונטים והתפתחויות אסymptוטיות בהנדסה דורשים לדעת מתי סכום אינסופי מייצג כמות פיזיקלית סופית — טורים מתבדרים אינם סקרנות מתמטית בלבד; הם מאותתים על מודל שבור."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formula card:**\n- p-Series: $\\sum 1/n^p$ converges iff $p>1$\n- Ratio: $L = \\lim|a_{n+1}/a_n|$; $L<1$ conv., $L>1$ div., $L=1$ inconclusive\n- Root: $L = \\lim \\sqrt[n]{|a_n|}$; same rule\n- Leibniz: $b_n>0$, decreasing, $b_n\\to 0$ $\\Rightarrow$ $\\sum(-1)^n b_n$ converges\n- Absolute convergence $\\Rightarrow$ convergence (not vice versa)\n\n**Israeli university exam patterns:**\n- 2–3 series to classify (must state the test and verify all conditions).\n- One proof question (usually: absolute implies convergence, or Leibniz theorem).\n- Common traps: ratio test giving $L=1$, alternating series that is only conditionally convergent.\n\n**Exam tip:** Always state which test you are using, verify its conditions explicitly, and state the conclusion. Write \"inconclusive\" when $L=1$ or $a_n\\to 0$ — then name your backup test. Partial credit is given for correct test identification even if the limit is computed incorrectly.",
+      "body_he_md": "**גיליון נוסחאות:**\n- p-Series: $\\sum 1/n^p$ מתכנס אם ורק אם $p>1$\n- מנה: $L=\\lim|a_{n+1}/a_n|$; $L<1$ מתכנס, $L>1$ מתבדר, $L=1$ לא מכריע\n- שורש: $L=\\lim\\sqrt[n]{|a_n|}$; אותו כלל\n- לייבניץ: $b_n>0$ יורד ל-0 $\\Rightarrow$ $\\sum(-1)^n b_n$ מתכנס\n- מוחלטת $\\Rightarrow$ מתכנס (ולא להיפך)\n\n**דגשים בבחינות ישראליות:**\n- 2–3 טורים לסיווג (חובה לציין המבחן ולאמת כל התנאים).\n- שאלת הוכחה (בד\"כ: מוחלטת $\\Rightarrow$ מתכנס, או משפט לייבניץ).\n- מלכודות: $L=1$ במנה, טור מתחלף שמתכנס מותנית בלבד.\n\n**טיפ:** תמיד ציינו איזה מבחן אתם מפעילים, אמתו תנאים במפורש, וסיימו במסקנה. כתבו \"לא מכריע\" כש-$L=1$ או $a_n\\to 0$ — ואז ציינו מבחן גיבוי. נקודות חלקיות על זיהוי מבחן נכון גם כשחישוב הגבול שגוי."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Absolute vs conditional; tests",
+      "title_he": "בהחלט מול בתנאי; מבחנים",
+      "body_en_md": "<!-- STUB_CORE_series_absolute_convergence -->\nRatio and root tests, when conclusive, prove absolute convergence. Alternating series may converge conditionally — check $\\sum|a_n|$ separately.",
+      "body_he_md": "מבחני יחס ושורש, כשהם חד-משמעיים, מוכיחים התכנסות בהחלט. טורים מתחלפים עשויים להתכנס בתנאי."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Divergence test:** if $a_n \\not\\to 0$, series diverges; if $a_n\\to 0$, inconclusive — proceed to another test.\n- **p-Series:** $\\sum 1/n^p$ converges iff $p>1$; harmonic series ($p=1$) diverges.\n- **Ratio test:** use when $a_n$ involves $n!$ or $r^n$; inconclusive at $L=1$ — switch tests.\n- **Root test:** use when $a_n = (f(n))^n$; same $L=1$ caveat as ratio.\n- **Comparison tests:** direct (bound terms) or limit (match dominant power to $1/n^p$).\n- **Integral test:** when $a_n = f(n)$ with easy antiderivative.\n- **Leibniz:** alternating series with decreasing $b_n\\to 0$ converges; test $\\sum|a_n|$ for absolute vs conditional.\n- **Decision flow:** divergence test → identify form → apply best test → if $L=1$, use comparison.",
+      "body_he_md": "- **מבחן גבול:** $a_n\\not\\to 0$ — מתבדר; $a_n\\to 0$ — לא מסייע, המשיכו למבחן אחר.\n- **p-Series:** $\\sum 1/n^p$ מתכנס אם ורק אם $p>1$; הרמוני ($p=1$) מתבדר.\n- **מנה:** כש-$a_n$ כולל $n!$ או $r^n$; לא מכריע ב-$L=1$ — החליפו מבחן.\n- **שורש:** כש-$a_n=(f(n))^n$; אותה אזהרה על $L=1$.\n- **השוואות:** ישירה (חסימה) או גבולות (התאמת מדרגה ל-$1/n^p$).\n- **אינטגרל:** כש-$a_n = f(n)$ עם פונקציה ראשונית פשוטה.\n- **לייבניץ:** מתחלפים עם $b_n$ יורד ל-0; בדקו $\\sum|a_n|$ למוחלטת/מותנית.\n- **זרימה:** מבחן גבול → זיהוי צורה → מבחן מתאים → אם $L=1$, השוואה."
+    }
+  ],
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "divergence_test",
+      "geometric_series",
+      "p_series",
+      "ratio_test"
+    ]
+  },
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "A geometric series $\\sum ar^n$ converges if and only if:",
+      "stem_he": "טור הנדסי $\\sum ar^n$ מתכנס אם ורק אם:",
+      "explanation_en": "**Convergence requires $|r|<1$.**\n\n**Answer:** $|r|<1$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**התכנסות דורשת $|r|<1$.**\n\n**תשובה:** $|r|<1$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "geometric_series"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$|r|<1$",
+          "$|r|>1$",
+          "$r>0$",
+          "$a>0$"
+        ],
+        "options_he": [
+          "$|r|<1$",
+          "$|r|>1$",
+          "$r>0$",
+          "$a>0$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "f85f854d-2a9e-5987-be3a-9b909b89bd90",
+      "points_level_min": "course",
+      "options_en": [
+        "$|r|<1$",
+        "$|r|>1$",
+        "$r>0$",
+        "$a>0$"
+      ],
+      "options_he": [
+        "$|r|<1$",
+        "$|r|>1$",
+        "$r>0$",
+        "$a>0$"
+      ],
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
+    },
+    {
+      "ord": 2,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the sum $1+\\tfrac12+\\tfrac14+\\tfrac18+\\cdots$.",
+      "stem_he": "מצאו את הסכום $1+\\tfrac12+\\tfrac14+\\tfrac18+\\cdots$.",
+      "explanation_en": "**$\\tfrac{a}{1-r}=\\tfrac{1}{1-\\tfrac12}=2$.**\n\n**Answer:** $2$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$\\tfrac{a}{1-r}=\\tfrac{1}{1-\\tfrac12}=2$.**\n\n**תשובה:** $2$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "geometric_series"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "4ab98ec0-8cba-53b2-9f34-32d3edc38d74",
+      "points_level_min": "course",
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 3,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "stem_en": "True or False: the harmonic series $\\sum \\tfrac{1}{n}$ diverges.",
+      "stem_he": "נכון או לא נכון: הטור ההרמוני $\\sum \\tfrac{1}{n}$ מתבדר.",
+      "explanation_en": "**The harmonic series diverges ($p=1$)** — **true**.\n\n**Answer:** true.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**הטור ההרמוני מתבדר ($p=1$)** — **נכון**.\n\n**תשובה:** נכון.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "p_series"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "fe059606-884a-57a0-b506-c1a0a420c6b4",
+      "points_level_min": "course",
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
+    },
+    {
+      "ord": 4,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Find $\\displaystyle\\sum_{n=0}^{\\infty}\\left(\\tfrac15\\right)^n$.",
+      "stem_he": "מצאו את $\\displaystyle\\sum_{n=0}^{\\infty}\\left(\\tfrac15\\right)^n$.",
+      "explanation_en": "**Step 1 — Identify.** $a=1$, $r=\\tfrac15$, $|r|<1$.\n\n**Step 2 — Apply formula.** $\\tfrac{a}{1-r}=\\tfrac{1}{1-\\tfrac15}$.\n\n**Step 3 — Simplify.** $\\tfrac{1}{\\tfrac45}=\\tfrac54$.\n\n**Answer:** $\\tfrac54$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1 — זיהוי.** $a=1$, $r=\\tfrac15$, $|r|<1$.\n\n**שלב 2 — הצבה בנוסחה.** $\\tfrac{1}{1-\\tfrac15}$.\n\n**שלב 3 — פישוט.** $\\tfrac54$.\n\n**תשובה:** $\\tfrac54$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "geometric_series"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Identify.** $a=1$, $r=\\tfrac15$, $|r|<1$.",
+          "**Step 2 — Apply formula.** $\\tfrac{a}{1-r}=\\tfrac{1}{1-\\tfrac15}$.",
+          "**Step 3 — Simplify.** $\\tfrac{1}{\\tfrac45}=\\tfrac54$.",
+          "**Answer:** $\\tfrac54$."
+        ],
+        "steps_he": [
+          "**שלב 1 — זיהוי.** $a=1$, $r=\\tfrac15$, $|r|<1$.",
+          "**שלב 2 — הצבה בנוסחה.** $\\tfrac{1}{1-\\tfrac15}$.",
+          "**שלב 3 — פישוט.** $\\tfrac54$.",
+          "**תשובה:** $\\tfrac54$."
+        ]
+      },
+      "source_item_id": "c91778dd-306b-5253-be33-132877557f29",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "course",
+      "archetypes": [
+        "application"
+      ],
+      "needs_review": true
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "By the ratio test, a series converges if the limit $L$ satisfies:",
+      "stem_he": "לפי מבחן המנה, טור מתכנס אם הגבול $L$ מקיים:",
+      "explanation_en": "**$L<1$ implies convergence.**\n\n**Answer:** $L<1$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$L<1$ גורר התכנסות.**\n\n**תשובה:** $L<1$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "ratio_test"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$L<1$",
+          "$L>1$",
+          "$L=1$",
+          "$L=\\infty$"
+        ],
+        "options_he": [
+          "$L<1$",
+          "$L>1$",
+          "$L=1$",
+          "$L=\\infty$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "b9d7edc2-b2fd-5366-99a4-48c9b732582d",
+      "points_level_min": "course",
+      "options_en": [
+        "$L<1$",
+        "$L>1$",
+        "$L=1$",
+        "$L=\\infty$"
+      ],
+      "options_he": [
+        "$L<1$",
+        "$L>1$",
+        "$L=1$",
+        "$L=\\infty$"
+      ],
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
+    },
+    {
+      "ord": 6,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find $\\displaystyle\\sum_{n=0}^{\\infty}\\left(\\tfrac13\\right)^n$.",
+      "stem_he": "מצאו את $\\displaystyle\\sum_{n=0}^{\\infty}\\left(\\tfrac13\\right)^n$.",
+      "explanation_en": "**$\\tfrac{1}{1-\\tfrac13}=\\tfrac32$.**\n\n**Answer:** $\\tfrac32$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$\\tfrac{1}{1-\\tfrac13}=\\tfrac32$.**\n\n**תשובה:** $\\tfrac32$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "geometric_series"
+      ],
+      "answer_payload": {
+        "value": 1.5
+      },
+      "source_item_id": "58ba4146-c29d-5abf-9a7f-4d96427dd3cf",
+      "points_level_min": "course",
+      "correct_answer": "1.5",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1.5",
+        "expected": 1.5,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 7,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "The $p$-series $\\sum \\tfrac{1}{n^p}$ converges if and only if:",
+      "stem_he": "הטור $\\sum \\tfrac{1}{n^p}$ מתכנס אם ורק אם:",
+      "explanation_en": "**Converges exactly when $p>1$.**\n\n**Answer:** $p>1$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**מתכנס בדיוק כאשר $p>1$.**\n\n**תשובה:** $p>1$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "p_series"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$p>1$",
+          "$p<1$",
+          "$p=1$",
+          "$p>0$"
+        ],
+        "options_he": [
+          "$p>1$",
+          "$p<1$",
+          "$p=1$",
+          "$p>0$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "44810d03-bc96-55d7-88d8-cf2fdae26e37",
+      "points_level_min": "course",
+      "options_en": [
+        "$p>1$",
+        "$p<1$",
+        "$p=1$",
+        "$p>0$"
+      ],
+      "options_he": [
+        "$p>1$",
+        "$p<1$",
+        "$p=1$",
+        "$p>0$"
+      ],
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
+    },
+    {
+      "ord": 8,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find $\\displaystyle\\sum_{n=0}^{\\infty}\\left(\\tfrac23\\right)^n$.",
+      "stem_he": "מצאו את $\\displaystyle\\sum_{n=0}^{\\infty}\\left(\\tfrac23\\right)^n$.",
+      "explanation_en": "**$\\tfrac{1}{1-\\tfrac23}=3$.**\n\n**Answer:** $3$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$\\tfrac{1}{1-\\tfrac23}=3$.**\n\n**תשובה:** $3$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "geometric_series"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "337551ed-2277-5cc2-a76d-c02bda0c21e4",
+      "points_level_min": "course",
+      "correct_answer": "3",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "3",
+        "expected": 3,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find $\\displaystyle\\sum_{n=1}^{\\infty}\\left(\\tfrac12\\right)^n$.",
+      "stem_he": "מצאו את $\\displaystyle\\sum_{n=1}^{\\infty}\\left(\\tfrac12\\right)^n$.",
+      "explanation_en": "**First term $\\tfrac12$: $\\tfrac{\\tfrac12}{1-\\tfrac12}=1$.**\n\n**Answer:** $1$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**איבר ראשון $\\tfrac12$: הסכום $1$.**\n\n**תשובה:** $1$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "geometric_series"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "922dee83-1bf4-5f42-9a9f-23dcddb47e93",
+      "points_level_min": "course",
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "A geometric series has first term $5$ and ratio $\\tfrac12$. Find its sum.",
+      "stem_he": "לטור הנדסי איבר ראשון $5$ ומנה $\\tfrac12$. מצאו את סכומו.",
+      "explanation_en": "**$\\tfrac{5}{1-\\tfrac12}=10$.**\n\n**Answer:** $10$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$\\tfrac{5}{1-\\tfrac12}=10$.**\n\n**תשובה:** $10$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "geometric_series"
+      ],
+      "answer_payload": {
+        "value": 10
+      },
+      "source_item_id": "c61ae518-042e-5ad7-992a-d66a60c84772",
+      "points_level_min": "course",
+      "correct_answer": "10",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "10",
+        "expected": 10,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 11,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: the $p$-series $\\sum \\tfrac{1}{n^2}$ converges.",
+      "stem_he": "נכון או לא נכון: הטור $\\sum \\tfrac{1}{n^2}$ מתכנס.",
+      "explanation_en": "**$p=2>1$, so it converges** — **true**.\n\n**Answer:** true.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$p=2>1$, ולכן מתכנס** — **נכון**.\n\n**תשובה:** נכון.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "p_series"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "d6e5cc02-c7e2-5f1d-921d-8f50a79c417a",
+      "points_level_min": "course",
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: if the terms $a_n$ do not tend to $0$, the series $\\sum a_n$ diverges.",
+      "stem_he": "נכון או לא נכון: אם האיברים $a_n$ אינם שואפים ל-$0$, הטור $\\sum a_n$ מתבדר.",
+      "explanation_en": "**The divergence (n-th term) test** — **true**.\n\n**Answer:** true.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**מבחן האיבר הכללי** — **נכון**.\n\n**תשובה:** נכון.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "divergence_test"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "21bcbad3-c237-5706-9776-734f5200a25f",
+      "points_level_min": "course",
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find $\\displaystyle\\sum_{n=0}^{\\infty} 3\\left(\\tfrac14\\right)^n$.",
+      "stem_he": "מצאו את $\\displaystyle\\sum_{n=0}^{\\infty} 3\\left(\\tfrac14\\right)^n$.",
+      "explanation_en": "**$\\tfrac{3}{1-\\tfrac14}=4$.**\n\n**Answer:** $4$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$\\tfrac{3}{1-\\tfrac14}=4$.**\n\n**תשובה:** $4$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "geometric_series"
+      ],
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "4c3427b2-d4e4-5013-9a09-3e8876fefec1",
+      "points_level_min": "course",
+      "correct_answer": "4",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "4",
+        "expected": 4,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find $\\displaystyle\\sum_{n=2}^{\\infty}\\left(\\tfrac12\\right)^n$.",
+      "stem_he": "מצאו את $\\displaystyle\\sum_{n=2}^{\\infty}\\left(\\tfrac12\\right)^n$.",
+      "explanation_en": "**First term $\\tfrac14$: $\\tfrac{\\tfrac14}{1-\\tfrac12}=\\tfrac12$.**\n\n**Answer:** $\\tfrac12$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**איבר ראשון $\\tfrac14$: הסכום $\\tfrac12$.**\n\n**תשובה:** $\\tfrac12$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "geometric_series"
+      ],
+      "answer_payload": {
+        "value": 0.5
+      },
+      "source_item_id": "d2ea5ac7-bd92-5ce0-bf9b-d7cd934cb86a",
+      "points_level_min": "course",
+      "correct_answer": "0.5",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.5",
+        "expected": 0.5,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find $1-\\tfrac13+\\tfrac19-\\tfrac{1}{27}+\\cdots$.",
+      "stem_he": "מצאו את $1-\\tfrac13+\\tfrac19-\\tfrac{1}{27}+\\cdots$.",
+      "explanation_en": "**$a=1$, $r=-\\tfrac13$: $\\tfrac{1}{1+\\tfrac13}=\\tfrac34$.**\n\n**Answer:** $\\tfrac34$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$a=1$, $r=-\\tfrac13$: $\\tfrac{1}{1+\\tfrac13}=\\tfrac34$.**\n\n**תשובה:** $\\tfrac34$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "skill_atoms": [
+        "geometric_series"
+      ],
+      "answer_payload": {
+        "value": 0.75
+      },
+      "source_item_id": "686e0d12-a5d2-525a-84b5-7749f2012f6a",
+      "points_level_min": "course",
+      "correct_answer": "0.75",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.75",
+        "expected": 0.75,
+        "tol": 0.000001
+      }
+    },
+    {
+      "points_level_min": "university",
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "divergence_test",
+        "geometric_series",
+        "p_series"
+      ],
+      "stem_en": "The $p$-series $\\sum n^{-p}$ converges for $p=$ ____ (enter the threshold; converges when $p$ is greater than this).",
+      "stem_he": "טור ה-$p$ $\\sum n^{-p}$ מתכנס עבור $p=$ ____ (הזינו את הסף; מתכנס כאשר $p$ גדול מערך זה).",
+      "explanation_en": "**Step 1.** Integral test compares to $\\int_1^\\infty x^{-p}\\,dx$.\n\n**Step 2.** That improper integral converges iff $p>1$.\n\n**Step 3.** Threshold blank is $1$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** מבחן האינטגרל משווה ל-$\\int_1^\\infty x^{-p}\\,dx$.\n\n**שלב 2.** מתכנס אמ\"ם $p>1$.\n\n**שלב 3.** הסף הוא $1$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "value": "1"
+      },
+      "correct_answer": "1",
+      "ord": 16
+    },
+    {
+      "points_level_min": "university",
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "divergence_test",
+        "geometric_series",
+        "p_series"
+      ],
+      "stem_en": "By the ratio test, if $L=1$, can you conclude convergence? Answer 'yes' or 'no'.",
+      "stem_he": "לפי מבחן היחס, אם $L=1$, האם אפשר להסיק התכנסות? ענו 'yes' או 'no'.",
+      "explanation_en": "**Step 1.** Ratio test: $L<1$ converge, $L>1$ diverge, $L=1$ inconclusive.\n\n**Step 2.** Both harmonic and $p=2$ give $L=1$.\n\n**Step 3.** Need another test. Answer: no.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** $L<1$ התכנסות, $L>1$ התבדרות, $L=1$ לא חד-משמעי.\n\n**שלב 2.** גם הרמוני וגם $p=2$ נותנים $L=1$.\n\n**שלב 3.** צריך מבחן אחר. תשובה: no.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "no",
+          "No",
+          "לא"
+        ]
+      },
+      "acceptable_answers": [
+        "no",
+        "No",
+        "לא"
+      ],
+      "ord": 17
+    },
+    {
+      "points_level_min": "university",
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "divergence_test",
+        "geometric_series",
+        "p_series"
+      ],
+      "stem_en": "Match each concept to the correct description.",
+      "stem_he": "התאימו כל מושג לתיאור הנכון.",
+      "explanation_en": "These four cues are the first filter on any series problem. Memorize the inconclusive cases ($L=1$, $p=1$) separately.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "ארבעת האיתותים האלה הם המסננת הראשונה בכל בעיית טורים. זכרו בנפרד את המקרים הלא חד-משמעיים.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "left_en": [
+          "Geometric |r|<1",
+          "p-series p>1",
+          "Ratio L<1",
+          "Term test fail"
+        ],
+        "left_he": [
+          "גיאומטרי |r|<1",
+          "טור p עם p>1",
+          "יחס L<1",
+          "כישלון מבחן איבר"
+        ],
+        "right_en": [
+          "Converges",
+          "Converges",
+          "Absolute convergence",
+          "Diverges"
+        ],
+        "right_he": [
+          "מתכנס",
+          "מתכנס",
+          "התכנסות מוחלטת",
+          "מתבדר"
+        ],
+        "correct_pairs": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "ord": 18
+    },
+    {
+      "points_level_min": "university",
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "divergence_test",
+        "geometric_series",
+        "p_series"
+      ],
+      "stem_en": "Order the steps of the standard solution method for this topic.",
+      "stem_he": "סדרו את שלבי שיטת הפתרון הסטנדרטית לנושא זה.",
+      "explanation_en": "A fixed workflow prevents random test shopping. Ratio first on $n!$ is efficient; comparison first on rational terms is efficient.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "זרימת עבודה קבועה מונעת בחירת מבחנים אקראית. יחס קודם על $n!$ יעיל; השוואה קודם על איברים רציונליים יעילה.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "Check $a_n\\to 0$.",
+          "Identify geometric or p-series if possible.",
+          "Try ratio/root for factorials and exponentials.",
+          "Use comparison / limit comparison / alternating as needed."
+        ],
+        "steps_he": [
+          "בדקו $a_n\\to 0$.",
+          "זהו גיאומטרי או טור p אם אפשר.",
+          "נסו יחס/שורש לעצרות ואקספוננטים.",
+          "השתמשו בהשוואה / השוואת גבול / מתחלף לפי הצורך."
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "ord": 19
+    },
+    {
+      "points_level_min": "university",
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "divergence_test",
+        "geometric_series",
+        "p_series"
+      ],
+      "stem_en": "Select **all** correct statements.",
+      "stem_he": "סמנו את **כל** ההיגדים הנכונים.",
+      "explanation_en": "Harmonic diverges. Ratio/root $L<1$ give absolute convergence; $L>1$ divergence. $p=2$ converges.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "ההרמוני מתבדר. יחס/שורש $L<1$ נותנים התכנסות מוחלטת; $L>1$ התבדרות. $p=2$ מתכנס.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "options_en": [
+          "$\\sum 1/n^2$ converges.",
+          "$\\sum 1/n$ converges.",
+          "If $L=\\lim|a_{n+1}/a_n|<1$, then absolute convergence.",
+          "Root test with $L>1$ implies divergence."
+        ],
+        "options_he": [
+          "$\\sum 1/n^2$ מתכנס.",
+          "$\\sum 1/n$ מתכנס.",
+          "אם $L=\\lim|a_{n+1}/a_n|<1$, אז התכנסות מוחלטת.",
+          "מבחן שורש עם $L>1$ גורר התבדרות."
+        ],
+        "correct_indices": [
+          0,
+          2,
+          3
+        ]
+      },
+      "options_en": [
+        "$\\sum 1/n^2$ converges.",
+        "$\\sum 1/n$ converges.",
+        "If $L=\\lim|a_{n+1}/a_n|<1$, then absolute convergence.",
+        "Root test with $L>1$ implies divergence."
+      ],
+      "options_he": [
+        "$\\sum 1/n^2$ מתכנס.",
+        "$\\sum 1/n$ מתכנס.",
+        "אם $L=\\lim|a_{n+1}/a_n|<1$, אז התכנסות מוחלטת.",
+        "מבחן שורש עם $L>1$ גורר התבדרות."
+      ],
+      "correct_indices": [
+        0,
+        2,
+        3
+      ],
+      "ord": 20
+    },
+    {
+      "points_level_min": "university",
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "divergence_test",
+        "geometric_series",
+        "p_series"
+      ],
+      "needs_review": true,
+      "stem_en": "Use the ratio test to determine convergence of $\\sum n^2/3^n$. Sketch why exponential decay beats polynomial growth.",
+      "stem_he": "השתמשו במבחן היחס לקביעת התכנסות של $\\sum n^2/3^n$. הסבירו מדוע דעיכה אקספוננטית גוברת על גדילה פולינומית.",
+      "explanation_en": "**Step 1.** $\\bigl|\\frac{a_{n+1}}{a_n}\\bigr|=\\bigl(\\frac{n+1}{n}\\bigr)^2\\frac{1}{3}\\to\\frac13$.\n\n**Step 2.** $L=1/3<1$ ⇒ absolute convergence.\n\n**Step 3.** The factor $3^{-n}$ dominates any $n^2$ growth.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** היחס שואף ל-$1/3$.\n\n**שלב 2.** $L<1$ ⇒ התכנסות מוחלטת.\n\n**שלב 3.** $3^{-n}$ שולט בכל $n^2$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "L=1/3<1",
+          "Absolute convergence",
+          "Exponential wins"
+        ],
+        "steps_he": [
+          "L=1/3<1",
+          "התכנסות מוחלטת",
+          "אקספוננט גובר"
+        ]
+      },
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה שלב-אחר-שלב ותשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון.",
+      "ord": 21
+    },
+    {
+      "points_level_min": "university",
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof",
+        "parametric"
+      ],
+      "skill_atoms": [
+        "divergence_test",
+        "geometric_series",
+        "p_series"
+      ],
+      "needs_review": true,
+      "stem_en": "Using the integral test outline, justify that $\\sum_{n=1}^\\infty 1/n^p$ converges for $p>1$.",
+      "stem_he": "בעזרת מתווה מבחן האינטגרל, נמקו ש-$\\sum_{n=1}^\\infty 1/n^p$ מתכנס עבור $p>1$.",
+      "explanation_en": "**Step 1.** $f(x)=x^{-p}$ is positive, continuous, eventually decreasing for $p>0$.\n\n**Step 2.** $\\int_1^\\infty x^{-p}\\,dx$ converges iff $p>1$.\n\n**Step 3.** Integral test transfers that conclusion to the series.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** $f(x)=x^{-p}$ חיובית, רציפה ויורדת לבסוף.\n\n**שלב 2.** האינטגרל מתכנס אמ\"ם $p>1$.\n\n**שלב 3.** מבחן האינטגרל מעביר את המסקנה לטור.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "$f(x)=x^{-p}$ positive decreasing",
+          "$\\int_1^\\infty$ converges iff $p>1$",
+          "Integral test ⇒ series converges"
+        ],
+        "steps_he": [
+          "$f(x)=x^{-p}$ חיובית יורדת",
+          "$\\int_1^\\infty$ מתכנס אמ\"ם $p>1$",
+          "מבחן אינטגרל ⇒ הטור מתכנס"
+        ]
+      },
+      "ord": 22
+    },
+    {
+      "points_level_min": "university",
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "divergence_test",
+        "geometric_series",
+        "p_series"
+      ],
+      "stem_en": "Sum $\\sum_{n=0}^\\infty (1/2)^n$.",
+      "stem_he": "סכום $\\sum_{n=0}^\\infty (1/2)^n$.",
+      "explanation_en": "**Step 1.** Geometric with $r=1/2$.\n\n**Step 2.** Sum $1/(1-1/2)=2$.\n\n**Step 3.** Ratio test also gives $L=1/2<1$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** גיאומטרי עם $r=1/2$.\n\n**שלב 2.** סכום $2$.\n\n**שלב 3.** גם מבחן יחס: $L=1/2<1$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "value": 2
+      },
+      "correct_answer": "2",
+      "verify": {
+        "expr": "1/(1-1/2)",
+        "expected": 2,
+        "tol": 0.0001
+      },
+      "ord": 23
+    },
+    {
+      "points_level_min": "university",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "reverse"
+      ],
+      "skill_atoms": [
+        "divergence_test",
+        "geometric_series",
+        "p_series"
+      ],
+      "stem_en": "Which test is usually best for $\\sum \\frac{n!}{n^n}$?",
+      "stem_he": "איזה מבחן בדרך כלל הכי מתאים ל-$\\sum \\frac{n!}{n^n}$?",
+      "explanation_en": "Factorials and changing exponential bases scream ratio test. A $p$-series model does not fit $n!$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "עצרות ובסיסים אקספוננטיים משתנים קוראים למבחן יחס. מודל טור $p$ לא מתאים ל-$n!$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "options_en": [
+          "Ratio test",
+          "Term test only",
+          "p-series directly",
+          "Geometric closed form"
+        ],
+        "options_he": [
+          "מבחן יחס",
+          "מבחן איבר בלבד",
+          "טור p ישירות",
+          "סכום גיאומטרי סגור"
+        ],
+        "correct_index": 0
+      },
+      "options_en": [
+        "Ratio test",
+        "Term test only",
+        "p-series directly",
+        "Geometric closed form"
+      ],
+      "options_he": [
+        "מבחן יחס",
+        "מבחן איבר בלבד",
+        "טור p ישירות",
+        "סכום גיאומטרי סגור"
+      ],
+      "correct_index": 0,
+      "ord": 24
+    },
+    {
+      "points_level_min": "university",
+      "kind": "true_false",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "divergence_test",
+        "geometric_series",
+        "p_series"
+      ],
+      "stem_en": "True or False: the harmonic series $\\sum 1/n$ diverges.",
+      "stem_he": "נכון או לא נכון: הטור ההרמוני $\\sum 1/n$ מתבדר.",
+      "explanation_en": "This is the central divergent $p=1$ example. Integral test or Cauchy condensation both prove divergence; partial sums grow like $\\ln n$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "זהו דוגמת ההתבדרות המרכזית $p=1$. מבחן אינטגרל או עיבוי קושי מוכיחים התבדרות; הסכומים החלקיים גדלים כמו $\\ln n$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "value": true
+      },
+      "correct_bool": true,
+      "ord": 25
+    },
+    {
+      "id": "series_absolute_convergence-core-1",
+      "ord": 26,
+      "kind": "open",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "proof"
+      ],
+      "stem_en": "State the main theorem of this lesson (Absolute Convergence of Series) with hypotheses and conclusion, then give one exam-style application.",
+      "stem_he": "נסחו את המשפט המרכזי של השיעור (התכנסות בהחלט של טורים) עם הנחות ומסקנה, ותנו יישום אחד בסגנון מבחן.",
+      "correct_answer": "see theory section",
+      "explanation_en": "Recall the hypotheses carefully, write the conclusion, then apply it once (existence, classification, or computation) as in the theory section.",
+      "explanation_he": "הזכירו את ההנחות, כתבו את המסקנה, ויישמו פעם אחת כבחלק התיאוריה.",
+      "skill_atoms": []
+    }
+  ],
+  "est_minutes": 60,
+  "author": "wave3-calc1-stubs",
+  "version": 2,
+  "level_focus": null,
+  "skill_atom_bank": null
+}

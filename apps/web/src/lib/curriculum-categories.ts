@@ -222,11 +222,18 @@ const MATH_5PT_NEW_CONCEPTS = [
   'analytic_geometry',
   'analytic_geometry_5pt',
   'analytic_geometry_conics',
+  'analytic_geometry_parabola',
+  'analytic_geometry_ellipse',
   'circles',
   'vectors_dot_product_3d',
   'complex_numbers_de_moivre',
   'complex_numbers_5pt',
   'probability_conditional_bayes',
+  'probability_basic',
+  'probability_trees_tables',
+  'probability_bernoulli',
+  'functions_even_odd',
+  'trigonometry_sine_cosine_laws',
 ];
 const MATH_5PT_KG_LEGACY = [
   'logarithms',
@@ -688,6 +695,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
           'analytic_geometry',
           'analytic_geometry_4pt',
           'analytic_geometry_lines_circles',
+          'trigonometry_sine_cosine_laws',
           'trigonometry_plane_sine_cosine_law',
           'circles',
           'quadrilaterals',
@@ -705,6 +713,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
           'normal_distribution_z_scores',
           'linear_regression_correlation',
           'combinatorics',
+          'probability_trees_tables',
         ],
       },
       {
@@ -799,6 +808,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
           'optimization_related_rates',
           'function_analysis_asymptotes',
           'function_analysis_5pt',
+          'functions_even_odd',
           'integrals_trigonometric',
           'integrals_trig_exp',
           'integrals_substitution_basic',
@@ -825,7 +835,6 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
           'mathematical_induction',
           'combinatorics_5pt',
           'combinatorics',
-          'distributions',
           'function_transformations',
           'logarithms',
           'sequences_5pt',
@@ -839,6 +848,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         concept_ids: [
           'trigonometry_identities',
           'trigonometry_equations',
+          'trigonometry_sine_cosine_laws',
         ],
       },
       {
@@ -847,6 +857,9 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         enLabel: 'Paper 1 — Probability',
         exam_paper: 'paper_1',
         concept_ids: [
+          'probability_basic',
+          'probability_trees_tables',
+          'probability_bernoulli',
           'probability_conditional_bayes',
           'distributions',
         ],
@@ -859,7 +872,8 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         concept_ids: [
           'analytic_geometry',
           'analytic_geometry_5pt',
-          'analytic_geometry_conics',
+          'analytic_geometry_parabola',
+          'analytic_geometry_ellipse',
           'circles',
         ],
       },
