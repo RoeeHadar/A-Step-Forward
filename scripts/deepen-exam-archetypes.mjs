@@ -70,7 +70,7 @@ const SEQ_THEORY = {
 **Odd/even index sums.** Split $a_1+a_3+\\cdots$ vs $a_2+a_4+\\cdots$ — each is itself arithmetic or geometric with common difference/ratio $2d$ or $r^2$.
 
 **Prove arithmetic / geometric.** Show $a_{k+1}-a_k$ constant (arithmetic) or $a_{k+1}/a_k$ constant (geometric) for all $k$ in range — or use the closed form and reverse-engineer.`,
-  body_he_md: `**סכום N אחרונים.** בחשבונית $S_{\\text{אחרונים}}=S_N-S_{N-n}$. בהנדסית אותו רעיון עם סכומים חלקיים.
+  body_he_md: `**סכום N אחרונים.** בחשבונית $S_{\\mathrm{last}\\,n}=S_N-S_{N-n}$. בהנדסית אותו רעיון עם סכומים חלקיים.
 
 **איברים אמצעיים.** בחשבונית של $N$ איברים — אינדקס אמצעי. סכום בלוק מרכזי = סה״כ פחות שני הקצוות.
 
