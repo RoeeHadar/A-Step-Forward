@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import os
 from collections.abc import AsyncGenerator
-from uuid import uuid4
 
 import pytest
 from memory_service.default_service import DefaultMemoryService
@@ -51,7 +50,8 @@ async def postgres_available() -> AsyncGenerator[None, None]:
 
 
 async def test_chat_turn_writes_episodic_memory_row(postgres_available: None) -> None:
-    learner_id = f"learner-{uuid4()}"
+    # Fixed id — random UUIDs can trip the credit-card-like PII digit regex.
+    learner_id = "learner-episodic-write-smoke"
     message = "Explain why fractions matter in one sentence."
     memory = DefaultMemoryService()
     runner = OrchestratorRunner(memory_service=memory)
