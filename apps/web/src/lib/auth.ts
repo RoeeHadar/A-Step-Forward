@@ -58,6 +58,7 @@ export function requireRole(ctx: AuthContext, allowed: AppRole[]): void {
 /** Best-effort sync of Clerk publicMetadata.role with app_users. */
 export async function syncClerkRole(userId: string, role: SocialRole): Promise<void> {
   try {
+    // Clerk session JWT may lag; Neon app_users is authoritative for routing.
     await clerkClient.users.updateUserMetadata(userId, {
       publicMetadata: { role },
     });

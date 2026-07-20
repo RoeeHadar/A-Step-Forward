@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useUser } from '@clerk/nextjs';
 import { Button } from '@asf/ui/button';
 import { Input } from '@asf/ui/input';
 import { useI18n } from '@/providers/i18n-provider';
@@ -40,7 +41,7 @@ export function IdentitySetupForm({
 }) {
   const { locale } = useI18n();
   const isHe = locale === 'he';
-  const router = useRouter();
+  const { user } = useUser();
   const search = useSearchParams();
   const next = search.get('next') || '/app';
 
@@ -104,8 +105,11 @@ export function IdentitySetupForm({
         setSaving(false);
         return;
       }
-      router.replace(data.redirect ?? (role === 'educator' ? '/educator' : next));
-      router.refresh();
+      // Refresh Clerk client cache so publicMetadata.role is visible ASAP.
+      await user?.reload().catch(() => undefined);
+      const dest = data.redirect ?? (role === 'educator' ? '/educator' : next);
+      // Hard navigation avoids RSC cache serving a stale redirect loop.
+      window.location.assign(dest);
     } catch {
       setError(isHe ? 'שגיאת רשת' : 'Network error');
       setSaving(false);

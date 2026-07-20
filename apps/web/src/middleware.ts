@@ -15,7 +15,10 @@ const isPublicRoute = createRouteMatcher([
 ]);
 
 const isAdminRoute = createRouteMatcher(['/admin(.*)']);
-const isEducatorRoute = createRouteMatcher(['/educator(.*)']);
+// NOTE: Do NOT gate /educator in middleware on Clerk JWT role.
+// After identity setup we write role to Neon + Clerk publicMetadata, but the
+// session JWT often still says "learner" until the next sign-in/refresh.
+// App layouts/pages enforce educator via Neon-backed getAuthContext().
 
 export default clerkMiddleware(async (auth, request) => {
   const { userId, sessionClaims } = auth();
@@ -37,7 +40,10 @@ export default clerkMiddleware(async (auth, request) => {
     signInUrl.searchParams.set('redirect_url', request.url);
     return NextResponse.redirect(signInUrl);
   }
-  const metadata = (sessionClaims?.metadata ?? {}) as {
+  const metadata = (sessionClaims?.metadata ??
+    // Clerk JWT templates sometimes expose public metadata under either key.
+    (sessionClaims as { publicMetadata?: { role?: string } } | undefined)?.publicMetadata ??
+    {}) as {
     role?: string;
     child_mode?: boolean;
     age?: number;
@@ -45,12 +51,6 @@ export default clerkMiddleware(async (auth, request) => {
   const role = metadata.role ?? 'learner';
 
   if (isAdminRoute(request) && role !== 'admin') {
-    return isApiRoute
-      ? NextResponse.json({ error: 'forbidden' }, { status: 403 })
-      : NextResponse.redirect(new URL('/app', request.url));
-  }
-
-  if (isEducatorRoute(request) && role !== 'educator' && role !== 'admin') {
     return isApiRoute
       ? NextResponse.json({ error: 'forbidden' }, { status: 403 })
       : NextResponse.redirect(new URL('/app', request.url));
