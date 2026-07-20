@@ -101,8 +101,17 @@ class QuizSubmitRequest(BaseModel):
 
 class QuizSubmitResponse(BaseModel):
     quiz_id: str
-    score: float
+    score: float | None = None
     per_topic: dict[str, float]
     weak_concepts: list[str]
     plan_adapted: bool = False
     next_week_concepts: list[str] | None = None
+    passed: bool | None = None
+    pass_threshold: float | None = None
+    attempt_id: str | None = None
+    grading_status: str | None = None
+    open_pending: int | None = None
+    open_total: int | None = None
+    graded_open: int | None = None
+    busy: bool | None = None
+    message: str | None = None

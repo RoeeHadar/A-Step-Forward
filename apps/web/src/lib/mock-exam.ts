@@ -5,7 +5,6 @@ import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import { randomUUID } from 'node:crypto';
 import { appendLearnerPersonaLine } from './neon-db';
-import { recordTestAttempt } from './test-attempts';
 
 neonConfig.fetchConnectionCache = true;
 
@@ -423,6 +422,7 @@ export async function submitMockExam(
   let scoreMcq = 0;
   let maxMcq = 0;
   const feedback: MockExamSubmitFeedback[] = [];
+  const closedScores: Record<string, number> = {};
 
   for (const q of questions) {
     const chosen = answers[q.id]?.trim() ?? '';
@@ -431,6 +431,7 @@ export async function submitMockExam(
       const correct = (q.correct ?? '').toUpperCase();
       const isCorrect = chosen.toUpperCase() === correct;
       if (isCorrect) scoreMcq += 1;
+      closedScores[q.id] = isCorrect ? 1 : 0;
       feedback.push({
         question_id: q.id,
         correct: isCorrect,
@@ -463,38 +464,56 @@ export async function submitMockExam(
     )
   `;
 
-  // Unify into the Tests archive (ADR-0010 Stream B: all assessments archived; also
-  // feeds the readiness mock-gate). Best-effort — never blocks the exam result.
-  const mockScore = maxMcq > 0 ? scoreMcq / maxMcq : 0;
-  await recordTestAttempt({
+  const { createPendingAttempt } = await import('./assessment-grading');
+  const view = await createPendingAttempt({
     learnerId: userId,
     kind: 'mock_exam',
-    score: mockScore,
-    passThreshold: MOCK_PASS_THRESHOLD,
-    perTopic: {},
-    weakConcepts: [],
+    quizId: String(examId),
+    locale: 'he',
     questions: questions.map((q) => ({
       id: q.id,
       topic: q.id,
       subject: '',
       stem: q.stem_he || q.stem_en || '',
-      options: (q.options ?? []).map((o) => ({ key: o.key, text: o.text_he || o.text_en || '' })),
+      kind: q.kind === 'mcq' ? 'mcq' : 'open',
+      options: (q.options ?? []).map((o) => ({
+        key: o.key,
+        text: o.text_he || o.text_en || '',
+      })),
       correct: (q.correct ?? '').toUpperCase(),
+      rubric: q.rubric_he ?? q.rubric_en,
+      model_answer: q.model_answer_he ?? q.model_answer_en,
+      total_points: q.kind === 'mcq' ? 5 : 20,
     })),
     answers: Object.entries(answers).map(([item_id, chosen]) => ({
       item_id,
       chosen: String(chosen ?? ''),
     })),
-  }).catch(() => null);
+    closedScores,
+    passThreshold: MOCK_PASS_THRESHOLD,
+  });
 
-  // Memory "About me" — Hebrew-default observation so Progress/Memory stay in sync.
-  const pct = Math.round(mockScore * 100);
-  const passedMock = mockScore >= MOCK_PASS_THRESHOLD;
-  void appendLearnerPersonaLine(
-    userId,
-    'תצפיות אחרונות',
-    `מבחן לדוגמה: ${scoreMcq}/${maxMcq} בשאלות רב-ברירה (${pct}%) — ${passedMock ? 'עבר את רף המוכנות' : 'מתחת לרף המוכנות'}.`,
-  ).catch(() => null);
+  // Persona line only when already complete (closed-only); otherwise after grade-next.
+  if (view?.grading_status === 'complete' && view.score != null) {
+    const pct = Math.round(view.score * 100);
+    void appendLearnerPersonaLine(
+      userId,
+      'תצפיות אחרונות',
+      `מבחן לדוגמה: ציון ${pct}% לאחר בדיקה — ${view.passed ? 'עבר את רף המוכנות' : 'מתחת לרף המוכנות'}.`,
+    ).catch(() => null);
+  }
 
-  return { score_mcq: scoreMcq, max_mcq: maxMcq, feedback_by_question: feedback };
+  return {
+    score_mcq: scoreMcq,
+    max_mcq: maxMcq,
+    feedback_by_question: feedback,
+    attempt_id: view?.attempt_id ?? null,
+    grading_status: view?.grading_status,
+    score: view?.score ?? null,
+    passed: view?.passed ?? null,
+    item_feedback: view?.item_feedback,
+    open_pending: view?.open_pending,
+    open_total: view?.open_total,
+    graded_open: view?.graded_open,
+  };
 }

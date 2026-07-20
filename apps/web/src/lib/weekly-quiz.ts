@@ -9,8 +9,7 @@ import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import { randomUUID } from 'node:crypto';
 import { appendLearnerPersonaLine, getConceptMastery, getLearnerProfile } from './neon-db';
-import { evaluateGatePass, hasFrontier } from './plan-pacing';
-import { countGateAttempts, GATE_PASS_THRESHOLD, recordTestAttempt } from './test-attempts';
+import { countGateAttempts, GATE_PASS_THRESHOLD } from './test-attempts';
 import {
   GATE_BANK_FORMAT_VERSION,
   isBankSourcedGateQuiz,
@@ -726,7 +725,9 @@ export async function generateWeeklyQuizForUser(
 }
 
 /**
- * Grades a cached weekly quiz on Neon (no Render). Idempotent when already submitted.
+ * Grades a cached weekly quiz on Neon (no Render).
+ * Feedback-first: if any open items exist, returns pending (score=null) until
+ * process review completes via grade-next.
  */
 export async function submitWeeklyQuizForUser(
   userId: string,
@@ -773,136 +774,189 @@ export async function submitWeeklyQuizForUser(
     .filter((q): q is StoredWeeklyQuestion => q != null);
   if (stored.length === 0) return null;
 
-  const answerMap = new Map(args.answers.map((a) => [a.item_id, a.chosen]));
-  const openItems = stored
-    .filter((q) => q.kind === 'open' || q.kind === 'derivation')
-    .map((q) => ({
-      id: q.id,
-      stem: q.stem,
-      rubric: q.rubric,
-      model_answer: q.model_answer,
-      response: (answerMap.get(q.id) ?? '').trim(),
-    }))
-    .filter((it) => it.response.length > 0);
-
   const locale = (args.locale ?? row.locale ?? 'he') === 'en' ? 'en' : 'he';
-  const openGrades = await gradeOpenGateItems(openItems, locale);
-
-  // Unanswered open items are incorrect (fail closed).
-  for (const q of stored) {
-    if ((q.kind === 'open' || q.kind === 'derivation') && openGrades[q.id] === undefined) {
-      openGrades[q.id] = false;
-    }
-  }
-
-  const { score, per_topic, weak_concepts } = scoreWeeklyQuizAnswers(
-    stored,
-    args.answers,
-    openGrades,
-  );
-
-  const profile = await getLearnerProfile(userId).catch(() => null);
-  const goalKeyRaw =
-    (profile?.personality_profile as { goal_key?: unknown } | null | undefined)?.goal_key;
-  const goalKey =
-    typeof goalKeyRaw === 'string' && hasFrontier(goalKeyRaw)
-      ? goalKeyRaw
-      : typeof profile?.goal === 'string' && hasFrontier(profile.goal)
-        ? profile.goal
-        : null;
-  const gate = evaluateGatePass({
-    aggregateScore: score,
-    perTopic: per_topic,
-    goalKey,
-    passThreshold: GATE_PASS_THRESHOLD,
-  });
-  const weakForRemediation = Array.from(new Set([...weak_concepts, ...gate.failed_critical]));
-
-  try {
-    await sql`
-      UPDATE weekly_quizzes_ai
-      SET submitted_at = NOW(),
-          score = ${score},
-          per_topic = ${JSON.stringify(per_topic)}::jsonb
-      WHERE id = ${quizId}::uuid
-        AND user_id = ${userId}
-    `;
-  } catch {
-    // Still return graded result even if persistence fails.
-  }
-
-  for (const [topic, topicScore] of Object.entries(per_topic)) {
-    try {
-      await updateTopicMasteryFromQuiz(userId, topic, topicScore);
-    } catch {
-      // Best-effort mastery sync per topic.
-    }
-  }
-
-  const passed = gate.passed;
   const answerByItem = new Map(args.answers.map((a) => [a.item_id, a.chosen]));
-  const attemptId = await recordTestAttempt({
+
+  const closedScores: Record<string, number> = {};
+  for (const q of stored) {
+    if (q.kind === 'open' || q.kind === 'derivation') continue;
+    closedScores[q.id] = gradeClosedItem(q, answerByItem.get(q.id) ?? '') ? 1 : 0;
+  }
+
+  const { createPendingAttempt } = await import('./assessment-grading');
+  const view = await createPendingAttempt({
     learnerId: userId,
     kind: 'weekly_gate',
     planId: row.plan_id ?? args.planId,
     weekNum: row.week_num ?? args.weekNum,
     quizId,
-    score,
-    passThreshold: GATE_PASS_THRESHOLD,
-    perTopic: per_topic,
-    weakConcepts: weakForRemediation,
+    locale,
     questions: stored.map((q) => ({
       id: q.id,
       topic: q.topic,
       subject: q.subject,
       stem: q.stem,
+      kind: q.kind,
       options: q.options,
-      correct: q.correct ?? q.correct_answer ?? '',
+      correct: q.correct,
+      correct_answer: q.correct_answer,
+      acceptable_answers: q.acceptable_answers,
+      rubric: q.rubric,
+      model_answer: q.model_answer,
+      total_points: q.total_points ?? (q.kind === 'open' || q.kind === 'derivation' ? 20 : 5),
     })),
     answers: stored.map((q) => ({
       item_id: q.id,
       chosen: answerByItem.get(q.id) ?? '',
     })),
-  }).catch(() => null);
+    closedScores,
+    passThreshold: GATE_PASS_THRESHOLD,
+  });
 
-  // Keep Memory "About me" current — Hebrew-default line about this gate attempt.
-  const pct = Math.round(score * 100);
-  const personaLine =
-    locale === 'en'
-      ? `Week ${row.week_num ?? args.weekNum} gate: scored ${pct}% (${passed ? 'passed' : 'needs remediation'}). Weak topics: ${weakForRemediation.slice(0, 4).join(', ') || 'none'}.`
-      : `שער שבוע ${row.week_num ?? args.weekNum}: ציון ${pct}% (${passed ? 'עבר/ה' : 'דורש חיזוק'}). נושאים חלשים: ${weakForRemediation.slice(0, 4).join(', ') || 'אין'}.`;
-  void appendLearnerPersonaLine(
-    userId,
-    locale === 'en' ? 'Recent observations' : 'תצפיות אחרונות',
-    personaLine,
-  ).catch(() => null);
+  if (!view) return null;
 
-  let planAdvanced = false;
-  if (passed) {
-    try {
-      const updated = (await sql`
-        UPDATE plan_weeks
-        SET status = 'completed'
-        WHERE plan_id = ${row.plan_id ?? args.planId}::uuid
-          AND week_number = ${row.week_num ?? args.weekNum}
-          AND status = 'active'
-        RETURNING id
-      `) as Array<{ id: string }>;
-      planAdvanced = updated.length > 0;
-    } catch {
-      // Best-effort; soft-override remains the backstop.
+  try {
+    await sql`
+      UPDATE weekly_quizzes_ai
+      SET submitted_at = NOW(),
+          score = ${view.score ?? null},
+          per_topic = ${JSON.stringify(view.per_topic ?? {})}::jsonb
+      WHERE id = ${quizId}::uuid
+        AND user_id = ${userId}
+    `;
+  } catch {
+    // best-effort
+  }
+
+  // Closed-only complete path: may advance immediately.
+  let planAdapted = false;
+  if (view.grading_status === 'complete' && view.passed) {
+    planAdapted = await markWeekCompleted(
+      row.plan_id ?? args.planId,
+      row.week_num ?? args.weekNum,
+    );
+    if (view.score != null) {
+      const pct = Math.round(view.score * 100);
+      const personaLine =
+        locale === 'en'
+          ? `Week ${row.week_num ?? args.weekNum} gate: scored ${pct}% (passed).`
+          : `שער שבוע ${row.week_num ?? args.weekNum}: ציון ${pct}% (עבר/ה).`;
+      void appendLearnerPersonaLine(
+        userId,
+        locale === 'en' ? 'Recent observations' : 'תצפיות אחרונות',
+        personaLine,
+      ).catch(() => null);
     }
   }
 
   return {
     quiz_id: quizId,
-    score,
-    per_topic,
-    weak_concepts: weakForRemediation,
-    plan_adapted: planAdvanced,
+    score: view.score,
+    per_topic: view.per_topic,
+    weak_concepts: view.weak_concepts,
+    plan_adapted: planAdapted,
     next_week_concepts: null,
-    passed,
+    passed: view.passed,
     pass_threshold: GATE_PASS_THRESHOLD,
-    attempt_id: attemptId,
+    attempt_id: view.attempt_id,
+    grading_status: view.grading_status,
+    item_feedback: view.item_feedback,
+    item_scores: view.item_scores,
+    open_pending: view.open_pending,
+    open_total: view.open_total,
+    graded_open: view.graded_open,
+    busy: view.busy,
+    message: view.message,
+  };
+}
+
+async function markWeekCompleted(planId: string, weekNum: number): Promise<boolean> {
+  if (!sql) return false;
+  try {
+    const updated = (await sql`
+      UPDATE plan_weeks
+      SET status = 'completed'
+      WHERE plan_id = ${planId}::uuid
+        AND week_number = ${weekNum}
+        AND status = 'active'
+      RETURNING id
+    `) as Array<{ id: string }>;
+    return updated.length > 0;
+  } catch {
+    return false;
+  }
+}
+
+/** Continue chunked process grading for a weekly-gate attempt. */
+export async function continueWeeklyQuizGrading(
+  userId: string,
+  attemptId: string,
+): Promise<QuizSubmitResponse | null> {
+  const { gradeNextOpenItem } = await import('./assessment-grading');
+  const view = await gradeNextOpenItem(userId, attemptId, {
+    onPassed: async ({ planId, weekNum, score }) => {
+      if (!planId || weekNum == null) return false;
+      const ok = await markWeekCompleted(planId, weekNum);
+      if (ok) {
+        const personaLine = `שער שבוע ${weekNum}: ציון ${Math.round(score * 100)}% (עבר/ה) — לאחר בדיקת תהליך.`;
+        void appendLearnerPersonaLine(userId, 'תצפיות אחרונות', personaLine).catch(() => null);
+      }
+      return ok;
+    },
+  });
+  if (!view) return null;
+
+  let quizId = attemptId;
+  try {
+    if (sql) {
+      const rows = (await sql`
+        SELECT quiz_id FROM test_attempts
+        WHERE id = ${attemptId}::uuid AND learner_id = ${userId}
+        LIMIT 1
+      `) as Array<{ quiz_id: string | null }>;
+      if (rows[0]?.quiz_id) quizId = rows[0].quiz_id;
+
+      if (view.grading_status === 'complete' && view.score != null && rows[0]?.quiz_id) {
+        await sql`
+          UPDATE weekly_quizzes_ai
+          SET score = ${view.score},
+              per_topic = ${JSON.stringify(view.per_topic ?? {})}::jsonb,
+              submitted_at = COALESCE(submitted_at, NOW())
+          WHERE id = ${rows[0].quiz_id}::uuid AND user_id = ${userId}
+        `;
+      }
+    }
+  } catch {
+    // best-effort sync
+  }
+
+  if (view.grading_status === 'complete' && view.per_topic) {
+    for (const [topic, topicScore] of Object.entries(view.per_topic)) {
+      try {
+        await updateTopicMasteryFromQuiz(userId, topic, topicScore);
+      } catch {
+        // ignore
+      }
+    }
+  }
+
+  return {
+    quiz_id: quizId,
+    score: view.score,
+    per_topic: view.per_topic,
+    weak_concepts: view.weak_concepts,
+    plan_adapted: view.plan_adapted,
+    next_week_concepts: null,
+    passed: view.passed,
+    pass_threshold: view.pass_threshold,
+    attempt_id: view.attempt_id,
+    grading_status: view.grading_status,
+    item_feedback: view.item_feedback,
+    item_scores: view.item_scores,
+    open_pending: view.open_pending,
+    open_total: view.open_total,
+    graded_open: view.graded_open,
+    busy: view.busy,
+    message: view.message,
   };
 }

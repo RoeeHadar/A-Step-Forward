@@ -7,6 +7,10 @@ import { Button } from '@asf/ui/button';
 import { Badge } from '@asf/ui/badge';
 import { cn } from '@asf/ui';
 import { CheckCircle2, XCircle, Clock, ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
+import {
+  gradingUiPhase,
+  maxGradeNextPolls,
+} from '@/lib/assessment-grading-logic';
 import type { QuizQuestion, QuizStartResponse, QuizSubmitResponse } from '@asf/schemas/learning_path';
 import { useLanguagePreference, type Lang } from '@/hooks/use-language-preference';
 import { MarkdownMath } from '@/components/markdown-math';
@@ -54,6 +58,19 @@ const STR = {
     kind_numeric: 'חישוב',
     kind_short: 'תשובה קצרה',
     kind_mcq: 'רב-ברירה',
+    reviewing: 'בודקים את הפתרונות שלכם…',
+    review_progress: (done: number, total: number) => `נבדקו ${done} מתוך ${total} שאלות פתוחות`,
+    score_after_review: 'הציון יופיע רק אחרי בדיקת התהליך המלא.',
+    feedback_title: 'משוב לפי שאלה',
+    strengths: 'חוזקות',
+    steps_present: 'שלבים שהופיעו',
+    steps_skipped: 'שלבים שדולגו',
+    logic: 'היגיון',
+    material: 'עיגון לחומר',
+    points: 'נקודות',
+    next_fix: 'תיקון הבא',
+    grader_busy: 'הבודק עסוק — ממשיכים בעוד רגע…',
+    grader_failed: 'לא הצלחנו לסיים את הבדיקה. נסו לרענן.',
   },
   en: {
     title: (n: number) => `Week ${n} Quiz`,
@@ -80,6 +97,19 @@ const STR = {
     kind_numeric: 'Calculation',
     kind_short: 'Short answer',
     kind_mcq: 'Multiple choice',
+    reviewing: 'Reviewing your solutions…',
+    review_progress: (done: number, total: number) => `Reviewed ${done} of ${total} open questions`,
+    score_after_review: 'Your score appears only after full process review.',
+    feedback_title: 'Per-question feedback',
+    strengths: 'Strengths',
+    steps_present: 'Steps present',
+    steps_skipped: 'Steps skipped',
+    logic: 'Logic',
+    material: 'Material anchoring',
+    points: 'Points',
+    next_fix: 'Next fix',
+    grader_busy: 'Grader busy — retrying shortly…',
+    grader_failed: 'Could not finish grading. Try refreshing.',
   },
 } as const;
 
@@ -240,21 +270,133 @@ function QuizQuestionCard({
   );
 }
 
+function ProcessFeedbackList({
+  result,
+  t,
+}: {
+  result: QuizSubmitResponse;
+  t: (typeof STR)[Lang];
+}) {
+  const entries = Object.values(result.item_feedback ?? {}).filter(
+    (f) => f.status === 'graded' || f.status === 'failed',
+  );
+  if (entries.length === 0) return null;
+  return (
+    <div className="space-y-4">
+      <h3 className="text-sm font-semibold">{t.feedback_title}</h3>
+      {entries.map((f) => (
+        <div key={f.item_id} className="glass-surface space-y-2 rounded-xl p-4 text-sm">
+          <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+            <span dir="ltr">{f.item_id.slice(0, 12)}</span>
+            <span>
+              {t.points}: {f.points_earned}/{f.points_available}
+            </span>
+          </div>
+          {f.strengths ? (
+            <p>
+              <span className="font-medium">{t.strengths}: </span>
+              {f.strengths}
+            </p>
+          ) : null}
+          {f.steps_present ? (
+            <p>
+              <span className="font-medium">{t.steps_present}: </span>
+              {f.steps_present}
+            </p>
+          ) : null}
+          {f.steps_skipped ? (
+            <p>
+              <span className="font-medium">{t.steps_skipped}: </span>
+              {f.steps_skipped}
+            </p>
+          ) : null}
+          {f.logic ? (
+            <p>
+              <span className="font-medium">{t.logic}: </span>
+              {f.logic}
+            </p>
+          ) : null}
+          {f.material_anchoring ? (
+            <p>
+              <span className="font-medium">{t.material}: </span>
+              {f.material_anchoring}
+            </p>
+          ) : null}
+          {f.next_fix ? (
+            <p className="text-amber-700 dark:text-amber-400">
+              <span className="font-medium">{t.next_fix}: </span>
+              {f.next_fix}
+            </p>
+          ) : null}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function ResultView({
   result,
   onGoToDashboard,
   lang,
+  grading,
 }: {
   result: QuizSubmitResponse;
   onGoToDashboard: () => void;
   lang: Lang;
+  grading?: boolean;
 }) {
   const t = STR[lang];
   const isHe = lang === 'he';
-  const pct = Math.round(result.score * 100);
-  // Week-gate pass (ADR-0009): use the server's gate result when present,
-  // falling back to the legacy encouragement threshold for older payloads.
-  const passed = result.passed ?? result.score >= 0.6;
+  const phase = gradingUiPhase({
+    grading_status: result.grading_status,
+    score: result.score,
+  });
+  const openTotal = result.open_total ?? 0;
+  const gradedOpen = result.graded_open ?? 0;
+
+  if (phase === 'failed') {
+    return (
+      <div className="space-y-6 text-center" dir={isHe ? 'rtl' : 'ltr'}>
+        <XCircle className="mx-auto h-16 w-16 text-destructive" />
+        <p className="text-muted-foreground">{t.grader_failed}</p>
+        <ProcessFeedbackList result={result} t={t} />
+        <Button className="w-full" onClick={onGoToDashboard}>
+          {t.back_to_dashboard}
+        </Button>
+      </div>
+    );
+  }
+
+  if (phase === 'pending') {
+    return (
+      <div className="space-y-6" dir={isHe ? 'rtl' : 'ltr'}>
+        <div className="text-center">
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-primary" />
+          <h2 className="mt-4 font-display text-2xl font-bold">{t.reviewing}</h2>
+          <p className="mt-2 text-sm text-muted-foreground">{t.score_after_review}</p>
+          {openTotal > 0 ? (
+            <p className="mt-1 text-sm text-muted-foreground">
+              {t.review_progress(gradedOpen, openTotal)}
+            </p>
+          ) : null}
+          {result.busy || result.message ? (
+            <p className="mt-2 text-sm text-amber-700 dark:text-amber-400" role="status">
+              {result.message ?? t.grader_busy}
+            </p>
+          ) : null}
+          {grading ? (
+            <p className="mt-2 text-xs text-muted-foreground" aria-live="polite">
+              …
+            </p>
+          ) : null}
+        </div>
+        <ProcessFeedbackList result={result} t={t} />
+      </div>
+    );
+  }
+
+  const pct = Math.round((result.score ?? 0) * 100);
+  const passed = result.passed ?? (result.score ?? 0) >= 0.6;
 
   return (
     <div className="space-y-6" dir={isHe ? 'rtl' : 'ltr'}>
@@ -269,6 +411,8 @@ function ResultView({
           {passed ? t.great : t.keep_studying}
         </p>
       </div>
+
+      <ProcessFeedbackList result={result} t={t} />
 
       {Object.keys(result.per_topic).length > 0 && (
         <div className="glass-surface rounded-xl p-4">
@@ -365,6 +509,7 @@ export function WeekQuizClient({ quiz, planId, weekNum, token }: Props) {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [result, setResult] = useState<QuizSubmitResponse | null>(null);
+  const [grading, setGrading] = useState(false);
 
   const handleSubmit = useCallback(
     async (opts?: { allowEmpty?: boolean }) => {
@@ -413,6 +558,73 @@ export function WeekQuizClient({ quiz, planId, weekNum, token }: Props) {
     [answers, quiz, planId, weekNum, token, submitting, t, lang],
   );
 
+  // Chunked process grading: keep calling grade-next until complete.
+  useEffect(() => {
+    if (!result?.attempt_id) return;
+    const status = result.grading_status ?? 'complete';
+    if (status === 'complete' || status === 'failed') return;
+    // Closed-only submits already have score.
+    if ((result.open_total ?? 0) === 0 && result.score != null) return;
+
+    const attemptId = result.attempt_id;
+    const maxPolls = maxGradeNextPolls(result.open_total ?? 4);
+    let polls = 0;
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
+    const tick = async () => {
+      if (cancelled) return;
+      if (polls >= maxPolls) {
+        setResult((prev) =>
+          prev
+            ? {
+                ...prev,
+                grading_status: 'failed',
+                message:
+                  lang === 'he'
+                    ? 'בדיקה ארכה מדי — נסו לרענן.'
+                    : 'Grading took too long — try refreshing.',
+              }
+            : prev,
+        );
+        return;
+      }
+      polls += 1;
+      setGrading(true);
+      try {
+        const res = await fetch('/api/quiz/grade-next', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ attempt_id: attemptId }),
+        });
+        if (!res.ok) {
+          if (!cancelled) timer = setTimeout(() => void tick(), 2500);
+          return;
+        }
+        const data = (await res.json()) as QuizSubmitResponse;
+        if (cancelled) return;
+        setResult(data);
+        const next = data.grading_status ?? 'complete';
+        if (next !== 'complete' && next !== 'failed') {
+          const delay = data.busy ? 3000 : 400;
+          timer = setTimeout(() => void tick(), delay);
+        }
+      } catch {
+        if (!cancelled) timer = setTimeout(() => void tick(), 3000);
+      } finally {
+        if (!cancelled) setGrading(false);
+      }
+    };
+
+    timer = setTimeout(() => void tick(), 200);
+    return () => {
+      cancelled = true;
+      if (timer) clearTimeout(timer);
+    };
+    // Intentionally only re-start when a new attempt appears (not on every grade chunk).
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- poll loop owns updates
+  }, [result?.attempt_id]);
+
   // Countdown timer
   useEffect(() => {
     if (result) return;
@@ -435,6 +647,7 @@ export function WeekQuizClient({ quiz, planId, weekNum, token }: Props) {
         result={result}
         onGoToDashboard={() => router.push('/app')}
         lang={lang}
+        grading={grading}
       />
     );
   }

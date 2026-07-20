@@ -124,17 +124,41 @@ export const quizStartResponseSchema = z.object({
   started_at: z.string(),
 });
 
+export const processFeedbackSchema = z.object({
+  item_id: z.string(),
+  status: z.enum(['pending', 'graded', 'failed']),
+  retries: z.number(),
+  strengths: z.string(),
+  steps_present: z.string(),
+  steps_skipped: z.string(),
+  logic: z.string(),
+  material_anchoring: z.string(),
+  points_earned: z.number(),
+  points_available: z.number(),
+  process_score: z.number(),
+  next_fix: z.string(),
+  graded_at: z.string().optional(),
+});
+
 export const quizSubmitResponseSchema = z.object({
   quiz_id: z.string(),
-  score: z.number(),
+  /** null while grading_status is pending/grading — never invent a score */
+  score: z.number().nullable(),
   per_topic: z.record(z.string(), z.number()),
   weak_concepts: z.array(z.string()),
   plan_adapted: z.boolean(),
   next_week_concepts: z.array(z.string()).nullable().optional(),
-  // Week-gate signal (ADR-0009). Optional so older payloads still validate.
-  passed: z.boolean().optional(),
+  passed: z.boolean().nullable().optional(),
   pass_threshold: z.number().optional(),
   attempt_id: z.string().nullable().optional(),
+  grading_status: z.enum(['pending', 'grading', 'complete', 'failed']).optional(),
+  item_feedback: z.record(z.string(), processFeedbackSchema).optional(),
+  item_scores: z.record(z.string(), z.number()).optional(),
+  open_pending: z.number().optional(),
+  open_total: z.number().optional(),
+  graded_open: z.number().optional(),
+  busy: z.boolean().optional(),
+  message: z.string().optional(),
 });
 
 export type PlanConcept = z.infer<typeof planConceptSchema>;

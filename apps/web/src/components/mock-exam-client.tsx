@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { MarkdownMath } from '@/components/markdown-math';
 import { Clock, CheckCircle2, ArrowLeft } from 'lucide-react';
 import { OpenWrittenQuestion } from '@/components/open-written-question';
+import { maxGradeNextPolls } from '@/lib/assessment-grading-logic';
 import type { SeedMockExam, MockExamIndexEntry } from '@/lib/mock-exam-seed-types';
 
 type Lang = 'he' | 'en';
@@ -43,6 +44,29 @@ function MockExamRunner({
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [selectedBySection, setSelectedBySection] = useState<Record<string, Set<string>>>({});
   const [revealedSections, setRevealedSections] = useState<Set<string>>(new Set());
+  const [gradingView, setGradingView] = useState<{
+    attempt_id?: string | null;
+    grading_status?: string;
+    score?: number | null;
+    passed?: boolean | null;
+    graded_open?: number;
+    open_total?: number;
+    message?: string;
+    item_feedback?: Record<
+      string,
+      {
+        status: string;
+        strengths: string;
+        steps_present: string;
+        steps_skipped: string;
+        logic: string;
+        material_anchoring: string;
+        points_earned: number;
+        points_available: number;
+        next_fix: string;
+      }
+    >;
+  } | null>(null);
   const persistStarted = useRef(false);
   const answersRef = useRef(answers);
   answersRef.current = answers;
@@ -65,12 +89,14 @@ function MockExamRunner({
     return () => window.clearInterval(id);
   }, [started, finished]);
 
-  // Persist once when the exam ends (button or timer). Previously this UI was
-  // client-only — Progress / My Tests / Memory never saw the attempt.
+  // Persist once when the exam ends, then chunk process grading.
   useEffect(() => {
     if (!finished || persistStarted.current) return;
     persistStarted.current = true;
     setPersistState('saving');
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
     void (async () => {
       try {
         const res = await fetch('/api/quiz/mock-exam/seed-submit', {
@@ -82,11 +108,71 @@ function MockExamRunner({
             locale: lang,
           }),
         });
-        setPersistState(res.ok ? 'saved' : 'error');
+        if (!res.ok) {
+          if (!cancelled) setPersistState('error');
+          return;
+        }
+        const data = (await res.json()) as NonNullable<typeof gradingView> & {
+          attempt_id: string | null;
+        };
+        if (cancelled) return;
+        setGradingView(data);
+        setPersistState('saved');
+
+        const attemptId = data.attempt_id;
+        if (!attemptId) return;
+
+        const maxPolls = maxGradeNextPolls(data.open_total ?? 8);
+        let polls = 0;
+
+        const tick = async () => {
+          if (cancelled) return;
+          if (polls >= maxPolls) {
+            setGradingView((prev) =>
+              prev
+                ? {
+                    ...prev,
+                    grading_status: 'failed',
+                    message:
+                      lang === 'he'
+                        ? 'בדיקה ארכה מדי — נסו לרענן.'
+                        : 'Grading took too long — try refreshing.',
+                  }
+                : prev,
+            );
+            return;
+          }
+          polls += 1;
+          const gRes = await fetch('/api/quiz/grade-next', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ attempt_id: attemptId }),
+          });
+          if (!gRes.ok) {
+            timer = setTimeout(() => void tick(), 2500);
+            return;
+          }
+          const next = (await gRes.json()) as NonNullable<typeof gradingView>;
+          if (cancelled) return;
+          setGradingView(next);
+          const st = next.grading_status ?? 'complete';
+          if (st !== 'complete' && st !== 'failed') {
+            timer = setTimeout(() => void tick(), next.message ? 3000 : 400);
+          }
+        };
+
+        if ((data.grading_status ?? 'pending') !== 'complete') {
+          timer = setTimeout(() => void tick(), 200);
+        }
       } catch {
-        setPersistState('error');
+        if (!cancelled) setPersistState('error');
       }
     })();
+
+    return () => {
+      cancelled = true;
+      if (timer) clearTimeout(timer);
+    };
   }, [finished, exam.id, lang]);
 
   const title = isHe ? exam.title_he : exam.title_en;
@@ -271,26 +357,70 @@ function MockExamRunner({
 
       {finished ? (
         <div className="rounded-xl border border-emerald-500/40 bg-emerald-500/5 p-6 text-center">
-          <p className="font-semibold text-emerald-700 dark:text-emerald-400">
-            {isHe
-              ? 'המבחן הוגש. השוו את הפתרונות שלכם למחוונים.'
-              : 'Exam submitted. Compare your work to the rubrics.'}
-          </p>
+          {gradingView?.grading_status === 'complete' && gradingView.score != null ? (
+            <>
+              <p className="font-display text-3xl font-bold">
+                {Math.round(gradingView.score * 100)}%
+              </p>
+              <p className="mt-2 font-semibold text-emerald-700 dark:text-emerald-400">
+                {gradingView.passed
+                  ? isHe
+                    ? 'עברת את רף המוכנות (לאחר בדיקת תהליך).'
+                    : 'You met the readiness bar (after process review).'
+                  : isHe
+                    ? 'מתחת לרף — המשיכו לחזק לפי המשוב.'
+                    : 'Below the bar — strengthen using the feedback below.'}
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="font-semibold text-emerald-700 dark:text-emerald-400">
+                {isHe ? 'בודקים את הפתרונות שלכם…' : 'Reviewing your solutions…'}
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {isHe
+                  ? 'הציון יופיע רק אחרי בדיקת תהליך מלא.'
+                  : 'Score appears only after full process review.'}
+              </p>
+              {(gradingView?.open_total ?? 0) > 0 ? (
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {isHe
+                    ? `נבדקו ${gradingView?.graded_open ?? 0} מתוך ${gradingView?.open_total}`
+                    : `Reviewed ${gradingView?.graded_open ?? 0} of ${gradingView?.open_total}`}
+                </p>
+              ) : null}
+            </>
+          )}
           <p className="mt-2 text-xs text-muted-foreground" aria-live="polite">
             {persistState === 'saving'
               ? isHe
                 ? 'שומר את המבחן…'
                 : 'Saving attempt…'
-              : persistState === 'saved'
+              : persistState === 'error'
                 ? isHe
-                  ? 'נשמר ב״המבחנים שלי״ ובעדכון ההתקדמות.'
-                  : 'Saved to My Tests and Progress.'
-                : persistState === 'error'
-                  ? isHe
-                    ? 'השמירה נכשלה — נסו לרענן או לפנות לתמיכה.'
-                    : 'Save failed — try refresh or contact support.'
-                  : null}
+                  ? 'השמירה נכשלה — נסו לרענן או לפנות לתמיכה.'
+                  : 'Save failed — try refresh or contact support.'
+                : null}
           </p>
+          {gradingView?.item_feedback
+            ? Object.entries(gradingView.item_feedback)
+                .filter(([, f]) => f.status === 'graded')
+                .map(([id, f]) => (
+                  <div
+                    key={id}
+                    className="mt-3 rounded-lg border border-border bg-background/60 p-3 text-start text-xs"
+                  >
+                    <p className="font-medium">
+                      {f.points_earned}/{f.points_available}
+                    </p>
+                    {f.strengths ? <p className="mt-1">{f.strengths}</p> : null}
+                    {f.steps_skipped ? <p className="mt-1">{f.steps_skipped}</p> : null}
+                    {f.next_fix ? (
+                      <p className="mt-1 text-amber-700 dark:text-amber-400">{f.next_fix}</p>
+                    ) : null}
+                  </div>
+                ))
+            : null}
           <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
             <Link href="/app/tests" className="text-sm text-primary hover:underline">
               {isHe ? 'המבחנים שלי' : 'My Tests'}

@@ -1,30 +1,20 @@
 'use client';
 
 /**
- * Custom AI quiz: builder ➜ runner ➜ results.
- *
- * All three views live in one client component because they share the
- * generated quiz envelope and per-item answer state. The component is
- * fully bilingual and renders right-to-left when the user's language
- * preference is Hebrew, while keeping math (`$...$`, `$$...$$`) rendered
- * left-to-right via KaTeX.
+ * Custom AI quiz: builder ➜ runner ➜ process grading ➜ results.
  *
  * Flow:
- *   builder ── POST /api/quiz/custom ──► running ── submit ──► results
- *                                                            ▲
- *                                              "Build another" button
+ *   builder ── POST /api/quiz/custom ──► running ── submit ──► grading ──► results
  *
- * Closed kinds (mcq, true_false, numeric, short_answer) are graded on the
- * client at submit time. Open kinds get a 3-way self-assessment (correct /
- * partial / wrong) so the score is at least directionally honest. We post
- * each answered item to `/api/lesson/answer` so the mastery engine still
- * sees the practice, but the quiz envelope itself is NOT persisted — it's
- * ephemeral per session.
+ * Open answers go through chunked process review (`/api/quiz/custom/submit` +
+ * `/api/quiz/grade-next`). Score is shown only after feedback is complete.
+ * Mastery sync to `/api/lesson/answer` is best-effort after finalize.
  */
 
 import { useMemo, useState, useEffect } from 'react';
 import { MarkdownMath } from '@/components/markdown-math';
 import { AgentSidePanel } from '@/components/agent-side-panel';
+import { maxGradeNextPolls } from '@/lib/assessment-grading-logic';
 import {
   ChevronLeft,
   ChevronRight,
@@ -134,7 +124,7 @@ const STR = {
     sampleSolution: 'פתרון לדוגמה',
     markingScheme: 'סכמת ניקוד',
     resultsTitle: 'תוצאות',
-    resultsScore: 'ניקוד עצמי',
+    resultsScore: 'ציון (לאחר בדיקת תהליך)',
     resultsTime: 'זמן',
     resultsPerConcept: 'לפי נושא',
     yourAnswer: 'הפתרון שלך',
@@ -189,7 +179,7 @@ const STR = {
     sampleSolution: 'Sample solution',
     markingScheme: 'Marking scheme',
     resultsTitle: 'Results',
-    resultsScore: 'Self-assessed score',
+    resultsScore: 'Score (after process review)',
     resultsTime: 'Time',
     resultsPerConcept: 'By concept',
     yourAnswer: 'Your solution',
@@ -243,7 +233,7 @@ interface AnswerState {
   solutionRevealed?: boolean;
 }
 
-type Phase = 'builder' | 'generating' | 'running' | 'self_assess' | 'results';
+type Phase = 'builder' | 'generating' | 'running' | 'grading' | 'self_assess' | 'results';
 
 const QUIZ_SESSION_KEY = 'asf-quiz-session';
 
@@ -454,114 +444,184 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
     return null;
   }
 
-  function openQuestionsNeedingSelfAssess(): number[] {
-    if (!envelope) return [];
-    const pending: number[] = [];
-    for (let i = 0; i < envelope.questions.length; i += 1) {
-      const q = envelope.questions[i];
-      if (!q) continue;
-      const a = answers[i] ?? {};
-      if (isOpenQuestion(q) && hasWrittenAnswer(q, a) && !a.self) {
-        pending.push(i);
-      }
-    }
-    return pending;
-  }
-
   function handleAttemptSubmit() {
     if (!envelope) return;
-    if (openQuestionsNeedingSelfAssess().length > 0) {
-      setPhase('self_assess');
-      return;
-    }
     void submitQuiz();
   }
 
+  const [gradeView, setGradeView] = useState<{
+    attempt_id?: string | null;
+    grading_status?: string;
+    score?: number | null;
+    item_feedback?: Record<
+      string,
+      {
+        status: string;
+        strengths: string;
+        steps_present: string;
+        steps_skipped: string;
+        logic: string;
+        material_anchoring: string;
+        points_earned: number;
+        points_available: number;
+        next_fix: string;
+        process_score: number;
+      }
+    >;
+    item_scores?: Record<string, number>;
+    per_topic?: Record<string, number>;
+    open_total?: number;
+    graded_open?: number;
+    message?: string;
+  } | null>(null);
+
   const displayResults = useMemo(() => {
     if (!envelope || !results) return results;
-    let earnedPoints = 0;
-    const perConcept: Record<string, { correct: number; total: number }> = {};
-    for (let i = 0; i < envelope.questions.length; i += 1) {
-      const q = envelope.questions[i];
-      if (!q) continue;
-      const a = answers[i] ?? {};
-      const points = questionPoints(q, a);
-      if (points != null) earnedPoints += points;
-      const bucket = (perConcept[q.concept_id] ??= { correct: 0, total: 0 });
-      bucket.total += 1;
-      if (points != null) bucket.correct += points;
+    if (gradeView?.grading_status === 'complete' && gradeView.score != null) {
+      const perConcept: Record<string, { correct: number; total: number }> = {};
+      for (const [topic, score] of Object.entries(gradeView.per_topic ?? {})) {
+        perConcept[topic] = { correct: score, total: 1 };
+      }
+      return {
+        ...results,
+        correctCount: Math.round(gradeView.score * envelope.questions.length * 10) / 10,
+        perConcept: Object.keys(perConcept).length > 0 ? perConcept : results.perConcept,
+      };
     }
-    return { ...results, correctCount: earnedPoints, perConcept };
-  }, [envelope, answers, results]);
+    return results;
+  }, [envelope, results, gradeView]);
 
   async function submitQuiz() {
     if (!envelope) return;
     setSubmitting(true);
+    setPhase('grading');
     try {
-      const perConcept: Record<string, { correct: number; total: number }> = {};
-      let earnedPoints = 0;
-      const syncPayloads: Array<{
-        concept_id: string;
-        correct: boolean;
-        skill_atoms: string[];
-        user_answer: string;
-        kind: string;
-      }> = [];
-
-      for (let i = 0; i < envelope.questions.length; i += 1) {
-        const q = envelope.questions[i];
-        if (!q) continue;
+      const answerRows = envelope.questions.map((q, i) => {
         const a = answers[i] ?? {};
-        const points = questionPoints(q, a);
-        if (points != null) earnedPoints += points;
-        const bucket = (perConcept[q.concept_id] ??= { correct: 0, total: 0 });
-        bucket.total += 1;
-        if (points != null) bucket.correct += points;
-
-        const writtenAnswer =
+        const written =
           q.parts && q.parts.length > 0 && a.parts
             ? q.parts.map((p) => `${p.label}: ${a.parts?.[p.label] ?? ''}`).join('\n')
             : (a.text ?? '');
+        const mcqChosen =
+          q.kind === 'mcq' && typeof a.mcq === 'number'
+            ? String.fromCharCode(65 + a.mcq)
+            : '';
+        return {
+          item_id: `cq-${i}-${q.concept_id}`,
+          chosen: written.trim() || mcqChosen,
+        };
+      });
 
-        if (points != null || writtenAnswer.trim()) {
-          syncPayloads.push({
-            concept_id: q.concept_id,
-            correct: (points ?? 0) >= 0.5,
-            skill_atoms: q.skill_atoms ?? [],
-            user_answer: writtenAnswer,
-            kind: q.kind,
-          });
-        }
+      const questionsPayload = envelope.questions.map((q, i) => ({
+        id: `cq-${i}-${q.concept_id}`,
+        concept_id: q.concept_id,
+        kind: q.kind,
+        stem: (lang === 'he' ? q.stem_he : q.stem_en) || q.stem_he || q.stem_en,
+        rubric: (lang === 'he' ? q.rubric_he : q.rubric_en) || q.rubric_he || q.rubric_en,
+        model_answer:
+          (lang === 'he' ? q.sample_solution_he : q.sample_solution_en) ||
+          q.sample_solution_he ||
+          q.sample_solution_en,
+        parts: q.parts,
+        total_points: q.total_points,
+        skill_atoms: q.skill_atoms,
+        correct:
+          q.kind === 'mcq' && typeof q.correct_index === 'number'
+            ? String.fromCharCode(65 + q.correct_index)
+            : undefined,
+        options: (lang === 'he' ? q.options_he : q.options_en)?.map((text, oi) => ({
+          key: String.fromCharCode(65 + oi),
+          text,
+        })),
+      }));
+
+      const res = await fetch('/api/quiz/custom/submit', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          quiz_id: envelope.quiz_id,
+          locale: lang,
+          questions: questionsPayload,
+          answers: answerRows,
+        }),
+      });
+      if (!res.ok) {
+        setGenError(isHe ? 'שליחת המבחן נכשלה.' : 'Quiz submit failed.');
+        setPhase('running');
+        return;
+      }
+      let data = (await res.json()) as NonNullable<typeof gradeView>;
+      setGradeView(data);
+
+      const attemptId = data.attempt_id;
+      const maxPolls = maxGradeNextPolls(data.open_total ?? envelope.questions.length);
+      let polls = 0;
+      while (
+        attemptId &&
+        data.grading_status !== 'complete' &&
+        data.grading_status !== 'failed' &&
+        polls < maxPolls
+      ) {
+        polls += 1;
+        await new Promise((r) => setTimeout(r, data.message ? 3000 : 500));
+        const gRes = await fetch('/api/quiz/grade-next', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ attempt_id: attemptId }),
+        });
+        if (!gRes.ok) continue;
+        data = (await gRes.json()) as NonNullable<typeof gradeView>;
+        setGradeView(data);
+      }
+
+      if (data.grading_status !== 'complete') {
+        setGenError(
+          isHe
+            ? 'לא הצלחנו לסיים את בדיקת התהליך. נסו שוב.'
+            : 'Could not finish process review. Please try again.',
+        );
+        setPhase('running');
+        return;
       }
 
       const secondsUsed = startedAt ? Math.round((Date.now() - startedAt) / 1000) : 0;
+      const score = data.score ?? 0;
+      const perConcept: Record<string, { correct: number; total: number }> = {};
+      for (const [topic, s] of Object.entries(data.per_topic ?? {})) {
+        perConcept[topic] = { correct: s, total: 1 };
+      }
       setResults({
-        correctCount: earnedPoints,
+        correctCount: Math.round(score * envelope.questions.length * 10) / 10,
         total: envelope.questions.length,
         perConcept,
         secondsUsed,
       });
       setPhase('results');
+      clearQuizSession();
 
-      // Mastery sync is best-effort and must not block the results screen.
+      // Best-effort mastery sync from process scores
       void Promise.allSettled(
-        syncPayloads.map((item) =>
-          fetch('/api/lesson/answer', {
+        envelope.questions.map((q, i) => {
+          const id = `cq-${i}-${q.concept_id}`;
+          const ps = data.item_scores?.[id] ?? data.item_feedback?.[id]?.process_score ?? 0;
+          return fetch('/api/lesson/answer', {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify({
               lesson_id: envelope.quiz_id,
-              question_id: `${envelope.quiz_id}:${item.concept_id}`,
-              concept_id: item.concept_id,
-              correct: item.correct,
-              skill_atoms: item.skill_atoms,
-              user_answer: item.user_answer,
-              kind: item.kind,
-              ephemeral: true,
+              question_id: `${envelope.quiz_id}:${q.concept_id}`,
+              concept_id: q.concept_id,
+              correct: ps >= 0.5,
+              skill_atoms: q.skill_atoms ?? [],
+              user_answer: answerRows[i]?.chosen ?? '',
+              kind: q.kind,
             }),
-          }),
-        ),
+          });
+        }),
       );
+    } catch {
+      setGenError(isHe ? 'שליחת המבחן נכשלה.' : 'Quiz submit failed.');
+      setPhase('running');
     } finally {
       setSubmitting(false);
     }
@@ -944,7 +1004,49 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
     );
   }
 
-  // ---------- self-assess (open questions before scoring) ----------------
+  // ---------- grading (process review) ------------------------------------
+  if (phase === 'grading' && envelope) {
+    return (
+      <div className="mx-auto max-w-3xl py-12 text-center" dir={dir}>
+        <Loader2 className="mx-auto h-12 w-12 animate-spin text-primary" />
+        <h1 className="mt-4 font-display text-2xl font-bold">
+          {isHe ? 'בודקים את הפתרונות שלכם…' : 'Reviewing your solutions…'}
+        </h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {isHe
+            ? 'הציון יופיע רק אחרי בדיקת תהליך מלא.'
+            : 'Score appears only after full process review.'}
+        </p>
+        {(gradeView?.open_total ?? 0) > 0 ? (
+          <p className="mt-1 text-sm text-muted-foreground">
+            {isHe
+              ? `נבדקו ${gradeView?.graded_open ?? 0} מתוך ${gradeView?.open_total}`
+              : `Reviewed ${gradeView?.graded_open ?? 0} of ${gradeView?.open_total}`}
+          </p>
+        ) : null}
+        {gradeView?.item_feedback
+          ? Object.entries(gradeView.item_feedback)
+              .filter(([, f]) => f.status === 'graded')
+              .map(([id, f]) => (
+                <div
+                  key={id}
+                  className="mt-4 rounded-xl border border-border p-4 text-start text-sm"
+                >
+                  <p className="font-medium">
+                    {f.points_earned}/{f.points_available}
+                  </p>
+                  {f.strengths ? <p className="mt-1">{f.strengths}</p> : null}
+                  {f.next_fix ? (
+                    <p className="mt-1 text-amber-700 dark:text-amber-400">{f.next_fix}</p>
+                  ) : null}
+                </div>
+              ))
+          : null}
+      </div>
+    );
+  }
+
+  // ---------- self-assess (legacy; unused after process grading) ------------
   if (phase === 'self_assess' && envelope) {
     const toRate = envelope.questions
       .map((q, i) => ({ q, i }))
@@ -1066,7 +1168,15 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
           <ul className="space-y-6">
             {envelope.questions.map((q, i) => {
               const a = answers[i] ?? {};
-              const points = questionPoints(q, a);
+              const itemId = `cq-${i}-${q.concept_id}`;
+              const processScore =
+                gradeView?.item_scores?.[itemId] ??
+                gradeView?.item_feedback?.[itemId]?.process_score;
+              const points =
+                processScore != null
+                  ? processScore
+                  : questionPoints(q, a);
+              const fb = gradeView?.item_feedback?.[itemId];
               const stem = isHe ? q.stem_he : q.stem_en;
               const sampleSolution = isHe ? q.sample_solution_he : q.sample_solution_en;
               const rubric = isHe ? q.rubric_he : q.rubric_en;
@@ -1088,22 +1198,34 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
                     {q.total_points > 0 && (
                       <Badge variant="outline" className="text-xs">{q.total_points} {t.points}</Badge>
                     )}
-                    {points === 1 ? (
+                    {points != null && points >= 0.85 ? (
                       <Badge variant="success" className="gap-1">
                         <Check className="h-3 w-3" aria-hidden />
                         {t.selfCorrect}
                       </Badge>
-                    ) : points === 0 ? (
+                    ) : points != null && points <= 0.15 ? (
                       <Badge variant="secondary" className="gap-1 bg-destructive/15 text-destructive">
                         <X className="h-3 w-3" aria-hidden />
                         {t.selfWrong}
                       </Badge>
-                    ) : points === 0.5 ? (
-                      <Badge variant="secondary" className="gap-1">{t.selfPartial}</Badge>
+                    ) : points != null ? (
+                      <Badge variant="secondary" className="gap-1">
+                        {Math.round(points * 100)}%
+                      </Badge>
                     ) : (
                       <Badge variant="secondary">—</Badge>
                     )}
                   </div>
+
+                  {fb && fb.status === 'graded' ? (
+                    <div className="mb-3 space-y-1 rounded-lg border border-border p-3 text-xs">
+                      {fb.strengths ? <p>{fb.strengths}</p> : null}
+                      {fb.steps_skipped ? <p>{fb.steps_skipped}</p> : null}
+                      {fb.next_fix ? (
+                        <p className="text-amber-700 dark:text-amber-400">{fb.next_fix}</p>
+                      ) : null}
+                    </div>
+                  ) : null}
 
                   {/* Stem */}
                   <div className="mb-3 rounded-lg border border-primary/20 bg-primary/5 p-3">
