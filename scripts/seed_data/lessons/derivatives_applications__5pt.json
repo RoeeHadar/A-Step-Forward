@@ -1,0 +1,1101 @@
+{
+  "concept_id": "derivatives_applications__5pt",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": [
+    "5pt"
+  ],
+  "title_en": "Applications of Derivatives — 5pt mastery",
+  "title_he": "יישומי נגזרות — שליטה 5 יח׳",
+  "summary_en": "The derivative is the key to finding maxima, minima, inflection points, and solving optimization problems. Uses $f'$ and $f''$ to analyze function shape.",
+  "summary_he": "הנגזרת היא המפתח למציאת מקסימום, מינימום, נקודות פיתול ובעיות אופטימיזציה. משתמשים ב-$f'$ וב-$f''$ לניתוח צורת הפונקציה.",
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "What derivatives tell us",
+      "title_he": "מה הנגזרות מספרות לנו",
+      "body_en_md": "Once you can compute $f'(x)$, the derivative becomes a **shape detector** for graphs and a **decision engine** for optimization. The sign of $f'$ tells you where a function rises or falls; the sign of $f''$ tells you whether the graph bends upward like a bowl or downward like a hill. Together, $f'$ and $f''$ answer the questions examiners love: *Where are the peaks and valleys? Where does the curve change bend? What is the best choice under a constraint?*\n\n**The six signals every investigator uses:**\n- $f'(x) > 0$: $f$ is **increasing** on that interval.\n- $f'(x) < 0$: $f$ is **decreasing**.\n- $f'(x) = 0$: a **critical point** — a candidate for local max or min.\n- $f''(x) > 0$: **concave up** (holds water; tangent slopes increase).\n- $f''(x) < 0$: **concave down** (sheds water; tangent slopes decrease).\n- $f''$ changes sign at $x_0$: an **inflection point** where concavity switches.\n\nIn the Bagrut 4- and 5-unit exams, **function investigation** (חקירת פונקציה) is the single most common derivative application: find critical points, classify them, locate inflection, sketch asymptotes, and connect the graph to the sign tables. **Optimization word problems** — fencing, boxes, revenue — appear almost every year. Mastering these patterns turns derivative rules into full exam points.\n\n**5pt focus:** Short justifications, edge cases, MoE-faithful (no uni limit-closeness drills).",
+      "body_he_md": "ברגע שיודעים לחשב $f'(x)$, הנגזרת הופכת ל**גלאי צורה** של גרפים ול**מנוע החלטות** באופטימיזציה. סימן $f'$ אומר איפה הפונקציה עולה או יורדת; סימן $f''$ אומר אם הגרף כפוף כלפי מעלה כמו קערה או כלפי מטה כמו גבעה. יחד, $f'$ ו-$f''$ עונים על השאלות שבוחני הבגרות אוהבים: *איפה שיאים ושפלים? איפה העקומה משנה כיוון כיפוף? מה הבחירה הטובה ביותר תחת אילוץ?*\n\n**ששת האותות שכל חוקר פונקציה משתמש בהם:**\n- $f'(x) > 0$: $f$ **עולה** בקטע.\n- $f'(x) < 0$: $f$ **יורדת**.\n- $f'(x) = 0$: **נקודה קריטית** — מועמדת למקסימום או מינימום מקומי.\n- $f''(x) > 0$: **קעורה כלפי מעלה** (שקערורית; שיפוע המשיק גדל).\n- $f''(x) < 0$: **קעורה כלפי מטה** (קמורה; שיפוע המשיק קטן).\n- $f''$ משנה סימן ב-$x_0$: **נקודת פיתול** שבה הקעירות מתהפכת.\n\nבבגרות 4 ו-5 יחידות, **חקירת פונקציה** היא היישום הנפוץ ביותר של נגזרות: נקודות קיצון, סיווג, פיתול, אסימפטוטות ושרטוט. **בעיות אופטימיזציה** — גדר, קופסאות, הכנסה — מופיעות כמעט בכל שנה. שליטה בדפוסים האלה הופכת כללי גזירה לנקודות מלאות בבחינה.\n\n**מיקוד 5 יח׳:** הצדקות קצרות, מקרי קצה, נאמן לתוכנית (בלי תרגול limit-closeness אוניברסיטאי)."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Key Definitions",
+      "title_he": "הגדרות מפתח",
+      "body_en_md": "**Critical point:** A number $x_0$ in the domain where $f'(x_0) = 0$ **or** $f'(x_0)$ does not exist (corner, cusp, vertical tangent). Critical points are *candidates* for local extrema — you must still classify them with a sign table or derivative test.\n\n**Local maximum:** $f(x_0) \\ge f(x)$ for all $x$ in some open interval around $x_0$. The graph is highest in a neighborhood, not necessarily over the entire domain.\n\n**Local minimum:** $f(x_0) \\le f(x)$ for all $x$ near $x_0$.\n\n**Absolute (global) maximum/minimum:** The largest or smallest value of $f$ over the entire domain, or over a closed interval $[a,b]$. On a closed interval, compare **all critical points inside $(a,b)$ AND the endpoints** $f(a)$, $f(b)$.\n\n**Inflection point:** A point where concavity changes — equivalently, where $f''$ changes sign at $x_0$. Solving $f''(x_0)=0$ alone is **not enough**; you must verify the sign flip.\n\n**Second derivative test** (when $f'(x_0)=0$):\n- $f''(x_0) > 0$ $\\Rightarrow$ **local minimum** (concave up, bowl shape).\n- $f''(x_0) < 0$ $\\Rightarrow$ **local maximum** (concave down, hill shape).\n- $f''(x_0) = 0$: **inconclusive** — switch to the first derivative test.\n\n**First derivative test:** Examine the sign of $f'$ immediately left and right of $x_0$.\n- Sign change $+ \\to -$: **local maximum**.\n- Sign change $- \\to +$: **local minimum**.\n- No sign change: **not an extremum** (e.g., $f(x)=x^3$ at $x=0$).",
+      "body_he_md": "**נקודה קריטית:** מספר $x_0$ בתחום שבו $f'(x_0) = 0$ **או** $f'(x_0)$ לא קיימת (פינה, קאספ, משיק אנכי). נקודות קריטיות הן *מועמדות* לקיצון מקומי — חובה לסווג אותן בטבלת סימנים או במבחן נגזרות.\n\n**מקסימום מקומי:** $f(x_0) \\ge f(x)$ לכל $x$ בסביבה פתוחה של $x_0$. הגרף הגבוה ביותר בשכונה, לא בהכרח על כל התחום.\n\n**מינימום מקומי:** $f(x_0) \\le f(x)$ לכל $x$ קרוב ל-$x_0$.\n\n**מקסימום/מינימום מוחלט (גלובלי):** הערך הגדול ביותר או הקטן ביותר של $f$ על כל התחום, או על קטע סגור $[a,b]$. בקטע סגור, השוו **כל נקודות הקיצון בתוך $(a,b)$ וגם את הקצוות** $f(a)$, $f(b)$.\n\n**נקודת פיתול:** נקודה שבה הקעירות משתנה — כלומר $f''$ משנה סימן ב-$x_0$. פתרון $f''(x_0)=0$ **לבדו אינו מספיק**; חובה לאמת שינוי סימן.\n\n**מבחן נגזרת שנייה** (כאשר $f'(x_0)=0$):\n- $f''(x_0) > 0$ $\\Rightarrow$ **מינימום מקומי** (קעורה כלפי מעלה, צורת קערה).\n- $f''(x_0) < 0$ $\\Rightarrow$ **מקסימום מקומי** (קעורה כלפי מטה, צורת גבעה).\n- $f''(x_0) = 0$: **לא חד-משמעי** — עברו למבחן נגזרת ראשונה.\n\n**מבחן נגזרת ראשונה:** בדקו את סימן $f'$ משמאל ומימין ל-$x_0$.\n- שינוי סימן $+ \\to -$: **מקסימום מקומי**.\n- שינוי סימן $- \\to +$: **מינימום מקומי**.\n- ללא שינוי סימן: **לא קיצון** (למשל $f(x)=x^3$ ב-$x=0$)."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Three Application Patterns",
+      "title_he": "שלושה דפוסי יישום",
+      "body_en_md": "### Pattern A: Function Investigation (חקירת פונקציה)\n\nThis is the full exam workflow for sketching $y=f(x)$:\n\n1. **Domain** — exclude division-by-zero, even roots of negatives, log restrictions.\n2. **$f'(x)=0$** (and points where $f'$ is undefined) $\\Rightarrow$ critical points.\n3. **Sign table for $f'$** — mark each interval as increasing ($+$) or decreasing ($-$); classify max/min by sign changes ($+\\to-$ max, $-\\to+$ min).\n4. **$f''(x)=0$** $\\Rightarrow$ inflection candidates; verify $f''$ actually changes sign.\n5. **Asymptotes** — vertical ($x=a$ where $f\\to\\pm\\infty$), horizontal ($y=L$ as $x\\to\\pm\\infty$), oblique (polynomial long division for rational functions).\n6. **Intercepts and special values**, then **sketch** connecting all information.\n\n### Pattern B: Optimization Word Problems\n\n1. Read carefully; **draw and label** the geometry or situation.\n2. Introduce one variable $x$ and write the quantity to optimize $Q(x)$ using a **constraint** to eliminate extra variables.\n3. State the **domain** (physical meaning: lengths $>0$, etc.).\n4. Solve $Q'(x)=0$, classify with $Q''$ or a sign table.\n5. **Check endpoints** of the domain — the optimum may occur at a boundary.\n6. Answer in context with **units**.\n\n### Pattern C: Absolute Extrema on Closed Interval $[a,b]$\n\n1. Find all critical points in $(a,b)$.\n2. Evaluate $f$ at each critical point **and** at $a$ and $b$.\n3. Largest value $=$ absolute max; smallest $=$ absolute min. Ties are allowed at multiple points.\n\n### Tangent Line Equation\n\nThe tangent to $y=f(x)$ at $(a,f(a))$ has slope $f'(a)$:\n$$y - f(a) = f'(a)(x - a).$$\nThis connects derivative applications to linear approximation and rate-of-change problems.",
+      "body_he_md": "### דפוס א': חקירת פונקציה\n\nזהו תהליך הבחינה המלא לשרטוט $y=f(x)$:\n\n1. **תחום** — הוציאו חלוקה באפס, שורשים זוגיים של שליליים, הגבלות לוגריתם.\n2. **$f'(x)=0$** (ונקודות שבהן $f'$ לא מוגדרת) $\\Rightarrow$ נקודות קיצון מועמדות.\n3. **טבלת סימנים של $f'$** — סמנו כל קטע כעולה ($+$) או יורדת ($-$); סווגו מקס/מין לפי שינוי סימן ($+\\to-$ מקס, $-\\to+$ מין).\n4. **$f''(x)=0$** $\\Rightarrow$ מועמדות לפיתול; אמתו ש-$f''$ באמת משנה סימן.\n5. **אסימפטוטות** — אנכית ($x=a$ כש-$f\\to\\pm\\infty$), אופקית ($y=L$ כש-$x\\to\\pm\\infty$), אלכסונית (חלוקת פולינומים לפונקציות רציונליות).\n6. **חיתוכים וערכים מיוחדים**, ואז **שרטוט** שמחבר את כל המידע.\n\n### דפוס ב': בעיות אופטימיזציה\n\n1. קראו בעיון; **שרטטו וסמנו** את הגיאומטריה או המצב.\n2. הגדירו משתנה $x$ אחד וכתבו את הגודל לאופטימיזציה $Q(x)$ תוך שימוש ב**אילוץ** להסרת משתנים נוספים.\n3. ציינו את **התחום** (משמעות פיזית: אורכים $>0$ וכו').\n4. פתרו $Q'(x)=0$, סווגו עם $Q''$ או טבלת סימנים.\n5. **בדקו קצוות** התחום — הקיצון עלול להיות בגבול.\n6. ענו בהקשר עם **יחידות**.\n\n### דפוס ג': קיצון מוחלט על קטע סגור $[a,b]$\n\n1. מצאו כל נקודות קיצון ב-$(a,b)$.\n2. חשבו $f$ בכל נקודת קיצון **וגם** ב-$a$ וב-$b$.\n3. הערך הגדול ביותר $=$ מקסימום מוחלט; הקטן ביותר $=$ מינימום מוחלט. תיקו מותר בכמה נקודות.\n\n### משוואת משיק\n\nהמשיק ל-$y=f(x)$ ב-$(a,f(a))$ בשיפוע $f'(a)$:\n$$y - f(a) = f'(a)(x - a).$$\nזה מחבר יישומי נגזרות לאומדן לינארי ולבעיות קצב שינוי."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Finding Extrema of a Polynomial",
+      "title_he": "דוגמה פתורה 1 — מציאת קיצונות של פולינום",
+      "body_en_md": "**Find the local extrema of** $f(x) = x^3 - 6x^2 + 9x + 1$.\n\n### Move 1: Compute $f'(x)$ and factor completely.\n$$f'(x) = 3x^2 - 12x + 9 = 3(x^2 - 4x + 3) = 3(x-1)(x-3).$$\nFactoring before solving saves sign-table errors on the exam.\n\n### Move 2: Critical points — set $f'(x)=0$.\n$$x = 1 \\quad \\text{or} \\quad x = 3.$$\n\n### Move 3: Build the sign table for $f'$.\n| Interval | $f'$ sign | $f$ behavior |\n|---|---|---|\n| $(-\\infty,1)$ | $+$ | increasing |\n| $(1,3)$ | $-$ | decreasing |\n| $(3,\\infty)$ | $+$ | increasing |\n\nTest values: $x=0$ gives $f'(0)=9>0$; $x=2$ gives $f'(2)=-3<0$; $x=4$ gives $f'(4)=9>0$.\n\n### Move 4: Classify and compute function values.\n- $x=1$: sign change $+ \\to -$ $\\Rightarrow$ **local maximum**. $f(1) = 1-6+9+1 = 5$.\n- $x=3$: sign change $- \\to +$ $\\Rightarrow$ **local minimum**. $f(3) = 27-54+27+1 = 1$.\n\n**Answer:** Local max $(1,5)$; local min $(3,1)$. No absolute extrema on $\\mathbb{R}$ since $f\\to-\\infty$ as $x\\to-\\infty$.",
+      "body_he_md": "**מצאו קיצונות מקומיים של** $f(x) = x^3-6x^2+9x+1$.\n\n### צעד 1: חשבו $f'(x)$ ופרקו לגורמים.\n$$f'(x) = 3x^2-12x+9 = 3(x-1)(x-3).$$\nפירוק לגורמים לפני פתרון מונע שגיאות בטבלת הסימנים בבחינה.\n\n### צעד 2: נקודות קיצון — $f'(x)=0$.\n$$x = 1 ,\\quad x = 3.$$\n\n### צעד 3: בנו טבלת סימנים של $f'$.\n| קטע | סימן $f'$ | התנהגות $f$ |\n|---|---|---|\n| $(-\\infty,1)$ | $+$ | עולה |\n| $(1,3)$ | $-$ | יורדת |\n| $(3,\\infty)$ | $+$ | עולה |\n\nערכי בדיקה: $x=0$ נותן $f'(0)=9>0$; $x=2$ נותן $f'(2)=-3<0$; $x=4$ נותן $f'(4)=9>0$.\n\n### צעד 4: סיווג וחישוב ערכי הפונקציה.\n- $x=1$: שינוי סימן $+ \\to -$ $\\Rightarrow$ **מקסימום מקומי**. $f(1) = 5$.\n- $x=3$: שינוי סימן $- \\to +$ $\\Rightarrow$ **מינימום מקומי**. $f(3) = 1$.\n\n**תשובה:** מקס מקומי $(1,5)$; מין מקומי $(3,1)$. אין קיצון מוחלט על $\\mathbb{R}$ כי $f\\to-\\infty$ כש-$x\\to-\\infty$. בבחינה, טבלת הסימנים חייבת להופיע לפני הסיווג — בוחנים מעניקים נקודות חלקיות עליה גם כשיש טעות חישוב בסוף."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find the absolute maximum and minimum of $f(x) = x^3 - 3x + 2$ on the interval $[-2, 2]$.",
+      "body_he_md": "מצאו מקסימום ומינימום מוחלטים של $f(x) = x^3-3x+2$ על הקטע $[-2,2]$.",
+      "checkpoint_solution_en": "**Step 1:** Differentiate.\n$$f'(x) = 3x^2 - 3 = 3(x^2-1) = 3(x-1)(x+1) = 0 \\Rightarrow x = -1, \\; 1.$$\nBoth critical points lie inside $[-2,2]$.\n\n**Step 2:** Build the comparison table (critical points **and** endpoints).\n| $x$ | $f(x)$ |\n|---|---|\n| $-2$ | $-8+6+2 = 0$ |\n| $-1$ | $-1+3+2 = 4$ |\n| $1$ | $1-3+2 = 0$ |\n| $2$ | $8-6+2 = 4$ |\n\n**Step 3:** Read off absolute extrema.\n- **Absolute maximum** $= 4$ at $x=-1$ and $x=2$ (tie allowed).\n- **Absolute minimum** $= 0$ at $x=-2$ and $x=1$.\n\n**Why endpoints matter:** $f'(2)=9\\ne 0$, yet $x=2$ achieves the same maximum as the critical point $x=-1$. Skipping endpoints would miss half the answer.",
+      "checkpoint_solution_he": "**שלב 1:** גזירה.\n$$f'(x) = 3x^2-3 = 3(x-1)(x+1) = 0 \\Rightarrow x = -1, \\; 1.$$\nשתי הנקודות בתוך $[-2,2]$.\n\n**שלב 2:** טבלת השוואה (נקודות קיצון **וגם** קצוות).\n| $x$ | $f(x)$ |\n|---|---|\n| $-2$ | $0$ |\n| $-1$ | $4$ |\n| $1$ | $0$ |\n| $2$ | $4$ |\n\n**שלב 3:** קיצון מוחלט.\n- **מקסימום מוחלט** $= 4$ ב-$x=-1$ ו-$x=2$ (תיקו מותר).\n- **מינימום מוחלט** $= 0$ ב-$x=-2$ ו-$x=1$.\n\n**למה קצוות חשובים:** $f'(2)=9\\ne 0$, ובכל זאת $x=2$ משיג את אותו מקסימום כמו $x=-1$. דילוג על קצוות מפספס חצי מהתשובה."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Optimization: Maximize Area",
+      "title_he": "דוגמה פתורה 2 — אופטימיזציה: מקסימום שטח",
+      "body_en_md": "**Problem:** A farmer has 100 m of fencing. She builds a rectangular pen along a barn wall (one side needs no fence). Maximize the enclosed area.\n\n### Move 1: Draw and label. Let $x$ = side perpendicular to the barn, $y$ = side parallel to the barn.\n\n### Move 2: Write the constraint from the fence length.\nOnly two sides of length $x$ and one of length $y$ use fencing:\n$$2x + y = 100 \\Rightarrow y = 100 - 2x.$$\n\n### Move 3: Area as a function of one variable.\n$$A(x) = x \\cdot y = x(100-2x) = 100x - 2x^2.$$\n**Domain:** $x>0$ and $y=100-2x>0$, so $0 < x < 50$.\n\n### Move 4: Find critical points — $A'(x)=0$.\n$$A'(x) = 100 - 4x = 0 \\Rightarrow x = 25.$$\n\n### Move 5: Classify with the second derivative.\n$$A''(x) = -4 < 0 \\quad \\text{for all } x \\Rightarrow \\text{ concave down} \\Rightarrow \\text{ maximum at } x=25.$$\n\n### Move 6: Answer with units and context.\n$$x = 25\\text{ m}, \\quad y = 50\\text{ m}, \\quad A_{\\max} = 25 \\times 50 = 1250\\text{ m}^2.$$\nCheck endpoints: as $x\\to 0^+$ or $x\\to 50^-$, area $\\to 0$, confirming the interior critical point is optimal.",
+      "body_he_md": "**בעיה:** לחקלאית יש 100 מ' גדר. היא בונה משתלה מלבנית לאורך קיר האורווה (צד אחד ללא גדר). מקסימום שטח.\n\n### צעד 1: שרטוט וסימון. $x$ = צלע מאונכת לקיר, $y$ = צלע מקבילה.\n\n### צעד 2: כתבו את האילוץ מאורך הגדר.\nרק שתי צלעות באורך $x$ וצלע אחת באורך $y$ משתמשות בגדר:\n$$2x + y = 100 \\Rightarrow y = 100 - 2x.$$\n\n### צעד 3: שטח כפונקציה של משתנה אחד.\n$$A(x) = x(100-2x) = 100x - 2x^2.$$\n**תחום:** $x>0$ ו-$y=100-2x>0$, כלומר $0 < x < 50$.\n\n### צעד 4: נקודות קיצון — $A'(x)=0$.\n$$A'(x) = 100 - 4x = 0 \\Rightarrow x = 25.$$\n\n### צעד 5: סיווג בנגזרת שנייה.\n$A''(x) = -4 < 0$, ולכן הפונקציה קמורה כלפי מטה — מקסימום ב-$x=25$.\n\n### צעד 6: תשובה עם יחידות והקשר.\n$x = 25$ מ', $y = 50$ מ', $A_{\\max} = 1250$ מ\"ר.\nבדיקת קצוות: כש-$x\\to 0^+$ או $x\\to 50^-$, השטח $\\to 0$, מאשר שהקיצון הפנימי הוא האופטימלי. בבגרות, כתבו את האילוץ $2x+y=100$ לפני גזירת $A(x)$ — זה מרוויח נקודות שיטה."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A shop sells $x$ units per day at price $p = 200 - 2x$ shekels. Find the number of units that maximizes daily revenue.",
+      "body_he_md": "חנות מוכרת $x$ יחידות ביום במחיר $p=200-2x$ ש\"ח. מצאו את $x$ שממקסם את ההכנסה היומית.",
+      "checkpoint_solution_en": "**Step 1:** Revenue $R(x) = x \\cdot p = x(200-2x) = 200x - 2x^2$. Price positive requires $p=200-2x>0$, so $0 < x < 100$.\n\n**Step 2:** Critical point.\n$$R'(x) = 200 - 4x = 0 \\Rightarrow x = 50.$$\n\n**Step 3:** Classify.\n$$R''(x) = -4 < 0 \\Rightarrow \\text{maximum at } x = 50.$$\n\n**Step 4:** Compute maximum revenue.\n$$R(50) = 50 \\times (200 - 100) = 50 \\times 100 = 5000 \\text{ shekels/day}.$$\n\n**Check endpoints:** $R(0)=0$ and $R(100)=0$, confirming the interior critical point gives the peak. Always state both the optimal quantity and the revenue value.",
+      "checkpoint_solution_he": "**שלב 1:** הכנסה $R(x) = x(200-2x) = 200x-2x^2$. מחיר חיובי דורש $0 < x < 100$.\n\n**שלב 2:** נקודת קיצון.\n$$R'(x) = 200-4x = 0 \\Rightarrow x = 50.$$\n\n**שלב 3:** סיווג.\n$R''(x) = -4 < 0$, ולכן מקסימום ב-$x = 50$.\n\n**שלב 4:** הכנסה מקסימלית.\n$R(50) = 50 \\times 100 = 5000$ ש\"ח ליום.\n\n**בדיקת קצוות:** $R(0)=0$ ו-$R(100)=0$, מאשר שהקיצון הפנימי הוא השיא. ציינו גם כמות אופטימלית וגם ערך ההכנסה."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Full Function Investigation (Exam Level)",
+      "title_he": "דוגמה פתורה 3 — חקירת פונקציה מלאה (רמת בחינה)",
+      "body_en_md": "**Investigate** $f(x) = \\dfrac{x^2}{x-1}$ and sketch (Bagrut 5-unit level).\n\n### Move 1: Domain.\n$x \\ne 1$, so domain is $(-\\infty,1) \\cup (1,\\infty)$.\n\n### Move 2: Asymptotes.\n- **Vertical:** $x = 1$ (denominator zero).\n- **Oblique:** polynomial division: $\\dfrac{x^2}{x-1} = x+1 + \\dfrac{1}{x-1}$. As $x\\to\\pm\\infty$, remainder $\\to 0$, so $y = x+1$ is the oblique asymptote.\n\n### Move 3: First derivative.\n$$f'(x) = \\frac{2x(x-1) - x^2}{(x-1)^2} = \\frac{x^2-2x}{(x-1)^2} = \\frac{x(x-2)}{(x-1)^2}.$$\n\n### Move 4: Critical points — $f'(x)=0$ (numerator zero; denominator $\\ne 0$).\n$x = 0$ and $x = 2$.\n\n### Move 5: Sign table for $f'$.\n| Interval | $f'$ sign | behavior |\n|---|---|---|\n| $(-\\infty,0)$ | $+$ | increasing |\n| $(0,1)$ | $-$ | decreasing |\n| $(1,2)$ | $-$ | decreasing |\n| $(2,\\infty)$ | $+$ | increasing |\n\n- $x=0$: $+\\to-$ $\\Rightarrow$ local max, $f(0)=0$.\n- $x=2$: $-\\to+$ $\\Rightarrow$ local min, $f(2)=4$.\n\n### Move 6: Second derivative and concavity.\n$$f''(x) = \\frac{2}{(x-1)^3}.$$\n$f''>0$ for $x>1$ (concave up); $f''<0$ for $x<1$ (concave down). No inflection — concavity jumps at the vertical asymptote $x=1$, not at a domain point.",
+      "body_he_md": "**חקרו** $f(x) = \\dfrac{x^2}{x-1}$ ושרטטו (רמת בגרות 5 יחידות).\n\n### צעד 1: תחום.\n$x \\ne 1$, כלומר $(-\\infty,1) \\cup (1,\\infty)$.\n\n### צעד 2: אסימפטוטות.\n- **אנכית:** $x = 1$ (מכנה מתאפס).\n- **אלכסונית:** חלוקת פולינומים: $\\dfrac{x^2}{x-1} = x+1 + \\dfrac{1}{x-1}$. כש-$x\\to\\pm\\infty$, השארית $\\to 0$, כלומר $y = x+1$.\n\n### צעד 3: נגזרת ראשונה.\n$$f'(x) = \\frac{x(x-2)}{(x-1)^2}.$$\n\n### צעד 4: נקודות קיצון — $f'(x)=0$.\n$x = 0$ ו-$x = 2$.\n\n### צעד 5: טבלת סימנים של $f'$.\n| קטע | סימן $f'$ | התנהגות |\n|---|---|---|\n| $(-\\infty,0)$ | $+$ | עולה |\n| $(0,1)$ | $-$ | יורדת |\n| $(1,2)$ | $-$ | יורדת |\n| $(2,\\infty)$ | $+$ | עולה |\n\n- $x=0$: $+\\to-$ $\\Rightarrow$ מקס מקומי, $f(0)=0$.\n- $x=2$: $-\\to+$ $\\Rightarrow$ מין מקומי, $f(2)=4$.\n\n### צעד 6: נגזרת שנייה וקעירות.\n$$f''(x) = \\frac{2}{(x-1)^3}.$$\n$f''>0$ ל-$x>1$ (שקערורית); $f''<0$ ל-$x<1$ (קמורה). אין פיתול — הקעירות קופצת באסימפטוטה $x=1$, לא בנקודה בתחום. בבחינת 5 יחידות, חובה לסמן אסימפטוטה אלכסונית $y=x+1$ לפני שרטוט העקומה."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Reading f, f', and f'' From Each Other",
+      "title_he": "קריאת f, f' ו-f'' זו מזו",
+      "body_en_md": "A recurring exam skill is being handed **one** of the three graphs — $f$, $f'$, or $f''$ — and being asked about the others. Because differentiation is a fixed relationship, each graph is a coded message about its neighbours.\n\n### From $f'$ to $f$ (the most common direction)\nThe graph of $f'$ is a graph of **slopes**. So:\n- Where $f'$ is **above** the axis, $f$ **rises**; where $f'$ is **below**, $f$ **falls**.\n- Where $f'$ **crosses** the axis (a root of $f'$), $f$ has a **turning point** — max if $f'$ goes $+\\to-$, min if $-\\to+$.\n- Where $f'$ reaches its own **peak or valley**, $f$ has an **inflection** (the slope is steepest there).\n\nNotice a root of $f'$ is a turning point of $f$, not of $f'$ — mixing these up is the classic error.\n\n### From $f$ to $f'$\nRead the slope of $f$ at each $x$ and plot it as the height of $f'$. Flat spots of $f$ become roots of $f'$; steep rising parts of $f$ become high positive values of $f'$.\n\n### The 'how many solutions' question via one picture\nGiven $f$ with a known local max value $M$ and local min value $m$, the equation $f(x)=k$ has as many solutions as the horizontal line $y=k$ has intersections. Slide the line: crossing between $m$ and $M$ gives the most intersections; above $M$ or below $m$ gives the fewest. You answer an entire family of equations from a single sketch — a high-value 4pt/5pt move.\n\n### Sketching related curves\n- $y=f(x)+c$: shift vertically; extrema keep their $x$.\n- $y=f(x-a)$: shift horizontally.\n- $y=-f(x)$: reflect; swaps max$\\leftrightarrow$min.\n- $y=1/f(x)$: vertical asymptotes at roots of $f$; a max of $f$ (where $f>0$) becomes a min of $1/f$.\n\nEvery one of these is answered by translating features you already extracted from the sign tables — no fresh differentiation required.",
+      "body_he_md": "מיומנות בחינה חוזרת היא לקבל **אחד** משלושת הגרפים — $f$, $f'$ או $f''$ — ולהישאל על האחרים. מאחר שהגזירה היא יחס קבוע, כל גרף הוא מסר מקודד על שכניו.\n\n### מ-$f'$ אל $f$ (הכיוון הנפוץ ביותר)\nגרף $f'$ הוא גרף של **שיפועים**. לכן:\n- היכן ש-$f'$ **מעל** הציר, $f$ **עולה**; היכן ש**מתחת**, $f$ **יורדת**.\n- היכן ש-$f'$ **חוצה** את הציר (שורש של $f'$), ל-$f$ יש **נקודת קיצון** — מקסימום אם $f'$ עובר $+\\to-$, מינימום אם $-\\to+$.\n- היכן ש-$f'$ מגיע ל**שיא או שפל** משלו, ל-$f$ יש **פיתול** (השיפוע תלול ביותר שם).\n\nשימו לב ששורש של $f'$ הוא נקודת קיצון של $f$, לא של $f'$ — בלבול בזה הוא הטעות הקלאסית.\n\n### מ-$f$ אל $f'$\nקראו את שיפוע $f$ בכל $x$ ושרטטו אותו כגובה $f'$. נקודות שטוחות של $f$ הופכות לשורשי $f'$; חלקים תלולים ועולים של $f$ הופכים לערכים חיוביים גבוהים של $f'$.\n\n### שאלת 'כמה פתרונות' מתמונה אחת\nבהינתן $f$ עם ערך מקסימום מקומי ידוע $M$ וערך מינימום מקומי $m$, למשוואה $f(x)=k$ יש כמספר החיתוכים של הישר האופקי $y=k$. הזיזו את הישר: חצייה בין $m$ ל-$M$ נותנת הכי הרבה חיתוכים; מעל $M$ או מתחת $m$ הכי מעט. אתם עונים על משפחה שלמה של משוואות משרטוט אחד — מהלך רב-ערך ב-4/5 יח'.\n\n### שרטוט עקומות נגזרות\n- $y=f(x)+c$: הזזה אנכית; הקיצון שומר על $x$.\n- $y=f(x-a)$: הזזה אופקית.\n- $y=-f(x)$: שיקוף; מחליף מקס$\\leftrightarrow$מין.\n- $y=1/f(x)$: אסימפטוטות אנכיות בשורשי $f$; מקסימום של $f$ (עם $f>0$) הופך למינימום של $1/f$.\n\nכל אחד מאלה נענה על ידי תרגום תכונות שכבר חילצתם מטבלאות הסימנים — בלי גזירה חדשה.",
+      "points_level_min": "4pt"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — Describing f From the Graph of f'",
+      "title_he": "דוגמה פתורה 4 — תיאור f מגרף f'",
+      "body_en_md": "**Problem.** The derivative of a function is $f'(x) = (x+2)(x-1)$ (a upward parabola with roots $-2$ and $1$). Without finding $f$, describe where $f$ increases/decreases, classify its extrema, and say where $f$ is steepest downhill.\n\n### Step 1: Roots of $f'$ are the turning points of $f$\n$f'(x)=0$ at $x=-2$ and $x=1$. These are the candidate extrema of $f$.\n\n### Step 2: Sign of $f'$ from the parabola\nAn upward parabola is positive outside its roots and negative between them:\n- $f'>0$ on $(-\\infty,-2)$ → $f$ increasing.\n- $f'<0$ on $(-2,1)$ → $f$ decreasing.\n- $f'>0$ on $(1,\\infty)$ → $f$ increasing.\n\n### Step 3: Classify the extrema of $f$\n- At $x=-2$: $f'$ changes $+\\to-$ → **local maximum** of $f$.\n- At $x=1$: $f'$ changes $-\\to+$ → **local minimum** of $f$.\n\n### Step 4: Where is $f$ steepest downhill?\n$f$ falls on $(-2,1)$, and it is steepest where $f'$ is **most negative** — the vertex of the parabola $f'$, at $x=\\dfrac{-2+1}{2}=-\\dfrac12$. That is the inflection point of $f$.\n\n**Answer:** $f$ rises on $(-\\infty,-2)$ and $(1,\\infty)$, falls on $(-2,1)$; local max at $x=-2$, local min at $x=1$; steepest descent (inflection of $f$) at $x=-\\tfrac12$ — all read directly off $f'$ with no integration.",
+      "body_he_md": "**בעיה.** הנגזרת של פונקציה היא $f'(x) = (x+2)(x-1)$ (פרבולה נפתחת כלפי מעלה עם שורשים $-2$ ו-$1$). בלי למצוא את $f$, תארו היכן $f$ עולה/יורדת, סווגו את קיצוניה, ואמרו היכן $f$ תלולה ביותר במורד.\n\n### שלב 1: שורשי $f'$ הם נקודות הקיצון של $f$\n$f'(x)=0$ ב-$x=-2$ וב-$x=1$. אלה מועמדי הקיצון של $f$.\n\n### שלב 2: סימן $f'$ מהפרבולה\nפרבולה נפתחת כלפי מעלה חיובית מחוץ לשורשים ושלילית ביניהם:\n- $f'>0$ ב-$(-\\infty,-2)$ → $f$ עולה.\n- $f'<0$ ב-$(-2,1)$ → $f$ יורדת.\n- $f'>0$ ב-$(1,\\infty)$ → $f$ עולה.\n\n### שלב 3: סיווג קיצוני $f$\n- ב-$x=-2$: $f'$ עובר $+\\to-$ → **מקסימום מקומי** של $f$.\n- ב-$x=1$: $f'$ עובר $-\\to+$ → **מינימום מקומי** של $f$.\n\n### שלב 4: היכן $f$ תלולה ביותר במורד?\n$f$ יורדת ב-$(-2,1)$, והיא תלולה ביותר היכן ש-$f'$ **הכי שלילי** — קודקוד הפרבולה $f'$, ב-$x=\\dfrac{-2+1}{2}=-\\dfrac12$. זו נקודת הפיתול של $f$.\n\n**תשובה:** $f$ עולה ב-$(-\\infty,-2)$ וב-$(1,\\infty)$, יורדת ב-$(-2,1)$; מקסימום מקומי ב-$x=-2$, מינימום מקומי ב-$x=1$; המורד התלול ביותר (פיתול של $f$) ב-$x=-\\tfrac12$ — הכל נקרא ישירות מ-$f'$ בלי אינטגרציה.",
+      "points_level_min": "4pt"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Derivative Applications",
+      "title_he": "מדריך שיטה — יישומי נגזרות",
+      "body_en_md": "| Goal | Method | Key formula / step |\n|---|---|---|\n| Find critical points | Solve $f'(x)=0$; check where $f'$ undefined | Also include domain boundaries if relevant |\n| Classify max/min | 1st derivative test (sign change) or 2nd derivative test | $f''>0$ at critical pt $\\Rightarrow$ min; $f''<0$ $\\Rightarrow$ max |\n| Absolute max/min on $[a,b]$ | Evaluate $f$ at all critical pts in $(a,b)$ **and** at $a,b$ | Compare all values — do not skip endpoints |\n| Inflection point | Solve $f''=0$, then verify sign change of $f''$ | $f''=0$ without sign change is NOT inflection |\n| Optimization word problem | One variable $Q(x)$ via constraint | $Q'=0$, classify, check domain endpoints |\n| Tangent line | Point-slope form | $y-f(a)=f'(a)(x-a)$ |\n| Concavity | Sign of $f''$ | $f''>0$: concave up; $f''<0$: concave down |\n\n**Sign table template (exam-ready):**\n\n1. Mark critical points, inflection candidates, and domain holes on a number line.\n2. Pick one test value in each open interval; compute the sign of $f'$ (or $f''$).\n3. Read off increasing/decreasing (or concavity); classify extrema: $+\\to-$ gives max, $-\\to+$ gives min.\n\n**When to use which test:** Second derivative is faster when $f''$ is easy to compute and nonzero at the critical point. First derivative test is mandatory when $f''(x_0)=0$ or when $f'$ fails to exist.",
+      "body_he_md": "| מטרה | שיטה | נוסחה / צעד מרכזי |\n|---|---|---|\n| נקודות קיצון | פתרו $f'(x)=0$; בדקו היכן $f'$ לא מוגדרת | כללו גבולות תחום אם רלוונטי |\n| סיווג מקס/מין | מבחן נגזרת ראשונה (שינוי סימן) או שנייה | $f''>0$ בנקודה $\\Rightarrow$ מין; $f''<0$ $\\Rightarrow$ מקס |\n| מקס/מין מוחלט על $[a,b]$ | חשבו $f$ בכל נקודות קיצון ב-$(a,b)$ **וגם** ב-$a,b$ | השוו את כל הערכים — אל תדלגו על קצוות |\n| נקודת פיתול | פתרו $f''=0$, ואז אמתו שינוי סימן של $f''$ | $f''=0$ בלי שינוי סימן — לא פיתול |\n| בעיית אופטימיזציה | משתנה $Q(x)$ אחד דרך אילוץ | $Q'=0$, סיווג, בדיקת קצוות תחום |\n| משוואת משיק | צורת נקודה-שיפוע | $y-f(a)=f'(a)(x-a)$ |\n| קעירות | סימן $f''$ | $f''>0$: שקערורית; $f''<0$: קמורה |\n\n**תבנית טבלת סימנים (מוכנה לבחינה):**\n\n1. סמנו נקודות קיצון, מועמדות לפיתול וחורים בתחום על ציר המספרים.\n2. בחרו ערך בדיקה אחד בכל קטע פתוח; חשבו סימן $f'$ (או $f''$).\n3. קראו עולה/יורדת (או קעירות); סווגו קיצון: $+\\to-$ נותן מקס, $-\\to+$ נותן מין.\n\n**מתי להשתמש באיזה מבחן:** נגזרת שנייה מהירה כש-$f''$ קל לחישוב ושונה מאפס בנקודה. נגזרת ראשונה חובה כש-$f''(x_0)=0$ או כש-$f'$ לא קיימת."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Find all critical points of $f(x) = 2x^3 - 3x^2 - 12x + 4$.",
+          "body_he": "מצאו את כל נקודות הקיצון של $f(x)=2x^3-3x^2-12x+4$.",
+          "solution_en": "**Solution:**\n\n$f'(x)=6x^2-6x-12=6(x^2-x-2)=6(x-2)(x+1)=0 \\Rightarrow x=2, x=-1$.",
+          "solution_he": "**פתרון:**\n\n$f'=6(x-2)(x+1)=0 \\Rightarrow x=2, x=-1$."
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Classify $x=2$ and $x=-1$ for $f(x)=2x^3-3x^2-12x+4$ using the second derivative test.",
+          "body_he": "סווגו $x=2$ ו-$x=-1$ עבור $f(x)=2x^3-3x^2-12x+4$ באמצעות מבחן הנגזרת השנייה.",
+          "solution_en": "$f''(x)=12x-6$. $f''(2)=18>0$ → local min. $f''(-1)=-18<0$ → local max.",
+          "solution_he": "$f''(2)=18>0$ → מינימום מקומי. $f''(-1)=-18<0$ → מקסימום מקומי."
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Find the equation of the tangent line to $f(x)=x^2+3x$ at $x=1$.",
+          "body_he": "מצאו משוואת המשיק ל-$f(x)=x^2+3x$ ב-$x=1$.",
+          "solution_en": "$f(1)=4$. $f'(x)=2x+3$, $f'(1)=5$. Tangent: $y-4=5(x-1)$, i.e., $y=5x-1$.",
+          "solution_he": "$f(1)=4$, $f'(1)=5$. משיק: $y=5x-1$."
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Where is $f(x) = x^4 - 8x^2$ concave up?",
+          "body_he": "היכן $f(x)=x^4-8x^2$ שקערורית?",
+          "solution_en": "$f''(x)=12x^2-16$. $f''>0$ when $12x^2>16$, i.e., $x^2>4/3$, so $|x|>2/\\sqrt{3}\\approx1.15$. Concave up on $(-\\infty,-2/\\sqrt{3})\\cup(2/\\sqrt{3},\\infty)$.",
+          "solution_he": "$f''=12x^2-16>0$ כש-$|x|>2/\\sqrt{3}$. שקערורית על $(-\\infty,-2/\\sqrt{3})\\cup(2/\\sqrt{3},\\infty)$."
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "A box (no lid) is made from a 12 cm × 12 cm square sheet by cutting equal squares from each corner and folding up the sides. Find the size of cut that maximizes volume.",
+          "body_he": "קופסה (ללא מכסה) עשויה מגיליון ריבועי 12×12 ס\"מ על ידי גזירת ריבועים שווים מהפינות. מצאו גודל הגזירה שממקסם נפח.",
+          "solution_en": "Let cut = $x$. Box dimensions: $(12-2x) \\times (12-2x) \\times x$. $V(x)=x(12-2x)^2=4x(6-x)^2$, $0<x<6$. $V'=4(6-x)^2+4x\\cdot 2(6-x)(-1)=4(6-x)[(6-x)-2x]=4(6-x)(6-3x)=0$. Critical: $x=6$ (endpoint) or $x=2$. $V(2)=2\\cdot64=128$ cm³ (max).",
+          "solution_he": "$x$ = גודל גזירה. $V(x)=x(12-2x)^2$, $0<x<6$. $V'=4(6-x)(6-3x)=0 \\Rightarrow x=2$. $V(2)=128$ ס\"מ³."
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Find inflection points of $f(x)=x^4-6x^2$.",
+          "body_he": "מצאו נקודות פיתול של $f(x)=x^4-6x^2$.",
+          "solution_en": "$f'=4x^3-12x$. $f''=12x^2-12=12(x-1)(x+1)=0 \\Rightarrow x=\\pm1$. Check sign change: $f''<0$ on $(-1,1)$, $f''>0$ outside. Sign change at both → inflection points at $x=1, f(1)=-5$ and $x=-1, f(-1)=-5$.",
+          "solution_he": "$f''=12(x-1)(x+1)=0 \\Rightarrow x=\\pm1$. שינוי סימן אומת. נקודות פיתול: $(\\pm1,-5)$."
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Find the absolute max and min of $f(x)=\\sin x + \\cos x$ on $[0, \\pi]$.",
+          "body_he": "מצאו מקסימום ומינימום מוחלטים של $f(x)=\\sin x+\\cos x$ על $[0,\\pi]$.",
+          "solution_en": "$f'=\\cos x-\\sin x=0 \\Rightarrow \\tan x=1 \\Rightarrow x=\\pi/4$ (in $[0,\\pi]$). Also $x=5\\pi/4$ is outside. Evaluate: $f(0)=1$, $f(\\pi/4)=\\sqrt{2}$, $f(\\pi)=-1$. Max = $\\sqrt{2}$ at $x=\\pi/4$; min = $-1$ at $x=\\pi$.",
+          "solution_he": "$x=\\pi/4$: $f=\\sqrt{2}$ (מקס). $f(\\pi)=-1$ (מין)."
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Two numbers sum to 20. Maximize their product.",
+          "body_he": "שני מספרים שסכומם 20. מקסמו את מכפלתם.",
+          "solution_en": "Let numbers be $x$ and $20-x$. Product $P=x(20-x)=20x-x^2$. $P'=20-2x=0 \\Rightarrow x=10$. Both numbers = 10, product = 100.",
+          "solution_he": "$P=x(20-x)$. $P'=20-2x=0 \\Rightarrow x=10$. מכפלה מקסימלית = 100."
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Find the point on the curve $y=\\sqrt{x}$ closest to the point $(2, 0)$.",
+          "body_he": "מצאו את הנקודה על $y=\\sqrt{x}$ הקרובה ביותר ל-$(2,0)$.",
+          "solution_en": "Distance²: $D(x)=(x-2)^2+x$, $x\\ge0$. $D'(x)=2(x-2)+1=2x-3=0 \\Rightarrow x=3/2$. $y=\\sqrt{3/2}=\\sqrt{6}/2$. Closest point: $(3/2, \\sqrt{6}/2)$.",
+          "solution_he": "$D(x)=(x-2)^2+x$. $D'=2x-3=0 \\Rightarrow x=3/2$. נקודה קרובה ביותר: $(3/2,\\sqrt{6}/2)$."
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Fully investigate $f(x)=x^3-3x^2-9x+5$: domain, critical points, max/min, inflection, sketch guidance.",
+          "body_he": "חקרו לחלוטין את $f(x)=x^3-3x^2-9x+5$: תחום, נקודות קיצון, מקס/מין, פיתול, הנחיות לשרטוט.",
+          "solution_en": "Domain: $\\mathbb{R}$. $f'=3x^2-6x-9=3(x-3)(x+1)=0 \\Rightarrow x=3,-1$. Sign: $+$ on $(-\\infty,-1)$, $-$ on $(-1,3)$, $+$ on $(3,\\infty)$. Local max at $x=-1$: $f(-1)=10$. Local min at $x=3$: $f(3)=-22$. $f''=6x-6=0 \\Rightarrow x=1$. Inflection at $(1,f(1))=(1,-6)$. Oblique rise for $x\\to\\pm\\infty$.",
+          "solution_he": "$f'=3(x-3)(x+1)=0 \\Rightarrow x=3,-1$. מקסימום $x=-1$: $f(-1)=10$. מינימום $x=3$: $f(3)=-22$. $f''=6x-6=0 \\Rightarrow x=1$. פיתול ב-$(1,-6)$."
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "A cylindrical can (with lid) must hold $V = 500\\pi$ cm³. Minimize total surface area.",
+          "body_he": "פח גלילי (עם מכסה) חייב להכיל $V=500\\pi$ ס\"מ³. מזערו את שטח הפנים הכולל.",
+          "solution_en": "$V=\\pi r^2 h = 500\\pi \\Rightarrow h=500/r^2$. $S=2\\pi r^2+2\\pi rh=2\\pi r^2+1000\\pi/r$. $S'=4\\pi r-1000\\pi/r^2=0 \\Rightarrow r^3=250 \\Rightarrow r=\\sqrt[3]{250}\\approx6.3$ cm. $h=500/r^2$. At this $r$: $h=2r$ (optimal ratio).",
+          "solution_he": "$h=500/r^2$, $S=2\\pi r^2+1000\\pi/r$. $S'=0 \\Rightarrow r=\\sqrt[3]{250}$. ביחס אופטימלי $h=2r$."
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Show that for $x > 0$, $e^x > 1 + x$ using derivative analysis.",
+          "body_he": "הראו שלכל $x>0$: $e^x > 1+x$ באמצעות ניתוח נגזרות.",
+          "solution_en": "Let $g(x)=e^x-1-x$. $g(0)=0$. $g'(x)=e^x-1 > 0$ for $x>0$ (since $e^x>1$). So $g$ is strictly increasing on $(0,\\infty)$, hence $g(x) > g(0) = 0$ for $x>0$. Therefore $e^x > 1+x$.",
+          "solution_he": "$g(x)=e^x-1-x$. $g(0)=0$. $g'(x)=e^x-1>0$ לכל $x>0$. לכן $g$ עולה, $g(x)>g(0)=0$, כלומר $e^x>1+x$."
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "A ladder leans against a wall. The foot slides away at 2 m/s. When the foot is 6 m from the wall and the ladder is 10 m long, how fast is the top sliding down?",
+          "body_he": "סולם נשען על קיר. הבסיס מתרחק ב-2 מ\"ש. כשהבסיס 6 מ' מהקיר והסולם 10 מ', באיזה מהירות יורד הראש?",
+          "solution_en": "$x^2+y^2=100$. Differentiate: $2x(dx/dt)+2y(dy/dt)=0$. At $x=6$: $y=\\sqrt{100-36}=8$. $2(6)(2)+2(8)(dy/dt)=0 \\Rightarrow dy/dt=-24/16=-1.5$ m/s (negative = downward).",
+          "solution_he": "$x^2+y^2=100$. גוזרים: $2(6)(2)+2(8)(dy/dt)=0 \\Rightarrow dy/dt=-1.5$ מ\"ש."
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Forgetting endpoints on closed intervals.** On $[a,b]$, the absolute maximum might occur at $x=a$ or $x=b$, not at any critical point. Always build a comparison table: critical values plus $f(a)$ and $f(b)$.\n\n2. **Treating $f''(x_0)=0$ as automatic inflection.** You must verify a sign change. Example: $f(x)=x^4$ has $f''(0)=0$ but concavity is up on both sides — no inflection at $0$.\n\n3. **Assuming every critical point is an extremum.** If $f'$ does not change sign (e.g., $f(x)=x^3$ at $x=0$), the point is neither max nor min — it is a horizontal inflection.\n\n4. **Using the second derivative test when $f''(x_0)=0$.** The test is inconclusive. Switch to the first derivative sign table immediately.\n\n5. **Ignoring domain restrictions in optimization.** A critical point outside the physical domain (negative length, $x=0$ when length must be positive) must be discarded. Also check whether the optimum sits at a domain endpoint.\n\n6. **Sign table errors near asymptotes.** Test values must lie in the correct branch of the domain; picking $x=0$ when the domain excludes $0$ gives a wrong sign.",
+      "body_he_md": "1. **שכחת קצוות בקטעים סגורים.** ב-$[a,b]$, המקסימום המוחלט עלול להיות ב-$x=a$ או $x=b$, לא בנקודת קיצון. בנו תמיד טבלת השוואה: ערכי קיצון בתוספת $f(a)$ ו-$f(b)$.\n\n2. **התייחסות ל-$f''(x_0)=0$ כפיתול אוטומטי.** חובה לאמת שינוי סימן. דוגמה: $f(x)=x^4$ נותן $f''(0)=0$ אך הקעירות כלפי מעלה משני הצדדים — אין פיתול ב-$0$.\n\n3. **הנחה שכל נקודה קריטית היא קיצון.** אם $f'$ לא משנה סימן (למשל $f(x)=x^3$ ב-$x=0$), אין מקסימום ולא מינימום — זו נקודת פיתול אופקית.\n\n4. **שימוש במבחן נגזרת שנייה כש-$f''(x_0)=0$.** המבחן לא חד-משמעי. עברו מיד לטבלת סימנים של הנגזרת הראשונה.\n\n5. **התעלמות מהגבלות תחום באופטימיזציה.** נקודת קיצון מחוץ לתחום הפיזי (אורך שלילי, $x=0$ כשאורך חייב להיות חיובי) יש לפסול. בדקו גם אם הקיצון בקצה התחום.\n\n6. **שגיאות טבלת סימנים ליד אסימפטוטות.** ערכי בדיקה חייבים להיות בענף הנכון של התחום; בחירת $x=0$ כשהתחום מוציא $0$ נותנת סימן שגוי."
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "Derivative applications bridge pure calculus to every quantitative field on the platform and on Bagrut exams.\n\n**You will use this to unlock:**\n- `concept:work_energy` **Work & Energy** — force from potential energy is $F = -\\dfrac{dU}{dx}$; equilibrium occurs where $U'(x)=0$.\n- `concept:optimization_word_problems` **Optimization** — the same $Q'=0$ pattern appears in economics, geometry, and engineering.\n- `concept:differential_equations_intro` **Differential Equations** — slope fields and stability analysis start from $f'$ and $f''$ sign information.\n\n**Builds on:**\n- `concept:derivatives_rules` **Derivative Rules** — you must compute $f'$ and $f''$ reliably before any investigation.\n\n**Why it matters for exams:** Bagrut 4- and 5-unit papers routinely allocate 20–30 points to function investigation and optimization combined. Examiners reward complete sign tables, endpoint checks, and labeled sketches — not just isolated answers. University Calc 1 expects the same rigor with more complex functions.",
+      "body_he_md": "יישומי נגזרות מחברים חשבון טהור לכל תחום כמותי בפלטפורמה ולבחינות הבגרות.\n\n**תשתמשו בזה כדי להתקדם ל:**\n- `concept:work_energy` **עבודה ואנרגיה** — כוח מאנרגיה פוטנציאלית הוא $F = -\\dfrac{dU}{dx}$; שיווי משקל מתרחש כש-$U'(x)=0$.\n- `concept:optimization_word_problems` **אופטימיזציה** — אותו דפוס $Q'=0$ מופיע בכלכלה, גיאומטריה והנדסה.\n- `concept:differential_equations_intro` **משוואות דיפרנציאליות** — שדות שיפוע וניתוח יציבות מתחילים ממידע על סימן $f'$ ו-$f''$.\n\n**מבוסס על:**\n- `concept:derivatives_rules` **כללי גזירה** — חובה לחשב $f'$ ו-$f''$ בצורה אמינה לפני כל חקירה.\n\n**למה זה חשוב לבחינות:** בבגרות 4 ו-5 יחידות מוקדשות שגרתית 20–30 נקודות לחקירת פונקציה ואופטימיזציה יחד. בוחנים מעריכים טבלאות סימנים מלאות, בדיקת קצוות ושרטוט מתויג — לא רק תשובות בודדות. בחדו״א 1 נדרשת אותה קפדנות עם פונקציות מורכבות יותר."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Function investigation checklist:**\n1. Domain — list every restriction before differentiating.\n2. $f'=0$ and undefined points $\\Rightarrow$ critical points.\n3. Sign table for $f'$: increasing/decreasing; classify max/min ($+\\to-$, $-\\to+$).\n4. $f''=0$ $\\Rightarrow$ inflection candidates; **verify sign change**.\n5. Asymptotes: vertical, horizontal, oblique (long division for rationals).\n6. Intercepts, special values, then sketch with labels.\n\n**Optimization checklist:**\n1. Draw; define one variable; write $Q(x)$; state domain with units.\n2. $Q'(x)=0$; solve and classify ($Q''$ or sign table).\n3. Evaluate at **domain endpoints** — boundary may win.\n4. Final sentence with context and units.\n\n**Red flags before submitting:**\n- Did you evaluate $f(a)$ and $f(b)$ for absolute extrema?\n- Is $f''=0$ confirmed as inflection by a sign change?\n- Did you discard critical points outside the physical domain?",
+      "body_he_md": "**רשימת בדיקה לחקירת פונקציה:**\n1. תחום — רשמו כל הגבלה לפני גזירה.\n2. $f'=0$ ונקודות לא מוגדרות $\\Rightarrow$ נקודות קיצון.\n3. טבלת סימנים $f'$: עולה/יורדת; סיווג מקס/מין ($+\\to-$, $-\\to+$).\n4. $f''=0$ $\\Rightarrow$ מועמדות לפיתול; **אמתו שינוי סימן**.\n5. אסימפטוטות: אנכית, אופקית, אלכסונית (חלוקה לרציונליות).\n6. חיתוכים, ערכים מיוחדים, ואז שרטוט מתויג.\n\n**רשימת בדיקה לאופטימיזציה:**\n1. שרטוט; משתנה אחד; כתבו $Q(x)$; ציינו תחום עם יחידות.\n2. $Q'(x)=0$; פתרו וסווגו ($Q''$ או טבלת סימנים).\n3. חשבו ב**קצוות התחום** — הגבול עלול לנצח.\n4. משפט סיום עם הקשר ויחידות.\n\n**דגלים אדומים לפני הגשה:**\n- חישבתם $f(a)$ ו-$f(b)$ לקיצון מוחלט?\n- $f''=0$ אומת כפיתול בשינוי סימן?\n- פסלתם נקודות קיצון מחוץ לתחום הפיזי?"
+    },
+    {
+      "kind": "theory",
+      "title_en": "Facets: rule selection and graphical derivative",
+      "title_he": "פנים: בחירת כלל ונגזרת מהגרף",
+      "body_en_md": "**Rule selection:** product / quotient / chain.\n\n**Graphical derivative:** sketch $f'$ from the graph of $f$.",
+      "body_he_md": "**בחירת כלל:** מכפלה / מנה / שרשרת.\n\n**נגזרת מהגרף:** סקצו את $f'$ מגרף $f$."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- $f'>0$: increasing; $f'<0$: decreasing; $f'=0$: critical point (candidate for extrema).\n- **First derivative test:** sign change of $f'$ classifies local max ($+\\to-$) and min ($-\\to+$).\n- **Second derivative test:** at $f'(x_0)=0$, $f''(x_0)>0$ $\\Rightarrow$ local min; $f''(x_0)<0$ $\\Rightarrow$ local max; $f''=0$ $\\Rightarrow$ use first test.\n- **Inflection:** $f''$ changes sign — not merely $f''=0$.\n- **Absolute extrema on $[a,b]$:** evaluate at all critical points in $(a,b)$ **and** at endpoints $a,b$.\n- **Optimization:** express $Q$ in one variable via constraint, find domain, solve $Q'=0$, classify, check endpoints, answer with units.\n- **Tangent line:** $y-f(a)=f'(a)(x-a)$.",
+      "body_he_md": "- $f'>0$: עולה; $f'<0$: יורדת; $f'=0$: נקודה קריטית (מועמדת לקיצון).\n- **מבחן נגזרת ראשונה:** שינוי סימן של $f'$ מסווג מקס מקומי ($+\\to-$) ומין ($-\\to+$).\n- **מבחן נגזרת שנייה:** ב-$f'(x_0)=0$, $f''(x_0)>0$ $\\Rightarrow$ מין מקומי; $f''(x_0)<0$ $\\Rightarrow$ מקס; $f''=0$ $\\Rightarrow$ עברו למבחן ראשון.\n- **פיתול:** $f''$ משנה סימן — לא רק $f''=0$.\n- **קיצון מוחלט על $[a,b]$:** חשבו בכל נקודות הקיצון ב-$(a,b)$ **וגם** בקצוות $a,b$.\n- **אופטימיזציה:** ביטוי $Q$ במשתנה אחד דרך אילוץ, מציאת תחום, $Q'=0$, סיווג, בדיקת קצוות, תשובה עם יחידות.\n- **משיק:** $y-f(a)=f'(a)(x-a)$."
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "$f'>0$: increasing; $f'<0$: decreasing; $f'=0$: critical.",
+      "Second derivative test: $f''(c)>0$ → min, $f''(c)<0$ → max.",
+      "Absolute extrema on $[a,b]$: always include endpoints.",
+      "Optimization: express in one variable using constraint."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "f''=0 always means inflection",
+        "correction": "Must verify sign change of f''. Example: x^4 at x=0.",
+        "detect_phrase_en": "second derivative zero inflection",
+        "detect_phrase_he": "נגזרת שנייה אפס פיתול"
+      }
+    ],
+    "skill_atoms_unlocked": [
+      "concavity",
+      "extremum_classification",
+      "inflection_point",
+      "monotonicity",
+      "normal_line",
+      "optimization",
+      "rate_of_change",
+      "second_derivative",
+      "slope_of_curve",
+      "tangent_line"
+    ],
+    "tutor_pacing_hint": "Always draw a sign table for f'. Demand students evaluate at endpoints for absolute extrema.",
+    "next_recommended": [
+      "integrals_intro",
+      "definite_integrals"
+    ]
+  },
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Given $f(x) = 2 x^{3} - 9 x^{2} + 12 x$, compute $f'(1)$.",
+      "stem_he": "בהינתן $f(x) = 2 x^{3} - 9 x^{2} + 12 x$, חשבו את $f'(1)$.",
+      "explanation_en": "**Step 1 — Differentiate term by term.** $f'(x) = 6 x^{2} - 18 x + 12$.\n\n**Step 2 — Substitute $x = 1$.** $f'(1) = 6 - 18 + 12 = 0$.\n\n**Interpretation.** A derivative of zero means the tangent is horizontal at $x=1$, so this is a critical point — a candidate for a local maximum or minimum.\n\n**Answer:** $f'(1) = 0$.",
+      "explanation_he": "**שלב 1 — גזירה איבר-איבר.** $f'(x) = 6 x^{2} - 18 x + 12$.\n\n**שלב 2 — הצבת $x = 1$.** $f'(1) = 6 - 18 + 12 = 0$.\n\n**פרשנות.** נגזרת אפס פירושה משיק אופקי ב-$x=1$, ולכן זו נקודה קריטית — מועמדת למקסימום או מינימום מקומי.\n\n**תשובה:** $f'(1) = 0$.",
+      "skill_atoms": [
+        "tangent_line"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "1ff564ae-0d03-5641-9b25-f477936a04ff",
+      "points_level_min": "4pt",
+      "correct_answer": "0",
+      "id": "derivatives_applications__5pt-q1"
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "At $x = 1$, $f(x) = 2x^3 - 9x^2 + 12x$ has $f'(1) = 0$ and $f''(1) = -6$. What is $x = 1$?",
+      "stem_he": "בנקודה $x = 1$ מתקיים $f'(1) = 0$ ו-$f''(1) = -6$ עבור $f(x) = 2x^3 - 9x^2 + 12x$. מהי $x = 1$?",
+      "explanation_en": "**Step 1 — Critical point.** $f'(1) = 0$ makes $x=1$ a critical point (horizontal tangent).\n\n**Step 2 — Apply the second-derivative test.** $f''(1) = -6 < 0$ means the graph is concave down there, curving like a cap.\n\n**Step 3 — Conclude.** A critical point with concave-down shape is a peak, so $x=1$ is a **local maximum**.",
+      "explanation_he": "**שלב 1 — נקודה קריטית.** $f'(1) = 0$ הופך את $x=1$ לנקודה קריטית (משיק אופקי).\n\n**שלב 2 — מבחן הנגזרת השנייה.** $f''(1) = -6 < 0$ פירושו שהגרף קעור כלפי מטה שם, מתעקל כמו כיפה.\n\n**שלב 3 — מסקנה.** נקודה קריטית עם צורה קעורה כלפי מטה היא פסגה, ולכן $x=1$ הוא **מקסימום מקומי**.",
+      "skill_atoms": [
+        "extremum_classification",
+        "concavity"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\text{local maximum}$",
+          "$\\text{local minimum}$",
+          "$\\text{inflection point}$",
+          "$\\text{not critical}$"
+        ],
+        "options_he": [
+          "$\\text{local maximum}$",
+          "$\\text{local minimum}$",
+          "$\\text{inflection point}$",
+          "$\\text{not critical}$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "07d38f80-47f4-5f44-ab59-3a09d6051042",
+      "points_level_min": "4pt",
+      "options_en": [
+        "$\\text{local maximum}$",
+        "$\\text{local minimum}$",
+        "$\\text{inflection point}$",
+        "$\\text{not critical}$"
+      ],
+      "options_he": [
+        "$\\text{local maximum}$",
+        "$\\text{local minimum}$",
+        "$\\text{inflection point}$",
+        "$\\text{not critical}$"
+      ],
+      "correct_index": 0,
+      "id": "derivatives_applications__5pt-q2"
+    },
+    {
+      "ord": 3,
+      "kind": "open",
+      "difficulty": "hard",
+      "needs_review": true,
+      "stem_en": "A rectangle has its base on the $x$-axis and its two upper corners on the parabola $y = 12 - x^2$. Find the dimensions that maximize its area.",
+      "stem_he": "למלבן בסיס על ציר ה-$x$ ושתי פינותיו העליונות על הפרבולה $y = 12 - x^2$. מצאו את הממדים הממקסמים את השטח.",
+      "explanation_en": "**Step 1 — Set up.** By symmetry the corners are at $\\pm x$, so width $= 2x$ and height $= 12 - x^2$.\n\n**Step 2 — Area function.** $A(x) = 2x(12 - x^2) = 24x - 2x^3$, for $0 < x < 2\\sqrt3$.\n\n**Step 3 — Optimize.** $A'(x) = 24 - 6x^2 = 0 \\Rightarrow x^2 = 4 \\Rightarrow x = 2$.\n\n**Step 4 — Confirm max.** $A''(x) = -12x < 0$, so $x = 2$ is a maximum.\n\n**Answer:** width $= 4$, height $= 12 - 4 = 8$, area $= 32$.",
+      "explanation_he": "**שלב 1 — הצבה.** מסימטריה הפינות ב-$\\pm x$, ולכן רוחב $= 2x$ וגובה $= 12 - x^2$.\n\n**שלב 2 — פונקציית שטח.** $A(x) = 2x(12 - x^2) = 24x - 2x^3$, עבור $0 < x < 2\\sqrt3$.\n\n**שלב 3 — אופטימיזציה.** $A'(x) = 24 - 6x^2 = 0 \\Rightarrow x^2 = 4 \\Rightarrow x = 2$.\n\n**שלב 4 — אימות מקסימום.** $A''(x) = -12x < 0$, ולכן $x = 2$ מקסימום.\n\n**תשובה:** רוחב $= 4$, גובה $= 8$, שטח $= 32$.",
+      "skill_atoms": [
+        "optimization",
+        "extremum_classification"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Set up.** By symmetry the corners are at $\\pm x$, so width $= 2x$ and height $= 12 - x^2$.",
+          "**Step 2 — Area function.** $A(x) = 2x(12 - x^2) = 24x - 2x^3$, for $0 < x < 2\\sqrt3$.",
+          "**Step 3 — Optimize.** $A'(x) = 24 - 6x^2 = 0 \\Rightarrow x^2 = 4 \\Rightarrow x = 2$.",
+          "**Step 4 — Confirm max.** $A''(x) = -12x < 0$, so $x = 2$ is a maximum.",
+          "**Answer:** width $= 4$, height $= 12 - 4 = 8$, area $= 32$."
+        ],
+        "steps_he": [
+          "**שלב 1 — הצבה.** מסימטריה הפינות ב-$\\pm x$, ולכן רוחב $= 2x$ וגובה $= 12 - x^2$.",
+          "**שלב 2 — פונקציית שטח.** $A(x) = 2x(12 - x^2) = 24x - 2x^3$, עבור $0 < x < 2\\sqrt3$.",
+          "**שלב 3 — אופטימיזציה.** $A'(x) = 24 - 6x^2 = 0 \\Rightarrow x^2 = 4 \\Rightarrow x = 2$.",
+          "**שלב 4 — אימות מקסימום.** $A''(x) = -12x < 0$, ולכן $x = 2$ מקסימום.",
+          "**תשובה:** רוחב $= 4$, גובה $= 8$, שטח $= 32$."
+        ]
+      },
+      "source_item_id": "5fc3fc82-4fde-581b-ab2c-17b208346f0e",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "4pt",
+      "id": "derivatives_applications__5pt-q3"
+    },
+    {
+      "ord": 4,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: $f(x) = 2 x^{3} - 9 x^{2} + 12 x$ is increasing near $x = 0$.",
+      "stem_he": "נכון או לא נכון: $f(x) = 2 x^{3} - 9 x^{2} + 12 x$ עולה בסביבת $x = 0$.",
+      "explanation_en": "**Step 1 — Sign of the first derivative.** $f'(x) = 6 x^{2} - 18 x + 12$.\n\n**Step 2 — Test at $x = 0$.** $f'(0) = 12$.\n\n**Conclusion:** $f'(x) > 0$ there, so $f$ is increasing — the statement is true.",
+      "explanation_he": "**שלב 1 — סימן הנגזרת הראשונה.** $f'(x) = 6 x^{2} - 18 x + 12$.\n\n**שלב 2 — בדיקה ב-$x = 0$.** $f'(0) = 12$.\n\n**מסקנה:** $f'(x) > 0$ שם, ולכן $f$ עולה — ההיגד נכון.",
+      "skill_atoms": [
+        "monotonicity"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "f481b8ee-7012-5db2-bc5d-e4aeb5b8ba8b",
+      "points_level_min": "4pt",
+      "correct_bool": true,
+      "id": "derivatives_applications__5pt-q4"
+    },
+    {
+      "ord": 5,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "The slope of the curve $y = x^3 - 12x + 5$ at $x = 2$ equals the value of $y'$ there. Find it.",
+      "stem_he": "שיפוע העקומה $y = x^3 - 12x + 5$ בנקודה $x = 2$ שווה לערך $y'$ שם. מצאו אותו.",
+      "explanation_en": "**Step 1 — Differentiate.** $y' = 3x^2 - 12$.\n\n**Step 2 — Slope is the derivative value.** $y'(2) = 3(4) - 12 = 0$.\n\n**Answer:** slope $= 0$ (a horizontal tangent — $x=2$ is a critical point).",
+      "explanation_he": "**שלב 1 — גזירה.** $y' = 3x^2 - 12$.\n\n**שלב 2 — השיפוע הוא ערך הנגזרת.** $y'(2) = 3\\cdot4 - 12 = 0$.\n\n**תשובה:** שיפוע $= 0$ (משיק אופקי — $x=2$ נקודה קריטית).",
+      "skill_atoms": [
+        "slope_of_curve",
+        "tangent_line"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "13b99940-5b3f-5fb2-8fd1-715168129da7",
+      "points_level_min": "4pt",
+      "correct_answer": "0",
+      "id": "derivatives_applications__5pt-q5"
+    },
+    {
+      "ord": 6,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Given $f(x) = 2 x^{3} - 9 x^{2} + 12 x$, compute $f'(0)$.",
+      "stem_he": "בהינתן $f(x) = 2 x^{3} - 9 x^{2} + 12 x$, חשבו את $f'(0)$.",
+      "explanation_en": "**Step 1 — Differentiate term by term.** $f'(x) = 6 x^{2} - 18 x + 12$.\n\n**Step 2 — Substitute $x = 0$.** Only the constant term survives: $f'(0) = 12$.\n\n**Interpretation.** Since $f'(0)=12>0$, the graph is rising steeply at the origin — the slope of the tangent there is $12$.\n\n**Answer:** $f'(0) = 12$.",
+      "explanation_he": "**שלב 1 — גזירה איבר-איבר.** $f'(x) = 6 x^{2} - 18 x + 12$.\n\n**שלב 2 — הצבת $x = 0$.** רק האיבר הקבוע שורד: $f'(0) = 12$.\n\n**פרשנות.** מאחר ש-$f'(0)=12>0$, הגרף עולה בתלילות בראשית — שיפוע המשיק שם הוא $12$.\n\n**תשובה:** $f'(0) = 12$.",
+      "skill_atoms": [
+        "slope_of_curve",
+        "tangent_line"
+      ],
+      "answer_payload": {
+        "value": 12
+      },
+      "source_item_id": "3ee14d2c-5de6-57fd-8070-73892c52e8e5",
+      "points_level_min": "4pt",
+      "correct_answer": "12",
+      "id": "derivatives_applications__5pt-q6"
+    },
+    {
+      "ord": 7,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the $x$-coordinate of the inflection point of $f(x) = 2x^3 - 9x^2 + 12x$.",
+      "stem_he": "מצאו את שיעור ה-$x$ של נקודת הפיתול של $f(x) = 2x^3 - 9x^2 + 12x$.",
+      "explanation_en": "**Step 1 — Second derivative.** $f''(x) = 12x - 18$.\n\n**Step 2 — Set $f'' = 0$.** $12x - 18 = 0 \\Rightarrow x = \\tfrac{3}{2}$.\n\n**Step 3 — Confirm sign change.** $f''$ goes from $-$ to $+$ across $x = \\tfrac32$, so it is a genuine inflection.\n\n**Answer:** $x = \\tfrac{3}{2}$.",
+      "explanation_he": "**שלב 1 — נגזרת שנייה.** $f''(x) = 12x - 18$.\n\n**שלב 2 — $f'' = 0$.** $12x - 18 = 0 \\Rightarrow x = \\tfrac{3}{2}$.\n\n**שלב 3 — אימות שינוי סימן.** $f''$ עוברת מ-$-$ ל-$+$ סביב $x = \\tfrac32$, ולכן זו נקודת פיתול אמיתית.\n\n**תשובה:** $x = \\tfrac{3}{2}$.",
+      "skill_atoms": [
+        "inflection_point",
+        "concavity"
+      ],
+      "answer_payload": {
+        "value": 1.5
+      },
+      "source_item_id": "948725ac-f026-5e2b-a1f3-431291b33302",
+      "points_level_min": "4pt",
+      "correct_answer": "1.5",
+      "id": "derivatives_applications__5pt-q7"
+    },
+    {
+      "ord": 8,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $f(x) = 2x^3 - 9x^2 + 12x$, compute $f''(2)$ and note its sign.",
+      "stem_he": "עבור $f(x) = 2x^3 - 9x^2 + 12x$, חשבו את $f''(2)$ וציינו את הסימן.",
+      "explanation_en": "**Step 1 — First derivative.** $f'(x) = 6x^2 - 18x + 12$.\n\n**Step 2 — Second derivative.** $f''(x) = 12x - 18$.\n\n**Step 3 — Evaluate.** $f''(2) = 24 - 18 = 6 > 0$, so $f$ is concave up at $x = 2$.\n\n**Answer:** $6$.",
+      "explanation_he": "**שלב 1 — נגזרת ראשונה.** $f'(x) = 6x^2 - 18x + 12$.\n\n**שלב 2 — נגזרת שנייה.** $f''(x) = 12x - 18$.\n\n**שלב 3 — הצבה.** $f''(2) = 24 - 18 = 6 > 0$, ולכן $f$ קעורה כלפי מעלה ב-$x = 2$.\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "concavity",
+        "second_derivative"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "b460185e-b68a-5945-8108-1b21c8144d13",
+      "points_level_min": "4pt",
+      "correct_answer": "6",
+      "id": "derivatives_applications__5pt-q8"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $f(x) = x^3 - 12x + 5$, find the $x$-coordinates of the critical points (where $f'(x) = 0$). Give the positive one.",
+      "stem_he": "עבור $f(x) = x^3 - 12x + 5$, מצאו את שיעורי ה-$x$ של הנקודות הקריטיות (בהן $f'(x) = 0$). תנו את החיובי.",
+      "explanation_en": "**Step 1 — Differentiate.** $f'(x) = 3x^2 - 12$.\n\n**Step 2 — Set $f' = 0$.** $3x^2 = 12 \\Rightarrow x^2 = 4$.\n\n**Step 3 — Solve.** $x = \\pm 2$; the positive one is $2$.\n\n**Answer:** $x = 2$.",
+      "explanation_he": "**שלב 1 — גזירה.** $f'(x) = 3x^2 - 12$.\n\n**שלב 2 — $f' = 0$.** $x^2 = 4$.\n\n**שלב 3 — פתרון.** $x = \\pm 2$; החיובי הוא $2$.\n\n**תשובה:** $x = 2$.",
+      "skill_atoms": [
+        "extremum_classification",
+        "tangent_line"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "4b60f6cf-66b0-554e-8eda-aadb1429fccf",
+      "points_level_min": "4pt",
+      "correct_answer": "2",
+      "id": "derivatives_applications__5pt-q9"
+    },
+    {
+      "ord": 10,
+      "kind": "open",
+      "difficulty": "medium",
+      "needs_review": true,
+      "stem_en": "Find the equation of the tangent line to $f(x) = x^{3} - 12 x + 5$ at $x = 3$.",
+      "stem_he": "מצאו את משוואת המשיק ל-$f(x) = x^{3} - 12 x + 5$ בנקודה $x = 3$.",
+      "explanation_en": "**Step 1 — Slope from the derivative.** $f'(x) = 3 x^{2} - 12$, so the slope is $m = f'(3) = 15$.\n\n**Step 2 — Point of tangency.** $f(3) = -4$, giving the point $(3, -4)$.\n\n**Step 3 — Point-slope form.** $y - -4 = 15\\,(x - 3)$.\n\n**Answer:** $y = 15 x - 49$.",
+      "explanation_he": "**שלב 1 — שיפוע מהנגזרת.** $f'(x) = 3 x^{2} - 12$, ולכן השיפוע הוא $m = f'(3) = 15$.\n\n**שלב 2 — נקודת ההשקה.** $f(3) = -4$, כלומר הנקודה $(3, -4)$.\n\n**שלב 3 — צורת נקודה-שיפוע.** $y - -4 = 15\\,(x - 3)$.\n\n**תשובה:** $y = 15 x - 49$.",
+      "skill_atoms": [
+        "tangent_line"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Slope from the derivative.** $f'(x) = 3 x^{2} - 12$, so the slope is $m = f'(3) = 15$.",
+          "**Step 2 — Point of tangency.** $f(3) = -4$, giving the point $(3, -4)$.",
+          "**Step 3 — Point-slope form.** $y - -4 = 15\\,(x - 3)$.",
+          "**Answer:** $y = 15 x - 49$."
+        ],
+        "steps_he": [
+          "**שלב 1 — שיפוע מהנגזרת.** $f'(x) = 3 x^{2} - 12$, ולכן השיפוע הוא $m = f'(3) = 15$.",
+          "**שלב 2 — נקודת ההשקה.** $f(3) = -4$, כלומר הנקודה $(3, -4)$.",
+          "**שלב 3 — צורת נקודה-שיפוע.** $y - -4 = 15\\,(x - 3)$.",
+          "**תשובה:** $y = 15 x - 49$."
+        ]
+      },
+      "source_item_id": "d58540a3-d8a6-5100-b622-8e05a57f457d",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "4pt",
+      "id": "derivatives_applications__5pt-q10"
+    },
+    {
+      "ord": 11,
+      "kind": "open",
+      "difficulty": "medium",
+      "needs_review": true,
+      "stem_en": "Find the equation of the tangent line to $f(x) = 2 x^{3} - 9 x^{2} + 12 x$ at $x = 1$.",
+      "stem_he": "מצאו את משוואת המשיק ל-$f(x) = 2 x^{3} - 9 x^{2} + 12 x$ בנקודה $x = 1$.",
+      "explanation_en": "**Step 1 — Slope from the derivative.** $f'(x) = 6 x^{2} - 18 x + 12$, so the slope is $m = f'(1) = 0$.\n\n**Step 2 — Point of tangency.** $f(1) = 5$, giving the point $(1, 5)$.\n\n**Step 3 — Point-slope form.** $y - 5 = 0\\,(x - 1)$.\n\n**Answer:** $y = 5$.",
+      "explanation_he": "**שלב 1 — שיפוע מהנגזרת.** $f'(x) = 6 x^{2} - 18 x + 12$, ולכן השיפוע הוא $m = f'(1) = 0$.\n\n**שלב 2 — נקודת ההשקה.** $f(1) = 5$, כלומר הנקודה $(1, 5)$.\n\n**שלב 3 — צורת נקודה-שיפוע.** $y - 5 = 0\\,(x - 1)$.\n\n**תשובה:** $y = 5$.",
+      "skill_atoms": [
+        "tangent_line"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Slope from the derivative.** $f'(x) = 6 x^{2} - 18 x + 12$, so the slope is $m = f'(1) = 0$.",
+          "**Step 2 — Point of tangency.** $f(1) = 5$, giving the point $(1, 5)$.",
+          "**Step 3 — Point-slope form.** $y - 5 = 0\\,(x - 1)$.",
+          "**Answer:** $y = 5$."
+        ],
+        "steps_he": [
+          "**שלב 1 — שיפוע מהנגזרת.** $f'(x) = 6 x^{2} - 18 x + 12$, ולכן השיפוע הוא $m = f'(1) = 0$.",
+          "**שלב 2 — נקודת ההשקה.** $f(1) = 5$, כלומר הנקודה $(1, 5)$.",
+          "**שלב 3 — צורת נקודה-שיפוע.** $y - 5 = 0\\,(x - 1)$.",
+          "**תשובה:** $y = 5$."
+        ]
+      },
+      "source_item_id": "79e0008c-48b4-5e0a-be48-7a5503fc4c70",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "4pt",
+      "id": "derivatives_applications__5pt-q11"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: $f(x) = 2 x^{3} - 9 x^{2} + 12 x$ is concave down at $x = 1$.",
+      "stem_he": "נכון או לא נכון: $f(x) = 2 x^{3} - 9 x^{2} + 12 x$ קעורה כלפי מטה בנקודה $x = 1$.",
+      "explanation_en": "**Step 1 — Second derivative.** $f''(x) = 6 \\left(2 x - 3\\right)$.\n\n**Step 2 — Evaluate at $x = 1$.** $f''(1) = -6$.\n\n**Conclusion:** $f''(1) < 0$, so $f$ is concave down there — the statement is true.",
+      "explanation_he": "**שלב 1 — נגזרת שנייה.** $f''(x) = 6 \\left(2 x - 3\\right)$.\n\n**שלב 2 — הצבה ב-$x = 1$.** $f''(1) = -6$.\n\n**מסקנה:** $f''(1) < 0$, ולכן $f$ קעורה כלפי מטה שם — ההיגד נכון.",
+      "skill_atoms": [
+        "concavity"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "ac701c6b-1aa3-576d-9fa3-8cb047118151",
+      "points_level_min": "4pt",
+      "correct_bool": true,
+      "id": "derivatives_applications__5pt-q12"
+    },
+    {
+      "ord": 13,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: $f(x) = x^{3} - 12 x + 5$ is concave up at $x = 2$.",
+      "stem_he": "נכון או לא נכון: $f(x) = x^{3} - 12 x + 5$ קעורה כלפי מעלה בנקודה $x = 2$.",
+      "explanation_en": "**Step 1 — Second derivative.** $f''(x) = 6 x$.\n\n**Step 2 — Evaluate at $x = 2$.** $f''(2) = 12$.\n\n**Conclusion:** $f''(2) > 0$, so $f$ is concave up there — the statement is true.",
+      "explanation_he": "**שלב 1 — נגזרת שנייה.** $f''(x) = 6 x$.\n\n**שלב 2 — הצבה ב-$x = 2$.** $f''(2) = 12$.\n\n**מסקנה:** $f''(2) > 0$, ולכן $f$ קעורה כלפי מעלה שם — ההיגד נכון.",
+      "skill_atoms": [
+        "concavity"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "9a083c59-cd86-5acd-a050-a6ac8084d6eb",
+      "points_level_min": "4pt",
+      "correct_bool": true,
+      "id": "derivatives_applications__5pt-q13"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the slope of the normal line to $f(x) = x^{3} - 12 x + 5$ at $x = 1$.",
+      "stem_he": "מצאו את שיפוע הנורמל ל-$f(x) = x^{3} - 12 x + 5$ בנקודה $x = 1$.",
+      "explanation_en": "**Step 1 — Tangent slope.** $f'(x) = 3 x^{2} - 12$, so $m_{tan} = f'(1) = -9$.\n\n**Step 2 — Normal is perpendicular.** The normal slope is $-\\dfrac{1}{m_{tan}} = \\frac{1}{9}$.\n\n**Answer:** normal slope $= \\frac{1}{9}$.",
+      "explanation_he": "**שלב 1 — שיפוע המשיק.** $f'(x) = 3 x^{2} - 12$, ולכן $m_{tan} = f'(1) = -9$.\n\n**שלב 2 — הנורמל מאונך.** שיפוע הנורמל הוא $-\\dfrac{1}{m_{tan}} = \\frac{1}{9}$.\n\n**תשובה:** שיפוע הנורמל $= \\frac{1}{9}$.",
+      "skill_atoms": [
+        "normal_line",
+        "tangent_line"
+      ],
+      "answer_payload": {
+        "value": 0.111111
+      },
+      "source_item_id": "1a01403b-dc09-548c-bcdf-e44614be655e",
+      "points_level_min": "4pt",
+      "correct_answer": "0.111111",
+      "id": "derivatives_applications__5pt-q14"
+    },
+    {
+      "ord": 15,
+      "kind": "open",
+      "difficulty": "hard",
+      "needs_review": true,
+      "stem_en": "A particle moves along a line with position $s(t) = t^3 - 6t^2 + 9t$ (metres, $t \\ge 0$). Find the times it is momentarily at rest and its acceleration at each.",
+      "stem_he": "חלקיק נע על ישר עם מיקום $s(t) = t^3 - 6t^2 + 9t$ (מטרים, $t \\ge 0$). מצאו את הזמנים בהם הוא במנוחה רגעית ואת התאוצה בכל אחד מהם.",
+      "explanation_en": "**Step 1 — Velocity.** $v(t) = s'(t) = 3t^2 - 12t + 9 = 3(t-1)(t-3)$.\n\n**Step 2 — At rest means $v = 0$.** $t = 1$ and $t = 3$ seconds.\n\n**Step 3 — Acceleration.** $a(t) = v'(t) = 6t - 12$.\n\n**Step 4 — Evaluate.** $a(1) = -6\\ \\text{m/s}^2$ (decelerating), $a(3) = 6\\ \\text{m/s}^2$ (accelerating).\n\n**Answer:** at rest at $t = 1, 3$; accelerations $-6$ and $6\\ \\text{m/s}^2$.",
+      "explanation_he": "**שלב 1 — מהירות.** $v(t) = s'(t) = 3t^2 - 12t + 9 = 3(t-1)(t-3)$.\n\n**שלב 2 — מנוחה פירושה $v = 0$.** $t = 1$ ו-$t = 3$ שניות.\n\n**שלב 3 — תאוצה.** $a(t) = v'(t) = 6t - 12$.\n\n**שלב 4 — הצבה.** $a(1) = -6\\ \\text{m/s}^2$ (מאט), $a(3) = 6\\ \\text{m/s}^2$ (מאיץ).\n\n**תשובה:** במנוחה ב-$t = 1, 3$; תאוצות $-6$ ו-$6\\ \\text{m/s}^2$.",
+      "skill_atoms": [
+        "rate_of_change",
+        "tangent_line"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Velocity.** $v(t) = s'(t) = 3t^2 - 12t + 9 = 3(t-1)(t-3)$.",
+          "**Step 2 — At rest means $v = 0$.** $t = 1$ and $t = 3$ seconds.",
+          "**Step 3 — Acceleration.** $a(t) = v'(t) = 6t - 12$.",
+          "**Step 4 — Evaluate.** $a(1) = -6\\ \\text{m/s}^2$ (decelerating), $a(3) = 6\\ \\text{m/s}^2$ (accelerating).",
+          "**Answer:** at rest at $t = 1, 3$; accelerations $-6$ and $6\\ \\text{m/s}^2$."
+        ],
+        "steps_he": [
+          "**שלב 1 — מהירות.** $v(t) = s'(t) = 3t^2 - 12t + 9 = 3(t-1)(t-3)$.",
+          "**שלב 2 — מנוחה פירושה $v = 0$.** $t = 1$ ו-$t = 3$ שניות.",
+          "**שלב 3 — תאוצה.** $a(t) = v'(t) = 6t - 12$.",
+          "**שלב 4 — הצבה.** $a(1) = -6\\ \\text{m/s}^2$ (מאט), $a(3) = 6\\ \\text{m/s}^2$ (מאיץ).",
+          "**תשובה:** במנוחה ב-$t = 1, 3$; תאוצות $-6$ ו-$6\\ \\text{m/s}^2$."
+        ]
+      },
+      "source_item_id": "e4d3a9bb-93b1-54ff-86b7-882b2a4a5803",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "4pt",
+      "id": "derivatives_applications__5pt-q15"
+    },
+    {
+      "ord": 16,
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "stem_en": "Order the steps for solving an optimization word problem.",
+      "stem_he": "סדרו את שלבי פתרון בעיית אופטימיזציה מילולית.",
+      "explanation_en": "The reliable optimization recipe: model first (draw, define a variable, use the constraint to get one-variable $Q(x)$ with its domain), then apply calculus ($Q'=0$, classify), then interpret (check endpoints, answer with units). Skipping the constraint step is the most common cause of a wrong setup.",
+      "explanation_he": "מתכון האופטימיזציה האמין: קודם מידול (שרטוט, הגדרת משתנה, שימוש באילוץ לקבלת $Q(x)$ במשתנה אחד עם התחום), אז חשבון ($Q'=0$, סיווג), אז פרשנות (בדיקת קצוות, תשובה עם יחידות). דילוג על שלב האילוץ הוא הגורם הנפוץ ביותר להצבה שגויה.",
+      "skill_atoms": [
+        "optimization"
+      ],
+      "steps_en": [
+        "Draw and label; define one variable.",
+        "Write the quantity $Q$ and use the constraint to reduce to one variable; state the domain.",
+        "Solve $Q'(x)=0$ and classify the critical point.",
+        "Check the domain endpoints.",
+        "Answer in context with units."
+      ],
+      "steps_he": [
+        "שרטטו וסמנו; הגדירו משתנה אחד.",
+        "כתבו את הגודל $Q$ והשתמשו באילוץ לצמצום למשתנה אחד; ציינו תחום.",
+        "פתרו $Q'(x)=0$ וסווגו את הנקודה הקריטית.",
+        "בדקו את קצוות התחום.",
+        "ענו בהקשר עם יחידות."
+      ],
+      "correct_order": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "Draw and label; define one variable.",
+          "Write the quantity $Q$ and use the constraint to reduce to one variable; state the domain.",
+          "Solve $Q'(x)=0$ and classify the critical point.",
+          "Check the domain endpoints.",
+          "Answer in context with units."
+        ],
+        "steps_he": [
+          "שרטטו וסמנו; הגדירו משתנה אחד.",
+          "כתבו את הגודל $Q$ והשתמשו באילוץ לצמצום למשתנה אחד; ציינו תחום.",
+          "פתרו $Q'(x)=0$ וסווגו את הנקודה הקריטית.",
+          "בדקו את קצוות התחום.",
+          "ענו בהקשר עם יחידות."
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "points_level_min": "4pt",
+      "id": "derivatives_applications__5pt-q16"
+    },
+    {
+      "ord": 17,
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "stem_en": "Match each derivative sign condition to what it says about the graph of $f$.",
+      "stem_he": "התאימו כל תנאי סימן נגזרת למה שהוא אומר על גרף $f$.",
+      "explanation_en": "$f'>0$ ↔ increasing; $f'<0$ ↔ decreasing; $f''>0$ ↔ concave up (bowl); $f''<0$ ↔ concave down (cap). The first derivative controls rise/fall; the second controls the bend.",
+      "explanation_he": "$f'>0$ ↔ עולה; $f'<0$ ↔ יורדת; $f''>0$ ↔ קעורה כלפי מעלה (קערה); $f''<0$ ↔ קעורה כלפי מטה (כיפה). הנגזרת הראשונה שולטת בעלייה/ירידה; השנייה בכיפוף.",
+      "skill_atoms": [
+        "monotonicity",
+        "concavity"
+      ],
+      "left_en": [
+        "$f'>0$",
+        "$f'<0$",
+        "$f''>0$",
+        "$f''<0$"
+      ],
+      "left_he": [
+        "$f'>0$",
+        "$f'<0$",
+        "$f''>0$",
+        "$f''<0$"
+      ],
+      "right_en": [
+        "Increasing",
+        "Decreasing",
+        "Concave up",
+        "Concave down"
+      ],
+      "right_he": [
+        "עולה",
+        "יורדת",
+        "קעורה כלפי מעלה",
+        "קעורה כלפי מטה"
+      ],
+      "correct_pairs": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "answer_payload": {
+        "left_en": [
+          "$f'>0$",
+          "$f'<0$",
+          "$f''>0$",
+          "$f''<0$"
+        ],
+        "left_he": [
+          "$f'>0$",
+          "$f'<0$",
+          "$f''>0$",
+          "$f''<0$"
+        ],
+        "right_en": [
+          "Increasing",
+          "Decreasing",
+          "Concave up",
+          "Concave down"
+        ],
+        "right_he": [
+          "עולה",
+          "יורדת",
+          "קעורה כלפי מעלה",
+          "קעורה כלפי מטה"
+        ],
+        "correct_pairs": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "points_level_min": "4pt",
+      "id": "derivatives_applications__5pt-q17"
+    },
+    {
+      "ord": 18,
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual"
+      ],
+      "stem_en": "Select **all** statements that are always correct for a differentiable $f$ on an open interval.",
+      "stem_he": "סמנו את **כל** ההיגדים הנכונים תמיד עבור $f$ גזירה בקטע פתוח.",
+      "explanation_en": "- If $f'(x_0)=0$ and $f''(x_0)>0$, then $x_0$ is a local minimum. ✓\n- If $f''$ changes sign at $x_0$ (and $f$ is defined), then $x_0$ is an inflection. ✓\n- Every point with $f'(x_0)=0$ is an extremum. ✗ ($x^3$ at $0$).\n- On $[a,b]$, the absolute maximum can occur at an endpoint. ✓\n- $f''(x_0)=0$ guarantees an inflection. ✗ (need a sign change; $x^4$ at $0$).\n\n**Correct:** 1, 2, and 4.",
+      "explanation_he": "- אם $f'(x_0)=0$ ו-$f''(x_0)>0$, אז $x_0$ מינימום מקומי. ✓\n- אם $f''$ מחליפה סימן ב-$x_0$ (ו-$f$ מוגדרת), אז $x_0$ פיתול. ✓\n- כל נקודה עם $f'(x_0)=0$ היא קיצון. ✗ ($x^3$ ב-$0$).\n- ב-$[a,b]$, המקסימום המוחלט יכול להיות בקצה. ✓\n- $f''(x_0)=0$ מבטיח פיתול. ✗ (צריך שינוי סימן; $x^4$ ב-$0$).\n\n**נכונים:** 1, 2 ו-4.",
+      "skill_atoms": [
+        "extremum_classification",
+        "inflection_point"
+      ],
+      "options_en": [
+        "$f'(x_0)=0$ and $f''(x_0)>0$ ⇒ local minimum",
+        "$f''$ changing sign at $x_0$ ⇒ inflection point",
+        "Every point with $f'(x_0)=0$ is an extremum",
+        "On $[a,b]$ the absolute maximum may occur at an endpoint",
+        "$f''(x_0)=0$ guarantees an inflection point"
+      ],
+      "options_he": [
+        "$f'(x_0)=0$ ו-$f''(x_0)>0$ ⇐ מינימום מקומי",
+        "$f''$ שמחליפה סימן ב-$x_0$ ⇐ נקודת פיתול",
+        "כל נקודה עם $f'(x_0)=0$ היא קיצון",
+        "ב-$[a,b]$ המקסימום המוחלט עשוי להיות בקצה",
+        "$f''(x_0)=0$ מבטיח נקודת פיתול"
+      ],
+      "correct_indices": [
+        0,
+        1,
+        3
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$f'(x_0)=0$ and $f''(x_0)>0$ ⇒ local minimum",
+          "$f''$ changing sign at $x_0$ ⇒ inflection point",
+          "Every point with $f'(x_0)=0$ is an extremum",
+          "On $[a,b]$ the absolute maximum may occur at an endpoint",
+          "$f''(x_0)=0$ guarantees an inflection point"
+        ],
+        "options_he": [
+          "$f'(x_0)=0$ ו-$f''(x_0)>0$ ⇐ מינימום מקומי",
+          "$f''$ שמחליפה סימן ב-$x_0$ ⇐ נקודת פיתול",
+          "כל נקודה עם $f'(x_0)=0$ היא קיצון",
+          "ב-$[a,b]$ המקסימום המוחלט עשוי להיות בקצה",
+          "$f''(x_0)=0$ מבטיח נקודת פיתול"
+        ],
+        "correct_indices": [
+          0,
+          1,
+          3
+        ]
+      },
+      "points_level_min": "4pt",
+      "id": "derivatives_applications__5pt-q18"
+    },
+    {
+      "ord": 19,
+      "kind": "fill_blank",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Two positive numbers have sum $30$. Their product is largest when each equals ____. (Enter the number.)",
+      "stem_he": "לשני מספרים חיוביים סכום $30$. מכפלתם מקסימלית כשכל אחד שווה ____. (הזינו מספר.)",
+      "explanation_en": "**Step 1 — Model.** Let the numbers be $x$ and $30-x$; product $P(x)=x(30-x)=30x-x^2$.\n\n**Step 2 — Optimize.** $P'(x)=30-2x=0\\Rightarrow x=15$, and the other number is $30-15=15$.\n\n**Step 3 — Confirm.** $P''=-2<0$, a maximum. Equal split maximizes a product with fixed sum.\n\n**Answer:** $15$.",
+      "explanation_he": "**שלב 1 — מידול.** המספרים $x$ ו-$30-x$; מכפלה $P(x)=x(30-x)=30x-x^2$.\n\n**שלב 2 — אופטימיזציה.** $P'(x)=30-2x=0\\Rightarrow x=15$, והשני $30-15=15$.\n\n**שלב 3 — אימות.** $P''=-2<0$, מקסימום. חלוקה שווה ממקסמת מכפלה בסכום קבוע.\n\n**תשובה:** $15$.",
+      "skill_atoms": [
+        "optimization"
+      ],
+      "answer_payload": {
+        "value": "15"
+      },
+      "correct_answer": "15",
+      "points_level_min": "4pt",
+      "id": "derivatives_applications__5pt-q19"
+    },
+    {
+      "ord": 20,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "application"
+      ],
+      "stem_en": "A projectile's height is $h(t)=-5t^2+30t$ (m). Its velocity is $h'(t)$. Find the maximum height (m).",
+      "stem_he": "גובה קליע הוא $h(t)=-5t^2+30t$ (מ'). מהירותו היא $h'(t)$. מצאו את הגובה המרבי (מ').",
+      "explanation_en": "**Step 1 — Peak where velocity is zero.** $h'(t)=-10t+30=0\\Rightarrow t=3$.\n\n**Step 2 — Max is a maximum.** $h''=-10<0$, confirming a peak.\n\n**Step 3 — Height at $t=3$.** $h(3)=-5(9)+30(3)=-45+90=45$.\n\n**Answer:** $45$ m.",
+      "explanation_he": "**שלב 1 — שיא היכן שהמהירות אפס.** $h'(t)=-10t+30=0\\Rightarrow t=3$.\n\n**שלב 2 — זהו מקסימום.** $h''=-10<0$, מאשר שיא.\n\n**שלב 3 — גובה ב-$t=3$.** $h(3)=-45+90=45$.\n\n**תשובה:** $45$ מ'.",
+      "skill_atoms": [
+        "optimization",
+        "rate_of_change"
+      ],
+      "verify": {
+        "expr": "-5*3^2 + 30*3",
+        "expected": 45
+      },
+      "answer_payload": {
+        "value": 45
+      },
+      "correct_answer": "45",
+      "points_level_min": "4pt",
+      "id": "derivatives_applications__5pt-q20"
+    },
+    {
+      "ord": 21,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "reverse",
+        "parametric"
+      ],
+      "stem_en": "The curve $f(x)=x^3+ax+1$ has a horizontal tangent at $x=2$. Find $a$.",
+      "stem_he": "לעקומה $f(x)=x^3+ax+1$ יש משיק אופקי ב-$x=2$. מצאו את $a$.",
+      "explanation_en": "**Step 1 — Horizontal tangent ⇒ $f'(2)=0$.** $f'(x)=3x^2+a$, so $f'(2)=12+a=0$.\n\n**Step 2 — Solve.** $a=-12$.\n\n**Answer:** $a=-12$. Reverse problems fix a coefficient from a stated slope condition.",
+      "explanation_he": "**שלב 1 — משיק אופקי ⇐ $f'(2)=0$.** $f'(x)=3x^2+a$, ולכן $f'(2)=12+a=0$.\n\n**שלב 2 — פתרון.** $a=-12$.\n\n**תשובה:** $a=-12$. בעיות הפוכות קובעות מקדם מתנאי שיפוע נתון.",
+      "skill_atoms": [
+        "tangent_line",
+        "extremum_classification"
+      ],
+      "verify": {
+        "expr": "-3*2^2",
+        "expected": -12
+      },
+      "answer_payload": {
+        "value": -12
+      },
+      "correct_answer": "-12",
+      "points_level_min": "4pt",
+      "id": "derivatives_applications__5pt-q21"
+    },
+    {
+      "ord": 22,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Find the absolute maximum of $f(x)=-x^2+4x+1$ on $[0,3]$.",
+      "stem_he": "מצאו את המקסימום המוחלט של $f(x)=-x^2+4x+1$ בקטע $[0,3]$.",
+      "explanation_en": "**Step 1 — Critical point.** $f'(x)=-2x+4=0\\Rightarrow x=2$ (inside $[0,3]$).\n\n**Step 2 — Compare critical value and endpoints.** $f(0)=1$, $f(2)=-4+8+1=5$, $f(3)=-9+12+1=4$.\n\n**Step 3 — Largest wins.** The absolute maximum is $5$ at $x=2$.\n\n**Answer:** $5$.",
+      "explanation_he": "**שלב 1 — נקודה קריטית.** $f'(x)=-2x+4=0\\Rightarrow x=2$ (בתוך $[0,3]$).\n\n**שלב 2 — השוו ערך קריטי וקצוות.** $f(0)=1$, $f(2)=5$, $f(3)=4$.\n\n**שלב 3 — הגדול מנצח.** המקסימום המוחלט הוא $5$ ב-$x=2$.\n\n**תשובה:** $5$.",
+      "skill_atoms": [
+        "extremum_classification"
+      ],
+      "verify": {
+        "expr": "-2^2 + 4*2 + 1",
+        "expected": 5
+      },
+      "answer_payload": {
+        "value": 5
+      },
+      "correct_answer": "5",
+      "points_level_min": "4pt",
+      "id": "derivatives_applications__5pt-q22"
+    },
+    {
+      "ord": 23,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Give the interval(s) on which $f(x)=x^3-3x^2$ is decreasing.",
+      "stem_he": "ציינו את הקטע/ים שבהם $f(x)=x^3-3x^2$ יורדת.",
+      "explanation_en": "**Step 1 — Differentiate and factor.** $f'(x)=3x^2-6x=3x(x-2)$.\n\n**Step 2 — Decreasing where $f'<0$.** The product $3x(x-2)<0$ for $0<x<2$.\n\n**Answer:** $f$ is decreasing on $(0,2)$.",
+      "explanation_he": "**שלב 1 — גזירה ופירוק.** $f'(x)=3x(x-2)$.\n\n**שלב 2 — יורדת היכן ש-$f'<0$.** $3x(x-2)<0$ עבור $0<x<2$.\n\n**תשובה:** $f$ יורדת ב-$(0,2)$.",
+      "skill_atoms": [
+        "monotonicity"
+      ],
+      "answer_payload": {
+        "acceptable_answers": [
+          "(0, 2)",
+          "(0,2)",
+          "0 < x < 2",
+          "0<x<2"
+        ],
+        "case_sensitive": false
+      },
+      "acceptable_answers": [
+        "(0, 2)",
+        "(0,2)",
+        "0 < x < 2",
+        "0<x<2"
+      ],
+      "case_sensitive": false,
+      "correct_answer": "(0, 2)",
+      "points_level_min": "4pt",
+      "id": "derivatives_applications__5pt-q23"
+    },
+    {
+      "ord": 24,
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof",
+        "application"
+      ],
+      "needs_review": true,
+      "stem_en": "A closed cylinder has fixed volume $V$. Prove that the surface area is minimized when the height equals the diameter ($h=2r$).",
+      "stem_he": "לגליל סגור נפח קבוע $V$. הוכיחו ששטח הפנים ממוזער כאשר הגובה שווה לקוטר ($h=2r$).",
+      "explanation_en": "**Step 1 — Express the constraint.** $V=\\pi r^2 h$ is fixed, so $h=\\dfrac{V}{\\pi r^2}$.\n\n**Step 2 — Surface area in one variable.** $S=2\\pi r^2+2\\pi r h = 2\\pi r^2 + 2\\pi r\\cdot\\dfrac{V}{\\pi r^2} = 2\\pi r^2 + \\dfrac{2V}{r}$.\n\n**Step 3 — Differentiate and set to zero.** $S'(r)=4\\pi r - \\dfrac{2V}{r^2}=0 \\Rightarrow 4\\pi r = \\dfrac{2V}{r^2} \\Rightarrow V=2\\pi r^3$.\n\n**Step 4 — Confirm a minimum.** $S''(r)=4\\pi + \\dfrac{4V}{r^3}>0$ for $r>0$, so this critical point is a minimum.\n\n**Step 5 — Back-substitute for $h$.** $h=\\dfrac{V}{\\pi r^2}=\\dfrac{2\\pi r^3}{\\pi r^2}=2r$. Thus the optimal height equals the diameter. $\\blacksquare$",
+      "explanation_he": "**שלב 1 — נסחו את האילוץ.** $V=\\pi r^2 h$ קבוע, ולכן $h=\\dfrac{V}{\\pi r^2}$.\n\n**שלב 2 — שטח פנים במשתנה אחד.** $S=2\\pi r^2+2\\pi r h = 2\\pi r^2 + \\dfrac{2V}{r}$.\n\n**שלב 3 — גזרו והשוו לאפס.** $S'(r)=4\\pi r - \\dfrac{2V}{r^2}=0 \\Rightarrow V=2\\pi r^3$.\n\n**שלב 4 — אימות מינימום.** $S''(r)=4\\pi + \\dfrac{4V}{r^3}>0$ ל-$r>0$, ולכן זה מינימום.\n\n**שלב 5 — הציבו חזרה עבור $h$.** $h=\\dfrac{V}{\\pi r^2}=\\dfrac{2\\pi r^3}{\\pi r^2}=2r$. לכן הגובה האופטימלי שווה לקוטר. $\\blacksquare$",
+      "skill_atoms": [
+        "optimization",
+        "extremum_classification"
+      ],
+      "answer_payload": {
+        "expected_steps": [
+          "h = V/(pi r^2) from the volume constraint",
+          "S = 2 pi r^2 + 2V/r",
+          "S' = 4 pi r - 2V/r^2 = 0 gives V = 2 pi r^3",
+          "S'' > 0 confirms a minimum",
+          "substitute back: h = 2r"
+        ]
+      },
+      "expected_steps": [
+        "h = V/(pi r^2) from the volume constraint",
+        "S = 2 pi r^2 + 2V/r",
+        "S' = 4 pi r - 2V/r^2 = 0 gives V = 2 pi r^3",
+        "S'' > 0 confirms a minimum",
+        "substitute back: h = 2r"
+      ],
+      "rubric_en": "Full credit: constraint used to reduce to one variable, correct S', critical point, second-derivative confirmation, and back-substitution to h=2r.",
+      "rubric_he": "ניקוד מלא: שימוש באילוץ לצמצום למשתנה אחד, S' נכון, נקודה קריטית, אימות בנגזרת שנייה, והצבה חזרה ל-h=2r.",
+      "points_level_min": "5pt",
+      "id": "derivatives_applications__5pt-q24"
+    },
+    {
+      "ord": 25,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "archetypes": [
+        "graphical",
+        "conceptual"
+      ],
+      "stem_en": "The graph of $f'$ is positive on $(-\\infty,4)$, zero at $x=4$, and negative on $(4,\\infty)$. What happens to $f$ at $x=4$?",
+      "stem_he": "גרף $f'$ חיובי ב-$(-\\infty,4)$, אפס ב-$x=4$, ושלילי ב-$(4,\\infty)$. מה קורה ל-$f$ ב-$x=4$?",
+      "explanation_en": "**Read $f$ from the sign of $f'$.** $f'>0$ before $x=4$ means $f$ rises up to $x=4$; $f'<0$ after means $f$ falls. Rising then falling with $f'=0$ between is a **local maximum** of $f$.\n\nThe answer 'minimum' would need $-\\to+$; 'inflection' would need no sign change of $f'$.\n\n**Answer:** local maximum at $x=4$.",
+      "explanation_he": "**קראו את $f$ מסימן $f'$.** $f'>0$ לפני $x=4$ פירושו ש-$f$ עולה עד $x=4$; $f'<0$ אחרי פירושו ש-$f$ יורדת. עולה ואז יורדת עם $f'=0$ באמצע היא **מקסימום מקומי** של $f$.\n\nהתשובה 'מינימום' הייתה דורשת $-\\to+$; 'פיתול' היה דורש היעדר שינוי סימן של $f'$.\n\n**תשובה:** מקסימום מקומי ב-$x=4$.",
+      "skill_atoms": [
+        "monotonicity",
+        "extremum_classification"
+      ],
+      "options_en": [
+        "Local maximum",
+        "Local minimum",
+        "Inflection point",
+        "Nothing special"
+      ],
+      "options_he": [
+        "מקסימום מקומי",
+        "מינימום מקומי",
+        "נקודת פיתול",
+        "שום דבר מיוחד"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "Local maximum",
+          "Local minimum",
+          "Inflection point",
+          "Nothing special"
+        ],
+        "options_he": [
+          "מקסימום מקומי",
+          "מינימום מקומי",
+          "נקודת פיתול",
+          "שום דבר מיוחד"
+        ],
+        "correct_index": 0
+      },
+      "points_level_min": "4pt",
+      "id": "derivatives_applications__5pt-q25"
+    },
+    {
+      "id": "derivatives_applications__5pt-facet-auto",
+      "ord": 26,
+      "kind": "open",
+      "difficulty": "medium",
+      "facets": [
+        "rule_selection",
+        "graphical_derivative"
+      ],
+      "stem_en": "Apply the lesson facets (rule_selection, graphical_derivative): give a short worked example.",
+      "stem_he": "יישמו את פני השיעור (rule_selection, graphical_derivative): תנו דוגמה פתורה קצרה.",
+      "explanation_en": "**Facet practice.** Identify which facet applies, write the governing relation, compute or justify in two steps, then verify by substitution or a limiting case. See the facet theory section in this lesson for the checklist keywords and worked patterns. Keep method marks visible even if arithmetic slips.",
+      "explanation_he": "**תרגול פנים.** זהו איזה פן חל, כתבו את הקשר השולט, חשבו או הצדיקו בשני שלבים, ואמתו בהצבה או במקרה גבול. ראו את סעיף הפנים בשיעור לרשימת מילות המפתח ולדפוסים. השאירו ניקוד שיטה גלוי גם אם יש טעות חשבון.",
+      "correct_answer": "see facet section",
+      "skill_atoms": []
+    }
+  ],
+  "est_minutes": 80,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
+}

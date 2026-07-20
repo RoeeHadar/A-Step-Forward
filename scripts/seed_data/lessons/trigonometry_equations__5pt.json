@@ -1,0 +1,1205 @@
+{
+  "concept_id": "trigonometry_equations__5pt",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": [
+    "5pt"
+  ],
+  "title_en": "Trigonometric Equations — All the Solutions — 5pt mastery",
+  "title_he": "משוואות טריגונומטריות — שליטה 5 יח׳",
+  "summary_en": "Trig equations always have infinitely many solutions because sin/cos/tan are periodic. Master the general-solution formulas, then restrict to the requested interval. Identities reduce complex equations to one of the four standard forms.",
+  "summary_he": "למשוואות טריגונומטריות תמיד יש אינסוף פתרונות כי סינוס/קוסינוס/טנגנס מחזוריים. שולטים בנוסחאות הפתרון הכללי, ואז מצמצמים לקטע המבוקש. זהויות מצמצמות משוואות מורכבות לאחת מארבע הצורות הסטנדרטיות.",
+  "sections": [
+    {
+      "id": "intro",
+      "kind": "intro",
+      "title_en": "Why trig equations have infinitely many solutions",
+      "title_he": "למה למשוואות טריגונומטריות יש אינסוף פתרונות",
+      "body_en_md": "Trig functions are **periodic**: they repeat every period. Sine and cosine repeat every $360°$ (or $2\\pi$ radians); tangent every $180°$ ($\\pi$ radians). On the unit circle, rotating by a full turn lands you back at the same $(\\cos\\theta,\\sin\\theta)$, so any equation like $\\sin\\theta = 1/2$ is satisfied again and again.\n\nSo if $\\sin \\theta = 1/2$, every angle $\\theta = 30° + 360°k$ (for any integer $k$) is a solution — and there is also a *mirror* solution $\\theta = 150° + 360°k$ from the symmetry of the unit circle. A horizontal line $y = 1/2$ crosses the circle twice per revolution.\n\n**The art of solving trig equations** is twofold:\n1. Find **all** general solutions using a formula (write $k \\in \\mathbb{Z}$ explicitly).\n2. Restrict to the **interval** requested in the problem (often $[0°, 360°)$ or $[0, 2\\pi)$) by choosing the right values of $k$.\n\nBagrut questions rarely ask for the full infinite family — they ask \"how many solutions in $[0°,720°)$?\" or \"list all solutions in $[0°,360°)$.\" This lesson builds the general formulas first, then teaches interval restriction as a separate, deliberate step.\n\n**5pt focus:** Short justifications, edge cases, MoE-faithful (no uni limit-closeness drills).",
+      "body_he_md": "פונקציות טריגונומטריות הן **מחזוריות**: הן חוזרות על עצמן בכל מחזור. סינוס וקוסינוס חוזרים כל $360°$ (או $2\\pi$ רדיאן); טנגנס כל $180°$ ($\\pi$ רדיאן). במעגל היחידה, סיבוב של סיבוב מלא מחזיר לאותה נקודה $(\\cos\\theta,\\sin\\theta)$, ולכן משוואה כמו $\\sin\\theta = 1/2$ מתקיימת שוב ושוב.\n\nאם $\\sin \\theta = 1/2$, כל זווית $\\theta = 30° + 360°k$ (לכל $k$ שלם) היא פתרון — ויש גם פתרון *מראה* $\\theta = 150° + 360°k$ מסימטריית מעגל היחידה. קו אופקי $y = 1/2$ חותך את המעגל פעמיים בכל סיבוב.\n\n**האמנות של פתרון משוואות טריגונומטריות** היא דו-שלבית:\n1. מוצאים את כל הפתרונות **הכלליים** באמצעות נוסחה (כותבים $k \\in \\mathbb{Z}$ במפורש).\n2. מצמצמים ל**קטע** המבוקש בבעיה (בדרך כלל $[0°, 360°)$ או $[0, 2\\pi)$) על ידי בחירת ערכי $k$ מתאימים.\n\nשאלות בגרות לעיתים רחוקות מבקשות את המשפחה האינסופית — הן שואלות \"כמה פתרונות ב-$[0°,720°)$?\" או \"רשמו את כל הפתרונות ב-$[0°,360°)$.\" בשיעור זה בונים קודם את הנוסחאות הכלליות, ואז לומדים הגבלה לקטע כשלב נפרד ומכוון.\n\n**מיקוד 5 יח׳:** הצדקות קצרות, מקרי קצה, נאמן לתוכנית (בלי תרגול limit-closeness אוניברסיטאי)."
+    },
+    {
+      "id": "definition",
+      "kind": "definition",
+      "title_en": "General solution formulas — quick reference",
+      "title_he": "נוסחאות הפתרון הכללי — עזר מהיר",
+      "body_en_md": "Let $\\theta_0$ be the **reference angle** (principal value from the inverse trig function or unit circle).\n\n| Equation | General solution ($k \\in \\mathbb{Z}$) |\n|---|---|\n| $\\sin\\theta = a$, $|a|\\le1$ | $\\theta = \\theta_0 + 360°k$ **or** $\\theta = 180° - \\theta_0 + 360°k$ |\n| $\\cos\\theta = a$, $|a|\\le1$ | $\\theta = \\pm\\theta_0 + 360°k$ |\n| $\\tan\\theta = a$, any real $a$ | $\\theta = \\theta_0 + 180°k$ |\n\n**No solution:** $|a|>1$ for $\\sin$ or $\\cos$ (range $[-1,1]$); tangent has no upper bound.\n\n**Reading the table:** for sine, the two families are symmetric about $90°$ in the first half-period. For cosine, $\\pm\\theta_0$ captures mirror points on the $x$-axis. For tangent, period $180°$ means one family only — but that family still repeats forever as $k$ runs through all integers.\n\n**Radians:** replace $360°$ with $2\\pi$ and $180°$ with $\\pi$ when the interval is given in radians. Never mix units within one solution line.",
+      "body_he_md": "נניח $\\theta_0$ = **זווית רפרנס** (ערך ראשי ממחשבון או ממעגל היחידה).\n\n| משוואה | פתרון כללי ($k \\in \\mathbb{Z}$) |\n|---|---|\n| $\\sin\\theta = a$, $|a|\\le1$ | $\\theta = \\theta_0 + 360°k$ **או** $\\theta = 180° - \\theta_0 + 360°k$ |\n| $\\cos\\theta = a$, $|a|\\le1$ | $\\theta = \\pm\\theta_0 + 360°k$ |\n| $\\tan\\theta = a$, כל $a$ ממשי | $\\theta = \\theta_0 + 180°k$ |\n\n**אין פתרון:** $|a|>1$ עבור $\\sin$ או $\\cos$ (טווח $[-1,1]$); לטנגנס אין חסם עליון.\n\n**קריאת הטבלה:** בסינוס, שתי המשפחות סימטריות סביב $90°$ במחצית המחזור הראשונה. בקוסינוס, $\\pm\\theta_0$ תופס נקודות מראה על ציר $x$. בטנגנס, מחזור $180°$ אומר משפחה אחת בלבד — אך המשפחה חוזרת לנצח כש-$k$ רץ על כל השלמים.\n\n**רדיאנים:** החליפו $360°$ ב-$2\\pi$ ו-$180°$ ב-$\\pi$ כשהקטע נתון ברדיאנים. אל תערבבו יחידות באותה שורת פתרון."
+    },
+    {
+      "id": "theory",
+      "kind": "theory",
+      "title_en": "General-solution formulas",
+      "title_he": "נוסחאות הפתרון הכללי",
+      "body_en_md": "Let $\\theta_0$ be a known reference solution (typically the one a calculator returns in the correct quadrant).\n\n### $\\sin \\theta = a$ (where $|a| \\le 1$)\n\n$$\\theta = \\theta_0 + 360°k \\quad \\text{or} \\quad \\theta = 180° - \\theta_0 + 360°k.$$\n\nThe two families come from the *two* points where a horizontal line $y = a$ hits the unit circle. If $\\theta_0 = \\arcsin(a)$ is in quadrant I, the mirror angle $180° - \\theta_0$ lies in quadrant II with the same sine.\n\n### $\\cos \\theta = a$ (where $|a| \\le 1$)\n\n$$\\theta = \\pm \\theta_0 + 360°k.$$\n\nThe $\\pm$ captures the symmetry of cosine about the $x$-axis: $\\cos\\theta = \\cos(-\\theta)$. When $a = \\pm1$, the two branches collapse to one angle per period.\n\n### $\\tan \\theta = a$ (any real $a$)\n\n$$\\theta = \\theta_0 + 180°k.$$\n\nTangent's period is $180°$, so add multiples of $180°$ only. Both quadrants where $\\sin$ and $\\cos$ have the same ratio share one tangent value.\n\n### Strategy for harder equations\n\n1. **Isolate the trig function** (or factor if several terms share $\\sin\\theta$).\n2. **Substitute** (e.g., $u = \\sin \\theta$) and treat algebraically.\n3. **Apply identities** to reduce to a single trig function.\n4. **Solve the standard form** using the formulas above.\n5. **Restrict to the interval** by picking integer values of $k$.\n\n**Range check first:** if $|\\text{RHS}|>1$ for $\\sin$/$\\cos$, stop — no real solution. This saves time on Bagrut multiple-choice items.",
+      "body_he_md": "נניח $\\theta_0$ פתרון רפרנס ידוע (בדרך כלל מה שהמחשבון מחזיר ברביע הנכון).\n\n### $\\sin \\theta = a$ (כאשר $|a| \\le 1$)\n\n$$\\theta = \\theta_0 + 360°k \\quad \\text{or} \\quad \\theta = 180° - \\theta_0 + 360°k.$$\n\nשתי המשפחות נובעות מ**שתי** הנקודות שבהן קו אופקי $y = a$ חותך את מעגל היחידה. אם $\\theta_0 = \\arcsin(a)$ ברביע I, זווית המראה $180° - \\theta_0$ ברביע II עם אותו סינוס.\n\n### $\\cos \\theta = a$ (כאשר $|a| \\le 1$)\n\n$$\\theta = \\pm \\theta_0 + 360°k.$$\n\nה-$\\pm$ תופס סימטריית קוסינוס סביב ציר $x$: $\\cos\\theta = \\cos(-\\theta)$. כש-$a = \\pm1$, שני הענפים מתאחדים לזווית אחת למחזור.\n\n### $\\tan \\theta = a$ (כל $a$ ממשי)\n\n$$\\theta = \\theta_0 + 180°k.$$\n\nמחזור הטנגנס $180°$, ולכן מוסיפים כפולות של $180°$ בלבד. שני הרביעים שבהם $\\sin$ ו-$\\cos$ באותו יחס חולקים ערך טנגנס אחד.\n\n### אסטרטגיה למשוואות קשות\n\n1. **בודדים** את הפונקציה הטריגונומטרית (או מפרקים אם כמה איברים חולקים $\\sin\\theta$).\n2. **מציבים** (למשל $u = \\sin \\theta$) ומטפלים אלגברית.\n3. **מיישמים זהויות** כדי לצמצם לפונקציה אחת.\n4. **פותרים צורה סטנדרטית** עם הנוסחאות למעלה.\n5. **מצמצמים לקטע** על ידי בחירת $k$ שלם מתאים.\n\n**בדיקת טווח קודם:** אם $|\\text{RHS}|>1$ עבור $\\sin$/$\\cos$, עוצרים — אין פתרון ממשי. זה חוסך זמן בשאלות רב-ברירה בבגרות."
+    },
+    {
+      "id": "worked_example_1",
+      "kind": "worked_example",
+      "example_number": 1,
+      "difficulty": "easy",
+      "title_en": "Worked Example 1 (easy) — solve $2\\sin\\theta = 1$ for $\\theta \\in [0°, 360°)$",
+      "title_he": "דוגמה פתורה 1 (קלה) — פתרו $2\\sin\\theta = 1$ עבור $\\theta \\in [0°, 360°)$",
+      "body_en_md": "**Solve:** $2\\sin\\theta = 1$ for $\\theta \\in [0°, 360°)$.\n\nThis is the simplest standard form after isolating sine. It appears on almost every Bagrut trig-equation section — master it before tackling quadratics or double angles.\n\n### Move 1: Isolate $\\sin \\theta$\nDivide both sides by $2$: $\\sin \\theta = 1/2$. Range check: $|1/2| \\le 1$ ✓ — solutions exist. If the RHS were $1.5$, you would stop immediately.\n\n### Move 2: Find the reference angle\n$\\theta_0 = \\arcsin(1/2) = 30°$. On the unit circle, the horizontal line $y = 1/2$ crosses at $30°$ (Q I) and $150°$ (Q II). The calculator returns only the Q I value — you must add the mirror angle.\n\n### Move 3: Write the general solution\n$$\\theta = 30° + 360°k \\quad \\text{or} \\quad \\theta = 150° + 360°k, \\quad k \\in \\mathbb{Z}.$$\n\n### Move 4: Restrict to $[0°, 360°)$\nFor $k = 0$ only: $\\theta = 30°$ and $\\theta = 150°$. For $k = 1$, angles exceed $360°$ and fall outside the interval.\n\n**Answer:** $\\theta = 30°$ or $\\theta = 150°$. **Verify:** $\\sin30° = \\sin150° = 1/2$ ✓. **Exam tip:** always write both sine families before restricting.",
+      "body_he_md": "**פתרו:** $2\\sin\\theta = 1$ עבור $\\theta \\in [0°, 360°)$.\n\nזו הצורה הסטנדרטית הפשוטה ביותר אחרי בידוד הסינוס. היא מופיעה בכמעט כל חלק משוואות טריגונומטריות בבגרות — שלטו בה לפני ריבועיות או זוויות כפולות.\n\n### צעד 1: בידוד $\\sin \\theta$\nחלוקה ב-$2$: $\\sin \\theta = 1/2$. בדיקת טווח: $|1/2| \\le 1$ ✓ — יש פתרונות. אם אגף ימין היה $1.5$, הייתם עוצרים מיד.\n\n### צעד 2: מציאת זווית הרפרנס\n$\\theta_0 = \\arcsin(1/2) = 30°$. במעגל היחידה, קו אופקי $y = 1/2$ חותך ב-$30°$ (רביע I) וב-$150°$ (רביע II). המחשבון מחזיר רק ערך ברביע I — חובה להוסיף זווית מראה.\n\n### צעד 3: כתיבת הפתרון הכללי\n$$\\theta = 30° + 360°k \\quad \\text{or} \\quad \\theta = 150° + 360°k, \\quad k \\in \\mathbb{Z}.$$\n\n### צעד 4: הגבלה ל-$[0°, 360°)$\nרק עבור $k = 0$: $\\theta = 30°$ ו-$\\theta = 150°$. עבור $k = 1$ הזוויות עוברות $360°$ ונמצאות מחוץ לקטע.\n\n**תשובה:** $\\theta = 30°$ או $\\theta = 150°$. **אימות:** $\\sin30° = \\sin150° = 1/2$ ✓. **טיפ לבחינה:** תמיד כתבו את שתי משפחות הסינוס לפני ההגבלה."
+    },
+    {
+      "id": "checkpoint_1",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Solve $\\cos\\theta = \\frac{\\sqrt{3}}{2}$ for $\\theta\\in[0°,360°)$.",
+      "body_he_md": "פתרו $\\cos\\theta = \\frac{\\sqrt{3}}{2}$ ל-$\\theta\\in[0°,360°)$.",
+      "checkpoint_solution_en": "Isolate: already in standard form $\\cos\\theta = \\sqrt{3}/2$. Reference angle: $\\theta_0 = \\arccos(\\sqrt{3}/2) = 30°$. General solution: $\\theta = \\pm 30° + 360°k$. In $[0°,360°)$: $+30°$ gives $\\theta = 30°$; $-30°$ gives $\\theta = 330°$ (since $-30° + 360° = 330°$). **Answer:** $\\theta = 30°$ and $\\theta = 330°$. Check: $\\cos30° = \\cos330° = \\sqrt{3}/2$ ✓.",
+      "checkpoint_solution_he": "בידוד: כבר בצורה $\\cos\\theta = \\sqrt{3}/2$. זווית רפרנס: $\\theta_0 = \\arccos(\\sqrt{3}/2) = 30°$. פתרון כללי: $\\theta = \\pm 30° + 360°k$. ב-$[0°,360°)$: $+30°$ נותן $\\theta = 30°$; $-30°$ נותן $\\theta = 330°$ (כי $-30° + 360° = 330°$). **תשובה:** $\\theta = 30°$ ו-$\\theta = 330°$. בדיקה: $\\cos30° = \\cos330° = \\sqrt{3}/2$ ✓."
+    },
+    {
+      "id": "worked_example_2",
+      "kind": "worked_example",
+      "example_number": 2,
+      "difficulty": "medium",
+      "title_en": "Worked Example 2 (medium) — solve $2\\sin^2\\theta - \\sin\\theta - 1 = 0$ in $[0°, 360°)$",
+      "title_he": "דוגמה פתורה 2 (בינונית) — פתרו $2\\sin^2\\theta - \\sin\\theta - 1 = 0$",
+      "body_en_md": "**Solve:** $2\\sin^2\\theta - \\sin\\theta - 1 = 0$ for $\\theta \\in [0°, 360°)$.\n\nThis quadratic in $\\sin\\theta$ splits into two simpler trig equations. The factored form is faster than the quadratic formula on Bagrut time limits.\n\n### Move 1: Substitute $u = \\sin \\theta$\n$2u^2 - u - 1 = 0$. Domain reminder: $|u| \\le 1$ always — reject any algebraic root outside $[-1,1]$.\n\n### Move 2: Factor\n$(2u + 1)(u - 1) = 0 \\Rightarrow u = -1/2$ or $u = 1$. Both values lie in $[-1,1]$ ✓.\n\n### Move 3: Branch A — $\\sin\\theta = 1$\nOnly one solution in $[0°,360°)$: $\\theta = 90°$ (top of unit circle). The mirror branch $180° - 90° = 90°$ coincides.\n\n### Move 4: Branch B — $\\sin\\theta = -1/2$\nReference: $\\theta_0 = -30°$ (or $330°$). General: $\\theta = -30°+360°k$ or $\\theta = 210°+360°k$. In interval: $\\theta = 210°$ and $\\theta = 330°$.\n\n**Answer:** $\\theta = 90°, 210°, 330°$. **Exam tip:** list every branch; missing one sine family costs a full solution. **Verify** each angle in the original equation before submitting your final list.",
+      "body_he_md": "**פתרו:** $2\\sin^2\\theta - \\sin\\theta - 1 = 0$ עבור $\\theta \\in [0°, 360°)$.\n\nריבועית ב-$\\sin\\theta$ מתפצלת לשתי משוואות טריגונומטריות פשוטות יותר. פירוק לגורמים מהיר מהנוסחה הריבועית בזמן מוגבל בבגרות.\n\n### צעד 1: הצבה $u = \\sin \\theta$\n$2u^2 - u - 1 = 0$. תזכורת תחום: $|u| \\le 1$ תמיד — דחו שורש אלגברי מחוץ ל-$[-1,1]$.\n\n### צעד 2: פירוק\n$(2u + 1)(u - 1) = 0 \\Rightarrow u = -1/2$ או $u = 1$. שני הערכים ב-$[-1,1]$ ✓.\n\n### צעד 3: ענף A — $\\sin\\theta = 1$\nפתרון יחיד ב-$[0°,360°)$: $\\theta = 90°$ (ראשית מעגל היחידה). ענף המראה $180° - 90° = 90°$ מתאחד.\n\n### צעד 4: ענף B — $\\sin\\theta = -1/2$\nרפרנס: $\\theta_0 = -30°$ (או $330°$). כללי: $\\theta = -30°+360°k$ או $\\theta = 210°+360°k$. בקטע: $\\theta = 210°$ ו-$\\theta = 330°$.\n\n**תשובה:** $\\theta = 90°, 210°, 330°$. **טיפ לבחינה:** רשמו כל ענף; החמצת משפחת סינוס אחת עולה בפתרון שלם. **אמתו** כל זווית במשוואה המקורית."
+    },
+    {
+      "id": "checkpoint_2",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Solve $\\tan\\theta = -1$ for $\\theta\\in[0°,360°)$.",
+      "body_he_md": "פתרו $\\tan\\theta = -1$ ל-$\\theta\\in[0°,360°)$.",
+      "checkpoint_solution_en": "Reference angle: $\\theta_0 = \\arctan(-1) = -45°$ (Q IV). General: $\\theta = -45° + 180°k$. In $[0°,360°)$: $k=1 \\Rightarrow 135°$; $k=2 \\Rightarrow 315°$. Both lie where $\\sin$ and $\\cos$ have opposite signs (Q II and Q IV). **Answer:** $\\theta = 135°$ and $\\theta = 315°$. Verify: $\\tan135° = \\tan315° = -1$ ✓.",
+      "checkpoint_solution_he": "זווית רפרנס: $\\theta_0 = \\arctan(-1) = -45°$ (רביע IV). כללי: $\\theta = -45° + 180°k$. ב-$[0°,360°)$: $k=1 \\Rightarrow 135°$; $k=2 \\Rightarrow 315°$. שניהם ברביעים שבהם $\\sin$ ו-$\\cos$ בסימנים מנוגדים (II ו-IV). **תשובה:** $\\theta = 135°$ ו-$\\theta = 315°$. אימות: $\\tan135° = \\tan315° = -1$ ✓."
+    },
+    {
+      "id": "worked_example_3",
+      "kind": "worked_example",
+      "example_number": 3,
+      "difficulty": "hard",
+      "title_en": "Worked Example 3 (hard) — solve $\\cos 2\\theta + \\cos\\theta = 0$ in $[0°,360°)$",
+      "title_he": "דוגמה פתורה 3 (קשה) — פתרו $\\cos 2\\theta + \\cos\\theta = 0$",
+      "body_en_md": "**Solve:** $\\cos 2\\theta + \\cos\\theta = 0$ for $\\theta \\in [0°, 360°)$.\n\nDouble-angle substitution turns this into a quadratic in $\\cos\\theta$. Choose $\\cos2\\theta = 2\\cos^2\\theta - 1$ because the leading $1$ cancels cleanly with the $+\\cos\\theta$ term.\n\n### Move 1: Apply $\\cos 2\\theta = 2\\cos^2\\theta - 1$\n$$2\\cos^2\\theta - 1 + \\cos\\theta = 0 \\quad \\Rightarrow \\quad 2\\cos^2\\theta + \\cos\\theta - 1 = 0.$$\n\n### Move 2: Factor\n$(2\\cos\\theta - 1)(\\cos\\theta + 1) = 0$. Set each factor to zero separately — do not divide by $\\cos\\theta$.\n\n### Move 3: Branch A — $\\cos\\theta = 1/2$\n$\\theta_0 = 60°$. General: $\\theta = \\pm 60° + 360°k$. In $[0°,360°)$: $\\theta = 60°$ and $\\theta = 300°$ (from $-60° + 360°$).\n\n### Move 4: Branch B — $\\cos\\theta = -1$\n$\\theta = 180°$ exactly (both $\\pm$ branches collapse to the leftmost point).\n\n**Answer:** $\\theta = 60°, 180°, 300°$. **Common slip:** forgetting $\\theta = 300°$ from the $-60°$ branch. **Verify:** substitute all three into $\\cos2\\theta + \\cos\\theta$. This problem type — double angle plus linear cosine — is a Bagrut staple worth practicing until automatic. Name the identity you use at each step for partial credit.",
+      "body_he_md": "**פתרו:** $\\cos 2\\theta + \\cos\\theta = 0$ עבור $\\theta \\in [0°, 360°)$.\n\nהצבת זווית כפולה הופכת את זה לריבועית ב-$\\cos\\theta$. בוחרים $\\cos2\\theta = 2\\cos^2\\theta - 1$ כי ה-$1$ המוביל מתבטל בנקיות עם האיבר $+\\cos\\theta$.\n\n### צעד 1: יישום $\\cos 2\\theta = 2\\cos^2\\theta - 1$\n$$2\\cos^2\\theta - 1 + \\cos\\theta = 0 \\quad \\Rightarrow \\quad 2\\cos^2\\theta + \\cos\\theta - 1 = 0.$$\n\n### צעד 2: פירוק\n$(2\\cos\\theta - 1)(\\cos\\theta + 1) = 0$. שווים כל גורם לאפס בנפרד — אל תחלקו ב-$\\cos\\theta$.\n\n### צעד 3: ענף A — $\\cos\\theta = 1/2$\n$\\theta_0 = 60°$. כללי: $\\theta = \\pm 60° + 360°k$. ב-$[0°,360°)$: $\\theta = 60°$ ו-$\\theta = 300°$ (מ-$-60° + 360°$).\n\n### צעד 4: ענף B — $\\cos\\theta = -1$\n$\\theta = 180°$ בדיוק (שני ענפי $\\pm$ מתאחדים בנקודה השמאלית).\n\n**תשובה:** $\\theta = 60°, 180°, 300°$. **טעות נפוצה:** שכחת $\\theta = 300°$ מענף $-60°$. **אימות:** הציבו את שלוש הזוויות ב-$\\cos2\\theta + \\cos\\theta$. סוג בעיה זה — זווית כפולה עם קוסינוס לינארי — חוזר הרבה בבגרות ושווה תרגול עד שזה אוטומטי. ציינו את הזהות בכל שלב לנקודות חלקיות."
+    },
+    {
+      "id": "method_guide",
+      "kind": "theory",
+      "title_en": "Why Trig Equations Have Infinitely Many Solutions — Periodicity and the General Solution",
+      "title_he": "למה למשוואות טריגו יש אינסוף פתרונות — מחזוריות והפתרון הכללי",
+      "body_en_md": "The defining feature that makes trigonometric equations different from algebraic ones is **periodicity**: because $\\sin$, $\\cos$, and $\\tan$ repeat forever, a trig equation almost never has a single solution — it has infinitely many, spaced out in a predictable pattern. Mastering the **general solution** is what this topic is really about.\n\n### Why one solution is never enough\nSolve $\\sin x=\\tfrac12$ and your calculator says $x=30^\\circ$. But $\\sin$ takes the value $\\tfrac12$ again at $150^\\circ$, and again at $30^\\circ+360^\\circ$, and forever after. Every horizontal line $y=c$ (with $|c|\\le 1$) cuts the sine wave infinitely often. So the honest answer is a *formula* generating all of them, not one angle.\n\n### The general-solution formulas\nEach function has its own pattern, dictated by its period and symmetry:\n- **$\\sin x = a$:** $\\;x = \\sin^{-1}(a) + 360^\\circ k$ **or** $x = 180^\\circ - \\sin^{-1}(a) + 360^\\circ k$.\n- **$\\cos x = a$:** $\\;x = \\pm\\cos^{-1}(a) + 360^\\circ k$ (the $\\pm$ captures the symmetry of cosine about the $x$-axis).\n- **$\\tan x = a$:** $\\;x = \\tan^{-1}(a) + 180^\\circ k$ (tangent's period is only $180^\\circ$, so one family suffices).\n\nHere $k$ is **any integer**, and it's what generates the infinite list. In radians replace $360^\\circ$ with $2\\pi$ and $180^\\circ$ with $\\pi$.\n\n### Why sine needs two families but tangent needs one\nWithin one $360^\\circ$ turn, $\\sin x=a$ has *two* solutions (a positive value is hit on the way up and on the way down), so its general solution has two branches. Cosine likewise has two (captured compactly by $\\pm$). Tangent, with period $180^\\circ$, hits each value once per period, so a single family $+180^\\circ k$ covers everything. The structure of the formula mirrors the graph.\n\n### The strategy for harder equations\nMost exam equations aren't in the simple form above — first **reduce** them to it:\n1. Use identities (e.g. $\\sin^2x+\\cos^2x=1$, double-angle) to get a single trig function.\n2. Treat that function as a variable and solve the resulting algebraic equation (often a quadratic in $\\sin x$ or $\\cos x$).\n3. Write the general solution for each root, then, if a domain like $[0^\\circ,360^\\circ)$ is given, **list the specific solutions** by choosing the integer values of $k$ that land in range.\n\nThe last step — restricting the infinite family to a stated interval — is where most marks are won or lost.",
+      "body_he_md": "התכונה המגדירה שמבדילה משוואות טריגונומטריות מאלגבריות היא **מחזוריות**: מכיוון ש-$\\sin$, $\\cos$, ו-$\\tan$ חוזרות לנצח, למשוואה טריגונומטרית כמעט אף פעם אין פתרון יחיד — יש לה אינסוף, מרווחים בתבנית צפויה. שליטה ב**פתרון הכללי** היא מה שהנושא הזה באמת עוסק בו.\n\n### למה פתרון אחד לעולם אינו מספיק\nפתרו $\\sin x=\\tfrac12$ והמחשבון אומר $x=30^\\circ$. אך $\\sin$ מקבל את הערך $\\tfrac12$ שוב ב-$150^\\circ$, ושוב ב-$30^\\circ+360^\\circ$, וכך לנצח. כל ישר אופקי $y=c$ (עם $|c|\\le 1$) חותך את גל הסינוס אינסוף פעמים. ולכן התשובה הכנה היא *נוסחה* המייצרת את כולם, לא זווית אחת.\n\n### נוסחאות הפתרון הכללי\nלכל פונקציה תבנית משלה, המוכתבת על ידי מחזורה וסימטרייתה:\n- **$\\sin x = a$:** $\\;x = \\sin^{-1}(a) + 360^\\circ k$ **או** $x = 180^\\circ - \\sin^{-1}(a) + 360^\\circ k$.\n- **$\\cos x = a$:** $\\;x = \\pm\\cos^{-1}(a) + 360^\\circ k$ (ה-$\\pm$ לוכד את הסימטריה של קוסינוס סביב ציר ה-$x$).\n- **$\\tan x = a$:** $\\;x = \\tan^{-1}(a) + 180^\\circ k$ (מחזור הטנגנס רק $180^\\circ$, ולכן משפחה אחת מספיקה).\n\nכאן $k$ הוא **מספר שלם כלשהו**, וזה מה שמייצר את הרשימה האינסופית. ברדיאנים החליפו $360^\\circ$ ב-$2\\pi$ ו-$180^\\circ$ ב-$\\pi$.\n\n### למה סינוס צריך שתי משפחות אך טנגנס צריך אחת\nבתוך סיבוב $360^\\circ$ אחד, ל-$\\sin x=a$ יש *שני* פתרונות (ערך חיובי מושג בדרך למעלה ובדרך למטה), ולכן לפתרון הכללי שלו שני ענפים. לקוסינוס יש גם שניים (נלכדים בקצרה על ידי $\\pm$). לטנגנס, עם מחזור $180^\\circ$, מושג כל ערך פעם אחת למחזור, ולכן משפחה יחידה $+180^\\circ k$ מכסה הכול. מבנה הנוסחה משקף את הגרף.\n\n### האסטרטגיה למשוואות קשות יותר\nרוב משוואות הבחינה אינן בצורה הפשוטה שלמעלה — תחילה **צמצמו** אותן אליה:\n1. השתמשו בזהויות (למשל $\\sin^2x+\\cos^2x=1$, זווית-כפולה) לקבלת פונקציה טריגו יחידה.\n2. התייחסו לפונקציה הזו כמשתנה ופתרו את המשוואה האלגברית המתקבלת (לעתים קרובות ריבועית ב-$\\sin x$ או $\\cos x$).\n3. כתבו את הפתרון הכללי לכל שורש, ואז, אם ניתן תחום כמו $[0^\\circ,360^\\circ)$, **רשמו את הפתרונות הספציפיים** בבחירת ערכי $k$ השלמים שנוחתים בטווח.\n\nהצעד האחרון — צמצום המשפחה האינסופית לקטע נתון — הוא היכן שרוב הנקודות מרוויחים או מאבדים."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — Reduce with an Identity, Then List Solutions",
+      "title_he": "דוגמה פתורה 4 — צמצמו עם זהות, ואז רשמו פתרונות",
+      "body_en_md": "**Problem.** Solve $2\\cos^2 x + \\sin x - 1 = 0$ for $x\\in[0^\\circ,360^\\circ)$.\n\n### Step 1: Reduce to a single trig function\nThe equation mixes $\\cos^2 x$ and $\\sin x$. Use $\\cos^2 x = 1-\\sin^2 x$ to write everything in $\\sin x$:\n$$2(1-\\sin^2 x)+\\sin x-1=0 \\;\\Longrightarrow\\; 2-2\\sin^2x+\\sin x-1=0.$$\nSimplify: $-2\\sin^2 x+\\sin x+1=0$, or multiplying by $-1$:\n$$2\\sin^2 x-\\sin x-1=0.$$\n\n### Step 2: Solve the quadratic in sin x\nLet $s=\\sin x$: $2s^2-s-1=0$. Factor: $(2s+1)(s-1)=0$, so\n$$s=-\\tfrac12 \\quad\\text{or}\\quad s=1.$$\n\n### Step 3: Solve each simple equation on [0°, 360°)\n**$\\sin x = 1$:** the sine reaches its maximum once per turn, at $x=90^\\circ$.\n**$\\sin x = -\\tfrac12$:** the reference angle is $30^\\circ$, and sine is negative in the third and fourth quadrants:\n$$x=180^\\circ+30^\\circ=210^\\circ \\quad\\text{and}\\quad x=360^\\circ-30^\\circ=330^\\circ.$$\n\n### Step 4: Collect the solutions in range\n$$x=90^\\circ,\\ 210^\\circ,\\ 330^\\circ.$$\n\n### Step 5: Check one\nAt $x=210^\\circ$: $\\sin 210^\\circ=-\\tfrac12$, $\\cos 210^\\circ=-\\tfrac{\\sqrt3}{2}$, so $2(\\tfrac34)+(-\\tfrac12)-1=\\tfrac32-\\tfrac12-1=0$. ✓\n\n**Answer:** $x=90^\\circ,\\ 210^\\circ,\\ 330^\\circ$. The identity collapsed a mixed equation into a quadratic in $\\sin x$; the domain restriction then turned the infinite general solution into three specific angles.",
+      "body_he_md": "**בעיה.** פתרו $2\\cos^2 x + \\sin x - 1 = 0$ עבור $x\\in[0^\\circ,360^\\circ)$.\n\n### שלב 1: צמצמו לפונקציה טריגו יחידה\nהמשוואה מערבבת $\\cos^2 x$ ו-$\\sin x$. השתמשו ב-$\\cos^2 x = 1-\\sin^2 x$ לכתיבת הכול ב-$\\sin x$:\n$$2(1-\\sin^2 x)+\\sin x-1=0 \\;\\Longrightarrow\\; 2-2\\sin^2x+\\sin x-1=0.$$\nפשטו: $-2\\sin^2 x+\\sin x+1=0$, או בהכפלה ב-$-1$:\n$$2\\sin^2 x-\\sin x-1=0.$$\n\n### שלב 2: פתרו את הריבועית ב-sin x\nיהי $s=\\sin x$: $2s^2-s-1=0$. פרקו: $(2s+1)(s-1)=0$, ולכן $s=-\\tfrac12$ או $s=1$.\n\n### שלב 3: פתרו כל משוואה פשוטה על [0°, 360°)\n**$\\sin x = 1$:** הסינוס מגיע למקסימום פעם אחת למחזור, ב-$x=90^\\circ$.\n**$\\sin x = -\\tfrac12$:** זווית הייחוס היא $30^\\circ$, והסינוס שלילי ברביע השלישי והרביעי, ולכן $x=180^\\circ+30^\\circ=210^\\circ$ וגם $x=360^\\circ-30^\\circ=330^\\circ$.\n\n### שלב 4: אספו את הפתרונות בטווח\n$$x=90^\\circ,\\ 210^\\circ,\\ 330^\\circ.$$\n\n### שלב 5: בדקו אחד\nב-$x=210^\\circ$: $\\sin 210^\\circ=-\\tfrac12$, $\\cos 210^\\circ=-\\tfrac{\\sqrt3}{2}$, ולכן $2(\\tfrac34)+(-\\tfrac12)-1=\\tfrac32-\\tfrac12-1=0$. ✓\n\n**תשובה:** $x=90^\\circ,\\ 210^\\circ,\\ 330^\\circ$. הזהות כיווצה משוואה מעורבת לריבועית ב-$\\sin x$; צמצום התחום אז הפך את הפתרון הכללי האינסופי לשלוש זוויות ספציפיות."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method guide — solving trig equations",
+      "title_he": "מדריך שיטה — פתרון משוואות טריגונומטריות",
+      "body_en_md": "| Step | Action |\n|---|---|\n| 1 | **Range check:** if $|\\text{RHS}|>1$ for $\\sin$/$\\cos$, no solution |\n| 2 | Isolate one trig function (or factor common terms) |\n| 3 | If quadratic/compound: substitute $u=\\sin\\theta$, $u=\\cos\\theta$, etc. |\n| 4 | If double-angle: apply identity to reduce to one function |\n| 5 | Apply general formula ($\\sin$: 2 families; $\\cos$: $\\pm$; $\\tan$: 1 family) |\n| 6 | Enumerate $k$ to find solutions in the requested interval |\n| 7 | Verify in original equation (especially after squaring both sides) |\n\n**Unit-circle picture:** draw the horizontal/vertical line for the RHS value — count intersections per period. That count times the number of periods in the interval gives \"how many solutions\" questions.\n\n**Bagrut tip:** write the general solution before restricting; examiners award partial credit for correct formulas even if one $k$ value is wrong.",
+      "body_he_md": "| שלב | פעולה |\n|---|---|\n| 1 | **בדיקת טווח:** אם $|\\text{RHS}|>1$ עבור $\\sin$/$\\cos$, אין פתרון |\n| 2 | בודדים פונקציה טריגונומטרית אחת (או מפרקים גורם משותף) |\n| 3 | ריבועית/מורכבת: הצב $u=\\sin\\theta$, $u=\\cos\\theta$ וכו' |\n| 4 | זווית כפולה: יישם זהות לצמצום לפונקציה אחת |\n| 5 | נוסחת פתרון כללי ($\\sin$: 2 משפחות; $\\cos$: $\\pm$; $\\tan$: 1) |\n| 6 | מנה $k$ שלם למציאת פתרונות בקטע הנדרש |\n| 7 | בדוק בנוסחה המקורית (במיוחד אחרי העלאה בריבוע) |\n\n**תמונת מעגל יחידה:** שרטטו קו אופקי/אנכי לערך בצד ימין — ספרו חיתוכים למחזור. מכפילים במספר המחזורים בקטע לשאלות \"כמה פתרונות\".\n\n**טיפ בגרות:** כתבו פתרון כללי לפני הגבלה; בוחנים נותנים נקודות חלקיות על נוסחאות נכונות גם אם $k$ אחד שגוי."
+    },
+    {
+      "id": "exercise_set",
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Solve $\\sin\\theta=0$ for $\\theta\\in[0°,360°)$.",
+          "body_he": "פתרו $\\sin\\theta=0$ ב-$[0°,360°)$.",
+          "solution_en": "**Solution:**\n\n$\\sin\\theta=0$ at every multiple of $180°$. In $[0°,360°)$: $\\theta=0°,180°$.\n\n**Check:** $\\sin0°=\\sin180°=0$ ✓.",
+          "solution_he": "**פתרון:**\n\n$\\sin\\theta=0$ בכל כפולה של $180°$. ב-$[0°,360°)$: $\\theta=0°,180°$.\n\n**בדיקה:** $\\sin0°=\\sin180°=0$ ✓.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Solve $\\cos\\theta=1$ for $\\theta\\in[0°,360°)$.",
+          "body_he": "פתרו $\\cos\\theta=1$.",
+          "solution_en": "**Solution:**\n\n$\\cos\\theta=1$ only at $\\theta=0°$ (rightmost point on unit circle) in $[0°,360°)$.\n\n**Check:** $\\cos0°=1$ ✓.",
+          "solution_he": "**פתרון:**\n\n$\\cos\\theta=1$ רק ב-$\\theta=0°$ (נקודה ימנית ביותר) ב-$[0°,360°)$.\n\n**בדיקה:** $\\cos0°=1$ ✓.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Solve $\\tan\\theta=0$ for $\\theta\\in[0°,360°)$.",
+          "body_he": "פתרו $\\tan\\theta=0$.",
+          "solution_en": "**Solution:**\n\n$\\tan\\theta=0$ when $\\sin\\theta=0$ and $\\cos\\theta\\ne0$. In $[0°,360°)$: $\\theta=0°,180°$.\n\n**Check:** $\\tan0°=\\tan180°=0$ ✓.",
+          "solution_he": "**פתרון:**\n\n$\\tan\\theta=0$ כש-$\\sin\\theta=0$ ו-$\\cos\\theta\\ne0$. ב-$[0°,360°)$: $\\theta=0°,180°$.\n\n**בדיקה:** $\\tan0°=\\tan180°=0$ ✓.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Solve $2\\cos\\theta=\\sqrt{2}$ for $\\theta\\in[0°,360°)$.",
+          "body_he": "פתרו $2\\cos\\theta=\\sqrt{2}$.",
+          "solution_en": "**Solution:**\n\n$\\cos\\theta=\\sqrt{2}/2$. General: $\\theta=\\pm45°+360°k$. In interval: $\\theta=45°,315°$.\n\n**Check:** $\\cos45°=\\cos315°=\\sqrt2/2$ ✓.",
+          "solution_he": "**פתרון:**\n\n$\\cos\\theta=\\sqrt{2}/2$. כללי: $\\theta=\\pm45°+360°k$. בקטע: $\\theta=45°,315°$.\n\n**בדיקה:** $\\cos45°=\\cos315°=\\sqrt2/2$ ✓.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Solve $\\sin^2\\theta=1/4$ for $\\theta\\in[0°,360°)$.",
+          "body_he": "פתרו $\\sin^2\\theta=1/4$.",
+          "solution_en": "**Solution:**\n\n$\\sin\\theta=\\pm1/2$. Positive branch: $30°,150°$. Negative branch: $210°,330°$. Total: four solutions.\n\n**Check:** each angle gives $\\sin^2\\theta=1/4$ ✓.",
+          "solution_he": "**פתרון:**\n\n$\\sin\\theta=\\pm1/2$. ענף חיובי: $30°,150°$. ענף שלילי: $210°,330°$. סה\"כ ארבעה פתרונות.\n\n**בדיקה:** כל זווית נותנת $\\sin^2\\theta=1/4$ ✓.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Solve $\\cos2\\theta=0$ for $\\theta\\in[0°,360°)$.",
+          "body_he": "פתרו $\\cos2\\theta=0$.",
+          "solution_en": "**Solution:**\n\n$2\\theta=90°+360°k$ or $270°+360°k$. Divide by 2: $\\theta=45°,135°,225°,315°$.\n\n**Check:** $\\cos(2\\cdot45°)=\\cos90°=0$ ✓.",
+          "solution_he": "**פתרון:**\n\n$2\\theta=90°+360°k$ או $270°+360°k$. חלוקה ב-2: $\\theta=45°,135°,225°,315°$.\n\n**בדיקה:** $\\cos(2\\cdot45°)=\\cos90°=0$ ✓.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Solve $2\\cos^2\\theta-1=0$ for $\\theta\\in[0°,360°)$.",
+          "body_he": "פתרו $2\\cos^2\\theta-1=0$.",
+          "solution_en": "**Solution:**\n\n$\\cos^2\\theta=1/2$, so $\\cos\\theta=\\pm1/\\sqrt{2}$. Four solutions: $\\theta=45°,135°,225°,315°$.\n\n**Check:** identity $2\\cos^245°-1=0$ ✓.",
+          "solution_he": "**פתרון:**\n\n$\\cos^2\\theta=1/2$, כלומר $\\cos\\theta=\\pm1/\\sqrt{2}$. ארבעה פתרונות: $\\theta=45°,135°,225°,315°$.\n\n**בדיקה:** $2\\cos^245°-1=0$ ✓.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Solve $\\sin\\theta+\\cos\\theta=0$ for $\\theta\\in[0°,360°)$.",
+          "body_he": "פתרו $\\sin\\theta+\\cos\\theta=0$.",
+          "solution_en": "**Solution:**\n\n$\\sin\\theta=-\\cos\\theta$. Divide by $\\cos\\theta$ (check $\\cos\\theta\\ne0$ separately): $\\tan\\theta=-1$. Solutions: $\\theta=135°,315°$.\n\n**Check:** $\\sin135°+\\cos135°=0$ ✓.",
+          "solution_he": "**פתרון:**\n\n$\\sin\\theta=-\\cos\\theta$. חלוקה ב-$\\cos\\theta$ (בדקו $\\cos\\theta\\ne0$ בנפרד): $\\tan\\theta=-1$. פתרונות: $\\theta=135°,315°$.\n\n**בדיקה:** $\\sin135°+\\cos135°=0$ ✓.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Solve $\\sin2\\theta=\\sin\\theta$ for $\\theta\\in[0°,360°)$.",
+          "body_he": "פתרו $\\sin2\\theta=\\sin\\theta$.",
+          "solution_en": "**Solution:**\n\n$2\\sin\\theta\\cos\\theta-\\sin\\theta=0$. Factor: $\\sin\\theta(2\\cos\\theta-1)=0$. Either $\\sin\\theta=0$ → $0°,180°$, or $\\cos\\theta=1/2$ → $60°,300°$.\n\n**Answer:** $\\theta=0°,60°,180°,300°$.",
+          "solution_he": "**פתרון:**\n\n$2\\sin\\theta\\cos\\theta-\\sin\\theta=0$. פירוק: $\\sin\\theta(2\\cos\\theta-1)=0$. $\\sin\\theta=0$ → $0°,180°$, או $\\cos\\theta=1/2$ → $60°,300°$.\n\n**תשובה:** $\\theta=0°,60°,180°,300°$.",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Solve $2\\sin^2\\theta+3\\sin\\theta+1=0$ for $\\theta\\in[0°,360°)$.",
+          "body_he": "פתרו $2\\sin^2\\theta+3\\sin\\theta+1=0$.",
+          "solution_en": "**Solution:**\n\n$(2\\sin\\theta+1)(\\sin\\theta+1)=0$. $\\sin\\theta=-1/2$ → $210°,330°$; $\\sin\\theta=-1$ → $270°$.\n\n**Answer:** $\\theta=210°,270°,330°$.",
+          "solution_he": "**פתרון:**\n\n$(2\\sin\\theta+1)(\\sin\\theta+1)=0$. $\\sin\\theta=-1/2$ → $210°,330°$; $\\sin\\theta=-1$ → $270°$.\n\n**תשובה:** $\\theta=210°,270°,330°$.",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Solve $\\sin\\theta=\\cos\\theta$ for $\\theta\\in[0°,360°)$.",
+          "body_he": "פתרו $\\sin\\theta=\\cos\\theta$.",
+          "solution_en": "**Solution:**\n\n$\\tan\\theta=1$ (for $\\cos\\theta\\ne0$). Period $180°$: $\\theta=45°,225°$.\n\n**Check:** $\\sin45°=\\cos45°$ ✓.",
+          "solution_he": "**פתרון:**\n\n$\\tan\\theta=1$ (כש-$\\cos\\theta\\ne0$). מחזור $180°$: $\\theta=45°,225°$.\n\n**בדיקה:** $\\sin45°=\\cos45°$ ✓.",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Solve $\\sin^2\\theta-\\cos^2\\theta=0$ for $\\theta\\in[0°,360°)$.",
+          "body_he": "פתרו $\\sin^2\\theta-\\cos^2\\theta=0$.",
+          "solution_en": "**Solution:**\n\n$\\sin^2\\theta=\\cos^2\\theta$, so $\\cos2\\theta=0$. Then $2\\theta=90°+180°k$, giving $\\theta=45°,135°,225°,315°$.\n\n**Check:** at $45°$, $\\sin^245°=\\cos^245°$ ✓.",
+          "solution_he": "**פתרון:**\n\n$\\sin^2\\theta=\\cos^2\\theta$, כלומר $\\cos2\\theta=0$. אז $2\\theta=90°+180°k$, ומתקבל $\\theta=45°,135°,225°,315°$.\n\n**בדיקה:** ב-$45°$, $\\sin^245°=\\cos^245°$ ✓.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Solve $\\tan^2\\theta-3=0$ for $\\theta\\in[0°,360°)$.",
+          "body_he": "פתרו $\\tan^2\\theta-3=0$.",
+          "solution_en": "**Solution:**\n\n$\\tan\\theta=\\pm\\sqrt{3}$. Positive: $60°,240°$. Negative: $120°,300°$.\n\n**Answer:** $\\theta=60°,120°,240°,300°$.",
+          "solution_he": "**פתרון:**\n\n$\\tan\\theta=\\pm\\sqrt{3}$. חיובי: $60°,240°$. שלילי: $120°,300°$.\n\n**תשובה:** $\\theta=60°,120°,240°,300°$.",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "kind": "pitfall",
+      "title_en": "Common pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Missing the second branch.** Sine has TWO families per $360°$; cosine also TWO (via $\\pm$); tangent ONE per $180°$. Stopping at the calculator's inverse value loses half the answers.\n\n2. **Forgetting interval restriction.** The general formula is infinite; Bagrut wants angles in $[0°,360°)$ or a specified range. Always enumerate $k$ systematically.\n\n3. **Squaring both sides** can introduce extraneous solutions (e.g., $\\sin\\theta = -\\cos\\theta$ squared gives $\\sin^2\\theta = \\cos^2\\theta$, which also accepts $\\sin\\theta = \\cos\\theta$). Always verify in the original equation.\n\n4. **Dividing by $\\sin\\theta$ or $\\cos\\theta$** loses solutions where that function equals zero. **Factor instead** — see $\\sin2\\theta = \\sin\\theta$.\n\n5. **Degrees vs radians.** Match the unit to the problem and calculator mode. $\\pi$ radians $\\ne 180°$ written without the degree symbol.\n\n**Example misconception:** Stopping at $\\arcsin(1/2) = 30°$ only.\n\n**Fix:** Draw the unit circle — two intersection points per period for sine.",
+      "body_he_md": "1. **החמצת הענף השני.** לסינוס שתי משפחות לכל $360°$; לקוסינוס גם שתיים (דרך $\\pm$); לטנגנס אחת לכל $180°$. עצירה בערך ההפוך מהמחשבון מאבדת חצי מהפתרונות.\n\n2. **שכחת הגבלת הקטע.** הנוסחה הכללית אינסופית; בגרות רוצה זוויות ב-$[0°,360°)$ או בטווח מוגדר. תמיד מנה $k$ בצורה שיטתית.\n\n3. **העלאה בריבוע** עלולה להכניס פתרונות זרים (למשל $\\sin\\theta = -\\cos\\theta$ בריבוע נותן גם $\\sin\\theta = \\cos\\theta$). תמיד אמתו במשוואה המקורית.\n\n4. **חילוק ב-$\\sin\\theta$ או $\\cos\\theta$** מאבד פתרונות שבהם הפונקציה מתאפסת. **מפרקים במקום** — ראו $\\sin2\\theta = \\sin\\theta$.\n\n5. **מעלות מול רדיאנים.** התאימו יחידות לבעיה ולמצב המחשבון. $\\pi$ רדיאנים $\\ne 180°$ בלי סימן מעלות.\n\n**דוגמה לטעות:** עצירה ב-$\\arcsin(1/2) = 30°$ בלבד.\n\n**תיקון:** שרטטו מעגל יחידה — שתי נקודות חיתוך למחזור בסינוס."
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "Solving trig equations is the bridge between identities (always true) and applied models (waves, circuits, rotation) where you need **specific** angles or times when a quantity hits a target value.\n\n**You will use this to unlock:**\n- `concept:doppler` **Doppler Effect** — phase relationships between moving sources and observers involve periodic functions whose solutions give resonance and beat frequencies.\n- Calculus — finding where $\\sin x = 0$ on an interval is the first step in many area and volume problems.\n\n**Why it matters for exams:** Bagrut 4–5 units routinely combine identities with equation solving in multi-part questions. Partial credit goes to correct general formulas even when interval arithmetic slips. Master the two-step workflow: general first, restrict second.",
+      "body_he_md": "פתרון משוואות טריגונומטריות הוא הגשר בין זהויות (תמיד נכונות) לבין מודלים יישומיים (גלים, מעגלים, סיבוב) שבהם צריך **זוויות או זמנים ספציפיים** שבהם גודל מסוים מגיע לערך יעד.\n\n**תשתמשו בזה כדי להתקדם ל:**\n- `concept:doppler` **אפקט דופלר** — יחסי פאזה בין מקורות נעים וצופים כוללים פונקציות מחזוריות שפתרונן נותן תדירויות תהודה והטבעה.\n- חדו\"א — מציאת היכן $\\sin x = 0$ בקטע היא צעד ראשון בהרבה בעיות שטח ונפח.\n\n**למה זה חשוב לבחינות:** בגרות 4–5 יחידות משלבות לעיתים קרובות זהויות עם פתרון משוואות בשאלות רב-שלביות. נקודות חלקיות ניתנות על נוסחאות כלליות נכונות גם כשיש טעות בחשבון הקטע. שלטו בתהליך דו-שלבי: קודם כללי, אחר כך הגבלה."
+    },
+    {
+      "id": "before_exam",
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "- $\\sin$: 2 families per $360°$: $\\theta_0+360°k$ and $180°-\\theta_0+360°k$.\n- $\\cos$: $\\pm\\theta_0+360°k$.\n- $\\tan$: $\\theta_0+180°k$ only.\n- Quadratic in trig: substitute $u=\\sin\\theta$ etc., solve algebraically, convert each branch back.\n- Double angle: $\\cos2\\theta=2\\cos^2\\theta-1$ (or others) to reduce to one function.\n- After general solution: restrict to interval by enumerating $k$.\n- Range check: $|\\sin|,|\\cos| \\le 1$ always.\n- Factor before dividing — never lose zero solutions.\n\n**Last review:** Say each formula out loud once, then solve one checkpoint without looking. Time yourself: a standard interval-restriction problem should take under four minutes. Bring a unit-circle sketch habit to every exam question.",
+      "body_he_md": "- $\\sin$: 2 משפחות לכל $360°$: $\\theta_0+360°k$ ו-$180°-\\theta_0+360°k$.\n- $\\cos$: $\\pm\\theta_0+360°k$.\n- $\\tan$: $\\theta_0+180°k$ בלבד.\n- ריבועית בטריג: הצב $u=\\sin\\theta$, פתור אלגברית, המר כל ענף חזרה.\n- זווית כפולה: $\\cos2\\theta=2\\cos^2\\theta-1$ (או אחרות) לצמצום.\n- אחרי פתרון כללי: הגבל לקטע על ידי מניין $k$.\n- בדיקת טווח: $|\\sin|,|\\cos| \\le 1$ תמיד.\n- פרקו לפני חילוק — אל תאבדו פתרונות אפס.\n\n**חזרה אחרונה:** אמרו כל נוסחה בקול פעם אחת, ואז פתרו checkpoint אחד בלי להסתכל. תזמנו: בעיית הגבלת קטע סטנדרטית צריכה לקחת פחות מארבע דקות. הרגלו לשרטט מעגל יחידה בכל שאלת בחינה."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Facets: parameters and word-problem setup",
+      "title_he": "פנים: פרמטרים ובניית בעיה מילולית",
+      "body_en_md": "**Parametric root conditions:** translate “for which $k$…” into discriminant / domain conditions.\n\n**Word-problem setup:** define variables, write equations, verify units.",
+      "body_he_md": "**תנאי שורשים פרמטריים:** תרגמו \"עבור אילו $k$…\" לתנאי דיסקרימיננטה / תחום.\n\n**בניית בעיה מילולית:** הגדירו משתנים, כתבו משוואות, אמתו יחידות."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Facets: triangle vs unit circle; identity application",
+      "title_he": "פנים: משולש מול מעגל יחידה; יישום זהויות",
+      "body_en_md": "Choose **right triangle** vs **unit circle** models. Apply the needed **identity** before solving.",
+      "body_he_md": "בחרו מודל **משולש ישר** מול **מעגל היחידה**. יישמו את ה**זהות** הדרושה לפני הפתרון."
+    },
+    {
+      "id": "summary",
+      "kind": "summary",
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- Trig equations have infinitely many solutions because of periodicity — always start with the **general formula**, then restrict.\n- $\\sin$: two families per $360°$. $\\cos$: $\\pm$ family per $360°$. $\\tan$: one family per $180°$.\n- Reduce complex equations using identities and substitution ($u = \\sin\\theta$, etc.) to standard form.\n- After solving generally, restrict to the requested interval by enumerating integer values of $k$.\n- Verify candidates; squaring or dividing can create or lose solutions.\n- Range check $|a| \\le 1$ for sine and cosine before doing any algebra.",
+      "body_he_md": "- למשוואות טריגונומטריות אינסוף פתרונות בגלל מחזוריות — תמיד מתחילים ב**נוסחה הכללית**, ואז מגבילים.\n- $\\sin$: שתי משפחות לכל $360°$. $\\cos$: $\\pm$ לכל $360°$. $\\tan$: משפחה אחת לכל $180°$.\n- צמצום משוואות מורכבות עם זהויות והצבות ($u = \\sin\\theta$ וכו') לצורה סטנדרטית.\n- אחרי פתרון כללי, הגבלה לקטע המבוקש על ידי מניין $k$ שלם.\n- אימות מועמדים; העלאה בריבוע או חילוק יוצרים או מאבדים פתרונות.\n- בדיקת טווח $|a| \\le 1$ לסינוס וקוסינוס לפני כל אלגברה."
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Periodic ⇒ infinite solutions. General formula first; then restrict.",
+      "Sine: 2 families per 360°. Cosine: ±θ per 360°. Tangent: 1 family per 180°.",
+      "Identities reduce complex trig equations to quadratics in $\\sin$ or $\\cos$.",
+      "Range checks save time: $|\\sin|, |\\cos| \\le 1$ always."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Stopping at the calculator's $\\arcsin$ answer",
+        "correction": "Sine has two solutions per period; calculator gives only one.",
+        "detect_phrase_en": "got the answer from arcsin",
+        "detect_phrase_he": "קיבלתי תשובה מ-arcsin"
+      },
+      {
+        "wrong": "Dividing both sides by $\\cos\\theta$",
+        "correction": "Loses the solutions where $\\cos\\theta = 0$. Factor or rearrange instead.",
+        "detect_phrase_en": "divide by cos",
+        "detect_phrase_he": "לחלק ב-cos"
+      },
+      {
+        "wrong": "Mixing degrees and radians",
+        "correction": "Pick one and stick with it. Interval $[0°, 360°)$ vs $[0, 2\\pi)$.",
+        "detect_phrase_en": "got 3.14 instead of 180",
+        "detect_phrase_he": "קיבלתי 3.14 במקום 180"
+      }
+    ],
+    "skill_atoms_unlocked": [
+      "cofunction_identity",
+      "solve_trig"
+    ],
+    "prerequisites_to_check_before_teaching": [
+      "trigonometry_ratios",
+      "trigonometry_identities",
+      "equations_quadratic"
+    ],
+    "tutor_pacing_hint": "Always start with the unit-circle picture. Plot the horizontal line $y = a$ and ask 'where does it cross the circle?' Two crossings = two solutions per period. After that visual is solid, the formulas feel inevitable.",
+    "coach_drill_skills": [
+      "general_solution_sin",
+      "general_solution_cos",
+      "interval_restriction",
+      "substitute_identity"
+    ],
+    "diagnostic_signals": {
+      "if_learner_gives_one_solution_only": "Show the unit circle, draw $y = 1/2$ — two intersection points are obvious.",
+      "if_learner_divides_out_a_function": "Stop and ask 'what if $\\sin\\theta = 0$?' — they realize they've lost a case.",
+      "if_learner_works_in_wrong_unit": "Calculator mode + interval notation should match."
+    },
+    "next_recommended": [
+      "derivatives_rules",
+      "integrals_techniques",
+      "geometry_basics"
+    ]
+  },
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "Solve $\\sin x=1$ for $x$ in $[0^\\circ,360^\\circ)$. Which is correct?",
+      "stem_he": "פתרו $\\sin x=1$ עבור $x$ ב-$[0^\\circ,360^\\circ)$. איזו תשובה נכונה?",
+      "options_en": [
+        "$x=90^\\circ$",
+        "$x=0^\\circ$",
+        "$x=180^\\circ$",
+        "$x=270^\\circ$"
+      ],
+      "options_he": [
+        "$x=90^\\circ$",
+        "$x=0^\\circ$",
+        "$x=180^\\circ$",
+        "$x=270^\\circ$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "**Step 1.** $\\sin x=1$ at the top of the unit circle, so $x=90^\\circ$ in one full turn.\n**Step 2.** General solution $x=90^\\circ+360^\\circ k$; inside $[0,360)$ there is exactly one root.\n**Step 3 — Exam tip.** Distractors: $0^\\circ$ and $180^\\circ$ give sine $0$; $270^\\circ$ gives $-1$. Do not confuse max sine with max cosine.\n**Answer:** $90^\\circ$",
+      "explanation_he": "**שלב 1.** $\\sin x=1$ בראש מעגל היחידה, ולכן $x=90^\\circ$ בסיבוב מלא אחד.\n**שלב 2.** פתרון כללי $x=90^\\circ+360^\\circ k$; ב-$[0,360)$ יש שורש יחיד.\n**שלב 3 — טיפ לבחינה.** מסיחים: $0^\\circ$ ו-$180^\\circ$ נותנים סינוס $0$; $270^\\circ$ נותן $-1$. אל תבלבלו מקסימום סינוס עם מקסימום קוסינוס.\n**תשובה:** $90^\\circ$",
+      "points_level_min": "4pt",
+      "answer_payload": {
+        "options_en": [
+          "$x=90^\\circ$",
+          "$x=0^\\circ$",
+          "$x=180^\\circ$",
+          "$x=270^\\circ$"
+        ],
+        "options_he": [
+          "$x=90^\\circ$",
+          "$x=0^\\circ$",
+          "$x=180^\\circ$",
+          "$x=270^\\circ$"
+        ],
+        "correct_index": 0
+      },
+      "id": "trigonometry_equations__5pt-q1"
+    },
+    {
+      "ord": 2,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "Find the smallest non-negative solution (in degrees) of $\\sin x=0$.",
+      "stem_he": "מצאו את הפתרון הלא-שלילי הקטן ביותר (במעלות) של $\\sin x=0$.",
+      "verify": {
+        "expr": "0^2",
+        "expected": 0,
+        "tol": 1e-9
+      },
+      "explanation_en": "**Step 1.** Sine is zero when the unit-circle $y$-coordinate is zero: $x=0^\\circ,180^\\circ,360^\\circ,\\ldots$\n**Step 2.** The smallest non-negative solution among these is $0^\\circ$.\n**Step 3 — Exam tip.** Always report solutions inside the interval the Bagrut question asks for; the general family is $x=180^\\circ k$.\n**Answer:** $0$",
+      "explanation_he": "**שלב 1.** סינוס מתאפס כאשר קואורדינטת $y$ במעגל היחידה היא אפס: $x=0^\\circ,180^\\circ,360^\\circ,\\ldots$\n**שלב 2.** הפתרון הלא-שלילי הקטן ביותר מביניהם הוא $0^\\circ$.\n**שלב 3 — טיפ לבחינה.** תמיד דווחו פתרונות בתוך הקטע שדורשת שאלת הבגרות; המשפחה הכללית היא $x=180^\\circ k$.\n**תשובה:** $0$",
+      "points_level_min": "4pt",
+      "answer_payload": {
+        "value": 0
+      },
+      "correct_answer": "0",
+      "id": "trigonometry_equations__5pt-q2"
+    },
+    {
+      "ord": 3,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "Find the acute solution (in degrees) of $\\sin x=\\tfrac12$.",
+      "stem_he": "מצאו את הפתרון החד (במעלות) של $\\sin x=\\tfrac12$.",
+      "verify": {
+        "expr": "asin(1/2)*180/pi",
+        "expected": 30,
+        "tol": 0.000001
+      },
+      "explanation_en": "**Step 1.** From the special-angle table, $\\sin 30^\\circ=1/2$. The second solution in one turn is $150^\\circ$.\n**Step 2.** “Acute” means between $0^\\circ$ and $90^\\circ$, so only $30^\\circ$ qualifies.\n**Step 3 — Exam tip.** When the stem asks for the acute root, do not list the obtuse companion unless requested.\n**Answer:** $30$",
+      "explanation_he": "**שלב 1.** מטבלת הזוויות המיוחדות, $\\sin 30^\\circ=1/2$. הפתרון השני בסיבוב הוא $150^\\circ$.\n**שלב 2.** “חדה” פירושה בין $0^\\circ$ ל-$90^\\circ$, ולכן רק $30^\\circ$ מתאים.\n**שלב 3 — טיפ לבחינה.** כשהגזע מבקש שורש חד, אל תציינו את הקהה אלא אם נדרש.\n**תשובה:** $30$",
+      "points_level_min": "4pt",
+      "answer_payload": {
+        "value": 30
+      },
+      "correct_answer": "30",
+      "id": "trigonometry_equations__5pt-q3"
+    },
+    {
+      "ord": 4,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "Find the smallest non-negative solution (in degrees) of $\\cos x=1$.",
+      "stem_he": "מצאו את הפתרון הלא-שלילי הקטן ביותר (במעלות) של $\\cos x=1$.",
+      "verify": {
+        "expr": "0^1",
+        "expected": 0,
+        "tol": 1e-9
+      },
+      "explanation_en": "**Step 1.** $\\cos x=1$ at the rightmost unit-circle point $(1,0)$, so $x=0^\\circ+360^\\circ k$.\n**Step 2.** The smallest non-negative solution is $0^\\circ$ (take $k=0$).\n**Step 3 — Exam tip.** Do not confuse with $\\cos x=-1$, which is $180^\\circ$ — a common slip after long algebra.\n**Answer:** $0$",
+      "explanation_he": "**שלב 1.** $\\cos x=1$ בנקודה הימנית ביותר $(1,0)$, ולכן $x=0^\\circ+360^\\circ k$.\n**שלב 2.** הפתרון הלא-שלילי הקטן ביותר הוא $0^\\circ$ ($k=0$).\n**שלב 3 — טיפ לבחינה.** אל תבלבלו עם $\\cos x=-1$, שהוא $180^\\circ$ — טעות נפוצה אחרי אלגברה ארוכה.\n**תשובה:** $0$",
+      "points_level_min": "4pt",
+      "answer_payload": {
+        "value": 0
+      },
+      "correct_answer": "0",
+      "id": "trigonometry_equations__5pt-q4"
+    },
+    {
+      "ord": 5,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "Find the smallest positive solution (in degrees) of $\\cos x=0$.",
+      "stem_he": "מצאו את הפתרון החיובי הקטן ביותר (במעלות) של $\\cos x=0$.",
+      "verify": {
+        "expr": "90^1",
+        "expected": 90,
+        "tol": 1e-9
+      },
+      "explanation_en": "**Step 1.** Cosine zero means the $x$-coordinate is $0$: angles $90^\\circ$ and $270^\\circ$ in one turn.\n**Step 2.** The smallest positive solution is $90^\\circ$; note that $0^\\circ$ has cosine $1$, not $0$.\n**Step 3 — Exam tip.** Wherever $\\cos x=0$, $\\tan x$ is undefined — critical after rewriting equations with tangent.\n**Answer:** $90$",
+      "explanation_he": "**שלב 1.** קוסינוס אפס פירושו שקואורדינטת $x$ היא $0$: זוויות $90^\\circ$ ו-$270^\\circ$ בסיבוב אחד.\n**שלב 2.** הפתרון החיובי הקטן ביותר הוא $90^\\circ$; שימו לב שב-$0^\\circ$ הקוסינוס הוא $1$, לא $0$.\n**שלב 3 — טיפ לבחינה.** היכן ש-$\\cos x=0$, $\\tan x$ לא מוגדר — קריטי אחרי כתיבה מחדש של משוואות עם טנגנס.\n**תשובה:** $90$",
+      "points_level_min": "4pt",
+      "answer_payload": {
+        "value": 90
+      },
+      "correct_answer": "90",
+      "id": "trigonometry_equations__5pt-q5"
+    },
+    {
+      "ord": 6,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "cofunction_identity"
+      ],
+      "stem_en": "True or False: $\\sin 30^\\circ=\\cos 60^\\circ$ (co-function identity).",
+      "stem_he": "נכון או לא נכון: $\\sin 30^\\circ=\\cos 60^\\circ$ (זהות משלימים).",
+      "explanation_en": "**Step 1.** The co-function identity $\\sin\\theta=\\cos(90^\\circ-\\theta)$ with $\\theta=30^\\circ$ gives $\\cos 60^\\circ$.\n**Step 2.** Both sides equal $1/2$. This identity bridges sine-equations and cosine-equations on Bagrut.\n**Step 3 — Exam tip.** Sister forms: $\\cos\\theta=\\sin(90^\\circ-\\theta)$ and $\\tan\\theta=\\cot(90^\\circ-\\theta)$ where defined.\n**Answer:** True",
+      "explanation_he": "**שלב 1.** זהות המשלימים $\\sin\\theta=\\cos(90^\\circ-\\theta)$ עם $\\theta=30^\\circ$ נותנת $\\cos 60^\\circ$.\n**שלב 2.** שני האגפים שווים ל-$1/2$. הזהות מקשרת משוואות סינוס ומשוואות קוסינוס בבגרות.\n**שלב 3 — טיפ לבחינה.** צורות אחיות: $\\cos\\theta=\\sin(90^\\circ-\\theta)$ ו-$\\tan\\theta=\\cot(90^\\circ-\\theta)$ בתחום.\n**תשובה:** True",
+      "points_level_min": "4pt",
+      "correct_bool": true,
+      "answer_payload": {
+        "value": true
+      },
+      "id": "trigonometry_equations__5pt-q6"
+    },
+    {
+      "ord": 7,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "Find the acute solution (in degrees) of $\\tan x=1$.",
+      "stem_he": "מצאו את הפתרון החד (במעלות) של $\\tan x=1$.",
+      "verify": {
+        "expr": "45^1",
+        "expected": 45,
+        "tol": 1e-9
+      },
+      "explanation_en": "**Step 1.** $\\tan 45^\\circ=1$ is the unique acute solution from the special-angle table.\n**Step 2.** General solution $x=45^\\circ+180^\\circ k$; in $[0,360)$ you also get $225^\\circ$, which is not acute.\n**Step 3 — Exam tip.** For $\\tan x=a$, find one reference angle then add $180^\\circ k$; do not copy sine/cosine quadrant rules blindly.\n**Answer:** $45$",
+      "explanation_he": "**שלב 1.** $\\tan 45^\\circ=1$ הוא הפתרון החד היחיד מטבלת הזוויות המיוחדות.\n**שלב 2.** פתרון כללי $x=45^\\circ+180^\\circ k$; ב-$[0,360)$ גם $225^\\circ$, שאינו חד.\n**שלב 3 — טיפ לבחינה.** עבור $\\tan x=a$ מוצאים זווית ייחוס ומוסיפים $180^\\circ k$; אל תעתיקו עיוור כללי רביעים של סינוס/קוסינוס.\n**תשובה:** $45$",
+      "points_level_min": "4pt",
+      "answer_payload": {
+        "value": 45
+      },
+      "correct_answer": "45",
+      "id": "trigonometry_equations__5pt-q7"
+    },
+    {
+      "ord": 8,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "Find the acute solution (in degrees) of $\\sin x=\\dfrac{\\sqrt3}{2}$.",
+      "stem_he": "מצאו את הפתרון החד (במעלות) של $\\sin x=\\dfrac{\\sqrt3}{2}$.",
+      "verify": {
+        "expr": "60^1",
+        "expected": 60,
+        "tol": 1e-9
+      },
+      "explanation_en": "**Step 1.** From the table, $\\sin 60^\\circ=\\sqrt3/2$. The second solution in one turn is $120^\\circ$ (obtuse).\n**Step 2.** Only $60^\\circ$ is acute. State both roots when the interval is a full period unless the stem restricts.\n**Step 3 — Exam tip.** Quadrants III/IV have negative sine, so they never solve $\\sin x=+\\sqrt3/2$.\n**Answer:** $60$",
+      "explanation_he": "**שלב 1.** מהטבלה, $\\sin 60^\\circ=\\sqrt3/2$. הפתרון השני בסיבוב הוא $120^\\circ$ (קהה).\n**שלב 2.** רק $60^\\circ$ חדה. ציינו שני שורשים כשהקטע מחזור מלא אלא אם הגזע מגביל.\n**שלב 3 — טיפ לבחינה.** ברביעים III/IV הסינוס שלילי, ולכן אינם פותרים $\\sin x=+\\sqrt3/2$.\n**תשובה:** $60$",
+      "points_level_min": "4pt",
+      "answer_payload": {
+        "value": 60
+      },
+      "correct_answer": "60",
+      "id": "trigonometry_equations__5pt-q8"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "Find the acute solution (in degrees) of $\\cos x=\\tfrac12$.",
+      "stem_he": "מצאו את הפתרון החד (במעלות) של $\\cos x=\\tfrac12$.",
+      "verify": {
+        "expr": "60^1",
+        "expected": 60,
+        "tol": 1e-9
+      },
+      "explanation_en": "**Step 1.** $\\cos 60^\\circ=1/2$. Cosine is also positive in QIV: $300^\\circ$ in $[0,360)$.\n**Step 2.** The acute solution is specifically $60^\\circ$.\n**Step 3 — Exam tip.** Co-function reminder: $\\cos 60^\\circ=\\sin 30^\\circ$, but the unknown angle with cosine $1/2$ is still $60^\\circ$.\n**Answer:** $60$",
+      "explanation_he": "**שלב 1.** $\\cos 60^\\circ=1/2$. קוסינוס חיובי גם ב-QIV: $300^\\circ$ ב-$[0,360)$.\n**שלב 2.** הפתרון החד הוא דווקא $60^\\circ$.\n**שלב 3 — טיפ לבחינה.** תזכורת משלימים: $\\cos 60^\\circ=\\sin 30^\\circ$, אך הזווית עם קוסינוס $1/2$ היא עדיין $60^\\circ$.\n**תשובה:** $60$",
+      "points_level_min": "4pt",
+      "answer_payload": {
+        "value": 60
+      },
+      "correct_answer": "60",
+      "id": "trigonometry_equations__5pt-q9"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "Solve $2\\sin x=1$ for the acute solution (in degrees).",
+      "stem_he": "פתרו $2\\sin x=1$ עבור הפתרון החד (במעלות).",
+      "verify": {
+        "expr": "asin(1/2)*180/pi",
+        "expected": 30,
+        "tol": 0.000001
+      },
+      "explanation_en": "**Step 1.** Isolate first: divide by $2$ to get $\\sin x=1/2$.\n**Step 2.** The acute solution of $\\sin x=1/2$ is $x=30^\\circ$ (also $150^\\circ$ in a full turn).\n**Step 3 — Exam tip.** Forgetting the coefficient $2$ wrongly yields $\\sin x=1$ and $x=90^\\circ$ — always isolate before reading the table.\n**Answer:** $30$",
+      "explanation_he": "**שלב 1.** קודם מבודדים: מחלקים ב-$2$ ומקבלים $\\sin x=1/2$.\n**שלב 2.** הפתרון החד של $\\sin x=1/2$ הוא $x=30^\\circ$ (וגם $150^\\circ$ בסיבוב מלא).\n**שלב 3 — טיפ לבחינה.** שכחת המקדם $2$ נותנת בטעות $\\sin x=1$ ו-$x=90^\\circ$ — תמיד מבודדים לפני קריאת הטבלה.\n**תשובה:** $30$",
+      "points_level_min": "4pt",
+      "answer_payload": {
+        "value": 30
+      },
+      "correct_answer": "30",
+      "id": "trigonometry_equations__5pt-q10"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "graphical"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "Find the next positive solution after $0^\\circ$ (in degrees) of $\\sin x=0$.",
+      "stem_he": "מצאו את הפתרון החיובי הבא אחרי $0^\\circ$ (במעלות) של $\\sin x=0$.",
+      "verify": {
+        "expr": "180^1",
+        "expected": 180,
+        "tol": 1e-9
+      },
+      "explanation_en": "**Step 1.** Zeroes of sine: $x=0^\\circ,180^\\circ,360^\\circ,\\ldots$\n**Step 2.** The next positive root after $0^\\circ$ is $180^\\circ$.\n**Step 3 — Exam tip.** Graphically, the sine wave crosses the axis every $180^\\circ$; reading those crossings is the graphical form of $\\sin x=0$.\n**Answer:** $180$",
+      "explanation_he": "**שלב 1.** אפסי סינוס: $x=0^\\circ,180^\\circ,360^\\circ,\\ldots$\n**שלב 2.** השורש החיובי הבא אחרי $0^\\circ$ הוא $180^\\circ$.\n**שלב 3 — טיפ לבחינה.** גרפית, גל הסינוס חוצה את הציר כל $180^\\circ$; קריאת החיתוכים היא הצורה הגרפית של $\\sin x=0$.\n**תשובה:** $180$",
+      "points_level_min": "4pt",
+      "answer_payload": {
+        "value": 180
+      },
+      "correct_answer": "180",
+      "id": "trigonometry_equations__5pt-q11"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "Find the smallest positive solution (in degrees) of $\\sin 2x=1$.",
+      "stem_he": "מצאו את הפתרון החיובי הקטן ביותר (במעלות) של $\\sin 2x=1$.",
+      "verify": {
+        "expr": "asin(1)*180/pi/2",
+        "expected": 45,
+        "tol": 0.000001
+      },
+      "explanation_en": "**Step 1.** Set $u=2x$. Solve $\\sin u=1$ to get $u=90^\\circ+360^\\circ k$.\n**Step 2.** Return to $x$: $2x=90^\\circ+360^\\circ k$ ⇒ $x=45^\\circ+180^\\circ k$. Smallest positive: $45^\\circ$.\n**Step 3 — Exam tip.** Solving $\\sin x=1$ instead of $\\sin 2x=1$ wrongly yields $90^\\circ$ — divide the period carefully for $2x$.\n**Answer:** $45$",
+      "explanation_he": "**שלב 1.** מגדירים $u=2x$. פותרים $\\sin u=1$ ומקבלים $u=90^\\circ+360^\\circ k$.\n**שלב 2.** חוזרים ל-$x$: $2x=90^\\circ+360^\\circ k$ ⇒ $x=45^\\circ+180^\\circ k$. החיובי הקטן: $45^\\circ$.\n**שלב 3 — טיפ לבחינה.** פתרון $\\sin x=1$ במקום $\\sin 2x=1$ נותן בטעות $90^\\circ$ — חלק את המחזור בזהירות עבור $2x$.\n**תשובה:** $45$",
+      "points_level_min": "4pt",
+      "answer_payload": {
+        "value": 45
+      },
+      "correct_answer": "45",
+      "id": "trigonometry_equations__5pt-q12"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "Given $\\sin^2 x=\\tfrac14$ with $\\sin x>0$, find the acute solution (in degrees).",
+      "stem_he": "נתון $\\sin^2 x=\\tfrac14$ עם $\\sin x>0$; מצאו את הפתרון החד (במעלות).",
+      "verify": {
+        "expr": "asin(sqrt(1/4))*180/pi",
+        "expected": 30,
+        "tol": 0.000001
+      },
+      "explanation_en": "**Step 1.** Take square roots: $\\sin x=\\pm 1/2$. The condition $\\sin x>0$ keeps $\\sin x=1/2$.\n**Step 2.** Acute solution of $\\sin x=1/2$ is $30^\\circ$ (the other positive root $150^\\circ$ is obtuse).\n**Step 3 — Exam tip.** Squaring can introduce extras; always filter with the given sign condition and the required interval.\n**Answer:** $30$",
+      "explanation_he": "**שלב 1.** לוקחים שורש: $\\sin x=\\pm 1/2$. התנאי $\\sin x>0$ משאיר $\\sin x=1/2$.\n**שלב 2.** הפתרון החד של $\\sin x=1/2$ הוא $30^\\circ$ (השורש החיובי האחר $150^\\circ$ קהה).\n**שלב 3 — טיפ לבחינה.** העלאה בריבוע עלולה להוסיף פתרונות; תמיד מסננים עם תנאי הסימן והקטע הנדרש.\n**תשובה:** $30$",
+      "points_level_min": "4pt",
+      "answer_payload": {
+        "value": 30
+      },
+      "correct_answer": "30",
+      "id": "trigonometry_equations__5pt-q13"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "Find the acute solution (in degrees) of $\\tan x=\\sqrt3$.",
+      "stem_he": "מצאו את הפתרון החד (במעלות) של $\\tan x=\\sqrt3$.",
+      "verify": {
+        "expr": "60^1",
+        "expected": 60,
+        "tol": 1e-9
+      },
+      "explanation_en": "**Step 1.** From the table, $\\tan 60^\\circ=\\sqrt3$. That is the unique acute solution.\n**Step 2.** General solution $x=60^\\circ+180^\\circ k$; also $240^\\circ$ in $[0,360)$, which is not acute.\n**Step 3 — Exam tip.** Remember tangent’s period is $180^\\circ$, not $360^\\circ$ — missing that is a frequent Bagrut error.\n**Answer:** $60$",
+      "explanation_he": "**שלב 1.** מהטבלה, $\\tan 60^\\circ=\\sqrt3$. זה הפתרון החד היחיד.\n**שלב 2.** פתרון כללי $x=60^\\circ+180^\\circ k$; גם $240^\\circ$ ב-$[0,360)$, שאינו חד.\n**שלב 3 — טיפ לבחינה.** זכרו שמחזור הטנגנס הוא $180^\\circ$, לא $360^\\circ$ — טעות נפוצה בבגרות.\n**תשובה:** $60$",
+      "points_level_min": "4pt",
+      "answer_payload": {
+        "value": 60
+      },
+      "correct_answer": "60",
+      "id": "trigonometry_equations__5pt-q14"
+    },
+    {
+      "ord": 15,
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "The general solution of $\\sin x=0$ (in degrees) is $x=$ ____ $^\\circ\\cdot k$ for integer $k$.",
+      "stem_he": "הפתרון הכללי של $\\sin x=0$ (במעלות) הוא $x=$ ____ $^\\circ\\cdot k$ עבור $k$ שלם.",
+      "explanation_en": "**Step 1.** Sine vanishes at integer multiples of $180^\\circ$: $x=180^\\circ k$.\n**Step 2.** Equivalently $x=0^\\circ$ or $180^\\circ$ inside one half-turn pattern, then extend by the period.\n**Step 3 — Exam tip.** Do not write $360^\\circ k$ alone — that misses the odd multiples such as $180^\\circ$.\n**Answer:** $180$",
+      "explanation_he": "**שלב 1.** סינוס מתאפס בכפולות שלמות של $180^\\circ$: $x=180^\\circ k$.\n**שלב 2.** באופן שקול $x=0^\\circ$ או $180^\\circ$ בדפוס חצי-סיבוב, ואז מרחיבים במחזור.\n**שלב 3 — טיפ לבחינה.** אל תכתבו רק $360^\\circ k$ — זה מפספס כפולות אי-זוגיות כמו $180^\\circ$.\n**תשובה:** $180$",
+      "points_level_min": "4pt",
+      "acceptable_answers": [
+        "180",
+        "180°",
+        "180 degrees"
+      ],
+      "case_sensitive": false,
+      "correct_answer": "180",
+      "answer_payload": {
+        "acceptable_answers": [
+          "180",
+          "180°",
+          "180 degrees"
+        ],
+        "case_sensitive": false
+      },
+      "id": "trigonometry_equations__5pt-q15"
+    },
+    {
+      "ord": 16,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "application"
+      ],
+      "skill_atoms": [
+        "solve_trig",
+        "cofunction_identity"
+      ],
+      "stem_en": "Using a co-function identity, rewrite $\\cos x=1/2$ as an equivalent sine equation.",
+      "stem_he": "בעזרת זהות משלימים, כתבו מחדש את $\\cos x=1/2$ כמשוואת סינוס שקולה.",
+      "explanation_en": "**Step 1.** Co-function: $\\cos x=\\sin(90^\\circ-x)$. So $\\cos x=1/2$ becomes $\\sin(90^\\circ-x)=1/2$.\n**Step 2.** You may then solve the sine equation for the auxiliary angle $90^\\circ-x$ and return to $x$.\n**Step 3 — Exam tip.** This rewrite is useful when a later step already uses sine tables or a sine double-angle substitution.\n**Answer:** $\\sin(90^\\circ-x)=1/2$",
+      "explanation_he": "**שלב 1.** משלימים: $\\cos x=\\sin(90^\\circ-x)$. לכן $\\cos x=1/2$ הופך ל-$\\sin(90^\\circ-x)=1/2$.\n**שלב 2.** אפשר אז לפתור את משוואת הסינוס לזווית העזר $90^\\circ-x$ ולחזור ל-$x$.\n**שלב 3 — טיפ לבחינה.** כתיבה מחדש זו שימושית כששלב מאוחר יותר כבר משתמש בטבלת סינוס או בהצבת זווית כפולה לסינוס.\n**תשובה:** $\\sin(90^\\circ-x)=1/2$",
+      "points_level_min": "4pt",
+      "acceptable_answers": [
+        "sin(90°-x)=1/2",
+        "sin(90-x)=1/2",
+        "\\sin(90^\\circ-x)=1/2",
+        "sin(π/2-x)=1/2"
+      ],
+      "case_sensitive": false,
+      "correct_answer": "sin(90°-x)=1/2",
+      "answer_payload": {
+        "acceptable_answers": [
+          "sin(90°-x)=1/2",
+          "sin(90-x)=1/2",
+          "\\sin(90^\\circ-x)=1/2",
+          "sin(π/2-x)=1/2"
+        ],
+        "case_sensitive": false
+      },
+      "id": "trigonometry_equations__5pt-q16"
+    },
+    {
+      "ord": 17,
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "proof"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "Order the steps to solve $\\sin 2x=1/2$ for $x$ in $[0^\\circ,360^\\circ)$.",
+      "stem_he": "סדרו את השלבים לפתרון $\\sin 2x=1/2$ עבור $x$ ב-$[0^\\circ,360^\\circ)$.",
+      "steps_en": [
+        "Set $u=2x$ and solve $\\sin u=1/2$ for $u$ in $[0^\\circ,720^\\circ)$.",
+        "List $u=30^\\circ,150^\\circ,390^\\circ,510^\\circ$ (all solutions of $\\sin u=1/2$ in that enlarged interval).",
+        "Divide by $2$: $x=15^\\circ,75^\\circ,195^\\circ,255^\\circ$.",
+        "Check each $x$ lies in $[0^\\circ,360^\\circ)$ and discard any extraneous values."
+      ],
+      "steps_he": [
+        "מגדירים $u=2x$ ופותרים $\\sin u=1/2$ עבור $u$ ב-$[0^\\circ,720^\\circ)$.",
+        "רושמים $u=30^\\circ,150^\\circ,390^\\circ,510^\\circ$ (כל פתרונות $\\sin u=1/2$ בקטע המורחב).",
+        "מחלקים ב-$2$: $x=15^\\circ,75^\\circ,195^\\circ,255^\\circ$.",
+        "בודקים שכל $x$ נמצא ב-$[0^\\circ,360^\\circ)$ ופוסלים ערכים זרים."
+      ],
+      "explanation_en": "**Step 1.** When the argument is $2x$, enlarge the $u$-interval to twice the original length before listing roots.\n**Step 2.** Divide carefully by $2$ and map every $u$-solution back; missing one $u$-root loses a whole $x$-solution.\n**Step 3 — Exam tip.** Finally filter to the requested $x$-interval — the most common place students drop or duplicate answers.\n**Answer:** auxiliary → list u → divide → filter x",
+      "explanation_he": "**שלב 1.** כשהארגומנט הוא $2x$, מרחיבים את קטע ה-$u$ לפי שניים מאורך המקורי לפני רישום שורשים.\n**שלב 2.** מחלקים בזהירות ב-$2$ וממפים כל פתרון $u$ בחזרה; החמצת שורש $u$ אחד מאבדת פתרון $x$ שלם.\n**שלב 3 — טיפ לבחינה.** לבסוף מסננים לקטע ה-$x$ המבוקש — המקום הנפוץ ביותר שבו תלמידים מפילים או מכפילים תשובות.\n**תשובה:** auxiliary → list u → divide → filter x",
+      "points_level_min": "4pt",
+      "correct_order": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "Set $u=2x$ and solve $\\sin u=1/2$ for $u$ in $[0^\\circ,720^\\circ)$.",
+          "List $u=30^\\circ,150^\\circ,390^\\circ,510^\\circ$ (all solutions of $\\sin u=1/2$ in that enlarged interval).",
+          "Divide by $2$: $x=15^\\circ,75^\\circ,195^\\circ,255^\\circ$.",
+          "Check each $x$ lies in $[0^\\circ,360^\\circ)$ and discard any extraneous values."
+        ],
+        "steps_he": [
+          "מגדירים $u=2x$ ופותרים $\\sin u=1/2$ עבור $u$ ב-$[0^\\circ,720^\\circ)$.",
+          "רושמים $u=30^\\circ,150^\\circ,390^\\circ,510^\\circ$ (כל פתרונות $\\sin u=1/2$ בקטע המורחב).",
+          "מחלקים ב-$2$: $x=15^\\circ,75^\\circ,195^\\circ,255^\\circ$.",
+          "בודקים שכל $x$ נמצא ב-$[0^\\circ,360^\\circ)$ ופוסלים ערכים זרים."
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "id": "trigonometry_equations__5pt-q17"
+    },
+    {
+      "ord": 18,
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "solve_trig",
+        "cofunction_identity"
+      ],
+      "stem_en": "Match each trig equation to its acute (or principal) special-angle solution.",
+      "stem_he": "התאימו כל משוואה טריגונומטרית לפתרון החד (או העיקרי) בזווית מיוחדת.",
+      "left_en": [
+        "$\\sin x=1/2$",
+        "$\\cos x=1/2$",
+        "$\\tan x=1$",
+        "$\\sin x=\\sqrt3/2$"
+      ],
+      "left_he": [
+        "$\\sin x=1/2$",
+        "$\\cos x=1/2$",
+        "$\\tan x=1$",
+        "$\\sin x=\\sqrt3/2$"
+      ],
+      "right_en": [
+        "$30^\\circ$",
+        "$60^\\circ$",
+        "$45^\\circ$",
+        "$60^\\circ$ (sine)"
+      ],
+      "right_he": [
+        "$30^\\circ$",
+        "$60^\\circ$",
+        "$45^\\circ$",
+        "$60^\\circ$ (סינוס)"
+      ],
+      "explanation_en": "**Step 1.** These four table facts are the backbone of almost every Bagrut trig-equation starter.\n**Step 2.** Note that both $\\cos x=1/2$ and $\\sin x=\\sqrt3/2$ have acute solution $60^\\circ$ — different functions, same angle.\n**Step 3 — Exam tip.** After matching the acute reference, remember to add the second quadrant / period copies required by the interval.\n**Answer:** pairs in listed order",
+      "explanation_he": "**שלב 1.** ארבע עובדות טבלה אלה הן הבסיס של כמעט כל פתיחת משוואה טריגונומטרית בבגרות.\n**שלב 2.** שימו לב שגם $\\cos x=1/2$ וגם $\\sin x=\\sqrt3/2$ בעלי פתרון חד $60^\\circ$ — פונקציות שונות, אותה זווית.\n**שלב 3 — טיפ לבחינה.** אחרי התאמת זווית הייחוס החדה, זכרו להוסיף את עותקי הרביע השני / המחזור לפי הקטע.\n**תשובה:** pairs in listed order",
+      "points_level_min": "4pt",
+      "correct_pairs": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "answer_payload": {
+        "left_en": [
+          "$\\sin x=1/2$",
+          "$\\cos x=1/2$",
+          "$\\tan x=1$",
+          "$\\sin x=\\sqrt3/2$"
+        ],
+        "left_he": [
+          "$\\sin x=1/2$",
+          "$\\cos x=1/2$",
+          "$\\tan x=1$",
+          "$\\sin x=\\sqrt3/2$"
+        ],
+        "right_en": [
+          "$30^\\circ$",
+          "$60^\\circ$",
+          "$45^\\circ$",
+          "$60^\\circ$ (sine)"
+        ],
+        "right_he": [
+          "$30^\\circ$",
+          "$60^\\circ$",
+          "$45^\\circ$",
+          "$60^\\circ$ (סינוס)"
+        ],
+        "correct_pairs": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "id": "trigonometry_equations__5pt-q18"
+    },
+    {
+      "ord": 19,
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "Select **all** correct statements about solving trig equations on Bagrut 4–5 exams.",
+      "stem_he": "סמנו את **כל** ההיגדים הנכונים על פתרון משוואות טריגונומטריות בבגרות 4–5.",
+      "options_en": [
+        "The period of $\\tan x$ is $180^\\circ$, not $360^\\circ$",
+        "If $\\sin x=a$ with $|a|<1$, there are generally two solutions in $[0^\\circ,360^\\circ)$",
+        "Dividing both sides by $\\cos x$ never loses solutions",
+        "For $\\sin 2x=k$, first solve for $2x$ on a doubled interval",
+        "$\\sin x=2$ has two real solutions in every period"
+      ],
+      "options_he": [
+        "מחזור $\\tan x$ הוא $180^\\circ$, לא $360^\\circ$",
+        "אם $\\sin x=a$ עם $|a|<1$, יש בדרך כלל שני פתרונות ב-$[0^\\circ,360^\\circ)$",
+        "חלוקת שני האגפים ב-$\\cos x$ לעולם אינה מאבדת פתרונות",
+        "עבור $\\sin 2x=k$, קודם פותרים ל-$2x$ בקטע כפול",
+        "ל-$\\sin x=2$ יש שני פתרונות ממשיים בכל מחזור"
+      ],
+      "correct_indices": [
+        0,
+        1,
+        3
+      ],
+      "explanation_en": "**Step 1.** Tangent has period $180^\\circ$; sine/cosine equations with $|a|<1$ generally have two roots per full turn.\n**Step 2.** Dividing by $\\cos x$ can lose roots where cosine is zero, and $\\sin x=2$ has no real solutions because sine stays in $[-1,1]$.\n**Step 3 — Exam tip.** For double-angle equations, solve on the doubled $u$-interval first, then map back — statements 1, 2, and 4 are the correct ones here.\n**Answer:** options 1, 2, 4",
+      "explanation_he": "**שלב 1.** לטנגנס יש מחזור $180^\\circ$; למשוואות סינוס/קוסינוס עם $|a|<1$ יש בדרך כלל שני שורשים בסיבוב מלא.\n**שלב 2.** חלוקה ב-$\\cos x$ עלולה לאבד שורשים שבהם הקוסינוס אפס, ול-$\\sin x=2$ אין פתרונות ממשיים כי סינוס נשאר ב-$[-1,1]$.\n**שלב 3 — טיפ לבחינה.** למשוואות זווית כפולה פותרים קודם בקטע $u$ כפול ואז ממפים בחזרה — היגדים 1, 2 ו-4 הם הנכונים כאן.\n**תשובה:** options 1, 2, 4",
+      "points_level_min": "4pt",
+      "answer_payload": {
+        "options_en": [
+          "The period of $\\tan x$ is $180^\\circ$, not $360^\\circ$",
+          "If $\\sin x=a$ with $|a|<1$, there are generally two solutions in $[0^\\circ,360^\\circ)$",
+          "Dividing both sides by $\\cos x$ never loses solutions",
+          "For $\\sin 2x=k$, first solve for $2x$ on a doubled interval",
+          "$\\sin x=2$ has two real solutions in every period"
+        ],
+        "options_he": [
+          "מחזור $\\tan x$ הוא $180^\\circ$, לא $360^\\circ$",
+          "אם $\\sin x=a$ עם $|a|<1$, יש בדרך כלל שני פתרונות ב-$[0^\\circ,360^\\circ)$",
+          "חלוקת שני האגפים ב-$\\cos x$ לעולם אינה מאבדת פתרונות",
+          "עבור $\\sin 2x=k$, קודם פותרים ל-$2x$ בקטע כפול",
+          "ל-$\\sin x=2$ יש שני פתרונות ממשיים בכל מחזור"
+        ],
+        "correct_indices": [
+          0,
+          1,
+          3
+        ]
+      },
+      "id": "trigonometry_equations__5pt-q19"
+    },
+    {
+      "ord": 20,
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual",
+        "application"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "Solve $\\cos x=-\\tfrac12$ for $x$ in $[0^\\circ,360^\\circ)$; give both solutions and identify the smaller one.",
+      "stem_he": "פתרו $\\cos x=-\\tfrac12$ עבור $x$ ב-$[0^\\circ,360^\\circ)$; תנו את שני הפתרונות וציינו את הקטן.",
+      "rubric_en": "Full credit: both $120^\\circ$ and $240^\\circ$ with correct quadrant reasoning; names smaller $120$.",
+      "rubric_he": "ניקוד מלא: גם $120^\\circ$ וגם $240^\\circ$ עם נימוק רביעים; ציון הקטן $120$.",
+      "explanation_en": "**Step 1.** Reference angle for cosine magnitude $1/2$ is $60^\\circ$; place it in the quadrants where cosine is negative.\n**Step 2.** QII gives $120^\\circ$ and QIII gives $240^\\circ$ inside $[0^\\circ,360^\\circ)$.\n**Step 3 — Exam tip.** Always list both roots unless the stem restricts to acute/smallest; here the smaller is $120^\\circ$.\n**Answer:** $120$ (and $240$)",
+      "explanation_he": "**שלב 1.** זווית הייחוס לגודל קוסינוס $1/2$ היא $60^\\circ$; מציבים אותה ברביעים שבהם הקוסינוס שלילי.\n**שלב 2.** QII נותן $120^\\circ$ ו-QIII נותן $240^\\circ$ ב-$[0^\\circ,360^\\circ)$.\n**שלב 3 — טיפ לבחינה.** תמיד רושמים את שני השורשים אלא אם הגזע מגביל לחד/קטן; כאן הקטן הוא $120^\\circ$.\n**תשובה:** $120$ (and $240$)",
+      "points_level_min": "4pt",
+      "needs_review": true,
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Reference.** $\\cos 60^\\circ=1/2$, so the reference angle is $60^\\circ$.",
+          "**Step 2 — Quadrants.** Cosine is negative in QII and QIII: $x=180^\\circ-60^\\circ=120^\\circ$ and $x=180^\\circ+60^\\circ=240^\\circ$.",
+          "**Step 3 — Smaller.** The smaller solution in the interval is $120^\\circ$.",
+          "**Answer:** $120^\\circ$ and $240^\\circ$; smaller $120$."
+        ],
+        "steps_he": [
+          "**שלב 1 — ייחוס.** $\\cos 60^\\circ=1/2$, ולכן זווית הייחוס היא $60^\\circ$.",
+          "**שלב 2 — רביעים.** קוסינוס שלילי ב-QII ו-QIII: $x=120^\\circ$ ו-$x=240^\\circ$.",
+          "**שלב 3 — הקטן.** הפתרון הקטן בקטע הוא $120^\\circ$.",
+          "**תשובה:** $120^\\circ$ ו-$240^\\circ$; הקטן $120$."
+        ]
+      },
+      "id": "trigonometry_equations__5pt-q20"
+    },
+    {
+      "ord": 21,
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof",
+        "parametric"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "Derive the general solution of $\\sin x=0$ in degrees from the unit-circle definition.",
+      "stem_he": "גזרו את הפתרון הכללי של $\\sin x=0$ במעלות מהגדרת מעגל היחידה.",
+      "expected_steps": [
+        "Interpret sin x = 0 as y-coordinate 0 on the unit circle",
+        "Identify the points (1,0) and (-1,0), i.e. x = 0° and x = 180° in one turn",
+        "Note that these recur every 180°",
+        "Conclude x = 180°·k for integer k"
+      ],
+      "rubric_en": "Full credit: unit-circle reading, both axis points, period 180°, general form $x=180^\\circ k$.",
+      "rubric_he": "ניקוד מלא: קריאה ממעגל היחידה, שתי נקודות הציר, מחזור $180^\\circ$, צורה כללית $x=180^\\circ k$.",
+      "explanation_en": "**Step 1.** On the unit circle, $\\sin x$ is the $y$-coordinate, so $\\sin x=0$ means the point lies on the $x$-axis.\n**Step 2.** Those points are $(1,0)$ and $(-1,0)$, corresponding to $0^\\circ$ and $180^\\circ$ in one turn, and they recur every $180^\\circ$.\n**Step 3 — Exam tip.** Therefore the general solution is $x=180^\\circ k$ for integer $k$ — the standard Bagrut form.\n**Answer:** $x=180^\\circ k$",
+      "explanation_he": "**שלב 1.** במעגל היחידה, $\\sin x$ הוא קואורדינטת $y$, ולכן $\\sin x=0$ פירושו שהנקודה על ציר $x$.\n**שלב 2.** הנקודות הן $(1,0)$ ו-$(-1,0)$, המתאימות ל-$0^\\circ$ ו-$180^\\circ$ בסיבוב אחד, והן חוזרות כל $180^\\circ$.\n**שלב 3 — טיפ לבחינה.** לכן הפתרון הכללי הוא $x=180^\\circ k$ עבור $k$ שלם — הצורה הסטנדרטית בבגרות.\n**תשובה:** $x=180^\\circ k$",
+      "points_level_min": "4pt",
+      "needs_review": true,
+      "answer_payload": {
+        "expected_steps": [
+          "Interpret sin x = 0 as y-coordinate 0 on the unit circle",
+          "Identify the points (1,0) and (-1,0), i.e. x = 0° and x = 180° in one turn",
+          "Note that these recur every 180°",
+          "Conclude x = 180°·k for integer k"
+        ]
+      },
+      "id": "trigonometry_equations__5pt-q21"
+    },
+    {
+      "ord": 22,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "True or False: if you divide both sides of $2\\sin x\\cos x=\\sin x$ by $\\sin x$, you never lose solutions.",
+      "stem_he": "נכון או לא נכון: אם מחלקים את שני אגפי $2\\sin x\\cos x=\\sin x$ ב-$\\sin x$, לעולם לא מאבדים פתרונות.",
+      "explanation_en": "**Step 1.** Dividing by $\\sin x$ assumes $\\sin x\\ne0$ and drops the family of solutions where $\\sin x=0$.\n**Step 2.** Safer: move all terms to one side and factor $\\sin x(2\\cos x-1)=0$, then solve each factor.\n**Step 3 — Exam tip.** Lost-root errors after division are among the most common mistakes on Bagrut trig-equation items.\n**Answer:** False",
+      "explanation_he": "**שלב 1.** חלוקה ב-$\\sin x$ מניחה $\\sin x\\ne0$ ומשמיטה את משפחת הפתרונות שבה $\\sin x=0$.\n**שלב 2.** בטוח יותר: מעבירים הכל לאגף אחד ומפרקים $\\sin x(2\\cos x-1)=0$, ואז פותרים כל גורם.\n**שלב 3 — טיפ לבחינה.** טעויות אובדן שורש אחרי חלוקה הן מהנפוצות ביותר בפריטי משוואות טריגונומטריות בבגרות.\n**תשובה:** False",
+      "points_level_min": "4pt",
+      "correct_bool": false,
+      "answer_payload": {
+        "value": false
+      },
+      "id": "trigonometry_equations__5pt-q22"
+    },
+    {
+      "ord": 23,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "How many solutions does $\\sin x=1/2$ have in $[0^\\circ,360^\\circ)$?",
+      "stem_he": "כמה פתרונות יש ל-$\\sin x=1/2$ ב-$[0^\\circ,360^\\circ)$?",
+      "verify": {
+        "expr": "1+1",
+        "expected": 2,
+        "tol": 1e-9
+      },
+      "explanation_en": "**Step 1.** For $|a|<1$, the equation $\\sin x=a$ has two solutions in each full $360^\\circ$ turn.\n**Step 2.** Here $a=1/2$: the roots are $30^\\circ$ and $150^\\circ$, so the count is $2$.\n**Step 3 — Exam tip.** If the interval were $[0^\\circ,720^\\circ)$ you would get four roots — always match the interval length to the count.\n**Answer:** $2$",
+      "explanation_he": "**שלב 1.** עבור $|a|<1$, למשוואה $\\sin x=a$ יש שני פתרונות בכל סיבוב מלא של $360^\\circ$.\n**שלב 2.** כאן $a=1/2$: השורשים הם $30^\\circ$ ו-$150^\\circ$, ולכן המספר הוא $2$.\n**שלב 3 — טיפ לבחינה.** אם הקטע היה $[0^\\circ,720^\\circ)$ היו ארבעה שורשים — תמיד התאימו את אורך הקטע לספירה.\n**תשובה:** $2$",
+      "points_level_min": "4pt",
+      "answer_payload": {
+        "value": 2
+      },
+      "correct_answer": "2",
+      "id": "trigonometry_equations__5pt-q23"
+    },
+    {
+      "ord": 24,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "Find the smallest positive $x$ (degrees) satisfying $\\cos 2x=0$.",
+      "stem_he": "מצאו את ה-$x$ החיובי הקטן ביותר (במעלות) המקיים $\\cos 2x=0$.",
+      "verify": {
+        "expr": "90^1/2",
+        "expected": 45,
+        "tol": 1e-9
+      },
+      "explanation_en": "**Step 1.** Set $u=2x$. Then $\\cos u=0$ ⇒ $u=90^\\circ+180^\\circ k$.\n**Step 2.** Smallest positive $u$ is $90^\\circ$, so smallest positive $x$ is $45^\\circ$.\n**Step 3 — Exam tip.** Verify uses a power/division check on the auxiliary angle; always divide the $u$-solution by $2$ carefully.\n**Answer:** $45$",
+      "explanation_he": "**שלב 1.** מגדירים $u=2x$. אז $\\cos u=0$ ⇒ $u=90^\\circ+180^\\circ k$.\n**שלב 2.** ה-$u$ החיובי הקטן ביותר הוא $90^\\circ$, ולכן ה-$x$ החיובי הקטן ביותר הוא $45^\\circ$.\n**שלב 3 — טיפ לבחינה.** ה-verify בודק את זווית העזר; תמיד מחלקים את פתרון ה-$u$ ב-$2$ בזהירות.\n**תשובה:** $45$",
+      "points_level_min": "4pt",
+      "answer_payload": {
+        "value": 45
+      },
+      "correct_answer": "45",
+      "id": "trigonometry_equations__5pt-q24"
+    },
+    {
+      "ord": 25,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "solve_trig"
+      ],
+      "stem_en": "Which describes all solutions of $\\tan x=1$ in degrees?",
+      "stem_he": "איזו אפשרות מתארת את כל פתרונות $\\tan x=1$ במעלות?",
+      "options_en": [
+        "$x=45^\\circ+180^\\circ k$",
+        "$x=45^\\circ+360^\\circ k$",
+        "$x=90^\\circ+180^\\circ k$",
+        "$x=45^\\circ+90^\\circ k$"
+      ],
+      "options_he": [
+        "$x=45^\\circ+180^\\circ k$",
+        "$x=45^\\circ+360^\\circ k$",
+        "$x=90^\\circ+180^\\circ k$",
+        "$x=45^\\circ+90^\\circ k$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "**Step 1.** One particular solution is $45^\\circ$, and tangent has period $180^\\circ$, so add $180^\\circ k$.\n**Step 2.** Using period $360^\\circ$ alone misses $225^\\circ$, which also satisfies $\\tan x=1$.\n**Step 3 — Exam tip.** The distractor $90^\\circ+180^\\circ k$ is where tangent is undefined, not where it equals $1$.\n**Answer:** $x=45^\\circ+180^\\circ k$",
+      "explanation_he": "**שלב 1.** פתרון פרטי אחד הוא $45^\\circ$, ולטנגנס יש מחזור $180^\\circ$, ולכן מוסיפים $180^\\circ k$.\n**שלב 2.** שימוש במחזור $360^\\circ$ בלבד מפספס את $225^\\circ$, שמקיים גם הוא $\\tan x=1$.\n**שלב 3 — טיפ לבחינה.** המסיח $90^\\circ+180^\\circ k$ הוא היכן שטנגנס לא מוגדר, לא היכן שהוא שווה ל-$1$.\n**תשובה:** $x=45^\\circ+180^\\circ k$",
+      "points_level_min": "4pt",
+      "answer_payload": {
+        "options_en": [
+          "$x=45^\\circ+180^\\circ k$",
+          "$x=45^\\circ+360^\\circ k$",
+          "$x=90^\\circ+180^\\circ k$",
+          "$x=45^\\circ+90^\\circ k$"
+        ],
+        "options_he": [
+          "$x=45^\\circ+180^\\circ k$",
+          "$x=45^\\circ+360^\\circ k$",
+          "$x=90^\\circ+180^\\circ k$",
+          "$x=45^\\circ+90^\\circ k$"
+        ],
+        "correct_index": 0
+      },
+      "id": "trigonometry_equations__5pt-q25"
+    },
+    {
+      "id": "trigonometry_equations__5pt-facet-auto",
+      "ord": 26,
+      "kind": "open",
+      "difficulty": "medium",
+      "facets": [
+        "parametric_root_conditions",
+        "word_problem_setup"
+      ],
+      "stem_en": "Apply the lesson facets (parametric_root_conditions, word_problem_setup): give a short worked example.",
+      "stem_he": "יישמו את פני השיעור (parametric_root_conditions, word_problem_setup): תנו דוגמה פתורה קצרה.",
+      "explanation_en": "**Facet practice.** Identify which facet applies, write the governing relation, compute or justify in two steps, then verify by substitution or a limiting case. See the facet theory section in this lesson for the checklist keywords and worked patterns. Keep method marks visible even if arithmetic slips.",
+      "explanation_he": "**תרגול פנים.** זהו איזה פן חל, כתבו את הקשר השולט, חשבו או הצדיקו בשני שלבים, ואמתו בהצבה או במקרה גבול. ראו את סעיף הפנים בשיעור לרשימת מילות המפתח ולדפוסים. השאירו ניקוד שיטה גלוי גם אם יש טעות חשבון.",
+      "correct_answer": "see facet section",
+      "skill_atoms": []
+    },
+    {
+      "id": "trigonometry_equations__5pt-facet-auto",
+      "ord": 27,
+      "kind": "open",
+      "difficulty": "medium",
+      "facets": [
+        "right_triangle_vs_unit_circle",
+        "identity_application"
+      ],
+      "stem_en": "Apply the lesson facets (right_triangle_vs_unit_circle, identity_application): give a short worked example.",
+      "stem_he": "יישמו את פני השיעור (right_triangle_vs_unit_circle, identity_application): תנו דוגמה פתורה קצרה.",
+      "explanation_en": "**Facet practice.** Identify which facet applies, write the governing relation, compute or justify in two steps, then verify by substitution or a limiting case. See the facet theory section in this lesson for the checklist keywords and worked patterns. Keep method marks visible even if arithmetic slips.",
+      "explanation_he": "**תרגול פנים.** זהו איזה פן חל, כתבו את הקשר השולט, חשבו או הצדיקו בשני שלבים, ואמתו בהצבה או במקרה גבול. ראו את סעיף הפנים בשיעור לרשימת מילות המפתח ולדפוסים. השאירו ניקוד שיטה גלוי גם אם יש טעות חשבון.",
+      "correct_answer": "see facet section",
+      "skill_atoms": []
+    }
+  ],
+  "est_minutes": 18,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
+}

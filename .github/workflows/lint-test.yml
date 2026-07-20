@@ -120,6 +120,12 @@ jobs:
       - name: Track-scope audit (no questions gated above every served track)
         run: node scripts/audit-track-scope.mjs
 
+      - name: Curriculum track contract (5pt/uni denylists + required-basics)
+        run: node scripts/audit-lesson-scope.mjs --strict
+
+      - name: Facet checklist audit (piloted concept families)
+        run: node scripts/audit-lesson-facets.mjs --strict
+
       - name: Rewrite-bar audit (per-lesson depth floors for rewritten lessons)
         run: node scripts/audit-lesson-rewrite-bar.mjs --allowlist=scripts/seed_data/rewrite-bar-allowlist.json --strict
 

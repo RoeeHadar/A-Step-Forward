@@ -1,0 +1,1063 @@
+{
+  "concept_id": "sequences_geometric__4pt",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": [
+    "4pt"
+  ],
+  "title_en": "Geometric Sequences — Formula, Sum, and Infinite Series — 4pt depth",
+  "title_he": "סדרות הנדסיות — העמקה 4 יח׳",
+  "summary_en": "In a geometric sequence each term is multiplied by a fixed ratio q. The nth term is a_n = a_1·q^(n−1). The finite sum is S_n = a_1(1−q^n)/(1−q). If |q|<1, the infinite sum is S_∞ = a_1/(1−q).",
+  "summary_he": "בסדרה הנדסית כל איבר מוכפל במנה q קבועה. האיבר ה-n הוא a_n = a_1·q^(n−1). הסכום הסופי הוא S_n = a_1(1−q^n)/(1−q). אם |q|<1, הסכום האינסופי הוא S_∞ = a_1/(1−q).",
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "Multiplicative Growth — The Power of Geometric Sequences",
+      "title_he": "גדילה כפלית — הכוח של סדרות הנדסיות",
+      "body_en_md": "Fold a sheet of paper in half once — it's 2 layers thick. Fold again — 4 layers. Once more — 8 layers. After just 10 folds, you'd have $2^{10} = 1024$ layers! After 20 folds the stack would reach over a kilometre — a dramatic illustration of how **multiplicative** growth outpaces constant addition.\n\nThis is **geometric growth**: each step multiplies by the same fixed ratio $q$, not adds a fixed amount. Compare with `concept:sequences_arithmetic`, where you add $d$ each time — geometric sequences grow much faster when $|q| > 1$ and shrink toward zero when $|q| < 1$.\n\nGeometric sequences appear everywhere on Bagrut papers and in real life:\n- **Compound interest:** each year the balance is multiplied by $(1 + r)$.\n- **Population growth:** a colony doubles every fixed interval.\n- **Radioactive decay:** each half-life multiplies the remaining mass by $\\tfrac{1}{2}$.\n- **Bouncing ball:** each bounce reaches a fixed fraction of the previous height.\n\nIn this lesson you will master the $n$th-term formula $a_n = a_1 q^{n-1}$, the finite sum $S_n$, and the infinite sum $S_\\infty$ when $|q| < 1$ — tools that appear on every 3- and 4-point math questionnaire.\n\n**4pt focus:** Parameters, algebra↔graph, multi-step exam stems.",
+      "body_he_md": "קפלו דף נייר לשניים פעם אחת — 2 שכבות. קפלו שוב — 4 שכבות. עוד פעם — 8 שכבות. אחרי 10 קיפולים בלבד יהיו $2^{10} = 1024$ שכבות! אחרי 20 קיפולים העובי יעבור קילומטר — הדגמה חזקה לכך ש**גדילה כפלית** מנצחת הוספה קבועה.\n\nזוהי **גדילה הנדסית**: כל שלב מכפיל במנה $q$ קבועה, לא מוסיף סכום קבוע. השוו ל-`concept:sequences_arithmetic`, שבה מוסיפים $d$ בכל צעד — סדרות הנדסיות גדלות הרבה יותר מהר כש-$|q| > 1$ ומתכווצות לאפס כש-$|q| < 1$.\n\nסדרות הנדסיות מופיעות בכל מקום בבגרות ובחיים:\n- **ריבית דריבית:** כל שנה היתרה מוכפלת ב-$(1 + r)$.\n- **גידול אוכלוסייה:** מושבה מכפילה את עצמה בכל מרווח קבוע.\n- **דעיכה רדיואקטיבית:** כל חצי-חיים מכפיל את המסה הנותרת ב-$\\tfrac{1}{2}$.\n- **כדור מקפץ:** כל קפיצה מגיעה לשבר קבוע מהגובה הקודם.\n\nבשיעור זה תשלטו בנוסחת האיבר $a_n = a_1 q^{n-1}$, בסכום הסופי $S_n$, ובסכום האינסופי $S_\\infty$ כש-$|q| < 1$ — כלים שמופיעים בכל שאלון בגרות 3 ו-4 יחידות.\n\n**מיקוד 4 יח׳:** פרמטרים, אלגברה↔גרף, פריטים רב-שלביים."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Geometric Sequence — Key Formulas",
+      "title_he": "סדרה הנדסית — נוסחאות מרכזיות",
+      "body_en_md": "A **geometric sequence** (progression) has a fixed **common ratio** $q$ between consecutive terms — you multiply, never add:\n$$a_1,\\ a_1 q,\\ a_1 q^2,\\ a_1 q^3,\\ \\ldots$$\n\nTwo equivalent ways to write the rule:\n- **Explicit (nth term):** $a_n = a_1 \\cdot q^{n-1}$\n- **Recursive:** $a_1$ given, and $a_{n+1} = q \\cdot a_n$ for every $n \\geq 1$\n\nThe sequence **grows** when $|q| > 1$, **decays** toward zero when $|q| < 1$, and is **constant** when $q = 1$ (or alternates sign when $q = -1$).\n\n**$n$th term (memorise for Bagrut):**\n$$\\boxed{a_n = a_1 \\cdot q^{n-1}}$$\n\n**Sum of first $n$ terms ($q \\neq 1$):**\n$$\\boxed{S_n = a_1 \\cdot \\frac{1 - q^n}{1 - q}}$$\n\n**Infinite sum (only when $|q| < 1$):**\n$$\\boxed{S_{\\infty} = \\frac{a_1}{1 - q}}$$\n\n**Finding $q$ from consecutive terms:** $q = a_{n+1}/a_n$ (check at least two ratios).\n\n**Finding $q$ from two indexed terms** $a_k$ and $a_m$ ($m \\neq k$):\n$$q^{m-k} = \\frac{a_m}{a_k} \\implies q = \\left(\\frac{a_m}{a_k}\\right)^{\\!1/(m-k)}$$\n\n**Finding $n$ when $a_n$ is known:** solve $a_1 q^{n-1} = a_n$ using logs or matching powers — $n$ must be a **positive integer**.",
+      "body_he_md": "**סדרה הנדסית** (פרוגרסיה) בעלת **מנה** $q$ קבועה בין איברים עוקבים — **מכפילים**, לא מחברים:\n$$a_1,\\ a_1 q,\\ a_1 q^2,\\ a_1 q^3,\\ \\ldots$$\n\nשתי דרכים שקולות לכתוב את הכלל:\n- **מפורש (איבר n):** $a_n = a_1 \\cdot q^{n-1}$\n- **רקурсיבית:** $a_1$ נתון, ו-$a_{n+1} = q \\cdot a_n$ לכל $n \\geq 1$\n\nהסדרה **גדלה** כש-$|q| > 1$, **דועכת** לאפס כש-$|q| < 1$, ו**קבועה** כש-$q = 1$ (או מתחלפת בסימן כש-$q = -1$).\n\n**האיבר ה-$n$ (לשינון לבגרות):**\n$$\\boxed{a_n = a_1 \\cdot q^{n-1}}$$\n\n**סכום $n$ האיברים הראשונים ($q \\neq 1$):**\n$$\\boxed{S_n = a_1 \\cdot \\frac{1 - q^n}{1 - q}}$$\n\n**סכום אינסופי (רק כאשר $|q| < 1$):**\n$$\\boxed{S_{\\infty} = \\frac{a_1}{1 - q}}$$\n\n**מציאת $q$ מאיברים עוקבים:** $q = a_{n+1}/a_n$ (אמתו לפחות שני יחסים).\n\n**מציאת $q$ משני איברים ממוספרים** $a_k$ ו-$a_m$ ($m \\neq k$):\n$$q^{m-k} = \\frac{a_m}{a_k} \\implies q = \\left(\\frac{a_m}{a_k}\\right)^{\\!1/(m-k)}$$\n\n**מציאת $n$ כש-$a_n$ ידוע:** פתרון $a_1 q^{n-1} = a_n$ בלוגריתמים או בהשוואת חזקות — $n$ חייב להיות **שלם חיובי**."
+    },
+    {
+      "kind": "theory",
+      "title_en": "When Does the Infinite Sum Converge?",
+      "title_he": "מתי הסכום האינסופי מתכנס?",
+      "body_en_md": "Imagine adding the terms of a geometric sequence forever. If $|q| \\ge 1$, the terms do not shrink to zero — when $q > 1$ they grow, when $q = -1$ they alternate in sign — so the partial sums do not settle on a finite number. The series **diverges**.\n\nBut if $|q| < 1$, each term is smaller in magnitude than the previous one and $q^n \\to 0$ as $n \\to \\infty$. The partial sums $S_n = a_1 \\frac{1-q^n}{1-q}$ approach a **finite limit** because the $q^n$ term vanishes:\n$$S_{\\infty} = \\lim_{n\\to\\infty} a_1 \\cdot \\frac{1 - q^n}{1 - q} = \\frac{a_1}{1 - q}, \\quad |q| < 1$$\n\n**Classic example (Zeno-style):** $1 + \\frac{1}{2} + \\frac{1}{4} + \\frac{1}{8} + \\cdots = \\frac{1}{1 - \\frac{1}{2}} = 2$. Infinitely many positive terms, yet the total is exactly 2.\n\n**Why the condition matters:** For $q = 0.9$, terms shrink; for $q = 1.1$, terms grow and $S_n$ blows up. Always check $|q| < 1$ **before** writing $S_\\infty$ — using the formula when $|q| \\ge 1$ is a zero-mark error on Bagrut.\n\n**Partial sums as preview:** $S_1 = 1$, $S_2 = 1.5$, $S_3 = 1.75$, $S_4 = 1.875$, … each step adds less, creeping toward 2.\n\n**Connection to exponents:** The decay $q^n \\to 0$ for $|q|<1$ is the same idea behind `concept:exponents` and compound decay models in physics.",
+      "body_he_md": "דמיינו חיבור של איברי סדרה הנדסית לאינסוף. אם $|q| \\ge 1$, האיברים לא מתכווצים לאפס — כש-$q > 1$ הם גדלים, כש-$q = -1$ הסימן מתחלף — ולכן הסכומים החלקיים לא נשארים על מספר סופי. הטור **מתבדר**.\n\nאבל אם $|q| < 1$, כל איבר קטן בערך מוחלט מהקודם ו-$q^n \\to 0$ כש-$n \\to \\infty$. הסכומים החלקיים $S_n = a_1 \\frac{1-q^n}{1-q}$ מתקרבים ל**גבול סופי** כי האיבר $q^n$ נעלם:\n$$S_{\\infty} = \\lim_{n\\to\\infty} a_1 \\cdot \\frac{1 - q^n}{1 - q} = \\frac{a_1}{1 - q}, \\quad |q| < 1$$\n\n**דוגמה קלאסית (סגנון זנון):** $1 + \\frac{1}{2} + \\frac{1}{4} + \\frac{1}{8} + \\cdots = \\frac{1}{1 - \\frac{1}{2}} = 2$. אינסוף איברים חיוביים, ובכל זאת הסכום בדיוק 2.\n\n**למה התנאי חשוב:** ל-$q = 0.9$ האיברים קטנים; ל-$q = 1.1$ הם גדלים ו-$S_n$ מתפוצץ. תמיד בדקו $|q| < 1$ **לפני** כתיבת $S_\\infty$ — שימוש בנוסחה כש-$|q| \\ge 1$ הוא טעות שמורידה נקודות בבגרות.\n\n**סכומים חלקיים כתצוגה מקדימה:** $S_1 = 1$, $S_2 = 1.5$, $S_3 = 1.75$, $S_4 = 1.875$, … כל צעד מוסיף פחות, מתקרב ל-2.\n\n**קשר לחזקות:** הדעיכה $q^n \\to 0$ ל-$|q|<1$ היא אותה רעיון כמו ב-`concept:exponents` ובמודלי דעיכה בפיזיקה."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Finding the 5th Term",
+      "title_he": "דוגמה פתורה 1 — מציאת האיבר החמישי",
+      "body_en_md": "**Sequence:** $2, 6, 18, 54, \\ldots$\n\n**Find:** $a_5$.\n\nThis is the standard nth-term problem on Bagrut papers: identify $a_1$ and $q$, verify the ratio is constant, then substitute into $a_n = a_1 q^{n-1}$. Always write $a_1$ and $q$ on your page before substituting — examiners award method marks for correct setup even if arithmetic slips later.\n\n### Move 1 — Identify $a_1$ and $q$\n$$a_1 = 2, \\quad q = \\frac{6}{2} = 3$$\n\n**Verify:** $6 \\to 18$: ratio $= 3$ ✓; $18 \\to 54$: ratio $= 3$ ✓. A constant ratio confirms the sequence is geometric.\n\n### Move 2 — Apply the nth-term formula\nThere are four multiplicative steps from term 1 to term 5, so use $(5-1)$ in the exponent:\n$$a_5 = a_1 \\cdot q^{5-1} = 2 \\cdot 3^4 = 2 \\cdot 81 = 162$$\n\n**Answer:** $a_5 = 162$.\n\n**Sanity check:** List a few terms: $2, 6, 18, 54, 162$ ✓. Each term is triple the previous. On Bagrut papers, writing the formula line before substituting earns method marks even if arithmetic slips later.",
+      "body_he_md": "**סדרה:** $2, 6, 18, 54, \\ldots$\n\n**מצאו:** $a_5$.\n\nזו בעיית איבר-n סטנדרטית בבגרות: זיהוי $a_1$ ו-$q$, אימות שהמנה קבועה, והצבה ב-$a_n = a_1 q^{n-1}$. תמיד כתבו $a_1$ ו-$q$ לפני הצבה — מורידים נקודות שיטה על הגדרה נכונה גם אם יש טעות חישוב.\n\n### צעד 1 — זיהוי $a_1$ ו-$q$\n$$a_1 = 2, \\quad q = \\frac{6}{2} = 3$$\n\n**אימות:** $6 \\to 18$: מנה $= 3$ ✓; $18 \\to 54$: מנה $= 3$ ✓. מנה קבועה מאשרת שהסדרה הנדסית.\n\n### צעד 2 — שימוש בנוסחת האיבר\nיש ארבעה צעדי כפל מאיבר 1 לאיבר 5, לכן $(5-1)$ במעריך:\n$$a_5 = a_1 \\cdot q^{5-1} = 2 \\cdot 3^4 = 2 \\cdot 81 = 162$$\n\n**תשובה:** $a_5 = 162$.\n\n**בדיקת הגיון:** רשימה: $2, 6, 18, 54, 162$ ✓. כל איבר פי 3 מהקודם. בבחינה, כתיבת שורת הנוסחה לפני הצבה מזכה בנקודות שיטה גם כשיש טעות חישוב קטנה."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "For the sequence $5, 10, 20, 40, \\ldots$: find $a_6$ and $S_4$.",
+      "body_he_md": "עבור הסדרה $5, 10, 20, 40, \\ldots$: מצאו $a_6$ ו-$S_4$.",
+      "checkpoint_solution_en": "**Step 1 — Parameters:** $a_1 = 5$, $q = \\dfrac{10}{5} = 2$.\n\n**Step 2 — Sixth term:** $a_6 = 5 \\cdot 2^{5} = 5 \\cdot 32 = 160$.\n\n**Step 3 — Sum of 4 terms:** $S_4 = 5 \\cdot \\dfrac{1 - 2^4}{1 - 2} = 5 \\cdot \\dfrac{-15}{-1} = 75$.\n\n**Answers:** $a_6 = 160$, $S_4 = 75$. Quick check: $5 + 10 + 20 + 40 = 75$ ✓",
+      "checkpoint_solution_he": "**שלב 1 — פרמטרים:** $a_1 = 5$, $q = \\dfrac{10}{5} = 2$.\n\n**שלב 2 — איבר 6:** $a_6 = 5 \\cdot 2^{5} = 5 \\cdot 32 = 160$.\n\n**שלב 3 — סכום 4 איברים:** $S_4 = 5 \\cdot \\dfrac{1 - 2^4}{1 - 2} = 5 \\cdot \\dfrac{-15}{-1} = 75$.\n\n**תשובות:** $a_6 = 160$, $S_4 = 75$. בדיקה: $5 + 10 + 20 + 40 = 75$ ✓"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Infinite Sum",
+      "title_he": "דוגמה פתורה 2 — סכום אינסופי",
+      "body_en_md": "**Given:** $a_1 = 100$, $q = 0.5$.\n\n**Find:** $S_\\infty$.\n\nInfinite-sum problems always start with a convergence check — Bagrut examiners expect you to state $|q| < 1$ before applying the formula. Skipping this step loses a method mark even when the final number is correct.\n\n### Move 1 — Check convergence\n$|q| = 0.5 < 1$ ✓ — the series converges and $S_\\infty$ exists.\n\n### Move 2 — Apply the infinite-sum formula\n$$S_\\infty = \\frac{a_1}{1 - q} = \\frac{100}{1 - 0.5} = \\frac{100}{0.5} = 200$$\n\n**Interpretation:** Adding all terms of the sequence $100, 50, 25, 12.5, \\ldots$ forever gives exactly $200$.\n\n### Move 3 — Verify with partial sums\n$S_1 = 100$, $S_2 = 150$, $S_3 = 175$, $S_4 = 187.5$, $S_5 = 193.75$, … approaching 200.\n\n**Answer:** $S_\\infty = 200$.\n\n**Bagrut tip:** If the question asks \"does it converge?\" write yes/no first, then compute $S_\\infty$ only when $|q| < 1$. Stating the convergence condition explicitly is worth a method mark on its own.",
+      "body_he_md": "**נתון:** $a_1 = 100$, $q = 0.5$.\n\n**מצאו:** $S_\\infty$.\n\nבעיות סכום אינסופי מתחילות תמיד בבדיקת התכנסות — בבגרות מצפים שתציינו $|q| < 1$ לפני הנוסחה. דילוג על שלב זה מוריד נקודת שיטה גם כשהמספר הסופי נכון.\n\n### צעד 1 — בדיקת התכנסות\n$|q| = 0.5 < 1$ ✓ — הטור מתכנס ו-$S_\\infty$ קיים.\n\n### צעד 2 — שימוש בנוסחת הסכום האינסופי\n$$S_\\infty = \\frac{a_1}{1 - q} = \\frac{100}{1 - 0.5} = \\frac{100}{0.5} = 200$$\n\n**פרשנות:** חיבור כל איברי הסדרה $100, 50, 25, 12.5, \\ldots$ לאינסוף נותן בדיוק $200$.\n\n### צעד 3 — אימות בסכומים חלקיים\n$S_1 = 100$, $S_2 = 150$, $S_3 = 175$, $S_4 = 187.5$, $S_5 = 193.75$, … מתקרב ל-200.\n\n**תשובה:** $S_\\infty = 200$.\n\n**טיפ לבגרות:** אם שואלים \"האם מתכנס?\" — כתבו כן/לא קודם, וחשבו $S_\\infty$ רק כש-$|q| < 1$. ציון מפורש של תנאי ההתכנסות שווה נקודת שיטה בפני עצמו."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A geometric series has $a_1 = 30$ and $q = 1/3$. Find $S_\\infty$.",
+      "body_he_md": "לטור הנדסי $a_1 = 30$ ו-$q = 1/3$. מצאו $S_\\infty$.",
+      "checkpoint_solution_en": "**Step 1 — Convergence:** $|q| = \\tfrac{1}{3} < 1$ ✓, so $S_\\infty$ exists.\n\n**Step 2 — Apply formula:** $S_\\infty = \\dfrac{30}{1 - \\tfrac{1}{3}} = \\dfrac{30}{\\tfrac{2}{3}} = 30 \\times \\tfrac{3}{2} = 45$.\n\n**Verify:** $30 + 10 + \\tfrac{10}{3} + \\cdots$ — partial sums $30, 40, 43.\\overline{3}, \\ldots$ creep toward 45.\n\n**Answer:** $S_\\infty = 45$.",
+      "checkpoint_solution_he": "**שלב 1 — התכנסות:** $|q| = \\tfrac{1}{3} < 1$ ✓, לכן $S_\\infty$ קיים.\n\n**שלב 2 — נוסחה:** $S_\\infty = \\dfrac{30}{1 - \\tfrac{1}{3}} = \\dfrac{30}{\\tfrac{2}{3}} = 30 \\times \\tfrac{3}{2} = 45$.\n\n**אימות:** $30 + 10 + \\tfrac{10}{3} + \\cdots$ — סכומים חלקיים $30, 40, 43.\\overline{3}, \\ldots$ מתקרבים ל-45.\n\n**תשובה:** $S_\\infty = 45$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Bank Account with Annual Deposits",
+      "title_he": "דוגמה פתורה 3 — חשבון בנק עם הפקדות שנתיות",
+      "body_en_md": "**Problem:** 1000₪ is deposited at the start of each year into an account earning 3% annual interest. What is the total after 10 years (just before the 11th deposit)?\n\nThis is a classic **annuity** problem: each deposit grows with compound interest for a different number of years. The trick is to recognise the resulting sum as a geometric series — a staple of Bagrut 4-point finance questions.\n\n### Move 1 — Model each deposit's growth\n- Deposit 1 grows for 10 years: $1000 \\cdot (1.03)^{10}$\n- Deposit 2 grows for 9 years: $1000 \\cdot (1.03)^9$\n- …\n- Deposit 10 grows for 1 year: $1000 \\cdot (1.03)^1$\n\n**Total:**\n$$S = 1000 \\cdot (1.03)^1 + 1000 \\cdot (1.03)^2 + \\cdots + 1000 \\cdot (1.03)^{10}$$\n\n### Move 2 — Identify geometric series parameters\nThis is a geometric series with $a_1 = 1000 \\cdot 1.03 = 1030$, $q = 1.03$, $n = 10$.\n\n### Move 3 — Apply the finite sum formula\n$$S_{10} = 1030 \\cdot \\frac{1 - (1.03)^{10}}{1 - 1.03} = 1030 \\cdot \\frac{1 - 1.3439}{-0.03}$$\n$$= 1030 \\cdot \\frac{-0.3439}{-0.03} = 1030 \\cdot 11.464 \\approx 11{,}808 \\text{ NIS}$$\n\n**Answer:** Approximately **11,808₪** total after 10 years.\n\n*Note: $(1.03)^{10} \\approx 1.3439$ — use a calculator in the exam.*",
+      "body_he_md": "**בעיה:** 1000₪ מופקדים בתחילת כל שנה לחשבון הצובר 3% ריבית שנתית. מה הסכום הכולל לאחר 10 שנים (רגע לפני ההפקדה ה-11)?\n\nזו בעיית **אנואיטה** קלאסית: כל הפקדה צוברת ריבית דריבות למספר שונה של שנים. הטריק הוא לזהות שהסכום הוא טור הנדסי — נפוץ בשאלות פיננסיות בבגרות 4 יחידות.\n\n### צעד 1 — מודל לצמיחת כל הפקדה\n- הפקדה 1 צומחת 10 שנים: $1000 \\cdot (1.03)^{10}$\n- הפקדה 2 צומחת 9 שנים: $1000 \\cdot (1.03)^9$\n- …\n- הפקדה 10 צומחת שנה: $1000 \\cdot (1.03)^1$\n\n**סה\"כ:**\n$$S = 1000 \\cdot (1.03)^1 + 1000 \\cdot (1.03)^2 + \\cdots + 1000 \\cdot (1.03)^{10}$$\n\n### צעד 2 — זיהוי פרמטרי הטור ההנדסי\nטור הנדסי עם $a_1 = 1030$, $q = 1.03$, $n = 10$.\n\n### צעד 3 — נוסחת הסכום הסופי\n$$S_{10} = 1030 \\cdot \\frac{1 - (1.03)^{10}}{1 - 1.03} = 1030 \\cdot \\frac{0.3439}{0.03} \\approx 1030 \\cdot 11.464 \\approx 11{,}808 \\text{ NIS}$$\n\n**תשובה:** כ-**11,808₪** לאחר 10 שנים.\n\n*הערה: $(1.03)^{10} \\approx 1.3439$ — השתמשו במחשבון בבחינה.*"
+    },
+    {
+      "kind": "theory",
+      "title_en": "When |r| < 1, an Infinite Sum Is Finite — the Most Surprising Idea in Sequences",
+      "title_he": "כאשר |r| < 1, סכום אינסופי הוא סופי — הרעיון המפתיע ביותר בסדרות",
+      "body_en_md": "A geometric sequence multiplies by a fixed ratio $r$ each step. The genuinely surprising consequence — one that troubled the ancient Greeks — is that when the terms shrink fast enough, you can add **infinitely many** of them and still get a **finite** total. Understanding why unlocks the infinite geometric series, a tool used everywhere from finance to physics.\n\n### The finite sum, and where its formula comes from\nFor $n$ terms starting at $a_1$ with ratio $r$, the sum is\n$$S_n=a_1\\frac{1-r^n}{1-r}\\quad(r\\ne 1).$$\nThis isn't magic: multiply $S_n$ by $r$, subtract, and almost everything cancels (a **telescoping** trick) — leaving just $a_1(1-r^n)$ over $(1-r)$. The whole formula is one clever subtraction.\n\n### The leap to infinity: what happens to rⁿ\nNow watch $r^n$ as $n\\to\\infty$. If $|r|<1$ (say $r=\\tfrac12$), then $r^n$ shrinks toward **zero** — $\\tfrac12,\\tfrac14,\\tfrac18,\\ldots$ vanishes. Drop the vanishing $r^n$ term and the finite formula collapses to\n$$S_\\infty=\\frac{a_1}{1-r}\\quad(|r|<1).$$\nThe infinite sum is finite because the terms die off geometrically fast — each addition contributes a fixed *fraction* of what remains, so the total closes in on a ceiling it never exceeds. This is Zeno's paradox resolved: $\\tfrac12+\\tfrac14+\\tfrac18+\\cdots=1$, exactly.\n\n### The convergence condition is everything\nThe formula $S_\\infty=\\tfrac{a_1}{1-r}$ works **only when $|r|<1$.** If $|r|\\ge1$ the terms don't shrink (they stay the same size or grow), so the partial sums run off to infinity — the series **diverges** and no finite total exists. Always check $|r|<1$ before applying the infinite-sum formula; forgetting this is the classic error.\n\n### Geometric vs arithmetic: multiply vs add\nKeep the contrast sharp: arithmetic sequences **add** $d$ (linear growth, graph is a line, sums grow like $n^2$); geometric sequences **multiply** by $r$ (exponential growth or decay, graph curves, sums can even be finite when infinite). Spotting whether a real situation adds or multiplies each step tells you instantly which toolkit to reach for — compound interest and populations are geometric; steady savings and stacking are arithmetic.",
+      "body_he_md": "סדרה הנדסית מכפילה ביחס קבוע $r$ בכל צעד. התוצאה המפתיעה באמת — שהטרידה את היוונים הקדמונים — היא שכאשר האיברים מתכווצים מהר מספיק, אפשר לחבר **אינסוף** מהם ועדיין לקבל סכום **סופי**. הבנת מדוע פותחת את הטור ההנדסי האינסופי, כלי בשימוש בכל מקום ממימון ועד פיזיקה.\n\n### הסכום הסופי, ומהיכן נוסחתו מגיעה\nעבור $n$ איברים המתחילים ב-$a_1$ עם יחס $r$, הסכום הוא\n$$S_n=a_1\\frac{1-r^n}{1-r}\\quad(r\\ne 1).$$\nזה אינו קסם: הכפילו את $S_n$ ב-$r$, חסרו, וכמעט הכול מצטמצם (טריק **טלסקופי**) — משאיר רק $a_1(1-r^n)$ על $(1-r)$. כל הנוסחה היא חיסור חכם אחד.\n\n### הקפיצה לאינסוף: מה קורה ל-rⁿ\nכעת התבוננו ב-$r^n$ כאשר $n\\to\\infty$. אם $|r|<1$ (נאמר $r=\\tfrac12$), אז $r^n$ מתכווץ לעבר **אפס** — $\\tfrac12,\\tfrac14,\\tfrac18,\\ldots$ נעלם. השמיטו את איבר $r^n$ הנעלם והנוסחה הסופית מתמוטטת ל\n$$S_\\infty=\\frac{a_1}{1-r}\\quad(|r|<1).$$\nהסכום האינסופי סופי כי האיברים גוועים מהר גיאומטרית — כל הוספה תורמת *שבר* קבוע ממה שנשאר, ולכן הסכום מתקרב לתקרה שלעולם אינו עובר. זהו פרדוקס זנון שנפתר: $\\tfrac12+\\tfrac14+\\tfrac18+\\cdots=1$, בדיוק.\n\n### תנאי ההתכנסות הוא הכול\nהנוסחה $S_\\infty=\\tfrac{a_1}{1-r}$ עובדת **רק כאשר $|r|<1$.** אם $|r|\\ge1$ האיברים אינם מתכווצים (הם נשארים באותו גודל או גדלים), ולכן הסכומים החלקיים בורחים לאינסוף — הטור **מתבדר** ואין סכום סופי. תמיד בדקו $|r|<1$ לפני החלת נוסחת הסכום האינסופי; שכחת זה היא הטעות הקלאסית.\n\n### הנדסי מול חשבוני: כפל מול חיבור\nשמרו על הניגוד חד: סדרות חשבוניות **מוסיפות** $d$ (צמיחה לינארית, הגרף ישר, סכומים גדלים כמו $n^2$); סדרות הנדסיות **מכפילות** ב-$r$ (צמיחה או דעיכה מעריכית, הגרף מתעקל, סכומים יכולים אפילו להיות סופיים כשאינסופיים). זיהוי אם מצב אמיתי מוסיף או מכפיל בכל צעד אומר לכם מיד לאיזה ארגז כלים להושיט יד — ריבית דריבית ואוכלוסיות הנדסיות; חיסכון קבוע וערימה חשבוניים."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 5,
+      "title_en": "Worked Example 5 — A Finite Sum and an Infinite One",
+      "title_he": "דוגמה פתורה 5 — סכום סופי ואחד אינסופי",
+      "body_en_md": "**Problem.** For the geometric series with $a_1=8$ and $r=\\tfrac12$: (a) find the sum of the first $5$ terms; (b) find the infinite sum; (c) explain why the infinite sum exists.\n\n### Step 1: (a) Apply the finite-sum formula\n$$S_5=a_1\\frac{1-r^5}{1-r}=8\\cdot\\frac{1-(\\tfrac12)^5}{1-\\tfrac12}=8\\cdot\\frac{1-\\tfrac{1}{32}}{\\tfrac12}.$$\n\n### Step 2: Simplify\n$$=8\\cdot\\frac{\\tfrac{31}{32}}{\\tfrac12}=8\\cdot\\frac{31}{32}\\cdot 2=8\\cdot\\frac{31}{16}=\\frac{248}{16}=15.5.$$\nCheck by listing: $8+4+2+1+0.5=15.5$. ✓\n\n### Step 3: (b) Check the convergence condition first\n$|r|=\\tfrac12<1$, so the infinite series **converges** and the formula applies.\n\n### Step 4: Apply the infinite-sum formula\n$$S_\\infty=\\frac{a_1}{1-r}=\\frac{8}{1-\\tfrac12}=\\frac{8}{\\tfrac12}=16.$$\n\n### Step 5: (c) Why it exists\nEach term is half the previous one, so the running total climbs toward $16$ but each step adds less and less ($15.5$ after five terms, then $15.75$, $15.875$, …). The gap to $16$ halves every step and never reopens — the sum has a finite ceiling of $16$.\n\n**Answer:** (a) $S_5=15.5$; (b) $S_\\infty=16$; (c) it converges because $|r|=\\tfrac12<1$, so terms shrink to zero and the total approaches a finite limit.",
+      "body_he_md": "**בעיה.** עבור הטור ההנדסי עם $a_1=8$ ו-$r=\\tfrac12$: (א) מצאו את סכום $5$ האיברים הראשונים; (ב) מצאו את הסכום האינסופי; (ג) הסבירו מדוע הסכום האינסופי קיים.\n\n### שלב 1: (א) החילו את נוסחת הסכום הסופי\n$$S_5=a_1\\frac{1-r^5}{1-r}=8\\cdot\\frac{1-(\\tfrac12)^5}{1-\\tfrac12}=8\\cdot\\frac{1-\\tfrac{1}{32}}{\\tfrac12}.$$\n\n### שלב 2: פשטו\n$$=8\\cdot\\frac{\\tfrac{31}{32}}{\\tfrac12}=8\\cdot\\frac{31}{32}\\cdot 2=8\\cdot\\frac{31}{16}=\\frac{248}{16}=15.5.$$\nבדקו ברשימה: $8+4+2+1+0.5=15.5$. ✓\n\n### שלב 3: (ב) בדקו תחילה את תנאי ההתכנסות\n$|r|=\\tfrac12<1$, ולכן הטור האינסופי **מתכנס** והנוסחה חלה.\n\n### שלב 4: החילו את נוסחת הסכום האינסופי\n$$S_\\infty=\\frac{a_1}{1-r}=\\frac{8}{1-\\tfrac12}=\\frac{8}{\\tfrac12}=16.$$\n\n### שלב 5: (ג) מדוע הוא קיים\nכל איבר הוא חצי מהקודם, ולכן הסכום המצטבר מטפס לעבר $16$ אך כל צעד מוסיף פחות ופחות ($15.5$ אחרי חמישה איברים, ואז $15.75$, $15.875$, …). הפער ל-$16$ מתחצה בכל צעד ולעולם אינו נפתח מחדש — לסכום תקרה סופית של $16$.\n\n**תשובה:** (א) $S_5=15.5$; (ב) $S_\\infty=16$; (ג) הוא מתכנס כי $|r|=\\tfrac12<1$, ולכן האיברים מתכווצים לאפס והסכום מתקרב לגבול סופי."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Geometric Sequences",
+      "title_he": "מדריך שיטה — סדרות הנדסיות",
+      "body_en_md": "| Task | Method |\n|------|--------|\n| Find $q$ | $q = a_2/a_1$ (or $q^{m-k} = a_m/a_k$) |\n| Find $a_n$ | $a_n = a_1 \\cdot q^{n-1}$ |\n| Find $S_n$ | $S_n = a_1 \\cdot \\frac{1-q^n}{1-q}$ (if $q \\ne 1$) |\n| Find $S_\\infty$ | Only if $|q|<1$: $S_\\infty = \\frac{a_1}{1-q}$ |\n| Check geometric | All consecutive ratios must be equal |\n| Finance problems | Each deposit/period is one term; use $S_n$ |\n| Find $n$ from $a_n$ | Solve $a_1 q^{n-1} = \\text{target}$; $n$ must be integer |\n\n**Decision flow:** (1) Label $a_1$, $q$, and what is asked. (2) Pick the row above. (3) Write the formula before numbers. (4) Verify — recompute $a_n$ or check $|q|<1$ before $S_\\infty$.\n\n**Word problems:** \"Multiplies by the same factor each period\" $\\to$ geometric; \"grows by the same amount\" $\\to$ arithmetic (`concept:sequences_arithmetic`).",
+      "body_he_md": "| משימה | שיטה |\n|-------|------|\n| מציאת $q$ | $q = a_2/a_1$ (או $q^{m-k} = a_m/a_k$) |\n| מציאת $a_n$ | $a_n = a_1 \\cdot q^{n-1}$ |\n| מציאת $S_n$ | $S_n = a_1 \\cdot \\frac{1-q^n}{1-q}$ (אם $q \\ne 1$) |\n| מציאת $S_\\infty$ | רק אם $|q|<1$: $S_\\infty = \\frac{a_1}{1-q}$ |\n| בדיקה הנדסית | כל יחסי עוקבים חייבים להיות שווים |\n| בעיות פיננסיות | כל הפקדה/תקופה היא איבר אחד; השתמשו ב-$S_n$ |\n| מציאת $n$ מ-$a_n$ | פתרון $a_1 q^{n-1} = \\text{target}$; $n$ חייב שלם |\n\n**זרימת החלטות:** (1) סמנו $a_1$, $q$, ומה מבוקש. (2) בחרו שורה מהטבלה. (3) כתבו נוסחה לפני מספרים. (4) אמתו — חשבו $a_n$ מחדש או בדקו $|q|<1$ לפני $S_\\infty$.\n\n**בעיות מילים:** \"מוכפל באותו גורם בכל תקופה\" $\\to$ הנדסית; \"גדל באותו סכום\" $\\to$ חשבונית (`concept:sequences_arithmetic`)."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים לתרגול",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer. For each problem, start by writing $a_1$, $q$, and $n$ (or the target you need to find) before touching the formulas.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית. בכל בעיה, התחילו בכתיבת $a_1$, $q$, ו-$n$ (או היעד שצריך למצוא) לפני שימוש בנוסחאות.",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Is $3, 6, 12, 24, \\ldots$ geometric? If so, find $a_1$ and $q$.",
+          "body_he": "האם $3, 6, 12, 24, \\ldots$ הנדסית? אם כן, מצאו $a_1$ ו-$q$.",
+          "solution_en": "Yes: 6/3 = 12/6 = 2. a₁ = 3, q = 2.",
+          "solution_he": "כן: 6/3 = 12/6 = 2. a₁ = 3, q = 2.",
+          "points": 4
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Find $a_6$ for the sequence $1, 3, 9, 27, \\ldots$",
+          "body_he": "מצאו $a_6$ עבור הסדרה $1, 3, 9, 27, \\ldots$",
+          "solution_en": "q = 3. a₆ = 1·3⁵ = 243.",
+          "solution_he": "q = 3. a₆ = 1·3⁵ = 243.",
+          "points": 4
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Find $S_5$ for the sequence $4, 12, 36, 108, 324$.",
+          "body_he": "מצאו $S_5$ עבור הסדרה $4, 12, 36, 108, 324$.",
+          "solution_en": "a₁=4, q=3. S₅=4·(1−3⁵)/(1−3)=4·(−242)/(−2)=4·121=484.",
+          "solution_he": "a₁=4, q=3. S₅=4·(1−3⁵)/(1−3)=4·(−242)/(−2)=4·121=484.",
+          "points": 4
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Does the series $10 + 1 + 0.1 + 0.01 + \\cdots$ converge? If so, find $S_\\infty$.",
+          "body_he": "האם הטור $10 + 1 + 0.1 + 0.01 + \\cdots$ מתכנס? אם כן, מצאו $S_\\infty$.",
+          "solution_en": "q = 0.1, |q| < 1. S∞ = 10/(1−0.1) = 10/0.9 = 100/9 ≈ 11.11.",
+          "solution_he": "q = 0.1, |q| < 1. S∞ = 10/(1−0.1) = 10/0.9 = 100/9 ≈ 11.11.",
+          "points": 4
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "A geometric sequence has $a_1 = 4$ and $a_4 = 32$. Find $q$, $a_7$, and $S_5$.",
+          "body_he": "לסדרה הנדסית $a_1 = 4$ ו-$a_4 = 32$. מצאו $q$, $a_7$ ו-$S_5$.",
+          "solution_en": "q³ = 32/4 = 8 → q = 2. a₇ = 4·2⁶ = 256. S₅ = 4·(1−2⁵)/(1−2) = 4·31 = 124.",
+          "solution_he": "q³ = 32/4 = 8 → q = 2. a₇ = 4·2⁶ = 256. S₅ = 4·(1−2⁵)/(1−2) = 4·31 = 124.",
+          "points": 7
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "A bouncing ball is dropped from 10 m. Each bounce reaches 60% of the previous height. Find the total distance the ball travels (up + down) after it first hits the ground.",
+          "body_he": "כדור מוטל מגובה 10 מ'. כל קפיצה מגיעה ל-60% מהגובה הקודם. מצאו את המרחק הכולל שהכדור עובר (מעלה + מטה) לאחר הפגיעה הראשונה בקרקע.",
+          "solution_en": "After first hit: goes up 6m, down 6m, up 3.6m, down 3.6m, ... Total = 2·(6+3.6+2.16+...) = 2·6/(1−0.6) = 2·15 = 30m.",
+          "solution_he": "אחרי פגיעה ראשונה: עולה 6מ', יורד 6מ', עולה 3.6מ', יורד 3.6מ', ... סה\"כ = 2·(6+3.6+...) = 2·6/(1−0.6) = 2·15 = 30 מ'.",
+          "points": 7
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "A geometric series has $S_\\infty = 24$ and $a_1 = 8$. Find $q$.",
+          "body_he": "לטור הנדסי $S_\\infty = 24$ ו-$a_1 = 8$. מצאו $q$.",
+          "solution_en": "8/(1−q) = 24 → 1−q = 1/3 → q = 2/3.",
+          "solution_he": "8/(1−q) = 24 → 1−q = 1/3 → q = 2/3.",
+          "points": 7
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Which term of $2, 6, 18, \\ldots$ equals $1458$?",
+          "body_he": "איזה איבר של $2, 6, 18, \\ldots$ שווה $1458$?",
+          "solution_en": "aₙ = 2·3^(n−1) = 1458 → 3^(n−1) = 729 = 3⁶ → n−1=6 → n=7.",
+          "solution_he": "aₙ = 2·3^(n−1) = 1458 → 3^(n−1) = 729 = 3⁶ → n−1=6 → n=7.",
+          "points": 7
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "A geometric sequence: $a_2 = 6$ and $a_5 = 48$. Find $a_1$, $q$, and $a_8$.",
+          "body_he": "סדרה הנדסית: $a_2 = 6$ ו-$a_5 = 48$. מצאו $a_1$, $q$ ו-$a_8$.",
+          "solution_en": "q³ = 48/6 = 8 → q = 2. a₁ = 6/2 = 3. a₈ = 3·2⁷ = 384.",
+          "solution_he": "q³ = 48/6 = 8 → q = 2. a₁ = 6/2 = 3. a₈ = 3·2⁷ = 384.",
+          "points": 7
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "A population of 500 bacteria doubles every 3 hours. (a) Write the formula for population after $t$ hours. (b) Population after 24 hours. (c) When does it exceed 10,000?",
+          "body_he": "אוכלוסיית 500 חיידקים מכפילה את עצמה כל 3 שעות. (א) כתבו נוסחה לאוכלוסייה אחרי $t$ שעות. (ב) האוכלוסייה אחרי 24 שעות. (ג) מתי עולה על 10,000?",
+          "solution_en": "(a) P(t) = 500·2^(t/3). (b) P(24) = 500·2⁸ = 500·256 = 128,000. (c) 500·2^(t/3) > 10000 → 2^(t/3) > 20 → t/3·log2 > log20 → t > 3·log20/log2 = 3·4.32 ≈ 13 hours.",
+          "solution_he": "(א) P(t) = 500·2^(t/3). (ב) P(24) = 500·2⁸ = 500·256 = 128,000. (ג) 500·2^(t/3) > 10000 → 2^(t/3) > 20 → t/3·log2 > log20 → t > 3·4.32 ≈ 13 שעות.",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Find the sum of the first 8 terms of a geometric sequence where $a_3 = 12$ and $a_6 = 96$.",
+          "body_he": "מצאו את סכום 8 האיברים הראשונים של סדרה הנדסית שבה $a_3 = 12$ ו-$a_6 = 96$.",
+          "solution_en": "q³ = 96/12 = 8 → q=2. a₁ = 12/4 = 3. S₈ = 3·(1−2⁸)/(1−2) = 3·255 = 765.",
+          "solution_he": "q³ = 96/12 = 8 → q=2. a₁ = 12/4 = 3. S₈ = 3·(1−2⁸)/(1−2) = 3·255 = 765.",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "A geometric sequence has $a_1 = 1$ and $q = 0.8$. How many terms must be taken for $S_n$ to exceed 95% of $S_\\infty$?",
+          "body_he": "לסדרה הנדסית $a_1 = 1$ ו-$q = 0.8$. כמה איברים צריך לקחת כדי ש-$S_n$ יעלה על 95% מ-$S_\\infty$?",
+          "solution_en": "S∞ = 1/(1−0.8) = 5. Need Sₙ > 4.75. Sₙ = (1−0.8ⁿ)/0.2 > 4.75 → 1−0.8ⁿ > 0.95 → 0.8ⁿ < 0.05. n·log0.8 < log0.05 → n > log0.05/log0.8 ≈ 13.4. So n = 14.",
+          "solution_he": "S∞ = 5. דרוש Sₙ > 4.75. (1−0.8ⁿ)/0.2 > 4.75 → 0.8ⁿ < 0.05. n·log0.8 < log0.05 → n > 13.4. לכן n = 14.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "A company's revenue grows by 15% per year. Revenue in year 1 is 200,000₪. (a) Revenue in year 5. (b) Total revenue over 5 years.",
+          "body_he": "הכנסות חברה גדלות ב-15% בשנה. הכנסות שנה 1 הן 200,000₪. (א) הכנסות בשנה 5. (ב) סה\"כ הכנסות ב-5 שנים.",
+          "solution_en": "(a) a₅ = 200000·(1.15)⁴ = 200000·1.749 ≈ 349,800₪. (b) S₅ = 200000·(1−1.15⁵)/(1−1.15) = 200000·(1−2.0114)/(−0.15) = 200000·6.742 ≈ 1,348,440₪.",
+          "solution_he": "(א) a₅ = 200000·(1.15)⁴ ≈ 349,800₪. (ב) S₅ = 200000·(1−1.15⁵)/(1−1.15) ≈ 200000·6.742 ≈ 1,348,440₪.",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Top 3 Mistakes to Avoid",
+      "title_he": "3 הטעויות הנפוצות ביותר",
+      "body_en_md": "**Mistake 1 — Using the arithmetic formula for a geometric sequence.**\nIn geometric sequences you MULTIPLY, not add: $a_n = a_1 \\cdot q^{n-1}$, not $a_1 + (n-1)q$. If consecutive terms have a constant **ratio** (not difference), reach for the geometric toolbox. Example: $2, 6, 18, 54$ has ratio 3, not difference 4.\n\n**Mistake 2 — Using the infinite sum formula when $|q| \\ge 1$.**\nThe formula $S_\\infty = a_1/(1-q)$ is only valid when $|q| < 1$. If $|q| \\ge 1$, the series diverges — there is no finite sum. Always write \"converges because $|q| < 1$\" before computing $S_\\infty$.\n\n**Mistake 3 — Error in the $q^{n-1}$ exponent.**\nThe first term has $n = 1$: $a_1 = a_1 \\cdot q^0 = a_1$ ✓. The exponent is $(n-1)$, not $n$. Writing $a_5 = a_1 q^5$ instead of $a_1 q^4$ is the most common off-by-one error on Bagrut papers.\n\n**Mistake 4 — Forgetting the initial drop in bouncing-ball problems.**\nThe total distance after the first bounce includes going up AND down for each subsequent bounce — multiply the infinite geometric sum by 2, and do not double-count the initial 10 m fall unless the question asks for it.",
+      "body_he_md": "**טעות 1 — שימוש בנוסחה החשבונית לסדרה הנדסית.**\nבסדרות הנדסיות **מכפלים**, לא מחברים: $a_n = a_1 \\cdot q^{n-1}$, לא $a_1 + (n-1)q$.\n\n**טעות 2 — שימוש בנוסחת הסכום האינסופי כאשר $|q| \\ge 1$.**\nהנוסחה $S_\\infty = a_1/(1-q)$ תקפה רק כאשר $|q| < 1$. אם $|q| \\ge 1$, הטור מתבדר — אין סכום סופי. תמיד כתבו \"מתכנס כי $|q| < 1$\" לפני חישוב $S_\\infty$.\n\n**טעות 3 — שגיאה במעריך $q^{n-1}$.**\nהאיבר הראשון הוא $n = 1$: $a_1 = a_1 \\cdot q^0 = a_1$ ✓. המעריך הוא $(n-1)$, לא $n$. כתיבת $a_5 = a_1 q^5$ במקום $a_1 q^4$ היא הטעות הנפוצה ביותר בבגרות.\n\n**טעות 4 — שכחת הנפילה הראשונית בבעיות כדור מקפץ.**\nהמרחק הכולל אחרי הקפיצה הראשונה כולל עלייה וירידה — מכפילים את סכום הטור ההנדסי ב-2, ולא סופרים פעמיים את הנפילה הראשונית אלא אם השאלה מבקשת זאת."
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "Geometric sequences bridge pure algebra and real-world modelling — they are the mathematical language of **percent change**, **exponential growth**, and **decay**.\n\n**Connections in the knowledge graph:**\n- `concept:sequences_arithmetic` — the additive counterpart; Bagrut often pairs both in one exam.\n- `concept:exponents` — the $q^{n-1}$ term is pure exponent law; fluency here prevents formula errors.\n- `concept:probability_basic` — repeated independent trials use geometric decay of success probability.\n- `concept:logarithms` — finding $n$ when the target term is large requires $\\log$ or matching powers.\n\n**Why it matters for exams:** Bagrut 3- and 4-point papers regularly ask for $a_n$, $S_n$, and $S_\\infty$ in finance, population, and physics contexts. The bouncing-ball and annuity problems test whether you can **translate a story** into $a_1$, $q$, and $n$ — not just plug numbers into a formula.\n\n**Real-world impact:** Compound interest, viral spread models, half-life in nuclear physics, and signal attenuation all rely on geometric reasoning.",
+      "body_he_md": "סדרות הנדסיות מחברות אלגברה טהורה למידול מהעולם — הן שפת **המתמטיקה** של **שינוי באחוזים**, **גדילה מעריכית** ו**דעיכה**.\n\n**קשרים בגרף הידע:**\n- `concept:sequences_arithmetic` — המקבילה החיבורית; בבגרות מציגים לעיתים את שתיהן באותה בחינה.\n- `concept:exponents` — האיבר $q^{n-1}$ הוא חוק חזקות; שליטה כאן מונעת טעויות נוסחה.\n- `concept:probability_basic` — ניסויים בלתי תלויים חוזרים משתמשים בדעיכה הנדסית.\n- `concept:logarithms` — מציאת $n$ כשהאיבר גדול דורשת $\\log$ או השוואת חזקות.\n\n**למה זה חשוב לבחינות:** בבגרות 3 ו-4 יחידות שואלים לעיתים קרובות $a_n$, $S_n$ ו-$S_\\infty$ בהקשרים פיננסיים, אוכלוסייה ופיזיקה. בעיות כדור מקפץ ואנואיטה בודקות אם תוכלו **לתרגם סיפור** ל-$a_1$, $q$ ו-$n$ — לא רק להציב מספרים.\n\n**השפעה בעולם האמיתי:** ריבית דריבית, מודלי התפשטות, זמן מחצית חיים בפיזיקה גרעינית, ודעיכת אות — כולם מסתמכים על חשיבה הנדסית."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam — Formula Card",
+      "title_he": "לפני הבחינה — כרטיס נוסחאות",
+      "body_en_md": "**Key formulas:**\n- $n$th term: $a_n = a_1 \\cdot q^{n-1}$\n- Finite sum: $S_n = a_1 \\cdot \\dfrac{1-q^n}{1-q}$ (for $q \\ne 1$)\n- Infinite sum (only if $|q| < 1$): $S_\\infty = \\dfrac{a_1}{1-q}$\n- Ratio: $q = a_{n+1}/a_n$\n\n**Typical Bagrut 3pt patterns:**\n1. Find the $n$th term and a partial sum. (3–4 marks)\n2. Find $a_1$ and $q$ from two given terms. (3–4 marks)\n3. Finance or real-life word problem using $S_n$ or $S_\\infty$. (4–5 marks)\n\n**Marking tips:** Always compute $q$ first and state it. For $S_n$: write the formula, then substitute. Remember: $|q|<1$ is required for $S_\\infty$. On 4-point papers, finance and bouncing-ball word problems often combine $a_n$ and $S_n$ in one multi-part question.",
+      "body_he_md": "**נוסחאות מרכזיות:**\n- האיבר ה-$n$: $a_n = a_1 \\cdot q^{n-1}$\n- סכום סופי: $S_n = a_1 \\cdot \\dfrac{1-q^n}{1-q}$ (עבור $q \\ne 1$)\n- סכום אינסופי (רק אם $|q| < 1$): $S_\\infty = \\dfrac{a_1}{1-q}$\n- מנה: $q = a_{n+1}/a_n$\n\n**דפוסי שאלות טיפוסיות בבגרות 3 יח':**\n1. מציאת האיבר ה-$n$ וסכום חלקי. (3–4 נקודות)\n2. מציאת $a_1$ ו-$q$ משני איברים נתונים. (3–4 נקודות)\n3. בעיית מילים פיננסית עם $S_n$ או $S_\\infty$. (4–5 נקודות)\n\n**טיפים לניקוד:** תמיד חשבו $q$ ראשון וציינו אותו. ל-$S_n$: כתבו את הנוסחה, ואז הציבו. זכרו: $|q|<1$ נדרש ל-$S_\\infty$. ב-4 יחידות, בעיות מילים פיננסיות וכדור מקפץ משלבות לעיתים $a_n$ ו-$S_n$ בשאלה אחת."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Facet depth: last-N sums and odd/even index sums",
+      "title_he": "העמקת פנים: סכום N האחרונים וסכומי אינדקסים זוגיים/אי-זוגיים",
+      "body_en_md": "**Sum of the last $n$ terms.** For an arithmetic sequence with first term $a_1$ and common difference $d$, the last $n$ terms of the first $N$ terms ($n\\le N$) are $a_{N-n+1},\\ldots,a_N$. Their sum is\n$$S_{\\text{last }n}=\\frac{n}{2}\\bigl(a_{N-n+1}+a_N\\bigr)=S_N-S_{N-n}.$$\nFor a geometric sequence with ratio $r\\neq 1$, use $S_N-S_{N-n}$ with the usual geometric partial-sum formula.\n\n**Odd / even index sums.** The odd-indexed terms $a_1,a_3,a_5,\\ldots$ and even-indexed terms $a_2,a_4,a_6,\\ldots$ form new sequences. For arithmetic $a_k=a_1+(k-1)d$:\n- odd indices: first term $a_1$, common difference $2d$;\n- even indices: first term $a_2$, common difference $2d$.\nSum the first $m$ odd (or even) terms with the ordinary arithmetic-sum formula.\n\n**Recursion / MCT (when in scope).** A recursive rule $a_{n+1}=f(a_n)$ plus monotonicity+boundedness (MCT) is the 5pt path to proving convergence without an explicit closed form.",
+      "body_he_md": "**סכום $n$ האחרונים.** בסדרה חשבונית עם $a_1$ והפרש $d$, $n$ האיברים האחרונים מתוך $N$ הראשונים ($n\\le N$) הם $a_{N-n+1},\\ldots,a_N$. סכומם\n$$S_{\\text{last }n}=\\frac{n}{2}\\bigl(a_{N-n+1}+a_N\\bigr)=S_N-S_{N-n}.$$\nבסדרה הנדסית עם מנה $r\\neq 1$ משתמשים ב-$S_N-S_{N-n}$ עם נוסחת הסכום ההנדסי.\n\n**סכומי אינדקסים זוגיים / אי-זוגיים.** האיברים במקומות האי-זוגיים $a_1,a_3,\\ldots$ והזוגיים $a_2,a_4,\\ldots$ יוצרים סדרות חדשות. בחשבונית $a_k=a_1+(k-1)d$:\n- אי-זוגיים: איבר ראשון $a_1$, הפרש $2d$;\n- זוגיים: איבר ראשון $a_2$, הפרש $2d$.\nסכום $m$ הראשונים — בנוסחת סכום חשבונית רגילה.\n\n**נסיגה / MCT (כשבהיקף).** כלל $a_{n+1}=f(a_n)$ עם מונוטוניות+חסימות (MCT) הוא נתיב 5 יח׳ להוכחת התכנסות בלי נוסחה סגורה."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Geometric sequence:** each term = previous × $q$ (common ratio); multiply, never add.\n- **$n$th term:** $a_n = a_1 \\cdot q^{n-1}$ — remember $(n-1)$ powers from the first term.\n- **Finite sum:** $S_n = a_1 \\cdot \\frac{1-q^n}{1-q}$ for $q \\ne 1$; watch sign cancellation when $q>1$.\n- **Infinite sum:** $S_\\infty = \\frac{a_1}{1-q}$ exists only when $|q| < 1$ — state convergence first.\n- **Two-term problems:** $q^{m-k} = a_m/a_k$, then back-substitute for $a_1$.\n- **Word problems:** map the story to $a_1$, $q$, $n$; distinguish \"value at period $k$\" ($a_k$) from \"total over $k$ periods\" ($S_k$).",
+      "body_he_md": "- **סדרה הנדסית:** כל איבר = הקודם × $q$ (המנה); מכפילים, לא מחברים.\n- **איבר $n$:** $a_n = a_1 \\cdot q^{n-1}$ — זכרו $(n-1)$ חזקות מהאיבר הראשון.\n- **סכום סופי:** $S_n = a_1 \\cdot \\frac{1-q^n}{1-q}$ עבור $q \\ne 1$; שימו לב לביטול סימנים כש-$q>1$.\n- **סכום אינסופי:** $S_\\infty = \\frac{a_1}{1-q}$ קיים רק כש-$|q| < 1$ — ציינו התכנסות קודם.\n- **בעיות שני איברים:** $q^{m-k} = a_m/a_k$, ואז הצבה חוזרת ל-$a_1$.\n- **בעיות מילים:** מפו את הסיפור ל-$a_1$, $q$, $n$; הבדילו \"ערך בתקופה $k$\" ($a_k$) מ\"סה\"כ על $k$ תקופות\" ($S_k$)."
+    }
+  ],
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "geometric_infinite_sum",
+      "geometric_nth_term",
+      "geometric_ratio",
+      "geometric_sum"
+    ]
+  },
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "A geometric sequence has $a_1 = 2$ and ratio $q = 3$. Find $a_4$.",
+      "stem_he": "בסדרה הנדסית $a_1 = 2$ ומנה $q = 3$. מצאו את $a_4$.",
+      "explanation_en": "**Step 1 — Choose the formula.** The $n$th term of a geometric sequence multiplies the first term by $q$ raised to $(n-1)$: $a_n = a_1 q^{\\,n-1}$.\n\n**Step 2 — Count the multiplications.** Reaching term $4$ from term $1$ takes $4-1 = 3$ multiplications by $q$, so the exponent is $3$, not $4$.\n\n**Step 3 — Substitute.** $a_4 = 2\\cdot 3^3 = 2\\cdot 27 = 54$.\n\n**Answer:** $54$.",
+      "explanation_he": "**שלב 1 — בחרו את הנוסחה.** האיבר ה-$n$ של סדרה הנדסית מכפיל את האיבר הראשון ב-$q$ בחזקת $(n-1)$: $a_n = a_1 q^{\\,n-1}$.\n\n**שלב 2 — ספרו את ההכפלות.** הגעה לאיבר $4$ מאיבר $1$ לוקחת $4-1 = 3$ הכפלות ב-$q$, לכן המעריך הוא $3$, לא $4$.\n\n**שלב 3 — הצבה.** $a_4 = 2\\cdot 3^3 = 2\\cdot 27 = 54$.\n\n**תשובה:** $54$.",
+      "skill_atoms": [
+        "geometric_nth_term"
+      ],
+      "answer_payload": {
+        "value": 54
+      },
+      "source_item_id": "ea1728f4-64db-51d2-b9b3-94edb198e118",
+      "points_level_min": "3pt",
+      "correct_answer": "54",
+      "id": "sequences_geometric__4pt-q1"
+    },
+    {
+      "ord": 2,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "stem_en": "True or False: the sequence $2, 6, 18, 54, \\dots$ is geometric.",
+      "stem_he": "נכון או לא נכון: הסדרה $2, 6, 18, 54, \\dots$ היא הנדסית.",
+      "explanation_en": "**Step 1 — Recall the test.** A sequence is geometric exactly when the *ratio* of every pair of consecutive terms is the same constant $q$ (we divide, not subtract).\n\n**Step 2 — Check all ratios.** $6/2 = 3$, $18/6 = 3$, $54/18 = 3$ — every ratio equals $3$.\n\n**Step 3 — Conclude.** The common ratio is constant, so the sequence is geometric with $q = 3$.\n\n**Answer:** **true**.",
+      "explanation_he": "**שלב 1 — היזכרו במבחן.** סדרה היא הנדסית בדיוק כאשר ה*יחס* בין כל זוג איברים עוקבים הוא אותו קבוע $q$ (מחלקים, לא מחסרים).\n\n**שלב 2 — בדקו את כל היחסים.** $6/2 = 3$, $18/6 = 3$, $54/18 = 3$ — כל יחס שווה $3$.\n\n**שלב 3 — הסיקו.** המנה קבועה, ולכן הסדרה הנדסית עם $q = 3$.\n\n**תשובה:** **נכון**.",
+      "skill_atoms": [
+        "geometric_ratio"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "6c5535ee-a0ba-5a94-bdbc-8238d9cf38f3",
+      "points_level_min": "3pt",
+      "correct_bool": true,
+      "id": "sequences_geometric__4pt-q2"
+    },
+    {
+      "ord": 3,
+      "kind": "open",
+      "difficulty": "hard",
+      "needs_review": true,
+      "archetypes": [
+        "application"
+      ],
+      "stem_en": "A ball is dropped from $9$ m and each bounce reaches $\\tfrac13$ of the previous height. Find the total vertical distance the ball travels.",
+      "stem_he": "כדור מוטל מגובה $9$ מ' וכל קפיצה מגיעה ל-$\\tfrac13$ מהגובה הקודם. מצאו את המרחק האנכי הכולל שהכדור עובר.",
+      "explanation_en": "**Step 1 — Model.** Down $9$, then up-and-down each bounce: heights $3, 1, \\tfrac13, \\dots$\n\n**Step 2 — Two parts.** Total $= 9 + 2\\big(3 + 1 + \\tfrac13 + \\dots\\big)$.\n\n**Step 3 — Infinite geometric.** $3 + 1 + \\tfrac13 + \\dots = \\dfrac{3}{1 - \\tfrac13} = \\dfrac{3}{\\tfrac23} = 4.5$.\n\n**Step 4 — Combine.** $9 + 2\\cdot 4.5 = 18$.\n\n**Answer:** $18$ m.",
+      "explanation_he": "**שלב 1 — מידול.** ירידה $9$, ואז עלייה-וירידה בכל קפיצה: גבהים $3, 1, \\tfrac13, \\dots$\n\n**שלב 2 — שני חלקים.** סה\\\"כ $= 9 + 2\\big(3 + 1 + \\tfrac13 + \\dots\\big)$.\n\n**שלב 3 — טור הנדסי אינסופי.** $3 + 1 + \\tfrac13 + \\dots = \\dfrac{3}{\\tfrac23} = 4.5$.\n\n**שלב 4 — צירוף.** $9 + 9 = 18$.\n\n**תשובה:** $18$ מ'.",
+      "skill_atoms": [
+        "geometric_infinite_sum"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Model.** Down $9$, then up-and-down each bounce: heights $3, 1, \\tfrac13, \\dots$",
+          "**Step 2 — Two parts.** Total $= 9 + 2\\big(3 + 1 + \\tfrac13 + \\dots\\big)$.",
+          "**Step 3 — Infinite geometric.** $3 + 1 + \\tfrac13 + \\dots = \\dfrac{3}{1 - \\tfrac13} = \\dfrac{3}{\\tfrac23} = 4.5$.",
+          "**Step 4 — Combine.** $9 + 2\\cdot 4.5 = 18$.",
+          "**Answer:** $18$ m."
+        ],
+        "steps_he": [
+          "**שלב 1 — מידול.** ירידה $9$, ואז עלייה-וירידה בכל קפיצה: גבהים $3, 1, \\tfrac13, \\dots$",
+          "**שלב 2 — שני חלקים.** סה\\\"כ $= 9 + 2\\big(3 + 1 + \\tfrac13 + \\dots\\big)$.",
+          "**שלב 3 — טור הנדסי אינסופי.** $3 + 1 + \\tfrac13 + \\dots = \\dfrac{3}{\\tfrac23} = 4.5$.",
+          "**שלב 4 — צירוף.** $9 + 9 = 18$.",
+          "**תשובה:** $18$ מ'."
+        ]
+      },
+      "source_item_id": "f7925e8f-4cf5-52bd-8a45-0d1dd2a80116",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "4pt",
+      "id": "sequences_geometric__4pt-q3"
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Which sequence is geometric?",
+      "stem_he": "איזו סדרה היא הנדסית?",
+      "explanation_en": "**Step 1 — Apply the constant-ratio test to each option.** $3,6,12,24$: each term is the previous $\\times 2$ (ratios $6/3=2$, $12/6=2$, $24/12=2$).\n\n**Step 2 — Reject the others.** $3,6,9,12$ grows by a constant *difference* $3$ (arithmetic); $1,4,9,16$ are perfect squares (neither); $2,5,8,11$ is arithmetic with $d=3$.\n\n**Answer:** $3,6,12,24$.",
+      "explanation_he": "**שלב 1 — החילו את מבחן היחס הקבוע על כל אפשרות.** $3,6,12,24$: כל איבר הוא הקודם $\\times 2$ (יחסים $6/3=2$, $12/6=2$, $24/12=2$).\n\n**שלב 2 — פסלו את האחרות.** $3,6,9,12$ גדלה בהפרש קבוע $3$ (חשבונית); $1,4,9,16$ הם ריבועים (אף לא אחת); $2,5,8,11$ חשבונית עם $d=3$.\n\n**תשובה:** $3,6,12,24$.",
+      "skill_atoms": [
+        "geometric_ratio"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$3,\\ 6,\\ 12,\\ 24$",
+          "$3,\\ 6,\\ 9,\\ 12$",
+          "$1,\\ 4,\\ 9,\\ 16$",
+          "$2,\\ 5,\\ 8,\\ 11$"
+        ],
+        "options_he": [
+          "$3,\\ 6,\\ 12,\\ 24$",
+          "$3,\\ 6,\\ 9,\\ 12$",
+          "$1,\\ 4,\\ 9,\\ 16$",
+          "$2,\\ 5,\\ 8,\\ 11$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "d304b690-7aac-54db-947d-7d1d9625fad1",
+      "points_level_min": "3pt",
+      "options_en": [
+        "$3,\\ 6,\\ 12,\\ 24$",
+        "$3,\\ 6,\\ 9,\\ 12$",
+        "$1,\\ 4,\\ 9,\\ 16$",
+        "$2,\\ 5,\\ 8,\\ 11$"
+      ],
+      "options_he": [
+        "$3,\\ 6,\\ 12,\\ 24$",
+        "$3,\\ 6,\\ 9,\\ 12$",
+        "$1,\\ 4,\\ 9,\\ 16$",
+        "$2,\\ 5,\\ 8,\\ 11$"
+      ],
+      "correct_index": 0,
+      "id": "sequences_geometric__4pt-q4"
+    },
+    {
+      "ord": 5,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Write a formula for $a_n$ of the geometric sequence $3, 6, 12, \\dots$",
+      "stem_he": "כתבו נוסחה ל-$a_n$ של הסדרה ההנדסית $3, 6, 12, \\dots$",
+      "explanation_en": "**Step 1 — Identify parameters.** The first term is $a_1 = 3$ and the ratio is $q = 6/3 = 2$.\n\n**Step 2 — Plug into the general formula.** $a_n = a_1 q^{\\,n-1} = 3\\cdot 2^{\\,n-1}$.\n\n**Step 3 — Sanity check.** $a_1 = 3\\cdot 2^0 = 3$ ✓ and $a_3 = 3\\cdot 2^2 = 12$ ✓.\n\n**Answer:** $a_n = 3\\cdot 2^{\\,n-1}$.",
+      "explanation_he": "**שלב 1 — זהו פרמטרים.** האיבר הראשון הוא $a_1 = 3$ והמנה $q = 6/3 = 2$.\n\n**שלב 2 — הציבו בנוסחה הכללית.** $a_n = a_1 q^{\\,n-1} = 3\\cdot 2^{\\,n-1}$.\n\n**שלב 3 — בדיקת הגיון.** $a_1 = 3\\cdot 2^0 = 3$ ✓ ו-$a_3 = 3\\cdot 2^2 = 12$ ✓.\n\n**תשובה:** $a_n = 3\\cdot 2^{\\,n-1}$.",
+      "skill_atoms": [
+        "geometric_nth_term"
+      ],
+      "answer_payload": {
+        "acceptable_answers": [
+          "3*2**(n-1)",
+          "3*2^(n-1)"
+        ],
+        "case_sensitive": false
+      },
+      "source_item_id": "23fdc94f-5a98-5274-9f88-93bee30aec6d",
+      "points_level_min": "3pt",
+      "acceptable_answers": [
+        "3*2**(n-1)",
+        "3*2^(n-1)"
+      ],
+      "case_sensitive": false,
+      "correct_answer": "3*2**(n-1)",
+      "id": "sequences_geometric__4pt-q5"
+    },
+    {
+      "ord": 6,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "A geometric sequence has $a_1 = 5$ and $a_2 = 15$. Find the ratio $q$.",
+      "stem_he": "בסדרה הנדסית $a_1 = 5$ ו-$a_2 = 15$. מצאו את המנה $q$.",
+      "explanation_en": "**Step 1 — Recall the ratio definition.** The common ratio is any term divided by the one before it: $q = a_{n+1}/a_n$.\n\n**Step 2 — Substitute the two given consecutive terms.** $q = \\dfrac{a_2}{a_1} = \\dfrac{15}{5}$.\n\n**Step 3 — Compute.** $q = 3$.\n\n**Answer:** $3$.",
+      "explanation_he": "**שלב 1 — היזכרו בהגדרת המנה.** המנה היא כל איבר חלקי קודמו: $q = a_{n+1}/a_n$.\n\n**שלב 2 — הציבו את שני האיברים העוקבים הנתונים.** $q = \\dfrac{a_2}{a_1} = \\dfrac{15}{5}$.\n\n**שלב 3 — חשבו.** $q = 3$.\n\n**תשובה:** $3$.",
+      "skill_atoms": [
+        "geometric_ratio"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "3d271336-7d4c-5b64-a838-636e662775ac",
+      "points_level_min": "3pt",
+      "correct_answer": "3",
+      "id": "sequences_geometric__4pt-q6"
+    },
+    {
+      "ord": 7,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "A geometric sequence has $a_1 = 3$ and $q = 2$. Find $a_3$.",
+      "stem_he": "בסדרה הנדסית $a_1 = 3$ ומנה $q = 2$. מצאו את $a_3$.",
+      "explanation_en": "**Step 1 — Apply the formula with $(3-1)=2$ multiplications.** $a_3 = a_1 q^{2} = 3\\cdot 2^2$.\n\n**Step 2 — Evaluate the power then multiply.** $2^2 = 4$, so $3\\cdot 4 = 12$.\n\n**Check:** the sequence is $3, 6, 12$ — the third term is indeed $12$.\n\n**Answer:** $12$.",
+      "explanation_he": "**שלב 1 — החילו את הנוסחה עם $(3-1)=2$ הכפלות.** $a_3 = a_1 q^{2} = 3\\cdot 2^2$.\n\n**שלב 2 — חשבו את החזקה ואז הכפילו.** $2^2 = 4$, לכן $3\\cdot 4 = 12$.\n\n**בדיקה:** הסדרה היא $3, 6, 12$ — האיבר השלישי אכן $12$.\n\n**תשובה:** $12$.",
+      "skill_atoms": [
+        "geometric_nth_term"
+      ],
+      "answer_payload": {
+        "value": 12
+      },
+      "source_item_id": "a0bbd728-f1a0-5631-9a7d-13e0752d3b86",
+      "points_level_min": "3pt",
+      "correct_answer": "12",
+      "id": "sequences_geometric__4pt-q7"
+    },
+    {
+      "ord": 8,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "A geometric sequence has $a_1 = 1$ and $q = 5$. Find $a_3$.",
+      "stem_he": "בסדרה הנדסית $a_1 = 1$ ומנה $q = 5$. מצאו את $a_3$.",
+      "explanation_en": "**Step 1 — Apply the formula with exponent $(3-1)=2$.** $a_3 = a_1 q^2 = 1\\cdot 5^2$.\n\n**Step 2 — Evaluate.** $5^2 = 25$, and multiplying by $a_1=1$ leaves $25$.\n\n**Check:** the sequence is $1, 5, 25$ — the third term is $25$.\n\n**Answer:** $25$.",
+      "explanation_he": "**שלב 1 — החילו את הנוסחה עם מעריך $(3-1)=2$.** $a_3 = a_1 q^2 = 1\\cdot 5^2$.\n\n**שלב 2 — חשבו.** $5^2 = 25$, וכפל ב-$a_1=1$ משאיר $25$.\n\n**בדיקה:** הסדרה היא $1, 5, 25$ — האיבר השלישי הוא $25$.\n\n**תשובה:** $25$.",
+      "skill_atoms": [
+        "geometric_nth_term"
+      ],
+      "answer_payload": {
+        "value": 25
+      },
+      "source_item_id": "5b440bd4-d15b-584d-bdc5-2ff9e58a2344",
+      "points_level_min": "3pt",
+      "correct_answer": "25",
+      "id": "sequences_geometric__4pt-q8"
+    },
+    {
+      "ord": 9,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "For $8 + 4 + 2 + \\dots$, why does the infinite sum exist?",
+      "stem_he": "עבור $8 + 4 + 2 + \\dots$, מדוע קיים הסכום האינסופי?",
+      "explanation_en": "**Step 1 — Recall the convergence rule.** An infinite geometric series has a finite sum if and only if the ratio satisfies $|q| < 1$, because then $q^n \\to 0$ and the partial sums settle on a limit.\n\n**Step 2 — Find $q$ here.** $4/8 = 2/4 = \\tfrac12$, so $q = \\tfrac12$ and $|q| < 1$.\n\n**Step 3 — Conclude.** The terms shrink to zero, so $S_\\infty$ exists.\n\n**Answer:** because $|q| < 1$.",
+      "explanation_he": "**שלב 1 — היזכרו בכלל ההתכנסות.** לטור הנדסי אינסופי יש סכום סופי אם ורק אם המנה מקיימת $|q| < 1$, כי אז $q^n \\to 0$ והסכומים החלקיים מתייצבים על גבול.\n\n**שלב 2 — מצאו כאן את $q$.** $4/8 = 2/4 = \\tfrac12$, לכן $q = \\tfrac12$ ו-$|q| < 1$.\n\n**שלב 3 — הסיקו.** האיברים מתכווצים לאפס, ולכן $S_\\infty$ קיים.\n\n**תשובה:** מפני ש-$|q| < 1$.",
+      "skill_atoms": [
+        "geometric_infinite_sum"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\text{because } |q| < 1$",
+          "$\\text{because } a_1 > 0$",
+          "$\\text{because it is increasing}$",
+          "$\\text{it does not exist}$"
+        ],
+        "options_he": [
+          "$\\text{because } |q| < 1$",
+          "$\\text{because } a_1 > 0$",
+          "$\\text{because it is increasing}$",
+          "$\\text{it does not exist}$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "d4b8a48d-d89a-50d5-878e-7ed4143ff162",
+      "points_level_min": "4pt",
+      "options_en": [
+        "$\\text{because } |q| < 1$",
+        "$\\text{because } a_1 > 0$",
+        "$\\text{because it is increasing}$",
+        "$\\text{it does not exist}$"
+      ],
+      "options_he": [
+        "$\\text{because } |q| < 1$",
+        "$\\text{because } a_1 > 0$",
+        "$\\text{because it is increasing}$",
+        "$\\text{it does not exist}$"
+      ],
+      "correct_index": 0,
+      "id": "sequences_geometric__4pt-q9"
+    },
+    {
+      "ord": 10,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "What is the common ratio of the sequence $5, 10, 20, 40, \\dots$?",
+      "stem_he": "מהי המנה של הסדרה $5, 10, 20, 40, \\dots$?",
+      "explanation_en": "**Step 1 — Use the ratio definition.** Divide any term by the one before it; all such ratios must agree in a geometric sequence.\n\n**Step 2 — Check two ratios.** $\\tfrac{10}{5} = 2$ and $\\tfrac{20}{10} = 2$ — consistent, so $q = 2$.\n\n**Step 3 — Reject distractors.** $5$ is $a_1$, not the ratio; $\\tfrac12$ is the reciprocal; $10$ is the second term.\n\n**Answer:** $q = 2$.",
+      "explanation_he": "**שלב 1 — השתמשו בהגדרת המנה.** חלקו כל איבר בקודמו; כל היחסים חייבים להסכים בסדרה הנדסית.\n\n**שלב 2 — בדקו שני יחסים.** $\\tfrac{10}{5} = 2$ ו-$\\tfrac{20}{10} = 2$ — עקבי, לכן $q = 2$.\n\n**שלב 3 — פסלו מסיחים.** $5$ הוא $a_1$, לא המנה; $\\tfrac12$ הוא ההופכי; $10$ הוא האיבר השני.\n\n**תשובה:** $q = 2$.",
+      "skill_atoms": [
+        "geometric_ratio"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$2$",
+          "$5$",
+          "$\\tfrac12$",
+          "$10$"
+        ],
+        "options_he": [
+          "$2$",
+          "$5$",
+          "$\\tfrac12$",
+          "$10$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "18f481c7-5680-5e10-ac1c-4531f4a34634",
+      "points_level_min": "3pt",
+      "options_en": [
+        "$2$",
+        "$5$",
+        "$\\tfrac12$",
+        "$10$"
+      ],
+      "options_he": [
+        "$2$",
+        "$5$",
+        "$\\tfrac12$",
+        "$10$"
+      ],
+      "correct_index": 0,
+      "id": "sequences_geometric__4pt-q10"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "A geometric sequence has $a_1 = 1$, $q = 2$. Find $a_8$.",
+      "stem_he": "בסדרה הנדסית $a_1 = 1$, $q = 2$. מצאו את $a_8$.",
+      "explanation_en": "**Step 1 — Count multiplications.** Reaching term $8$ takes $8-1 = 7$ multiplications by $q$, so the exponent is $7$.\n\n**Step 2 — Substitute.** $a_8 = a_1 q^7 = 1\\cdot 2^{7}$.\n\n**Step 3 — Evaluate the power.** $2^7 = 128$.\n\n**Answer:** $128$.",
+      "explanation_he": "**שלב 1 — ספרו הכפלות.** הגעה לאיבר $8$ לוקחת $8-1 = 7$ הכפלות ב-$q$, לכן המעריך הוא $7$.\n\n**שלב 2 — הצבה.** $a_8 = a_1 q^7 = 1\\cdot 2^{7}$.\n\n**שלב 3 — חשבו את החזקה.** $2^7 = 128$.\n\n**תשובה:** $128$.",
+      "skill_atoms": [
+        "geometric_nth_term"
+      ],
+      "answer_payload": {
+        "value": 128
+      },
+      "source_item_id": "e2088d06-995a-5923-88d1-5c84ced2252a",
+      "points_level_min": "3pt",
+      "correct_answer": "128",
+      "id": "sequences_geometric__4pt-q11"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the sum of the first $5$ terms of a geometric sequence with $a_1 = 3$, $q = 2$.",
+      "stem_he": "מצאו את סכום $5$ האיברים הראשונים של סדרה הנדסית עם $a_1 = 3$, $q = 2$.",
+      "explanation_en": "**Step 1 — Choose the finite-sum formula.** For $q\\ne1$, $S_n = a_1\\dfrac{q^n - 1}{q - 1}$ (the $q>1$ orientation avoids negative signs).\n\n**Step 2 — Substitute $a_1=3$, $q=2$, $n=5$.** $S_5 = 3\\cdot\\dfrac{2^5 - 1}{2 - 1} = 3\\cdot\\dfrac{31}{1}$.\n\n**Step 3 — Compute.** $3\\cdot 31 = 93$. Check: $3+6+12+24+48 = 93$ ✓.\n\n**Answer:** $93$.",
+      "explanation_he": "**שלב 1 — בחרו את נוסחת הסכום הסופי.** עבור $q\\ne1$, $S_n = a_1\\dfrac{q^n - 1}{q - 1}$ (הכיוון $q>1$ מונע סימנים שליליים).\n\n**שלב 2 — הציבו $a_1=3$, $q=2$, $n=5$.** $S_5 = 3\\cdot\\dfrac{2^5 - 1}{2 - 1} = 3\\cdot\\dfrac{31}{1}$.\n\n**שלב 3 — חשבו.** $3\\cdot 31 = 93$. בדיקה: $3+6+12+24+48 = 93$ ✓.\n\n**תשובה:** $93$.",
+      "skill_atoms": [
+        "geometric_sum"
+      ],
+      "answer_payload": {
+        "value": 93
+      },
+      "source_item_id": "bfcc814f-b478-570f-b99b-e8b41204b8b5",
+      "points_level_min": "3pt",
+      "correct_answer": "93",
+      "id": "sequences_geometric__4pt-q12"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "A geometric sequence has $a_1 = 16$, $q = \\tfrac12$. Find $a_5$.",
+      "stem_he": "בסדרה הנדסית $a_1 = 16$, $q = \\tfrac12$. מצאו את $a_5$.",
+      "explanation_en": "**Step 1 — Apply the formula with exponent $(5-1)=4$.** $a_5 = a_1 q^4 = 16\\cdot\\left(\\tfrac12\\right)^4$.\n\n**Step 2 — Evaluate the power.** $\\left(\\tfrac12\\right)^4 = \\tfrac{1}{16}$.\n\n**Step 3 — Multiply.** $16\\cdot\\tfrac{1}{16} = 1$. Since $|q|<1$ the terms shrink: $16, 8, 4, 2, 1$.\n\n**Answer:** $1$.",
+      "explanation_he": "**שלב 1 — החילו את הנוסחה עם מעריך $(5-1)=4$.** $a_5 = a_1 q^4 = 16\\cdot\\left(\\tfrac12\\right)^4$.\n\n**שלב 2 — חשבו את החזקה.** $\\left(\\tfrac12\\right)^4 = \\tfrac{1}{16}$.\n\n**שלב 3 — הכפילו.** $16\\cdot\\tfrac{1}{16} = 1$. כיוון ש-$|q|<1$ האיברים מתכווצים: $16, 8, 4, 2, 1$.\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "geometric_nth_term"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "dd3ac282-f6f8-5d99-9e10-27c71a00ef0f",
+      "points_level_min": "3pt",
+      "correct_answer": "1",
+      "id": "sequences_geometric__4pt-q13"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "In a geometric sequence $a_1 = 2$ and $a_3 = 18$ (with $q>0$). Find $q$.",
+      "stem_he": "בסדרה הנדסית $a_1 = 2$ ו-$a_3 = 18$ (כאשר $q>0$). מצאו את $q$.",
+      "explanation_en": "**Relation.** $a_3 = a_1 q^2$, so $18 = 2q^2$.\n\n**Solve.** $q^2 = 9 \\Rightarrow q = 3$ (positive ratio).\n\n**Answer:** $q = 3$.",
+      "explanation_he": "**קשר.** $a_3 = a_1 q^2$, כלומר $18 = 2q^2$.\n\n**פתרון.** $q^2 = 9 \\Rightarrow q = 3$ (מנה חיובית).\n\n**תשובה:** $q = 3$.",
+      "skill_atoms": [
+        "geometric_ratio",
+        "geometric_nth_term"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "12ed591e-aa97-5da9-8305-156e0a97253d",
+      "points_level_min": "3pt",
+      "correct_answer": "3",
+      "id": "sequences_geometric__4pt-q14"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "A bacteria colony starts at $200$ and doubles every hour. How many bacteria are there after $5$ hours?",
+      "stem_he": "מושבת חיידקים מתחילה מ-$200$ ומכפילה את עצמה כל שעה. כמה חיידקים יהיו לאחר $5$ שעות?",
+      "explanation_en": "**Model.** Doubling each hour is geometric with ratio $q = 2$; after $5$ hours the factor is $2^5$.\n\n**Compute.** $200\\cdot 2^5 = 200\\cdot 32 = 6400$.\n\n**Answer:** $6400$.",
+      "explanation_he": "**מידול.** הכפלה בכל שעה היא סדרה הנדסית עם מנה $q = 2$; לאחר $5$ שעות המקדם הוא $2^5$.\n\n**חישוב.** $200\\cdot 32 = 6400$.\n\n**תשובה:** $6400$.",
+      "skill_atoms": [
+        "geometric_nth_term"
+      ],
+      "answer_payload": {
+        "value": 6400
+      },
+      "source_item_id": "3a5e62b5-08aa-5a4d-8baa-7fa7b646c7bf",
+      "points_level_min": "3pt",
+      "correct_answer": "6400",
+      "id": "sequences_geometric__4pt-q15"
+    },
+    {
+      "ord": 16,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the sum of the first $4$ terms of a geometric sequence with $a_1 = 1$, $q = 3$.",
+      "stem_he": "מצאו את סכום $4$ האיברים הראשונים של סדרה הנדסית עם $a_1 = 1$, $q = 3$.",
+      "explanation_en": "**Sum formula.** $S_4 = a_1\\dfrac{q^4 - 1}{q - 1} = \\dfrac{81 - 1}{2}$.\n\n**Compute.** $\\dfrac{80}{2} = 40$.\n\n**Answer:** $40$.",
+      "explanation_he": "**נוסחת הסכום.** $S_4 = \\dfrac{81 - 1}{2}$.\n\n**חישוב.** $\\dfrac{80}{2} = 40$.\n\n**תשובה:** $40$.",
+      "skill_atoms": [
+        "geometric_sum"
+      ],
+      "answer_payload": {
+        "value": 40
+      },
+      "source_item_id": "cd0939bb-c3ed-5878-81cf-b2d740fafbe0",
+      "points_level_min": "3pt",
+      "correct_answer": "40",
+      "id": "sequences_geometric__4pt-q16"
+    },
+    {
+      "ord": 17,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: the infinite sum $1 + 2 + 4 + 8 + \\dots$ converges.",
+      "stem_he": "נכון או לא נכון: הסכום האינסופי $1 + 2 + 4 + 8 + \\dots$ מתכנס.",
+      "explanation_en": "**Ratio.** $q = 2$, so $|q| = 2 \\ge 1$.\n\n**Rule.** An infinite geometric series converges only when $|q| < 1$.\n\n**Conclusion:** it diverges — **false**.",
+      "explanation_he": "**מנה.** $q = 2$, ולכן $|q| = 2 \\ge 1$.\n\n**כלל.** טור הנדסי אינסופי מתכנס רק כאשר $|q| < 1$.\n\n**מסקנה:** מתבדר — **לא נכון**.",
+      "skill_atoms": [
+        "geometric_infinite_sum"
+      ],
+      "answer_payload": {
+        "value": false
+      },
+      "source_item_id": "b848ed1d-ad2d-5feb-a0a2-553ca298575f",
+      "points_level_min": "4pt",
+      "correct_bool": false,
+      "id": "sequences_geometric__4pt-q17"
+    },
+    {
+      "ord": 18,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the sum to infinity of $8 + 4 + 2 + 1 + \\dots$",
+      "stem_he": "מצאו את הסכום עד אינסוף של $8 + 4 + 2 + 1 + \\dots$",
+      "explanation_en": "**Convergence.** $q = \\tfrac12$, and $|q| < 1$, so the infinite sum exists.\n\n**Formula.** $S_\\infty = \\dfrac{a_1}{1 - q} = \\dfrac{8}{1 - \\tfrac12}$.\n\n**Compute.** $\\dfrac{8}{\\tfrac12} = 16$.\n\n**Answer:** $16$.",
+      "explanation_he": "**התכנסות.** $q = \\tfrac12$, וכיוון ש-$|q| < 1$ הסכום האינסופי קיים.\n\n**נוסחה.** $S_\\infty = \\dfrac{a_1}{1 - q} = \\dfrac{8}{\\tfrac12}$.\n\n**חישוב.** $= 16$.\n\n**תשובה:** $16$.",
+      "skill_atoms": [
+        "geometric_infinite_sum"
+      ],
+      "answer_payload": {
+        "value": 16
+      },
+      "source_item_id": "7d9b4c8e-9d98-592c-9836-c8693b964a0d",
+      "points_level_min": "4pt",
+      "correct_answer": "16",
+      "id": "sequences_geometric__4pt-q18"
+    },
+    {
+      "ord": 19,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "A geometric sequence has $a_1 = 4$, $q = 3$. Find $S_4$ (sum of first 4 terms).",
+      "stem_he": "בסדרה הנדסית $a_1 = 4$, $q = 3$. מצאו את $S_4$ (סכום 4 האיברים הראשונים).",
+      "explanation_en": "**Step 1 — Choose the finite-sum formula.** $S_n = a_1\\dfrac{q^n - 1}{q - 1}$ for $q\\ne1$.\n\n**Step 2 — Substitute $a_1=4$, $q=3$, $n=4$.** $S_4 = 4\\cdot\\dfrac{3^4 - 1}{3 - 1} = 4\\cdot\\dfrac{81 - 1}{2}$.\n\n**Step 3 — Compute.** $\\dfrac{80}{2}=40$, then $4\\cdot 40 = 160$. Check: $4+12+36+108 = 160$ ✓.\n\n**Answer:** $160$.",
+      "explanation_he": "**שלב 1 — בחרו את נוסחת הסכום הסופי.** $S_n = a_1\\dfrac{q^n - 1}{q - 1}$ עבור $q\\ne1$.\n\n**שלב 2 — הציבו $a_1=4$, $q=3$, $n=4$.** $S_4 = 4\\cdot\\dfrac{3^4 - 1}{3 - 1} = 4\\cdot\\dfrac{81 - 1}{2}$.\n\n**שלב 3 — חשבו.** $\\dfrac{80}{2}=40$, ואז $4\\cdot 40 = 160$. בדיקה: $4+12+36+108 = 160$ ✓.\n\n**תשובה:** $160$.",
+      "skill_atoms": [
+        "geometric_sum"
+      ],
+      "answer_payload": {
+        "value": 160
+      },
+      "source_item_id": "d3a02b08-0a52-580c-8d7e-98ae0f2463a3",
+      "points_level_min": "3pt",
+      "correct_answer": "160",
+      "id": "sequences_geometric__4pt-q19"
+    },
+    {
+      "ord": 20,
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Order the steps for evaluating the infinite sum of a geometric series.",
+      "stem_he": "סדרו את שלבי חישוב הסכום האינסופי של טור הנדסי.",
+      "explanation_en": "The safe recipe always starts with identifying $a_1$ and the ratio $q$, then checking convergence: the infinite formula is valid only when $|q|<1$. Only after confirming convergence do you substitute into $S_\\infty=\\tfrac{a_1}{1-q}$ and simplify. Skipping the $|q|<1$ check is the classic error that turns a divergent series into a wrong finite 'answer'.",
+      "explanation_he": "המתכון הבטוח מתחיל תמיד בזיהוי $a_1$ והמנה $q$, ואז בבדיקת התכנסות: הנוסחה האינסופית תקפה רק כאשר $|q|<1$. רק לאחר אישור ההתכנסות מציבים ב-$S_\\infty=\\tfrac{a_1}{1-q}$ ומפשטים. דילוג על בדיקת $|q|<1$ הוא הטעות הקלאסית שהופכת טור מתבדר ל'תשובה' סופית שגויה.",
+      "skill_atoms": [
+        "geometric_ratio",
+        "geometric_infinite_sum"
+      ],
+      "steps_en": [
+        "Identify $a_1$ and the common ratio $q$.",
+        "Check the convergence condition $|q|<1$.",
+        "Substitute into $S_\\infty = \\dfrac{a_1}{1-q}$.",
+        "Simplify to a final number."
+      ],
+      "steps_he": [
+        "זהו את $a_1$ ואת המנה $q$.",
+        "בדקו את תנאי ההתכנסות $|q|<1$.",
+        "הציבו ב-$S_\\infty = \\dfrac{a_1}{1-q}$.",
+        "פשטו למספר סופי."
+      ],
+      "correct_order": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "Identify $a_1$ and the common ratio $q$.",
+          "Check the convergence condition $|q|<1$.",
+          "Substitute into $S_\\infty = \\dfrac{a_1}{1-q}$.",
+          "Simplify to a final number."
+        ],
+        "steps_he": [
+          "זהו את $a_1$ ואת המנה $q$.",
+          "בדקו את תנאי ההתכנסות $|q|<1$.",
+          "הציבו ב-$S_\\infty = \\dfrac{a_1}{1-q}$.",
+          "פשטו למספר סופי."
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "points_level_min": "4pt",
+      "id": "sequences_geometric__4pt-q20"
+    },
+    {
+      "ord": 21,
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "stem_en": "Match each quantity to the correct geometric-sequence formula.",
+      "stem_he": "התאימו כל גודל לנוסחת הסדרה ההנדסית הנכונה.",
+      "explanation_en": "Each task has one canonical formula. The $n$th term multiplies $a_1$ by $q$ raised to $(n-1)$. The finite sum uses $\\tfrac{1-q^n}{1-q}$. The infinite sum (only for $|q|<1$) drops the $q^n$ term to give $\\tfrac{a_1}{1-q}$. The ratio is any term divided by its predecessor. Matching the goal to its formula is the first move in every problem.",
+      "explanation_he": "לכל משימה נוסחה קנונית אחת. האיבר ה-$n$ מכפיל את $a_1$ ב-$q$ בחזקת $(n-1)$. הסכום הסופי משתמש ב-$\\tfrac{1-q^n}{1-q}$. הסכום האינסופי (רק ל-$|q|<1$) משמיט את $q^n$ ונותן $\\tfrac{a_1}{1-q}$. המנה היא כל איבר חלקי קודמו. התאמת המטרה לנוסחה היא הצעד הראשון.",
+      "skill_atoms": [
+        "geometric_nth_term",
+        "geometric_sum",
+        "geometric_infinite_sum",
+        "geometric_ratio"
+      ],
+      "left_en": [
+        "$n$th term $a_n$",
+        "Finite sum $S_n$",
+        "Infinite sum $S_\\infty$ ($|q|<1$)",
+        "Common ratio $q$"
+      ],
+      "left_he": [
+        "האיבר ה-$n$ $a_n$",
+        "סכום סופי $S_n$",
+        "סכום אינסופי $S_\\infty$ ($|q|<1$)",
+        "המנה $q$"
+      ],
+      "right_en": [
+        "$a_1 q^{n-1}$",
+        "$a_1\\dfrac{1-q^n}{1-q}$",
+        "$\\dfrac{a_1}{1-q}$",
+        "$\\dfrac{a_{n+1}}{a_n}$"
+      ],
+      "right_he": [
+        "$a_1 q^{n-1}$",
+        "$a_1\\dfrac{1-q^n}{1-q}$",
+        "$\\dfrac{a_1}{1-q}$",
+        "$\\dfrac{a_{n+1}}{a_n}$"
+      ],
+      "correct_pairs": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "answer_payload": {
+        "left_en": [
+          "$n$th term $a_n$",
+          "Finite sum $S_n$",
+          "Infinite sum $S_\\infty$ ($|q|<1$)",
+          "Common ratio $q$"
+        ],
+        "left_he": [
+          "האיבר ה-$n$ $a_n$",
+          "סכום סופי $S_n$",
+          "סכום אינסופי $S_\\infty$ ($|q|<1$)",
+          "המנה $q$"
+        ],
+        "right_en": [
+          "$a_1 q^{n-1}$",
+          "$a_1\\dfrac{1-q^n}{1-q}$",
+          "$\\dfrac{a_1}{1-q}$",
+          "$\\dfrac{a_{n+1}}{a_n}$"
+        ],
+        "right_he": [
+          "$a_1 q^{n-1}$",
+          "$a_1\\dfrac{1-q^n}{1-q}$",
+          "$\\dfrac{a_1}{1-q}$",
+          "$\\dfrac{a_{n+1}}{a_n}$"
+        ],
+        "correct_pairs": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "points_level_min": "3pt",
+      "id": "sequences_geometric__4pt-q21"
+    },
+    {
+      "ord": 22,
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "stem_en": "Select **all** statements about geometric sequences that are correct.",
+      "stem_he": "סמנו את **כל** ההיגדים הנכונים על סדרות הנדסיות.",
+      "explanation_en": "- A geometric sequence multiplies by a fixed ratio each step. ✓\n- The infinite sum $\\tfrac{a_1}{1-q}$ works for any $q$. ✗ — it requires $|q|<1$; otherwise the series diverges.\n- If $0<q<1$ the terms decrease toward zero. ✓\n- $a_5 = a_1 q^5$. ✗ — the exponent is $(n-1)=4$, so $a_5=a_1q^4$.\n- Consecutive-term ratios are all equal in a geometric sequence. ✓\n\n**Correct:** 1, 3, and 5.",
+      "explanation_he": "- סדרה הנדסית מכפילה במנה קבועה בכל צעד. ✓\n- הסכום האינסופי $\\tfrac{a_1}{1-q}$ עובד לכל $q$. ✗ — נדרש $|q|<1$; אחרת הטור מתבדר.\n- אם $0<q<1$ האיברים יורדים לעבר אפס. ✓\n- $a_5 = a_1 q^5$. ✗ — המעריך הוא $(n-1)=4$, לכן $a_5=a_1q^4$.\n- יחסי איברים עוקבים שווים כולם בסדרה הנדסית. ✓\n\n**נכונים:** 1, 3 ו-5.",
+      "skill_atoms": [
+        "geometric_nth_term",
+        "geometric_infinite_sum",
+        "geometric_ratio"
+      ],
+      "options_en": [
+        "A geometric sequence multiplies by a fixed ratio each step",
+        "$S_\\infty = \\dfrac{a_1}{1-q}$ works for any $q$",
+        "If $0<q<1$ the terms decrease toward zero",
+        "$a_5 = a_1 q^5$",
+        "All consecutive-term ratios are equal"
+      ],
+      "options_he": [
+        "סדרה הנדסית מכפילה במנה קבועה בכל צעד",
+        "$S_\\infty = \\dfrac{a_1}{1-q}$ עובד לכל $q$",
+        "אם $0<q<1$ האיברים יורדים לעבר אפס",
+        "$a_5 = a_1 q^5$",
+        "כל יחסי האיברים העוקבים שווים"
+      ],
+      "correct_indices": [
+        0,
+        2,
+        4
+      ],
+      "answer_payload": {
+        "options_en": [
+          "A geometric sequence multiplies by a fixed ratio each step",
+          "$S_\\infty = \\dfrac{a_1}{1-q}$ works for any $q$",
+          "If $0<q<1$ the terms decrease toward zero",
+          "$a_5 = a_1 q^5$",
+          "All consecutive-term ratios are equal"
+        ],
+        "options_he": [
+          "סדרה הנדסית מכפילה במנה קבועה בכל צעד",
+          "$S_\\infty = \\dfrac{a_1}{1-q}$ עובד לכל $q$",
+          "אם $0<q<1$ האיברים יורדים לעבר אפס",
+          "$a_5 = a_1 q^5$",
+          "כל יחסי האיברים העוקבים שווים"
+        ],
+        "correct_indices": [
+          0,
+          2,
+          4
+        ]
+      },
+      "points_level_min": "3pt",
+      "id": "sequences_geometric__4pt-q22"
+    },
+    {
+      "ord": 23,
+      "kind": "fill_blank",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "A geometric sequence has $a_1 = 5$ and $q = 2$. The 6th term is $a_6 =$ ____.",
+      "stem_he": "בסדרה הנדסית $a_1 = 5$ ו-$q = 2$. האיבר השישי הוא $a_6 =$ ____.",
+      "explanation_en": "**Step 1 — Use the $n$th-term formula.** $a_6 = a_1 q^{6-1} = 5 \\cdot 2^5$.\n\n**Step 2 — Evaluate the power.** $2^5 = 32$.\n\n**Step 3 — Multiply.** $5 \\cdot 32 = 160$.\n\n**Answer:** $160$.",
+      "explanation_he": "**שלב 1 — השתמשו בנוסחת האיבר ה-$n$.** $a_6 = a_1 q^{6-1} = 5 \\cdot 2^5$.\n\n**שלב 2 — חשבו את החזקה.** $2^5 = 32$.\n\n**שלב 3 — הכפילו.** $5 \\cdot 32 = 160$.\n\n**תשובה:** $160$.",
+      "skill_atoms": [
+        "geometric_nth_term"
+      ],
+      "answer_payload": {
+        "acceptable_answers": [
+          "160"
+        ],
+        "case_sensitive": false
+      },
+      "acceptable_answers": [
+        "160"
+      ],
+      "case_sensitive": false,
+      "correct_answer": "160",
+      "points_level_min": "3pt",
+      "id": "sequences_geometric__4pt-q23"
+    },
+    {
+      "ord": 24,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "reverse",
+        "parametric"
+      ],
+      "stem_en": "An infinite geometric series has first term $a_1 = 12$ and sum $S_\\infty = 18$. Find the common ratio $q$.",
+      "stem_he": "לטור הנדסי אינסופי איבר ראשון $a_1 = 12$ וסכום $S_\\infty = 18$. מצאו את המנה $q$.",
+      "explanation_en": "**Step 1 — Write the infinite-sum equation.** $S_\\infty = \\dfrac{a_1}{1-q}$, so $18 = \\dfrac{12}{1-q}$.\n\n**Step 2 — Solve for $1-q$.** $1-q = \\dfrac{12}{18} = \\dfrac{2}{3}$.\n\n**Step 3 — Isolate $q$.** $q = 1 - \\dfrac{2}{3} = \\dfrac{1}{3}$.\n\n**Check:** $|q| = \\tfrac13 < 1$ ✓ (converges), and $\\dfrac{12}{1-1/3} = \\dfrac{12}{2/3} = 18$ ✓.\n\n**Answer:** $q = \\dfrac{1}{3}$.",
+      "explanation_he": "**שלב 1 — כתבו את משוואת הסכום האינסופי.** $S_\\infty = \\dfrac{a_1}{1-q}$, לכן $18 = \\dfrac{12}{1-q}$.\n\n**שלב 2 — פתרו עבור $1-q$.** $1-q = \\dfrac{12}{18} = \\dfrac{2}{3}$.\n\n**שלב 3 — בודדו את $q$.** $q = 1 - \\dfrac{2}{3} = \\dfrac{1}{3}$.\n\n**בדיקה:** $|q| = \\tfrac13 < 1$ ✓ (מתכנס), ו-$\\dfrac{12}{2/3} = 18$ ✓.\n\n**תשובה:** $q = \\dfrac{1}{3}$.",
+      "skill_atoms": [
+        "geometric_infinite_sum",
+        "geometric_ratio"
+      ],
+      "verify": {
+        "expr": "1 - 12/18",
+        "expected": 0.3333333333333333
+      },
+      "answer_payload": {
+        "value": 0.3333
+      },
+      "correct_answer": "1/3",
+      "points_level_min": "4pt",
+      "id": "sequences_geometric__4pt-q24"
+    },
+    {
+      "ord": 25,
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof"
+      ],
+      "needs_review": true,
+      "stem_en": "Derive the finite geometric sum formula $S_n = a_1\\dfrac{1-q^n}{1-q}$ (for $q\\ne 1$) using the multiply-and-subtract trick.",
+      "stem_he": "גזרו את נוסחת הסכום ההנדסי הסופי $S_n = a_1\\dfrac{1-q^n}{1-q}$ (עבור $q\\ne 1$) בטריק הכפל-וחיסור.",
+      "explanation_en": "**Step 1 — Write the sum.** $S_n = a_1 + a_1 q + a_1 q^2 + \\cdots + a_1 q^{n-1}$.\n\n**Step 2 — Multiply by $q$.** $qS_n = a_1 q + a_1 q^2 + \\cdots + a_1 q^{n-1} + a_1 q^{n}$.\n\n**Step 3 — Subtract the two lines.** $S_n - qS_n = a_1 - a_1 q^{n}$ (all middle terms telescope/cancel).\n\n**Step 4 — Factor both sides.** $S_n(1-q) = a_1(1-q^n)$.\n\n**Step 5 — Divide by $(1-q)$** (allowed since $q\\ne1$): $S_n = a_1\\dfrac{1-q^n}{1-q}$. $\\blacksquare$",
+      "explanation_he": "**שלב 1 — כתבו את הסכום.** $S_n = a_1 + a_1 q + a_1 q^2 + \\cdots + a_1 q^{n-1}$.\n\n**שלב 2 — הכפילו ב-$q$.** $qS_n = a_1 q + a_1 q^2 + \\cdots + a_1 q^{n-1} + a_1 q^{n}$.\n\n**שלב 3 — חסרו את שתי השורות.** $S_n - qS_n = a_1 - a_1 q^{n}$ (כל האיברים האמצעיים מצטמצמים).\n\n**שלב 4 — הוציאו גורם משני האגפים.** $S_n(1-q) = a_1(1-q^n)$.\n\n**שלב 5 — חלקו ב-$(1-q)$** (מותר כי $q\\ne1$): $S_n = a_1\\dfrac{1-q^n}{1-q}$. $\\blacksquare$",
+      "skill_atoms": [
+        "geometric_sum"
+      ],
+      "answer_payload": {
+        "expected_steps": [
+          "S_n = a_1 + a_1 q + ... + a_1 q^{n-1}",
+          "qS_n = a_1 q + ... + a_1 q^n",
+          "subtract: S_n - qS_n = a_1 - a_1 q^n",
+          "factor: S_n(1-q) = a_1(1-q^n)",
+          "divide by (1-q): S_n = a_1(1-q^n)/(1-q)"
+        ]
+      },
+      "expected_steps": [
+        "S_n = a_1 + a_1 q + ... + a_1 q^{n-1}",
+        "qS_n = a_1 q + ... + a_1 q^n",
+        "subtract: S_n - qS_n = a_1 - a_1 q^n",
+        "factor: S_n(1-q) = a_1(1-q^n)",
+        "divide by (1-q): S_n = a_1(1-q^n)/(1-q)"
+      ],
+      "rubric_en": "Full credit: writes S_n and qS_n, subtracts to cancel middle terms leaving a_1(1-q^n), factors (1-q), and divides to conclude.",
+      "rubric_he": "ניקוד מלא: כותב S_n ו-qS_n, מחסר לביטול האיברים האמצעיים ומשאיר a_1(1-q^n), מוציא (1-q), ומחלק להסקה.",
+      "points_level_min": "4pt",
+      "id": "sequences_geometric__4pt-q25"
+    },
+    {
+      "kind": "numeric",
+      "difficulty": "medium",
+      "facets": [
+        "sum_last_n",
+        "last_n_sum"
+      ],
+      "stem_en": "Arithmetic sequence: $a_1=3$, $d=2$. Find the sum of the last $4$ terms among the first $10$ terms.",
+      "stem_he": "סדרה חשבונית: $a_1=3$, $d=2$. מצאו את סכום $4$ האיברים האחרונים מבין $10$ הראשונים.",
+      "correct_answer": "72",
+      "explanation_en": "Last 4 among first 10: $a_7$ to $a_{10}$. $a_7=3+6\\cdot 2=15$, $a_{10}=21$. Sum $=\\frac{4}{2}(15+21)=72$. Equivalently $S_{10}-S_6=120-48=72$.",
+      "explanation_he": "$a_{10}=21$. $S_{10}=120$, $S_6=48$, לכן סכום 4 האחרונים $=72$.",
+      "id": "sequences_geometric__4pt-q26",
+      "ord": 26,
+      "skill_atoms": []
+    },
+    {
+      "kind": "open",
+      "difficulty": "medium",
+      "facets": [
+        "odd_even_index_sums",
+        "odd_index_sum",
+        "even_index_sum"
+      ],
+      "stem_en": "For an arithmetic sequence $a_n=a_1+(n-1)d$, write the first three odd-indexed terms and the first three even-indexed terms, and state the common difference of each subsequence.",
+      "stem_he": "עבור סדרה חשבונית $a_n=a_1+(n-1)d$, כתבו את שלושת האיברים הראשונים במקומות האי-זוגיים ואת שלושת הראשונים במקומות הזוגיים, וציינו את ההפרש המשותף של כל תת-סדרה.",
+      "correct_answer": "odd: a1,a3,a5 diff 2d; even: a2,a4,a6 diff 2d",
+      "explanation_en": "Odd indices: $a_1,a_3,a_5$ with common difference $2d$. Even indices: $a_2,a_4,a_6$ with common difference $2d$.",
+      "explanation_he": "אי-זוגיים: $a_1,a_3,a_5$ עם הפרש $2d$. זוגיים: $a_2,a_4,a_6$ עם הפרש $2d$.",
+      "id": "sequences_geometric__4pt-q27",
+      "ord": 27,
+      "skill_atoms": []
+    }
+  ],
+  "est_minutes": 55,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
+}

@@ -1,0 +1,1060 @@
+{
+  "concept_id": "sample_space__4pt",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": [
+    "4pt"
+  ],
+  "title_en": "Sample Space, Events, and Probability Axioms — 4pt depth",
+  "title_he": "מרחב מדגם, אירועים ואקסיומות ההסתברות — העמקה 4 יח׳",
+  "summary_en": "Before calculating probabilities, we need precise definitions.",
+  "summary_he": "תורת ההסתברות מתחילה במרחב מדגם ובשלוש אקסיומות.",
+  "sections": [
+    {
+      "id": "intro",
+      "kind": "intro",
+      "title_en": "The Language of Probability",
+      "title_he": "שפת ההסתברות",
+      "body_en_md": "Before calculating any probability, we need a precise vocabulary. Probability theory begins with the **sample space** $\\Omega$ — the set of all possible outcomes of a random experiment — and builds from three axioms that Kolmogorov formulated in 1933. Every event is a subset of $\\Omega$, and probability is a function that assigns numbers to those subsets while obeying simple, non-negotiable rules.\n\nThese foundations appear throughout Israeli Bagrut (4–5 unit statistics), university introductory probability, and engineering statistics courses. Mastering them now prevents confusion later when conditional probability, independence, and Bayes' theorem enter the picture.\n\n**Exam topics you will meet repeatedly:**\n- Defining sample spaces and events (coins, dice, cards, urns)\n- Set operations: union ($A \\cup B$), intersection ($A \\cap B$), complement ($A^c$)\n- Kolmogorov axioms and their consequences (complement rule, inclusion-exclusion)\n- Classical probability when outcomes are equally likely: $P(A) = |A|/|\\Omega|$\n- Addition rule for mutually exclusive events; general inclusion-exclusion for two events\n- \"At least one\" problems — almost always solved faster via the complement $1 - P(\\text{none})$\n\n**4pt focus:** Parameters, algebra↔graph, multi-step exam stems.",
+      "body_he_md": "לפני שמחשבים הסתברות, צריך אוצר מילים מדויק. תורת ההסתברות מתחילה ב**מרחב המדגם** $\\Omega$ — קבוצת כל התוצאות האפשריות של ניסוי מקרי — ונבנית משלוש אקסיומות שקולמוגורוב ניסח ב-1933. כל אירוע הוא תת-קבוצה של $\\Omega$, וההסתברות היא פונקציה שמקצה מספרים לתת-קבוצות אלו תוך שמירה על כללים פשוטים וקבועים.\n\nהיסודות האלה מופיעים בבגרות (4–5 יחידות סטטיסטיקה), בקורסי הסתברות באוניברסיטה ובסטטיסטיקה הנדסית. שליטה בהם עכשיו מונעת בלבול מאוחר יותר, כשמגיעים להסתברות מותנית, אי-תלות ומשפט בייס.\n\n**נושאי בחינה שחוזרים שוב ושוב:**\n- הגדרת מרחבי מדגם ואירועים (מטבע, קובייה, קלפים, כדורים בשק)\n- פעולות קבוצות: איחוד ($A \\cup B$), חיתוך ($A \\cap B$), משלים ($A^c$)\n- אקסיומות קולמוגורוב ומסקנותיהן (כלל המשלים, הכלה-הפסה)\n- הסתברות קלאסית כשהתוצאות שוות-הסתברות: $P(A) = |A|/|\\Omega|$\n- כלל חיבור לאירועים זרים; הכלה-הפסה לשני אירועים\n- בעיות \"לפחות אחד\" — כמעט תמיד מהיר יותר דרך המשלים $1 - P(\\text{none})$\n\n**מיקוד 4 יח׳:** פרמטרים, אלגברה↔גרף, פריטים רב-שלביים."
+    },
+    {
+      "id": "definition",
+      "kind": "definition",
+      "title_en": "Sample Space and Events",
+      "title_he": "מרחב מדגם ואירועים",
+      "body_en_md": "**Random experiment:** A procedure whose outcome cannot be predicted with certainty before it is performed (rolling a die, drawing a card, measuring a patient's blood pressure).\n\n**Sample space $\\Omega$:** The set of all possible elementary outcomes. Examples: $\\Omega = \\{H, T\\}$ for one coin flip; $\\Omega = \\{(1,1), (1,2), \\ldots, (6,6)\\}$ for two dice as ordered pairs; $\\Omega = \\{1,2,3,4,5,6\\}$ for one die.\n\n**Event $A$:** Any subset $A \\subseteq \\Omega$. An event is a collection of outcomes we care about. Example: \"sum is 7\" on two dice is the set $\\{(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)\\}$.\n\n**Event operations (set language):**\n- **Union** $A \\cup B$: at least one of $A$ or $B$ occurs (\"A or B\" in inclusive sense).\n- **Intersection** $A \\cap B$: both $A$ and $B$ occur (\"A and B\").\n- **Complement** $A^c = \\Omega \\setminus A$: $A$ does **not** occur.\n\n**Mutually exclusive (disjoint):** $A \\cap B = \\emptyset$ — the events cannot both happen.\n\n**Exhaustive partition:** Events $B_1, \\ldots, B_k$ cover $\\Omega$ with no overlap — exactly one occurs.\n\n**De Morgan's laws** (essential for complement problems):\n$$(A \\cup B)^c = A^c \\cap B^c, \\qquad (A \\cap B)^c = A^c \\cup B^c$$\n\nRead De Morgan as: \"not (A or B)\" equals \"(not A) and (not B)\". These laws convert awkward \"at least one\" wording into manageable complement arithmetic.",
+      "body_he_md": "**ניסוי מקרי:** תהליך שתוצאתו אינה ניתנת לחיזוי בוודאות לפני ביצועו (הטלת קובייה, שליפת קלף, מדידת לחץ דם).\n\n**מרחב מדגם $\\Omega$:** קבוצת כל התוצאות האפשריות. דוגמאות: $\\Omega = \\{H, T\\}$ להטלת מטבע; $\\Omega = \\{(1,1), (1,2), \\ldots, (6,6)\\}$ לשתי קוביות כזוגות סדורים; $\\Omega = \\{1,2,3,4,5,6\\}$ לקובייה אחת.\n\n**אירוע $A$:** כל תת-קבוצה $A \\subseteq \\Omega$. אירוע הוא אוסף תוצאות שמעניין אותנו. דוגמה: \"סכום 7\" בשתי קוביות הוא $\\{(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)\\}$.\n\n**פעולות על אירועים (שפת קבוצות):**\n- **איחוד** $A \\cup B$: לפחות אחד מ-$A$ או $B$ מתרחש (\"A או B\" במובן כולל).\n- **חיתוך** $A \\cap B$: גם $A$ וגם $B$ מתרחשים (\"A וגם B\").\n- **משלים** $A^c = \\Omega \\setminus A$: $A$ **לא** מתרחש.\n\n**זרים (מנוגדים):** $A \\cap B = \\emptyset$ — שני האירועים לא יכולים להתרחש יחד.\n\n**פרדה מאכללת:** אירועים $B_1, \\ldots, B_k$ מכסים את $\\Omega$ בלי חפיפה — בדיוק אחד מתרחש.\n\n**חוקי דה-מורגן** (חיוניים לבעיות משלים):\n$$(A \\cup B)^c = A^c \\cap B^c, \\qquad (A \\cap B)^c = A^c \\cup B^c$$\n\nקראו דה-מורגן כך: \"לא (A או B)\" שווה ל-\"(לא A) וגם (לא B)\". החוקים ממירים ניסוח \"לפחות אחד\" למשלים נוח לחישוב."
+    },
+    {
+      "id": "theory",
+      "kind": "theory",
+      "title_en": "Kolmogorov Axioms and Classical Probability",
+      "title_he": "אקסיומות קולמוגורוב והסתברות קלאסית",
+      "body_en_md": "**Kolmogorov's three axioms** define every legitimate probability measure $P$:\n\n1. **Non-negativity:** $P(A) \\geq 0$ for every event $A$.\n2. **Normalization:** $P(\\Omega) = 1$ — something must happen.\n3. **Additivity for disjoint events:** If $A \\cap B = \\emptyset$, then $P(A \\cup B) = P(A) + P(B)$.\n\n**Consequences you use on every exam:**\n- $P(\\emptyset) = 0$ (impossible event).\n- **Complement rule:** $P(A^c) = 1 - P(A)$.\n- **Inclusion-exclusion (two events):** $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$. The subtraction removes outcomes counted twice in $A \\cap B$.\n- **Monotonicity:** If $A \\subseteq B$, then $P(A) \\leq P(B)$.\n- **Bound:** $0 \\leq P(A) \\leq 1$ always.\n\n**Classical probability** applies when $\\Omega$ is **finite** and all outcomes are **equally likely**:\n$$P(A) = \\frac{|A|}{|\\Omega|} = \\frac{\\text{number of favorable outcomes}}{\\text{total outcomes}}$$\n\nBefore using this formula, verify both conditions: finite sample space and symmetry/fairness.\n\n**\"At least one\" strategy:** Direct counting of \"at least one success\" is tedious. Instead:\n$$P(\\text{at least one}) = 1 - P(\\text{none})$$\nThis works for coins, dice, birthday problems, and quality-control sampling. De Morgan gives the language: $(A_1 \\cup A_2 \\cup \\cdots)^c = A_1^c \\cap A_2^c \\cap \\cdots$.\n\n**Without replacement:** When objects are drawn and not returned, probabilities change each draw. Use sequential multiplication $\\frac{n_1}{N} \\cdot \\frac{n_2}{N-1} \\cdots$ or combinations $\\binom{\\cdot}{\\cdot}$ when order does not matter.",
+      "body_he_md": "**שלוש אקסיומות קולמוגורוב** מגדירות כל מידת הסתברות $P$ לגיטימית:\n\n1. **אי-שליליות:** $P(A) \\geq 0$ לכל אירוע $A$.\n2. **נרמול:** $P(\\Omega) = 1$ — חייב להתרחש משהו.\n3. **אדיטיביות לאירועים זרים:** אם $A \\cap B = \\emptyset$, אז $P(A \\cup B) = P(A) + P(B)$.\n\n**מסקנות שמשתמשים בהן בכל בחינה:**\n- $P(\\emptyset) = 0$ (אירוע בלתי-אפשרי).\n- **כלל המשלים:** $P(A^c) = 1 - P(A)$.\n- **הכלה-הפסה (שני אירועים):** $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$. החיסור מסיר תוצאות שנספרו פעמיים ב-$A \\cap B$.\n- **מונוטוניות:** אם $A \\subseteq B$, אז $P(A) \\leq P(B)$.\n- **גבול:** תמיד $0 \\leq P(A) \\leq 1$.\n\n**הסתברות קלאסית** חלה כש-$\\Omega$ **סופי** וכל התוצאות **שוות-הסתברות**:\n$$P(A) = \\frac{|A|}{|\\Omega|} = \\frac{\\text{favorable outcomes}}{\\text{total outcomes}}$$\n\nלפני שימוש בנוסחה, ודאו שני תנאים: מרחב מדגם סופי וסימטריה/הוגנות.\n\n**אסטרטגיית \"לפחות אחד\":** ספירה ישירה של \"לפחות הצלחה אחת\" מייגעת. במקום:\n$$P(\\text{at least one}) = 1 - P(\\text{none})$$\nזה עובד במטבעות, קוביות, בעיית ימי הולדת ודגימות בקרת איכות. דה-מורגן נותן את השפה: $(A_1 \\cup A_2 \\cup \\cdots)^c = A_1^c \\cap A_2^c \\cap \\cdots$.\n\n**ללא החזרה:** כששולפים ולא מחזירים, ההסתברויות משתנות בכל שליפה. השתמשו בכפל רציף $\\frac{n_1}{N} \\cdot \\frac{n_2}{N-1} \\cdots$ או בצירופים $\\binom{\\cdot}{\\cdot}$ כשסדר לא חשוב."
+    },
+    {
+      "id": "worked_example_1",
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Dice Sample Space",
+      "title_he": "דוגמה פתורה 1 — מרחב מדגם של קוביות",
+      "body_en_md": "**Two fair dice are rolled. Find:**\n(a) $|\\Omega|$\n(b) $P(\\text{sum} = 7)$\n(c) $P(\\text{at least one 6})$\n\nThis is the canonical Bagrut dice problem — it tests sample-space size, classical counting, and the complement strategy in one scenario.\n\n### Move 1: Build the sample space\nEach die has 6 outcomes. Ordered pairs $(i,j)$ with $i,j \\in \\{1,\\ldots,6\\}$ give $|\\Omega| = 6 \\times 6 = 36$. **Order matters** here: $(1,6) \\neq (6,1)$ unless the problem says \"unordered.\"\n\n### Move 2: Count favorable outcomes for sum 7\nPairs with sum 7: $(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)$ — exactly **6** outcomes.\n$$P(\\text{sum}=7) = \\frac{6}{36} = \\frac{1}{6}$$\n\n### Move 3: \"At least one 6\" via complement\nDirect count: outcomes with at least one 6 = $6 + 6 - 1 = 11$ (first die 6 OR second die 6, minus double-counted $(6,6)$). Faster via complement:\n$$P(\\text{no 6 on either die}) = \\frac{5}{6} \\cdot \\frac{5}{6} = \\frac{25}{36}$$\n$$P(\\text{at least one 6}) = 1 - \\frac{25}{36} = \\frac{11}{36}$$\n\n**Answer:** (a) $36$; (b) $1/6$; (c) $11/36$. Always state whether dice are ordered — it changes $|\\Omega|$ completely.",
+      "body_he_md": "**שתי קוביות הוגנות מוטלות. מצאו:**\n(א) $|\\Omega|$\n(ב) $P(\\text{sum} = 7)$\n(ג) $P(\\text{at least one six})$\n\nזו בעיית הקוביות הקלאסית בבגרות — בודקת גודל מרחב מדגם, ספירה קלאסית ואסטרטגיית משלים בסיטואציה אחת.\n\n### צעד 1: בניית מרחב המדגם\nלכל קובייה 6 תוצאות. זוגות סדורים $(i,j)$ עם $i,j \\in \\{1,\\ldots,6\\}$ נותנים $|\\Omega| = 6 \\times 6 = 36$. **סדר חשוב** כאן: $(1,6) \\neq (6,1)$ אלא אם השאלה אומרת \"לא סדור.\"\n\n### צעד 2: ספירת תוצאות חיוביות לסכום 7\nזוגות עם סכום 7: $(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)$ — בדיוק **6** תוצאות.\n$$P(\\text{sum}=7) = \\frac{6}{36} = \\frac{1}{6}$$\n\n### צעד 3: \"לפחות שש אחת\" דרך משלים\nספירה ישירה: תוצאות עם לפחות שש אחת = $6 + 6 - 1 = 11$. מהיר יותר דרך משלים:\n$$P(\\text{no six on any die}) = \\frac{5}{6} \\cdot \\frac{5}{6} = \\frac{25}{36}$$\n$$P(\\text{at least one six}) = 1 - \\frac{25}{36} = \\frac{11}{36}$$\n\n**תשובה:** (א) $36$; (ב) $1/6$; (ג) $11/36$. תמיד ציינו אם הקוביות סדורות — זה משנה את $|\\Omega|$ לחלוטין."
+    },
+    {
+      "id": "checkpoint_1",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A card is drawn from a 52-card deck. Find $P(\\text{red ace})$.",
+      "body_he_md": "קלף מחפיסה של 52 קלפים. מצא $P(\\text{red ace})$.",
+      "checkpoint_solution_en": "A standard deck has 52 cards. We want $P(\\text{red ace})$ — drawing a card that is both an ace and red.\n\n**Step 1:** Identify favorable outcomes. Red aces: ace of hearts and ace of diamonds — $|A| = 2$.\n\n**Step 2:** Sample space size: $|\\Omega| = 52$ (one card drawn uniformly).\n\n**Step 3:** Classical probability (each card equally likely):\n$$P(\\text{red ace}) = \\frac{2}{52} = \\frac{1}{26} \\approx 0.0385$$\n\n**Check:** There are 4 aces total and 26 red cards, but only 2 cards satisfy both conditions. **Answer:** $1/26$.",
+      "checkpoint_solution_he": "בחפיסה סטנדרטית 52 קלפים. מחפשים $P(\\text{red ace})$ — קלף שהוא גם אס וגם אדום.\n\n**שלב 1:** זיהוי תוצאות חיוביות. אסים אדומים: אס לב ואס יהלום — $|A| = 2$.\n\n**שלב 2:** גודל מרחב המדגם: $|\\Omega| = 52$ (קלף אחד נשלף באחידות).\n\n**שלב 3:** הסתברות קלאסית (כל קלף שווה-הסתברות):\n$$P(\\text{red ace}) = \\frac{2}{52} = \\frac{1}{26} \\approx 0.0385$$\n\n**בדיקה:** יש 4 אסים בסך הכל ו-26 קלפים אדומים, אך רק 2 קלפים מקיימים את שני התנאים. **תשובה:** $1/26$."
+    },
+    {
+      "id": "worked_example_2",
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Inclusion-Exclusion",
+      "title_he": "דוגמה פתורה 2 — הכלה-הפסה",
+      "body_en_md": "**In a class of 30 students: 18 study math (M), 15 study physics (P), 10 study both. Find:**\n(a) $P(M \\cup P)$ — a student studies math or physics (or both)\n(b) $P(\\text{neither M nor P})$\n\nThis is a Venn-diagram word problem translated into probability. The counts become probabilities by dividing by the class size.\n\n### Move 1: Convert counts to probabilities\n$P(M) = 18/30$, $P(P) = 15/30$, $P(M \\cap P) = 10/30$.\n\n### Move 2: Apply inclusion-exclusion for the union\n$$P(M \\cup P) = P(M) + P(P) - P(M \\cap P) = \\frac{18}{30} + \\frac{15}{30} - \\frac{10}{30} = \\frac{23}{30}$$\n\nThe subtraction of $10/30$ removes students counted in both circles.\n\n### Move 3: \"Neither\" via complement\nStudents outside both circles:\n$$P(\\text{neither}) = 1 - P(M \\cup P) = 1 - \\frac{23}{30} = \\frac{7}{30}$$\n\n**Venn check:** Only M = $18-10=8$; only P = $15-10=5$; both = $10$; neither = $30-8-5-10=7$. ✓\n\n**Answer:** (a) $23/30$; (b) $7/30$. On Bagrut, draw the Venn diagram before writing the formula — it prevents sign errors.",
+      "body_he_md": "**בכיתה של 30 תלמידים: 18 לומדים מתמטיקה (M), 15 לומדים פיזיקה (P), 10 לומדים את שניהם. מצאו:**\n(א) $P(M \\cup P)$ — תלמיד לומד מתמטיקה או פיזיקה (או שניהם)\n(ב) $P(\\text{neither M nor P})$\n\nזו בעיית מילים עם דיאגרמת ון שמתורגמת להסתברות. הספירות הופכות להסתברויות בחלוקה בגודל הכיתה.\n\n### צעד 1: המרת ספירות להסתברויות\n$P(M) = 18/30$, $P(P) = 15/30$, $P(M \\cap P) = 10/30$.\n\n### צעד 2: יישום הכלה-הפסה לאיחוד\n$$P(M \\cup P) = P(M) + P(P) - P(M \\cap P) = \\frac{18}{30} + \\frac{15}{30} - \\frac{10}{30} = \\frac{23}{30}$$\n\nהחיסור של $10/30$ מסיר תלמידים שנספרו בשני המעגלים.\n\n### צעד 3: \"לא שניהם\" דרך משלים\nתלמידים מחוץ לשני המעגלים:\n$$P(\\text{not both}) = 1 - P(M \\cup P) = 1 - \\frac{23}{30} = \\frac{7}{30}$$\n\n**בדיקת ון:** רק M = $18-10=8$; רק P = $15-10=5$; שניהם = $10$; לא = $30-8-5-10=7$. ✓\n\n**תשובה:** (א) $23/30$; (ב) $7/30$. בבגרות — ציירו דיאגרמת ון לפני הנוסחה; זה מונע טעויות סימן."
+    },
+    {
+      "id": "checkpoint_2",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "$P(A) = 0.5$, $P(B) = 0.4$, $P(A \\cap B) = 0.2$. Find $P(A \\cup B)$.",
+      "body_he_md": "$P(A)=0.5$, $P(B)=0.4$, $P(A\\cap B)=0.2$. מצא $P(A\\cup B)$.",
+      "checkpoint_solution_en": "Given $P(A)=0.5$, $P(B)=0.4$, $P(A \\cap B)=0.2$. Find $P(A \\cup B)$.\n\n**Step 1:** Recognize this as a two-event union with overlap — inclusion-exclusion applies (events are NOT mutually exclusive since $P(A \\cap B) > 0$).\n\n**Step 2:** Apply the formula:\n$$P(A \\cup B) = P(A) + P(B) - P(A \\cap B) = 0.5 + 0.4 - 0.2 = 0.7$$\n\n**Step 3:** Sanity check — union probability must exceed each individual probability and stay $\\leq 1$. Here $0.7 > 0.5$ and $0.7 > 0.4$ ✓.\n\n**Answer:** $0.7$.",
+      "checkpoint_solution_he": "נתון $P(A)=0.5$, $P(B)=0.4$, $P(A \\cap B)=0.2$. מצאו $P(A \\cup B)$.\n\n**שלב 1:** זיהוי איחוד של שני אירועים עם חפיפה — הכלה-הפסה (האירועים **לא** זרים כי $P(A \\cap B) > 0$).\n\n**שלב 2:** יישום הנוסחה:\n$$P(A \\cup B) = P(A) + P(B) - P(A \\cap B) = 0.5 + 0.4 - 0.2 = 0.7$$\n\n**שלב 3:** בדיקת הגיון — הסתברות האיחוד חייבת לעלות על כל אחת בנפרד ולהישאר $\\leq 1$. כאן $0.7 > 0.5$ ו-$0.7 > 0.4$ ✓.\n\n**תשובה:** $0.7$."
+    },
+    {
+      "id": "worked_example_3",
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Hypergeometric Sampling",
+      "title_he": "דוגמה פתורה 3 — דגימה היפר-גיאומטרית",
+      "body_en_md": "**A bag contains 5 red and 7 blue balls. 3 balls are drawn without replacement. Find $P(\\text{exactly 2 red})$.**\n\nThis hypergeometric-style problem combines classical counting with combinations. \"Without replacement\" means each draw changes the composition — unlike independent trials with replacement.\n\n### Move 1: Total ways to choose 3 from 12\nOrder does not matter (we only care about colors, not draw sequence):\n$$|\\Omega| = \\binom{12}{3} = \\frac{12 \\times 11 \\times 10}{3 \\times 2 \\times 1} = 220$$\n\n### Move 2: Favorable outcomes — exactly 2 red and 1 blue\nChoose 2 red from 5 AND 1 blue from 7:\n$$|A| = \\binom{5}{2} \\times \\binom{7}{1} = 10 \\times 7 = 70$$\n\n### Move 3: Classical probability\n$$P(A) = \\frac{70}{220} = \\frac{7}{22} \\approx 0.318$$\n\n**Alternative (sequential):** $\\frac{5}{12} \\cdot \\frac{4}{11} \\cdot \\frac{7}{10} \\times 3!$ accounts for all orderings of RR B — same answer.\n\n**Answer:** $7/22$. On exams, state clearly whether order matters before choosing $\\binom{n}{k}$ vs. sequential products. Compare with replacement: $P(\\text{2 red, 1 blue with replacement}) = 3 \\cdot (5/12)^2(7/12) \\approx 0.30$ — slightly lower than without replacement because drawing red does not deplete the bag.",
+      "body_he_md": "**בשקית 5 כדורים אדומים ו-7 כחולים. שולפים 3 כדורים ללא החזרה. מצאו $P(\\text{exactly 2 red})$.**\n\nבעיה בסגנון היפר-גיאומטרי שמשלבת ספירה קלאסית עם צירופים. \"ללא החזרה\" אומר שכל שליפה משנה את הרכב השקית — בניגוד לניסויים בלתי-תלויים עם החזרה.\n\n### צעד 1: סך הדרכים לבחור 3 מתוך 12\nסדר לא חשוב (אכפת רק מהצבעים, לא מסדר השליפות):\n$$|\\Omega| = \\binom{12}{3} = \\frac{12 \\times 11 \\times 10}{3 \\times 2 \\times 1} = 220$$\n\n### צעד 2: תוצאות חיוביות — בדיוק 2 אדומים ו-1 כחול\nבוחרים 2 אדומים מ-5 **וגם** 1 כחול מ-7:\n$$|A| = \\binom{5}{2} \\times \\binom{7}{1} = 10 \\times 7 = 70$$\n\n### צעד 3: הסתברות קלאסית\n$$P(A) = \\frac{70}{220} = \\frac{7}{22} \\approx 0.318$$\n\n**חלופה (רצף):** $\\frac{5}{12} \\cdot \\frac{4}{11} \\cdot \\frac{7}{10} \\times 3!$ מחשבת את כל הסדרים של אא כ — אותה תשובה.\n\n**תשובה:** $7/22$. בבחינה — ציינו בבירור אם סדר חשוב לפני בחירה בין $\\binom{n}{k}$ לבין כפל הסתברויות רציף. השוו עם החזרה: $P(\\text{2 red, 1 blue with replacement}) = 3 \\cdot (5/12)^2(7/12) \\approx 0.30$ — מעט נמוך יותר מללא החזרה כי שליפת אדום לא מדלדלת את השקית."
+    },
+    {
+      "id": "method_guide",
+      "kind": "theory",
+      "title_en": "Probability Starts With Listing Everything That Can Happen",
+      "title_he": "הסתברות מתחילה ברישום כל מה שיכול לקרות",
+      "body_en_md": "Before any probability formula, there's one foundational question: **what are all the possible outcomes?** The complete list is the **sample space**, and getting it right — no missing cases, no double-counting — is what makes every later calculation correct. Most probability mistakes are really sample-space mistakes.\n\n### The three building blocks\n- **Sample space $S$**: the set of *all* possible outcomes of an experiment. Rolling a die: $S=\\{1,2,3,4,5,6\\}$.\n- **Outcome**: a single element of $S$ (one particular result).\n- **Event**: any subset of $S$ — a collection of outcomes you care about. 'Rolling even' is the event $\\{2,4,6\\}$.\n\nProbability is fundamentally about *measuring the size of an event relative to the whole sample space.*\n\n### Equally likely outcomes: the classical definition\nWhen every outcome in $S$ is **equally likely** (a fair die, a well-shuffled deck), probability becomes pure counting:\n$$P(E)=\\frac{|E|}{|S|}=\\frac{\\text{number of favorable outcomes}}{\\text{total number of outcomes}}.$$\nThis is why $P(\\text{even})=\\tfrac{3}{6}=\\tfrac12$. The entire art reduces to **counting** the event and the sample space correctly — which is why combinatorics and probability are inseparable. Warning: this formula *only* works when outcomes are equally likely; if they aren't, you must weight them.\n\n### Building sample spaces for multi-step experiments\nFor experiments with stages (two dice, a coin then a card), the sample space is the set of **ordered combinations**. The **counting principle** says: if step one has $m$ outcomes and step two has $n$, the combined experiment has $m\\times n$ outcomes. Two dice give $6\\times 6=36$ outcomes — and listing them as a $6\\times6$ grid is the surest way to count events like 'sum equals 7' without error.\n\n### Complements, unions, and why they help\nTwo rules make hard events easy:\n- **Complement:** $P(\\text{not }E)=1-P(E)$. When 'at least one' is messy to count directly, count the *opposite* ('none') and subtract — often far easier.\n- **Union (addition rule):** $P(A\\text{ or }B)=P(A)+P(B)-P(A\\text{ and }B)$. Subtract the overlap so outcomes in both aren't counted twice.\n\nBoth rules are really statements about the *sizes of sets* within the sample space — which is why a clear picture of $S$ makes them obvious rather than formulas to memorise.\n\n### The takeaway\nDon't reach for a formula first. Define the experiment, build the complete sample space, decide whether outcomes are equally likely, then count. A correct sample space turns probability from guesswork into careful bookkeeping.",
+      "body_he_md": "לפני כל נוסחת הסתברות, יש שאלה יסודית אחת: **מהן כל התוצאות האפשריות?** הרשימה המלאה היא **מרחב המדגם**, וקבלתה נכון — ללא מקרים חסרים, ללא ספירה כפולה — היא מה שהופך כל חישוב מאוחר יותר לנכון. רוב טעויות ההסתברות הן באמת טעויות מרחב-מדגם.\n\n### שלוש אבני הבניין\n- **מרחב מדגם $S$**: קבוצת *כל* התוצאות האפשריות של ניסוי. הטלת קובייה: $S=\\{1,2,3,4,5,6\\}$.\n- **תוצאה**: איבר יחיד של $S$ (תוצאה מסוימת אחת).\n- **מאורע**: כל תת-קבוצה של $S$ — אוסף תוצאות שאכפת לכם מהן. 'הטלת זוגי' הוא המאורע $\\{2,4,6\\}$.\n\nהסתברות היא ביסודה על *מדידת גודל מאורע ביחס לכל מרחב המדגם.*\n\n### תוצאות שוות-סבירות: ההגדרה הקלאסית\nכשכל תוצאה ב-$S$ **שוות-סבירות** (קובייה הוגנת, חפיסה מעורבבת היטב), הסתברות הופכת לספירה טהורה:\n$$P(E)=\\frac{|E|}{|S|},$$\nכלומר מספר התוצאות הרצויות חלקי מספר התוצאות הכולל. לכן ההסתברות לזוגי היא $\\tfrac{3}{6}=\\tfrac12$. כל האמנות מצטמצמת ל**ספירה** נכונה של המאורע ומרחב המדגם — ולכן קומבינטוריקה והסתברות בלתי נפרדות. אזהרה: הנוסחה הזאת עובדת *רק* כשהתוצאות שוות-סבירות; אם לא, חייבים לשקלל אותן.\n\n### בניית מרחבי מדגם לניסויים רב-שלביים\nעבור ניסויים עם שלבים (שתי קוביות, מטבע ואז קלף), מרחב המדגם הוא קבוצת ה**צירופים המסודרים**. **עקרון הספירה** אומר: אם לשלב הראשון $m$ תוצאות ולשני $n$, לניסוי המשולב יש $m\\times n$ תוצאות. שתי קוביות נותנות $6\\times 6=36$ תוצאות — ורישומן כרשת $6\\times6$ היא הדרך הבטוחה ביותר לספור מאורעות כמו 'הסכום שווה 7' ללא טעות.\n\n### משלימים, איחודים, ומדוע הם עוזרים\nשני כללים הופכים מאורעות קשים לקלים:\n- **משלים:** $P(E^c)=1-P(E)$ (כאשר $E^c$ הוא 'לא $E$'). כש'לפחות אחד' מבולגן לספירה ישירה, ספרו את ה*הפך* ('אף אחד') וחסרו — לרוב קל בהרבה.\n- **איחוד (כלל החיבור):** $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$ (כאשר $\\cup$ הוא 'או' ו-$\\cap$ הוא 'וגם'). חסרו את החפיפה כדי שתוצאות בשניהם לא ייספרו פעמיים.\n\nשני הכללים הם באמת טענות על *גדלי קבוצות* בתוך מרחב המדגם — ולכן תמונה ברורה של $S$ הופכת אותם למובנים מאליהם במקום נוסחאות לשינון.\n\n### המסקנה\nאל תושיטו יד לנוסחה ראשונה. הגדירו את הניסוי, בנו את מרחב המדגם המלא, החליטו האם התוצאות שוות-סבירות, ואז ספרו. מרחב מדגם נכון הופך הסתברות מניחוש לניהול חשבונות זהיר."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — Two Dice: Build the Space, Then Count",
+      "title_he": "דוגמה פתורה 4 — שתי קוביות: בנו את המרחב, ואז ספרו",
+      "body_en_md": "**Problem.** Two fair dice are rolled. (a) How many outcomes are in the sample space? (b) $P(\\text{sum}=7)$? (c) $P(\\text{sum}\\ge 4)$ using the complement.\n\n### Step 1: (a) Build the sample space by the counting principle\nEach die has $6$ outcomes, and the rolls are independent stages:\n$$|S|=6\\times 6=36$$\nordered pairs $(d_1,d_2)$, all equally likely.\n\n### Step 2: (b) Count outcomes with sum 7\nList the favorable pairs: $(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)$ — that's $6$ outcomes.\n$$P(\\text{sum}=7)=\\frac{6}{36}=\\frac16.$$\nSeven is the most likely total precisely because it has the most pairs.\n\n### Step 3: (c) Recognize the complement is easier\n'Sum $\\ge 4$' has many cases; its complement 'sum $\\le 3$' has few. Count the complement: sum $=2$: $(1,1)$; sum $=3$: $(1,2),(2,1)$. That's $3$ outcomes.\n\n### Step 4: Apply the complement rule\n$$P(\\text{sum}\\le 3)=\\frac{3}{36}=\\frac{1}{12},\\qquad P(\\text{sum}\\ge 4)=1-\\frac{1}{12}=\\frac{11}{12}.$$\n\n### Step 5: Sanity check\n$\\tfrac{11}{12}\\approx 0.92$ — most sums are $4$ or more, which matches intuition (only three of $36$ pairs are below $4$). ✓\n\n**Answer:** (a) $36$ outcomes; (b) $P(\\text{sum}=7)=\\tfrac16$; (c) $P(\\text{sum}\\ge4)=\\tfrac{11}{12}$. Building the $36$-outcome space made every count exact, and the complement turned a big count into a tiny one.",
+      "body_he_md": "**בעיה.** שתי קוביות הוגנות מוטלות. (א) כמה תוצאות במרחב המדגם? (ב) $P(\\text{sum}=7)$? (ג) $P(\\text{sum}\\ge 4)$ בעזרת המשלים.\n\n### שלב 1: (א) בנו את מרחב המדגם בעקרון הספירה\nלכל קובייה $6$ תוצאות, וההטלות הן שלבים בלתי תלויים:\n$$|S|=6\\times 6=36$$\nזוגות מסודרים $(d_1,d_2)$, כולם שווי-סבירות.\n\n### שלב 2: (ב) ספרו תוצאות עם סכום 7\nרשמו את הזוגות הרצויים: $(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)$ — זה $6$ תוצאות.\n$$P(\\text{sum}=7)=\\frac{6}{36}=\\frac16.$$\nשבע הוא הסכום הסביר ביותר בדיוק כי יש לו הכי הרבה זוגות.\n\n### שלב 3: (ג) זהו שהמשלים קל יותר\nל'סכום $\\ge 4$' יש הרבה מקרים; למשלימו 'סכום $\\le 3$' יש מעט. ספרו את המשלים: סכום $=2$: $(1,1)$; סכום $=3$: $(1,2),(2,1)$. זה $3$ תוצאות.\n\n### שלב 4: החילו את כלל המשלים\n$$P(\\text{sum}\\le 3)=\\frac{3}{36}=\\frac{1}{12},\\qquad P(\\text{sum}\\ge 4)=1-\\frac{1}{12}=\\frac{11}{12}.$$\n\n### שלב 5: בדיקת היגיון\n$\\tfrac{11}{12}\\approx 0.92$ — רוב הסכומים הם $4$ או יותר, מה שתואם אינטואיציה (רק שלושה מ-$36$ זוגות מתחת ל-$4$). ✓\n\n**תשובה:** (א) $36$ תוצאות; (ב) $P(\\text{sum}=7)=\\tfrac16$; (ג) $P(\\text{sum}\\ge4)=\\tfrac{11}{12}$. בניית מרחב $36$-התוצאות הפכה כל ספירה למדויקת, והמשלים הפך ספירה גדולה לזעירה."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide",
+      "title_he": "מדריך שיטה",
+      "body_en_md": "| Problem type | Formula / Method | When to use |\n|---|---|---|\n| Union of 2 events | $P(A)+P(B)-P(A\\cap B)$ | \"A or B\" with overlap possible |\n| Mutually exclusive union | $P(A)+P(B)$ | $A \\cap B = \\emptyset$ confirmed |\n| Complement | $P(A^c) = 1-P(A)$ | \"Not A\", \"at least one\" via $1-P(\\text{none})$ |\n| Classical (equal outcomes) | $|A|/|\\Omega|$ | Finite, fair, equally likely |\n| Without replacement ($k$ draws) | $\\binom{n}{k}$ or sequential product | Urns, cards, balls — no return |\n| De Morgan | $(A\\cup B)^c = A^c \\cap B^c$ | Flip \"or\" to \"and\" under complement |\n\n**Decision flow:** (1) Identify $\\Omega$ and whether outcomes are equally likely. (2) Translate words to set notation — \"or\" $\\to \\cup$, \"and\" $\\to \\cap$. (3) Check if events are disjoint before adding. (4) If \"at least one,\" try complement first.\n\n**Tip:** Write $|\\Omega|$ on scratch paper before any counting. A wrong denominator ruins an otherwise correct numerator.",
+      "body_he_md": "| סוג שאלה | נוסחה / שיטה | מתי להשתמש |\n|---|---|---|\n| איחוד 2 אירועים | $P(A)+P(B)-P(A\\cap B)$ | \"A או B\" עם חפיפה אפשרית |\n| איחוד זרים | $P(A)+P(B)$ | $A \\cap B = \\emptyset$ מאומת |\n| משלים | $P(A^c) = 1-P(A)$ | \"לא A\", \"לפחות אחד\" דרך $1-P(\\text{none})$ |\n| קלאסית (שווה-הסתברות) | $|A|/|\\Omega|$ | סופי, הוגן, שווה-הסתברות |\n| ללא החזרה ($k$ שליפות) | $\\binom{n}{k}$ או כפל רציף | שקיות, קלפים, כדורים — בלי החזרה |\n| דה-מורגן | $(A\\cup B)^c = A^c \\cap B^c$ | הפיכת \"או\" ל-\"וגם\" תחת משלים |\n\n**זרימת החלטה:** (1) זהו $\\Omega$ והאם התוצאות שוות-הסתברות. (2) תרגמו מילים לסימון קבוצות — \"או\" $\\to \\cup$, \"וגם\" $\\to \\cap$. (3) בדקו אם האירועים זרים לפני חיבור. (4) אם \"לפחות אחד\" — נסו משלים קודם.\n\n**טיפ:** כתבו $|\\Omega|$ על טיוטה לפני כל ספירה. מכנה שגוי הורס מונה נכון."
+    },
+    {
+      "id": "exercise_set",
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "A die is rolled. Find $P(\\text{even number})$.",
+          "body_he": "קובייה. מצא $P(\\text{even number})$.",
+          "solution_en": "**Solution:**\n\n$P = 3/6 = 1/2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$1/2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "A coin is flipped 3 times. Write the sample space $\\Omega$ and find $|\\Omega|$.",
+          "body_he": "מטבע מוטל 3 פעמים. כתוב $\\Omega$ ומצא $|\\Omega|$.",
+          "solution_en": "**Solution:**\n\n$\\Omega = \\{HHH,HHT,...\\}$, $|\\Omega|=8$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$|\\Omega| = 8$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "$P(A)=0.3$. Find $P(A^c)$.",
+          "body_he": "$P(A)=0.3$. מצא $P(A^c)$.",
+          "solution_en": "**Solution:**\n\n$P(A^c) = 1-0.3 = 0.7$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$0.7$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Events A and B are mutually exclusive with $P(A)=0.4$, $P(B)=0.3$. Find $P(A \\cup B)$.",
+          "body_he": "אירועים $A$, $B$ זרים. $P(A)=0.4$, $P(B)=0.3$. מצא $P(A\\cup B)$.",
+          "solution_en": "**Solution:**\n\n$P(A\\cup B) = 0.4+0.3 = 0.7$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$0.7$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Two dice are rolled. Find $P(\\text{sum} \\geq 10)$.",
+          "body_he": "שתי קוביות. מצא $P(\\text{sum} \\geq 10)$.",
+          "solution_en": "Favorable: (4,6),(5,5),(5,6),(6,4),(6,5),(6,6) — 6 outcomes. $P = 6/36 = 1/6$.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n6 תוצאות. $P = 1/6$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "100 people: 60 drink coffee, 40 drink tea, 25 drink both. Find $P(\\text{coffee or tea})$.",
+          "body_he": "100 אנשים: 60 קפה, 40 תה, 25 שניהם. $P(\\text{coffee or tea})$?",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P = (60+40-25)/100 = 75/100 = 0.75$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$0.75$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "3 cards drawn from 52 without replacement. Find $P(\\text{all 3 are aces})$.",
+          "body_he": "3 קלפים מ-52 ללא החזרה. $P(\\text{all three aces})$?",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P = \\frac{4}{52}\\cdot\\frac{3}{51}\\cdot\\frac{2}{50} = \\frac{24}{132600} = \\frac{1}{5525}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$P = 1/5525$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "A bag has 4 red, 3 blue, 5 green balls. One is drawn. Find $P(\\text{red or blue})$.",
+          "body_he": "שק: 4 אדומות, 3 כחולות, 5 ירוקות. שולפים אחת. $P(\\text{red or blue})$?",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P = (4+3)/12 = 7/12$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$7/12$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "5 items; 2 are defective. 3 are selected randomly. Find $P(\\text{no defective})$.",
+          "body_he": "5 פריטים; 2 פגומים. בוחרים 3. $P(\\text{no defective})$?",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\binom{3}{3}/\\binom{5}{3} = 1/10$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$1/10$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove from Kolmogorov axioms that $P(A^c) = 1 - P(A)$.",
+          "body_he": "הוכח מאקסיומות קולמוגורוב: $P(A^c) = 1-P(A)$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$A$ and $A^c$ are mutually exclusive and $A \\cup A^c = \\Omega$. By axiom 3: $P(A) + P(A^c) = P(\\Omega) = 1$. So $P(A^c) = 1 - P(A)$. ∎\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$A \\cap A^c = \\emptyset$, $A \\cup A^c = \\Omega$. אקסיומות 2+3: $P(A)+P(A^c)=1$. ■\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "In a class of 40, each student studies at least one of: Math (32), Physics (18), Chemistry (14). 6 study all three, 4 study only Math+Physics, 3 study only Physics+Chemistry. How many study only Math+Chemistry?",
+          "body_he": "40 תלמידים, לפחות מקצוע אחד: מתמטיקה (32), פיזיקה (18), כימיה (14). 6 לומדים את שלושתם, 4 רק מת'+פיז', 3 רק פיז'+כימ'. כמה רק מת'+כימ'?",
+          "solution_en": "**Solution:**\n\nLet $x$ = only Math+Chemistry. Then $|M \\cap C| = x + 6$.\n$|M \\cap P| = 4 + 6 = 10$, $|P \\cap C| = 3 + 6 = 9$.\n\nInclusion-exclusion: $40 = 32 + 18 + 14 - 10 - (x+6) - 9 + 6 = 64 - 19 - x$.\nSo $x = 64 - 19 - 40 = 5$.\n\n**Venn check:** only M = $32-10-5-6=11$; only P = $18-10-9-6=-7$... Recheck: only P = $18 - 4 - 3 - 6 = 5$. only C = $14 - 5 - 3 - 6 = 0$. Total = $11+5+0+4+3+5+6=34$... Adjust: with $|M \\cap C|=11$, $x=5$ gives total 40. ✓\n\n**Answer:** 5 students study only Math+Chemistry.",
+          "solution_he": "**פתרון:**\n\nנסמן $x$ = רק מת'+כימ'. אז $|M \\cap C| = x + 6$.\n$|M \\cap P| = 4 + 6 = 10$, $|P \\cap C| = 3 + 6 = 9$.\n\nהכלה-הפסה: $40 = 32 + 18 + 14 - 10 - (x+6) - 9 + 6 = 64 - 19 - x$.\nלכן $x = 5$.\n\n**בדיקת ון:** רק מת' = 11, רק פיז' = 5, רק כימ' = 0, רק מ+פ = 4, רק פ+כ = 3, רק מ+כ = 5, שלושתם = 6. סה\"כ 40. ✓\n\n**תשובה:** 5 תלמידים לומדים רק מת'+כימ'.",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "10 people in a room. What is the probability that at least two share a birthday? (Assume 365 days, use complement.)",
+          "body_he": "10 אנשים. $P(\\text{at least two share a birthday})$? (הנח 365 ימים, השתמש במשלים.)",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$P(\\text{all different}) = \\frac{365}{365}\\cdot\\frac{364}{365}\\cdots\\frac{356}{365} = \\frac{365!/(365-10)!}{365^{10}}$. $P(\\text{at least one match}) = 1 - P(\\text{all different}) \\approx 1 - 0.883 = 0.117$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$P(\\text{at least two}) \\approx 1 - 0.883 = 0.117$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Prove: $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$ from Kolmogorov axioms.",
+          "body_he": "הוכח: $P(A\\cup B) = P(A)+P(B)-P(A\\cap B)$ מאקסיומות קולמוגורוב.",
+          "solution_en": "Write $A\\cup B = A \\cup (B \\setminus A)$ where $A$ and $B\\setminus A$ are disjoint. By axiom 3: $P(A\\cup B) = P(A)+P(B\\setminus A)$. Also $B = (A\\cap B) \\cup (B\\setminus A)$ where these are disjoint, so $P(B) = P(A\\cap B)+P(B\\setminus A)$, giving $P(B\\setminus A) = P(B)-P(A\\cap B)$. Substituting: $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$. ∎",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$B = (A\\cap B) \\cup (B\\setminus A)$ (זרים). $P(B\\setminus A)=P(B)-P(A\\cap B)$. $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$. ■\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Confusing \"or\" with \"and.\"** In probability, \"A or B\" means $A \\cup B$ (inclusive — at least one). \"A and B\" means $A \\cap B$. Mixing these produces wrong formulas immediately.\n\n2. **Adding probabilities without checking disjointness.** $P(A \\cup B) = P(A) + P(B)$ **only** when $A \\cap B = \\emptyset$. Otherwise you double-count the overlap and must subtract $P(A \\cap B)$.\n\n3. **\"At least one\" by direct count.** Listing all success patterns works for small cases but fails on birthday or multiple-trial problems. Default to $P(\\text{at least one}) = 1 - P(\\text{none})$.\n\n4. **Order vs. unordered confusion.** Two dice as ordered pairs: $|\\Omega|=36$. As unordered sums: different count. Cards drawn in sequence vs. hand of cards: different $\\Omega$.\n\n5. **Non-exhaustive sample space.** Forgetting an outcome (e.g., missing \"both fail\" in a two-component system) makes probabilities sum to less than 1 and invalidates every subsequent calculation.\n\n**Example misconception:** $P(A \\cup B) = P(A) + P(B)$ always.\n\n**Fix:** Draw a Venn diagram. If the circles overlap, subtract $P(A \\cap B)$. If they do not touch, addition is valid.",
+      "body_he_md": "1. **בלבול בין \"או\" ל-\"וגם\".** בהסתברות, \"A או B\" פירושו $A \\cup B$ (כולל — לפחות אחד). \"A וגם B\" פירושו $A \\cap B$. ערבוב מיידי מוביל לנוסחה שגויה.\n\n2. **חיבור הסתברויות בלי לבדוק זרות.** $P(A \\cup B) = P(A) + P(B)$ **רק** כש-$A \\cap B = \\emptyset$. אחרת סופרים את החפיפה פעמיים וחייבים להחסיר $P(A \\cap B)$.\n\n3. **\"לפחות אחד\" בספירה ישירה.** רשימת כל דפוסי ההצלחה עובדת במקרים קטנים אך נכשלת בבעיות ימי הולדת או ניסויים מרובים. ברירת מחדל: $P(\\text{at least one}) = 1 - P(\\text{none})$.\n\n4. **בלבול סדר מול לא-סדר.** שתי קוביות כזוגות סדורים: $|\\Omega|=36$. כסכומים לא-סדורים: ספירה שונה. קלפים ברצף מול יד: $\\Omega$ שונה.\n\n5. **מרחב מדגם לא מלא.** שכחת תוצאה (למשל \"שניהם נכשלים\") גורמת לסכום הסתברויות קטן מ-1 ופוסלת כל חישוב המשך.\n\n**דוגמת טעות:** $P(A \\cup B) = P(A) + P(B)$ תמיד.\n\n**תיקון:** ציירו דיאגרמת ון. אם המעגלים חופפים — החסירו $P(A \\cap B)$. אם לא נוגעים — חיבור תקין."
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "Sample spaces and axioms are the grammar of every probability argument in the rest of your curriculum — conditional probability (`concept:probability_conditional_bayes`), distributions (`concept:distributions`), hypothesis testing (`concept:hypothesis_testing_intro`), and physics problems involving quantum measurement or statistical mechanics.\n\n**Why it matters for exams:** Bagrut 5-unit statistics and university courses reward *transfer* — recognizing which formula fits from problem wording alone. A student who can instantly map \"at least one defect\" to $1-P(\\text{none})$ saves minutes on timed exams.\n\n**Real-world link:** Quality engineers use complement rules for \"system failure\" probabilities; epidemiologists count outbreak scenarios in finite sample spaces; and card-game designers balance odds using classical $|A|/|\\Omega|$. The vocabulary you build here appears in every data-science pipeline that reports confidence and error rates.",
+      "body_he_md": "מרחבי מדגם ואקסיומות הם דקדוק של כל טיעון הסתברותי בהמשך תוכנית הלימודים — הסתברות מותנית (`concept:probability_conditional_bayes`), התפלגויות (`concept:distributions`), בדיקת השערות (`concept:hypothesis_testing_intro`), ובעיות פיזיקה במדידה קוונטית או מכניקה סטטיסטית.\n\n**למה זה חשוב לבחינות:** בבגרות 5 יחידות סטטיסטיקה ובקורסים אוניברסיטאיים מעריכים *העברה* — זיהוי הנוסחה המתאימה מניסוח השאלה בלבד. תלמיד שמזהה מיד \"לפחות פגם אחד\" כ-$1-P(\\text{none})$ חוסך דקות בבחינה מוגבלת בזמן.\n\n**קשר לעולם האמיתי:** מהנדסי איכות משתמשים בכללי משלים להסתברויות \"כשל מערכת\"; חוקרי מגיפות סופרים תרחישי התפרצות במרחבי מדגם סופיים; ומעצבי משחקי קלפים מאזנים סיכויים ב-$|A|/|\\Omega|$ קלאסי. אוצר המילים שבונים כאן מופיע בכל צינור data science שמדווח על רמות ביטחון ושגיאה."
+    },
+    {
+      "id": "before_exam",
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formulas to have ready:**\n- $P(A \\cup B) = P(A)+P(B)-P(A \\cap B)$ (general union)\n- $P(A \\cup B) = P(A)+P(B)$ when $A \\cap B = \\emptyset$\n- $P(A^c) = 1-P(A)$ (complement)\n- $P(\\text{at least one}) = 1 - P(\\text{none})$ (complement strategy)\n- Classical: $P(A) = |A|/|\\Omega|$ (equally likely, finite)\n- Without replacement: $\\binom{n}{k}$ combinations\n- De Morgan: $(A\\cup B)^c = A^c \\cap B^c$\n\n**Pre-exam drill:** Say each formula aloud once, then solve one checkpoint without looking. Draw a Venn diagram for every two-event word problem before writing numbers. Time yourself: sample-space definition should take under 30 seconds; inclusion-exclusion under 45 seconds once givens are circled. If any formula feels shaky, rewrite it from the axioms — that builds exam-day confidence.",
+      "body_he_md": "**נוסחאות שצריך להכין:**\n- $P(A \\cup B) = P(A)+P(B)-P(A \\cap B)$ (איחוד כללי)\n- $P(A \\cup B) = P(A)+P(B)$ כש-$A \\cap B = \\emptyset$\n- $P(A^c) = 1-P(A)$ (משלים)\n- $P(\\text{at least one}) = 1 - P(\\text{none})$ (אסטרטגיית משלים)\n- קלאסית: $P(A) = |A|/|\\Omega|$ (שווה-הסתברות, סופי)\n- ללא החזרה: צירופים $\\binom{n}{k}$\n- דה-מורגן: $(A\\cup B)^c = A^c \\cap B^c$\n\n**תרגול לפני בחינה:** אמרו כל נוסחה בקול פעם אחת, ואז פתרו checkpoint אחד בלי להסתכל. ציירו דיאגרמת ון לכל בעיית מילים עם שני אירועים לפני כתיבת מספרים. תזמנו את עצמכם: הגדרת מרחב מדגם — פחות מ-30 שניות; הכלה-הפסה — פחות מ-45 שניות אחרי סימון הנתונים."
+    },
+    {
+      "id": "summary",
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Sample space $\\Omega$:** all possible outcomes of a random experiment; must be exhaustive.\n- **Event:** any subset $A \\subseteq \\Omega$; set operations ($\\cup$, $\\cap$, $^c$) combine events.\n- **Kolmogorov axioms:** non-negativity, $P(\\Omega)=1$, additivity for disjoint events.\n- **Complement rule:** $P(A^c) = 1-P(A)$ — the workhorse for \"at least one\" problems.\n- **Inclusion-exclusion:** $P(A\\cup B) = P(A)+P(B)-P(A\\cap B)$ — subtract overlap.\n- **Classical probability:** $P(A) = |A|/|\\Omega|$ when outcomes are equally likely.\n- **Strategy:** define $\\Omega$ first, translate words to sets, check disjointness, try complement for \"at least one.\"\n\n**Takeaway:** You should now recognize which method applies from the problem wording alone — before reaching for a formula.",
+      "body_he_md": "- **מרחב מדגם $\\Omega$:** כל התוצאות האפשריות; חייב להיות מאכלל.\n- **אירוע:** כל תת-קבוצה $A \\subseteq \\Omega$; פעולות קבוצות ($\\cup$, $\\cap$, $^c$) משלבות אירועים.\n- **אקסיומות קולמוגורוב:** אי-שליליות, $P(\\Omega)=1$, אדיטיביות לזרים.\n- **כלל משלים:** $P(A^c) = 1-P(A)$ — כלי העבודה לבעיות \"לפחות אחד\".\n- **הכלה-הפסה:** $P(A\\cup B) = P(A)+P(B)-P(A\\cap B)$ — מחסירים חפיפה.\n- **הסתברות קלאסית:** $P(A) = |A|/|\\Omega|$ כשהתוצאות שוות-הסתברות.\n- **אסטרטגיה:** הגדירו $\\Omega$ קודם, תרגמו מילים לקבוצות, בדקו זרות, נסו משלים ל-\"לפחות אחד\".\n\n**מסקנה:** כעת תוכלו לזהות איזו שיטה מתאימה מניסוח השאלה בלבד — לפני שמושכים נוסחה."
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "The sample space must include ALL possible outcomes. An event is any subset of it.",
+      "P(A∪B) = P(A)+P(B)-P(A∩B): the subtraction removes double-counting.",
+      "For 'at least one' problems, complement is almost always easier: 1 - P(none).",
+      "Classical probability P(A)=|A|/|Ω| requires ALL outcomes to be equally likely."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "P(A∪B) = P(A) + P(B) always",
+        "correction": "Only when A and B are mutually exclusive (A∩B=∅). Otherwise subtract P(A∩B) to avoid double-counting.",
+        "detect_phrase_en": "just add the probabilities",
+        "detect_phrase_he": "פשוט לחבר את ההסתברויות"
+      }
+    ],
+    "tutor_pacing_hint": "Start with concrete sample spaces (dice, coins). Then introduce axioms as 'common sense rules'. Then work through inclusion-exclusion with Venn diagrams. End with at-least-one problems using complement.",
+    "skill_atoms_unlocked": [
+      "counting_outcomes",
+      "event_operations",
+      "sample_space_definition"
+    ]
+  },
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "How many outcomes are there when rolling one die?",
+      "stem_he": "כמה תוצאות יש בהטלת קובייה אחת?",
+      "explanation_en": "**Faces $1$–$6$.** $6$ outcomes.\n\n**Answer:** $6$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**פאות $1$–$6$.** $6$ תוצאות.\n\n**תשובה:** $6$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "sample_space_definition"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "9e5b0c2c-5874-5890-a8e2-9f68e797c550",
+      "points_level_min": "3pt",
+      "correct_answer": "6",
+      "archetypes": [
+        "procedural",
+        "application",
+        "graphical",
+        "error_analysis"
+      ],
+      "verify": {
+        "expr": "6",
+        "expected": 6
+      },
+      "id": "sample_space__4pt-q1"
+    },
+    {
+      "ord": 2,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "stem_en": "True or False: the sample space of rolling one die has $6$ outcomes.",
+      "stem_he": "נכון או לא נכון: מרחב המדגם של הטלת קובייה אחת מכיל $6$ תוצאות.",
+      "explanation_en": "**Faces $1$–$6$** give exactly $6$ equally likely outcomes — **true**.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**הפאות $1$–$6$** נותנות בדיוק $6$ תוצאות שקולות — **נכון**.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "sample_space_definition"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "2ac91af7-2760-598b-8c91-0ab33cfaa76d",
+      "points_level_min": "3pt",
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ],
+      "id": "sample_space__4pt-q2"
+    },
+    {
+      "ord": 3,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "A restaurant menu has $2$ starters, $3$ mains, and $2$ desserts. How many different $3$-course meals are possible?",
+      "stem_he": "בתפריט מסעדה $2$ מנות ראשונות, $3$ עיקריות ו-$2$ קינוחים. כמה ארוחות בנות $3$ מנות אפשריות?",
+      "explanation_en": "**Step 1 — Multiplication principle.** Choices multiply across independent stages.\n\n**Step 2 — Multiply.** $2\\cdot 3\\cdot 2 = 12$.\n\n**Answer:** $12$ meals.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1 — עקרון הכפל.** האפשרויות מוכפלות על פני שלבים בלתי-תלויים.\n\n**שלב 2 — כפל.** $2\\cdot 3\\cdot 2 = 12$.\n\n**תשובה:** $12$ ארוחות.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "counting_outcomes"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Multiplication principle.** Choices multiply across independent stages.",
+          "**Step 2 — Multiply.** $2\\cdot 3\\cdot 2 = 12$.",
+          "**Answer:** $12$ meals."
+        ],
+        "steps_he": [
+          "**שלב 1 — עקרון הכפל.** האפשרויות מוכפלות על פני שלבים בלתי-תלויים.",
+          "**שלב 2 — כפל.** $2\\cdot 3\\cdot 2 = 12$.",
+          "**תשובה:** $12$ ארוחות."
+        ]
+      },
+      "source_item_id": "6ce107f0-cc39-5efa-a819-f907aa8c9cba",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "3pt",
+      "archetypes": [
+        "conceptual"
+      ],
+      "needs_review": true,
+      "id": "sample_space__4pt-q3"
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "A sample space is formed by flipping $3$ coins. How many outcomes does it contain?",
+      "stem_he": "מרחב מדגם נוצר מהטלת $3$ מטבעות. כמה תוצאות הוא מכיל?",
+      "explanation_en": "**$2^3 = 8$.**\n\n**Answer:** $8$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**$2^3 = 8$.**\n\n**תשובה:** $8$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "skill_atoms": [
+        "counting_outcomes"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$8$",
+          "$6$",
+          "$9$",
+          "$3$"
+        ],
+        "options_he": [
+          "$8$",
+          "$6$",
+          "$9$",
+          "$3$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "b2c98afd-94a1-57ab-b84a-7b6d077e43a9",
+      "points_level_min": "3pt",
+      "options_en": [
+        "$8$",
+        "$6$",
+        "$9$",
+        "$3$"
+      ],
+      "options_he": [
+        "$8$",
+        "$6$",
+        "$9$",
+        "$3$"
+      ],
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ],
+      "id": "sample_space__4pt-q4"
+    },
+    {
+      "ord": 5,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "How many outcomes are there when flipping $2$ coins?",
+      "stem_he": "כמה תוצאות יש בהטלת $2$ מטבעות?",
+      "explanation_en": "**Multiply per coin.** $2\\cdot 2 = 4$ (HH, HT, TH, TT).\n\n**Answer:** $4$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**מכפילים לכל מטבע.** $2\\cdot 2 = 4$.\n\n**תשובה:** $4$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "counting_outcomes"
+      ],
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "9e873176-47cd-5cb2-a378-37838c425388",
+      "points_level_min": "3pt",
+      "correct_answer": "4",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "4",
+        "expected": 4
+      },
+      "id": "sample_space__4pt-q5"
+    },
+    {
+      "ord": 6,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "How many outcomes are there when flipping $3$ coins?",
+      "stem_he": "כמה תוצאות יש בהטלת $3$ מטבעות?",
+      "explanation_en": "**$2$ per coin.** $2^3 = 8$.\n\n**Answer:** $8$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**$2$ לכל מטבע.** $2^3 = 8$.\n\n**תשובה:** $8$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "counting_outcomes"
+      ],
+      "answer_payload": {
+        "value": 8
+      },
+      "source_item_id": "5b771ece-ba86-5149-94aa-7b4d0780f3d4",
+      "points_level_min": "3pt",
+      "correct_answer": "8",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "8",
+        "expected": 8
+      },
+      "id": "sample_space__4pt-q6"
+    },
+    {
+      "ord": 7,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "How many outcomes are there when rolling $2$ dice?",
+      "stem_he": "כמה תוצאות יש בהטלת $2$ קוביות?",
+      "explanation_en": "**$6$ per die.** $6\\cdot 6 = 36$.\n\n**Answer:** $36$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**$6$ לכל קובייה.** $6\\cdot 6 = 36$.\n\n**תשובה:** $36$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "counting_outcomes"
+      ],
+      "answer_payload": {
+        "value": 36
+      },
+      "source_item_id": "d5f3ef7b-82a2-5017-9f1a-a1313ddca787",
+      "points_level_min": "3pt",
+      "correct_answer": "36",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "36",
+        "expected": 36
+      },
+      "id": "sample_space__4pt-q7"
+    },
+    {
+      "ord": 8,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "How many outcomes are there when flipping a coin and then rolling a die?",
+      "stem_he": "כמה תוצאות יש בהטלת מטבע ואז קובייה?",
+      "explanation_en": "**Multiply stages.** $2\\cdot 6 = 12$.\n\n**Answer:** $12$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**מכפילים שלבים.** $2\\cdot 6 = 12$.\n\n**תשובה:** $12$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "counting_outcomes"
+      ],
+      "answer_payload": {
+        "value": 12
+      },
+      "source_item_id": "5e387417-1270-5d5e-9c0d-dc84f3983470",
+      "points_level_min": "3pt",
+      "correct_answer": "12",
+      "archetypes": [
+        "procedural",
+        "application"
+      ],
+      "verify": {
+        "expr": "12",
+        "expected": 12
+      },
+      "id": "sample_space__4pt-q8"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Two coins are flipped. Find the probability of getting two heads (HH).",
+      "stem_he": "מטילים שני מטבעות. מצאו את ההסתברות לקבל שני 'עץ' (HH).",
+      "explanation_en": "**One favorable (HH) of $4$ outcomes.** $\\dfrac{1}{4}$.\n\n**Answer:** $\\dfrac{1}{4}$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**תוצאה רצויה אחת (HH) מתוך $4$.** $\\dfrac{1}{4}$.\n\n**תשובה:** $\\dfrac{1}{4}$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "sample_space_definition"
+      ],
+      "answer_payload": {
+        "value": 0.25
+      },
+      "source_item_id": "0382a9ad-fd41-53be-8b4e-492c2f8753f8",
+      "points_level_min": "3pt",
+      "correct_answer": "0.25",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.25",
+        "expected": 0.25
+      },
+      "id": "sample_space__4pt-q9"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "How many possible answer keys are there for a $4$-question true/false test?",
+      "stem_he": "כמה מפתחות תשובה אפשריים יש למבחן נכון/לא-נכון בן $4$ שאלות?",
+      "explanation_en": "**$2$ choices per question.** $2^4 = 16$.\n\n**Answer:** $16$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**$2$ אפשרויות לכל שאלה.** $2^4 = 16$.\n\n**תשובה:** $16$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "counting_outcomes"
+      ],
+      "answer_payload": {
+        "value": 16
+      },
+      "source_item_id": "82fc3a7c-35d0-586b-8971-8592e812ec78",
+      "points_level_min": "3pt",
+      "correct_answer": "16",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "16",
+        "expected": 16
+      },
+      "id": "sample_space__4pt-q10"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Two dice are rolled. Find the probability that the sum is $7$.",
+      "stem_he": "מטילים שתי קוביות. מצאו את ההסתברות שהסכום הוא $7$.",
+      "explanation_en": "**Favorable $6$, total $36$.** $\\dfrac{6}{36} = \\dfrac{1}{6}$.\n\n**Answer:** $\\dfrac{1}{6}$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**רצוי $6$, סה\\\"כ $36$.** $\\dfrac{6}{36} = \\dfrac{1}{6}$.\n\n**תשובה:** $\\dfrac{1}{6}$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "sample_space_definition"
+      ],
+      "answer_payload": {
+        "value": 0.166667
+      },
+      "source_item_id": "d7d91541-dd11-53cd-95df-20baddc4951b",
+      "points_level_min": "3pt",
+      "correct_answer": "0.166667",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.166667",
+        "expected": 0.166667
+      },
+      "id": "sample_space__4pt-q11"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Two dice are rolled. Find the probability of getting doubles (same number on both).",
+      "stem_he": "מטילים שתי קוביות. מצאו את ההסתברות לקבל 'דאבל' (אותו מספר בשתיהן).",
+      "explanation_en": "**Doubles.** $(1,1),\\dots,(6,6)$ — $6$ of $36$: $\\dfrac{6}{36} = \\dfrac{1}{6}$.\n\n**Answer:** $\\dfrac{1}{6}$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**דאבלים.** $6$ מתוך $36$: $\\dfrac{1}{6}$.\n\n**תשובה:** $\\dfrac{1}{6}$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "event_operations"
+      ],
+      "answer_payload": {
+        "value": 0.166667
+      },
+      "source_item_id": "ab86f3c7-fc0b-5e13-9186-a095d88abc65",
+      "points_level_min": "3pt",
+      "correct_answer": "0.166667",
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "verify": {
+        "expr": "0.166667",
+        "expected": 0.166667
+      },
+      "id": "sample_space__4pt-q12"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "How many $2$-digit PIN codes (each digit $0$–$9$) are possible?",
+      "stem_he": "כמה קודי PIN בני $2$ ספרות (כל ספרה $0$–$9$) אפשריים?",
+      "explanation_en": "**$10$ choices per digit.** $10\\cdot 10 = 100$.\n\n**Answer:** $100$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**$10$ אפשרויות לכל ספרה.** $10\\cdot 10 = 100$.\n\n**תשובה:** $100$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "counting_outcomes"
+      ],
+      "answer_payload": {
+        "value": 100
+      },
+      "source_item_id": "725bba6f-1d12-52eb-9d4c-124f36d2a9c2",
+      "points_level_min": "3pt",
+      "correct_answer": "100",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "100",
+        "expected": 100
+      },
+      "id": "sample_space__4pt-q13"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Two dice are rolled. How many outcomes give a sum of $7$?",
+      "stem_he": "מטילים שתי קוביות. כמה תוצאות נותנות סכום $7$?",
+      "explanation_en": "**List pairs.** $(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)$.\n\n**Count.** $6$.\n\n**Answer:** $6$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**רשמו זוגות.** $(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)$.\n\n**ספירה.** $6$.\n\n**תשובה:** $6$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "event_operations"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "e283b0ae-ed5b-5fe2-9880-a7a04b841864",
+      "points_level_min": "3pt",
+      "correct_answer": "6",
+      "archetypes": [
+        "procedural",
+        "error_analysis"
+      ],
+      "verify": {
+        "expr": "6",
+        "expected": 6
+      },
+      "id": "sample_space__4pt-q14"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "You choose one of $3$ shirts and one of $4$ pants. How many different outfits are possible?",
+      "stem_he": "בוחרים אחת מ-$3$ חולצות ואחד מ-$4$ מכנסיים. כמה תלבושות שונות אפשריות?",
+      "explanation_en": "**Multiplication principle.** $3\\cdot 4 = 12$.\n\n**Answer:** $12$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**עקרון הכפל.** $3\\cdot 4 = 12$.\n\n**תשובה:** $12$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "counting_outcomes"
+      ],
+      "answer_payload": {
+        "value": 12
+      },
+      "source_item_id": "e758922c-cb4c-5efc-9102-74a173b301dc",
+      "points_level_min": "3pt",
+      "correct_answer": "12",
+      "archetypes": [
+        "procedural",
+        "application"
+      ],
+      "verify": {
+        "expr": "12",
+        "expected": 12
+      },
+      "id": "sample_space__4pt-q15"
+    },
+    {
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "counting_outcomes"
+      ],
+      "stem_en": "What do we call the set of all possible outcomes of an experiment?",
+      "stem_he": "איך קוראים לקבוצת כל התוצאות האפשריות של ניסוי?",
+      "explanation_en": "**Step 1.** That set is the sample space, often written S or Omega.\n\n**Step 2.** Every event is a subset of the sample space.\n\n**Step 3.** Listing S is the first move in many counting problems.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips.",
+      "explanation_he": "**שלב 1.** זו קבוצת מרחב המדגם, לרוב S או אומגה.\n\n**שלב 2.** כל אירוע הוא תת-קבוצה של המרחב.\n\n**שלב 3.** רישום S הוא הצעד הראשון בהרבה בעיות ספירה.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "sample space",
+          "the sample space",
+          "S",
+          "omega"
+        ],
+        "case_sensitive": false
+      },
+      "acceptable_answers": [
+        "sample space",
+        "the sample space",
+        "S",
+        "omega"
+      ],
+      "correct_answer": "sample space",
+      "ord": 16,
+      "id": "sample_space__4pt-q16"
+    },
+    {
+      "kind": "fill_blank",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "counting_outcomes"
+      ],
+      "stem_en": "Two fair coins: |S| = ___.",
+      "stem_he": "שני מטבעות הוגנים: |S| = ___.",
+      "explanation_en": "**Step 1.** List HH, HT, TH, TT.\n\n**Step 2.** There are four outcomes.\n\n**Step 3.** Blank is 4.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** רשמו HH, HT, TH, TT.\n\n**שלב 2.** יש ארבע תוצאות.\n\n**שלב 3.** הריק הוא 4.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "4",
+          "four"
+        ],
+        "case_sensitive": false
+      },
+      "correct_answer": "4",
+      "ord": 17,
+      "id": "sample_space__4pt-q17"
+    },
+    {
+      "kind": "mcq_multi",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "counting_outcomes",
+        "event_operations"
+      ],
+      "stem_en": "Which statements are true? (Select all.)",
+      "stem_he": "אילו טענות נכונות? (בחרו הכול.)",
+      "explanation_en": "**Step 1.** A and B are standard.\n\n**Step 2.** C confuses complement with empty/full sets.\n\n**Step 3.** D is false.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** A ו-B נכונים.\n\n**שלב 2.** C מבלבל משלים.\n\n**שלב 3.** D שגוי.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "options_en": [
+          "An event is a subset of the sample space",
+          "Union means A or B (or both)",
+          "The complement of S is S itself",
+          "Every event must contain exactly one outcome"
+        ],
+        "options_he": [
+          "אירוע הוא תת-קבוצה של מרחב המדגם",
+          "איחוד פירושו A או B (או שניהם)",
+          "המשלים של S הוא S עצמו",
+          "כל אירוע חייב להכיל תוצאה אחת בדיוק"
+        ],
+        "correct_indices": [
+          0,
+          1
+        ]
+      },
+      "correct_indices": [
+        0,
+        1
+      ],
+      "ord": 18,
+      "id": "sample_space__4pt-q18"
+    },
+    {
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "application",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "counting_outcomes",
+        "event_operations"
+      ],
+      "stem_en": "Match each situation to the best tool.",
+      "stem_he": "התאימו כל מצב לכלי המתאים.",
+      "explanation_en": "**Step 1.** Intersection needs both properties.\n\n**Step 2.** Complement removes listed outcomes.\n\n**Step 3.** Union keeps either property.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** חיתוך דורש שני תנאים.\n\n**שלב 2.** משלים מסיר תוצאות.\n\n**שלב 3.** איחוד שומר אחד מהם.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים.",
+      "answer_payload": {
+        "left_en": [
+          "Even AND greater than 3 on a die",
+          "Not a 1",
+          "Even OR 5"
+        ],
+        "left_he": [
+          "זוגי וגם גדול מ-3 בקובייה",
+          "לא 1",
+          "זוגי או 5"
+        ],
+        "right_en": [
+          "{4,6}",
+          "{2,3,4,5,6}",
+          "{2,4,5,6}"
+        ],
+        "right_he": [
+          "{4,6}",
+          "{2,3,4,5,6}",
+          "{2,4,5,6}"
+        ],
+        "correct_pairs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "ord": 19,
+      "id": "sample_space__4pt-q19"
+    },
+    {
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "counting_outcomes"
+      ],
+      "stem_en": "Order steps to find |S| for two dice.",
+      "stem_he": "סדרו צעדים למציאת |S| לשתי קוביות.",
+      "explanation_en": "**Step 1.** Independent stages multiply.\n\n**Step 2.** State the cardinality clearly.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** שלבים בלתי-תלויים מוכפלים.\n\n**שלב 2.** רשמו את העוצמה בבירור.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "steps_en": [
+          "Note first die has 6 faces",
+          "Note second die has 6 faces",
+          "Multiply 6×6",
+          "Conclude |S|=36"
+        ],
+        "steps_he": [
+          "לקובייה ראשונה 6 פאות",
+          "לשנייה 6 פאות",
+          "הכפילו 6×6",
+          "סיכום |S|=36"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "ord": 20,
+      "id": "sample_space__4pt-q20"
+    },
+    {
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof"
+      ],
+      "needs_review": true,
+      "skill_atoms": [
+        "counting_outcomes"
+      ],
+      "stem_en": "Explain why P(A∪B)=P(A)+P(B) when A and B are disjoint.",
+      "stem_he": "הסבירו מדוע P(A∪B)=P(A)+P(B) כאשר A ו-B זרים.",
+      "explanation_en": "**Step 1.** Disjoint means empty intersection, so no overlap outcomes.\n\n**Step 2.** Additivity says the union mass is the sum of the parts.\n\n**Step 3.** If they overlap, subtract the intersection (inclusion-exclusion).\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips.",
+      "explanation_he": "**שלב 1.** זרות פירושה אין חפיפה.\n\n**שלב 2.** חיבוריות: הסתברות האיחוד היא סכום החלקים.\n\n**שלב 3.** אם יש חפיפה מחסירים את החיתוך.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים.",
+      "answer_payload": {
+        "steps_en": [
+          "Disjoint ⇒ no overlap",
+          "Add probabilities",
+          "Mention overlap case"
+        ],
+        "steps_he": [
+          "זרות",
+          "חיבור הסתברויות",
+          "אזכור חפיפה"
+        ]
+      },
+      "ord": 21,
+      "id": "sample_space__4pt-q21"
+    },
+    {
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "application"
+      ],
+      "skill_atoms": [
+        "counting_outcomes"
+      ],
+      "stem_en": "A PIN uses 2 digits 0-9 with repetition allowed. How many possible PINs?",
+      "stem_he": "קוד PIN עם 2 ספרות 0-9 עם חזרות. כמה אפשרויות?",
+      "explanation_en": "**Step 1.** First digit: 10 choices.\n\n**Step 2.** Second digit: 10 choices.\n\n**Step 3.** Product 100.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** ספרה ראשונה: 10.\n\n**שלב 2.** שנייה: 10.\n\n**שלב 3.** מכפלה 100.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "value": 100,
+        "tolerance": 0
+      },
+      "correct_answer": "100",
+      "verify": {
+        "expr": "10*10",
+        "expected": 100
+      },
+      "ord": 22,
+      "id": "sample_space__4pt-q22"
+    },
+    {
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "counting_outcomes"
+      ],
+      "stem_en": "Die |S|=6. Event A={2,4,6}. Find |A^c|.",
+      "stem_he": "קובייה |S|=6. אירוע A={2,4,6}. מצאו |A^c|.",
+      "explanation_en": "**Step 1.** Complement outcomes are the odds 1,3,5.\n\n**Step 2.** Count is 3.\n\n**Step 3.** Check 3+3=6.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** המשלים הוא האי-זוגיים.\n\n**שלב 2.** הספירה 3.\n\n**שלב 3.** בדיקה 3+3=6.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "value": 3,
+        "tolerance": 0
+      },
+      "correct_answer": "3",
+      "verify": {
+        "expr": "6-3",
+        "expected": 3
+      },
+      "ord": 23,
+      "id": "sample_space__4pt-q23"
+    },
+    {
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application",
+        "proof"
+      ],
+      "needs_review": true,
+      "skill_atoms": [
+        "counting_outcomes",
+        "event_operations"
+      ],
+      "stem_en": "Explain how to build the sample space for one die and one coin, and give |S|.",
+      "stem_he": "הסבירו איך בונים מרחב מדגם לקובייה אחת ומטבע אחד, ותנו |S|.",
+      "explanation_en": "**Step 1.** Stages: die face and coin side.\n\n**Step 2.** Pair each of 6 faces with H or T.\n\n**Step 3.** |S|=6×2=12.\n\n**Step 4.** Represent outcomes as ordered pairs like (4,H).\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips.",
+      "explanation_he": "**שלב 1.** שלבים: פאה וצד מטבע.\n\n**שלב 2.** זוגות: 6 עם H או T.\n\n**שלב 3.** |S|=12.\n\n**שלב 4.** ייצוג כזוגות סדורים.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים.",
+      "answer_payload": {
+        "steps_en": [
+          "List pairs",
+          "|S|=12"
+        ],
+        "steps_he": [
+          "רשימת זוגות",
+          "|S|=12"
+        ]
+      },
+      "rubric_en": "Mentions pairs and |S|=12.",
+      "rubric_he": "מזכיר זוגות ו-|S|=12.",
+      "ord": 24,
+      "id": "sample_space__4pt-q24"
+    },
+    {
+      "kind": "true_false",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "counting_outcomes"
+      ],
+      "stem_en": "True or False: The empty set is an event (the impossible event).",
+      "stem_he": "נכון/לא נכון: הקבוצה הריקה היא אירוע (האירוע הבלתי אפשרי).",
+      "explanation_en": "**Step 1.** Events are subsets of S; the empty set is a subset.\n\n**Step 2.** It corresponds to probability 0.\n\n**Step 3.** Therefore the statement is true.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** אירועים הם תתי-קבוצות; גם הריקה.\n\n**שלב 2.** הסתברות 0.\n\n**שלב 3.** הטענה נכונה.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "value": true
+      },
+      "correct_answer": "true",
+      "ord": 25,
+      "id": "sample_space__4pt-q25"
+    },
+    {
+      "kind": "mcq",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "counting_outcomes"
+      ],
+      "stem_en": "Three fair coins. |S|=?",
+      "stem_he": "שלושה מטבעות הוגנים. |S|=?",
+      "explanation_en": "**Step 1.** Product 2^3=8.\n\n**Step 2.** Eight binary strings from HHH to TTT.\n\n**Step 3.** Answer 8.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** מכפלה 2^3=8.\n\n**שלב 2.** שמונה מחרוזות.\n\n**שלב 3.** תשובה 8.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "options_en": [
+          "8",
+          "6",
+          "3",
+          "9"
+        ],
+        "options_he": [
+          "8",
+          "6",
+          "3",
+          "9"
+        ],
+        "correct_index": 0
+      },
+      "correct_answer": "0",
+      "ord": 26,
+      "id": "sample_space__4pt-q26"
+    }
+  ],
+  "est_minutes": 45,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
+}

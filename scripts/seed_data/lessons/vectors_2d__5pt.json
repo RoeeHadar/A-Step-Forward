@@ -1,0 +1,1101 @@
+{
+  "concept_id": "vectors_2d__5pt",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": [
+    "5pt"
+  ],
+  "title_en": "2D Vectors — Components, Dot Product, and Applications — 5pt mastery",
+  "title_he": "וקטורים במישור — שליטה 5 יח׳",
+  "summary_en": "A 2D vector has magnitude and direction. Operations include addition, scalar multiplication, dot product, and finding angles between vectors. Vectors are used to prove geometric theorems about parallelograms and diagonals.",
+  "summary_he": "לוקטור דו-ממדי יש גודל וכיוון. פעולות כוללות חיבור, כפל סקלרי, מכפלה סקלרית ומציאת זוויות בין וקטורים. וקטורים משמשים להוכחת משפטים גאומטריים על מקביליות ואלכסונות.",
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "Why Vectors?",
+      "title_he": "למה וקטורים?",
+      "body_en_md": "A wind speed of \"40 km/h north-east\" is not just a number — it has both size (40 km/h) and direction (north-east). This is a vector. Vectors are the language of physics (force, velocity, displacement) and the key to proving many geometric theorems cleanly.\n\n**Where vectors appear on the Bagrut (4pt and 5pt tracks):**\n- Computing magnitudes and unit vectors.\n- Using the dot product to find angles between vectors.\n- Proving geometric facts about parallelograms using vector methods.\n- Problems mixing vectors with analytic geometry.\n\nBy the end of this lesson you will add and scale vectors, compute magnitudes and dot products, find angles, and use vectors to prove that the diagonals of a parallelogram bisect each other.\n\n**5pt focus:** Short justifications, edge cases, MoE-faithful (no uni limit-closeness drills).",
+      "body_he_md": "מהירות רוח של \"40 קמ\"ש צפון-מזרח\" אינה רק מספר — יש לה גם גודל (40 קמ\"ש) וגם כיוון (צפון-מזרח). זהו וקטור. וקטורים הם שפת הפיזיקה (כוח, מהירות, תזוזה) והמפתח להוכחת משפטים גאומטריים רבים בצורה נקייה.\n\n**היכן וקטורים מופיעים בבגרות (מסלולי 4 ו-5 יח\"ל):**\n- חישוב גדלים ווקטורים יחידה.\n- שימוש במכפלה הסקלרית למציאת זוויות בין וקטורים.\n- הוכחת עובדות גאומטריות על מקביליות בשיטות וקטוריות.\n- בעיות המשלבות וקטורים עם גאומטריה אנליטית.\n\nבסוף השיעור תחברו ותכפילו וקטורים, תחשבו גדלים ומכפלות סקלריות, תמצאו זוויות, ותשתמשו בוקטורים להוכחה שאלכסוני מקבילית מחצים זה את זה.\n\n**מיקוד 5 יח׳:** הצדקות קצרות, מקרי קצה, נאמן לתוכנית (בלי תרגול limit-closeness אוניברסיטאי)."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Vectors — Definitions and Operations",
+      "title_he": "וקטורים — הגדרות ופעולות",
+      "body_en_md": "A **vector** in the plane is an ordered pair $\\vec{v}=(a,b)$ that encodes both **magnitude** (how long) and **direction** (which way). Unlike a scalar, reversing a vector changes its meaning — $(3,4)$ and $(-3,-4)$ point in opposite directions. On Bagrut 4pt and 5pt math, vectors appear in analytic geometry, trigonometry, and proof questions about parallelograms and midpoints.\n\n**Magnitude (length):** Think of $(a,b)$ as the legs of a right triangle from the origin. Pythagoras gives\n$$|\\vec{v}| = \\sqrt{a^2 + b^2}.$$\n\n**Unit vector:** A vector of magnitude exactly $1$ pointing in the same direction as $\\vec{v}$:\n$$\\hat{v} = \\frac{\\vec{v}}{|\\vec{v}|} = \\left(\\frac{a}{|\\vec{v}|},\\ \\frac{b}{|\\vec{v}|}\\right).$$\nEvery non-zero vector has exactly one unit vector in its direction.\n\n**Addition and scalar multiplication:** Vectors add **component-wise**: $(a_1,b_1)+(a_2,b_2)=(a_1+a_2,\\ b_1+b_2)$. Multiplying by scalar $k$ stretches or flips: $k(a,b)=(ka,kb)$.\n\n**Dot product (scalar product):** Combines two vectors into one number:\n$$\\vec{u} \\cdot \\vec{v} = a_1 a_2 + b_1 b_2 = |\\vec{u}||\\vec{v}|\\cos\\theta.$$\nZero dot product means perpendicular (for non-zero vectors).\n\n**Angle between vectors:**\n$$\\cos\\theta = \\frac{\\vec{u} \\cdot \\vec{v}}{|\\vec{u}||\\vec{v}|}, \\quad 0° \\le \\theta \\le 180°.$$\n\n**Perpendicularity:** $\\vec{u} \\perp \\vec{v} \\iff \\vec{u} \\cdot \\vec{v} = 0$.\n\n**Parallelism:** $\\vec{u} \\parallel \\vec{v} \\iff \\vec{v} = k\\vec{u}$ for some scalar $k \\ne 0$ (same direction or opposite).",
+      "body_he_md": "**וקטור** במישור הוא זוג סדור $\\vec{v}=(a,b)$ שמקודד **גודל** (כמה ארוך) ו**כיוון** (לאן). בניגוד לסקלר, היפוך וקטור משנה את משמעותו — $(3,4)$ ו-$(-3,-4)$ מצביעים בכיוונים הפוכים. בבגרות 4 ו-5 יח\"ל, וקטורים מופיעים בגאומטריה אנליטית, טריגונומטריה, ושאלות הוכחה על מקביליות ונקודות אמצע.\n\n**גודל (אורך):** חשבו על $(a,b)$ כצלעות במשולש ישר-זווית מהראשית. פיתגורס נותן\n$$|\\vec{v}| = \\sqrt{a^2 + b^2}.$$\n\n**וקטור יחידה:** וקטור בגודל בדיוק $1$ באותו כיוון כמו $\\vec{v}$:\n$$\\hat{v} = \\frac{\\vec{v}}{|\\vec{v}|} = \\left(\\frac{a}{|\\vec{v}|},\\ \\frac{b}{|\\vec{v}|}\\right).$$\nלכל וקטור שונה מאפס יש וקטור יחידה יחיד בכיוונו.\n\n**חיבור וכפל סקלרי:** וקטורים מתחברים **לפי רכיבים**: $(a_1,b_1)+(a_2,b_2)=(a_1+a_2,\\ b_1+b_2)$. כפל בסקלר $k$ מותח או הופך: $k(a,b)=(ka,kb)$.\n\n**מכפלה סקלרית:** משלבת שני וקטורים למספר אחד:\n$$\\vec{u} \\cdot \\vec{v} = a_1 a_2 + b_1 b_2 = |\\vec{u}||\\vec{v}|\\cos\\theta.$$\nמכפלה אפס = ניצבות (לוקטורים שונים מאפס).\n\n**זווית בין וקטורים:**\n$$\\cos\\theta = \\frac{\\vec{u} \\cdot \\vec{v}}{|\\vec{u}||\\vec{v}|}, \\quad 0° \\le \\theta \\le 180°.$$\n\n**אנכיות:** $\\vec{u} \\perp \\vec{v} \\iff \\vec{u} \\cdot \\vec{v} = 0$.\n\n**מקביליות:** $\\vec{u} \\parallel \\vec{v} \\iff \\vec{v} = k\\vec{u}$ עבור סקלר $k \\ne 0$ (אותו כיוון או הפוך)."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Geometric Interpretation of Vectors",
+      "title_he": "פרשנות גאומטרית של וקטורים",
+      "body_en_md": "Vectors bridge algebra and geometry. Once you assign coordinates to points, every geometric statement about segments, angles, and midpoints becomes a calculation with ordered pairs.\n\n**Position vector:** The vector from the origin $O$ to point $P(a,b)$ is $\\overrightarrow{OP} = (a,b)$. Moving the whole figure by a translation does not change vector relationships — this is why coordinate proofs work.\n\n**Vector between two points:** For $A(x_A,y_A)$ and $B(x_B,y_B)$,\n$$\\overrightarrow{AB} = B - A = (x_B - x_A,\\ y_B - y_A).$$\nThe tail is always subtracted from the head. Reversing direction gives $\\overrightarrow{BA} = -\\overrightarrow{AB}$.\n\n**Midpoint via vectors:** The midpoint $M$ of segment $AB$ satisfies\n$$\\overrightarrow{OM} = \\frac{1}{2}(\\overrightarrow{OA} + \\overrightarrow{OB}), \\qquad M = \\left(\\frac{x_A+x_B}{2},\\ \\frac{y_A+y_B}{2}\\right).$$\n\n**Dot product geometry:** The formula $\\vec{u} \\cdot \\vec{v} = |\\vec{u}||\\vec{v}|\\cos\\theta$ explains every special case:\n- $\\theta = 90°$: $\\cos 90° = 0$ → dot product zero → perpendicular.\n- $\\theta = 0°$: same direction → dot product equals product of magnitudes.\n- $\\theta = 180°$: opposite directions → dot product is negative.\n\n**Triangle law of addition:** Walking from $A$ to $B$ then $B$ to $C$ is the same as going directly $A$ to $C$:\n$$\\overrightarrow{AB} + \\overrightarrow{BC} = \\overrightarrow{AC}.$$\n\n**Parallelogram law:** If $\\vec{u}$ and $\\vec{v}$ are adjacent sides of a parallelogram, the diagonal from their common vertex is $\\vec{u}+\\vec{v}$. The other diagonal is $\\vec{v}-\\vec{u}$ (or $\\vec{u}-\\vec{v}$ depending on orientation).\n\n**Bagrut proof strategy:** Place one vertex at the origin, express all other vertices as position vectors, then compute midpoints or side vectors algebraically. Equality of vector pairs proves parallel and equal sides.",
+      "body_he_md": "וקטורים מגשרים בין אלגברה לגאומטריה. ברגע שמציבים קואורדינטות לנקודות, כל הצהרה גאומטרית על קטעים, זוויות ונקודות אמצע הופכת לחישוב עם זוגות סדורים.\n\n**וקטור מיקום:** הוקטור מהראשית $O$ לנקודה $P(a,b)$ הוא $\\overrightarrow{OP} = (a,b)$. הזזת כל הצורה בתזוזה לא משנה יחסי וקטורים — לכן הוכחות קואורדינטות עובדות.\n\n**וקטור בין שתי נקודות:** עבור $A(x_A,y_A)$ ו-$B(x_B,y_B)$,\n$$\\overrightarrow{AB} = B - A = (x_B - x_A,\\ y_B - y_A).$$\nהזנב תמיד מחוסר מהראש. היפוך כיוון נותן $\\overrightarrow{BA} = -\\overrightarrow{AB}$.\n\n**נקודת אמצע בוקטורים:** נקודת האמצע $M$ של $AB$ מקיימת\n$$\\overrightarrow{OM} = \\frac{1}{2}(\\overrightarrow{OA} + \\overrightarrow{OB}), \\qquad M = \\left(\\frac{x_A+x_B}{2},\\ \\frac{y_A+y_B}{2}\\right).$$\n\n**גאומטריה של מכפלה סקלרית:** הנוסחה $\\vec{u} \\cdot \\vec{v} = |\\vec{u}||\\vec{v}|\\cos\\theta$ מסבירה כל מקרה מיוחד:\n- $\\theta = 90°$: $\\cos 90° = 0$ → מכפלה אפס → ניצבות.\n- $\\theta = 0°$: אותו כיוון → מכפלה שווה למכפלת הגדלים.\n- $\\theta = 180°$: כיוונים הפוכים → מכפלה שלילית.\n\n**חוק המשולש:** הליכה מ-$A$ ל-$B$ ואז מ-$B$ ל-$C$ שווה למסלול ישיר מ-$A$ ל-$C$:\n$$\\overrightarrow{AB} + \\overrightarrow{BC} = \\overrightarrow{AC}.$$\n\n**חוק המקבילית:** אם $\\vec{u}$ ו-$\\vec{v}$ צלעות סמוכות במקבילית, האלכסון מהקודקוד המשותף הוא $\\vec{u}+\\vec{v}$. האלכסון השני הוא $\\vec{v}-\\vec{u}$.\n\n**אסטרטגיית הוכחה בבגרות:** הציבו קודקוד אחד בראשית, הביעו את שאר הקודקודים כוקטורי מיקום, ואז חשבו נקודות אמצע או וקטורי צלעות אלגברית. שוויון זוגות וקטורים מוכיח צלעות מקבילות ושוות."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Magnitude and Unit Vector",
+      "title_he": "דוגמה פתורה 1 — גודל ווקטור יחידה",
+      "body_en_md": "**Given:** $\\vec{u} = (3, -4)$. Find $|\\vec{u}|$ and the unit vector $\\hat{u}$.\n\nThis is the standard magnitude-and-unit-vector problem. The components $(3,-4)$ form a $3$-$4$-$5$ right triangle — recognizing this triple saves time on Bagrut.\n\n### Move 1 — Compute magnitude\nApply Pythagoras to the components:\n$$|\\vec{u}| = \\sqrt{3^2 + (-4)^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5$$\nThe negative sign on $-4$ disappears when squared.\n\n### Move 2 — Form the unit vector\nDivide each component by the magnitude:\n$$\\hat{u} = \\frac{\\vec{u}}{|\\vec{u}|} = \\frac{(3,-4)}{5} = \\left(\\frac{3}{5},\\ -\\frac{4}{5}\\right)$$\nThe unit vector points in the same direction as $\\vec{u}$ but has length exactly $1$.\n\n### Move 3 — Verify\n$$|\\hat{u}| = \\sqrt{\\left(\\frac{3}{5}\\right)^2 + \\left(-\\frac{4}{5}\\right)^2} = \\sqrt{\\frac{9}{25}+\\frac{16}{25}} = \\sqrt{1} = 1 \\checkmark$$\n\n**Answer:** $|\\vec{u}| = 5$, $\\hat{u} = \\left(\\dfrac{3}{5}, -\\dfrac{4}{5}\\right)$.\n\n**Bagrut note:** Always verify $|\\hat{u}|=1$ after division. If you get a different length, you divided by the wrong number or forgot one component.\n\n**Physical picture:** The vector $(3,-4)$ points into the fourth quadrant — right and down. Its unit vector preserves that direction while normalizing length to $1$. This same procedure applies to velocity, force, or any physical vector on Bagrut.",
+      "body_he_md": "**נתון:** $\\vec{u} = (3, -4)$. מצאו את $|\\vec{u}|$ ואת וקטור היחידה $\\hat{u}$.\n\nזו בעיית גודל ווקטור-יחידה סטנדרטית. הרכיבים $(3,-4)$ יוצרים משולש ישר-זווית $3$-$4$-$5$ — זיהוי המשולש חוסך זמן בבגרות.\n\n### צעד 1 — חישוב הגודל\nיישום פיתגורס על הרכיבים:\n$$|\\vec{u}| = \\sqrt{3^2 + (-4)^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5$$\nהסימן השלילי על $-4$ נעלם בריבוע.\n\n### צעד 2 — בניית וקטור היחידה\nחלקו כל רכיב בגודל:\n$$\\hat{u} = \\frac{\\vec{u}}{|\\vec{u}|} = \\frac{(3,-4)}{5} = \\left(\\frac{3}{5},\\ -\\frac{4}{5}\\right)$$\nוקטור היחידה מצביע באותו כיוון כמו $\\vec{u}$ אך באורך בדיוק $1$.\n\n### צעד 3 — אימות\n$$|\\hat{u}| = \\sqrt{\\left(\\frac{3}{5}\\right)^2 + \\left(-\\frac{4}{5}\\right)^2} = \\sqrt{\\frac{9}{25}+\\frac{16}{25}} = \\sqrt{1} = 1 \\checkmark$$\n\n**תשובה:** $|\\vec{u}| = 5$, $\\hat{u} = \\left(\\dfrac{3}{5}, -\\dfrac{4}{5}\\right)$.\n\n**הערת בגרות:** תמיד אמתו $|\\hat{u}|=1$ אחרי החילוק. אם קיבלתם אורך אחר, חילקתם במספר שגוי או שכחתם רכיב.\n\n**תמונה:** הוקטור $(3,-4)$ מצביע לרביע הרביעי — ימינה ולמטה. וקטור היחידה שומר על כיוון זה תוך נרמול האורך ל-$1$. אותה שיטה חלה על מהירות, כוח, או כל וקטור פיזיקלי בבגרות."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find the magnitude and unit vector of $\\vec{v} = (-5, 12)$.",
+      "body_he_md": "מצאו את הגודל ווקטור היחידה של $\\vec{v} = (-5, 12)$.",
+      "checkpoint_solution_en": "Find the magnitude and unit vector of $\\vec{v} = (-5, 12)$.\n\n**Step 1 — Magnitude:** The components $(-5, 12)$ form a $5$-$12$-$13$ right triangle:\n$$|\\vec{v}| = \\sqrt{(-5)^2 + 12^2} = \\sqrt{25+144} = \\sqrt{169} = 13$$\n\n**Step 2 — Unit vector:** Divide each component by $13$:\n$$\\hat{v} = \\left(-\\frac{5}{13},\\ \\frac{12}{13}\\right)$$\n\n**Step 3 — Verify:** $\\sqrt{(25+144)/169} = 1$ ✓\n\n**Answer:** $|\\vec{v}| = 13$, $\\hat{v} = (-5/13,\\ 12/13)$.",
+      "checkpoint_solution_he": "מצאו את הגודל ווקטור היחידה של $\\vec{v} = (-5, 12)$.\n\n**שלב 1 — גודל:** הרכיבים $(-5, 12)$ יוצרים משולש $5$-$12$-$13$:\n$$|\\vec{v}| = \\sqrt{(-5)^2 + 12^2} = \\sqrt{25+144} = \\sqrt{169} = 13$$\n\n**שלב 2 — וקטור יחידה:** חלקו כל רכיב ב-$13$:\n$$\\hat{v} = \\left(-\\frac{5}{13},\\ \\frac{12}{13}\\right)$$\n\n**שלב 3 — אימות:** $\\sqrt{(25+144)/169} = 1$ ✓\n\n**תשובה:** $|\\vec{v}| = 13$, $\\hat{v} = (-5/13,\\ 12/13)$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Angle Between Two Vectors",
+      "title_he": "דוגמה פתורה 2 — זווית בין שני וקטורים",
+      "body_en_md": "**Given:** $\\vec{u} = (1, 2)$ and $\\vec{v} = (3, -1)$. Find the angle $\\theta$ between them.\n\nThis problem uses the full angle formula: dot product in the numerator, product of magnitudes in the denominator. Work in three clear stages to avoid mixing steps.\n\n### Move 1 — Dot product\n$$\\vec{u} \\cdot \\vec{v} = (1)(3) + (2)(-1) = 3 - 2 = 1$$\nA positive dot product tells us the angle is acute (less than $90°$).\n\n### Move 2 — Magnitudes\n$$|\\vec{u}| = \\sqrt{1^2+2^2} = \\sqrt{5}$$\n$$|\\vec{v}| = \\sqrt{3^2+(-1)^2} = \\sqrt{10}$$\n\n### Move 3 — Cosine of the angle\n$$\\cos\\theta = \\frac{\\vec{u}\\cdot\\vec{v}}{|\\vec{u}||\\vec{v}|} = \\frac{1}{\\sqrt{5}\\cdot\\sqrt{10}} = \\frac{1}{\\sqrt{50}} = \\frac{1}{5\\sqrt{2}} = \\frac{\\sqrt{2}}{10}$$\n\n### Move 4 — Find $\\theta$\n$$\\theta = \\arccos\\left(\\frac{\\sqrt{2}}{10}\\right) \\approx 81.9°$$\n\n**Answer:** The angle between $\\vec{u}$ and $\\vec{v}$ is approximately $81.9°$.\n\n**Bagrut note:** Write dot product, then each magnitude, then the fraction on separate lines. Graders award method marks even if the final angle is slightly off due to rounding.\n\n**Alternative check:** Since $\\cos\\theta = \\sqrt{2}/10 \\approx 0.141$, the angle is clearly acute and close to $90°$ but not perpendicular — the dot product being $1$ (not zero) confirms this.",
+      "body_he_md": "**נתון:** $\\vec{u} = (1, 2)$ ו-$\\vec{v} = (3, -1)$. מצאו את הזווית $\\theta$ ביניהם.\n\nבעיה זו משתמשת בנוסחת הזווית המלאה: מכפלה סקלרית במונה, מכפלת גדלים במכנה. עבדו בשלושה שלבים ברורים.\n\n### צעד 1 — מכפלה סקלרית\n$$\\vec{u} \\cdot \\vec{v} = (1)(3) + (2)(-1) = 3 - 2 = 1$$\nמכפלה חיובית = זווית חדה (פחות מ-$90°$).\n\n### צעד 2 — גדלים\n$$|\\vec{u}| = \\sqrt{1^2+2^2} = \\sqrt{5}$$\n$$|\\vec{v}| = \\sqrt{3^2+(-1)^2} = \\sqrt{10}$$\n\n### צעד 3 — קוסינוס הזווית\n$$\\cos\\theta = \\frac{\\vec{u}\\cdot\\vec{v}}{|\\vec{u}||\\vec{v}|} = \\frac{1}{\\sqrt{5}\\cdot\\sqrt{10}} = \\frac{1}{\\sqrt{50}} = \\frac{1}{5\\sqrt{2}} = \\frac{\\sqrt{2}}{10}$$\n\n### צעד 4 — מציאת $\\theta$\n$$\\theta = \\arccos\\left(\\frac{\\sqrt{2}}{10}\\right) \\approx 81.9°$$\n\n**תשובה:** הזווית בין $\\vec{u}$ ו-$\\vec{v}$ היא בערך $81.9°$.\n\n**הערת בגרות:** כתבו מכפלה, גודל, ושבר בשורות נפרדות. נקודות על השיטה גם אם הזווית הסופית מעט שונה בגלל עיגול.\n\n**בדיקה חלופית:** מאחר ש-$\\cos\\theta = \\sqrt{2}/10 \\approx 0.141$, הזווית חדה וקרובה ל-$90°$ אך לא ניצבת — המכפלה $1$ (לא אפס) מאשרת זאת. זו שאלה טיפוסית בבגרות 5 יח\"ל."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Are $\\vec{a} = (2, 3)$ and $\\vec{b} = (6, -4)$ perpendicular? Justify.",
+      "body_he_md": "האם $\\vec{a} = (2, 3)$ ו-$\\vec{b} = (6, -4)$ מאונכים? הסבר.",
+      "checkpoint_solution_en": "Are $\\vec{a} = (2, 3)$ and $\\vec{b} = (6, -4)$ perpendicular? Justify.\n\n**Step 1 — Compute dot product:**\n$$\\vec{a} \\cdot \\vec{b} = (2)(6) + (3)(-4) = 12 - 12 = 0$$\n\n**Step 2 — Interpret:** Since the dot product is zero and both vectors are non-zero, the angle between them is exactly $90°$.\n\n**Conclusion:** Yes, $\\vec{a}$ and $\\vec{b}$ are perpendicular because $\\vec{a} \\cdot \\vec{b} = 0$.\n\n**Check:** Perpendicularity requires dot product zero — not equal magnitudes or opposite signs on components.",
+      "checkpoint_solution_he": "האם $\\vec{a} = (2, 3)$ ו-$\\vec{b} = (6, -4)$ מאונכים? הסבירו.\n\n**שלב 1 — חישוב מכפלה סקלרית:**\n$$\\vec{a} \\cdot \\vec{b} = (2)(6) + (3)(-4) = 12 - 12 = 0$$\n\n**שלב 2 — פרשנות:** מאחר שהמכפלה הסקלרית אפס ושני הוקטורים שונים מאפס, הזווית ביניהם בדיוק $90°$.\n\n**מסקנה:** כן, $\\vec{a}$ ו-$\\vec{b}$ מאונכים כי $\\vec{a} \\cdot \\vec{b} = 0$.\n\n**בדיקה:** ניצבות דורשת מכפלה אפס — לא גדלים שווים או סימנים הפוכים על רכיבים."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Diagonals of a Parallelogram Bisect Each Other",
+      "title_he": "דוגמה פתורה 3 — אלכסוני מקבילית מחצים זה את זה",
+      "body_en_md": "**Theorem:** Prove that the diagonals of a parallelogram bisect each other using vectors.\n\nVector proofs on Bagrut often ask you to show two midpoints coincide. The coordinate approach below is the cleanest: place one vertex at the origin and express everything algebraically.\n\n**Setup:** Let parallelogram $ABCD$ have vertices $A$, $B$, $C$, $D$. In a parallelogram, $\\overrightarrow{AB} = \\overrightarrow{DC}$, which means opposite sides are equal and parallel as vectors.\n\n**Coordinate approach:** Place $A = (0,0)$, $B = (p,q)$, $D = (r,s)$. Since $ABCD$ is a parallelogram, $C = B + D = (p+r, q+s)$ — the fourth vertex is found by vector addition, not by guessing coordinates.\n\n### Move 1 — Midpoint of diagonal $AC$\n$$M_1 = \\frac{A + C}{2} = \\frac{(0,0)+(p+r,q+s)}{2} = \\left(\\frac{p+r}{2},\\ \\frac{q+s}{2}\\right)$$\n\n### Move 2 — Midpoint of diagonal $BD$\n$$M_2 = \\frac{B + D}{2} = \\frac{(p,q)+(r,s)}{2} = \\left(\\frac{p+r}{2},\\ \\frac{q+s}{2}\\right)$$\n\n### Move 3 — Compare\n$$M_1 = M_2 \\quad \\checkmark$$\n\nBoth diagonals share the same midpoint, so they bisect each other.\n\n**Conclusion:** The midpoints of both diagonals coincide — the diagonals bisect each other. $\\square$\n\n**Bagrut note:** You only need to show $M_1 = M_2$ with explicit coordinates. State \"midpoints are equal, therefore diagonals bisect each other\" as the final sentence.",
+      "body_he_md": "**משפט:** הוכיחו שאלכסוני מקבילית מחצים זה את זה תוך שימוש בוקטורים.\n\nהוכחות וקטוריות בבגרות מבקשות לעיתים קרובות להראות ששתי נקודות אמצע חופפות. הגישה הקואורדינטית למטה היא הנקייה ביותר: הציבו קודקוד אחד בראשית והביעו הכל אלגברית.\n\n**הכנה:** תהי מקבילית $ABCD$ עם קודקודים $A$, $B$, $C$, $D$. במקבילית, $\\overrightarrow{AB} = \\overrightarrow{DC}$ — צלעות נגדיות שוות ומקבילות כוקטורים.\n\n**גישה קואורדינטית:** $A = (0,0)$, $B = (p,q)$, $D = (r,s)$. מאחר ש-$ABCD$ מקבילית, $C = B + D = (p+r, q+s)$ — הקודקוד הרביעי נמצא בחיבור וקטורי.\n\n### צעד 1 — נקודת אמצע של אלכסון $AC$\n$$M_1 = \\frac{A + C}{2} = \\frac{(0,0)+(p+r,q+s)}{2} = \\left(\\frac{p+r}{2},\\ \\frac{q+s}{2}\\right)$$\n\n### צעד 2 — נקודת אמצע של אלכסון $BD$\n$$M_2 = \\frac{B + D}{2} = \\frac{(p,q)+(r,s)}{2} = \\left(\\frac{p+r}{2},\\ \\frac{q+s}{2}\\right)$$\n\n### צעד 3 — השוואה\n$$M_1 = M_2 \\quad \\checkmark$$\n\nלשני האלכסונים אותה נקודת אמצע, ולכן הם מחצים זה את זה.\n\n**מסקנה:** נקודות האמצע של שני האלכסונות חופפות — האלכסונות מחצים זה את זה. $\\square$\n\n**הערת בגרות:** מספיק להראות $M_1 = M_2$ עם קואורדינטות מפורשות. כתבו \"נקודות האמצע שוות, לכן האלכסונים מחצים זה את זה\" כמשפט סיום."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Vector Problem Strategy",
+      "title_he": "מדריך שיטות — אסטרטגיה לבעיות וקטורים",
+      "body_en_md": "Use this table and strategy for every vector problem on Bagrut 4pt and 5pt:\n\n| Task | Method |\n|------|--------|\n| Magnitude $|\\vec{v}|$ | $\\sqrt{a^2+b^2}$ |\n| Unit vector $\\hat{v}$ | $\\vec{v}/|\\vec{v}|$ |\n| Dot product | $a_1 a_2 + b_1 b_2$ |\n| Angle between vectors | $\\cos\\theta = \\frac{\\vec{u}\\cdot\\vec{v}}{|\\vec{u}||\\vec{v}|}$ |\n| Check perpendicularity | $\\vec{u}\\cdot\\vec{v} = 0?$ |\n| Check parallelism | $\\vec{v} = k\\vec{u}$ for scalar $k$? |\n| Vector $\\overrightarrow{AB}$ | $B - A$ |\n| Midpoint of $AB$ | $\\frac{1}{2}(A+B)$ |\n\n**Geometric proof strategy (4 steps):**\n1. Assign coordinates or position vectors — often place one vertex at the origin.\n2. Express all required vectors (sides, diagonals, midpoints) in terms of the basic vectors.\n3. Compute what is needed: dot products for angles, midpoints for bisection, component equality for parallelograms.\n4. State the geometric conclusion in one clear sentence and box your answer.\n\n**Exam tip:** For angle problems, always write dot product, then magnitudes, then cosine — three separate lines earn partial credit.",
+      "body_he_md": "השתמשו בטבלה ובאסטרטגיה לכל בעיית וקטורים בבגרות 4 ו-5 יח\"ל:\n\n| משימה | שיטה |\n|-------|------|\n| גודל $|\\vec{v}|$ | $\\sqrt{a^2+b^2}$ |\n| וקטור יחידה $\\hat{v}$ | $\\vec{v}/|\\vec{v}|$ |\n| מכפלה סקלרית | $a_1 a_2 + b_1 b_2$ |\n| זווית בין וקטורים | $\\cos\\theta = \\frac{\\vec{u}\\cdot\\vec{v}}{|\\vec{u}||\\vec{v}|}$ |\n| בדיקת אנכיות | $\\vec{u}\\cdot\\vec{v} = 0?$ |\n| בדיקת מקביליות | $\\vec{v} = k\\vec{u}$ עבור סקלר $k$? |\n| וקטור $\\overrightarrow{AB}$ | $B - A$ |\n| נקודת אמצע של $AB$ | $\\frac{1}{2}(A+B)$ |\n\n**אסטרטגיה להוכחה גאומטרית (4 שלבים):**\n1. הציבו קואורדינטות או וקטורי מיקום — לעיתים קרובות קודקוד אחד בראשית.\n2. הביעו את כל הוקטורים הנדרשים (צלעות, אלכסונים, נקודות אמצע) כפונקציה של הוקטורים הבסיסיים.\n3. חשבו את הנדרש: מכפלות סקלריות לזוויות, נקודות אמצע לחצייה, שוויון רכיבים למקביליות.\n4. ציינו את המסקנה הגאומטרית במשפט ברור אחד וסגרו את התשובה.\n\n**טיפ לבחינה:** בבעיות זווית, כתבו מכפלה, גודל, וקוסינוס — שלוש שורות נפרדות מזכות בנקודות חלקיות."
+    },
+    {
+      "kind": "theory",
+      "title_en": "The Dot Product — Where Vectors Meet Trigonometry",
+      "title_he": "המכפלה הסקלרית — היכן שוקטורים פוגשים טריגונומטריה",
+      "body_en_md": "You've seen the dot product as a formula, $\\vec{u}\\cdot\\vec{v}=u_1v_1+u_2v_2$. But its real power is that this simple arithmetic secretly measures an *angle*. Understanding why unlocks half of vector geometry.\n\n### Two faces of the same number\nThe dot product has two equivalent definitions:\n$$\\vec{u}\\cdot\\vec{v}=u_1v_1+u_2v_2 \\qquad\\text{(components)}$$\n$$\\vec{u}\\cdot\\vec{v}=|\\vec{u}||\\vec{v}|\\cos\\theta \\qquad\\text{(geometry)}$$\nThe first is easy to compute; the second tells you what it *means*. Setting them equal is the master tool:\n$$\\cos\\theta=\\frac{u_1v_1+u_2v_2}{|\\vec{u}||\\vec{v}|}.$$\nGiven any two vectors, you can now find the angle between them with pure arithmetic — no protractor, no drawing.\n\n### The sign of the dot product is a compass\nBecause $|\\vec{u}||\\vec{v}|>0$, the *sign* of $\\vec{u}\\cdot\\vec{v}$ is the sign of $\\cos\\theta$:\n- **Positive** → $\\theta<90°$: the vectors point in broadly the *same* direction.\n- **Zero** → $\\theta=90°$: the vectors are **perpendicular**. This is the single most useful fact in the topic — perpendicularity is a one-line arithmetic check.\n- **Negative** → $\\theta>90°$: the vectors point in broadly *opposite* directions.\n\nYou can read the geometry of a configuration off a single number.\n\n### Projection: how much of one vector lies along another\nThe dot product also answers \"how much of $\\vec{u}$ points along $\\vec{v}$?\" The **scalar projection** of $\\vec{u}$ onto $\\vec{v}$ is\n$$\\text{comp}_{\\vec{v}}\\vec{u}=\\frac{\\vec{u}\\cdot\\vec{v}}{|\\vec{v}|}=|\\vec{u}|\\cos\\theta.$$\nThis is the length of the shadow $\\vec{u}$ casts on the line of $\\vec{v}$. It's why the dot product appears everywhere in physics: work is $W=\\vec{F}\\cdot\\vec{d}$ — only the part of the force *along* the displacement does work, and the dot product extracts exactly that component.\n\n### Why the two definitions agree\nThe equivalence isn't a coincidence — it's the law of cosines in disguise. For the triangle formed by $\\vec{u}$, $\\vec{v}$, and $\\vec{u}-\\vec{v}$, the law of cosines says $|\\vec{u}-\\vec{v}|^2=|\\vec{u}|^2+|\\vec{v}|^2-2|\\vec{u}||\\vec{v}|\\cos\\theta$. Expanding $|\\vec{u}-\\vec{v}|^2$ in components and simplifying leaves exactly $\\vec{u}\\cdot\\vec{v}=|\\vec{u}||\\vec{v}|\\cos\\theta$. Trigonometry and algebra were describing the same thing all along.",
+      "body_he_md": "ראיתם את המכפלה הסקלרית כנוסחה, $\\vec{u}\\cdot\\vec{v}=u_1v_1+u_2v_2$. אך העוצמה האמיתית שלה היא שהחשבון הפשוט הזה מודד בסתר *זווית*. הבנת ה\"מדוע\" פותחת מחצית מהגאומטריה הוקטורית.\n\n### שני פרצופים לאותו מספר\nלמכפלה הסקלרית שתי הגדרות שקולות — האחת ברכיבים, השנייה בגאומטריה:\n$$\\vec{u}\\cdot\\vec{v}=u_1v_1+u_2v_2$$\n$$\\vec{u}\\cdot\\vec{v}=|\\vec{u}||\\vec{v}|\\cos\\theta$$\nהראשונה קלה לחישוב; השנייה אומרת מה זה *אומר*. השוואתן היא הכלי המרכזי:\n$$\\cos\\theta=\\frac{u_1v_1+u_2v_2}{|\\vec{u}||\\vec{v}|}.$$\nבהינתן שני וקטורים כלשהם, תוכלו כעת למצוא את הזווית ביניהם בחשבון טהור — בלי מד-זווית, בלי ציור.\n\n### הסימן של המכפלה הסקלרית הוא מצפן\nכיוון ש-$|\\vec{u}||\\vec{v}|>0$, ה*סימן* של $\\vec{u}\\cdot\\vec{v}$ הוא הסימן של $\\cos\\theta$:\n- **חיובי** → $\\theta<90°$: הוקטורים מצביעים בגדול לאותו *כיוון*.\n- **אפס** → $\\theta=90°$: הוקטורים **אנכיים**. זו העובדה השימושית ביותר בנושא — אנכיות היא בדיקה חשבונית של שורה אחת.\n- **שלילי** → $\\theta>90°$: הוקטורים מצביעים בגדול לכיוונים *מנוגדים*.\n\nאפשר לקרוא את הגאומטריה של תצורה ממספר יחיד.\n\n### היטל: כמה מוקטור אחד שוכב לאורך האחר\nהמכפלה הסקלרית עונה גם על \"כמה מ-$\\vec{u}$ מצביע לאורך $\\vec{v}$?\" ה**היטל הסקלרי** של $\\vec{u}$ על $\\vec{v}$ הוא\n$$\\text{comp}_{\\vec{v}}\\vec{u}=\\frac{\\vec{u}\\cdot\\vec{v}}{|\\vec{v}|}=|\\vec{u}|\\cos\\theta.$$\nזהו אורך הצל ש-$\\vec{u}$ מטיל על הישר של $\\vec{v}$. לכן המכפלה הסקלרית מופיעה בכל מקום בפיזיקה: עבודה היא $W=\\vec{F}\\cdot\\vec{d}$ — רק החלק של הכוח *לאורך* ההעתק מבצע עבודה, והמכפלה הסקלרית מחלצת בדיוק את הרכיב הזה.\n\n### מדוע שתי ההגדרות מסכימות\nהשקילות אינה מקרית — היא משפט הקוסינוסים בתחפושת. עבור המשולש שנוצר מ-$\\vec{u}$, $\\vec{v}$, ו-$\\vec{u}-\\vec{v}$, משפט הקוסינוסים אומר $|\\vec{u}-\\vec{v}|^2=|\\vec{u}|^2+|\\vec{v}|^2-2|\\vec{u}||\\vec{v}|\\cos\\theta$. פיתוח $|\\vec{u}-\\vec{v}|^2$ ברכיבים ופישוט משאירים בדיוק $\\vec{u}\\cdot\\vec{v}=|\\vec{u}||\\vec{v}|\\cos\\theta$. טריגונומטריה ואלגברה תיארו את אותו דבר כל הזמן."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — Angle and Projection Between Two Vectors",
+      "title_he": "דוגמה פתורה 4 — זווית והיטל בין שני וקטורים",
+      "body_en_md": "**Problem.** Given $\\vec{u}=(3,4)$ and $\\vec{v}=(4,3)$, find (a) the angle $\\theta$ between them, and (b) the scalar projection of $\\vec{u}$ onto $\\vec{v}$.\n\n### Step 1: Dot product\n$$\\vec{u}\\cdot\\vec{v}=(3)(4)+(4)(3)=12+12=24.$$\n\n### Step 2: Magnitudes\n$$|\\vec{u}|=\\sqrt{3^2+4^2}=\\sqrt{25}=5,\\qquad |\\vec{v}|=\\sqrt{4^2+3^2}=5.$$\n\n### Step 3: Angle from the cosine formula\n$$\\cos\\theta=\\frac{\\vec{u}\\cdot\\vec{v}}{|\\vec{u}||\\vec{v}|}=\\frac{24}{5\\cdot 5}=\\frac{24}{25}=0.96.$$\n$$\\theta=\\arccos(0.96)\\approx 16.26°.$$\nThe positive dot product already told us $\\theta<90°$; now we have the exact value.\n\n### Step 4: Scalar projection of u onto v\n$$\\text{comp}_{\\vec{v}}\\vec{u}=\\frac{\\vec{u}\\cdot\\vec{v}}{|\\vec{v}|}=\\frac{24}{5}=4.8.$$\nSo $4.8$ units of $\\vec{u}$'s length lie along the direction of $\\vec{v}$. Since $|\\vec{u}|=5$, almost all of $\\vec{u}$ points along $\\vec{v}$ — consistent with the small $16°$ angle.\n\n### Step 5: Sanity check\nBy symmetry $\\vec{u}$ and $\\vec{v}$ have equal length and are mirror images across the line $y=x$, so the angle between each and that line is equal, and the total angle between them being small is exactly what we'd expect. ✓\n\n**Answer:** $\\theta\\approx 16.26°$, projection $=4.8$.",
+      "body_he_md": "**בעיה.** בהינתן $\\vec{u}=(3,4)$ ו-$\\vec{v}=(4,3)$, מצאו (א) את הזווית $\\theta$ ביניהם, ו-(ב) את ההיטל הסקלרי של $\\vec{u}$ על $\\vec{v}$.\n\n### שלב 1: מכפלה סקלרית\n$$\\vec{u}\\cdot\\vec{v}=(3)(4)+(4)(3)=12+12=24.$$\n\n### שלב 2: גדלים\n$$|\\vec{u}|=\\sqrt{3^2+4^2}=\\sqrt{25}=5,\\qquad |\\vec{v}|=\\sqrt{4^2+3^2}=5.$$\n\n### שלב 3: זווית מנוסחת הקוסינוס\n$$\\cos\\theta=\\frac{\\vec{u}\\cdot\\vec{v}}{|\\vec{u}||\\vec{v}|}=\\frac{24}{5\\cdot 5}=\\frac{24}{25}=0.96.$$\n$$\\theta=\\arccos(0.96)\\approx 16.26°.$$\nהמכפלה החיובית כבר אמרה לנו $\\theta<90°$; כעת יש לנו את הערך המדויק.\n\n### שלב 4: היטל סקלרי של u על v\n$$\\text{comp}_{\\vec{v}}\\vec{u}=\\frac{\\vec{u}\\cdot\\vec{v}}{|\\vec{v}|}=\\frac{24}{5}=4.8.$$\nכך ש-$4.8$ יחידות מאורך $\\vec{u}$ שוכבות לאורך כיוון $\\vec{v}$. כיוון ש-$|\\vec{u}|=5$, כמעט כל $\\vec{u}$ מצביע לאורך $\\vec{v}$ — עקבי עם הזווית הקטנה של $16°$.\n\n### שלב 5: בדיקת היגיון\nמסימטריה $\\vec{u}$ ו-$\\vec{v}$ שווי אורך והם תמונות ראי סביב הישר $y=x$, ולכן הזווית של כל אחד עם הישר הזה שווה, וכך שהזווית הכוללת ביניהם קטנה — בדיוק כמצופה. ✓\n\n**תשובה:** $\\theta\\approx 16.26°$, היטל $=4.8$."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Find $|\\vec{v}|$ and $\\hat{v}$ for $\\vec{v} = (4, 3)$.",
+          "body_he": "מצאו $|\\vec{v}|$ ו-$\\hat{v}$ עבור $\\vec{v} = (4, 3)$.",
+          "solution_en": "**Solution:**\n\n$|\\vec{v}| = \\sqrt{16+9} = 5$. $\\hat{v} = (4/5,\\ 3/5)$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$|\\vec{v}| = \\sqrt{16+9} = 5$. $\\hat{v} = (4/5,\\ 3/5)$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Compute $\\vec{u} + \\vec{v}$ and $3\\vec{u} - \\vec{v}$ for $\\vec{u} = (2, -1)$ and $\\vec{v} = (-3, 4)$.",
+          "body_he": "חשבו $\\vec{u} + \\vec{v}$ ו-$3\\vec{u} - \\vec{v}$ עבור $\\vec{u} = (2, -1)$ ו-$\\vec{v} = (-3, 4)$.",
+          "solution_en": "**Solution:**\n\n$\\vec{u}+\\vec{v} = (-1, 3)$. $3\\vec{u}-\\vec{v} = (6-(-3),\\ -3-4) = (9, -7)$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$\\vec{u}+\\vec{v} = (-1, 3)$. $3\\vec{u}-\\vec{v} = (6-(-3),\\ -3-4) = (9, -7)$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Compute $\\vec{u} \\cdot \\vec{v}$ for $\\vec{u} = (5, 2)$ and $\\vec{v} = (1, -3)$.",
+          "body_he": "חשבו $\\vec{u} \\cdot \\vec{v}$ עבור $\\vec{u} = (5, 2)$ ו-$\\vec{v} = (1, -3)$.",
+          "solution_en": "**Solution:**\n\n$\\vec{u} \\cdot \\vec{v} = 5 \\cdot 1 + 2 \\cdot (-3) = 5 - 6 = -1$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$\\vec{u} \\cdot \\vec{v} = 5 \\cdot 1 + 2 \\cdot (-3) = 5 - 6 = -1$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Find $\\overrightarrow{AB}$ where $A = (1, 3)$ and $B = (4, -2)$. Then find $|\\overrightarrow{AB}|$.",
+          "body_he": "מצאו $\\overrightarrow{AB}$ כאשר $A = (1, 3)$ ו-$B = (4, -2)$. לאחר מכן מצאו $|\\overrightarrow{AB}|$.",
+          "solution_en": "**Solution:**\n\n$\\overrightarrow{AB} = (4-1,\\ -2-3) = (3, -5)$. $|\\overrightarrow{AB}| = \\sqrt{9+25} = \\sqrt{34}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$\\overrightarrow{AB} = (4-1,\\ -2-3) = (3, -5)$. $|\\overrightarrow{AB}| = \\sqrt{9+25} = \\sqrt{34}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Find the angle between $\\vec{u} = (1, 0)$ and $\\vec{v} = (1, 1)$.",
+          "body_he": "מצאו את הזווית בין $\\vec{u} = (1, 0)$ ו-$\\vec{v} = (1, 1)$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\vec{u}\\cdot\\vec{v} = 1$. $|\\vec{u}| = 1$, $|\\vec{v}| = \\sqrt{2}$. $\\cos\\theta = 1/\\sqrt{2}$. $\\theta = 45°$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "$\\vec{u}\\cdot\\vec{v} = 1$. $|\\vec{u}| = 1$, $|\\vec{v}| = \\sqrt{2}$. $\\cos\\theta = 1/\\sqrt{2}$. $\\theta = 45°$.",
+          "points": 5
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Find all values of $t$ such that $\\vec{u} = (t, 3)$ is perpendicular to $\\vec{v} = (2, t-1)$.",
+          "body_he": "מצאו את כל ערכי $t$ כך ש-$\\vec{u} = (t, 3)$ מאונך ל-$\\vec{v} = (2, t-1)$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\vec{u}\\cdot\\vec{v} = 0$: $2t + 3(t-1) = 0$. $2t+3t-3 = 0$. $5t = 3$. $t = 3/5$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "$\\vec{u}\\cdot\\vec{v} = 0$: $2t + 3(t-1) = 0$. $2t+3t-3 = 0$. $5t = 3$. $t = 3/5$.",
+          "points": 5
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Points $A(1,2)$, $B(5,4)$, $C(7,0)$, $D(3,-2)$ form a quadrilateral. Use vectors to show it is a parallelogram.",
+          "body_he": "הנקודות $A(1,2)$, $B(5,4)$, $C(7,0)$, $D(3,-2)$ יוצרות מרובע. השתמש בוקטורים להראות שזו מקבילית.",
+          "solution_en": "$\\overrightarrow{AB} = (4,2)$. $\\overrightarrow{DC} = (7-3,\\ 0-(-2)) = (4,2)$. Since $\\overrightarrow{AB} = \\overrightarrow{DC}$, $AB \\parallel DC$ and equal — it is a parallelogram.",
+          "solution_he": "$\\overrightarrow{AB} = (4,2)$. $\\overrightarrow{DC} = (7-3,\\ 0-(-2)) = (4,2)$. מאחר ש-$\\overrightarrow{AB} = \\overrightarrow{DC}$, $AB \\parallel DC$ ושווים — זוהי מקבילית.",
+          "points": 5
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "A vector has magnitude $10$ and makes a $60°$ angle with the positive $x$-axis. Write it in component form.",
+          "body_he": "לוקטור גודל $10$ והוא יוצר זווית $60°$ עם ציר $x$ החיובי. כתוב אותו בצורת רכיבים.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\vec{v} = (10\\cos 60°,\\ 10\\sin 60°) = (10 \\cdot \\frac{1}{2},\\ 10 \\cdot \\frac{\\sqrt{3}}{2}) = (5,\\ 5\\sqrt{3})$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\vec{v} = (10\\cos 60°,\\ 10\\sin 60°) = (10 \\cdot \\frac{1}{2},\\ 10 \\cdot \\frac{\\sqrt{3}}{2}) = (5,\\ 5\\sqrt{3})$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Show that the dot product is distributive: $(\\vec{u}+\\vec{v})\\cdot\\vec{w} = \\vec{u}\\cdot\\vec{w} + \\vec{v}\\cdot\\vec{w}$.",
+          "body_he": "הראה שהמכפלה הסקלרית היא דיסטריבוטיבית: $(\\vec{u}+\\vec{v})\\cdot\\vec{w} = \\vec{u}\\cdot\\vec{w} + \\vec{v}\\cdot\\vec{w}$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nLet $\\vec{u}=(a_1,b_1)$, $\\vec{v}=(a_2,b_2)$, $\\vec{w}=(a_3,b_3)$. LHS: $(a_1+a_2)a_3+(b_1+b_2)b_3 = a_1 a_3+b_1 b_3+a_2 a_3+b_2 b_3 = \\vec{u}\\cdot\\vec{w}+\\vec{v}\\cdot\\vec{w}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "תהיינה $\\vec{u}=(a_1,b_1)$, $\\vec{v}=(a_2,b_2)$, $\\vec{w}=(a_3,b_3)$. צד שמאל: $(a_1+a_2)a_3+(b_1+b_2)b_3 = a_1 a_3+b_1 b_3+a_2 a_3+b_2 b_3 = \\vec{u}\\cdot\\vec{w}+\\vec{v}\\cdot\\vec{w}$.",
+          "points": 5
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove using vectors that the midpoints of the sides of any quadrilateral form a parallelogram (Varignon's theorem).",
+          "body_he": "הוכח בעזרת וקטורים שנקודות האמצע של צלעות מרובע כלשהו יוצרות מקבילית (משפט ורינון).",
+          "solution_en": "Let vertices $A,B,C,D$ have position vectors $\\vec{a},\\vec{b},\\vec{c},\\vec{d}$. Midpoints: $P=\\frac{\\vec{a}+\\vec{b}}{2}$, $Q=\\frac{\\vec{b}+\\vec{c}}{2}$, $R=\\frac{\\vec{c}+\\vec{d}}{2}$, $S=\\frac{\\vec{d}+\\vec{a}}{2}$. $\\overrightarrow{PQ}=Q-P=\\frac{\\vec{c}-\\vec{a}}{2}$. $\\overrightarrow{SR}=R-S=\\frac{\\vec{c}-\\vec{a}}{2}$. Since $\\overrightarrow{PQ}=\\overrightarrow{SR}$, $PQRS$ is a parallelogram.",
+          "solution_he": "תהיינה קודקודים $A,B,C,D$ עם וקטורי מיקום $\\vec{a},\\vec{b},\\vec{c},\\vec{d}$. נקודות אמצע: $P=\\frac{\\vec{a}+\\vec{b}}{2}$, $Q=\\frac{\\vec{b}+\\vec{c}}{2}$, $R=\\frac{\\vec{c}+\\vec{d}}{2}$, $S=\\frac{\\vec{d}+\\vec{a}}{2}$. $\\overrightarrow{PQ}=Q-P=\\frac{\\vec{c}-\\vec{a}}{2}$. $\\overrightarrow{SR}=R-S=\\frac{\\vec{c}-\\vec{a}}{2}$. מאחר ש-$\\overrightarrow{PQ}=\\overrightarrow{SR}$, $PQRS$ היא מקבילית.",
+          "points": 5
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Prove the Cauchy-Schwarz inequality: $|\\vec{u}\\cdot\\vec{v}| \\leq |\\vec{u}||\\vec{v}|$.",
+          "body_he": "הוכח את אי-שוויון קושי-שוורץ: $|\\vec{u}\\cdot\\vec{v}| \\leq |\\vec{u}||\\vec{v}|$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nFrom the angle formula: $\\vec{u}\\cdot\\vec{v} = |\\vec{u}||\\vec{v}|\\cos\\theta$. So $|\\vec{u}\\cdot\\vec{v}| = |\\vec{u}||\\vec{v}||\\cos\\theta| \\leq |\\vec{u}||\\vec{v}|$ since $|\\cos\\theta| \\leq 1$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nמנוסחת הזווית: $\\vec{u}\\cdot\\vec{v} = |\\vec{u}||\\vec{v}|\\cos\\theta$. לכן $|\\vec{u}\\cdot\\vec{v}| = |\\vec{u}||\\vec{v}||\\cos\\theta| \\leq |\\vec{u}||\\vec{v}|$ מאחר ש-$|\\cos\\theta| \\leq 1$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "In triangle $ABC$, let $M$ be the midpoint of $BC$. Express $\\overrightarrow{AM}$ in terms of $\\overrightarrow{AB}$ and $\\overrightarrow{AC}$, and find $|AM|$ if $AB=6$, $AC=8$, $\\angle A=60°$.",
+          "body_he": "במשולש $ABC$, תהי $M$ נקודת האמצע של $BC$. הבע את $\\overrightarrow{AM}$ כפונקציה של $\\overrightarrow{AB}$ ו-$\\overrightarrow{AC}$, ומצאו $|AM|$ אם $AB=6$, $AC=8$, $\\angle A=60°$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$\\overrightarrow{AM} = \\frac{1}{2}(\\overrightarrow{AB}+\\overrightarrow{AC})$. $|AM|^2 = \\frac{1}{4}(|AB|^2 + 2\\overrightarrow{AB}\\cdot\\overrightarrow{AC} + |AC|^2) = \\frac{1}{4}(36+2\\cdot6\\cdot8\\cos60°+64) = \\frac{1}{4}(36+48+64) = \\frac{148}{4} = 37$. So $|AM| = \\sqrt{37}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$\\overrightarrow{AM} = \\frac{1}{2}(\\overrightarrow{AB}+\\overrightarrow{AC})$. $|AM|^2 = \\frac{1}{4}(|AB|^2 + 2\\overrightarrow{AB}\\cdot\\overrightarrow{AC} + |AC|^2) = \\frac{1}{4}(36+2\\cdot6\\cdot8\\cos60°+64) = \\frac{1}{4}(36+48+64) = \\frac{148}{4} = 37$. לכן $|AM| = \\sqrt{37}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Prove: $|\\vec{u}+\\vec{v}|^2 + |\\vec{u}-\\vec{v}|^2 = 2(|\\vec{u}|^2 + |\\vec{v}|^2)$ (parallelogram law).",
+          "body_he": "הוכח: $|\\vec{u}+\\vec{v}|^2 + |\\vec{u}-\\vec{v}|^2 = 2(|\\vec{u}|^2 + |\\vec{v}|^2)$ (חוק המקבילית).",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$|\\vec{u}+\\vec{v}|^2 = (\\vec{u}+\\vec{v})\\cdot(\\vec{u}+\\vec{v}) = |\\vec{u}|^2+2\\vec{u}\\cdot\\vec{v}+|\\vec{v}|^2$. $|\\vec{u}-\\vec{v}|^2 = |\\vec{u}|^2-2\\vec{u}\\cdot\\vec{v}+|\\vec{v}|^2$. Sum $= 2|\\vec{u}|^2+2|\\vec{v}|^2$. $\\checkmark$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$|\\vec{u}+\\vec{v}|^2 = (\\vec{u}+\\vec{v})\\cdot(\\vec{u}+\\vec{v}) = |\\vec{u}|^2+2\\vec{u}\\cdot\\vec{v}+|\\vec{v}|^2$. $|\\vec{u}-\\vec{v}|^2 = |\\vec{u}|^2-2\\vec{u}\\cdot\\vec{v}+|\\vec{v}|^2$. סכום $= 2|\\vec{u}|^2+2|\\vec{v}|^2$. $\\checkmark$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Mistakes",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "Avoid these five mistakes that cost points on Bagrut vector questions:\n\n1. **Magnitude is not the sum of components:** $|\\vec{v}| = \\sqrt{a^2+b^2}$, never $a+b$. Adding $(3,4)$ gives $7$, but the magnitude is $5$.\n\n2. **Dot product is a scalar, not a vector:** $\\vec{u}\\cdot\\vec{v}$ gives a single number. You cannot take the unit vector of a dot product or add it to a vector directly.\n\n3. **Perpendicularity test requires non-zero vectors:** $\\vec{u}\\cdot\\vec{v}=0$ proves perpendicularity only when both vectors are non-zero. The zero vector is a degenerate case.\n\n4. **Angle formula gives $0°$ to $180°$:** If the dot product is negative, the angle is obtuse. Do not report a negative angle or use $\\sin$ when the question asks for the angle between vectors.\n\n5. **Direction of $\\overrightarrow{AB}$:** Always $\\overrightarrow{AB} = B - A$, never $A - B$. Reversing gives the opposite direction, which fails proof questions.",
+      "body_he_md": "הימנעו מחמש טעויות שגוזלות נקודות בשאלות וקטורים בבגרות:\n\n1. **הגודל אינו סכום הרכיבים:** $|\\vec{v}| = \\sqrt{a^2+b^2}$, לעולם לא $a+b$. חיבור $(3,4)$ נותן $7$, אך הגודל הוא $5$.\n\n2. **המכפלה הסקלרית היא סקלר, לא וקטור:** $\\vec{u}\\cdot\\vec{v}$ נותנת מספר בודד. אי-אפשר לקחת וקטור יחידה של מכפלה סקלרית או לחבר אותה ישירות לוקטור.\n\n3. **בדיקת ניצבות דורשת וקטורים שונים מאפס:** $\\vec{u}\\cdot\\vec{v}=0$ מוכיח ניצבות רק כששני הוקטורים שונים מאפס. הוקטור האפס הוא מקרה שולי.\n\n4. **נוסחת הזווית נותנת $0°$ עד $180°$:** אם המכפלה שלילית, הזווית קהה. אל תדווחו על זווית שלילית ואל תשתמשו ב-$\\sin$ כשהשאלה על זווית בין וקטורים.\n\n5. **כיוון $\\overrightarrow{AB}$:** תמיד $\\overrightarrow{AB} = B - A$, לעולם לא $A - B$. היפוך נותן כיוון הפוך, מה שגורם לכישלון בשאלות הוכחה."
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "2D vectors are the mathematical language that connects pure geometry to physics and later university topics. Mastering components, dot product, and vector proofs here unlocks the entire mechanics track.\n\n**You will use this to unlock:**\n- `concept:kinematics_2d` **Kinematics in 2D** — velocity and displacement as vectors with independent $x$ and $y$ components.\n- `concept:projectile_motion` **Projectile Motion** — decomposing launch speed into horizontal and vertical parts.\n\n**Why it matters for exams:** Bagrut 4pt and 5pt math regularly include vector proof questions (parallelogram properties, midpoint theorems) worth 8–12 points. University calculus and linear algebra assume you can manipulate $\\vec{v}=(a,b)$ fluently. When you study, always ask: \"Can I express this geometric fact as a vector equation?\" That habit transfers to physics, engineering, and computer graphics.",
+      "body_he_md": "וקטורים דו-ממדיים הם שפת המתמטיקה שמחברת גאומטריה טהורה לפיזיקה ולנושאים אוניברסיטאיים מאוחרים. שליטה ברכיבים, מכפלה סקלרית והוכחות וקטוריות פותחת את כל מסלול המכניקה.\n\n**תשתמשו בזה כדי להתקדם ל:**\n- `concept:kinematics_2d` **קינמטיקה בשני ממדים** — מהירות ותזוזה כוקטורים עם רכיבי $x$ ו-$y$ עצמאיים.\n- `concept:projectile_motion` **תנועת קליע** — פירוק מהירות שיגור לחלקים אופקיים ואנכיים.\n\n**למה זה חשוב לבחינות:** בגרות 4 ו-5 יח\"ל כוללת שאלות הוכחה וקטוריות (תכונות מקבילית, משפטי נקודת אמצע) בשווי 8–12 נקודות. חדו\"א ואלגברה לינארית באוניברסיטה מניחים שליטה ב-$\\vec{v}=(a,b)$. בזמן לימוד, שאלו: \"האם אוכל לבטא את העובדה הגאומטרית כמשוואה וקטורית?\" הרגל זה עובר לפיזיקה, הנדסה וגרפיקה ממוחשבת."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Essential formulas (write these from memory):**\n$$|\\vec{v}| = \\sqrt{a^2+b^2}, \\quad \\hat{v} = \\frac{\\vec{v}}{|\\vec{v}|}, \\quad \\vec{u}\\cdot\\vec{v} = a_1 a_2+b_1 b_2$$\n$$\\cos\\theta = \\frac{\\vec{u}\\cdot\\vec{v}}{|\\vec{u}||\\vec{v}|}, \\quad \\vec{u}\\perp\\vec{v} \\iff \\vec{u}\\cdot\\vec{v}=0$$\n\n**Typical Bagrut patterns (4pt and 5pt):**\n- Compute magnitude and unit vector — recognize $3$-$4$-$5$ and $5$-$12$-$13$ triples.\n- Find the angle between two vectors — three-step: dot product, magnitudes, arccos.\n- Determine perpendicularity or find parameter $t$ for perpendicular vectors.\n- Use vectors to prove a geometric property (midpoint, parallelogram, Varignon).\n- Express a vector in component form from magnitude and angle: $(r\\cos\\theta,\\ r\\sin\\theta)$.\n\n**Last review checklist:** Say each formula aloud once, solve one checkpoint without notes, and verify a unit vector has length $1$.",
+      "body_he_md": "**נוסחאות חיוניות (כתבו מהזיכרון):**\n$$|\\vec{v}| = \\sqrt{a^2+b^2}, \\quad \\hat{v} = \\frac{\\vec{v}}{|\\vec{v}|}, \\quad \\vec{u}\\cdot\\vec{v} = a_1 a_2+b_1 b_2$$\n$$\\cos\\theta = \\frac{\\vec{u}\\cdot\\vec{v}}{|\\vec{u}||\\vec{v}|}, \\quad \\vec{u}\\perp\\vec{v} \\iff \\vec{u}\\cdot\\vec{v}=0$$\n\n**תבניות אופייניות בבגרות (4 ו-5 יח\"ל):**\n- חישוב גודל ווקטור יחידה — זיהוי משולשים $3$-$4$-$5$ ו-$5$-$12$-$13$.\n- מציאת זווית בין שני וקטורים — שלושה שלבים: מכפלה, גדלים, arccos.\n- קביעת ניצבות או מציאת פרמטר $t$ לוקטורים ניצבים.\n- שימוש בוקטורים להוכחת תכונה גאומטרית (נקודת אמצע, מקבילית, ורינון).\n- הבעת וקטור בצורת רכיבים מגודל וזווית: $(r\\cos\\theta,\\ r\\sin\\theta)$.\n\n**רשימת בדיקה אחרונה:** אמרו כל נוסחה בקול, פתרו checkpoint אחד בלי רשימות, ואמתו שוקטור יחידה באורך $1$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Facets: tangent and locus reasoning",
+      "title_he": "פנים: משיק ומקום גאומטרי",
+      "body_en_md": "**Line–circle tangent** conditions; **locus** descriptions from geometric constraints.",
+      "body_he_md": "תנאי **משיק ישר–מעגל**; תיאורי **מקום גאומטרי** מאילוצים."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Facets: components and dot product meaning",
+      "title_he": "פנים: רכיבים ומשמעות מכפלה סקלרית",
+      "body_en_md": "Resolve **components**; interpret the **dot product** as projection / work.",
+      "body_he_md": "פרקו ל**רכיבים**; פרשו **מכפלה סקלרית** כהטלה / עבודה."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Lesson Summary",
+      "title_he": "סיכום השיעור",
+      "body_en_md": "- **Magnitude:** $|\\vec{v}| = \\sqrt{a^2+b^2}$. Unit vector: $\\hat{v} = \\vec{v}/|\\vec{v}|$. Verify $|\\hat{v}|=1$.\n- **Dot product:** $\\vec{u}\\cdot\\vec{v} = a_1 a_2+b_1 b_2$. Measures alignment; zero means perpendicular (non-zero vectors).\n- **Angle:** $\\cos\\theta = \\frac{\\vec{u}\\cdot\\vec{v}}{|\\vec{u}||\\vec{v}|}$. Range $0°$–$180°$; negative dot product → obtuse angle.\n- **Vector between points:** $\\overrightarrow{AB} = B-A$. Midpoint: $\\frac{1}{2}(A+B)$.\n- **Geometric proofs:** assign coordinates, express sides and diagonals as vectors, compare components or midpoints.\n- **Parallelogram diagonal bisection:** midpoints of $AC$ and $BD$ are equal — proved by computing $\\frac{A+C}{2} = \\frac{B+D}{2}$.",
+      "body_he_md": "- **גודל:** $|\\vec{v}| = \\sqrt{a^2+b^2}$. וקטור יחידה: $\\hat{v} = \\vec{v}/|\\vec{v}|$. אמתו $|\\hat{v}|=1$.\n- **מכפלה סקלרית:** $\\vec{u}\\cdot\\vec{v} = a_1 a_2+b_1 b_2$. מודדת יישור; אפס = ניצבות (וקטורים שונים מאפס).\n- **זווית:** $\\cos\\theta = \\frac{\\vec{u}\\cdot\\vec{v}}{|\\vec{u}||\\vec{v}|}$. טווח $0°$–$180°$; מכפלה שלילית = זווית קהה.\n- **וקטור בין נקודות:** $\\overrightarrow{AB} = B-A$. נקודת אמצע: $\\frac{1}{2}(A+B)$.\n- **הוכחות גאומטריות:** הצבת קואורדינטות, הבעת צלעות ואלכסונים כוקטורים, השוואת רכיבים או נקודות אמצע.\n- **חציית אלכסוני מקבילית:** נקודות האמצע של $AC$ ו-$BD$ שוות — מוכח בחישוב $\\frac{A+C}{2} = \\frac{B+D}{2}$."
+    }
+  ],
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "cross_product_2d",
+      "dot_product",
+      "parallel_vectors",
+      "scalar_multiple",
+      "unit_vector",
+      "vector_addition",
+      "vector_angle",
+      "vector_magnitude",
+      "vector_projection"
+    ]
+  },
+  "questions": [
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "vector_magnitude"
+      ],
+      "ord": 1,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Magnitude of $(3,4)$?",
+      "stem_he": "גודל $(3,4)$?",
+      "explanation_en": "**Step 1.** Apply the lesson formula for this stem.\n\n**Step 2.** Evaluate carefully to obtain $5$.\n\n**Step 3.** Recheck signs and squares before roots. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** השתמשו בנוסחת השיעור.\n\n**שלב 2.** קבלו $5$.\n\n**שלב 3.** בדקו סימנים וריבועים. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "value": 5
+      },
+      "verify": {
+        "expr": "sqrt(3^2+4^2)",
+        "expected": 5,
+        "tol": 0.00001
+      },
+      "correct_answer": "5",
+      "id": "vectors_2d__5pt-q1"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "dot_product"
+      ],
+      "ord": 2,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Dot product $(1,2)\\cdot(3,4)$?",
+      "stem_he": "מכפלה סקלרית $(1,2)\\cdot(3,4)$?",
+      "explanation_en": "**Step 1.** Apply the lesson formula for this stem.\n\n**Step 2.** Evaluate carefully to obtain $11$.\n\n**Step 3.** Recheck signs and squares before roots. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** השתמשו בנוסחת השיעור.\n\n**שלב 2.** קבלו $11$.\n\n**שלב 3.** בדקו סימנים וריבועים. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "value": 11
+      },
+      "verify": {
+        "expr": "1*3+2*4",
+        "expected": 11,
+        "tol": 0.00001
+      },
+      "correct_answer": "11",
+      "id": "vectors_2d__5pt-q2"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "vector_addition"
+      ],
+      "ord": 3,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "$x$-component of $(1,2)+(4,6)$?",
+      "stem_he": "רכיב $x$ של $(1,2)+(4,6)$?",
+      "explanation_en": "**Step 1.** Apply the lesson formula for this stem.\n\n**Step 2.** Evaluate carefully to obtain $5$.\n\n**Step 3.** Recheck signs and squares before roots. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** השתמשו בנוסחת השיעור.\n\n**שלב 2.** קבלו $5$.\n\n**שלב 3.** בדקו סימנים וריבועים. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "value": 5
+      },
+      "verify": {
+        "expr": "1+4",
+        "expected": 5,
+        "tol": 0.00001
+      },
+      "correct_answer": "5",
+      "id": "vectors_2d__5pt-q3"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "scalar_multiple"
+      ],
+      "ord": 4,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "$x$-component of $3\\cdot(2,-1)$?",
+      "stem_he": "רכיב $x$ של $3\\cdot(2,-1)$?",
+      "explanation_en": "**Step 1.** Apply the lesson formula for this stem.\n\n**Step 2.** Evaluate carefully to obtain $6$.\n\n**Step 3.** Recheck signs and squares before roots. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** השתמשו בנוסחת השיעור.\n\n**שלב 2.** קבלו $6$.\n\n**שלב 3.** בדקו סימנים וריבועים. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "value": 6
+      },
+      "verify": {
+        "expr": "3*2",
+        "expected": 6,
+        "tol": 0.00001
+      },
+      "correct_answer": "6",
+      "id": "vectors_2d__5pt-q4"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "vector_magnitude"
+      ],
+      "ord": 5,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Magnitude of $(-6,8)$?",
+      "stem_he": "גודל $(-6,8)$?",
+      "explanation_en": "**Step 1.** Apply the lesson formula for this stem.\n\n**Step 2.** Evaluate carefully to obtain $10$.\n\n**Step 3.** Recheck signs and squares before roots. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** השתמשו בנוסחת השיעור.\n\n**שלב 2.** קבלו $10$.\n\n**שלב 3.** בדקו סימנים וריבועים. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "value": 10
+      },
+      "verify": {
+        "expr": "sqrt((-6)^2+8^2)",
+        "expected": 10,
+        "tol": 0.00001
+      },
+      "correct_answer": "10",
+      "id": "vectors_2d__5pt-q5"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "dot_product"
+      ],
+      "ord": 6,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Dot product $(2,-3)\\cdot(4,5)$?",
+      "stem_he": "מכפלה $(2,-3)\\cdot(4,5)$?",
+      "explanation_en": "**Step 1.** Apply the lesson formula for this stem.\n\n**Step 2.** Evaluate carefully to obtain $-7$.\n\n**Step 3.** Recheck signs and squares before roots. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** השתמשו בנוסחת השיעור.\n\n**שלב 2.** קבלו $-7$.\n\n**שלב 3.** בדקו סימנים וריבועים. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "value": -7
+      },
+      "verify": {
+        "expr": "2*4+(-3)*5",
+        "expected": -7,
+        "tol": 0.00001
+      },
+      "correct_answer": "-7",
+      "id": "vectors_2d__5pt-q6"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "dot_product"
+      ],
+      "ord": 7,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Find $k$ so $(2,k)\\cdot(3,6)=0$.",
+      "stem_he": "מצאו $k$ כך ש-$(2,k)\\cdot(3,6)=0$.",
+      "explanation_en": "**Step 1.** Apply the lesson formula for this stem.\n\n**Step 2.** Evaluate carefully to obtain $-1$.\n\n**Step 3.** Recheck signs and squares before roots. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** השתמשו בנוסחת השיעור.\n\n**שלב 2.** קבלו $-1$.\n\n**שלב 3.** בדקו סימנים וריבועים. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "value": -1
+      },
+      "verify": {
+        "expr": "-(2*3)/6",
+        "expected": -1,
+        "tol": 0.00001
+      },
+      "correct_answer": "-1",
+      "id": "vectors_2d__5pt-q7"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "unit_vector"
+      ],
+      "ord": 8,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "$x$-component of unit vector along $(3,4)$?",
+      "stem_he": "רכיב $x$ של וקטור יחידה בכיוון $(3,4)$?",
+      "explanation_en": "**Step 1.** Apply the lesson formula for this stem.\n\n**Step 2.** Evaluate carefully to obtain $0.6$.\n\n**Step 3.** Recheck signs and squares before roots. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** השתמשו בנוסחת השיעור.\n\n**שלב 2.** קבלו $0.6$.\n\n**שלב 3.** בדקו סימנים וריבועים. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "value": 0.6
+      },
+      "verify": {
+        "expr": "3/5",
+        "expected": 0.6,
+        "tol": 0.00001
+      },
+      "correct_answer": "0.6",
+      "id": "vectors_2d__5pt-q8"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "vector_projection"
+      ],
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Scalar projection of $(4,3)$ onto $(1,0)$?",
+      "stem_he": "הטלה סקלרית של $(4,3)$ על $(1,0)$?",
+      "explanation_en": "**Step 1.** Apply the lesson formula for this stem.\n\n**Step 2.** Evaluate carefully to obtain $4$.\n\n**Step 3.** Recheck signs and squares before roots. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** השתמשו בנוסחת השיעור.\n\n**שלב 2.** קבלו $4$.\n\n**שלב 3.** בדקו סימנים וריבועים. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "value": 4
+      },
+      "verify": {
+        "expr": "4",
+        "expected": 4,
+        "tol": 0.00001
+      },
+      "correct_answer": "4",
+      "id": "vectors_2d__5pt-q9"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "dot_product"
+      ],
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Compute $(3,4)\\cdot(3,4)$ (equals $|v|^2$).",
+      "stem_he": "חשבו $(3,4)\\cdot(3,4)$ (=$|v|^2$).",
+      "explanation_en": "**Step 1.** Apply the lesson formula for this stem.\n\n**Step 2.** Evaluate carefully to obtain $25$.\n\n**Step 3.** Recheck signs and squares before roots. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** השתמשו בנוסחת השיעור.\n\n**שלב 2.** קבלו $25$.\n\n**שלב 3.** בדקו סימנים וריבועים. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "value": 25
+      },
+      "verify": {
+        "expr": "3*3+4*4",
+        "expected": 25,
+        "tol": 0.00001
+      },
+      "correct_answer": "25",
+      "id": "vectors_2d__5pt-q10"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "vector_angle"
+      ],
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "$\\cos\\theta$ between $(1,0)$ and $(1,1)$?",
+      "stem_he": "$\\cos\\theta$ בין $(1,0)$ ל-$(1,1)$?",
+      "explanation_en": "**Step 1.** Apply the lesson formula for this stem.\n\n**Step 2.** Evaluate carefully to obtain $0.7071067812$.\n\n**Step 3.** Recheck signs and squares before roots. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** השתמשו בנוסחת השיעור.\n\n**שלב 2.** קבלו $0.7071067812$.\n\n**שלב 3.** בדקו סימנים וריבועים. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "value": 0.7071067812
+      },
+      "verify": {
+        "expr": "1/sqrt(2)",
+        "expected": 0.7071067812,
+        "tol": 0.00001
+      },
+      "correct_answer": "0.7071067812",
+      "id": "vectors_2d__5pt-q11"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "dot_product"
+      ],
+      "ord": 12,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "stem_en": "Dot product of two perpendicular vectors?",
+      "stem_he": "מכפלה סקלרית של וקטורים מאונכים?",
+      "explanation_en": "**Step 1.** Recall the definition or formula.\n\n**Step 2.** The correct choice is option 1.\n\n**Step 3.** Eliminate distractors that confuse related notions. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** זכרו הגדרה/נוסחה.\n\n**שלב 2.** התשובה הנכונה היא אפשרות 1.\n\n**שלב 3.** פסלו מסיחים נפוצים. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "options_en": [
+          "$0$",
+          "$1$",
+          "$-1$",
+          "undefined"
+        ],
+        "options_he": [
+          "$0$",
+          "$1$",
+          "$-1$",
+          "לא מוגדר"
+        ],
+        "correct_index": 0
+      },
+      "options_en": [
+        "$0$",
+        "$1$",
+        "$-1$",
+        "undefined"
+      ],
+      "options_he": [
+        "$0$",
+        "$1$",
+        "$-1$",
+        "לא מוגדר"
+      ],
+      "correct_index": 0,
+      "id": "vectors_2d__5pt-q12"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "parallel_vectors"
+      ],
+      "ord": 13,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "stem_en": "Which pair is parallel?",
+      "stem_he": "איזה זוג מקביל?",
+      "explanation_en": "**Step 1.** Recall the definition or formula.\n\n**Step 2.** The correct choice is option 1.\n\n**Step 3.** Eliminate distractors that confuse related notions. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** זכרו הגדרה/נוסחה.\n\n**שלב 2.** התשובה הנכונה היא אפשרות 1.\n\n**שלב 3.** פסלו מסיחים נפוצים. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "options_en": [
+          "$(2,4)$ and $(1,2)$",
+          "$(1,0)$ and $(0,1)$",
+          "$(1,2)$ and $(2,-1)$",
+          "$(3,1)$ and $(1,3)$"
+        ],
+        "options_he": [
+          "$(2,4)$ ו-$(1,2)$",
+          "$(1,0)$ ו-$(0,1)$",
+          "$(1,2)$ ו-$(2,-1)$",
+          "$(3,1)$ ו-$(1,3)$"
+        ],
+        "correct_index": 0
+      },
+      "options_en": [
+        "$(2,4)$ and $(1,2)$",
+        "$(1,0)$ and $(0,1)$",
+        "$(1,2)$ and $(2,-1)$",
+        "$(3,1)$ and $(1,3)$"
+      ],
+      "options_he": [
+        "$(2,4)$ ו-$(1,2)$",
+        "$(1,0)$ ו-$(0,1)$",
+        "$(1,2)$ ו-$(2,-1)$",
+        "$(3,1)$ ו-$(1,3)$"
+      ],
+      "correct_index": 0,
+      "id": "vectors_2d__5pt-q13"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "dot_product",
+        "vector_magnitude",
+        "parallel_vectors"
+      ],
+      "ord": 14,
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual"
+      ],
+      "stem_en": "Which are true? (Select all.)",
+      "stem_he": "מה נכון? (בחרו הכול.)",
+      "explanation_en": "**Step 1.** Judge each statement independently against lesson theorems.\n\n**Step 2.** Select every true statement; one distractor usually misstates a formula.\n\n**Step 3.** Note why the false option fails for method marks. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** בדקו כל טענה מול משפטי השיעור.\n\n**שלב 2.** בחרו את כל הנכונות.\n\n**שלב 3.** הסבירו מדוע המסיח השגוי נכשל.",
+      "answer_payload": {
+        "options_en": [
+          "$u\\cdot v=|u||v|\\cos\\theta$",
+          "$|v|^2=v\\cdot v$",
+          "Parallel vectors are scalar multiples",
+          "Perpendicular => dot product $1$"
+        ],
+        "options_he": [
+          "$u\\cdot v=|u||v|\\cos\\theta$",
+          "$|v|^2=v\\cdot v$",
+          "מקבילים = כפולה סקלרית",
+          "מאונכים => מכפלה $1$"
+        ],
+        "correct_indices": [
+          0,
+          1,
+          2
+        ]
+      },
+      "id": "vectors_2d__5pt-q14"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "parallel_vectors"
+      ],
+      "ord": 15,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "stem_en": "True/False: $(2,4)$ and $(1,2)$ are parallel.",
+      "stem_he": "נכון/לא נכון: $(2,4)$ ו-$(1,2)$ מקבילים.",
+      "explanation_en": "**Step 1.** Compare with the definition or theorem.\n\n**Step 2.** The claim matches the standard fact, so it is true.\n\n**Step 3.** State the matching criterion briefly for method marks. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** השוו להגדרה/משפט.\n\n**שלב 2.** הטענה נכונה.\n\n**שלב 3.** ציינו את הקריטריון. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "correct": true
+      },
+      "correct_answer": "true",
+      "id": "vectors_2d__5pt-q15"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "dot_product"
+      ],
+      "ord": 16,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "stem_en": "True/False: if $u\\cdot v=0$ then one vector must be zero.",
+      "stem_he": "נכון/לא נכון: אם $u\\cdot v=0$ אז אחד הווקטורים אפס.",
+      "explanation_en": "**Step 1.** Compare with the definition or theorem.\n\n**Step 2.** The claim contradicts the standard fact, so it is false.\n\n**Step 3.** Give the corrected statement for method marks. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** השוו להגדרה/משפט.\n\n**שלב 2.** הטענה שגויה.\n\n**שלב 3.** כתבו את התיקון. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "correct": false
+      },
+      "correct_answer": "false",
+      "id": "vectors_2d__5pt-q16"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "unit_vector"
+      ],
+      "ord": 17,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "stem_en": "A vector of length $1$ is called a … vector.",
+      "stem_he": "וקטור באורך $1$ נקרא וקטור …",
+      "explanation_en": "**Step 1.** Use vocabulary from the lesson.\n\n**Step 2.** Acceptable answers center on \"unit\".\n\n**Step 3.** Write the term clearly so graders can map it. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** השתמשו במונחי השיעור.\n\n**שלב 2.** התשובה סביב \"unit\".\n\n**שלב 3.** כתבו במדויק. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "unit",
+          "unit vector"
+        ],
+        "case_sensitive": false
+      },
+      "correct_answer": "unit",
+      "acceptable_answers": [
+        "unit",
+        "unit vector"
+      ],
+      "case_sensitive": false,
+      "id": "vectors_2d__5pt-q17"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "cross_product_2d"
+      ],
+      "ord": 18,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "stem_en": "In 2D, $|u_x v_y-u_y v_x|$ equals the … of the parallelogram they span.",
+      "stem_he": "ב-2D, $|u_x v_y-u_y v_x|$ שווה ל… המקבילית.",
+      "explanation_en": "**Step 1.** Use vocabulary from the lesson.\n\n**Step 2.** Acceptable answers center on \"area\".\n\n**Step 3.** Write the term clearly so graders can map it. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** השתמשו במונחי השיעור.\n\n**שלב 2.** התשובה סביב \"area\".\n\n**שלב 3.** כתבו במדויק. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "area",
+          "the area"
+        ],
+        "case_sensitive": false
+      },
+      "correct_answer": "area",
+      "acceptable_answers": [
+        "area",
+        "the area"
+      ],
+      "case_sensitive": false,
+      "id": "vectors_2d__5pt-q18"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "dot_product"
+      ],
+      "ord": 19,
+      "kind": "fill_blank",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Fill: $u\\cdot v=u_x v_x+\\underline{\\hspace{1cm}}$.",
+      "stem_he": "השלימו: $u\\cdot v=u_x v_x+\\underline{\\hspace{1cm}}$.",
+      "explanation_en": "**Step 1.** Recall the formula skeleton.\n\n**Step 2.** The blank is filled by u_y v_y.\n\n**Step 3.** Check that the completed formula still makes sense. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** זכרו את שלד הנוסחה.\n\n**שלב 2.** הריק: u_y v_y.\n\n**שלב 3.** בדקו עקביות. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "u_y v_y",
+          "uy*vy"
+        ],
+        "case_sensitive": false
+      },
+      "correct_answer": "u_y v_y",
+      "id": "vectors_2d__5pt-q19"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "vector_magnitude"
+      ],
+      "ord": 20,
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Fill: $|v|=\\sqrt{v_x^2+\\underline{\\hspace{1cm}}}$.",
+      "stem_he": "השלימו: $|v|=\\sqrt{v_x^2+\\underline{\\hspace{1cm}}}$.",
+      "explanation_en": "**Step 1.** Recall the formula skeleton.\n\n**Step 2.** The blank is filled by v_y^2.\n\n**Step 3.** Check that the completed formula still makes sense. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** זכרו את שלד הנוסחה.\n\n**שלב 2.** הריק: v_y^2.\n\n**שלב 3.** בדקו עקביות. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "v_y^2",
+          "vy^2"
+        ],
+        "case_sensitive": false
+      },
+      "correct_answer": "v_y^2",
+      "id": "vectors_2d__5pt-q20"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "dot_product",
+        "vector_magnitude",
+        "vector_projection",
+        "cross_product_2d"
+      ],
+      "ord": 21,
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "application"
+      ],
+      "stem_en": "Match tool to use-case.",
+      "stem_he": "התאימו משימה לכלי.",
+      "explanation_en": "**Step 1.** Identify the job each left item asks for.\n\n**Step 2.** Pair it with the matching formula or theorem on the right.\n\n**Step 3.** Avoid swapping parallel with perpendicular or distance with midpoint. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** זהו את המשימה משמאל.\n\n**שלב 2.** התאימו לנוסחה/משפט מימין.\n\n**שלב 3.** הימנעו מהחלפות נפוצות. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "pairs": [
+          {
+            "left_en": "Angle between vectors",
+            "left_he": "זווית בין וקטורים",
+            "right_en": "Dot product",
+            "right_he": "מכפלה סקלרית"
+          },
+          {
+            "left_en": "Length",
+            "left_he": "אורך",
+            "right_en": "Magnitude",
+            "right_he": "גוודל"
+          },
+          {
+            "left_en": "Shadow on a direction",
+            "left_he": "צל על כיוון",
+            "right_en": "Projection",
+            "right_he": "הטלה"
+          },
+          {
+            "left_en": "Parallelogram area (2D)",
+            "left_he": "שטח מקבילית",
+            "right_en": "2D cross magnitude",
+            "right_he": "גודל מכפלה וקטורית 2D"
+          }
+        ]
+      },
+      "id": "vectors_2d__5pt-q21"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "vector_angle"
+      ],
+      "ord": 22,
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "graphical"
+      ],
+      "stem_en": "Order: find angle between two nonzero vectors.",
+      "stem_he": "סדרו את השלבים.",
+      "explanation_en": "**Step 1.** Start from data extraction (slope, radius, or components).\n\n**Step 2.** Apply the main formula, then simplify.\n\n**Step 3.** Verify with a second point, sketch, or special case. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1.** חילוץ נתונים.\n\n**שלב 2.** יישום הנוסחה ופישוט.\n\n**שלב 3.** אימות בנקודה שנייה או שרטוט. בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "items_en": [
+          "Compute dot product",
+          "Compute both magnitudes",
+          "Form $\\cos\\theta=(u\\cdot v)/(|u||v|)$",
+          "Take arccos if degrees needed"
+        ],
+        "items_he": [
+          "חשבו מכפלה סקלרית",
+          "חשבו גדלים",
+          "כתבו $\\cos\\theta$",
+          "arccos אם צריך"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "id": "vectors_2d__5pt-q22"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "cross_product_2d"
+      ],
+      "ord": 23,
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application",
+        "graphical"
+      ],
+      "stem_en": "Area of parallelogram spanned by $(3,0)$ and $(1,4)$?",
+      "stem_he": "שטח מקבילית $(3,0)$ ו-$(1,4)$?",
+      "explanation_en": "**Step 1 — 2D cross.** $|3\\cdot4-0\\cdot1|=12$.\n\n**Step 2 — Area.** Absolute value $12$.\n\n**Step 3 — Picture.** Base $3$ height $4$ also gives $12$. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1 — מכפלה 2D.** $|12|$.\n\n**שלב 2 — שטח $12$.**\n\n**שלב 3 — בסיס\timesגובה.** בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "steps_en": [
+          "area=12"
+        ],
+        "steps_he": [
+          "12"
+        ]
+      },
+      "needs_review": true,
+      "rubric_en": "Full marks: named method, clear steps, correct final result.",
+      "rubric_he": "ניקוד מלא: שיטה נקובה, שלבים ברורים, תוצאה נכונה.",
+      "id": "vectors_2d__5pt-q23"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "dot_product",
+        "vector_angle"
+      ],
+      "ord": 24,
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application"
+      ],
+      "stem_en": "Show $(1,0)$ and $(0,1)$ are perpendicular using the dot product; state $\\cos\\theta$.",
+      "stem_he": "הוכיחו ש-$(1,0)$ ו-$(0,1)$ מאונכים; ציינו $\\cos\\theta$.",
+      "explanation_en": "**Step 1 — Dot.** $1\\cdot0+0\\cdot1=0$.\n\n**Step 2 — Criterion.** Dot zero => perpendicular.\n\n**Step 3 — Cosine.** $\\cos\\theta=0$ so $\\theta=90^\\circ$. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1 — מכפלה $0$.**\n\n**שלב 2 — מאונכים.**\n\n**שלב 3 — $\\cos\\theta=0$.** בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "steps_en": [
+          "dot=0",
+          "theta=90"
+        ],
+        "steps_he": [
+          "0",
+          "90"
+        ]
+      },
+      "needs_review": true,
+      "rubric_en": "Full marks: named method, clear steps, correct final result.",
+      "rubric_he": "ניקוד מלא: שיטה נקובה, שלבים ברורים, תוצאה נכונה.",
+      "id": "vectors_2d__5pt-q24"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "vector_projection",
+        "unit_vector"
+      ],
+      "ord": 25,
+      "kind": "open",
+      "difficulty": "medium",
+      "archetypes": [
+        "graphical",
+        "application"
+      ],
+      "stem_en": "Unit vector in direction $(6,8)$ and scalar projection of $(6,8)$ onto $(1,0)$.",
+      "stem_he": "וקטור יחידה בכיוון $(6,8)$ והטלה סקלרית של $(6,8)$ על $(1,0)$.",
+      "explanation_en": "**Step 1 — Magnitude.** $|v|=10$.\n\n**Step 2 — Unit.** $(0.6,0.8)$.\n\n**Step 3 — Projection on $(1,0)$.** Equals $x$-component $6$. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1 — גודל $10$.**\n\n**שלב 2 — יחידה $(0.6,0.8)$.**\n\n**שלב 3 — הטלה $6$.** בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "steps_en": [
+          "unit (0.6,0.8)",
+          "proj=6"
+        ],
+        "steps_he": [
+          "יחידה",
+          "6"
+        ]
+      },
+      "needs_review": true,
+      "rubric_en": "Full marks: named method, clear steps, correct final result.",
+      "rubric_he": "ניקוד מלא: שיטה נקובה, שלבים ברורים, תוצאה נכונה.",
+      "id": "vectors_2d__5pt-q25"
+    },
+    {
+      "points_level_min": "4pt",
+      "skill_atoms": [
+        "dot_product"
+      ],
+      "ord": 26,
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof"
+      ],
+      "stem_en": "Derive $|v|^2=v\\cdot v$ from the component definition of the dot product.",
+      "stem_he": "גזרו $|v|^2=v\\cdot v$ מהגדרת רכיבים.",
+      "explanation_en": "**Step 1 — Dot.** $v\\cdot v=v_x^2+v_y^2$.\n\n**Step 2 — Magnitude.** $|v|=\\sqrt{v_x^2+v_y^2}$.\n\n**Step 3 — Square.** $|v|^2=v\\cdot v$. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips. On the Bagrut analytic-geometry / vectors paper, name the formula first, substitute carefully, and keep method marks even if arithmetic slips.",
+      "explanation_he": "**שלב 1 — מכפלה עצמית.**\n\n**שלב 2 — גודל.**\n\n**שלב 3 — $|v|^2=v\\cdot v$.** בבגרות בגיאומטריה אנליטית / וקטורים ציינו את הנוסחה לפני ההצבה ושמרו על נקודות שיטה.",
+      "answer_payload": {
+        "steps_en": [
+          "expand dot",
+          "magnitude",
+          "square"
+        ],
+        "steps_he": [
+          "מכפלה",
+          "גודל",
+          "ריבוע"
+        ]
+      },
+      "needs_review": true,
+      "rubric_en": "Full marks: clear deductive chain citing definitions/theorems.",
+      "rubric_he": "ניקוד מלא: שרשרת דדוקטיבית עם ציטוט הגדרות/משפטים.",
+      "id": "vectors_2d__5pt-q26"
+    },
+    {
+      "id": "vectors_2d__5pt-facet-auto",
+      "ord": 27,
+      "kind": "open",
+      "difficulty": "medium",
+      "facets": [
+        "line_circle_tangent",
+        "locus_reasoning"
+      ],
+      "stem_en": "Apply the lesson facets (line_circle_tangent, locus_reasoning): give a short worked example.",
+      "stem_he": "יישמו את פני השיעור (line_circle_tangent, locus_reasoning): תנו דוגמה פתורה קצרה.",
+      "explanation_en": "**Facet practice.** Identify which facet applies, write the governing relation, compute or justify in two steps, then verify by substitution or a limiting case. See the facet theory section in this lesson for the checklist keywords and worked patterns. Keep method marks visible even if arithmetic slips.",
+      "explanation_he": "**תרגול פנים.** זהו איזה פן חל, כתבו את הקשר השולט, חשבו או הצדיקו בשני שלבים, ואמתו בהצבה או במקרה גבול. ראו את סעיף הפנים בשיעור לרשימת מילות המפתח ולדפוסים. השאירו ניקוד שיטה גלוי גם אם יש טעות חשבון.",
+      "correct_answer": "see facet section",
+      "skill_atoms": []
+    },
+    {
+      "id": "vectors_2d__5pt-facet-auto",
+      "ord": 28,
+      "kind": "open",
+      "difficulty": "medium",
+      "facets": [
+        "component_geometry",
+        "dot_product_meaning"
+      ],
+      "stem_en": "Apply the lesson facets (component_geometry, dot_product_meaning): give a short worked example.",
+      "stem_he": "יישמו את פני השיעור (component_geometry, dot_product_meaning): תנו דוגמה פתורה קצרה.",
+      "explanation_en": "**Facet practice.** Identify which facet applies, write the governing relation, compute or justify in two steps, then verify by substitution or a limiting case. See the facet theory section in this lesson for the checklist keywords and worked patterns. Keep method marks visible even if arithmetic slips.",
+      "explanation_he": "**תרגול פנים.** זהו איזה פן חל, כתבו את הקשר השולט, חשבו או הצדיקו בשני שלבים, ואמתו בהצבה או במקרה גבול. ראו את סעיף הפנים בשיעור לרשימת מילות המפתח ולדפוסים. השאירו ניקוד שיטה גלוי גם אם יש טעות חשבון.",
+      "correct_answer": "see facet section",
+      "skill_atoms": []
+    }
+  ],
+  "est_minutes": 60,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
+}

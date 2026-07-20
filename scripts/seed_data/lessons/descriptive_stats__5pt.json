@@ -1,0 +1,1059 @@
+{
+  "concept_id": "descriptive_stats__5pt",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": [
+    "5pt"
+  ],
+  "title_en": "Descriptive Statistics — 5pt mastery",
+  "title_he": "סטטיסטיקה תיאורית — שליטה 5 יח׳",
+  "summary_en": "Mean, median, mode, range, variance, standard deviation, quartiles, IQR, and box plots. Data interpretation and comparison.",
+  "summary_he": "ממוצע, חציון, שכיח, טווח, שונות, סטיית תקן, רבעונים, IQR ותרשים קופסה. פירוש והשוואת נתונים.",
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "Making Sense of Data",
+      "title_he": "הבנת נתונים",
+      "body_en_md": "You have 30 test scores spread across a page — or a table of house prices, reaction times, or daily temperatures. Raw lists are hard to compare and impossible to discuss in one sentence. **Descriptive statistics** compress a dataset into a few numbers and one picture so you can answer: *Where does the data cluster? How spread out is it? Are there unusual values?*\n\nWe organize tools into three families:\n- **Central tendency** — mean, median, mode (typical or central values).\n- **Spread / dispersion** — range, variance, standard deviation, IQR (how much values differ).\n- **Visual summaries** — box plots and histograms (shape at a glance).\n\nThis topic appears on every Israeli Bagrut math exam: 3-point units ask for mean, median, and range; 4- and 5-point units add variance, standard deviation, quartiles, and outlier rules. Mastering the vocabulary here unlocks probability distributions and inference later.\n\n**5pt focus:** Short justifications, edge cases, MoE-faithful (no uni limit-closeness drills).",
+      "body_he_md": "יש לך 30 ציוני בחינה על דף — או טבלת מחירי דירות, זמני תגובה או טמפראטורות יומיות. רשימות גולמיות קשות להשוואה ואי-אפשר לדבר עליהן במשפט אחד. **סטטיסטיקה תיאורית** דוחסת קבוצת נתונים לכמה מספרים ולתמונה אחת, כדי שתוכל לענות: *איפה הנתונים מתרכזים? עד כמה הם פרוסים? האם יש ערכים חריגים?*\n\nמארגנים את הכלים בשלוש משפחות:\n- **נטייה מרכזית** — ממוצע, חציון, שכיח (ערכים טיפוסיים או מרכזיים).\n- **פיזור** — טווח, שונות, סטיית תקן, IQR (עד כמה הערכים שונים).\n- **סיכומים ויזואליים** — תרשים קופסה והיסטוגרמה (צורת התפלגות במבט).\n\nנושא זה מופיע בכל בחינת בגרות במתמטיקה: ב-3 יחידות שואלים ממוצע, חציון וטווח; ב-4 ו-5 יחידות מוסיפים שונות, סטיית תקן, רבעונים וכלל חריגים. שליטה במונחים כאן פותחת את הדרך להתפלגויות הסתברות ולהסקה סטטיסטית בהמשך.\n\n**מיקוד 5 יח׳:** הצדקות קצרות, מקרי קצה, נאמן לתוכנית (בלי תרגול limit-closeness אוניברסיטאי)."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Key Measures — Formulas",
+      "title_he": "מדדים מרכזיים — נוסחאות",
+      "body_en_md": "Let a dataset be $x_1, x_2, \\ldots, x_n$ with $n$ observations.\n\n**Mean (average):** $\\bar{x}=\\dfrac{\\sum x_i}{n}$ — the arithmetic balance point.\n\n**Median:** Sort ascending. Odd $n$: middle value. Even $n$: average of the two middle values.\n\n**Mode:** The value(s) appearing most often; a set may have none, one, or several modes.\n\n**Range:** $\\max - \\min$ — simplest spread measure.\n\n**Variance:** $s^2=\\dfrac{\\sum(x_i-\\bar{x})^2}{n}$ for a **population**, or divide by $(n-1)$ for a **sample** (check exam instructions).\n\n**Standard deviation:** $s=\\sqrt{s^2}$ — spread in the same units as the data.\n\n**Quartiles:** $Q_1$ = median of the lower half, $Q_2$ = overall median, $Q_3$ = median of the upper half (exclude $Q_2$ from halves when $n$ is odd, per textbook convention).\n\n**IQR (interquartile range):** $Q_3-Q_1$. **Outlier fences:** values below $Q_1-1.5\\cdot\\text{IQR}$ or above $Q_3+1.5\\cdot\\text{IQR}$ are flagged as potential outliers.",
+      "body_he_md": "יהיו הנתונים $x_1, x_2, \\ldots, x_n$ עם $n$ תצפיות.\n\n**ממוצע:** $\\bar{x}=\\dfrac{\\sum x_i}{n}$ — נקודת האיזון האריתמטית.\n\n**חציון:** מיינו בסדר עולה. $n$ אי-זוגי: הערך האמצעי. $n$ זוגי: ממוצע שני הערכים האמצעיים.\n\n**שכיח:** הערך (או הערכים) שמופיעים הכי הרבה; ייתכן שאין שכיח, שכיח אחד או כמה שכיחים.\n\n**טווח:** $\\max - \\min$ — מדד הפיזור הפשוט ביותר.\n\n**שונות:** $s^2=\\dfrac{\\sum(x_i-\\bar{x})^2}{n}$ עבור **אוכלוסייה**, או חלוקה ב-$(n-1)$ עבור **מדגם** (בדקו הנחיות הבחינה).\n\n**סטיית תקן:** $s=\\sqrt{s^2}$ — פיזור באותן יחידות כמו הנתון.\n\n**רבעונים:** $Q_1$ = חציון החצי התחתון, $Q_2$ = החציון הכללי, $Q_3$ = חציון החצי העליון (ב-$n$ אי-זוגי — אל תכללו את $Q_2$ בחצאים, לפי המקובל בספרי הלימוד).\n\n**IQR (טווח רבעונים):** $Q_3-Q_1$. **גדרות חריגים:** ערכים מתחת ל-$Q_1-1.5\\cdot\\text{IQR}$ או מעל $Q_3+1.5\\cdot\\text{IQR}$ מסומנים כחריגים פוטנציאליים."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Choosing the Right Measure",
+      "title_he": "בחירת המדד הנכון",
+      "body_en_md": "**Mean vs median:** Use the **mean** when data are roughly symmetric and free of extreme outliers — it uses every value and behaves well in algebra (e.g., finding a missing score from a known mean). Use the **median** when the distribution is **skewed** (incomes, house prices) or when a few extreme values would distort the average. The mode suits **categorical** or heavily tied discrete data.\n\n**Interpreting standard deviation:** Small $s$ means values cluster near $\\bar{x}$; large $s$ means wide spread. For **approximately normal** data, roughly 68% fall within $\\bar{x}\\pm s$ and 95% within $\\bar{x}\\pm 2s$ — a quick sanity check on exam tables.\n\n**IQR vs range:** IQR ignores the outer 25% on each tail, so it is **robust** to outliers; range depends only on min and max.\n\n**Box plot (five-number summary):** whiskers extend to min and max (or to the last non-outlier), box edges at $Q_1$ and $Q_3$, median line at $Q_2$. Comparing two box plots side-by-side reveals differences in centre and spread without recalculating every statistic.\n\n**Scaling rule:** If every value is multiplied by a constant $k$, the mean and std dev multiply by $|k|$; adding a constant shifts the mean but leaves spread unchanged.",
+      "body_he_md": "**ממוצע מול חציון:** השתמשו ב**ממוצע** כשהנתונים סימטריים בערך וללא חריגים קיצוניים — הוא משתמש בכל ערך ומתנהג טוב באלגברה (למשל מציאת ציון חסר מממוצע ידוע). השתמשו ב**חציון** כשההתפלגות **מוטה** (משכורות, מחירי דירות) או כשכמה ערכים קיצוניים מעוותים את הממוצע. השכיח מתאים לנתונים **קטגוריים** או בדידים עם שוויון תדירויות.\n\n**פירוש סטיית תקן:** $s$ קטן — הערכים ריכוזיים סביב $\\bar{x}$; $s$ גדול — פיזור רחב. בנתונים **נורמליים בקירוב**, כ-68% נמצאים ב-$\\bar{x}\\pm s$ וכ-95% ב-$\\bar{x}\\pm 2s$ — בדיקת הגיון מהירה בטבלאות בחינה.\n\n**IQR מול טווח:** IQR מתעלם מ-25% החיצוניים בכל זנב, ולכן **עמיד** לחריגים; הטווח תלוי רק במינימום ובמקסימום.\n\n**תרשים קופסה (סיכום חמישה מספרים):** השפם מגיע למינ ולמקס (או לערך הלא-חריג האחרון), קצוות הקופסה ב-$Q_1$ ו-$Q_3$, קו החציון ב-$Q_2$. השוואת שני תרשימי קופסה זה לצד זה חושפת הבדלי מרכז ופיזור בלי לחשב מחדש כל מדד.\n\n**כלל קנה מידה:** הכפלת כל ערך בקבוע $k$ מכפילה את הממוצע ואת סטיית התקן ב-$|k|$; הוספת קבוע מזיזה את הממוצע אך לא משנה את הפיזור."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Mean, Median, Mode",
+      "title_he": "דוגמה פתורה 1 — ממוצע, חציון, שכיח",
+      "body_en_md": "**Dataset:** $4, 7, 7, 9, 11, 13, 13, 13, 15$. Find mean, median, and mode.\n\nThe data are already sorted — good for median and mode.\n\n### Move 1 Count and sum for the mean.\n$n=9$. $\\bar{x}=(4+7+7+9+11+13+13+13+15)/9=92/9\\approx10.22$.\n\n### Move 2 Locate the median.\nOdd $n$: the 5th value in order is $\\mathbf{11}$.\n\n### Move 3 Identify the mode.\nCount frequencies: 13 appears three times; all others appear once or twice. **Mode $=13$.**\n\n**Summary:** Mean $\\approx10.22$, Median $=11$, Mode $=13$. Notice mean $<$ median $<$ mode — a slight right skew; the repeated high 13s pull the mean less than the median suggests for a symmetric set.\n\n**Exam habit:** Report the median position as $(n+1)/2=5$ before reading the value — graders want to see you know *why* 11 is the middle.\n\n**Transfer:** The same sort-then-locate workflow applies to quartiles in Worked Example 3; always count $n$ before picking a position.",
+      "body_he_md": "**נתונים:** $4, 7, 7, 9, 11, 13, 13, 13, 15$. מצאו ממוצע, חציון ושכיח.\n\nהנתונים כבר ממוינים — נוח לחציון ולשכיח.\n\n### צעד 1 ספירה וסכום לממוצע.\n$n=9$. $\\bar{x}=(4+7+7+9+11+13+13+13+15)/9=92/9\\approx10.22$.\n\n### צעד 2 איתור החציון.\n$n$ אי-זוגי: הערך החמישי בסדר הוא $\\mathbf{11}$.\n\n### צעד 3 זיהוי השכיח.\nספירת תדירויות: 13 מופיע שלוש פעמים; השאר פעם או פעמיים. **שכיח $=13$.**\n\n**סיכום:** ממוצע $\\approx10.22$, חציון $=11$, שכיח $=13$. שימו לב: ממוצע $<$ חציון $<$ שכיח — מוטה קל ימינה; ה-13 החוזרים מושכים את הממוצע פחות ממה שהחציון מרמז בהתפלגות סימטרית.\n\n**הרגל לבחינה:** ציינו את מיקום החציון $(n+1)/2=5$ לפני קריאת הערך — המעריך רוצה לראות שאתם יודעים *למה* 11 הוא האמצע.\n\n**העברה:** אותו סדר מיון-ואיתור חוזר ברבעונים בדוגמה 3; תמיד ספרו $n$ לפני בחירת מיקום."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find median and mode of: $3, 5, 5, 6, 8, 9, 9, 9, 12$.",
+      "body_he_md": "מצא חציון ושכיח: $3,5,5,6,8,9,9,9,12$.",
+      "checkpoint_solution_en": "**Step 1 — Sort (already sorted).** $n=9$ values.\n\n**Step 2 — Median.** Odd $n$: position $(9+1)/2=5$. The 5th value is $\\mathbf{8}$.\n\n**Step 3 — Mode.** Count: 9 appears three times; 5 appears twice; others once. **Mode $=9$.**\n\n**Check:** Median 8 sits near the centre; mode 9 reflects the most common score — both reasonable for this list.",
+      "checkpoint_solution_he": "**שלב 1 — מיון (כבר ממוין).** $n=9$ ערכים.\n\n**שלב 2 — חציון.** $n$ אי-זוגי: מיקום $(9+1)/2=5$. הערך החמישי הוא $\\mathbf{8}$.\n\n**שלב 3 — שכיח.** ספירה: 9 מופיע שלוש פעמים; 5 פעמיים; השאר פעם. **שכיח $=9$.**\n\n**בדיקה:** חציון 8 קרוב למרכז; שכיח 9 משקף את הציון הנפוץ — שניהם הגיוניים."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Standard Deviation",
+      "title_he": "דוגמה פתורה 2 — סטיית תקן",
+      "body_en_md": "**Dataset:** $2, 4, 4, 4, 5, 5, 7, 9$. Find mean and population standard deviation.\n\n### Move 1 Compute the mean.\n$\\bar{x}=(2+4+4+4+5+5+7+9)/8=40/8=5$.\n\n### Move 2 Form deviations $x_i-\\bar{x}$.\n$(-3,-1,-1,-1,0,0,2,4)$ — verify they sum to zero (always true).\n\n### Move 3 Square each deviation.\n$(9,1,1,1,0,0,4,16)$. Sum $=32$.\n\n### Move 4 Variance and std dev.\n$s^2=32/8=4$. $s=\\sqrt{4}=2$.\n\n**Interpretation:** Typical scores lie about **2 points** from the mean of 5. Values 2 and 9 are two std devs away — the tails of this small set.\n\n**Exam tip:** If the problem says *sample*, divide the sum of squares by $n-1=7$ instead; always underline whether population or sample variance is required.\n\n**Verify:** Deviations must sum to zero — if yours do not, recheck $\\bar{x}$ before squaring.\n\n**Compare:** $s=2$ on a 0–10 scale is moderate spread; half the values equal the mean exactly, which keeps variance modest.",
+      "body_he_md": "**נתונים:** $2, 4, 4, 4, 5, 5, 7, 9$. מצאו ממוצע וסטיית תקן אוכלוסייה.\n\n### צעד 1 חישוב הממוצע.\n$\\bar{x}=(2+4+4+4+5+5+7+9)/8=40/8=5$.\n\n### צעד 2 סטיות $x_i-\\bar{x}$.\n$(-3,-1,-1,-1,0,0,2,4)$ — ודאו שהסכום אפס (תמיד).\n\n### צעד 3 ריבוע כל סטייה.\n$(9,1,1,1,0,0,4,16)$. סכום $=32$.\n\n### צעד 4 שונות וסטיית תקן.\n$s^2=32/8=4$. $s=\\sqrt{4}=2$.\n\n**פירוש:** ציונים טיפוסיים נמצאים כ-**2 נקודות** מהממוצע 5. הערכים 2 ו-9 רחוקים שתי סטיות תקן — קצוות הקבוצה הקטנה.\n\n**טיפ לבחינה:** אם כתוב *מדגם*, חלקו סכום הריבועים ב-$n-1=7$; תמיד סמנו האם נדרשת שונות אוכלוסייה או מדגם.\n\n**אימות:** סטיות חייבות להסתכם לאפס — אם לא, בדקו מחדש את $\\bar{x}$ לפני הריבוע.\n\n**השוואה:** $s=2$ בקנה מידה 0–10 הוא פיזור בינוני; חצי מהערכים שווים לממוצע, ולכן השונות מתונה."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "For data $1, 3, 5, 7, 9$: find mean and variance.",
+      "body_he_md": "לנתונים $1,3,5,7,9$: מצא ממוצע ושונות.",
+      "checkpoint_solution_en": "**Step 1 — Mean.** $\\bar{x}=(1+3+5+7+9)/5=25/5=5$.\n\n**Step 2 — Deviations.** $(-4,-2,0,2,4)$.\n\n**Step 3 — Squared deviations.** $(16,4,0,4,16)$. Sum $=40$.\n\n**Step 4 — Variance.** $s^2=40/5=8$.\n\n**Check:** Symmetric data around 5 — deviations mirror each other, so variance is positive unless all values equal.",
+      "checkpoint_solution_he": "**שלב 1 — ממוצע.** $\\bar{x}=(1+3+5+7+9)/5=25/5=5$.\n\n**שלב 2 — סטיות.** $(-4,-2,0,2,4)$.\n\n**שלב 3 — סטיות בריבוע.** $(16,4,0,4,16)$. סכום $=40$.\n\n**שלב 4 — שונות.** $s^2=40/5=8$.\n\n**בדיקה:** נתונים סימטריים סביב 5 — הסטיות משקפות זו את זו, ולכן השונות חיובית."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Quartiles and Box Plot",
+      "title_he": "דוגמה פתורה 3 — רבעונים ותרשים קופסה",
+      "body_en_md": "**Dataset (sorted):** $12, 15, 18, 20, 22, 25, 28, 30, 35, 40$.\n\n### Move 1 Overall median $Q_2$.\n$n=10$ (even). Average of 5th and 6th: $(22+25)/2=23.5$.\n\n### Move 2 Lower half and $Q_1$.\nValues $12,15,18,20,22$. Median of lower half: $\\mathbf{18}$.\n\n### Move 3 Upper half and $Q_3$.\nValues $25,28,30,35,40$. Median of upper half: $\\mathbf{30}$.\n\n### Move 4 IQR and outlier fences.\n$\\text{IQR}=30-18=12$. Lower fence $=18-1.5\\cdot12=0$. Upper fence $=30+1.5\\cdot12=48$. All data lie in $[0,48]$ — **no outliers**.\n\n### Move 5 Box plot.\nWhiskers 12–40, box from 18 to 30, median line at 23.5.\n\n**Exam note:** Some calculators use a different quartile convention; on Bagrut, show split-halves clearly so method marks are secure even if a button differs slightly.\n\n**Reading the plot:** A long box means large IQR; whiskers longer on one side suggest skew in that direction.",
+      "body_he_md": "**נתונים (ממוינים):** $12, 15, 18, 20, 22, 25, 28, 30, 35, 40$.\n\n### צעד 1 חציון כללי $Q_2$.\n$n=10$ (זוגי). ממוצע ה-5 וה-6: $(22+25)/2=23.5$.\n\n### צעד 2 חצי תחתון ו-$Q_1$.\nערכים $12,15,18,20,22$. חציון החצי התחתון: $\\mathbf{18}$.\n\n### צעד 3 חצי עליון ו-$Q_3$.\nערכים $25,28,30,35,40$. חציון החצי העליון: $\\mathbf{30}$.\n\n### צעד 4 IQR וגדרות חריגים.\n$\\text{IQR}=30-18=12$. גדר תחתונה $=18-1.5\\cdot12=0$. גדר עליונה $=30+1.5\\cdot12=48$. כל הנתונים ב-$[0,48]$ — **אין חריגים**.\n\n### צעד 5 תרשים קופסה.\nשפם 12–40, קופסה מ-18 עד 30, קו חציון ב-23.5.\n\n**הערת בחינה:** מחשבונים משתמשים לפעמים במוסכמה אחרת; בבגרות — הציגו פיצול לחצאים בבירור לנקודות שיטה.\n\n**קריאת התרשים:** קופסה ארוכה = IQR גדול; שפם ארוך מצד אחד מרמז על הטיה בכיוון זה."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Mean vs. Median, and What Standard Deviation Actually Measures",
+      "title_he": "ממוצע מול חציון, ומה סטיית התקן באמת מודדת",
+      "body_en_md": "Descriptive statistics compress a whole dataset into a few numbers. The skill is not computing them — it is knowing *which* number tells the truth for *which* data.\n\n### Mean vs. median: the outlier question\nThe **mean** $\\bar{x}=\\dfrac{1}{n}\\sum x_i$ is the balance point: every value pulls on it in proportion to its size. That makes it sensitive to **outliers**. The **median** is the middle value once sorted; it only cares about *order*, so a single huge value barely moves it.\n\nExample: salaries $\\{30, 32, 35, 38, 300\\}$ (in thousands). The mean is $87$ — a figure *nobody* earns, dragged up by the $300$. The median is $35$, which honestly represents a typical worker. **Rule of thumb:** for skewed data (incomes, house prices, reaction times), report the median; for roughly symmetric data, the mean is fine and uses all the information.\n\n### What standard deviation measures\nCentre is only half the story — two datasets can share a mean but differ wildly in *spread*. **Variance** averages the squared distances from the mean:\n$$s^2 = \\frac{1}{n-1}\\sum (x_i-\\bar{x})^2,$$\nand the **standard deviation** $s=\\sqrt{s^2}$ brings it back to the original units. Bigger $s$ means the data is more scattered around the mean; $s=0$ means every value is identical.\n\n### Why square the deviations?\nIf you just averaged $x_i-\\bar{x}$, you would always get **zero** — positive and negative deviations cancel exactly (that is what 'balance point' means). Squaring removes the signs so distances add up, and it penalizes far-away points more heavily. Taking the square root at the end restores the original units so $s$ is comparable to the data itself.\n\n### Why divide by $n-1$, not $n$?\nWhen you estimate spread from a *sample*, you use the sample mean $\\bar{x}$ — which is itself pulled toward the data, making deviations look slightly *smaller* than they truly are around the real (population) mean. Dividing by $n-1$ instead of $n$ inflates the estimate just enough to correct this bias. This is **Bessel's correction**; for a full population you divide by $n$.",
+      "body_he_md": "סטטיסטיקה תיאורית דוחסת מערך נתונים שלם למספרים בודדים. המיומנות אינה חישובם — אלא הידיעה *איזה* מספר אומר את האמת עבור *אילו* נתונים.\n\n### ממוצע מול חציון: שאלת החריגים\nה**ממוצע** $\\bar{x}=\\dfrac{1}{n}\\sum x_i$ הוא נקודת שיווי המשקל: כל ערך מושך אותו ביחס לגודלו. זה הופך אותו לרגיש ל**חריגים**. ה**חציון** הוא הערך האמצעי לאחר מיון; אכפת לו רק מה*סדר*, ולכן ערך ענק בודד בקושי מזיז אותו.\n\nדוגמה: משכורות $\\{30, 32, 35, 38, 300\\}$ (באלפים). הממוצע הוא $87$ — סכום ש*אף אחד* אינו מרוויח, נמשך למעלה על ידי ה-$300$. החציון הוא $35$, שמייצג נאמנה עובד טיפוסי. **כלל אצבע:** לנתונים אסימטריים (הכנסות, מחירי דירות, זמני תגובה) דווחו את החציון; לנתונים סימטריים בקירוב הממוצע מתאים ומשתמש בכל המידע.\n\n### מה סטיית התקן מודדת\nהמרכז הוא רק חצי הסיפור — שני מערכי נתונים יכולים לחלוק ממוצע אך להיבדל מאוד ב*פיזור*. ה**שונות** ממצעת את ריבועי המרחקים מהממוצע:\n$$s^2 = \\frac{1}{n-1}\\sum (x_i-\\bar{x})^2,$$\nו**סטיית התקן** $s=\\sqrt{s^2}$ מחזירה זאת ליחידות המקוריות. $s$ גדול יותר פירושו שהנתונים מפוזרים יותר סביב הממוצע; $s=0$ פירושו שכל הערכים זהים.\n\n### למה מעלים את הסטיות בריבוע?\nאם רק תמצעו את $x_i-\\bar{x}$, תקבלו תמיד **אפס** — סטיות חיוביות ושליליות מתבטלות בדיוק (זו משמעות 'נקודת שיווי המשקל'). העלאה בריבוע מסירה את הסימנים כך שמרחקים מצטברים, ומענישה נקודות רחוקות בחומרה רבה יותר. הוצאת השורש בסוף משחזרת את היחידות המקוריות כך ש-$s$ בר-השוואה לנתונים עצמם.\n\n### למה מחלקים ב-$n-1$, לא ב-$n$?\nכשמעריכים פיזור מתוך *מדגם*, משתמשים בממוצע המדגם $\\bar{x}$ — שהוא עצמו נמשך אל הנתונים, מה שגורם לסטיות להיראות מעט *קטנות* יותר ממה שהן באמת סביב הממוצע האמיתי (של האוכלוסייה). חלוקה ב-$n-1$ במקום ב-$n$ מנפחת את ההערכה בדיוק כדי לתקן הטיה זו. זהו **תיקון בסל**; לאוכלוסייה מלאה מחלקים ב-$n$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — When the Mean Lies (Outlier Effect)",
+      "title_he": "דוגמה פתורה 4 — כשהממוצע משקר (השפעת חריג)",
+      "body_en_md": "**Problem.** Seven quiz scores: $\\{6, 7, 7, 8, 8, 9, 33\\}$ (out of $10$ — the $33$ is a data-entry error). Compute the mean and median, then decide which describes the class better.\n\n### Step 1: Mean\n$$\\bar{x} = \\frac{6+7+7+8+8+9+33}{7} = \\frac{78}{7} \\approx 11.1.$$\nA 'mean score' of $11.1$ out of $10$ is impossible — a red flag that one value is distorting everything.\n\n### Step 2: Median\nThe data is already sorted; with $n=7$ the median is the $4$th value:\n$$\\text{median} = 8.$$\n\n### Step 3: Compare\nThe median $8$ sits right among the real scores; the mean $11.1$ represents *no one* and exceeds the maximum possible score. The lone outlier $33$ pulled the mean far off while leaving the median untouched.\n\n### Step 4: Decision\nReport the **median** here — the data is clearly contaminated/skewed by one value. Better still, investigate the $33$: it is almost certainly a typo for $3$. With the corrected value $3$, the mean becomes $\\frac{48}{7}\\approx 6.9$, now trustworthy.\n\n**Answer:** mean $\\approx 11.1$, median $=8$; the median (or a cleaned mean) is the honest summary.\n\n**Meta-comment.** This is the theory in one picture: the mean uses every value's *magnitude*, so one bad number wrecks it; the median uses only *rank*, so it shrugs off outliers. Always look for the outlier before trusting a mean.",
+      "body_he_md": "**בעיה.** שבעה ציוני מבחון: $\\{6, 7, 7, 8, 8, 9, 33\\}$ (מתוך $10$ — ה-$33$ הוא שגיאת הזנה). חשבו את הממוצע והחציון, ואז החליטו מי מתאר טוב יותר את הכיתה.\n\n### שלב 1: ממוצע\n$$\\bar{x} = \\frac{6+7+7+8+8+9+33}{7} = \\frac{78}{7} \\approx 11.1.$$\n'ציון ממוצע' של $11.1$ מתוך $10$ הוא בלתי אפשרי — דגל אדום שערך אחד מעוות הכול.\n\n### שלב 2: חציון\nהנתונים כבר ממוינים; עם $n=7$ החציון הוא הערך ה-$4$, כלומר החציון $= 8$.\n\n### שלב 3: השוואה\nהחציון $8$ יושב ממש בין הציונים האמיתיים; הממוצע $11.1$ אינו מייצג *אף אחד* וחורג מהציון המרבי האפשרי. החריג הבודד $33$ משך את הממוצע הרחק בעוד החציון נותר ללא שינוי.\n\n### שלב 4: החלטה\nדווחו כאן את ה**חציון** — הנתונים מזוהמים/מוטים בבירור על ידי ערך אחד. עדיף עוד יותר: חקרו את ה-$33$: כמעט בוודאי זו טעות הקלדה של $3$. עם הערך המתוקן $3$, הממוצע הופך ל-$\\frac{48}{7}\\approx 6.9$, כעת אמין.\n\n**תשובה:** ממוצע $\\approx 11.1$, חציון $=8$; החציון (או ממוצע מנוקה) הוא הסיכום הכן.\n\n**הערת סיכום.** זו התאוריה בתמונה אחת: הממוצע משתמש ב*גודל* כל ערך, ולכן מספר רע אחד הורס אותו; החציון משתמש רק ב*דירוג*, ולכן אינו מושפע מחריגים. חפשו תמיד את החריג לפני שאתם סומכים על ממוצע."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Descriptive Statistics",
+      "title_he": "מדריך שיטה — סטטיסטיקה תיאורית",
+      "body_en_md": "| Measure | Formula | When to use |\n|---|---|---|\n| Mean | $\\sum x_i/n$ | Symmetric, no outliers |\n| Median | Middle value (sorted) | Skewed / with outliers |\n| Mode | Most frequent | Categorical or discrete |\n| Range | max − min | Quick spread |\n| Variance | $\\sum(x_i-\\bar{x})^2/n$ | Formal measure of spread |\n| Std dev | $\\sqrt{\\text{variance}}$ | Same units as data |\n| IQR | $Q_3-Q_1$ | Robust, outlier resistant |\n\n**Workflow checklist:** (1) Sort if median/quartiles needed. (2) Compute $\\bar{x}$. (3) Pick centre measure by shape. (4) For spread: range for a glance, $s$ for precision, IQR if outliers suspected. (5) Draw box plot from five-number summary.\n\n**Missing-value problems:** Total sum $=\\bar{x}\\cdot n$; subtract known values. **Comparison problems:** Same mean but different $s$ → smaller $s$ means more consistent.",
+      "body_he_md": "| מדד | נוסחה | מתי? |\n|---|---|---|\n| ממוצע | $\\sum x_i/n$ | נתונים סימטריים |\n| חציון | ערך אמצעי | מוטים/חריגים |\n| שכיח | שכיח ביותר | בדיד/קטגורי |\n| טווח | מקס−מינ | מהיר |\n| שונות | $\\sum(x_i-\\bar{x})^2/n$ | פיזור פורמלי |\n| סטיית תקן | $\\sqrt{\\text{variance}}$ | יחידות כמו הנתון |\n| IQR | $Q_3-Q_1$ | עמיד לחריגים |\n\n**רשימת בדיקה:** (1) מיינו אם צריך חציון/רבעונים. (2) חשבו $\\bar{x}$. (3) בחרו מדד מרכז לפי הצורה. (4) לפיזור: טווח למבט, $s$ לדיוק, IQR אם חשד לחריגים. (5) שרטטו תרשים קופסה מסיכום חמישה מספרים.\n\n**ערך חסר:** סכום $=\\bar{x}\\cdot n$; חסרו ידועים. **השוואה:** אותו ממוצע, $s$ שונה → $s$ קטן יותר = עקביות גבוהה יותר."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Dataset: $6, 8, 10, 12, 14$. Find mean.",
+          "body_he": "נתונים: $6,8,10,12,14$. מצא ממוצע.",
+          "solution_en": "**Solution:**\n\n$\\bar{x}=50/5=10$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$\\bar{x}=50/5=10$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Dataset: $3, 5, 7, 9, 11$. Find median.",
+          "body_he": "$3,5,7,9,11$. מצא חציון.",
+          "solution_en": "**Solution:**\n\nMiddle value = 7.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$n=5$ אי-זוגי — הערך השלישי = $7$.\n\n**בדיקה:** הנתונים כבר ממוינים; אין צורך למיין."
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Dataset: $4, 4, 5, 6, 7, 7, 7, 8$. Find mode.",
+          "body_he": "$4,4,5,6,7,7,7,8$. מצא שכיח.",
+          "solution_en": "**Solution:**\n\n7 (appears 3 times).\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$7$ מופיע 3 פעמים — **שכיח $=7$**.\n\n**בדיקה:** ספרו תדירויות לכל ערך."
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Range of $15, 22, 8, 33, 19$?",
+          "body_he": "טווח של $15,22,8,33,19$?",
+          "solution_en": "**Solution:**\n\n$33-8=25$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\nמקס $=33$, מין $=8$. טווח $=33-8=25$.\n\n**בדיקה:** מצאו מקס ומין לפני החיסור."
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Find variance and std dev of $2, 6, 10$. Mean = 6.",
+          "body_he": "מצא שונות וסטיית תקן של $2,6,10$. ממוצע $=6$.",
+          "solution_en": "Deviations: $-4, 0, 4$. Squared: $16, 0, 16$. Variance $=32/3\\approx10.67$. Std dev $\\approx3.27$.",
+          "solution_he": "סטיות: $-4,0,4$. בריבוע: $16,0,16$. שונות $=32/3\\approx10.67$. סטיית תקן $\\approx3.27$."
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Find $Q_1$, $Q_2$, $Q_3$ and IQR of: $5, 7, 10, 12, 15, 18, 20$.",
+          "body_he": "מצא $Q_1,Q_2,Q_3$, IQR: $5,7,10,12,15,18,20$.",
+          "solution_en": "$Q_2=12$, Lower half $\\{5,7,10\\}$: $Q_1=7$, Upper $\\{15,18,20\\}$: $Q_3=18$. IQR $=11$.",
+          "solution_he": "$Q_2=12$, חצי תחתון $\\{5,7,10\\}$: $Q_1=7$, חצי עליון $\\{15,18,20\\}$: $Q_3=18$. IQR $=11$."
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Two classes: A has mean 75, std dev 5; B has mean 75, std dev 15. Which class is more consistent?",
+          "body_he": "שתי כיתות: A ממוצע 75, סטיית תקן 5; B ממוצע 75, סטיית תקן 15. איזו עקבית יותר?",
+          "solution_en": "Class A is more consistent — smaller std dev means scores cluster tightly around the mean.",
+          "solution_he": "כיתה A עקבית יותר — סטיית תקן קטנה יותר (5 לעומת 15) פירושה ציונים ריכוזיים סביב אותו ממוצע 75."
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Data: $10,12,14,16,18$. If 10 is replaced by 2, how does mean change?",
+          "body_he": "$10,12,14,16,18$. 10 מוחלף ב-2. איך משתנה הממוצע?",
+          "solution_en": "Original mean $=14$. New sum $=70-10+2=62$, new mean $=62/5=12.4$. Mean decreases by 1.6.",
+          "solution_he": "ממוצע מקורי $=14$. סכום חדש $=70-10+2=62$, ממוצע חדש $=12.4$. ירידה של 1.6."
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Find any outliers in: $3, 5, 6, 7, 8, 9, 10, 35$.",
+          "body_he": "מצא חריגים ב: $3,5,6,7,8,9,10,35$.",
+          "solution_en": "$Q_1=5.5$, $Q_3=9.5$, IQR $=4$. Fence: $<5.5-6=-0.5$ or $>9.5+6=15.5$. Value 35 is an outlier.",
+          "solution_he": "$Q_1=5.5$, $Q_3=9.5$, IQR$=4$. גדר עליונה $=15.5$. $35$ הוא חריג."
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "A dataset has mean 50 and std dev 10. A new value of 80 is added. Describe qualitatively how the mean and std dev change.",
+          "body_he": "נתוני ממוצע 50, סטיית תקן 10. מוסיפים ערך 80. כיצד משתנים הממוצע וסטיית התקן?",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nMean increases (pulled toward 80). Std dev increases (new value is far from mean, increases spread).\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "הממוצע עולה (נמשך לכיוון 80). סטיית התקן עולה — 80 רחוק מהממוצע ומגדיל את הפיזור."
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Data: $2, 4, 6, 8, 10$. If each value doubles, how does std dev change?",
+          "body_he": "$2,4,6,8,10$. כל ערך מוכפל ב-2. איך משתנה סטיית התקן?",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nOriginal std dev $=\\sqrt{8}\\approx2.83$. Doubling all values doubles the std dev: $2\\sqrt{8}\\approx5.66$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "סטיית תקן מקורית $\\approx2.83$. הכפלת כל הערכים ב-2 מכפילה את סטיית התקן: $\\approx5.66$."
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Dataset: $10,20,30,40,50,60,70,80,90,100$. Find IQR and determine whether 5 is an outlier.",
+          "body_he": "$10,20,...,100$. מצא IQR והחלט האם 5 הוא חריג.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$Q_1=27.5$, $Q_3=72.5$, IQR$=45$. Lower fence $=27.5-67.5=-40$. Value 5 is NOT an outlier.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "$Q_1=27.5$, $Q_3=72.5$, IQR$=45$, גדר תחתונה $=-40$. 5 אינו חריג (גבוה מהגדר)."
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Explain why standard deviation is always ≥ 0.",
+          "body_he": "הסבר מדוע סטיית התקן תמיד $\\ge0$.",
+          "solution_en": "Variance $=\\sum(x_i-\\bar{x})^2/n$ is a sum of squared terms, each $\\ge0$, so variance $\\ge0$, and std dev $=\\sqrt{\\text{variance}}\\ge0$. It equals 0 only when all values are equal.",
+          "solution_he": "שונות $=\\sum(x_i-\\bar{x})^2/n$ היא סכום ריבועים — כל איבר $\\ge0$, ולכן השונות $\\ge0$. סטיית תקן $=\\sqrt{\\text{variance}}\\ge0$. שווה 0 רק כשכל הערכים שווים."
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Median from unsorted data** — always sort first; the middle *position* only works on ordered values.\n2. **Even $n$ median** — average the two middle values; picking only one loses half a mark.\n3. **Variance vs std dev** — variance uses squared units ($\\text{cm}^2$); std dev returns to original units ($\\text{cm}$).\n4. **Population vs sample divisor** — $n$ vs $(n-1)$; underline what the exam specifies before calculating.\n5. **Mean pulled by outliers** — one extreme score can make mean misleading; compare with median.\n6. **Quartile splits** — when $n$ is odd, do not double-count the median in both halves.\n\n**Example misconception:** Reporting mode as \"the average\" — mode is frequency, not balance point.\n\n**Fix:** Label each answer with its measure name (mean / median / mode) before computing.",
+      "body_he_md": "1. **חציון בלי מיון** — תמיד מיינו קודם; מיקום אמצעי עובד רק על ערכים מסודרים.\n2. **$n$ זוגי** — ממוצע שני הערכים האמצעיים; בחירה של אחד בלבד מפסידה נקודות.\n3. **שונות מול סטיית תקן** — שונות ביחידות בריבוע ($\\text{cm}^2$); סטיית תקן חוזרת ליחידות המקור ($\\text{cm}$).\n4. **מחלק אוכלוסייה מול מדגם** — $n$ לעומת $(n-1)$; סמנו מה הבחינה דורשת לפני החישוב.\n5. **ממוצע נמשך על ידי חריגים** — ציון קיצוני אחד עלול להטעות; השוו לחציון.\n6. **פיצול רבעונים** — ב-$n$ אי-זוגי, אל תספרו את החציון פעמיים בשני החצאים.\n\n**תפיסה שגויה:** לקרוא לשכיח \"ממוצע\" — שכיח הוא תדירות, לא נקודת איזון.\n\n**תיקון:** סמנו כל תשובה בשם המדד (ממוצע / חציון / שכיח) לפני החישוב."
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "Descriptive statistics is the language every later topic speaks — you cannot read a normal curve, a confidence interval, or a physics lab report without mean, spread, and outliers.\n\n**You will use this to unlock:**\n- `concept:distributions` **Probability Distributions** — mean and variance carry forward into $\\mu$ and $\\sigma$.\n- `concept:units_measurement` **Units & Measurement** — mean and SD of repeated measurements; error bars.\n\n**Why it matters for exams:** Bagrut rewards *transfer* — comparing two datasets, choosing median over mean, or interpreting a box plot in a word problem. When you study, ask: \"Which measure would a grader expect here, and why?\"",
+      "body_he_md": "סטטיסטיקה תיאורית היא השפה שכל נושא מתקדם מדבר — אי-אפשר לקרוא עקומה נורמלית, רווח סמך או דוח מעבדה בפיזיקה בלי ממוצע, פיזור וחריגים.\n\n**תשתמשו בזה כדי להתקדם ל:**\n- `concept:distributions` **התפלגויות הסתברות** — ממוצע ושונות ממשיכים ל-$\\mu$ ו-$\\sigma$.\n- `concept:units_measurement` **יחידות ומדידות** — ממוצע וסטיית תקן של מדידות חוזרות; סרגלי שגיאה.\n\n**למה זה חשוב לבחינות:** בבגרות מעריכים *העברה* — השוואת שתי קבוצות, בחירת חציון על פני ממוצע, או פירוש תרשים קופסה בשאלת מילול. בזמן לימוד, שאלו: \"איזה מדד המעריך מצפה לו כאן, ולמה?\""
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "- **Mean:** $\\sum x_i / n$. **Median:** sort, find middle (avg. two if even $n$).\n- **Variance:** $\\sum(x_i-\\bar{x})^2/n$ (or $n-1$). **Std dev:** $\\sqrt{\\text{var}}$.\n- **Quartiles:** split sorted data; $Q_1$, $Q_2$, $Q_3$. **IQR** $=Q_3-Q_1$.\n- **Box plot:** min, $Q_1$, $Q_2$, $Q_3$, max; mark outliers beyond $1.5\\cdot\\text{IQR}$.\n- **Outlier rule:** $<Q_1-1.5\\cdot\\text{IQR}$ or $>Q_3+1.5\\cdot\\text{IQR}$.\n\n**Last review:** Say each formula once aloud, then solve one checkpoint (median + mode) and one std-dev problem without notes. **Timing tip:** Quartile splits take longest — practice one odd-$n$ and one even-$n$ set the night before.",
+      "body_he_md": "- **ממוצע:** $\\sum x/n$. **חציון:** מיינו, מצאו אמצע (ממוצע שניים אם $n$ זוגי).\n- **שונות:** $\\sum(x-\\bar{x})^2/n$ (או $n-1$). **סטיית תקן:** $\\sqrt{s^2}$.\n- **רבעונים:** פצלו נתונים ממוינים; $Q_1$, $Q_2$, $Q_3$. **IQR** $=Q_3-Q_1$.\n- **תרשים קופסה:** מינ, $Q_1$, $Q_2$, $Q_3$, מקס; סמנו חריגים מעבר ל-$1.5\\cdot\\text{IQR}$.\n- **כלל חריג:** $<Q_1-1.5\\cdot\\text{IQR}$ או $>Q_3+1.5\\cdot\\text{IQR}$.\n\n**חזרה אחרונה:** אמרו כל נוסחה בקול, ואז פתרו נקודת ביקורת אחת (חציון+שכיח) ותרגיל סטיית תקן אחד בלי רשימות."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- **Central tendency:** mean (balance), median (middle), mode (most frequent).\n- **Spread:** range (quick), variance/std dev (precise), IQR (robust).\n- **Box plot:** five-number summary at a glance.\n- **Outliers:** IQR fence rule.\n\n**Takeaway:** From problem wording alone — symmetric centre → mean; skew or outliers → median; spread comparison → std dev or IQR; visual → box plot. Carry this decision tree into every data question on the exam.",
+      "body_he_md": "- **נטייה מרכזית:** ממוצע (איזון), חציון (אמצע), שכיח (תדיר ביותר).\n- **פיזור:** טווח (מהיר), שונות/סטיית תקן (מדויק), IQR (עמיד).\n- **תרשים קופסה:** סיכום חמישה מספרים במבט.\n- **חריגים:** כלל גדר IQR.\n\n**מסקנה:** מניסוח השאלה בלבד — מרכז סימטרי → ממוצע; הטיה או חריגים → חציון; השוואת פיזור → סטיית תקן או IQR; ויזואלי → תרשים קופסה."
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Always sort data before finding median or quartiles.",
+      "Variance is in squared units; std dev is the square root.",
+      "IQR is robust to outliers; mean is sensitive to them.",
+      "Box plot = five-number summary."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Taking median without sorting",
+        "correction": "Always sort data first.",
+        "detect_phrase_en": "median unsorted",
+        "detect_phrase_he": "חציון בלי מיון"
+      }
+    ],
+    "skill_atoms_unlocked": [
+      "mean",
+      "median",
+      "mode",
+      "quartile",
+      "range",
+      "standard_deviation",
+      "variance"
+    ],
+    "tutor_pacing_hint": "Mean/median first, then standard deviation, then quartiles and box plot.",
+    "next_recommended": [
+      "probability_basics_3pt",
+      "distributions"
+    ]
+  },
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "What does variance measure?",
+      "stem_he": "מה מודדת השונות?",
+      "explanation_en": "**Variance measures how spread out the data are around the mean.**\n\n**Answer:** spread.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**השונות מודדת את פיזור הנתונים סביב הממוצע.**\n\n**תשובה:** פיזור.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "variance"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\text{spread}$",
+          "$\\text{center}$",
+          "$\\text{maximum}$",
+          "$\\text{count}$"
+        ],
+        "options_he": [
+          "$\\text{spread}$",
+          "$\\text{center}$",
+          "$\\text{maximum}$",
+          "$\\text{count}$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "3bbee6cd-9e19-5be0-8e99-1e0db9a38b1e",
+      "points_level_min": "3pt",
+      "options_en": [
+        "$\\text{spread}$",
+        "$\\text{center}$",
+        "$\\text{maximum}$",
+        "$\\text{count}$"
+      ],
+      "options_he": [
+        "$\\text{spread}$",
+        "$\\text{center}$",
+        "$\\text{maximum}$",
+        "$\\text{count}$"
+      ],
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual",
+        "application",
+        "graphical",
+        "error_analysis"
+      ],
+      "id": "descriptive_stats__5pt-q1"
+    },
+    {
+      "ord": 2,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the mean of $2, 4, 4, 4, 5, 5, 7, 9$.",
+      "stem_he": "מצאו את הממוצע של $2, 4, 4, 4, 5, 5, 7, 9$.",
+      "explanation_en": "**Sum** $=40$ over $8$ values. $\\dfrac{40}{8}=5$.\n\n**Answer:** $5$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**סכום** $=40$ על $8$ ערכים. $\\dfrac{40}{8}=5$.\n\n**תשובה:** $5$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "mean"
+      ],
+      "answer_payload": {
+        "value": 5
+      },
+      "source_item_id": "20ab335d-7756-5b2d-8741-837c8610336f",
+      "points_level_min": "3pt",
+      "correct_answer": "5",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "5",
+        "expected": 5
+      },
+      "id": "descriptive_stats__5pt-q2"
+    },
+    {
+      "ord": 3,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Find the population variance of $3, 5, 7, 9, 11$.",
+      "stem_he": "מצאו את שונות האוכלוסייה של $3, 5, 7, 9, 11$.",
+      "explanation_en": "**Step 1 — Mean.** $\\dfrac{35}{5}=7$.\n\n**Step 2 — Squared deviations.** $16, 4, 0, 4, 16$; sum $=40$.\n\n**Step 3 — Variance.** $\\dfrac{40}{5}=8$.\n\n**Answer:** $8$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip.",
+      "explanation_he": "**שלב 1 — ממוצע.** $7$.\n\n**שלב 2 — סטיות בריבוע.** $16,4,0,4,16$; סכום $=40$.\n\n**שלב 3 — שונות.** $\\dfrac{40}{5}=8$.\n\n**תשובה:** $8$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "variance"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Mean.** $\\dfrac{35}{5}=7$.",
+          "**Step 2 — Squared deviations.** $16, 4, 0, 4, 16$; sum $=40$.",
+          "**Step 3 — Variance.** $\\dfrac{40}{5}=8$.",
+          "**Answer:** $8$."
+        ],
+        "steps_he": [
+          "**שלב 1 — ממוצע.** $7$.",
+          "**שלב 2 — סטיות בריבוע.** $16,4,0,4,16$; סכום $=40$.",
+          "**שלב 3 — שונות.** $\\dfrac{40}{5}=8$.",
+          "**תשובה:** $8$."
+        ]
+      },
+      "source_item_id": "dbc1f490-86b4-5cec-9ffb-87301794f2f8",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "3pt",
+      "archetypes": [
+        "conceptual"
+      ],
+      "needs_review": true,
+      "id": "descriptive_stats__5pt-q3"
+    },
+    {
+      "ord": 4,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: adding the same constant to every value leaves the variance unchanged.",
+      "stem_he": "נכון או לא נכון: הוספת אותו קבוע לכל ערך אינה משנה את השונות.",
+      "explanation_en": "**Shifting all data shifts the mean equally, so deviations are unchanged** — **true**.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**הזזת כל הנתונים מזיזה את הממוצע באותה מידה, לכן הסטיות נשמרות** — **נכון**.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "variance"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "ee50d57f-4fd7-5bad-9b57-465aff6de707",
+      "points_level_min": "3pt",
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ],
+      "id": "descriptive_stats__5pt-q4"
+    },
+    {
+      "ord": 5,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the range of $15, 22, 8, 30$.",
+      "stem_he": "מצאו את הטווח של $15, 22, 8, 30$.",
+      "explanation_en": "**Range = max − min.** $30-8 = 22$.\n\n**Answer:** $22$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**טווח = מקסימום − מינימום.** $22$.\n\n**תשובה:** $22$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "range"
+      ],
+      "answer_payload": {
+        "value": 22
+      },
+      "source_item_id": "f4a0a188-df17-57d5-9311-2af38b00ca07",
+      "points_level_min": "3pt",
+      "correct_answer": "22",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "22",
+        "expected": 22
+      },
+      "id": "descriptive_stats__5pt-q5"
+    },
+    {
+      "ord": 6,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the median of $7, 3, 9, 5, 11$.",
+      "stem_he": "מצאו את החציון של $7, 3, 9, 5, 11$.",
+      "explanation_en": "**Sort.** $3, 5, 7, 9, 11$. Middle value $=7$.\n\n**Answer:** $7$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**מיון.** $3, 5, 7, 9, 11$. אמצעי $=7$.\n\n**תשובה:** $7$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "median"
+      ],
+      "answer_payload": {
+        "value": 7
+      },
+      "source_item_id": "df0f3ac6-2719-5d70-9446-e48de009d2a1",
+      "points_level_min": "3pt",
+      "correct_answer": "7",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "7",
+        "expected": 7
+      },
+      "id": "descriptive_stats__5pt-q6"
+    },
+    {
+      "ord": 7,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the mode of $1, 2, 2, 3, 3, 3, 4$.",
+      "stem_he": "מצאו את השכיח של $1, 2, 2, 3, 3, 3, 4$.",
+      "explanation_en": "**$3$ appears three times — the most.**\n\n**Answer:** $3$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**$3$ מופיע שלוש פעמים — הכי הרבה.**\n\n**תשובה:** $3$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "mode"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "2009175b-daf4-5cb1-8194-8142cec06ec6",
+      "points_level_min": "3pt",
+      "correct_answer": "3",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "3",
+        "expected": 3
+      },
+      "id": "descriptive_stats__5pt-q7"
+    },
+    {
+      "ord": 8,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the population variance of $2, 4, 6$ (round to 4 decimals).",
+      "stem_he": "מצאו את שונות האוכלוסייה של $2, 4, 6$ (עגלו ל-4 ספרות).",
+      "explanation_en": "**Mean** $=4$. **Squared deviations** $=(−2)^2, 0^2, 2^2 = 4,0,4$.\n\n**Variance** $=\\dfrac{4+0+4}{3}=\\dfrac{8}{3}\\approx 2.6667$.\n\n**Answer:** $\\approx 2.6667$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**ממוצע** $=4$. **סטיות בריבוע** $=4,0,4$.\n\n**שונות** $=\\dfrac{8}{3}\\approx 2.6667$.\n\n**תשובה:** $\\approx 2.6667$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "variance"
+      ],
+      "answer_payload": {
+        "value": 2.666667
+      },
+      "source_item_id": "6d2bdb87-f970-5682-805a-beeaf33e4803",
+      "points_level_min": "3pt",
+      "correct_answer": "2.666667",
+      "archetypes": [
+        "procedural",
+        "application"
+      ],
+      "verify": {
+        "expr": "2.666667",
+        "expected": 2.666667
+      },
+      "id": "descriptive_stats__5pt-q8"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the population standard deviation of $2, 4, 6$ (round to 4 decimals).",
+      "stem_he": "מצאו את סטיית התקן של האוכלוסייה $2, 4, 6$ (עגלו ל-4 ספרות).",
+      "explanation_en": "**Variance** $=\\dfrac{8}{3}$. **SD** $=\\sqrt{8/3}$.\n\n**$\\approx 1.6330$.**\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שונות** $=\\dfrac{8}{3}$. **סטיית תקן** $=\\sqrt{8/3}\\approx 1.6330$.\n\n**תשובה:** $\\approx 1.6330$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "standard_deviation"
+      ],
+      "answer_payload": {
+        "value": 1.632993
+      },
+      "source_item_id": "5f9dccab-6b52-507b-9606-30230d20eecc",
+      "points_level_min": "3pt",
+      "correct_answer": "1.632993",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1.632993",
+        "expected": 1.632993
+      },
+      "id": "descriptive_stats__5pt-q9"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the mean of $10, 12, 14, 16, 18$.",
+      "stem_he": "מצאו את הממוצע של $10, 12, 14, 16, 18$.",
+      "explanation_en": "**Sum** $=70$. $\\dfrac{70}{5}=14$.\n\n**Answer:** $14$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**סכום** $=70$. $\\dfrac{70}{5}=14$.\n\n**תשובה:** $14$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "mean"
+      ],
+      "answer_payload": {
+        "value": 14
+      },
+      "source_item_id": "43a30524-cef1-5139-8ab8-146ced59961f",
+      "points_level_min": "3pt",
+      "correct_answer": "14",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "14",
+        "expected": 14
+      },
+      "id": "descriptive_stats__5pt-q10"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the population variance of $1, 3, 5, 7$ (mean $=4$).",
+      "stem_he": "מצאו את שונות האוכלוסייה של $1, 3, 5, 7$ (ממוצע $=4$).",
+      "explanation_en": "**Squared deviations** $=9,1,1,9$. Sum $=20$.\n\n**Variance** $=\\dfrac{20}{4}=5$.\n\n**Answer:** $5$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**סטיות בריבוע** $=9,1,1,9$. סכום $=20$.\n\n**שונות** $=\\dfrac{20}{4}=5$.\n\n**תשובה:** $5$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "variance"
+      ],
+      "answer_payload": {
+        "value": 5
+      },
+      "source_item_id": "f78a40d5-32f6-5e1e-a9c7-321215a263cf",
+      "points_level_min": "3pt",
+      "correct_answer": "5",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "5",
+        "expected": 5
+      },
+      "id": "descriptive_stats__5pt-q11"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the median of $4, 4, 5, 6, 8, 10$.",
+      "stem_he": "מצאו את החציון של $4, 4, 5, 6, 8, 10$.",
+      "explanation_en": "**Even count** — average the two middle values $5$ and $6$.\n\n**$\\dfrac{5+6}{2}=5.5$.**\n\n**Answer:** $5.5$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**מספר זוגי** — ממצעים את $5$ ו-$6$.\n\n**$\\dfrac{5+6}{2}=5.5$.**\n\n**תשובה:** $5.5$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "median"
+      ],
+      "answer_payload": {
+        "value": 5.5
+      },
+      "source_item_id": "95e2d095-3891-5788-b651-a5134779c525",
+      "points_level_min": "3pt",
+      "correct_answer": "5.5",
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "verify": {
+        "expr": "5.5",
+        "expected": 5.5
+      },
+      "id": "descriptive_stats__5pt-q12"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $2, 4, 6, 8, 10, 12, 14$, find the first quartile $Q_1$ (median of the lower half, exclusive method).",
+      "stem_he": "עבור $2, 4, 6, 8, 10, 12, 14$, מצאו את הרבעון הראשון $Q_1$ (חציון החצי התחתון, שיטה בלעדית).",
+      "explanation_en": "**Median** $=8$ (4th value).\n\n**Lower half** $=\\{2,4,6\\}$; its median is $4$.\n\n**Answer:** $Q_1 = 4$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**חציון** $=8$.\n\n**חצי תחתון** $=\\{2,4,6\\}$; חציונו $4$.\n\n**תשובה:** $Q_1 = 4$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "quartile"
+      ],
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "ad683a11-f6de-5b7d-bbb5-d69d3d414cc1",
+      "points_level_min": "3pt",
+      "correct_answer": "4",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "4",
+        "expected": 4
+      },
+      "id": "descriptive_stats__5pt-q13"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the population standard deviation of four values all equal to $10$.",
+      "stem_he": "מצאו את סטיית התקן של ארבעה ערכים השווים כולם ל-$10$.",
+      "explanation_en": "**All values equal the mean**, so every deviation is $0$.\n\n**Variance $=0$, SD $=0$.**\n\n**Answer:** $0$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**כל הערכים שווים לממוצע**, לכן כל סטייה $0$.\n\n**שונות $=0$, סטיית תקן $=0$.**\n\n**תשובה:** $0$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "standard_deviation"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "38c36db5-fb75-5478-be42-d11b93ff49e0",
+      "points_level_min": "3pt",
+      "correct_answer": "0",
+      "archetypes": [
+        "procedural",
+        "error_analysis"
+      ],
+      "verify": {
+        "expr": "0",
+        "expected": 0
+      },
+      "id": "descriptive_stats__5pt-q14"
+    },
+    {
+      "ord": 15,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "For $3, 5, 7, 8, 12, 13, 14, 18, 21$, find the interquartile range (IQR) using the exclusive method.",
+      "stem_he": "עבור $3, 5, 7, 8, 12, 13, 14, 18, 21$, מצאו את התחום הבין-רבעוני (IQR) בשיטה הבלעדית.",
+      "explanation_en": "**Step 1 — Median.** $9$ values; median $=12$ (5th value).\n\n**Step 2 — $Q_1$.** Lower half $\\{3,5,7,8\\}$; $Q_1=\\dfrac{5+7}{2}=6$.\n\n**Step 3 — $Q_3$.** Upper half $\\{13,14,18,21\\}$; $Q_3=\\dfrac{14+18}{2}=16$.\n\n**Step 4 — IQR.** $16-6=10$.\n\n**Answer:** $10$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip.",
+      "explanation_he": "**שלב 1 — חציון.** $12$.\n\n**שלב 2 — $Q_1$.** $\\{3,5,7,8\\}$; $Q_1=6$.\n\n**שלב 3 — $Q_3$.** $\\{13,14,18,21\\}$; $Q_3=16$.\n\n**שלב 4 — IQR.** $16-6=10$.\n\n**תשובה:** $10$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
+      "skill_atoms": [
+        "quartile"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Median.** $9$ values; median $=12$ (5th value).",
+          "**Step 2 — $Q_1$.** Lower half $\\{3,5,7,8\\}$; $Q_1=\\dfrac{5+7}{2}=6$.",
+          "**Step 3 — $Q_3$.** Upper half $\\{13,14,18,21\\}$; $Q_3=\\dfrac{14+18}{2}=16$.",
+          "**Step 4 — IQR.** $16-6=10$.",
+          "**Answer:** $10$."
+        ],
+        "steps_he": [
+          "**שלב 1 — חציון.** $12$.",
+          "**שלב 2 — $Q_1$.** $\\{3,5,7,8\\}$; $Q_1=6$.",
+          "**שלב 3 — $Q_3$.** $\\{13,14,18,21\\}$; $Q_3=16$.",
+          "**שלב 4 — IQR.** $16-6=10$.",
+          "**תשובה:** $10$."
+        ]
+      },
+      "source_item_id": "fd986ba6-b115-5142-b462-18a7344d990f",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "3pt",
+      "archetypes": [
+        "conceptual",
+        "application"
+      ],
+      "needs_review": true,
+      "id": "descriptive_stats__5pt-q15"
+    },
+    {
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "mean"
+      ],
+      "stem_en": "What measure of center is the sum of values divided by the count?",
+      "stem_he": "איזה מדד מרכז הוא סכום הערכים חלקי מספרם?",
+      "explanation_en": "**Step 1.** That quotient is the arithmetic mean.\n\n**Step 2.** Median is the middle after sorting.\n\n**Step 3.** Mode is the most frequent value.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** זה הממוצע החשבוני.\n\n**שלב 2.** חציון הוא האמצע אחרי מיון.\n\n**שלב 3.** שכיח הוא הנפוץ ביותר.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "mean",
+          "average",
+          "arithmetic mean",
+          "ממוצע"
+        ],
+        "case_sensitive": false
+      },
+      "acceptable_answers": [
+        "mean",
+        "average",
+        "arithmetic mean",
+        "ממוצע"
+      ],
+      "correct_answer": "mean",
+      "ord": 16,
+      "id": "descriptive_stats__5pt-q16"
+    },
+    {
+      "kind": "fill_blank",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "mean"
+      ],
+      "stem_en": "Fill: range = maximum - ___.",
+      "stem_he": "השלימו: טווח = מקסימום - ___.",
+      "explanation_en": "**Step 1.** Range is max minus min.\n\n**Step 2.** Blank is the minimum.\n\n**Step 3.** Range measures spread, not center.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** טווח = מקס פחות מינ.\n\n**שלב 2.** הריק הוא המינימום.\n\n**שלב 3.** טווח מודד פיזור לא מרכז.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "minimum",
+          "min",
+          "מינימום",
+          "המינימום"
+        ],
+        "case_sensitive": false
+      },
+      "correct_answer": "minimum",
+      "ord": 17,
+      "id": "descriptive_stats__5pt-q17"
+    },
+    {
+      "kind": "mcq_multi",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "mean",
+        "median"
+      ],
+      "stem_en": "Which statements are true? (Select all.)",
+      "stem_he": "אילו טענות נכונות? (בחרו הכול.)",
+      "explanation_en": "**Step 1.** A and B are correct center facts.\n\n**Step 2.** C confuses mode with median.\n\n**Step 3.** D is false: mean is sensitive to outliers.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** A ו-B נכונים.\n\n**שלב 2.** C מבלבל שכיח עם חציון.\n\n**שלב 3.** D שגוי: ממוצע רגיש לחריגים.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים.",
+      "answer_payload": {
+        "options_en": [
+          "Median uses the middle after sorting",
+          "Mean can be pulled by extreme outliers",
+          "Mode is always the middle value",
+          "Mean is unaffected by outliers"
+        ],
+        "options_he": [
+          "חציון משתמש באמצע אחרי מיון",
+          "ממוצע יכול להימשך ע\"י חריגים",
+          "שכיח תמיד הוא הערך האמצעי",
+          "ממוצע לא מושפע מחריגים"
+        ],
+        "correct_indices": [
+          0,
+          1
+        ]
+      },
+      "correct_indices": [
+        0,
+        1
+      ],
+      "ord": 18,
+      "id": "descriptive_stats__5pt-q18"
+    },
+    {
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "application",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "mean",
+        "median"
+      ],
+      "stem_en": "Match each situation to the best tool.",
+      "stem_he": "התאימו כל מצב לכלי המתאים.",
+      "explanation_en": "**Step 1.** Symmetric numeric data → mean.\n\n**Step 2.** Skewed prices → median.\n\n**Step 3.** Categorical popularity → mode.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** סימטרי → ממוצע.\n\n**שלב 2.** מוטה → חציון.\n\n**שלב 3.** שכיחות קטגורית → שכיח.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "left_en": [
+          "Typical height in a symmetric class",
+          "House prices with a few mansions",
+          "Most popular shoe size"
+        ],
+        "left_he": [
+          "גובה טיפוסי בכיתה סימטרית",
+          "מחירי דירות עם כמה וילות",
+          "מידת נעל הכי נפוצה"
+        ],
+        "right_en": [
+          "Mean",
+          "Median",
+          "Mode"
+        ],
+        "right_he": [
+          "ממוצע",
+          "חציון",
+          "שכיח"
+        ],
+        "correct_pairs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "ord": 19,
+      "id": "descriptive_stats__5pt-q19"
+    },
+    {
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "mean"
+      ],
+      "stem_en": "Order steps to find the median of an odd-sized list.",
+      "stem_he": "סדרו צעדים למציאת חציון ברשימה באורך אי-זוגי.",
+      "explanation_en": "**Step 1.** Never pick the middle of an unsorted list.\n\n**Step 2.** Sorting is mandatory.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** לעולם לא אמצע בלי מיון.\n\n**שלב 2.** מיון חובה.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "steps_en": [
+          "Sort the data ascending",
+          "Count n (odd)",
+          "Find position (n+1)/2",
+          "Read that ordered value"
+        ],
+        "steps_he": [
+          "מיינו עולה",
+          "ספרו n אי-זוגי",
+          "מצאו מיקום (n+1)/2",
+          "קראו את הערך הממוין"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "ord": 20,
+      "id": "descriptive_stats__5pt-q20"
+    },
+    {
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof"
+      ],
+      "needs_review": true,
+      "skill_atoms": [
+        "mean"
+      ],
+      "stem_en": "Show that the deviations from the mean sum to zero: sum(x_i - x̄)=0.",
+      "stem_he": "הראו שסכום הסטיות מהממוצע הוא אפס: sum(x_i - x̄)=0.",
+      "explanation_en": "**Step 1.** Expand sum(x_i - x̄) = sum x_i - n x̄.\n\n**Step 2.** By definition n x̄ = sum x_i.\n\n**Step 3.** Difference is 0 — the mean is the balance point.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips.",
+      "explanation_he": "**שלב 1.** פותחים לסכום x פחות n כפול הממוצע.\n\n**שלב 2.** לפי הגדרה n x̄ שווה לסכום.\n\n**שלב 3.** ההפרש 0 — הממוצע הוא נקודת שיווי משקל.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים.",
+      "answer_payload": {
+        "steps_en": [
+          "Expand sum",
+          "Use mean definition",
+          "Cancel to 0"
+        ],
+        "steps_he": [
+          "פתיחה",
+          "הגדרת ממוצע",
+          "ביטול ל-0"
+        ]
+      },
+      "ord": 21,
+      "id": "descriptive_stats__5pt-q21"
+    },
+    {
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "application"
+      ],
+      "skill_atoms": [
+        "mean"
+      ],
+      "stem_en": "Data: 2,4,6,8. Mean?",
+      "stem_he": "נתונים: 2,4,6,8. ממוצע?",
+      "explanation_en": "**Step 1.** Sum is 20.\n\n**Step 2.** Divide by 4.\n\n**Step 3.** Mean 5.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** סכום 20.\n\n**שלב 2.** חלקו ב-4.\n\n**שלב 3.** ממוצע 5.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "value": 5,
+        "tolerance": 0
+      },
+      "correct_answer": "5",
+      "verify": {
+        "expr": "(2+4+6+8)/4",
+        "expected": 5
+      },
+      "ord": 22,
+      "id": "descriptive_stats__5pt-q22"
+    },
+    {
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "mean"
+      ],
+      "stem_en": "Data 2,4,6. Sample-style variance with divisor n: average of squared deviations from mean?",
+      "stem_he": "נתונים 2,4,6. שונות בסגנון מחלקים ב-n: ממוצע ריבועי הסטיות מהממוצע?",
+      "explanation_en": "**Step 1.** Mean is 4.\n\n**Step 2.** Squared deviations: 4,0,4.\n\n**Step 3.** Average 8/3 ≈ 2.667 (population-style /n).\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** ממוצע 4.\n\n**שלב 2.** ריבועי סטיות 4,0,4.\n\n**שלב 3.** ממוצע 8/3 ≈ 2.667.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "value": 2.666667,
+        "tolerance": 0.01
+      },
+      "correct_answer": "2.666667",
+      "verify": {
+        "expr": "((2-4)^2+(4-4)^2+(6-4)^2)/3",
+        "expected": 2.6666666666666665
+      },
+      "ord": 23,
+      "id": "descriptive_stats__5pt-q23"
+    },
+    {
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application",
+        "proof"
+      ],
+      "needs_review": true,
+      "skill_atoms": [
+        "mean",
+        "median"
+      ],
+      "stem_en": "For data 1,2,2,9 explain which is larger, mean or median, and why an outlier matters.",
+      "stem_he": "לנתונים 1,2,2,9 הסבירו מי גדול יותר, ממוצע או חציון, ולמה חריג משנה.",
+      "explanation_en": "**Step 1.** Sorted already; median is average of 2 and 2 → 2 (even n: mid pair). Wait n=4 even: median (2+2)/2=2.\n\n**Step 2.** Mean (1+2+2+9)/4=3.5.\n\n**Step 3.** Mean > median because 9 pulls the average up.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips.",
+      "explanation_he": "**שלב 1.** חציון לנתונים זוגיים: ממוצע שני האמצעיים = 2.\n\n**שלב 2.** ממוצע 3.5.\n\n**שלב 3.** הממוצע גדול יותר כי 9 מושך מעלה.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים.",
+      "answer_payload": {
+        "steps_en": [
+          "Median 2",
+          "Mean 3.5",
+          "Outlier pulls mean"
+        ],
+        "steps_he": [
+          "חציון 2",
+          "ממוצע 3.5",
+          "חריג מושך ממוצע"
+        ]
+      },
+      "rubric_en": "Compares mean>median and mentions outlier 9.",
+      "rubric_he": "משווה ממוצע>חציון ומזכיר את 9.",
+      "ord": 24,
+      "id": "descriptive_stats__5pt-q24"
+    },
+    {
+      "kind": "true_false",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "mean"
+      ],
+      "stem_en": "True or False: The mode is the value that appears most frequently.",
+      "stem_he": "נכון/לא נכון: השכיח הוא הערך שמופיע בתדירות הגבוהה ביותר.",
+      "explanation_en": "**Step 1.** That is the definition of mode.\n\n**Step 2.** A data set may be multimodal.\n\n**Step 3.** Statement is true.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** זו הגדרת השכיח.\n\n**שלב 2.** ייתכן רב-שכיחי.\n\n**שלב 3.** הטענה נכונה.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "value": true
+      },
+      "correct_answer": "true",
+      "ord": 25,
+      "id": "descriptive_stats__5pt-q25"
+    },
+    {
+      "kind": "mcq",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "mean"
+      ],
+      "stem_en": "Data 4,4,5,7. Mode?",
+      "stem_he": "נתונים 4,4,5,7. שכיח?",
+      "explanation_en": "**Step 1.** 4 appears twice; others once.\n\n**Step 2.** Mode is 4.\n\n**Step 3.** Not the mean.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** 4 מופיע פעמיים.\n\n**שלב 2.** השכיח 4.\n\n**שלב 3.** לא הממוצע.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "options_en": [
+          "4",
+          "5",
+          "7",
+          "4.5"
+        ],
+        "options_he": [
+          "4",
+          "5",
+          "7",
+          "4.5"
+        ],
+        "correct_index": 0
+      },
+      "correct_answer": "0",
+      "ord": 26,
+      "id": "descriptive_stats__5pt-q26"
+    }
+  ],
+  "est_minutes": 40,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
+}

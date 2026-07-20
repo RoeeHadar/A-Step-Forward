@@ -1,0 +1,1166 @@
+{
+  "concept_id": "equations_quadratic__5pt",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": [
+    "5pt"
+  ],
+  "title_en": "Quadratic Equations — Factoring, Formula, and Discriminant — 5pt mastery",
+  "title_he": "משוואות ריבועיות — שליטה 5 יח׳",
+  "summary_en": "Taught for the 5-unit track: structured justifications, harder parameters, and links to later analysis topics — still MoE-faithful (no university limit-closeness drills). Quadratic equations: standard form, discriminant, factoring, quadratic formula, parametric root conditions, and word-problem setup with verification.",
+  "summary_he": "נלמד למסלול 5 יח׳: הצדקות מובנות, פרמטרים קשים, וקישורים לנושאי אנליזה מאוחרים — עדיין נאמן לתוכנית (בלי תרגול limit-closeness אוניברסיטאי). משוואות ריבועיות: צורה סטנדרטית, דיסקרימיננטה, פירוק, נוסחת שורשים, תנאי שורשים פרמטריים, ובניית בעיות מילוליות עם אימות.",
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "Why Quadratic Equations?",
+      "title_he": "למה משוואות ריבועיות?",
+      "body_en_md": "**Quadratic equations** appear whenever a quantity depends on the **square** of an unknown — area of a rectangle, height of a projectile, profit curves, and countless geometry problems on the Bagrut algebra track. Standard form is $ax^2+bx+c=0$ with $a\\ne0$; your job is to find every real $x$ that satisfies the equation or to decide that none exist.\n\n**Where you meet them:**\n- **Geometry:** A rectangle with perimeter 20 m and area 24 m² leads to $x(10-x)=24$, a quadratic in the width.\n- **Kinematics:** Setting $h(t)=0$ for a parabola $h(t)=-4t^2+16t+5$ asks when the object lands.\n- **Economics:** Break-even occurs when revenue minus cost equals zero — often a quadratic in price or units sold.\n\nThis lesson builds three complementary tools: **factoring** (fast when $\\Delta$ is a perfect square), the **quadratic formula** (always works), and the **discriminant** $\\Delta=b^2-4ac$ (predicts how many real roots before you compute them). Mastering when to use each saves time and prevents lost solutions on exam papers.\n\n**5pt focus:** Write short deductive chains, classify edge cases, and connect this skill to functions/sequences investigation. Stay inside MoE 5pt scope.",
+      "body_he_md": "**משוואות ריבועיות** מופיעות בכל פעם שכמות תלויה ב**ריבוע** של נעלם — שטח מלבן, גובה קליע, עקומות רווח, ואינספור בעיות גאומטריה במסלול האלגברה בבגרות. הצורה הסטנדרטית היא $ax^2+bx+c=0$ עם $a\\ne0$; המשימה שלכם היא למצוא כל $x$ ממשי שמקיים את המשוואה, או להחליט שאין כאלה.\n\n**איפה פוגשים אותן:**\n- **גאומטריה:** מלבן עם היקף 20 מ' ושטח 24 מ\"ר מוביל ל-$x(10-x)=24$, משוואה ריבועית ברוחב.\n- **קינמטיקה:** הצבת $h(t)=0$ בפרבולה $h(t)=-4t^2+16t+5$ שואלת מתי הגוף נוחת.\n- **כלכלה:** נקודת איזון כשהכנסה פחות עלות שווה לאפס — לעיתים ריבועית במחיר או ביחידות.\n\nבשיעור זה בונים שלושה כלים משלימים: **פירוק לגורמים** (מהיר כש-$\\Delta$ ריבוע שלם), **נוסחת השורשים** (תמיד עובדת), וה**דיסקרימיננטה** $\\Delta=b^2-4ac$ (מנבאת כמה שורשים ממשיים לפני החישוב). שליטה בבחירת השיטה חוסכת זמן ומונעת איבוד פתרונות בבחינה.\n\n**מיקוד 5 יח׳:** כתבו שרשראות דדוקטיביות קצרות, סווגו מקרי קצה, וקשרו מיומנות זו לחקירת פונקציות/סדרות. הישארו בתוך היקף 5 יח׳."
+    },
+    {
+      "kind": "definition",
+      "title_en": "The Standard Form and Its Parts",
+      "title_he": "הצורה הסטנדרטית וחלקיה",
+      "body_en_md": "A **quadratic equation** in one variable has degree 2. In **standard form** everything sits on one side and the right side is zero:\n\n$$ax^2 + bx + c = 0, \\quad a \\neq 0$$\n\n**Coefficients:**\n- $a$ — leading coefficient of $x^2$ (must not be zero; otherwise the equation is linear, not quadratic).\n- $b$ — coefficient of the linear term $x$.\n- $c$ — constant term (free term).\n\n**Discriminant** (determines the nature of roots before solving):\n$$\\Delta = b^2 - 4ac$$\n\n| $\\Delta$ | Real solutions |\n|-----------|----------------|\n| $\\Delta > 0$ | Two distinct real roots |\n| $\\Delta = 0$ | One repeated (double) root |\n| $\\Delta < 0$ | No real roots (complex roots exist) |\n\n**Quadratic formula** (Vieta's companion — gives explicit roots):\n$$x = \\frac{-b \\pm \\sqrt{\\Delta}}{2a}$$\n\nThe $\\pm$ is essential: it produces **both** roots in one line of algebra. Before applying any method, **rearrange** so the equation equals zero — hidden terms on the right side cause sign errors that propagate through $\\Delta$ and the formula.",
+      "body_he_md": "**משוואה ריבועית** במשתנה אחד היא מדרגה 2. ב**צורה סטנדרטית** הכל בצד אחד והצד הימני אפס:\n\n$$ax^2 + bx + c = 0, \\quad a \\neq 0$$\n\n**מקדמים:**\n- $a$ — מקדם $x^2$ (חייב להיות שונה מאפס; אחרת המשוואה לינארית, לא ריבועית).\n- $b$ — מקדם האיבר $x$.\n- $c$ — האיבר החופשי (קבוע).\n\n**דיסקרימיננטה** (קובעת את אופי השורשים לפני הפתרון):\n$$\\Delta = b^2 - 4ac$$\n\n| $\\Delta$ | פתרונות ממשיים |\n|-----------|----------------|\n| $\\Delta > 0$ | שני שורשים ממשיים שונים |\n| $\\Delta = 0$ | שורש כפול אחד |\n| $\\Delta < 0$ | אין שורשים ממשיים (קיימים מרוכבים) |\n\n**נוסחת השורשים:**\n$$x = \\frac{-b \\pm \\sqrt{\\Delta}}{2a}$$\n\nה-$\\pm$ חיוני: הוא מייצר **שני** שורשים בשורת אלגברה אחת. לפני כל שיטה, **ארגנו** כך שהמשוואה שווה לאפס — איברים נסתרים בצד הימני גורמים לשגיאות סימן ב-$\\Delta$ ובנוסחה."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Track lens: how 5pt learners should practice this",
+      "title_he": "עדשת מסלול: איך לומדי 5pt צריכים לתרגל",
+      "body_en_md": "Write **justifications** in 3–5 sentences: hypothesis → tool → conclusion. Include one edge case (no solution / infinite / boundary) every session.",
+      "body_he_md": "כתבו **הצדקות** ב-3–5 משפטים: הנחה → כלי → מסקנה. כללו מקרה קצה אחד (אין פתרון / אינסוף / שפה) בכל מפגש."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Three Methods for Solving",
+      "title_he": "שלוש שיטות לפתרון",
+      "body_en_md": "Choose a method using structure, not habit. The same decision tree works on every Bagrut item.\n\n**Method 1 — Factoring (zero-product property):**\nRewrite as $(px+q)(rx+s)=0$, then $px+q=0$ or $rx+s=0$.\n*Best when:* $\\Delta$ is a perfect square and $a,b,c$ are small integers.\nExample pattern: $x^2+bx+c$ — find integers with product $c$ and sum $b$.\n\n**Method 2 — Quadratic formula:**\n$$x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}$$\n*Best when:* factoring is not obvious, coefficients are fractions, or the stem says \"use the formula.\"\n\n**Method 3 — Completing the square:**\nRewrite $x^2+bx+c=0$ as $(x+p)^2=q$, then $x+p=\\pm\\sqrt{q}$.\n*Best when:* $a=1$ and $b$ is even; also the proof behind the formula.\n\n**Workflow every time:**\n1. Move all terms to one side ($=0$).\n2. Identify $a,b,c$ (watch signs!).\n3. Compute $\\Delta$ if unsure about method or if the question is parametric.\n4. Solve, then **substitute back** to verify.\n\n**Parametric problems** ($k$, $m$): translate words like \"two distinct roots\" into $\\Delta>0$, \"one repeated root\" into $\\Delta=0$, \"no real roots\" into $\\Delta<0$, then solve the inequality for the parameter.",
+      "body_he_md": "בחרו שיטה לפי מבנה, לא לפי הרגל. אותו עץ החלטות עובד בכל שאלת בגרות.\n\n**שיטה 1 — פירוק לגורמים (תכונת אפס-מכפלה):**\nכותבים $(px+q)(rx+s)=0$, ואז $px+q=0$ או $rx+s=0$.\n*מתאים כש:* $\\Delta$ ריבוע שלם ו-$a,b,c$ שלמים קטנים.\nדפוס: $x^2+bx+c$ — מוצאים שלמים שמכפלתם $c$ וסכומם $b$.\n\n**שיטה 2 — נוסחת השורשים:**\n$$x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}$$\n*מתאים כש:* פירוק לא ברור, מקדמים שבריים, או שהניסוח דורש \"השתמשו בנוסחה\".\n\n**שיטה 3 — השלמה לריבוע:**\nכותבים $x^2+bx+c=0$ כ-$(x+p)^2=q$, ואז $x+p=\\pm\\sqrt{q}$.\n*מתאים כש:* $a=1$ ו-$b$ זוגי; גם הבסיס להוכחת הנוסחה.\n\n**תהליך בכל פעם:**\n1. העבירו הכל לצד אחד ($=0$).\n2. זיהו $a,b,c$ (שימו לב לסימנים!).\n3. חשבו $\\Delta$ אם לא בטוחים בשיטה או בשאלה פרמטרית.\n4. פתרו, ואז **הציבו חזרה** לאימות.\n\n**בעיות פרמטריות** ($k$, $m$): \"שני שורשים שונים\" $\\Rightarrow$ $\\Delta>0$; \"שורש כפול\" $\\Rightarrow$ $\\Delta=0$; \"אין שורשים ממשיים\" $\\Rightarrow$ $\\Delta<0$; ואז פותרים את האי-שוויון."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Solving by Factoring",
+      "title_he": "דוגמה פתורה 1 — פתרון בפירוק לגורמים",
+      "body_en_md": "**Solve:** $x^2 - 5x + 6 = 0$\n\nThis is a classic trinomial with $a=1$. Factoring is faster than the formula because the constant $6$ has small integer factors.\n\n### Move 1\nConfirm standard form: right side is already $0$. Identify $a=1$, $b=-5$, $c=6$. Quick discriminant check: $\\Delta=25-24=1>0$, so two distinct real roots — factoring should work cleanly.\n\n### Move 2\nFind integers $p,q$ with $p\\cdot q=6$ and $p+q=-5$. Both numbers must have the same sign (product positive, sum negative).\nTry $p=-2$, $q=-3$: $(-2)(-3)=6$ ✓ and $-2+(-3)=-5$ ✓.\n\n### Move 3\nWrite the factored form using those numbers as roots:\n$$x^2 - 5x + 6 = (x - 2)(x - 3) = 0$$\n\n### Move 4\nApply the zero-product property — if a product equals zero, at least one factor is zero:\n$$x - 2 = 0 \\implies x = 2, \\quad x - 3 = 0 \\implies x = 3$$\n\n**Check by substitution:** $f(2)=4-10+6=0$ ✓; $f(3)=9-15+6=0$ ✓. Both roots satisfy the original equation.\n\n**Answer:** $x=2$ or $x=3$. On an exam, show the integer search explicitly — it earns method marks even before the final factors.",
+      "body_he_md": "**פתרו:** $x^2 - 5x + 6 = 0$\n\nזו חוליה קלאסית עם $a=1$. פירוק מהיר יותר מהנוסחה כי הקבוע $6$ מתפרק לשלמים קטנים ונוחים.\n\n### צעד 1\nאימות צורה סטנדרטית: הצד הימני כבר $0$. זיהוי $a=1$, $b=-5$, $c=6$. בדיקת $\\Delta$ מהירה: $\\Delta=25-24=1>0$ — שני שורשים ממשיים שונים, פירוק אמור לעבוד.\n\n### צעד 2\nמוצאים שלמים $p,q$ עם $p\\cdot q=6$ ו-$p+q=-5$. שני המספרים באותו סימן (מכפלה חיובית, סכום שלילי).\nניסיון $p=-2$, $q=-3$: $(-2)(-3)=6$ ✓ ו-$-2+(-3)=-5$ ✓.\n\n### צעד 3\nכותבים צורה מפורקת לפי השורשים:\n$$x^2 - 5x + 6 = (x - 2)(x - 3) = 0$$\n\n### צעד 4\nתכונת אפס-מכפלה — אם מכפלה שווה לאפס, לפחות גורם אחד אפס:\n$$x - 2 = 0 \\implies x = 2, \\quad x - 3 = 0 \\implies x = 3$$\n\n**בדיקה בהצבה:** $f(2)=0$ ✓; $f(3)=0$ ✓. שני השורשים מקיימים את המשוואה המקורית.\n\n**תשובה:** $x=2$ או $x=3$. בבחינה, הציגו את חיפוש השלמים במפורש — נקודות על השיטה והחישוב."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Solve by factoring: $x^2 - 7x + 12 = 0$.",
+      "body_he_md": "פתרו בפירוק לגורמים: $x^2 - 7x + 12 = 0$.",
+      "checkpoint_solution_en": "**Checkpoint:** $x^2 - 7x + 12 = 0$\n\nStandard form is already satisfied ($=0$ on the right). We need two integers whose product is $c=12$ and sum is $b=-7$. Since the product is positive and sum negative, both integers are negative.\n\nTry $p=-3$, $q=-4$: $(-3)(-4)=12$ ✓ and $-3+(-4)=-7$ ✓.\n\nFactor: $x^2-7x+12=(x-3)(x-4)=0$. Zero-product gives $x=3$ or $x=4$.\n\n**Verify:** $3^2-7(3)+12=9-21+12=0$ ✓; $4^2-7(4)+12=16-28+12=0$ ✓. Both roots check.",
+      "checkpoint_solution_he": "**תרגול:** $x^2 - 7x + 12 = 0$\n\nהצורה הסטנדרטית כבר מתקיימת. דרושים שני שלמים שמכפלתם $c=12$ וסכומם $b=-7$. המכפלה חיובית והסכום שלילי — שני השלמים שליליים.\n\nניסיון $p=-3$, $q=-4$: $(-3)(-4)=12$ ✓ ו-$-3+(-4)=-7$ ✓.\n\nפירוק: $x^2-7x+12=(x-3)(x-4)=0$. אפס-מכפלה: $x=3$ או $x=4$.\n\n**אימות:** $3^2-7(3)+12=0$ ✓; $4^2-7(4)+12=0$ ✓. שני השורשים נכונים."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Using the Quadratic Formula",
+      "title_he": "דוגמה פתורה 2 — שימוש בנוסחת השורשים",
+      "body_en_md": "**Solve:** $3x^2 - x - 2 = 0$\n\nWhen $a\\ne1$, factoring by trial is slower; the quadratic formula is reliable. We still compute $\\Delta$ first to confirm two real roots exist.\n\n### Move 1\nIdentify coefficients carefully — signs matter on the exam:\n$$a=3, \\quad b=-1, \\quad c=-2$$\nThe negative $c$ makes $-4ac$ **positive** because $-4(3)(-2)=+24$.\n\n### Move 2\nCompute the discriminant in a separate line (examiners expect this):\n$$\\Delta = (-1)^2 - 4(3)(-2) = 1 + 24 = 25$$\nSince $\\Delta=25>0$ and $25=5^2$, two distinct real roots exist. Factoring as $(3x+2)(x-1)=0$ would also work, but we follow the formula path.\n\n### Move 3\nSubstitute into the quadratic formula — note $-b=+1$ and $\\sqrt{\\Delta}=5$:\n$$x = \\frac{-(-1) \\pm \\sqrt{25}}{2(3)} = \\frac{1 \\pm 5}{6}$$\n\n### Move 4\nEvaluate **both** branches of $\\pm$ explicitly:\n$$x_1 = \\frac{1+5}{6} = 1, \\quad x_2 = \\frac{1-5}{6} = -\\frac{2}{3}$$\n\n**Check:** $3(1)^2-1-2=0$ ✓. For $x=-\\frac{2}{3}$: $3(\\frac{4}{9})+\\frac{2}{3}-2=\\frac{4}{3}+\\frac{2}{3}-2=0$ ✓\n\n**Answer:** $x=1$ or $x=-\\dfrac{2}{3}$. Always show the $\\pm$ split — skipping it loses a root and marks.",
+      "body_he_md": "**פתרו:** $3x^2 - x - 2 = 0$\n\nכש-$a\\ne1$, פירוק בניסוי איטי יותר; נוסחת השורשים אמינה. עדיין מחשבים $\\Delta$ קודם לאימות שני שורשים ממשיים.\n\n### צעד 1\nזיהוי מקדמים בקפידה — סימנים קובעים בבחינה:\n$$a=3, \\quad b=-1, \\quad c=-2$$\nה-$c$ השלילי הופך את $-4ac$ ל**חיובי** כי $-4(3)(-2)=+24$.\n\n### צעד 2\nחישוב דיסקרימיננטה בשורה נפרדת (הבוחנים מצפים):\n$$\\Delta = (-1)^2 - 4(3)(-2) = 1 + 24 = 25$$\nמאחר ש-$\\Delta=25>0$ ו-$25=5^2$, קיימים שני שורשים. פירוק $(3x+2)(x-1)=0$ גם אפשרי, אך נלך בנוסחה.\n\n### צעד 3\nהצבה בנוסחת השורשים — שימו לב $-b=+1$ ו-$\\sqrt{\\Delta}=5$:\n$$x = \\frac{-(-1) \\pm \\sqrt{25}}{2(3)} = \\frac{1 \\pm 5}{6}$$\n\n### צעד 4\nחישוב **שני** ענפי $\\pm$ במפורש:\n$$x_1 = \\frac{1+5}{6} = 1, \\quad x_2 = \\frac{1-5}{6} = -\\frac{2}{3}$$\n\n**בדיקה:** $3(1)^2-1-2=0$ ✓. עבור $x=-\\frac{2}{3}$: $3(\\frac{4}{9})+\\frac{2}{3}-2=0$ ✓\n\n**תשובה:** $x=1$ או $x=-\\dfrac{2}{3}$. הציגו פיצול $\\pm$ במפורש — השמטה מאבדת שורש ונקודות חשובות."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Solve using the quadratic formula: $2x^2 + 5x - 3 = 0$.",
+      "body_he_md": "פתרו בנוסחת השורשים: $2x^2 + 5x - 3 = 0$.",
+      "checkpoint_solution_en": "**Checkpoint:** $2x^2 + 5x - 3 = 0$\n\nIdentify $a=2$, $b=5$, $c=-3$. The negative constant makes $-4ac$ positive: $-4(2)(-3)=+24$.\n\nDiscriminant: $\\Delta=b^2-4ac=25+24=49=7^2$. Two distinct real roots expected.\n\nQuadratic formula: $x=\\dfrac{-5\\pm\\sqrt{49}}{4}=\\dfrac{-5\\pm7}{4}$.\n\nSo $x_1=\\dfrac{-5+7}{4}=\\dfrac{2}{4}=\\dfrac{1}{2}$ and $x_2=\\dfrac{-5-7}{4}=\\dfrac{-12}{4}=-3$.\n\n**Check:** $2(\\frac{1}{2})^2+5(\\frac{1}{2})-3=\\frac{1}{2}+\\frac{5}{2}-3=0$ ✓",
+      "checkpoint_solution_he": "**תרגול:** $2x^2 + 5x - 3 = 0$\n\nזיהוי $a=2$, $b=5$, $c=-3$. הקבוע השלילי הופך את $-4ac$ לחיובי: $-4(2)(-3)=+24$.\n\nדיסקרימיננטה: $\\Delta=25+24=49=7^2$. צפו לשני שורשים ממשיים שונים.\n\nנוסחת שורשים: $x=\\dfrac{-5\\pm7}{4}$.\n\nלכן $x_1=\\dfrac{1}{2}$ ו-$x_2=-3$.\n\n**בדיקה:** $2(\\frac{1}{2})^2+5(\\frac{1}{2})-3=0$ ✓"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Discriminant Condition (Parametric)",
+      "title_he": "דוגמה פתורה 3 — תנאי דיסקרימיננטה (פרמטרי)",
+      "body_en_md": "**Problem:** For which values of $k$ does $x^2 - kx + 9 = 0$ have two distinct real roots?\n\nParametric questions test whether you translate words into discriminant conditions **before** solving for $x$.\n\n### Move 1\nIdentify coefficients in terms of $k$: $a=1$, $b=-k$, $c=9$. Write $\\Delta$ symbolically:\n$$\\Delta = (-k)^2 - 4(1)(9) = k^2 - 36$$\nNote $(-k)^2=k^2$ — a common simplification.\n\n### Move 2\nTranslate \"two **distinct** real roots\" into a strict inequality. Distinct means $\\Delta>0$, not $\\Delta\\ge0$ (which would include the double-root case $\\Delta=0$):\n$$k^2 - 36 > 0 \\implies k^2 > 36$$\n\n### Move 3\nSolve the inequality on the number line. Since $k^2>36$ means $k$ is farther from zero than 6:\n$$|k| > 6 \\implies k < -6 \\text{ or } k > 6$$\n\n**Boundary checks (always verify endpoints on Bagrut):**\n- $k=6$: $\\Delta=36-36=0$ → one repeated root — **not** two distinct. Excluded. ✓\n- $k=7$: $\\Delta=49-36=13>0$ → two distinct roots. Included. ✓\n- $k=5$: $\\Delta=25-36=-11<0$ → no real roots. Excluded. ✓\n\n**Answer:** $k<-6$ or $k>6$. Write the final set in interval notation or on a number line for full credit.",
+      "body_he_md": "**בעיה:** עבור אילו ערכי $k$ יש ל-$x^2 - kx + 9 = 0$ שני שורשים ממשיים שונים?\n\nשאלות פרמטריות בודקות אם מתרגמים מילים לתנאי על $\\Delta$ **לפני** פתרון ל-$x$.\n\n### צעד 1\nזיהוי מקדמים ב-$k$: $a=1$, $b=-k$, $c=9$. כתיבת $\\Delta$ סימבולית:\n$$\\Delta = (-k)^2 - 4(1)(9) = k^2 - 36$$\nשימו לב $(-k)^2=k^2$ — פישוט נפוץ.\n\n### צעד 2\nתרגום \"שני שורשים **שונים**\" לאי-שוויון קפדני. שונים $\\Rightarrow$ $\\Delta>0$, לא $\\Delta\\ge0$ (שכולל $\\Delta=0$ — שורש כפול):\n$$k^2 - 36 > 0 \\implies k^2 > 36$$\n\n### צעד 3\nפתרון על ציר המספרים. $k^2>36$ פירושו $|k|>6$:\n$$k < -6 \\text{ or } k > 6$$\n\n**בדיקת גבולות (תמיד בבגרות):**\n- $k=6$: $\\Delta=0$ → שורש כפול — **לא** שניים שונים. לא נכלל. ✓\n- $k=7$: $\\Delta=13>0$ → שני שורשים. נכלל. ✓\n- $k=5$: $\\Delta=-11<0$ → אין שורשים ממשיים. לא נכלל. ✓\n\n**תשובה:** $k<-6$ או $k>6$. כתבו את קבוצת הפתרון בציר או בסימון קטעים לניקוד מלא בבחינה."
+    },
+    {
+      "kind": "theory",
+      "title_en": "The Discriminant Tells the Whole Story Before You Solve",
+      "title_he": "הדיסקרימיננטה מספרת את כל הסיפור לפני שפותרים",
+      "body_en_md": "A quadratic $ax^2+bx+c=0$ hides a remarkable amount of information in a single expression buried inside the quadratic formula: the **discriminant** $\\Delta = b^2-4ac$. Reading it *before* solving tells you how many solutions exist and what they look like — often the whole point of an exam question.\n\n### Where the discriminant comes from\nThe quadratic formula is\n$$x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}.$$\nEverything interesting happens under the square root. Since you're taking $\\sqrt{\\Delta}$, the sign of $\\Delta$ decides whether that root is a real number, zero, or imaginary — which is exactly what controls the number of real solutions.\n\n### The three cases\n- **$\\Delta > 0$:** two **distinct real** solutions. The parabola crosses the $x$-axis at two points.\n- **$\\Delta = 0$:** exactly **one real** solution (a 'double root'). The parabola *touches* the $x$-axis at its vertex — the tangent case.\n- **$\\Delta < 0$:** **no real** solutions (two complex-conjugate ones). The parabola floats entirely above or below the axis, never crossing.\n\nThis is why examiners love the discriminant: 'for which $k$ does this equation have exactly one solution?' is answered by setting $\\Delta=0$, no full solve required.\n\n### Vieta's formulas: the roots without solving\nEven the *values* of the roots leave fingerprints in the coefficients. If $x_1,x_2$ are the roots, then\n$$x_1+x_2=-\\frac{b}{a},\\qquad x_1 x_2=\\frac{c}{a}.$$\nThese come straight from factoring $a(x-x_1)(x-x_2)$ and comparing. They let you check answers instantly, build a quadratic from known roots, or find symmetric quantities like $x_1^2+x_2^2=(x_1+x_2)^2-2x_1x_2$ without ever computing the roots individually.\n\n### Choosing a solving method\nWhen you *do* solve: try **factoring** first (fastest when the roots are rational), fall back on **completing the square** (which also reveals the vertex), and use the **quadratic formula** as the universal method that always works. The discriminant is what tells you in advance whether factoring over the rationals is even possible ($\\Delta$ a perfect square) — connecting the theory back to practice.",
+      "body_he_md": "משוואה ריבועית $ax^2+bx+c=0$ מסתירה כמות מדהימה של מידע בביטוי יחיד הקבור בתוך נוסחת השורשים: ה**דיסקרימיננטה** $\\Delta = b^2-4ac$. קריאתה *לפני* הפתרון אומרת לכם כמה פתרונות קיימים וכיצד הם נראים — לעתים קרובות כל העניין של שאלת בחינה.\n\n### מאיפה הדיסקרימיננטה מגיעה\nנוסחת השורשים היא\n$$x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}.$$\nכל המעניין קורה מתחת לשורש. מכיוון שאתם לוקחים $\\sqrt{\\Delta}$, הסימן של $\\Delta$ מכריע אם השורש הזה מספר ממשי, אפס, או מדומה — וזה בדיוק מה ששולט במספר הפתרונות הממשיים.\n\n### שלושת המקרים\n- **$\\Delta > 0$:** שני פתרונות **ממשיים נבדלים**. הפרבולה חוצה את ציר ה-$x$ בשתי נקודות.\n- **$\\Delta = 0$:** בדיוק פתרון **ממשי אחד** ('שורש כפול'). הפרבולה *נוגעת* בציר ה-$x$ בקודקודה — מקרה המשיק.\n- **$\\Delta < 0$:** **אין** פתרונות ממשיים (שניים מרוכבים צמודים). הפרבולה מרחפת כולה מעל או מתחת לציר, ולעולם אינה חוצה.\n\nלכן בוחנים אוהבים את הדיסקרימיננטה: 'עבור אילו $k$ למשוואה זו יש בדיוק פתרון אחד?' נענית בהצבת $\\Delta=0$, ללא צורך בפתרון מלא.\n\n### נוסחאות וייטה: השורשים בלי לפתור\nאפילו ה*ערכים* של השורשים משאירים טביעות אצבע במקדמים. אם $x_1,x_2$ הם השורשים, אז\n$$x_1+x_2=-\\frac{b}{a},\\qquad x_1 x_2=\\frac{c}{a}.$$\nאלה נובעות ישירות מפירוק $a(x-x_1)(x-x_2)$ והשוואה. הן מאפשרות לכם לבדוק תשובות מיד, לבנות ריבועית משורשים ידועים, או למצוא כמויות סימטריות כמו $x_1^2+x_2^2=(x_1+x_2)^2-2x_1x_2$ מבלי לחשב אי פעם את השורשים בנפרד.\n\n### בחירת שיטת פתרון\nכשאתם *כן* פותרים: נסו **פירוק** תחילה (המהיר ביותר כשהשורשים רציונליים), חזרו ל**השלמה לריבוע** (שגם חושפת את הקודקוד), והשתמשו ב**נוסחת השורשים** כשיטה האוניברסלית שתמיד עובדת. הדיסקרימיננטה היא מה שאומר לכם מראש אם פירוק מעל הרציונליים בכלל אפשרי ($\\Delta$ ריבוע מושלם) — ומקשר את התאוריה חזרה לתרגול."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — Using the Discriminant and Vieta as a Shortcut",
+      "title_he": "דוגמה פתורה 4 — שימוש בדיסקרימיננטה ובווייטה כקיצור",
+      "body_en_md": "**Problem.** For $2x^2-7x+3=0$: (a) use the discriminant to say how many real roots exist; (b) find the roots; (c) verify them with Vieta's formulas; (d) compute $x_1^2+x_2^2$ *without* using the actual root values.\n\n### Step 1: (a) Discriminant\nHere $a=2,\\ b=-7,\\ c=3$:\n$$\\Delta=b^2-4ac=(-7)^2-4(2)(3)=49-24=25>0.$$\nSince $\\Delta=25>0$ and is a **perfect square**, there are two distinct real roots — and they're rational, so factoring/formula will give clean values.\n\n### Step 2: (b) Roots via the formula\n$$x=\\frac{-(-7)\\pm\\sqrt{25}}{2(2)}=\\frac{7\\pm5}{4}.$$\n$$x_1=\\frac{7+5}{4}=3,\\qquad x_2=\\frac{7-5}{4}=\\frac{2}{4}=\\frac12.$$\n\n### Step 3: (c) Verify with Vieta\n$$x_1+x_2=3+\\tfrac12=\\tfrac72,\\quad\\text{and}\\quad -\\frac{b}{a}=-\\frac{-7}{2}=\\frac72.\\ ✓$$\n$$x_1 x_2=3\\cdot\\tfrac12=\\tfrac32,\\quad\\text{and}\\quad \\frac{c}{a}=\\frac{3}{2}.\\ ✓$$\n\n### Step 4: (d) Symmetric quantity without the roots\nUse the identity $x_1^2+x_2^2=(x_1+x_2)^2-2x_1x_2$ with only the Vieta sums:\n$$x_1^2+x_2^2=\\left(\\tfrac72\\right)^2-2\\left(\\tfrac32\\right)=\\tfrac{49}{4}-3=\\tfrac{49-12}{4}=\\tfrac{37}{4}.$$\nCheck directly: $3^2+(\\tfrac12)^2=9+\\tfrac14=\\tfrac{37}{4}$. ✓\n\n**Answer:** (a) two distinct real (rational) roots; (b) $x=3,\\ \\tfrac12$; (c) Vieta confirms; (d) $x_1^2+x_2^2=\\tfrac{37}{4}$. Vieta turned a symmetric expression into two-line arithmetic — the point of learning it.",
+      "body_he_md": "**בעיה.** עבור $2x^2-7x+3=0$: (א) השתמשו בדיסקרימיננטה לומר כמה שורשים ממשיים קיימים; (ב) מצאו את השורשים; (ג) אמתו אותם עם נוסחאות וייטה; (ד) חשבו $x_1^2+x_2^2$ *בלי* להשתמש בערכי השורשים בפועל.\n\n### שלב 1: (א) דיסקרימיננטה\nכאן $a=2,\\ b=-7,\\ c=3$:\n$$\\Delta=b^2-4ac=(-7)^2-4(2)(3)=49-24=25>0.$$\nמכיוון ש-$\\Delta=25>0$ והוא **ריבוע מושלם**, יש שני שורשים ממשיים נבדלים — והם רציונליים, ולכן פירוק/נוסחה ייתנו ערכים נקיים.\n\n### שלב 2: (ב) שורשים דרך הנוסחה\n$$x=\\frac{-(-7)\\pm\\sqrt{25}}{2(2)}=\\frac{7\\pm5}{4}.$$\n$$x_1=\\frac{7+5}{4}=3,\\qquad x_2=\\frac{7-5}{4}=\\frac{2}{4}=\\frac12.$$\n\n### שלב 3: (ג) אמתו עם וייטה\nסכום: $x_1+x_2=3+\\tfrac12=\\tfrac72$, וגם $-\\dfrac{b}{a}=-\\dfrac{-7}{2}=\\dfrac72$. ✓\nמכפלה: $x_1 x_2=3\\cdot\\tfrac12=\\tfrac32$, וגם $\\dfrac{c}{a}=\\dfrac{3}{2}$. ✓\n\n### שלב 4: (ד) כמות סימטרית ללא השורשים\nהשתמשו בזהות $x_1^2+x_2^2=(x_1+x_2)^2-2x_1x_2$ עם סכומי וייטה בלבד:\n$$x_1^2+x_2^2=\\left(\\tfrac72\\right)^2-2\\left(\\tfrac32\\right)=\\tfrac{49}{4}-3=\\tfrac{49-12}{4}=\\tfrac{37}{4}.$$\nבדקו ישירות: $3^2+(\\tfrac12)^2=9+\\tfrac14=\\tfrac{37}{4}$. ✓\n\n**תשובה:** (א) שני שורשים ממשיים (רציונליים) נבדלים; (ב) $x=3,\\ \\tfrac12$; (ג) וייטה מאשרת; (ד) $x_1^2+x_2^2=\\tfrac{37}{4}$. וייטה הפכה ביטוי סימטרי לחשבון בן שתי שורות — הסיבה ללמוד אותה."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Which Solving Method to Use?",
+      "title_he": "מדריך שיטה — איזו שיטת פתרון לבחור?",
+      "body_en_md": "| Situation | Recommended method | Why |\n|-----------|-------------------|-----|\n| $\\Delta$ perfect square, integer $a,b,c$ | Factoring | Fastest; shows structure examiners like |\n| $\\Delta$ not a perfect square | Quadratic formula | Guaranteed correct roots |\n| Stem says \"use the formula\" | Quadratic formula | Method marks depend on it |\n| $a=1$, even $b$ | Completing the square or factoring | Clean arithmetic |\n| Parameter $k$ / \"how many roots\" | Discriminant conditions | Avoid solving full equation |\n| Equation like $x^2=4x$ | Factor after moving to $=0$ | Never divide by $x$ |\n\n**Decision shortcut:** compute $\\Delta$ first when unsure — it tells you *how many* roots and whether factoring is likely ($\\Delta$ a perfect square).\n\n**Always:** rearrange to $ax^2+bx+c=0$ before any method. Write $a,b,c$ on your exam paper — partial credit often requires visible identification.",
+      "body_he_md": "| מצב | שיטה מומלצת | למה |\n|-----|-------------|-----|\n| $\\Delta$ ריבוע שלם, $a,b,c$ שלמים | פירוק לגורמים | הכי מהיר; מראה מבנה |\n| $\\Delta$ לא ריבוע שלם | נוסחת השורשים | שורשים נכונים בוודאות |\n| הניסוח דורש \"השתמשו בנוסחה\" | נוסחת השורשים | נקודות על השיטה |\n| $a=1$, $b$ זוגי | השלמה לריבוע או פירוק | חישוב נקי |\n| פרמטר $k$ / \"כמה שורשים\" | תנאי על $\\Delta$ | בלי לפתור את כל המשוואה |\n| משוואה כמו $x^2=4x$ | פירוק אחרי $=0$ | לעולם אל תחלקו ב-$x$ |\n\n**קיצור דרך:** חשבו $\\Delta$ כשלא בטוחים — הוא אומר *כמה* שורשים ואם פירוק סביר ($\\Delta$ ריבוע שלם).\n\n**תמיד:** ארגנו ל-$ax^2+bx+c=0$ לפני כל שיטה. כתבו $a,b,c$ בדף — נקודות ביניים דורשות זיהוי גלוי."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים לתרגול",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Solve by factoring: $x^2 - 9 = 0$.",
+          "body_he": "פתרו בפירוק לגורמים: $x^2 - 9 = 0$.",
+          "solution_en": "(x−3)(x+3) = 0. x = 3 or x = −3.",
+          "solution_he": "(x−3)(x+3) = 0. x = 3 או x = −3.",
+          "points": 4
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Solve: $x^2 + 6x + 9 = 0$.",
+          "body_he": "פתרו: $x^2 + 6x + 9 = 0$.",
+          "solution_en": "(x+3)² = 0. Repeated root: x = −3.",
+          "solution_he": "(x+3)² = 0. שורש כפול: x = −3.",
+          "points": 4
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Find the discriminant of $5x^2 - 3x + 1 = 0$ and state how many real solutions it has.",
+          "body_he": "מצאו את הדיסקרימיננטה של $5x^2 - 3x + 1 = 0$ וקבעו כמה פתרונות ממשיים יש לה.",
+          "solution_en": "Δ = 9 − 20 = −11 < 0. No real solutions.",
+          "solution_he": "Δ = 9 − 20 = −11 < 0. אין פתרונות ממשיים.",
+          "points": 4
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Solve $x^2 = 4x$ by factoring (do not divide by $x$).",
+          "body_he": "פתרו $x^2 = 4x$ בפירוק לגורמים (אל תחלקו ב-$x$).",
+          "solution_en": "x² − 4x = 0 → x(x−4) = 0. x = 0 or x = 4.",
+          "solution_he": "x² − 4x = 0 → x(x−4) = 0. x = 0 או x = 4.",
+          "points": 4
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Solve using the formula: $x^2 - 3x - 4 = 0$.",
+          "body_he": "פתרו בנוסחת השורשים: $x^2 - 3x - 4 = 0$.",
+          "solution_en": "Δ = 9+16 = 25. x = (3±5)/2. x₁ = 4, x₂ = −1.",
+          "solution_he": "Δ = 9+16 = 25. x = (3±5)/2. x₁ = 4, x₂ = −1.",
+          "points": 6
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Solve: $4x^2 - 12x + 9 = 0$.",
+          "body_he": "פתרו: $4x^2 - 12x + 9 = 0$.",
+          "solution_en": "Δ = 144 − 144 = 0. x = 12/8 = 3/2. One repeated root: x = 3/2.",
+          "solution_he": "Δ = 144 − 144 = 0. x = 12/8 = 3/2. שורש כפול: x = 3/2.",
+          "points": 6
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "A rectangle has length 3 more than its width. Its area is 40 m². Find the dimensions.",
+          "body_he": "מלבן שאורכו גדול ב-3 מרוחבו. שטחו 40 מ\"ר. מצאו את המידות.",
+          "solution_en": "Width = x, length = x+3. x(x+3) = 40 → x²+3x−40 = 0. Δ = 9+160 = 169. x = (−3+13)/2 = 5. Width = 5m, length = 8m.",
+          "solution_he": "רוחב = x, אורך = x+3. x(x+3) = 40 → x²+3x−40 = 0. Δ = 9+160 = 169. x = (−3+13)/2 = 5. רוחב = 5 מ', אורך = 8 מ'.",
+          "points": 6
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Solve: $\\frac{1}{x} + \\frac{1}{x+1} = \\frac{5}{6}$. (Hint: multiply through by $6x(x+1)$.)",
+          "body_he": "פתרו: $\\frac{1}{x} + \\frac{1}{x+1} = \\frac{5}{6}$. (רמז: כפלו ב-$6x(x+1)$.)",
+          "solution_en": "Multiply: 6(x+1) + 6x = 5x(x+1) → 12x+6 = 5x²+5x → 5x²−7x−6 = 0. Δ = 49+120 = 169. x = (7±13)/10. x = 2 or x = −3/5.",
+          "solution_he": "כפל: 6(x+1) + 6x = 5x(x+1) → 12x+6 = 5x²+5x → 5x²−7x−6 = 0. Δ = 49+120 = 169. x = (7±13)/10. x = 2 או x = −3/5.",
+          "points": 6
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "For what value of $k$ does $x^2 + kx + 16 = 0$ have exactly one solution?",
+          "body_he": "עבור איזה ערך של $k$ יש ל-$x^2 + kx + 16 = 0$ בדיוק פתרון אחד?",
+          "solution_en": "Δ = k² − 64 = 0 → k² = 64 → k = ±8.",
+          "solution_he": "Δ = k² − 64 = 0 → k² = 64 → k = ±8.",
+          "points": 6
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "For what values of $m$ does $mx^2 - 6x + m = 0$ have two distinct real roots? (Assume $m \\neq 0$.)",
+          "body_he": "עבור אילו ערכי $m$ יש ל-$mx^2 - 6x + m = 0$ שני שורשים ממשיים שונים? (הניחו $m \\neq 0$.)",
+          "solution_en": "Δ = 36 − 4m² > 0 → m² < 9 → −3 < m < 3. Excluding m = 0: −3 < m < 0 or 0 < m < 3.",
+          "solution_he": "Δ = 36 − 4m² > 0 → m² < 9 → −3 < m < 3. ללא m = 0: −3 < m < 0 או 0 < m < 3.",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Prove that $x^2 + x + 1 = 0$ has no real solutions, and find what the discriminant equals.",
+          "body_he": "הוכיחו כי ל-$x^2 + x + 1 = 0$ אין פתרונות ממשיים, ומצאו מה שווה הדיסקרימיננטה.",
+          "solution_en": "Δ = 1² − 4(1)(1) = 1 − 4 = −3 < 0. Since Δ < 0, there are no real solutions.",
+          "solution_he": "Δ = 1² − 4(1)(1) = 1 − 4 = −3 < 0. מאחר ש-Δ < 0, אין פתרונות ממשיים.",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "The sum of a number and its reciprocal is $\\frac{10}{3}$. Find all such numbers.",
+          "body_he": "סכום מספר והופכי שלו הוא $\\frac{10}{3}$. מצאו את כל המספרים האלה.",
+          "solution_en": "x + 1/x = 10/3 → 3x² − 10x + 3 = 0. Δ = 100 − 36 = 64. x = (10±8)/6. x = 3 or x = 1/3.",
+          "solution_he": "x + 1/x = 10/3 → 3x² − 10x + 3 = 0. Δ = 100 − 36 = 64. x = (10±8)/6. x = 3 או x = 1/3.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "A ball is thrown so that its height follows $h(t) = -4t^2 + 16t + 5$. (a) When is it at height 17m? (b) When does it land?",
+          "body_he": "כדור נזרק כך שגובהו: $h(t) = -4t^2 + 16t + 5$. (א) מתי הוא בגובה 17 מ'? (ב) מתי הוא נוחת?",
+          "solution_en": "(a) −4t²+16t+5=17 → −4t²+16t−12=0 → t²−4t+3=0 → (t−1)(t−3)=0 → t=1s or t=3s. (b) −4t²+16t+5=0 → 4t²−16t−5=0. Δ=256+80=336. t=(16+√336)/8 ≈ (16+18.33)/8 ≈ 4.29s.",
+          "solution_he": "(א) −4t²+16t+5=17 → −4t²+16t−12=0 → t²−4t+3=0 → (t−1)(t−3)=0 → t=1 שניות או t=3 שניות. (ב) −4t²+16t+5=0 → 4t²−16t−5=0. Δ=256+80=336. t=(16+√336)/8 ≈ 4.29 שניות.",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Top 3 Mistakes to Avoid",
+      "title_he": "3 הטעויות הנפוצות ביותר",
+      "body_en_md": "**Mistake 1 — Dividing both sides by $x$.**\nIf $x^2=4x$, dividing by $x$ gives $x=4$ and **loses** $x=0$. Always move to standard form: $x^2-4x=0\\Rightarrow x(x-4)=0$.\n\n**Mistake 2 — Dropping the $\\pm$ in the formula.**\n$x=\\dfrac{-b\\pm\\sqrt{\\Delta}}{2a}$ has two roots. Using only $+$ or only $-$ yields half the solution set — a common 2-mark loss.\n\n**Mistake 3 — Sign error in $\\Delta$ when $c<0$.**\n$\\Delta=b^2-4ac$. If $a=2$ and $c=-3$, then $-4ac=-4(2)(-3)=+24$, not $-24$. Write the multiplication explicitly.\n\n**Mistake 4 — Confusing $\\Delta=0$ with \"no solutions\".**\n$\\Delta=0$ means **one repeated** real root, not zero roots. Only $\\Delta<0$ means no real solutions.",
+      "body_he_md": "**טעות 1 — חלוקה ב-$x$.**\nאם $x^2=4x$, חלוקה ב-$x$ נותנת $x=4$ ו**מאבדת** $x=0$. תמיד עברו לצורה סטנדרטית: $x^2-4x=0\\Rightarrow x(x-4)=0$.\n\n**טעות 2 — השמטת $\\pm$ בנוסחה.**\n$x=\\dfrac{-b\\pm\\sqrt{\\Delta}}{2a}$ נותן שני שורשים. שימוש רק ב-$+$ או רק ב-$-$ — איבוד חצי מהפתרונות.\n\n**טעות 3 — שגיאת סימן ב-$\\Delta$ כש-$c<0$.**\n$\\Delta=b^2-4ac$. אם $a=2$ ו-$c=-3$, אז $-4ac=-4(2)(-3)=+24$, לא $-24$. כתבו את הכפל במפורש.\n\n**טעות 4 — בלבול $\\Delta=0$ עם \"אין פתרונות\".**\n$\\Delta=0$ פירושו **שורש כפול** ממשי אחד, לא אפס שורשים. רק $\\Delta<0$ אומר שאין פתרונות ממשיים."
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "Quadratic equations are the **bridge** between linear algebra and higher topics on A Step Forward: parabola graphs, optimization, complex numbers ($\\Delta<0$), and physics kinematics all assume you can solve $ax^2+bx+c=0$ reliably.\n\n**Exam transfer:** Bagrut 3–4 units rarely ask \"solve this\" in isolation — they embed quadratics inside word problems, rational equations, and parameter questions. The discriminant shortcut separates students who merely memorize the formula from those who **predict** solution counts before calculating.\n\n**Downstream connections:** Factoring skills from the prior lesson feed directly into Method 1 here; completing the square previews vertex form $y=a(x-h)^2+k$ in functions; parametric $\\Delta$ conditions reappear in analytic geometry (tangent lines to parabolas). Treat every quadratic as practice for structured reasoning, not rote substitution.",
+      "body_he_md": "משוואות ריבועיות הן **גשר** בין אלגברה לינארית לנושאים מתקדמים ב-A Step Forward: גרפי פרבולות, אופטימיזציה, מספרים מרוכבים ($\\Delta<0$), וקינמטיקה בפיזיקה — כולם מניחים שאתם יודעים לפתור $ax^2+bx+c=0$ באמינות.\n\n**העברה בבחינה:** בבגרות 3–4 יחידות לעיתים רחוקות שואלים \"פתרו\" בבידוד — משבצים ריבועיות בתוך בעיות מילוליות, משוואות רציונליות ושאלות פרמטר. קיצור הדרך של $\\Delta$ מפריד בין מי שזוכר נוסחה לבין מי ש**מנבא** כמה פתרונות לפני החישוב.\n\n**קשרים בהמשך:** פירוק מהשיעור הקודם מזין ישירות לשיטה 1; השלמה לריבוע מכינה לצורת קודקוד $y=a(x-h)^2+k$; תנאי $\\Delta$ פרמטריים חוזרים בגאומטריה אנליטית. התייחסו לכל ריבועית כאימון לחשיבה מסודרת, לא להצבה מכנית."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam — Formula Card",
+      "title_he": "לפני הבחינה — כרטיס נוסחאות",
+      "body_en_md": "**Essential formulas (write these on your formula sheet):**\n- Standard form: $ax^2+bx+c=0$ with $a\\ne0$\n- Discriminant: $\\Delta=b^2-4ac$\n- Roots: $x=\\dfrac{-b\\pm\\sqrt{\\Delta}}{2a}$\n- Count: $\\Delta>0\\Rightarrow2$; $\\Delta=0\\Rightarrow1$ (double); $\\Delta<0\\Rightarrow0$ real\n\n**Typical Bagrut 3pt patterns:**\n1. **Direct solve** — show $a,b,c$, $\\Delta$, formula, both roots. (4–5 marks)\n2. **Repeated root** — find $k$ where $\\Delta=0$. (3–4 marks)\n3. **Word problem** — define variable, build equation, solve, reject invalid roots (negative length). (5–6 marks)\n4. **Rational equation** — clear denominators first, then quadratic. (5 marks)\n\n**Marking tips:** Label each step. Show $\\pm$ split explicitly. Substitute one root back. State final answer in context (units, \"width = 5 m\").",
+      "body_he_md": "**נוסחאות חיוניות (רשמו בדף נוסחאות):**\n- צורה סטנדרטית: $ax^2+bx+c=0$ עם $a\\ne0$\n- דיסקרימיננטה: $\\Delta=b^2-4ac$\n- שורשים: $x=\\dfrac{-b\\pm\\sqrt{\\Delta}}{2a}$\n- ספירה: $\\Delta>0\\Rightarrow2$; $\\Delta=0\\Rightarrow1$ (כפול); $\\Delta<0\\Rightarrow0$ ממשיים\n\n**דפוסי בגרות 3 יח':**\n1. **פתרון ישיר** — הציגו $a,b,c$, $\\Delta$, נוסחה, שני שורשים. (4–5 נק')\n2. **שורש כפול** — מציאת $k$ כש-$\\Delta=0$. (3–4 נק')\n3. **בעיית מילים** — הגדרת משתנה, בניית משוואה, פתרון, דחיית שורשים לא הגיוניים. (5–6 נק')\n4. **משוואה רציונלית** — ניקוי מכנים קודם, ואז ריבועית. (5 נק')\n\n**טיפים לניקוד:** תייגו כל שלב. הציגו פיצול $\\pm$ במפורש. הציבו שורש אחד חזרה. נסחו תשובה סופית בהקשר (יחידות, \"רוחב = 5 מ'\")."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Facets: parameters and word-problem setup",
+      "title_he": "פנים: פרמטרים ובניית בעיה מילולית",
+      "body_en_md": "**Parametric root conditions:** translate “for which $k$…” into discriminant / domain conditions.\n\n**Word-problem setup:** define variables, write equations, verify units.",
+      "body_he_md": "**תנאי שורשים פרמטריים:** תרגמו \"עבור אילו $k$…\" לתנאי דיסקרימיננטה / תחום.\n\n**בניית בעיה מילולית:** הגדירו משתנים, כתבו משוואות, אמתו יחידות."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "**Key takeaways:**\n- Always rearrange to $ax^2+bx+c=0$ before solving.\n- Discriminant $\\Delta=b^2-4ac$ predicts root count: positive → 2, zero → 1 double, negative → none (real).\n- **Factoring:** find two numbers with product $ac$ and sum $b$ (when $a=1$, product $c$).\n- **Formula:** $x=\\dfrac{-b\\pm\\sqrt{\\Delta}}{2a}$ — never omit $\\pm$.\n- **Parameters:** translate root conditions into inequalities on $\\Delta$.\n- **Word problems:** define $x$, build equation, solve, interpret — reject impossible values.\n- Never divide by $x$; factor to keep all solutions.",
+      "body_he_md": "**עיקרי הדברים:**\n- תמיד ארגנו ל-$ax^2+bx+c=0$ לפני פתרון.\n- דיסקרימיננטה $\\Delta=b^2-4ac$ מנבאת מספר שורשים: חיובי → 2, אפס → כפול 1, שלילי → אין (ממשיים).\n- **פירוק:** שני מספרים שמכפלתם $ac$ וסכומם $b$ (כש-$a=1$, מכפלה $c$).\n- **נוסחה:** $x=\\dfrac{-b\\pm\\sqrt{\\Delta}}{2a}$ — לעולם אל תשמיטו $\\pm$.\n- **פרמטרים:** תנאי שורשים → אי-שוויונות על $\\Delta$.\n- **בעיות מילים:** הגדרת $x$, בניית משוואה, פתרון, פרשנות — דחיית ערכים בלתי-אפשריים.\n- לעולם אל תחלקו ב-$x$; פרקו כדי לשמור כל הפתרונות."
+    }
+  ],
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "completing_the_square",
+      "discriminant",
+      "factoring_quadratics",
+      "quadratic_formula",
+      "square_root_method",
+      "vieta_formulas",
+      "word_problems"
+    ]
+  },
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "discriminant"
+      ],
+      "points_level_min": "3pt",
+      "stem_en": "Find the discriminant of $x^2 - 5x + 6 = 0$.",
+      "stem_he": "מצאו את הדיסקרימיננטה של $x^2 - 5x + 6 = 0$.",
+      "explanation_en": "**Step 1 — Identify coefficients.** Here $a=1$, $b=-5$, and $c=6$. Write them down before substituting so the signs stay correct on the exam paper.\n**Step 2 — Apply the definition.** The discriminant is $\\Delta=b^2-4ac=(-5)^2-4(1)(6)=25-24=1$.\n**Step 3 — Read the sign.** Since $\\Delta=1>0$, two distinct real roots exist; a perfect-square discriminant also hints that factoring will be clean.\n**Answer:** $1$.",
+      "explanation_he": "**שלב 1 — זיהוי מקדמים.** כאן $a=1$, $b=-5$, ו-$c=6$. רושמים לפני ההצבה כדי שהסימנים יישארו נכונים בבחינה.\n**שלב 2 — הגדרה.** הדיסקרימיננטה היא $\\Delta=b^2-4ac=(-5)^2-4(1)(6)=25-24=1$.\n**שלב 3 — קריאת הסימן.** מאחר ש-$\\Delta=1>0$, יש שני שורשים ממשיים שונים; ריבוע מושלם גם רומז שפירוק יהיה נקי.\n**תשובה:** $1$.",
+      "answer_payload": {
+        "value": 1
+      },
+      "correct_answer": "1",
+      "verify": {
+        "expr": "(-5)^2 - 4*1*6",
+        "expected": 1
+      },
+      "id": "equations_quadratic__5pt-q1"
+    },
+    {
+      "ord": 2,
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural",
+        "application"
+      ],
+      "needs_review": true,
+      "skill_atoms": [
+        "quadratic_formula"
+      ],
+      "points_level_min": "3pt",
+      "stem_en": "Solve $x^2 - 4x - 5 = 0$ using the quadratic formula, showing all steps and both roots.",
+      "stem_he": "פתרו $x^2 - 4x - 5 = 0$ בעזרת נוסחת השורשים, והציגו את כל השלבים ואת שני השורשים.",
+      "rubric_en": "Full credit: correct $a,b,c$, $\\Delta=36$, both roots $x=5$ and $x=-1$, and clear $\\pm$ split.",
+      "rubric_he": "ניקוד מלא: $a,b,c$ נכונים, $\\Delta=36$, שני השורשים $x=5$ ו-$x=-1$, ופיצול $\\pm$ ברור.",
+      "explanation_en": "**Step 1.** Identify $a=1$, $b=-4$, $c=-5$ after confirming the equation is already in standard form.\n**Step 2.** Compute $\\Delta=(-4)^2-4(1)(-5)=16+20=36$, so two distinct real roots exist.\n**Step 3.** Apply $x=\\dfrac{-b\\pm\\sqrt{\\Delta}}{2a}=\\dfrac{4\\pm6}{2}$.\n**Step 4.** Split: $x_1=\\dfrac{4+6}{2}=5$ and $x_2=\\dfrac{4-6}{2}=-1$.\n**Step 5 — Check.** $5^2-4\\cdot5-5=0$ and $(-1)^2-4(-1)-5=0$. Both roots work.\n**Answer:** $x=5$ or $x=-1$.",
+      "explanation_he": "**שלב 1.** מזהים $a=1$, $b=-4$, $c=-5$ אחרי אימות צורה סטנדרטית.\n**שלב 2.** מחשבים $\\Delta=(-4)^2-4(1)(-5)=16+20=36$, ולכן יש שני שורשים ממשיים שונים.\n**שלב 3.** מציבים $x=\\dfrac{-b\\pm\\sqrt{\\Delta}}{2a}=\\dfrac{4\\pm6}{2}$.\n**שלב 4.** פיצול: $x_1=5$ ו-$x_2=-1$.\n**שלב 5 — בדיקה.** שני השורשים מקיימים את המשוואה המקורית.\n**תשובה:** $x=5$ או $x=-1$.",
+      "answer_payload": {
+        "steps_en": [
+          "Identify a=1, b=-4, c=-5",
+          "Compute Delta=36",
+          "Apply formula (4±6)/2",
+          "Roots x=5 and x=-1"
+        ],
+        "steps_he": [
+          "זיהוי a=1, b=-4, c=-5",
+          "חישוב Delta=36",
+          "נוסחה (4±6)/2",
+          "שורשים x=5 ו-x=-1"
+        ]
+      },
+      "id": "equations_quadratic__5pt-q2"
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "factoring_quadratics"
+      ],
+      "points_level_min": "3pt",
+      "stem_en": "What are the roots of $x^2 - 5x + 6 = 0$?",
+      "stem_he": "מהם שורשי המשוואה $x^2 - 5x + 6 = 0$?",
+      "explanation_en": "**Step 1 — Factor.** Seek integers with product $6$ and sum $-5$: namely $-2$ and $-3$, so $x^2-5x+6=(x-2)(x-3)$.\n**Step 2 — Zero-product.** Set each factor to zero: $x-2=0$ or $x-3=0$.\n**Step 3 — Roots.** Therefore $x=2$ and $x=3$. Distractors often swap signs or list only one root; both must appear.\n**Answer:** $2$ and $3$.",
+      "explanation_he": "**שלב 1 — פירוק.** מחפשים שלמים שמכפלתם $6$ וסכומם $-5$: כלומר $-2$ ו-$-3$, ולכן $x^2-5x+6=(x-2)(x-3)$.\n**שלב 2 — אפס-מכפלה.** $x-2=0$ או $x-3=0$.\n**שלב 3 — שורשים.** לכן $x=2$ ו-$x=3$. מסיחים לעיתים מחליפים סימנים או מציגים שורש אחד בלבד.\n**תשובה:** $2$ ו-$3$.",
+      "options_en": [
+        "$2$ and $3$",
+        "$-2$ and $-3$",
+        "$2$ only",
+        "$5$ and $6$"
+      ],
+      "options_he": [
+        "$2$ ו-$3$",
+        "$-2$ ו-$-3$",
+        "$2$ בלבד",
+        "$5$ ו-$6$"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "$2$ and $3$",
+          "$-2$ and $-3$",
+          "$2$ only",
+          "$5$ and $6$"
+        ],
+        "options_he": [
+          "$2$ ו-$3$",
+          "$-2$ ו-$-3$",
+          "$2$ בלבד",
+          "$5$ ו-$6$"
+        ],
+        "correct_index": 0
+      },
+      "id": "equations_quadratic__5pt-q3"
+    },
+    {
+      "ord": 4,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "factoring_quadratics"
+      ],
+      "points_level_min": "3pt",
+      "stem_en": "Solve $x^2 - 5x + 6 = 0$ and write the factored form of the left side.",
+      "stem_he": "פתרו $x^2 - 5x + 6 = 0$ וכתבו את הצורה המפורקת של האגף השמאלי.",
+      "explanation_en": "**Step 1.** Find two integers whose product is $6$ and whose sum is $-5$. Both must be negative: $-2$ and $-3$.\n**Step 2.** Rewrite as $(x-2)(x-3)=0$. Zero-product then yields $x=2$ or $x=3$.\n**Step 3 — Exam tip.** On short-answer items, the factored form itself often earns method marks even before you list the roots.\n**Answer:** $(x-2)(x-3)$.",
+      "explanation_he": "**שלב 1.** מוצאים שלמים שמכפלתם $6$ וסכומם $-5$. שניהם שליליים: $-2$ ו-$-3$.\n**שלב 2.** כותבים $(x-2)(x-3)=0$. אפס-מכפלה נותן $x=2$ או $x=3$.\n**שלב 3 — טיפ.** בבחינה הצורה המפורקת עצמה מזכה בנקודות שיטה גם לפני רישום השורשים.\n**תשובה:** $(x-2)(x-3)$.",
+      "acceptable_answers": [
+        "(x-2)(x-3)",
+        "(x-2)*(x-3)",
+        "(x-3)(x-2)"
+      ],
+      "case_sensitive": false,
+      "correct_answer": "(x-2)(x-3)",
+      "answer_payload": {
+        "acceptable_answers": [
+          "(x-2)(x-3)",
+          "(x-2)*(x-3)",
+          "(x-3)(x-2)"
+        ],
+        "case_sensitive": false
+      },
+      "id": "equations_quadratic__5pt-q4"
+    },
+    {
+      "ord": 5,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "discriminant"
+      ],
+      "points_level_min": "3pt",
+      "stem_en": "True or False: $x^2 + x + 1 = 0$ has no real solutions.",
+      "stem_he": "נכון או לא נכון: למשוואה $x^2 + x + 1 = 0$ אין פתרונות ממשיים.",
+      "explanation_en": "**Step 1 — Discriminant.** For $a=1$, $b=1$, $c=1$ we get $\\Delta=1-4=-3<0$.\n**Step 2 — Interpretation.** A negative discriminant means the parabola never meets the $x$-axis, so there are no real roots (only a complex conjugate pair).\n**Step 3 — Common trap.** Students sometimes claim \"no solutions\" only when they cannot factor over the integers; here the discriminant, not factoring failure, is decisive.\n**Conclusion:** the statement is **true**.",
+      "explanation_he": "**שלב 1 — דיסקרימיננטה.** עבור $a=1$, $b=1$, $c=1$ מקבלים $\\Delta=1-4=-3<0$.\n**שלב 2 — פרשנות.** דיסקרימיננטה שלילית פירושה שהפרבולה אינה פוגשת את ציר $x$, ולכן אין שורשים ממשיים.\n**שלב 3 — מלכודת.** תלמידים לפעמים אומרים \"אין פתרון\" רק כי לא הצליחו לפרק; כאן ההכרעה היא $\\Delta$, לא כישלון פירוק.\n**מסקנה:** ההיגד **נכון**.",
+      "correct_bool": true,
+      "answer_payload": {
+        "value": true
+      },
+      "id": "equations_quadratic__5pt-q5"
+    },
+    {
+      "ord": 6,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "square_root_method"
+      ],
+      "points_level_min": "3pt",
+      "stem_en": "Solve $x^2 = 49$ and report the positive solution.",
+      "stem_he": "פתרו $x^2 = 49$ ומצאו את הפתרון החיובי.",
+      "explanation_en": "**Step 1 — Square-root both sides.** $x^2=49$ implies $x=\\pm\\sqrt{49}=\\pm7$. Never drop the minus branch when solving by roots.\n**Step 2 — Select the positive solution.** The problem asks only for the positive root, so $x=7$.\n**Step 3 — Sanity check.** $7^2=49$ and $(-7)^2=49$; both satisfy the equation, but only $7$ is requested.\n**Answer:** $7$.",
+      "explanation_he": "**שלב 1 — הוצאת שורש.** $x^2=49$ גורר $x=\\pm\\sqrt{49}=\\pm7$. אין להשמיט את הענף השלילי.\n**שלב 2 — בחירת החיובי.** השאלה מבקשת רק את השורש החיובי, ולכן $x=7$.\n**שלב 3 — בדיקה.** $7^2=49$ ו-$(-7)^2=49$; שניהם מקיימים, אך רק $7$ נדרש.\n**תשובה:** $7$.",
+      "answer_payload": {
+        "value": 7
+      },
+      "correct_answer": "7",
+      "verify": {
+        "expr": "sqrt(49)",
+        "expected": 7
+      },
+      "id": "equations_quadratic__5pt-q6"
+    },
+    {
+      "ord": 7,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "discriminant"
+      ],
+      "points_level_min": "3pt",
+      "stem_en": "How many real solutions does $x^2 - 4x + 4 = 0$ have?",
+      "stem_he": "כמה פתרונות ממשיים יש למשוואה $x^2 - 4x + 4 = 0$?",
+      "explanation_en": "**Step 1 — Discriminant.** $\\Delta=(-4)^2-4(1)(4)=16-16=0$.\n**Step 2 — Graph meaning.** $\\Delta=0$ means the parabola touches the $x$-axis at exactly one point (the vertex), so there is one repeated real root $x=2$.\n**Step 3 — Wording trap.** \"Two distinct\" would be false; \"two counting multiplicity\" is sometimes said in advanced courses, but Bagrut counts one real solution here.\n**Answer:** $1$.",
+      "explanation_he": "**שלב 1 — דיסקרימיננטה.** $\\Delta=16-16=0$.\n**שלב 2 — משמעות גרפית.** $\\Delta=0$ אומר שהפרבולה נוגעת בציר $x$ בנקודה אחת (הקודקוד), כלומר שורש ממשי כפול $x=2$.\n**שלב 3 — מלכודת ניסוח.** \"שניים שונים\" שגוי; בבגרות סופרים כאן פתרון ממשי אחד.\n**תשובה:** $1$.",
+      "options_en": [
+        "$1$",
+        "$0$",
+        "$2$",
+        "infinitely many"
+      ],
+      "options_he": [
+        "$1$",
+        "$0$",
+        "$2$",
+        "אינסוף"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "$1$",
+          "$0$",
+          "$2$",
+          "infinitely many"
+        ],
+        "options_he": [
+          "$1$",
+          "$0$",
+          "$2$",
+          "אינסוף"
+        ],
+        "correct_index": 0
+      },
+      "id": "equations_quadratic__5pt-q7"
+    },
+    {
+      "ord": 8,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "vieta_formulas"
+      ],
+      "points_level_min": "3pt",
+      "stem_en": "By Vieta's formulas, find the product of the roots of $2x^2 - 7x + 3 = 0$.",
+      "stem_he": "לפי נוסחאות וייטה, מצאו את מכפלת שורשי $2x^2 - 7x + 3 = 0$.",
+      "explanation_en": "**Step 1 — Recall Vieta.** For $ax^2+bx+c=0$, the product of the roots is $c/a$.\n**Step 2 — Substitute.** Here $a=2$ and $c=3$, so the product is $3/2=1.5$.\n**Step 3 — Optional check.** The roots are $3$ and $1/2$, and $3\\cdot(1/2)=1.5$, matching Vieta without needing the full solve on the exam.\n**Answer:** $1.5$.",
+      "explanation_he": "**שלב 1 — וייטה.** למשוואה $ax^2+bx+c=0$ מכפלת השורשים היא $c/a$.\n**שלב 2 — הצבה.** כאן $a=2$ ו-$c=3$, ולכן המכפלה היא $3/2=1.5$.\n**שלב 3 — בדיקה אופציונלית.** השורשים הם $3$ ו-$1/2$, ומכפלתם $1.5$ — מאשרת את וייטה.\n**תשובה:** $1.5$.",
+      "answer_payload": {
+        "value": 1.5
+      },
+      "correct_answer": "1.5",
+      "verify": {
+        "expr": "3/2",
+        "expected": 1.5
+      },
+      "id": "equations_quadratic__5pt-q8"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "vieta_formulas"
+      ],
+      "points_level_min": "3pt",
+      "stem_en": "By Vieta's formulas, find the sum of the roots of $2x^2 - 7x + 3 = 0$.",
+      "stem_he": "לפי נוסחאות וייטה, מצאו את סכום שורשי $2x^2 - 7x + 3 = 0$.",
+      "explanation_en": "**Step 1 — Recall Vieta.** The sum of roots is $-b/a$.\n**Step 2 — Substitute carefully.** With $a=2$ and $b=-7$, the sum is $-(-7)/2=7/2=3.5$.\n**Step 3 — Sign trap.** Forgetting the leading minus turns the answer into $-3.5$; always keep $-b/a$ intact.\n**Answer:** $3.5$.",
+      "explanation_he": "**שלב 1 — וייטה.** סכום השורשים הוא $-b/a$.\n**שלב 2 — הצבה.** עם $a=2$ ו-$b=-7$, הסכום הוא $-(-7)/2=7/2=3.5$.\n**שלב 3 — מלכודת סימן.** שכחת המינוס החיצוני הופכת את התשובה ל-$-3.5$.\n**תשובה:** $3.5$.",
+      "answer_payload": {
+        "value": 3.5
+      },
+      "correct_answer": "3.5",
+      "verify": {
+        "expr": "-(-7)/2",
+        "expected": 3.5
+      },
+      "id": "equations_quadratic__5pt-q9"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "factoring_quadratics"
+      ],
+      "points_level_min": "3pt",
+      "stem_en": "Find the smaller root of $x^2 - x - 6 = 0$.",
+      "stem_he": "מצאו את השורש הקטן יותר של $x^2 - x - 6 = 0$.",
+      "explanation_en": "**Step 1 — Factor.** Integers with product $-6$ and sum $-1$ are $-3$ and $2$, so $x^2-x-6=(x-3)(x+2)$.\n**Step 2 — Roots.** Zero-product gives $x=3$ or $x=-2$.\n**Step 3 — Compare.** The smaller value is $-2$. Substituting confirms $(-2)^2-(-2)-6=0$.\n**Answer:** $-2$.",
+      "explanation_he": "**שלב 1 — פירוק.** שלמים שמכפלתם $-6$ וסכומם $-1$ הם $-3$ ו-$2$, ולכן $x^2-x-6=(x-3)(x+2)$.\n**שלב 2 — שורשים.** אפס-מכפלה: $x=3$ או $x=-2$.\n**שלב 3 — השוואה.** הערך הקטן הוא $-2$. הצבה מאשרת.\n**תשובה:** $-2$.",
+      "answer_payload": {
+        "value": -2
+      },
+      "correct_answer": "-2",
+      "verify": {
+        "expr": "(1 - sqrt(1+24))/2",
+        "expected": -2
+      },
+      "id": "equations_quadratic__5pt-q10"
+    },
+    {
+      "ord": 11,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "factoring_quadratics"
+      ],
+      "points_level_min": "3pt",
+      "stem_en": "Solve $x^2 + 2x - 8 = 0$ by factoring; give the factored form.",
+      "stem_he": "פתרו $x^2 + 2x - 8 = 0$ בעזרת פירוק; כתבו את הצורה המפורקת.",
+      "explanation_en": "**Step 1.** Find integers with product $-8$ and sum $2$: namely $+4$ and $-2$.\n**Step 2.** Factor as $(x+4)(x-2)=0$, equivalently $(x-2)(x+4)=0$.\n**Step 3.** Roots are $x=-4$ and $x=2$. Report the factored form for grading.\n**Answer:** $(x-2)(x+4)$.",
+      "explanation_he": "**שלב 1.** שלמים שמכפלתם $-8$ וסכומם $2$: $+4$ ו-$-2$.\n**שלב 2.** פירוק $(x+4)(x-2)=0$, שקול ל-$(x-2)(x+4)=0$.\n**שלב 3.** השורשים הם $x=-4$ ו-$x=2$. מדווחים את הצורה המפורקת.\n**תשובה:** $(x-2)(x+4)$.",
+      "acceptable_answers": [
+        "(x-2)(x+4)",
+        "(x-2)*(x+4)",
+        "(x+4)(x-2)"
+      ],
+      "case_sensitive": false,
+      "correct_answer": "(x-2)(x+4)",
+      "answer_payload": {
+        "acceptable_answers": [
+          "(x-2)(x+4)",
+          "(x-2)*(x+4)",
+          "(x+4)(x-2)"
+        ],
+        "case_sensitive": false
+      },
+      "id": "equations_quadratic__5pt-q11"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "discriminant"
+      ],
+      "points_level_min": "3pt",
+      "stem_en": "True or False: $x^2 - 4x + 4 = 0$ has two distinct real roots.",
+      "stem_he": "נכון או לא נכון: למשוואה $x^2 - 4x + 4 = 0$ שני שורשים ממשיים שונים.",
+      "explanation_en": "**Step 1.** Compute $\\Delta=16-16=0$.\n**Step 2.** $\\Delta=0$ yields a single repeated root $x=2$, not two distinct roots.\n**Step 3 — Language.** \"Distinct\" is the keyword that makes the statement false; saying \"two real roots counting multiplicity\" is a different claim.\n**Conclusion:** **false**.",
+      "explanation_he": "**שלב 1.** מחשבים $\\Delta=16-16=0$.\n**שלב 2.** $\\Delta=0$ נותן שורש כפול יחיד $x=2$, לא שני שורשים שונים.\n**שלב 3 — לשון.** המילה \"שונים\" הופכת את ההיגד לשגוי.\n**מסקנה:** **לא נכון**.",
+      "correct_bool": false,
+      "answer_payload": {
+        "value": false
+      },
+      "id": "equations_quadratic__5pt-q12"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "factoring_quadratics",
+        "quadratic_formula"
+      ],
+      "points_level_min": "3pt",
+      "stem_en": "Solve $x^2 - 6x + 8 = 0$ and report the larger root.",
+      "stem_he": "פתרו $x^2 - 6x + 8 = 0$ ומצאו את השורש הגדול יותר.",
+      "explanation_en": "**Step 1 — Factor or formula.** $x^2-6x+8=(x-2)(x-4)$, or use $\\Delta=36-32=4$ and $x=(6\\pm2)/2$.\n**Step 2 — Roots.** The solutions are $x=2$ and $x=4$.\n**Step 3 — Select the larger.** Compare $2$ and $4$; the larger root is $4$. Always show both roots before selecting.\n**Answer:** $4$.",
+      "explanation_he": "**שלב 1 — פירוק או נוסחה.** $x^2-6x+8=(x-2)(x-4)$, או $\\Delta=4$ ו-$x=(6\\pm2)/2$.\n**שלב 2 — שורשים.** הפתרונות הם $x=2$ ו-$x=4$.\n**שלב 3 — בחירת הגדול.** הגדול הוא $4$. תמיד מציגים את שני השורשים לפני הבחירה.\n**תשובה:** $4$.",
+      "answer_payload": {
+        "value": 4
+      },
+      "correct_answer": "4",
+      "verify": {
+        "expr": "(6+2)/2",
+        "expected": 4
+      },
+      "id": "equations_quadratic__5pt-q13"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "completing_the_square"
+      ],
+      "points_level_min": "3pt",
+      "stem_en": "Complete the square for $x^2 - 6x + 5$ and give the minimum value of the expression.",
+      "stem_he": "השלימו לריבוע את $x^2 - 6x + 5$ ומצאו את הערך המינימלי של הביטוי.",
+      "explanation_en": "**Step 1 — Complete the square.** $x^2-6x+5=(x-3)^2-9+5=(x-3)^2-4$.\n**Step 2 — Non-negativity.** $(x-3)^2\\ge0$ for all real $x$, so the expression is at least $-4$.\n**Step 3 — Attainment.** The minimum $-4$ occurs at $x=3$, when the square term vanishes.\n**Answer:** $-4$.",
+      "explanation_he": "**שלב 1 — השלמה לריבוע.** $x^2-6x+5=(x-3)^2-4$.\n**שלב 2 — אי-שליליות.** $(x-3)^2\\ge0$ לכל $x$ ממשי, ולכן הביטוי לפחות $-4$.\n**שלב 3 — השגה.** המינימום $-4$ מתקבל ב-$x=3$.\n**תשובה:** $-4$.",
+      "answer_payload": {
+        "value": -4
+      },
+      "correct_answer": "-4",
+      "verify": {
+        "expr": "5 - (6/2)^2",
+        "expected": -4
+      },
+      "id": "equations_quadratic__5pt-q14"
+    },
+    {
+      "ord": 15,
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application"
+      ],
+      "needs_review": true,
+      "skill_atoms": [
+        "word_problems",
+        "factoring_quadratics"
+      ],
+      "points_level_min": "3pt",
+      "stem_en": "Two consecutive positive integers have a product of $56$. Find them.",
+      "stem_he": "מכפלת שני מספרים שלמים חיוביים עוקבים היא $56$. מצאו אותם.",
+      "rubric_en": "Full credit: model $x(x+1)=56$, solve the quadratic, discard the negative root, conclude $7$ and $8$.",
+      "rubric_he": "ניקוד מלא: מידול $x(x+1)=56$, פתרון הריבועית, פסילת השורש השלילי, ומסקנה $7$ ו-$8$.",
+      "explanation_en": "**Step 1 — Model.** Let the integers be $x$ and $x+1$, so $x(x+1)=56$.\n**Step 2 — Standard form.** Expand and rearrange: $x^2+x-56=0$.\n**Step 3 — Factor.** $(x-7)(x+8)=0$ gives $x=7$ or $x=-8$.\n**Step 4 — Domain.** Positive integers force $x=7$, so the pair is $7$ and $8$.\n**Step 5 — Check.** $7\\cdot8=56$. The negative root is extraneous for this word problem.\n**Answer:** $7$ and $8$.",
+      "explanation_he": "**שלב 1 — מידול.** נסמן את המספרים $x$ ו-$x+1$, כלומר $x(x+1)=56$.\n**שלב 2 — צורה סטנדרטית.** $x^2+x-56=0$.\n**שלב 3 — פירוק.** $(x-7)(x+8)=0$ נותן $x=7$ או $x=-8$.\n**שלב 4 — תחום.** מספרים חיוביים כופים $x=7$, ולכן הזוג הוא $7$ ו-$8$.\n**שלב 5 — בדיקה.** $7\\cdot8=56$. השורש השלילי זר לבעיה המילולית.\n**תשובה:** $7$ ו-$8$.",
+      "answer_payload": {
+        "steps_en": [
+          "Model x(x+1)=56",
+          "Solve x^2+x-56=0",
+          "Keep positive x=7",
+          "Pair is 7 and 8"
+        ],
+        "steps_he": [
+          "מידול x(x+1)=56",
+          "פתרון x^2+x-56=0",
+          "בחירת x=7 החיובי",
+          "הזוג 7 ו-8"
+        ]
+      },
+      "id": "equations_quadratic__5pt-q15"
+    },
+    {
+      "ord": 16,
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "discriminant"
+      ],
+      "points_level_min": "3pt",
+      "stem_en": "For $ax^2+bx+c=0$, the discriminant is $\\Delta=b^2-4$____ .",
+      "stem_he": "עבור $ax^2+bx+c=0$, הדיסקרימיננטה היא $\\Delta=b^2-4$____ .",
+      "explanation_en": "**Step 1 — Recall the formula.** By definition $\\Delta=b^2-4ac$, so the missing product after the $4$ is $ac$.\n**Step 2 — Why it matters.** The term $4ac$ carries the signs of $a$ and $c$; flipping either sign changes $\\Delta$ and can flip the number of real roots.\n**Step 3 — Exam tip.** Write $\\Delta=b^2-4ac$ as a single memorized block before any parametric work.\n**Answer:** $ac$.",
+      "explanation_he": "**שלב 1 — הנוסחה.** לפי הגדרה $\\Delta=b^2-4ac$, ולכן המכפלה החסרה אחרי $4$ היא $ac$.\n**שלב 2 — חשיבות.** האיבר $4ac$ נושא את סימני $a$ ו-$c$; שינוי סימן משנה את $\\Delta$.\n**שלב 3 — טיפ.** זוכרים את הבלוק $b^2-4ac$ כמקשה אחת לפני שאלות פרמטריות.\n**תשובה:** $ac$.",
+      "correct_answer": "ac",
+      "acceptable_answers": [
+        "ac",
+        "a*c",
+        "a c"
+      ],
+      "case_sensitive": false,
+      "answer_payload": {
+        "acceptable_answers": [
+          "ac",
+          "a*c",
+          "a c"
+        ],
+        "case_sensitive": false
+      },
+      "id": "equations_quadratic__5pt-q16"
+    },
+    {
+      "ord": 17,
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "discriminant"
+      ],
+      "points_level_min": "3pt",
+      "stem_en": "Match each discriminant condition to the correct geometric meaning for the parabola $y=ax^2+bx+c$.",
+      "stem_he": "התאימו כל תנאי דיסקרימיננטה למשמעות הגיאומטרית הנכונה של הפרבולה $y=ax^2+bx+c$.",
+      "left_en": [
+        "$\\Delta>0$",
+        "$\\Delta=0$",
+        "$\\Delta<0$",
+        "$\\Delta$ perfect square"
+      ],
+      "left_he": [
+        "$\\Delta>0$",
+        "$\\Delta=0$",
+        "$\\Delta<0$",
+        "$\\Delta$ ריבוע מושלם"
+      ],
+      "right_en": [
+        "Two distinct $x$-intercepts",
+        "Touches the $x$-axis once (vertex on axis)",
+        "No real $x$-intercepts",
+        "Roots are rational (when $a,b,c$ rational)"
+      ],
+      "right_he": [
+        "שני חיתוכי $x$ שונים",
+        "נוגעת בציר $x$ פעם אחת (קודקוד על הציר)",
+        "אין חיתוכי $x$ ממשיים",
+        "השורשים רציונליים (כש-$a,b,c$ רציונליים)"
+      ],
+      "correct_pairs": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "explanation_en": "**Step 1.** Positive $\\Delta$ means two crossings of the $x$-axis; zero means tangency at the vertex; negative means the graph misses the axis entirely.\n**Step 2.** A perfect-square discriminant (with rational coefficients) additionally guarantees rational roots — useful for choosing factoring over the formula.\n**Step 3 — Exam tip.** Parametric stems often ask only for the $\\Delta$ case; translate words to inequalities before solving for $k$.\n**Answer:** match in listed order $0,1,2,3$.",
+      "explanation_he": "**שלב 1.** $\\Delta$ חיובי — שני חיתוכים; אפס — נגיעה בקודקוד; שלילי — אין חיתוך ממשי.\n**שלב 2.** ריבוע מושלם (עם מקדמים רציונליים) מבטיח שורשים רציונליים — שימושי לבחירת פירוק.\n**שלב 3 — טיפ.** בשאלות פרמטריות מתרגמים מילים לאי-שוויונות על $\\Delta$ לפני פתרון ל-$k$.\n**תשובה:** התאמה בסדר $0,1,2,3$.",
+      "answer_payload": {
+        "left_en": [
+          "$\\Delta>0$",
+          "$\\Delta=0$",
+          "$\\Delta<0$",
+          "$\\Delta$ perfect square"
+        ],
+        "left_he": [
+          "$\\Delta>0$",
+          "$\\Delta=0$",
+          "$\\Delta<0$",
+          "$\\Delta$ ריבוע מושלם"
+        ],
+        "right_en": [
+          "Two distinct $x$-intercepts",
+          "Touches the $x$-axis once (vertex on axis)",
+          "No real $x$-intercepts",
+          "Roots are rational (when $a,b,c$ rational)"
+        ],
+        "right_he": [
+          "שני חיתוכי $x$ שונים",
+          "נוגעת בציר $x$ פעם אחת (קודקוד על הציר)",
+          "אין חיתוכי $x$ ממשיים",
+          "השורשים רציונליים (כש-$a,b,c$ רציונליים)"
+        ],
+        "correct_pairs": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "id": "equations_quadratic__5pt-q17"
+    },
+    {
+      "ord": 18,
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "proof"
+      ],
+      "skill_atoms": [
+        "quadratic_formula",
+        "discriminant"
+      ],
+      "points_level_min": "3pt",
+      "stem_en": "Order the steps to solve $2x^2+5x-3=0$ with the quadratic formula on a Bagrut paper.",
+      "stem_he": "סדרו את השלבים לפתרון $2x^2+5x-3=0$ בנוסחת השורשים בדף בגרות.",
+      "steps_en": [
+        "Identify $a=2$, $b=5$, $c=-3$ and confirm the equation equals zero.",
+        "Compute $\\Delta=b^2-4ac=25+24=49$.",
+        "Write $x=\\dfrac{-5\\pm\\sqrt{49}}{4}$ and evaluate both $\\pm$ branches.",
+        "Conclude $x=1/2$ or $x=-3$, then substitute to verify."
+      ],
+      "steps_he": [
+        "מזהים $a=2$, $b=5$, $c=-3$ ומאשרים שהמשוואה שווה לאפס.",
+        "מחשבים $\\Delta=b^2-4ac=25+24=49$.",
+        "כותבים $x=\\dfrac{-5\\pm\\sqrt{49}}{4}$ ומחשבים את שני ענפי $\\pm$.",
+        "מסיקים $x=1/2$ או $x=-3$, ואז מציבים לאימות."
+      ],
+      "correct_order": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "explanation_en": "**Step 1.** Always lock $a,b,c$ first — a sign error here ruins $\\Delta$ and both roots.\n**Step 2.** Compute $\\Delta$ on its own line; examiners look for that intermediate mark.\n**Step 3.** Only then apply the formula and split $\\pm$; verification by substitution catches arithmetic slips.\n**Answer:** the four steps in the listed order.",
+      "explanation_he": "**שלב 1.** קודם נועלים $a,b,c$ — שגיאת סימן הורסת את $\\Delta$ ואת שני השורשים.\n**שלב 2.** מחשבים $\\Delta$ בשורה נפרדת; הבוחנים מחפשים את נקודת הביניים.\n**שלב 3.** רק אחר כך מציבים בנוסחה ומפצלים $\\pm$; הצבה חוזרת תופסת טעויות חשבון.\n**תשובה:** ארבעת השלבים בסדר הרשום.",
+      "answer_payload": {
+        "steps_en": [
+          "Identify $a=2$, $b=5$, $c=-3$ and confirm the equation equals zero.",
+          "Compute $\\Delta=b^2-4ac=25+24=49$.",
+          "Write $x=\\dfrac{-5\\pm\\sqrt{49}}{4}$ and evaluate both $\\pm$ branches.",
+          "Conclude $x=1/2$ or $x=-3$, then substitute to verify."
+        ],
+        "steps_he": [
+          "מזהים $a=2$, $b=5$, $c=-3$ ומאשרים שהמשוואה שווה לאפס.",
+          "מחשבים $\\Delta=b^2-4ac=25+24=49$.",
+          "כותבים $x=\\dfrac{-5\\pm\\sqrt{49}}{4}$ ומחשבים את שני ענפי $\\pm$.",
+          "מסיקים $x=1/2$ או $x=-3$, ואז מציבים לאימות."
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "id": "equations_quadratic__5pt-q18"
+    },
+    {
+      "ord": 19,
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "discriminant",
+        "quadratic_formula"
+      ],
+      "points_level_min": "4pt",
+      "stem_en": "Select **all** correct statements about quadratic equations on Bagrut 3–4.",
+      "stem_he": "סמנו את **כל** ההיגדים הנכונים על משוואות ריבועיות בבגרות 3–4.",
+      "options_en": [
+        "If $\\Delta>0$, there are two distinct real roots",
+        "If $\\Delta=0$, there is exactly one real (repeated) root",
+        "Dividing both sides by $x$ is always safe when $x=0$ might be a root",
+        "Vieta gives sum $-b/a$ and product $c/a$",
+        "A negative discriminant guarantees two distinct real roots"
+      ],
+      "options_he": [
+        "אם $\\Delta>0$, יש שני שורשים ממשיים שונים",
+        "אם $\\Delta=0$, יש בדיוק שורש ממשי אחד (כפול)",
+        "חלוקת שני האגפים ב-$x$ תמיד בטוחה גם כש-$x=0$ עלול להיות שורש",
+        "וייטה נותנת סכום $-b/a$ ומכפלה $c/a$",
+        "דיסקרימיננטה שלילית מבטיחה שני שורשים ממשיים שונים"
+      ],
+      "correct_indices": [
+        0,
+        1,
+        3
+      ],
+      "explanation_en": "**Step 1.** Statements about $\\Delta>0$ and $\\Delta=0$ are the standard three-case reading of the discriminant.\n**Step 2.** Vieta's formulas are $x_1+x_2=-b/a$ and $x_1x_2=c/a$ — always useful for checks.\n**Step 3 — Errors.** Dividing by $x$ can lose the root $x=0$; a negative discriminant means no real roots, not two. Those two options are false.\n**Answer:** the first, second, and fourth statements.",
+      "explanation_he": "**שלב 1.** ההיגדים על $\\Delta>0$ ו-$\\Delta=0$ הם קריאת שלושת המקרים הסטנדרטית.\n**שלב 2.** נוסחאות וייטה: סכום $-b/a$ ומכפלה $c/a$.\n**שלב 3 — שגיאות.** חלוקה ב-$x$ עלולה לאבד את $x=0$; $\\Delta$ שלילי פירושו אין שורשים ממשיים. שני ההיגדים האלה שגויים.\n**תשובה:** הראשון, השני והרביעי.",
+      "answer_payload": {
+        "options_en": [
+          "If $\\Delta>0$, there are two distinct real roots",
+          "If $\\Delta=0$, there is exactly one real (repeated) root",
+          "Dividing both sides by $x$ is always safe when $x=0$ might be a root",
+          "Vieta gives sum $-b/a$ and product $c/a$",
+          "A negative discriminant guarantees two distinct real roots"
+        ],
+        "options_he": [
+          "אם $\\Delta>0$, יש שני שורשים ממשיים שונים",
+          "אם $\\Delta=0$, יש בדיוק שורש ממשי אחד (כפול)",
+          "חלוקת שני האגפים ב-$x$ תמיד בטוחה גם כש-$x=0$ עלול להיות שורש",
+          "וייטה נותנת סכום $-b/a$ ומכפלה $c/a$",
+          "דיסקרימיננטה שלילית מבטיחה שני שורשים ממשיים שונים"
+        ],
+        "correct_indices": [
+          0,
+          1,
+          3
+        ]
+      },
+      "id": "equations_quadratic__5pt-q19"
+    },
+    {
+      "ord": 20,
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof",
+        "parametric"
+      ],
+      "needs_review": true,
+      "skill_atoms": [
+        "completing_the_square",
+        "quadratic_formula"
+      ],
+      "points_level_min": "4pt",
+      "stem_en": "Starting from $ax^2+bx+c=0$ with $a\\ne0$, derive the quadratic formula by completing the square. State the final formula for $x$.",
+      "stem_he": "החל מ-$ax^2+bx+c=0$ עם $a\\ne0$, גזרו את נוסחת השורשים על ידי השלמה לריבוע. ציינו את הנוסחה הסופית ל-$x$.",
+      "expected_steps": [
+        "Divide by a to get x^2+(b/a)x+(c/a)=0",
+        "Move constant and complete the square: (x+b/(2a))^2 = (b^2-4ac)/(4a^2)",
+        "Take ± square roots",
+        "Conclude x=(-b±sqrt(Δ))/(2a)"
+      ],
+      "rubric_en": "Full credit: divide by $a$, complete the square correctly, introduce $\\Delta=b^2-4ac$, and obtain $x=\\dfrac{-b\\pm\\sqrt{\\Delta}}{2a}$.",
+      "rubric_he": "ניקוד מלא: חלוקה ב-$a$, השלמה לריבוע נכונה, הכנסת $\\Delta=b^2-4ac$, וקבלת $x=\\dfrac{-b\\pm\\sqrt{\\Delta}}{2a}$.",
+      "explanation_en": "**Step 1.** Divide by $a\\ne0$: $x^2+\\dfrac{b}{a}x+\\dfrac{c}{a}=0$.\n**Step 2.** Move the constant: $x^2+\\dfrac{b}{a}x=-\\dfrac{c}{a}$. Add $\\left(\\dfrac{b}{2a}\\right)^2$ to both sides.\n**Step 3.** Left side becomes $\\left(x+\\dfrac{b}{2a}\\right)^2$; right side simplifies to $\\dfrac{b^2-4ac}{4a^2}=\\dfrac{\\Delta}{4a^2}$.\n**Step 4.** Take square roots: $x+\\dfrac{b}{2a}=\\pm\\dfrac{\\sqrt{\\Delta}}{2a}$.\n**Step 5.** Solve for $x$: $x=\\dfrac{-b\\pm\\sqrt{\\Delta}}{2a}$ with $\\Delta=b^2-4ac$.\n**Answer:** $x=\\dfrac{-b\\pm\\sqrt{b^2-4ac}}{2a}$.",
+      "explanation_he": "**שלב 1.** מחלקים ב-$a\\ne0$: $x^2+\\dfrac{b}{a}x+\\dfrac{c}{a}=0$.\n**שלב 2.** מעבירים את הקבוע ומוסיפים $\\left(\\dfrac{b}{2a}\\right)^2$ לשני האגפים.\n**שלב 3.** האגף השמאלי הופך ל-$\\left(x+\\dfrac{b}{2a}\\right)^2$; הימני ל-$\\dfrac{\\Delta}{4a^2}$.\n**שלב 4.** מוציאים שורש: $x+\\dfrac{b}{2a}=\\pm\\dfrac{\\sqrt{\\Delta}}{2a}$.\n**שלב 5.** מסיקים $x=\\dfrac{-b\\pm\\sqrt{\\Delta}}{2a}$ עם $\\Delta=b^2-4ac$.\n**תשובה:** $x=\\dfrac{-b\\pm\\sqrt{b^2-4ac}}{2a}$.",
+      "answer_payload": {
+        "steps_en": [
+          "Divide by a",
+          "Complete the square",
+          "Introduce Delta",
+          "Obtain quadratic formula"
+        ],
+        "steps_he": [
+          "חלוקה ב-a",
+          "השלמה לריבוע",
+          "הכנסת Delta",
+          "קבלת נוסחת השורשים"
+        ]
+      },
+      "id": "equations_quadratic__5pt-q20"
+    },
+    {
+      "ord": 21,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "parametric"
+      ],
+      "skill_atoms": [
+        "discriminant"
+      ],
+      "points_level_min": "4pt",
+      "stem_en": "For $x^2-kx+9=0$ to have a repeated root, find the positive value of $k$.",
+      "stem_he": "כדי של-$x^2-kx+9=0$ יהיה שורש כפול, מצאו את הערך החיובי של $k$.",
+      "explanation_en": "**Step 1 — Translate.** A repeated root means $\\Delta=0$.\n**Step 2 — Compute.** With $a=1$, $b=-k$, $c=9$: $\\Delta=k^2-36$. Set $k^2-36=0$ so $k=\\pm6$.\n**Step 3 — Select positive.** The positive parameter is $k=6$. Boundary check: at $k=6$ the root is $x=3$ (double).\n**Answer:** $6$.",
+      "explanation_he": "**שלב 1 — תרגום.** שורש כפול פירושו $\\Delta=0$.\n**שלב 2 — חישוב.** עם $a=1$, $b=-k$, $c=9$: $\\Delta=k^2-36$. מציבים $k^2=36$ ולכן $k=\\pm6$.\n**שלב 3 — בחירה חיובית.** הפרמטר החיובי הוא $k=6$.\n**תשובה:** $6$.",
+      "answer_payload": {
+        "value": 6
+      },
+      "correct_answer": "6",
+      "verify": {
+        "expr": "sqrt(36)",
+        "expected": 6
+      },
+      "id": "equations_quadratic__5pt-q21"
+    },
+    {
+      "ord": 22,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "discriminant"
+      ],
+      "points_level_min": "3pt",
+      "stem_en": "Find the discriminant of $3x^2-x-2=0$.",
+      "stem_he": "מצאו את הדיסקרימיננטה של $3x^2-x-2=0$.",
+      "explanation_en": "**Step 1.** Identify $a=3$, $b=-1$, $c=-2$.\n**Step 2.** Compute $\\Delta=(-1)^2-4(3)(-2)=1+24=25$.\n**Step 3.** Because $\\Delta=25>0$ and is a perfect square, two distinct rational roots are expected.\n**Answer:** $25$.",
+      "explanation_he": "**שלב 1.** מזהים $a=3$, $b=-1$, $c=-2$.\n**שלב 2.** מחשבים $\\Delta=1+24=25$.\n**שלב 3.** מאחר ש-$\\Delta=25>0$ וריבוע מושלם, צפויים שני שורשים רציונליים שונים.\n**תשובה:** $25$.",
+      "answer_payload": {
+        "value": 25
+      },
+      "correct_answer": "25",
+      "verify": {
+        "expr": "(-1)^2 - 4*3*(-2)",
+        "expected": 25
+      },
+      "id": "equations_quadratic__5pt-q22"
+    },
+    {
+      "ord": 23,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "archetypes": [
+        "graphical"
+      ],
+      "skill_atoms": [
+        "discriminant"
+      ],
+      "points_level_min": "3pt",
+      "stem_en": "If a parabola $y=ax^2+bx+c$ touches the $x$-axis at exactly one point, which is true?",
+      "stem_he": "אם פרבולה $y=ax^2+bx+c$ נוגעת בציר ה-$x$ בנקודה אחת בלבד, מה נכון?",
+      "explanation_en": "**Step 1 — Geometry to algebra.** Touching once means the vertex lies on the $x$-axis, which is exactly the $\\Delta=0$ case.\n**Step 2 — Eliminate distractors.** $\\Delta>0$ would cross twice; $\\Delta<0$ would miss the axis; $a=0$ would no longer be a parabola.\n**Step 3 — Exam language.** \"Touches\" / \"tangent to the axis\" almost always signals set $\\Delta=0$ for a parameter.\n**Answer:** $\\Delta=0$.",
+      "explanation_he": "**שלב 1 — מגיאומטריה לאלגברה.** נגיעה אחת פירושה שהקודקוד על ציר $x$, כלומר $\\Delta=0$.\n**שלב 2 — פסילת מסיחים.** $\\Delta>0$ חוצה פעמיים; $\\Delta<0$ מחטיא; $a=0$ אינה פרבולה.\n**שלב 3 — לשון בחינה.** \"נוגעת\" / \"משיקה לציר\" כמעט תמיד אומר להציב $\\Delta=0$.\n**תשובה:** $\\Delta=0$.",
+      "options_en": [
+        "$\\Delta=0$",
+        "$\\Delta>0$",
+        "$\\Delta<0$",
+        "$a=0$"
+      ],
+      "options_he": [
+        "$\\Delta=0$",
+        "$\\Delta>0$",
+        "$\\Delta<0$",
+        "$a=0$"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "$\\Delta=0$",
+          "$\\Delta>0$",
+          "$\\Delta<0$",
+          "$a=0$"
+        ],
+        "options_he": [
+          "$\\Delta=0$",
+          "$\\Delta>0$",
+          "$\\Delta<0$",
+          "$a=0$"
+        ],
+        "correct_index": 0
+      },
+      "id": "equations_quadratic__5pt-q23"
+    },
+    {
+      "ord": 24,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "application"
+      ],
+      "skill_atoms": [
+        "word_problems",
+        "quadratic_formula"
+      ],
+      "points_level_min": "4pt",
+      "stem_en": "A rectangle has perimeter $20$ and area $24$. If the width is the smaller side, find that width.",
+      "stem_he": "למלבן היקף $20$ ושטח $24$. אם הרוחב הוא הצלע הקטנה יותר, מצאו את הרוחב.",
+      "explanation_en": "**Step 1 — Model.** Perimeter $2(\\ell+w)=20$ so $\\ell+w=10$ and $\\ell=10-w$. Area: $w(10-w)=24$.\n**Step 2 — Quadratic.** $10w-w^2=24\\Rightarrow w^2-10w+24=0$.\n**Step 3 — Solve.** $(w-4)(w-6)=0$ gives $w=4$ or $w=6$. The smaller side (width) is $4$.\n**Answer:** $4$.",
+      "explanation_he": "**שלב 1 — מידול.** היקף $2(\\ell+w)=20$ ולכן $\\ell=10-w$. שטח: $w(10-w)=24$.\n**שלב 2 — ריבועית.** $w^2-10w+24=0$.\n**שלב 3 — פתרון.** $(w-4)(w-6)=0$, והצלע הקטנה היא $4$.\n**תשובה:** $4$.",
+      "answer_payload": {
+        "value": 4
+      },
+      "correct_answer": "4",
+      "verify": {
+        "expr": "(10 - sqrt(100-96))/2",
+        "expected": 4
+      },
+      "id": "equations_quadratic__5pt-q24"
+    },
+    {
+      "ord": 25,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "parametric"
+      ],
+      "skill_atoms": [
+        "discriminant"
+      ],
+      "points_level_min": "4pt",
+      "stem_en": "For $x^2-6x+k=0$ to have two distinct real roots, the largest integer $k$ that still works is ____ (enter that integer).",
+      "stem_he": "כדי של-$x^2-6x+k=0$ יהיו שני שורשים ממשיים שונים, השלם הגדול ביותר של $k$ שעדיין עובד הוא ____ (הכניסו את השלם).",
+      "explanation_en": "**Step 1.** $\\Delta=(-6)^2-4(1)k=36-4k$. Distinct roots need $36-4k>0$, so $k<9$.\n**Step 2.** The largest integer strictly less than $9$ is $k=8$.\n**Step 3 — Boundary.** At $k=9$, $\\Delta=0$ (not distinct). At $k=8$, $\\Delta=4>0$.\n**Answer:** $8$.",
+      "explanation_he": "**שלב 1.** $\\Delta=36-4k$. שורשים שונים דורשים $k<9$.\n**שלב 2.** השלם הגדול ביותר הקטן מ-$9$ הוא $k=8$.\n**שלב 3 — גבול.** ב-$k=9$ מתקבל $\\Delta=0$ (לא שונים). ב-$k=8$ מתקבל $\\Delta=4>0$.\n**תשובה:** $8$.",
+      "answer_payload": {
+        "value": 8
+      },
+      "correct_answer": "8",
+      "verify": {
+        "expr": "9 - 1",
+        "expected": 8
+      },
+      "id": "equations_quadratic__5pt-q25"
+    },
+    {
+      "id": "equations_quadratic__5pt-facet-auto",
+      "ord": 26,
+      "kind": "open",
+      "difficulty": "medium",
+      "facets": [
+        "parametric_root_conditions",
+        "word_problem_setup"
+      ],
+      "stem_en": "Apply the lesson facets (parametric_root_conditions, word_problem_setup): give a short worked example.",
+      "stem_he": "יישמו את פני השיעור (parametric_root_conditions, word_problem_setup): תנו דוגמה פתורה קצרה.",
+      "explanation_en": "**Facet practice.** Identify which facet applies, write the governing relation, compute or justify in two steps, then verify by substitution or a limiting case. See the facet theory section in this lesson for the checklist keywords and worked patterns. Keep method marks visible even if arithmetic slips.",
+      "explanation_he": "**תרגול פנים.** זהו איזה פן חל, כתבו את הקשר השולט, חשבו או הצדיקו בשני שלבים, ואמתו בהצבה או במקרה גבול. ראו את סעיף הפנים בשיעור לרשימת מילות המפתח ולדפוסים. השאירו ניקוד שיטה גלוי גם אם יש טעות חשבון.",
+      "correct_answer": "see facet section",
+      "skill_atoms": []
+    }
+  ],
+  "est_minutes": 55,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
+}

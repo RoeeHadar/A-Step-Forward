@@ -217,3 +217,29 @@ Then HS physics → makhina → university (separate scope sections to be append
 | 2026-07-19 | 3pt volumes | PRUNE Cavalieri | 3pt uses direct volume formulas only |
 | 2026-07-19 | 4pt calculus | PRUNE substitution/impl./related-rates/volume-of-rev | 5pt-only per MoE |
 | 2026-07-19 | 5pt | PRUNE differential equations, multivariable, series tests | university-only |
+
+---
+
+## 8. Track contract & leakage CI (2026-07-20)
+
+**Source of truth:** `scripts/seed_data/curriculum-track-contract.json`
+
+| Gate | Script | What fails |
+|------|--------|------------|
+| Scope / leakage | `audit-lesson-scope.mjs --strict` | 5pt denylist hits (ε-δ, L’Hôpital, formal limit-def derivative, …); university Bagrut/MoE exam voice; missing required-basics track-owned lesson; multi-track “leak dump” on matrix basics |
+| Facets | `audit-lesson-facets.mjs --strict` | Piloted families (`functions_*`, `sequences_*`, `probability_*`) missing required facet evidence (keywords or `question.facets[]`) |
+
+**Required-basics (first wave):** each of `equations_quadratic`, `functions_quadratic`, `equations_linear`, `functions_linear`, `factoring`, `algebra_basics`, `inequalities`, `functions_intro` must have a **single-primary-track** lesson per `3pt` / `4pt` / `5pt` / `university` — typically canonical `concept.json` owned by 3pt plus `concept__4pt.json` / `__5pt.json` / `__uni.json` with distinct pedagogy (not a 3pt redirect).
+
+**npm:** `pnpm audit:lessons:scope` · `pnpm audit:lessons:facets`
+
+### Grill #2 expansion (2026-07-20)
+
+Contract **v2** expands ownership beyond the first-wave 8:
+
+- `moe_core_concepts` + `required_basics` for 3/4/5pt (and `university_bridge` for `__uni` / uni-owned lessons)
+- `physics_required` (`hs_physics` / `university`) and `makhina_required`
+- Single-track bans for MoE-core, physics, and makhina
+- Facet families expanded (equations, algebra, inequalities, trig, analytic geometry, derivatives, integrals, vectors, kinematics, newton, electric, `*_makhina`)
+
+Fan-out tooling: `scripts/fanout-track-owned.mjs`, `scripts/build-curriculum-track-contract.mjs`.

@@ -1,0 +1,1100 @@
+{
+  "concept_id": "systems_linear_equations__4pt",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": [
+    "4pt"
+  ],
+  "title_en": "Systems of Linear Equations — Substitution, Elimination, and Gaussian — 4pt depth",
+  "title_he": "מערכות משוואות לינאריות — העמקה 4 יח׳",
+  "summary_en": "Solve linear systems by substitution, elimination, or Gaussian row reduction on the augmented matrix — and classify every system as unique, infinite, or inconsistent.",
+  "summary_he": "פתרו מערכות לינאריות בהצבה, חיסור או אלימינציה גאוסית על המטריצה המורחבת — וסווגו כל מערכת כפתרון יחיד, אינסוף או סותרת.",
+  "sections": [
+    {
+      "id": "intro",
+      "kind": "intro",
+      "title_en": "Why Systems of Equations Matter",
+      "title_he": "למה מערכות משוואות חשובות",
+      "body_en_md": "A single equation in one variable has one unknown. But most real-world problems involve **multiple unknowns** that interact — prices, quantities, velocities, currents in a circuit, or production rates in two factories. A **system of linear equations** models all constraints simultaneously: every equation must hold at once.\n\nGeometrically, each equation in two variables describes a line in the plane. The solution is where those lines meet — if they meet at all. In three variables, each equation is a plane; the solution is their common intersection point, line, or empty set.\n\n**Three solution outcomes:**\n- **Unique solution** — lines (or planes) intersect at exactly one point\n- **Infinitely many solutions** — equations are dependent; the same line or plane described twice\n- **No solution** — parallel lines or planes that never meet (inconsistent constraints)\n\n**Exam relevance:** Bagrut 3–5 units, first-year linear algebra at Technion/TAU/BGU/HUJI, and engineering word problems. Mastering $2\\times2$ substitution and $3\\times3$ Gaussian elimination here unlocks `concept:matrix_operations_inverse` and `concept:la_vector_spaces`.\n\n**4pt focus:** Parameters, algebra↔graph, multi-step exam stems.",
+      "body_he_md": "משוואה בנעלם אחד מכילה נעלם יחיד. אך רוב הבעיות במציאות כוללות **מספר נעלמים** שמתקשרים זה בזה — מחירים, כמויות, מהירויות, זרמים במעגל, או קצבי ייצור בשני מפעלים. **מערכת משוואות לינאריות** מדגימה את כל האילוצים במקביל: כל משוואה חייבת להתקיים בו-זמנית.\n\nמבחינה גאומטרית, כל משוואה בשני נעלמים מתארת קו במישור. הפתרון הוא נקודת החיתוך — אם בכלל קיימת. בשלושה נעלמים, כל משוואה היא מישור; הפתרון הוא נקודת החיתוך, קו, או קבוצה ריקה.\n\n**שלושה מצבי פתרון:**\n- **פתרון יחיד** — הקווים (או המישורים) נחתכים בנקודה אחת בדיוק\n- **אינסוף פתרונות** — המשוואות תלויות; אותו קו או מישור מתואר פעמיים\n- **אין פתרון** — קווים או מישורים מקבילים שלא נפגשים (אילוצים סותרים)\n\n**רלוונטיות לבחינות:** בגרות 3–5 יחידות, אלגברה לינארית 1 באוניברסיטה, ובעיות מילוליות בהנדסה. שליטה בהצבה $2\\times2$ ובאלימינציה גאוסית $3\\times3$ כאן פותחת את `concept:matrix_operations_inverse` ו-`concept:la_vector_spaces`.\n\n**מיקוד 4 יח׳:** פרמטרים, אלגברה↔גרף, פריטים רב-שלביים."
+    },
+    {
+      "id": "definition",
+      "kind": "definition",
+      "title_en": "2×2 and 3×3 Linear Systems",
+      "title_he": "מערכות $2\\times2$ ו-$3\\times3$",
+      "body_en_md": "A **$2\\times2$ linear system** in standard form:\n$$\\begin{cases} a_1 x + b_1 y = c_1 \\\\ a_2 x + b_2 y = c_2 \\end{cases}$$\nEach equation is linear in $x$ and $y$ — no products $xy$, no powers $x^2$. The solution $(x,y)$ satisfies **both** equations simultaneously.\n\nA **$3\\times3$ linear system** is written compactly as $A\\vec{x}=\\vec{b}$, where $A$ is the $3\\times3$ coefficient matrix, $\\vec{x}=(x,y,z)^T$, and $\\vec{b}$ holds the constants on the right-hand side.\n\nThe **augmented matrix** $[A|\\vec{b}]$ stores coefficients and constants in one grid — essential for Gaussian elimination:\n$$\\left[\\begin{array}{cc|c} a_1 & b_1 & c_1 \\\\ a_2 & b_2 & c_2 \\end{array}\\right]$$\nFor $3\\times3$ systems, add a third row of coefficients and the third constant. **Tip:** always draw the vertical bar separating $A$ from $\\vec{b}$; losing track of the RHS is a top exam error.\n\n**Rouché–Capelli (consistency):** The system is **consistent** (has at least one solution) iff $\\text{rank}(A)=\\text{rank}([A|\\vec{b}])$. If ranks are equal and equal to the number of unknowns, the solution is unique. If ranks are equal but less than $n$, infinitely many solutions exist.",
+      "body_he_md": "**מערכת $2\\times2$** בצורה סטנדרטית:\n$$\\begin{cases} a_1 x + b_1 y = c_1 \\\\ a_2 x + b_2 y = c_2 \\end{cases}$$\nכל משוואה לינארית ב-$x$ ו-$y$ — ללא מכפלות $xy$ וללא חזקות $x^2$. הפתרון $(x,y)$ מקיים **את שתי** המשוואות בו-זמנית.\n\n**מערכת $3\\times3$** נכתבת בתמצית כ-$A\\vec{x}=\\vec{b}$, כאשר $A$ היא מטריצת המקדמים $3\\times3$, $\\vec{x}=(x,y,z)^T$, ו-$\\vec{b}$ מכיל את הקבועים בצד ימין.\n\n**המטריצה המורחבת** $[A|\\vec{b}]$ מאחסנת מקדמים וקבועים ברשת אחת — חיונית לאלימינציה גאוסית:\n$$\\left[\\begin{array}{cc|c} a_1 & b_1 & c_1 \\\\ a_2 & b_2 & c_2 \\end{array}\\right]$$\nלמערכת $3\\times3$ מוסיפים שורת מקדמים שלישית וקבוע שלישי. **טיפ:** תמיד סמנו את הקו האנכי המפריד בין $A$ ל-$\\vec{b}$; איבוד אגף ימין הוא טעות בחינה נפוצה.\n\n**רושה–קפלי (עקביות):** המערכת **עקבית** (יש לפחות פתרון אחד) אם ורק אם $\\text{rank}(A)=\\text{rank}([A|\\vec{b}])$. אם הדרגות שוות ושוות למספר הנעלמים — פתרון יחיד. אם שוות אך קטנות מ-$n$ — אינסוף פתרונות."
+    },
+    {
+      "id": "theory",
+      "kind": "theory",
+      "title_en": "Three Solution Methods",
+      "title_he": "שלוש שיטות פתרון",
+      "body_en_md": "### Method 1: Substitution\nSolve one equation for one variable (e.g. $x=8-2y$), then substitute that expression into every other equation. Best for $2\\times2$ systems where one equation already isolates a variable (like $y=2$). Watch fractions — if substitution produces messy denominators, switch to elimination.\n\n### Method 2: Elimination (adding/subtracting equations)\nMultiply one or both equations by constants so that adding or subtracting eliminates a variable. Example: to eliminate $x$, multiply the second equation by $2$ and subtract from the first. **Every term** on both sides must be scaled, including the constant.\n\n### Method 3: Gaussian Elimination\n1. Write the augmented matrix $[A|\\vec{b}]$.\n2. Row-reduce to **row-echelon form** using elementary row operations:\n   - **Swap:** $R_i \\leftrightarrow R_j$ (reorder rows)\n   - **Scale:** $R_i \\leftarrow cR_i$ ($c\\neq0$)\n   - **Add multiple:** $R_i \\leftarrow R_i + cR_j$ (eliminate below pivots)\n3. **Back-substitute** from the bottom row upward.\n\n**Reading the echelon form:** A row $[0\\,0\\,\\cdots\\,0\\,|\\,c]$ with $c\\neq0$ means **no solution**. A row of all zeros on both sides means a **dependent** equation. **Free variables:** when the number of pivots is less than the number of unknowns (and the system is consistent), assign parameters $t,s,\\ldots$ to free columns and express pivot variables in terms of them.",
+      "body_he_md": "### שיטה 1: הצבה\nפתרו משוואה אחת לגבי נעלם (למשל $x=8-2y$), והציבו את הביטוי בכל משוואה אחרת. מתאימה למערכות $2\\times2$ כשמשוואה אחת כבר בודדת נעלם (כמו $y=2$). שימו לב לשברים — אם ההצבה יוצרת מכנים מסורבלים, עברו לחיסור.\n\n### שיטה 2: חיסור (אלימינציה)\nכפלו משוואה אחת או שתיהן בקבועים כך שחיבור או חיסור מבטל נעלם. דוגמה: לביטול $x$, כפלו את המשוואה השנייה ב-$2$ וחסרו מהראשונה. **כל איבר** בשני הצדדים חייב להיות מוכפל, כולל הקבוע.\n\n### שיטה 3: אלימינציה גאוסית\n1. כתבו את המטריצה המורחבת $[A|\\vec{b}]$.\n2. הפחיתו שורות ל**צורת מדרג** (echelon) באמצעות פעולות שורה:\n   - **החלפה:** $R_i \\leftrightarrow R_j$\n   - **כפל:** $R_i \\leftarrow cR_i$ ($c\\neq0$)\n   - **חיבור כפולה:** $R_i \\leftarrow R_i + cR_j$ (ביטול מתחת ל-pivot)\n3. **הצבה לאחור** מהשורה התחתונה כלפי מעלה.\n\n**קריאת צורת המדרג:** שורה $[0\\,0\\,\\cdots\\,0\\,|\\,c]$ עם $c\\neq0$ פירושה **אין פתרון**. שורת אפסים מלאה בשני הצדדים פירושה משוואה **תלויה**. **משתנים חופשיים:** כשמספר ה-pivots קטן ממספר הנעלמים (והמערכת עקבית), הקצו פרמטרים $t,s,\\ldots$ לעמודות חופשיות ובטאו נעלמי pivot לפיהם."
+    },
+    {
+      "id": "worked_example_1",
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Substitution (2×2)",
+      "title_he": "דוגמה פתורה 1 — הצבה ($2\\times2$)",
+      "body_en_md": "**Solve:**\n$$\\begin{cases} x + 2y = 8 \\\\ 3x - y = 3 \\end{cases}$$\n\nSubstitution works well here because equation 1 isolates $x$ with coefficient 1 — no fractions appear.\n\n### Move 1: Isolate $x$ from equation 1\n$$x = 8 - 2y$$\n\n### Move 2: Substitute into equation 2\n$$3(8-2y) - y = 3 \\Rightarrow 24 - 6y - y = 3 \\Rightarrow -7y = -21 \\Rightarrow y = 3$$\n\n### Move 3: Back-substitute for $x$\n$$x = 8 - 2(3) = 2$$\n\n### Move 4: Verify in both originals\n$2+2(3)=8$ ✓ and $3(2)-3=3$ ✓.\n\n**Solution:** $(x, y) = (2, 3)$\n\n**Exam note:** On $2\\times2$ items, scan for a coefficient of $\\pm1$ before choosing substitution versus elimination. Always check both equations — a sign slip in step 2 is the most common error. If both equations have awkward coefficients, switch to elimination instead of forcing messy fractions. Geometrically, $(2,3)$ is the intersection of two non-parallel lines — the unique-solution case on every Bagrut and Linear Algebra 1 quiz. Label each move ($\\pm1$ coefficient scan, substitute, verify) for partial credit. Write each move as a separate labeled step to earn method marks on Bagrut.",
+      "body_he_md": "**פתרו:**\n$$\\begin{cases} x + 2y = 8 \\\\ 3x - y = 3 \\end{cases}$$\n\nהצבה מתאימה כאן כי משוואה 1 מבודדת $x$ במקדם 1 — ללא שברים.\n\n### צעד 1: ביטוי $x$ ממשוואה 1\n$x = 8 - 2y$\n\n### צעד 2: הצבה במשוואה 2\n$3(8-2y) - y = 3 \\Rightarrow 24 - 6y - y = 3 \\Rightarrow 7y = 21 \\Rightarrow y = 3$\n\n### צעד 3: חישוב $x$\n$x = 8 - 6 = 2$\n\n### צעד 4: אימות בשתי המשוואות\n$2+6=8$ ✓; $6-3=3$ ✓.\n\n**פתרון:** $(x, y) = (2, 3)$\n\n**טיפ לבחינה:** בחרו משוואה עם מקדם $\\pm1$ לפני בחירת שיטה. הציבו ב**שתי** המשוואות — טעות סימן בצעד 2 היא השגיאה הנפוצה ביותר. גאומטרית, $(2,3)$ היא חיתוך שני קווים לא-מקבילים — מקרה פתרון יחיד. אם המקדמים מסורבלים, עברו לחיסור במקום הצבה עם שברים. סמנו כל צעד בשוליים לקבלת נקודות חלקיות בבגרות ובאוניברסיטה. כתבו כל צעד בשורה נפרדת עם כותרת ### צעד N לקבלת נקודות על השיטה. חשוב."
+    },
+    {
+      "id": "checkpoint_1",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Solve by elimination:\n$$\\begin{cases} 2x + 3y = 12 \\\\ x - y = 1 \\end{cases}$$",
+      "body_he_md": "פתור בחיסור:\n$$\\begin{cases} 2x+3y=12 \\\\ x-y=1 \\end{cases}$$",
+      "checkpoint_solution_en": "### Move 1: Choose elimination\nMultiply equation 2 by 2: $2x-2y=2$. Subtract from equation 1: $(2x+3y)-(2x-2y)=12-2 \\Rightarrow 5y=10 \\Rightarrow y=2$.\n\n### Move 2: Back-substitute\nFrom $x-y=1$: $x=1+2=3$.\n\n### Move 3: Verify\n$2(3)+3(2)=6+6=12$ ✓ and $3-2=1$ ✓.\n\n**Alternative:** From eq 2, $x=1+y$. Substitute into eq 1: $2+2y+3y=12 \\Rightarrow 5y=10 \\Rightarrow y=2$, $x=3$. Both methods give $(3,2)$.",
+      "checkpoint_solution_he": "### צעד 1: בחירת חיסור\nכפל משוואה 2 ב-2: $2x-2y=2$. חיסור ממשוואה 1: $(2x+3y)-(2x-2y)=12-2 \\Rightarrow 5y=10 \\Rightarrow y=2$.\n\n### צעד 2: הצבה לאחור\nמ-$x-y=1$: $x=1+2=3$.\n\n### צעד 3: אימות\n$2(3)+3(2)=12$ ✓ ו-$3-2=1$ ✓.\n\n**חלופה:** ממשוואה 2, $x=1+y$. הצבה במשוואה 1: $2+5y=12 \\Rightarrow y=2$, $x=3$. שתי השיטות נותנות $(3,2)$."
+    },
+    {
+      "id": "worked_example_2",
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Gaussian Elimination (3×3)",
+      "title_he": "דוגמה פתורה 2 — אלימינציה גאוסית ($3\\times3$)",
+      "body_en_md": "**Solve:**\n$$\\begin{cases} x+2y+z=9 \\\\ 2x+5y+3z=23 \\\\ x+4y+2z=14 \\end{cases}$$\n\nFor $3\\times3$ systems, write the augmented matrix immediately — juggling three equations in your head invites arithmetic slips.\n\n### Move 1: Write augmented matrix\n$$\\left[\\begin{array}{ccc|c}1&2&1&9\\\\2&5&3&23\\\\1&4&2&14\\end{array}\\right]$$\n\n### Move 2: Eliminate below first pivot ($R_2-2R_1$, $R_3-R_1$)\n$$\\left[\\begin{array}{ccc|c}1&2&1&9\\\\0&1&1&5\\\\0&2&1&5\\end{array}\\right]$$\n\n### Move 3: Eliminate below second pivot ($R_3-2R_2$)\n$$\\left[\\begin{array}{ccc|c}1&2&1&9\\\\0&1&1&5\\\\0&0&-1&-5\\end{array}\\right]$$\n\n### Move 4: Back-substitute\n$z=5$; $y+5=5 \\Rightarrow y=0$; $x+5=9 \\Rightarrow x=4$.\n\n### Move 5: Verify all three originals\n$(4,0,5)$ satisfies every equation ✓.\n\n**Solution:** $(4, 0, 5)$\n\n**Exam note:** Label each row operation on the margin — graders award partial credit for correct elimination even if back-substitution slips. Circle each pivot before back-substitution; a missing pivot mark is a common reason for lost method marks on university Linear Algebra exams. Three pivots confirm unique solution with zero free variables. Total elimination should take under eight minutes with practice on a standard $3\\times3$ exam item. This workflow scales directly to larger systems on engineering exams.",
+      "body_he_md": "**פתרו:**\n$$\\begin{cases} x+2y+z=9 \\\\ 2x+5y+3z=23 \\\\ x+4y+2z=14 \\end{cases}$$\n\nלמערכות $3\\times3$, כתבו מיד את המטריצה המורחבת — אל תנהלו שלוש משוואות בראש.\n\n### צעד 1: כתיבת המטריצה המורחבת\n$$\\left[\\begin{array}{ccc|c}1&2&1&9\\\\2&5&3&23\\\\1&4&2&14\\end{array}\\right]$$\n\n### צעד 2: ביטול מתחת ל-pivot ראשון\n$R_2 \\leftarrow R_2-2R_1$ ו-$R_3 \\leftarrow R_3-R_1$:\n$$\\left[\\begin{array}{ccc|c}1&2&1&9\\\\0&1&1&5\\\\0&2&1&5\\end{array}\\right]$$\n\n### צעד 3: ביטול מתחת ל-pivot שני\n$R_3 \\leftarrow R_3-2R_2$:\n$$\\left[\\begin{array}{ccc|c}1&2&1&9\\\\0&1&1&5\\\\0&0&-1&-5\\end{array}\\right]$$\n\n### צעד 4: הצבה לאחור\n$z=5$; $y+5=5 \\Rightarrow y=0$; $x+0+5=9 \\Rightarrow x=4$.\n\n### צעד 5: אימות בשלוש המשוואות\n$(4,0,5)$ מקיים: $4+0+5=9$, $8+0+15=23$, $4+0+10=14$ ✓.\n\n**פתרון:** $(4, 0, 5)$\n\n**טיפ לבחינה:** סמנו כל pivot בעיגול. $R_2-2R_1$ **מחסר** — כולל $9$ באגף ימין. שלושה pivots = פתרון יחיד, ללא משתנים חופשיים. כתבו פעולות שורה בשוליים לקבלת נקודות חלקיות. אלימינציה מלאה $3\\times3$ צריכה להימשך פחות משמונה דקות עם תרגול — תכננו זמן בהתאם בבחינה. תהליך זה מתרחב ישירות למערכות גדולות יותר בבחינות הנדסה."
+    },
+    {
+      "id": "checkpoint_2",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "For what value of $k$ does the system have no solution?\n$$\\begin{cases} x+y=2 \\\\ 2x+2y=k \\end{cases}$$",
+      "body_he_md": "לאיזה $k$ אין פתרון?\n$$\\begin{cases} x+y=2 \\\\ 2x+2y=k \\end{cases}$$",
+      "checkpoint_solution_en": "### Move 1: Compare the rows\nRow 2 equals $2\\times$ Row 1 on the left side ($2x+2y$), but the RHS of Row 1 gives $2(x+y)=2\\cdot2=4$, while Row 2 demands $k$.\n\n### Move 2: Classify\nIf $k\\neq4$: Row 2 says $2x+2y=k$ but Row 1 forces $2x+2y=4$ — a contradiction $\\Rightarrow$ **no solution**.\nIf $k=4$: both equations describe the same line $\\Rightarrow$ **infinitely many solutions**.\n\n### Move 3: Geometric reading\nSame slope ($-1$), different intercepts when $k\\neq4$ — parallel lines that never meet.",
+      "checkpoint_solution_he": "### צעד 1: השוואת שורות\nשורה 2 שווה ל-$2\\times$ שורה 1 בצד שמאל ($2x+2y$), אך אגף ימין של שורה 1 נותן $2(x+y)=4$, בעוד שורה 2 דורשת $k$.\n\n### צעד 2: סיווג\nאם $k\\neq4$: שורה 2 אומרת $2x+2y=k$ אך שורה 1 כופה $2x+2y=4$ — סתירה $\\Rightarrow$ **אין פתרון**.\nאם $k=4$: שתי המשוואות מתארות אותו קו $\\Rightarrow$ **אינסוף פתרונות**.\n\n### צעד 3: קריאה גאומטרית\nאותו שיפוע ($-1$), חיתוכים שונים כש-$k\\neq4$ — קווים מקבילים שלא נפגשים."
+    },
+    {
+      "id": "worked_example_3",
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Free Variables and Parametric Solution",
+      "title_he": "דוגמה פתורה 3 — משתנים חופשיים ופתרון פרמטרי",
+      "body_en_md": "**Solve:**\n$$\\begin{cases} x + y + z = 6 \\\\ 2x + y + 3z = 13 \\end{cases}$$\n\nTwo equations in three unknowns — expect a **parametric family**, not a single point.\n\n### Move 1: Augmented matrix and one elimination step\n$$\\left[\\begin{array}{ccc|c}1&1&1&6\\\\2&1&3&13\\end{array}\\right] \\xrightarrow{R_2-2R_1} \\left[\\begin{array}{ccc|c}1&1&1&6\\\\0&-1&1&1\\end{array}\\right]$$\n\n### Move 2: Count rank and free variables\nRank $= 2 < 3$ unknowns $\\Rightarrow$ one free variable. Set $z = t$.\n\n### Move 3: Express pivot variables\nFrom row 2: $-y + t = 1 \\Rightarrow y = t - 1$. From row 1: $x = 6 - y - z = 7 - 2t$.\n\n### Move 4: Write parametric vector form\n$$\\vec{x} = \\begin{pmatrix}7\\\\-1\\\\0\\end{pmatrix} + t\\begin{pmatrix}-2\\\\1\\\\1\\end{pmatrix}, \\quad t \\in \\mathbb{R}$$\n\n### Move 5: Sanity check\n$x+y+z = (7-2t)+(t-1)+t = 6$ for all $t$ ✓.\n\n**Key idea:** Underdetermined consistent systems describe a line in $\\mathbb{R}^3$, not an isolated point. The particular solution $(7,-1,0)$ plus the direction vector $(-2,1,1)$ spans the full solution set — this vector form is required on Linear Algebra 1 exams at Israeli universities. Count free variables as $n-\\text{rank}=3-2=1$. Never stop at a single numeric triple when rank $< n$. Never stop at a single numeric triple when rank is less than the number of unknowns.",
+      "body_he_md": "**פתרו:**\n$$\\begin{cases} x + y + z = 6 \\\\ 2x + y + 3z = 13 \\end{cases}$$\n\nשתי משוואות בשלושה נעלמים — צפו **למשפחה פרמטרית**, לא לנקודה בודדת.\n\n### צעד 1: מטריצה מורחבת וצמצום\n$$\\left[\\begin{array}{ccc|c}1&1&1&6\\\\2&1&3&13\\end{array}\\right] \\xrightarrow{R_2-2R_1} \\left[\\begin{array}{ccc|c}1&1&1&6\\\\0&-1&1&1\\end{array}\\right]$$\n\n### צעד 2: ספירת דרגה ומשתנים חופשיים\nדרגה $= 2 < 3$ נעלמים $\\Rightarrow$ משתנה חופשי אחד. נקבע $z = t$.\n\n### צעד 3: ביטוי נעלמי pivot\nמ-$R_2$: $-y + t = 1 \\Rightarrow y = t - 1$. מ-$R_1$: $x = 7 - 2t$.\n\n### צעד 4: צורה וקטורית\n$$\\vec{x} = \\begin{pmatrix}7\\\\-1\\\\0\\end{pmatrix} + t\\begin{pmatrix}-2\\\\1\\\\1\\end{pmatrix}, \\quad t \\in \\mathbb{R}$$\n\n### צעד 5: בדיקת sanity\n$x+y+z = 6$ לכל $t$ ✓.\n\n**טיפ לבחינה:** כתבו פתרון מיוחד ווקטור כיוון בנפרד. $n-\\text{rank}=1$ משתנה חופשי. מערכת underdetermined עקבית מתארת קו ב-$\\mathbb{R}^3$, לא נקודה. אל תעצרו בשלישייה מספרית בודדת כש-$\\text{rank}<n$. אמתו $x+y+z=6$ לערך $t$ שרירותי לפני הגשה — זה מוכיח שהפרמטריזציה נכונה. אל תעצרו בשלישייה מספרית בודדת כשהדרגה קטנה ממספר הנעלמים — כתבו צורה פרמטרית מלאה."
+    },
+    {
+      "id": "method_guide",
+      "kind": "theory",
+      "title_en": "Gaussian Elimination — One Systematic Method for Any Size System",
+      "title_he": "חילוץ גאוס — שיטה שיטתית אחת לכל גודל מערכת",
+      "body_en_md": "Substitution and elimination are fine for two equations, but they get messy fast with three or more unknowns. **Gaussian elimination** is the systematic, never-fails procedure that scales to any size — it's how computers solve millions of equations, and understanding it turns 'systems' from guesswork into a recipe.\n\n### The big idea: create a staircase of zeros\nThe goal is to use row operations to reshape the system into **triangular form** — where the last equation has one unknown, the one above has two, and so on. Then you solve the bottom equation instantly and **back-substitute** upward. All the cleverness is in systematically making zeros below the diagonal, one column at a time.\n\n### The three legal row operations\nEverything rests on operations that **don't change the solution set**:\n1. **Swap** two equations (order never matters).\n2. **Scale** an equation by a nonzero constant.\n3. **Add a multiple** of one equation to another.\n\nOperation 3 is the workhorse — it's exactly the elimination move, used repeatedly to zero out one variable at a time. Because none of these operations changes which $(x,y,z)$ satisfy the system, the triangular version has the *same* solution as the original.\n\n### Reading the outcome from the final rows\nJust like two lines, a bigger system has three fates, and the triangular form reveals which:\n- A clean staircase with a pivot in every variable → **unique solution**.\n- A row like $0=0$ → a **free variable**, meaning **infinitely many solutions** (the equations were redundant).\n- A row like $0=5$ (a false statement) → **no solution** (the equations contradict).\n\nThis is the same trichotomy as two lines crossing, being identical, or being parallel — now generalised to any number of dimensions.\n\n### Why the matrix form makes it cleaner\nStripping away the $x,y,z$ labels and writing only the coefficients gives the **augmented matrix**. Row operations on this grid are faster to write and impossible to lose track of. Reducing it to **row-echelon form** (the staircase of leading entries) is Gaussian elimination in its cleanest dress — and it's the exact bridge between 'solving systems' and the matrix algebra you meet later.",
+      "body_he_md": "הצבה וחילוץ בסדר עבור שתי משוואות, אך הם נעשים מבולגנים מהר עם שלושה נעלמים או יותר. **חילוץ גאוס** הוא הפרוצדורה השיטתית, לעולם-לא-נכשלת, שמתאימה לכל גודל — כך מחשבים פותרים מיליוני משוואות, והבנתה הופכת 'מערכות' מניחוש למתכון.\n\n### הרעיון הגדול: צרו מדרגה של אפסים\nהמטרה היא להשתמש בפעולות שורה כדי לעצב מחדש את המערכת לצורה **משולשית** — שבה למשוואה האחרונה יש נעלם אחד, לזו שמעליה שניים, וכן הלאה. אז פותרים את המשוואה התחתונה מיד ו**מציבים חזרה** כלפי מעלה. כל החוכמה היא ביצירה שיטתית של אפסים מתחת לאלכסון, עמודה אחת בכל פעם.\n\n### שלוש פעולות השורה החוקיות\nהכול נשען על פעולות ש**אינן משנות את קבוצת הפתרונות**:\n1. **החליפו** שתי משוואות (הסדר לעולם אינו חשוב).\n2. **הכפילו** משוואה בקבוע שאינו אפס.\n3. **הוסיפו כפולה** של משוואה אחת לאחרת.\n\nפעולה 3 היא סוס העבודה — זהו בדיוק מהלך החילוץ, בשימוש חוזר לאיפוס משתנה אחד בכל פעם. כיוון שאף אחת מהפעולות אינה משנה אילו $(x,y,z)$ מקיימים את המערכת, הגרסה המשולשית בעלת *אותו* פתרון כמו המקורית.\n\n### קריאת התוצאה מהשורות הסופיות\nבדיוק כמו שני ישרים, למערכת גדולה יותר יש שלושה גורלות, והצורה המשולשית מגלה מי:\n- מדרגה נקייה עם ציר בכל משתנה → **פתרון יחיד**.\n- שורה כמו $0=0$ → **משתנה חופשי**, כלומר **אינסוף פתרונות** (המשוואות היו עודפות).\n- שורה כמו $0=5$ (טענה שקרית) → **אין פתרון** (המשוואות סותרות).\n\nזו אותה טריכוטומיה כמו שני ישרים נחתכים, זהים, או מקבילים — כעת מוכללת לכל מספר ממדים.\n\n### מדוע צורת המטריצה נקייה יותר\nהסרת תוויות ה-$x,y,z$ וכתיבת המקדמים בלבד נותנת את **המטריצה המורחבת**. פעולות שורה על הרשת הזו מהירות יותר לכתיבה ובלתי אפשריות לאבד. צמצומה ל**צורת מדרגות** (מדרגת האיברים המובילים) הוא חילוץ גאוס בלבושו הנקי ביותר — וזה בדיוק הגשר בין 'פתרון מערכות' לאלגברת המטריצות שתפגשו מאוחר יותר."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — A 3×3 System by Elimination and Back-Substitution",
+      "title_he": "דוגמה פתורה 4 — מערכת 3×3 בחילוץ והצבה חזרה",
+      "body_en_md": "**Problem.** Solve $\\begin{cases} x+y+z=6 \\\\ 2x-y+z=3 \\\\ x+2y-z=2 \\end{cases}$.\n\n### Step 1: Eliminate x from equations 2 and 3 using equation 1\nR2 − 2·R1: $(2x-y+z)-2(x+y+z)=3-12 \\Rightarrow -3y-z=-9$.\nR3 − R1: $(x+2y-z)-(x+y+z)=2-6 \\Rightarrow y-2z=-4$.\nThe system is now two equations in $y,z$.\n\n### Step 2: Eliminate y from the reduced pair\nFrom $-3y-z=-9$ and $y-2z=-4$. Multiply the second by $3$: $3y-6z=-12$. Add to the first:\n$$(-3y-z)+(3y-6z)=-9+(-12) \\implies -7z=-21 \\implies z=3.$$\n\n### Step 3: Back-substitute for y\nInto $y-2z=-4$: $y-2(3)=-4 \\Rightarrow y=-4+6=2$.\n\n### Step 4: Back-substitute for x\nInto R1 $x+y+z=6$: $x+2+3=6 \\Rightarrow x=1$.\n\n### Step 5: Verify in all three original equations\nEq1: $1+2+3=6$ ✓. Eq2: $2(1)-2+3=3$ ✓. Eq3: $1+2(2)-3=2$ ✓. All satisfied, so the solution is unique — a clean staircase with a pivot in each variable.\n\n**Answer:** $(x,y,z)=(1,2,3)$. Systematic elimination reduced three unknowns to one, and back-substitution recovered the rest.",
+      "body_he_md": "**בעיה.** פתרו $\\begin{cases} x+y+z=6 \\\\ 2x-y+z=3 \\\\ x+2y-z=2 \\end{cases}$.\n\n### שלב 1: חלצו את x ממשוואות 2 ו-3 בעזרת משוואה 1\nR2 − 2·R1: $(2x-y+z)-2(x+y+z)=3-12 \\Rightarrow -3y-z=-9$.\nR3 − R1: $(x+2y-z)-(x+y+z)=2-6 \\Rightarrow y-2z=-4$.\nהמערכת כעת שתי משוואות ב-$y,z$.\n\n### שלב 2: חלצו את y מהזוג המצומצם\nמ-$-3y-z=-9$ ו-$y-2z=-4$. הכפילו את השנייה ב-$3$: $3y-6z=-12$. הוסיפו לראשונה:\n$$(-3y-z)+(3y-6z)=-9+(-12) \\implies -7z=-21 \\implies z=3.$$\n\n### שלב 3: הציבו חזרה עבור y\nלתוך $y-2z=-4$: $y-2(3)=-4 \\Rightarrow y=-4+6=2$.\n\n### שלב 4: הציבו חזרה עבור x\nלתוך R1 $x+y+z=6$: $x+2+3=6 \\Rightarrow x=1$.\n\n### שלב 5: אמתו בכל שלוש המשוואות המקוריות\nמש1: $1+2+3=6$ ✓. מש2: $2(1)-2+3=3$ ✓. מש3: $1+2(2)-3=2$ ✓. הכול מקוים, ולכן הפתרון יחיד — מדרגה נקייה עם ציר בכל משתנה.\n\n**תשובה:** $(x,y,z)=(1,2,3)$. חילוץ שיטתי צמצם שלושה נעלמים לאחד, והצבה חזרה שחזרה את השאר."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide",
+      "title_he": "מדריך שיטה",
+      "body_en_md": "| Situation | Method | Key check |\n|---|---|---|\n| $2\\times2$, one variable isolated | Substitution | Substitute into **both** remaining equations |\n| $2\\times2$, no easy isolation | Elimination | Scale **all terms** including RHS before adding/subtracting |\n| $3\\times3$ or larger | Gaussian elimination on $[A\\|\\vec{b}]$ | Circle pivots; back-sub from bottom row |\n| Checking consistency | Row-reduce; look for $[0\\,0\\,\\cdots\\,0\\,|\\,c]$ with $c\\neq0$ | Complete reduction before declaring \"no solution\" |\n| Free variables | Count: $\\#\\text{unknowns} - \\#\\text{pivots}$ | System must be consistent first |\n| Parametric solution | Each free variable $= t, s, \\ldots$ | Verify $x+y+z$ (etc.) for arbitrary parameters |\n| Geometric interpretation | Lines: intersect / parallel / coincident | Same slope + different intercept $\\Rightarrow$ no solution |\n\n**Decision tree:**\n1. Count equations and unknowns.\n2. $2\\times2$ with simple structure? Try substitution first.\n3. Otherwise write $[A|\\vec{b}]$ and row-reduce.\n4. Echelon form has contradiction row? Inconsistent.\n5. Fewer pivots than unknowns (and consistent)? Parametric family.\n6. Always verify in original equations.",
+      "body_he_md": "| מצב | שיטה | בדיקה |\n|---|---|---|\n| $2\\times2$, נעלם מבודד | הצבה | הציבו ב**כל** המשוואות הנותרות |\n| $2\\times2$, ללא בידוד קל | חיסור | כפלו **כל איבר** כולל אגף ימין לפני חיבור/חיסור |\n| $3\\times3$ ומעלה | אלימינציה גאוסית על $[A\\|\\vec{b}]$ | סמנו pivots; הצבה לאחור מהשורה התחתונה |\n| בדיקת עקביות | הפחתת שורות; חפשו $[0\\,0\\,\\cdots\\,0\\,|\\,c\\neq0]$ | השלימו צמצום לפני \"אין פתרון\" |\n| משתנים חופשיים | ספירה: $\\#\\text{unknowns} - \\#\\text{pivots}$ | המערכת חייבת להיות עקבית תחילה |\n| פתרון פרמטרי | כל נעלם חופשי $= t, s, \\ldots$ | אמתו $x+y+z$ (וכו') לפרמטרים שרירותיים |\n| פרשנות גאומטרית | קווים: חיתוך / מקבילים / זהים | אותו שיפוע + חיתוך שונה $\\Rightarrow$ אין פתרון |\n\n**עץ החלטות:**\n1. ספרו משוואות ונעלמים.\n2. $2\\times2$ עם מבנה פשוט? נסו הצבה.\n3. אחרת כתבו $[A|\\vec{b}]$ והפחיתו.\n4. יש שורת סתירה? לא עקבית.\n5. פחות pivots מנעלמים (ועקבית)? משפחה פרמטרית.\n6. תמיד אמתו במשוואות המקוריות."
+    },
+    {
+      "id": "exercise_set",
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Solve: $x+y=5$, $x-y=1$.",
+          "body_he": "פתור: $x+y=5$, $x-y=1$.",
+          "solution_en": "**Solution:**\n\nAdding: $2x=6 \\Rightarrow x=3$, $y=2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$(3,2)$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Solve: $2x+3y=12$, $y=2$.",
+          "body_he": "פתור: $2x+3y=12$, $y=2$.",
+          "solution_en": "**Solution:**\n\n$2x+6=12 \\Rightarrow x=3$. $(3,2)$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$(3,2)$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Does $x+y=3$, $2x+2y=8$ have a solution? Why?",
+          "body_he": "האם $x+y=3$, $2x+2y=8$ עקבית?",
+          "solution_en": "Row 2 = 2×Row 1 gives $2x+2y=6\\neq8$. No solution (inconsistent).",
+          "solution_he": "**פתרון:**\n\nאין פתרון (סותרות).\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "How many solutions does $x+2y=4$, $2x+4y=8$ have?",
+          "body_he": "כמה פתרונות ל-$x+2y=4$, $2x+4y=8$?",
+          "solution_en": "Row 2 = 2×Row 1 exactly → identical equations. Infinitely many solutions.",
+          "solution_he": "**פתרון:**\n\nאינסוף פתרונות.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Solve by Gaussian elimination:\n$x-y+z=4$\n$2x+y-z=2$\n$x+2y+2z=6$",
+          "body_he": "פתור באלימינציה גאוסית:\n$x-y+z=4$, $2x+y-z=2$, $x+2y+2z=6$.",
+          "solution_en": "Augmented: $R_2-2R_1$: $[0,3,-3|-6]$; $R_3-R_1$: $[0,3,1|2]$. $R_3-R_2$: $[0,0,4|8]$. $z=2$, $y=0$, $x=2$. $(2,0,2)$.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$(2,0,2)$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "A system of two equations in three unknowns has rank 2. How many free variables are there?",
+          "body_he": "מערכת של שתי משוואות בשלושה נעלמים, דרגה 2. כמה משתנים חופשיים?",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nFree variables = 3 - 2 = 1.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n1 משתנה חופשי.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Find $k$ such that the system has infinitely many solutions:\n$x+2y=3$, $2x+ky=6$.",
+          "body_he": "מצא $k$ עבורו יש אינסוף פתרונות:\n$x+2y=3$, $2x+ky=6$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$R_2-2R_1$: $(k-4)y=0$. For infinitely many: $k=4$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$k=4$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "A baker makes rolls (R) and loaves (L). Each R uses 50g flour and 10g butter; each L uses 200g flour and 50g butter. He has 3000g flour and 700g butter. How many of each can he make?",
+          "body_he": "לחמניות (ל) ולחמים (ח): כל ל: 50g קמח, 10g חמאה; כל ח: 200g קמח, 50g חמאה. יש 3000g קמח, 700g חמאה. כמה מכל סוג?",
+          "solution_en": "$50R+200L=3000$ and $10R+50L=700$. From 2nd: $R=70-5L$. Substitute: $50(70-5L)+200L=3000 \\Rightarrow 3500+50L=3000 \\Rightarrow L=-10$. Negative — no valid integer solution with full use of both resources; the system is inconsistent for exact use. If question asks just for solution: $L=-10$ (impractical; adjust constraints).",
+          "solution_he": "מערכת זו סותרת לשימוש מלא בשני המשאבים — הנח שאחד אינו מנוצל לגמרי.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Write the general solution of:\n$\\begin{cases} x + y + z = 5 \\\\ 2x + 2y + 2z = 10 \\end{cases}$",
+          "body_he": "כתוב פתרון כללי:\n$x+y+z=5$, $2x+2y+2z=10$.",
+          "solution_en": "Rank = 1. Two free variables: let $y=s$, $z=t$. $x=5-s-t$. General: $(5-s-t, s, t)$.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$(5-s-t, s, t)$ עבור $s,t \\in \\mathbb{R}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Find all values of $a$ for which the system has:\n(a) no solution\n(b) exactly one solution\n(c) infinitely many solutions:\n$x+y=2$, $ax+y=a^2$.",
+          "body_he": "מצא $a$ עבורו:\n(א) אין פתרון (ב) פתרון יחיד (ג) אינסוף פתרונות:\n$x+y=2$, $ax+y=a^2$.",
+          "solution_en": "$R_2-aR_1$: $(1-a)y = a^2-2a = a(a-2)$. If $a=1$: $0 \\cdot y = -1$ → no solution. If $a\\neq1$: $y=a(a-2)/(1-a) = -a$; $x=2+a$. Unique solution for $a\\neq1$. If $a=2$: $y=-2, x=4$ (still unique). Check $a=2$: (1-2)y=2(0)=0 → y=0. Hmm, let me redo. $(1-a)y = a(a-2)$. If $a=1$: $0=1(−1)=-1$ → no solution. If $a\\neq1$: one solution. If $a=2$: $(1-2)y=2(0)=0 \\Rightarrow y=0$, $x=2$. So unique. Actually for infinitely many: need $(1-a)=0$ AND $a(a-2)=0$: $a=1$ AND $a=0$ or $a=2$ → impossible. So: no solution when $a=1$; unique solution for all $a\\neq1$; never infinitely many.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nאין פתרון: $a=1$. פתרון יחיד: $a\\neq1$. אינסוף: לעולם לא.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Solve by Gaussian elimination:\n$x+y+z+w=10$\n$2x+y+z=8$\n$x+3y+w=12$",
+          "body_he": "פתור באלימינציה גאוסית:\n$x+y+z+w=10$, $2x+y+z=8$, $x+3y+w=12$.",
+          "solution_en": "Augmented $[A|b]$: $R_2-2R_1$: $[0,-1,-1,-2|-12]$. $R_3-R_1$: $[0,2,−1,−1|2]$. $R_3+2R_2$: $[0,0,-3,-5|-22]$. Rank=3, 4 unknowns → 1 free variable. Let $w=t$: $-3z-5t=-22 \\Rightarrow z=(22-5t)/3$; $-y-z-2t=-12 \\Rightarrow y=12-z-2t$; $x=10-y-z-t$. Parametric family.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nדרגה 3, 4 נעלמים → 1 משתנה חופשי $w=t$. פתרון פרמטרי.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Prove: if a system $Ax=b$ is inconsistent and we add an extra equation $c^Tx = d$ that is a linear combination of the existing equations, the system remains inconsistent.",
+          "body_he": "הוכח: אם מערכת $Ax=b$ סותרת ונוסיף משוואה שהיא צירוף לינארי של הקיימות, המערכת תישאר סותרת.",
+          "solution_en": "If the system is inconsistent, $\\text{rank}(A) < \\text{rank}([A|b])$. A new equation that is a linear combination of existing rows adds a new row $c^T = \\sum \\lambda_i a_i^T$ to $A$ and $d = \\sum \\lambda_i b_i$ to $b$. But if the original system is inconsistent, the linear combination of the contradiction is still a contradiction. More formally: the new row operation doesn't change the rank relationship. The row space of $A$ is unchanged, but the inconsistency in $b$ persists.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nהוספת צירוף לינארי לא משנה את דרגת $A$ ואת אי-העקביות. הסתירה ב-$b$ נשמרת.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Two factories produce goods A and B. Factory 1: 3A, 2B per day. Factory 2: 1A, 4B per day. We need exactly 24A and 32B per week (7 days). How many days should each factory operate?",
+          "body_he": "שני מפעלים מייצרים A ו-B. מפעל 1: 3A, 2B ליום. מפעל 2: 1A, 4B ליום. צריך 24A ו-32B בשבוע. כמה ימים כל מפעל?",
+          "solution_en": "Let $x$ = days factory 1 operates, $y$ = days factory 2. $3x+y=24$ and $2x+4y=32 \\Rightarrow x+2y=16$. From 1st: $y=24-3x$. Substitute: $x+2(24-3x)=16 \\Rightarrow x+48-6x=16 \\Rightarrow -5x=-32 \\Rightarrow x=6.4$. Non-integer; nearest integer: $x=6$ or $x=7$... checking: $x=6$: $y=24-18=6$: $2(6)+4(6)=12+24=36\\neq32$. So exact integer solution doesn't exist for these numbers. Answer: $x=6.4$ days, $y=4.8$ days (approximately).",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$x=6.4$ ימים, $y=4.8$ ימים (קירוב).\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Forgetting to update all equations.** When multiplying a row to eliminate a variable, ALL terms (including the RHS) must be updated.\n\n2. **Sign errors in elimination.** $R_2 - 2R_1$ subtracts, not adds.\n\n3. **Declaring 'no solution' prematurely.** Row-reduce completely before concluding.\n\n4. **Missing free variables.** If rank < #unknowns and consistent, there are infinitely many solutions.\n\n5. **Not checking solutions.** Always substitute back into ALL original equations.\n\n**Example misconception:** A row of zeros means no solution\n\n**Fix:** A row of zeros in the augmented matrix [0 0 ... 0 | 0] means a redundant equation (infinitely many solutions, assuming no other inconsistency). Only [0 0 ... 0 | c≠0] means no solution.",
+      "body_he_md": "1. **שכחת לעדכן את כל האיברים.** כשמכפילים שורה כדי לבטל נעלם, **כל** האיברים (כולל אגף ימין) חייבים להיות מעודכנים. כפל רק את המקדמים בלי הקבוע $c$ שובר את המשוואה.\n\n2. **שגיאות סימן בחיסור.** $R_2 - 2R_1$ **מחסר** $2R_1$ משורה 2 — לא מוסיף. טעות סימן אחת הופכת את כל הפתרון.\n\n3. **קביעת 'אין פתרון' מוקדם מדי.** השלימו הפחתת שורות לפני מסקנה. שורת $[0\\,0\\,|\\,0]$ אינה סתירה — היא משוואה מיותרת.\n\n4. **החמצת משתנים חופשיים.** אם $\\text{rank} < \\#\\text{unknowns}$ והמערכת עקבית, יש אינסוף פתרונות — אל תחפשו $(x,y,z)$ בודד.\n\n5. **אי-בדיקת הפתרון.** הציבו תמיד ב**כל** המשוואות המקוריות, לא רק בזו שפתרתם.\n\n**תפיסה שגויה:** שורת אפסים = אין פתרון.\n\n**תיקון:** $[0\\,0\\,\\cdots\\,0\\,|\\,0]$ = משוואה תלויה (משתנה חופשי). רק $[0\\,0\\,\\cdots\\,0\\,|\\,c\\neq0]$ = אין פתרון.\n\n**טיפ לבחינה:** כשבודקים טעויות, שאלו \"באיזו מלכודת נפלתי?\" — לא רק \"מה המספר הנכון?\""
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "Systems of linear equations are the gateway to all of linear algebra — every matrix equation $A\\vec{x}=\\vec{b}$, every least-squares fit, and every circuit analysis problem reduces to solving (or classifying) such a system.\n\nIn Israeli university engineering and CS programs, Gaussian elimination on the augmented matrix is the **first algorithm** you learn in Linear Algebra 1, before determinants, vector spaces, or eigenvalues. Bagrut 4–5 unit students encounter $2\\times2$ word problems (mixtures, ages, prices); 5-unit tracks preview $3\\times3$ elimination.\n\n**Why it matters for exams:** Examiners reward recognizing the three-case classification instantly — unique, infinite, or inconsistent — without wasting time on a system that has no solution. The parametric form $\\vec{x}=\\vec{x}_0+t\\vec{v}$ connects directly to lines and planes in analytic geometry and to the null space in `concept:la_vector_spaces`.",
+      "body_he_md": "מערכות משוואות לינאריות הן שער הכניסה לכל האלגברה הלינארית — כל משוואת מטריצה $A\\vec{x}=\\vec{b}$, כל התאמת ריבועים פחותים, וכל ניתוח מעגל חשמלי מצטמצם לפתרון (או סיווג) של מערכת כזו.\n\nבתוכניות הנדסה ומדמ\"ח באוניברסיטאות בישראל, אלימינציה גאוסית על המטריצה המורחבת היא **האלגוריתם הראשון** באלגברה לינארית 1, לפני דטרמיננטות, מרחבי וקטורים או ערכים עצמיים. תלמידי בגרות 4–5 יחידות פוגשים בעיות מילוליות $2\\times2$ (תערובות, גילאים, מחירים); מסלול 5 יחידות מציץ ב-$3\\times3$.\n\n**למה זה חשוב לבחינות:** בוחנים מעריכים זיהוי מיידי של שלושת המצבים — יחיד, אינסוף, או סותר — בלי לבזבז זמן על מערכת ללא פתרון. הצורה הפרמטרית $\\vec{x}=\\vec{x}_0+t\\vec{v}$ מתחברת ישירות לקווים ומישורים בגאומטריה אנליטית ול-null space ב-`concept:la_vector_spaces`."
+    },
+    {
+      "id": "before_exam",
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "- **$2\\times2$:** substitution if one variable is isolated; otherwise elimination\n- **$3\\times3$+:** write augmented matrix, row-reduce to echelon, back-substitute\n- **Inconsistent:** echelon row $[0\\,0\\,\\cdots\\,0\\,|\\,c\\neq0]$ — stop, state \"no solution\"\n- **Infinitely many:** $\\text{rank}(A)=\\text{rank}([A|\\vec{b}])<n$ — assign parameters to free variables\n- **Free variable count:** $n-\\text{rank}(A)$ when consistent\n- **Consistency test:** compare $\\text{rank}(A)$ and $\\text{rank}([A|\\vec{b}])$\n- **Always verify** by substituting into every original equation\n\n**Last review:** Row-reduce one $3\\times3$ system from scratch, then classify a $2\\times2$ parameter problem ($k$ value) without calculating — pattern recognition saves exam time and reduces arithmetic errors under pressure.",
+      "body_he_md": "- **$2\\times2$:** הצבה אם נעלם מבודד; אחרת חיסור\n- **$3\\times3$+:** כתבו מטריצה מורחבת, הפחיתו למדרג, הצבה לאחור\n- **סותרת:** שורת $[0\\,0\\,\\cdots\\,0\\,|\\,c\\neq0]$ — עצרו, כתבו \"אין פתרון\"\n- **אינסוף:** $\\text{rank}(A)=\\text{rank}([A|\\vec{b}])<n$ — הקצו פרמטרים לנעלמים חופשיים\n- **מספר משתנים חופשיים:** $n-\\text{rank}(A)$ כשעקבית\n- **בדיקת עקביות:** השוו $\\text{rank}(A)$ ל-$\\text{rank}([A|\\vec{b}])$\n- **תמיד אמתו** בהצבה בכל משוואה מקורית\n\n**חזרה אחרונה:** הפחיתו מערכת $3\\times3$ מאפס, ואז סווגו בעיית פרמטר $2\\times2$ ($k$) בלי לחשב — זיהוי דפוסים חוסך זמן בבחינה."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Facets: parameters and word-problem setup",
+      "title_he": "פנים: פרמטרים ובניית בעיה מילולית",
+      "body_en_md": "**Parametric root conditions:** translate “for which $k$…” into discriminant / domain conditions.\n\n**Word-problem setup:** define variables, write equations, verify units.",
+      "body_he_md": "**תנאי שורשים פרמטריים:** תרגמו \"עבור אילו $k$…\" לתנאי דיסקרימיננטה / תחום.\n\n**בניית בעיה מילולית:** הגדירו משתנים, כתבו משוואות, אמתו יחידות."
+    },
+    {
+      "id": "summary",
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Three outcomes:** unique solution, infinitely many, no solution\n- **Substitution:** isolate one variable, plug into all others — best for simple $2\\times2$\n- **Elimination:** scale equations so a variable cancels — watch signs and RHS\n- **Gaussian elimination:** augmented matrix $\\to$ echelon form $\\to$ back-substitution\n- **Consistency (Rouché–Capelli):** $\\text{rank}(A)=\\text{rank}([A|\\vec{b}])$ required for any solution\n- **Free variables:** when consistent and $\\text{rank}(A)<n$; write parametric family $\\vec{x}=\\vec{x}_0+t\\vec{v}$\n- **Verify always:** substitute into every original equation\n\n**Takeaway:** From the problem structure alone — size, parameter $k$, or word-problem setup — you should now choose substitution, elimination, or Gaussian elimination without hesitation.",
+      "body_he_md": "- **שלושה מצבים:** פתרון יחיד, אינסוף, אין פתרון\n- **הצבה:** בודדים נעלם, מציבים בכל השאר — מתאים ל-$2\\times2$ פשוט\n- **חיסור:** מכפילים משוואות כדי לבטל נעלם — שימו לב לסימנים ולאגף ימין\n- **אלימינציה גאוסית:** מטריצה מורחבת $\\to$ צורת מדרג $\\to$ הצבה לאחור\n- **עקביות (רושה–קפלי):** $\\text{rank}(A)=\\text{rank}([A|\\vec{b}])$ נדרש לכל פתרון\n- **משתנים חופשיים:** כשעקבית ו-$\\text{rank}(A)<n$; כתבו משפחה $\\vec{x}=\\vec{x}_0+t\\vec{v}$\n- **תמיד אמתו:** הציבו בכל משוואה מקורית\n\n**מסקנה:** ממבנה הבעיה בלבד — גודל, פרמטר $k$, או בעיה מילולית — אתם אמורים לבחור הצבה, חיסור או גאוס ללא היסוס."
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Always write the augmented matrix for 3×3+ systems — tracking variables in equations leads to errors.",
+      "A row of all zeros [0 0 0 | 0] means dependent equation (free variable). A row [0 0 0 | c≠0] means inconsistent.",
+      "Free variables: if rank(A) < n (number of unknowns) and consistent, there are n-rank free variables.",
+      "Always verify by substituting back into ALL original equations."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "A row of zeros means no solution",
+        "correction": "A row of zeros in the augmented matrix [0 0 ... 0 | 0] means a redundant equation (infinitely many solutions, assuming no other inconsistency). Only [0 0 ... 0 | c≠0] means no solution.",
+        "detect_phrase_en": "row of zeros",
+        "detect_phrase_he": "שורת אפסים"
+      }
+    ],
+    "tutor_pacing_hint": "Start with 2×2 substitution for concrete intuition. Show geometric interpretation (intersection of lines). Then move to 3×3 Gaussian elimination. Spend extra time on the three-case classification (unique/infinite/none).",
+    "skill_atoms_unlocked": [
+      "system_check",
+      "system_dependent",
+      "system_elimination",
+      "system_inconsistent",
+      "system_substitution",
+      "word_problem"
+    ]
+  },
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Solve $\\begin{cases} x + y = 5 \\\\ 2x + y = 8 \\end{cases}$ — find $x$.",
+      "stem_he": "פתרו $\\begin{cases} x + y = 5 \\\\ 2x + y = 8 \\end{cases}$ — מצאו $x$.",
+      "explanation_en": "**Subtract equations.** $(2x + y) - (x + y) = 8 - 5 \\Rightarrow x = 3$.\n\n**Answer:** $x = 3$. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**מחסירים משוואות.** $x = 3$.\n\n**תשובה:** $x = 3$. בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "skill_atoms": [
+        "system_elimination"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "51b83347-db4e-53b1-8b66-b398ddf68ad8",
+      "points_level_min": "3pt",
+      "correct_answer": "3",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "3",
+        "expected": 3
+      },
+      "id": "systems_linear_equations__4pt-q1"
+    },
+    {
+      "ord": 2,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "stem_en": "True or False: $(3, 2)$ satisfies $x + y = 5$.",
+      "stem_he": "נכון או לא נכון: $(3, 2)$ מקיים $x + y = 5$.",
+      "explanation_en": "**Check.** $3 + 2 = 5$. ✓ — **true**. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**בדיקה.** $3 + 2 = 5$. ✓ — **נכון**. בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "skill_atoms": [
+        "system_check"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "60cac84a-0632-5d0e-b59a-678449751250",
+      "points_level_min": "3pt",
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ],
+      "id": "systems_linear_equations__4pt-q2"
+    },
+    {
+      "ord": 3,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Two numbers sum to $20$ and differ by $6$. Find the larger number.",
+      "stem_he": "סכום שני מספרים הוא $20$ והפרשם $6$. מצאו את הגדול.",
+      "explanation_en": "**Step 1 — Set up.** $x + y = 20$, $x - y = 6$.\n\n**Step 2 — Add.** $2x = 26 \\Rightarrow x = 13$.\n\n**Step 3 — Then $y = 7$.**\n\n**Answer:** the larger number is $13$. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**שלב 1 — הגדרה.** $x + y = 20$, $x - y = 6$.\n\n**שלב 2 — חיבור.** $2x = 26 \\Rightarrow x = 13$.\n\n**שלב 3 — ואז $y = 7$.**\n\n**תשובה:** הגדול הוא $13$.",
+      "skill_atoms": [
+        "system_elimination",
+        "word_problem"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Set up.** $x + y = 20$, $x - y = 6$.",
+          "**Step 2 — Add.** $2x = 26 \\Rightarrow x = 13$.",
+          "**Step 3 — Then $y = 7$.**",
+          "**Answer:** the larger number is $13$."
+        ],
+        "steps_he": [
+          "**שלב 1 — הגדרה.** $x + y = 20$, $x - y = 6$.",
+          "**שלב 2 — חיבור.** $2x = 26 \\Rightarrow x = 13$.",
+          "**שלב 3 — ואז $y = 7$.**",
+          "**תשובה:** הגדול הוא $13$."
+        ]
+      },
+      "source_item_id": "ce3531b5-1ff0-5d62-9956-22916e9680ad",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "3pt",
+      "archetypes": [
+        "application"
+      ],
+      "needs_review": true,
+      "id": "systems_linear_equations__4pt-q3"
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Which pair $(x, y)$ solves $\\begin{cases} x - 2y = 1 \\\\ 2x + y = 12 \\end{cases}$?",
+      "stem_he": "איזה זוג $(x, y)$ פותר את $\\begin{cases} x - 2y = 1 \\\\ 2x + y = 12 \\end{cases}$?",
+      "explanation_en": "**Test $(5,2)$.** $5 - 4 = 1$ ✓ and $10 + 2 = 12$ ✓.\n\n**Answer:** $(5, 2)$. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**מציבים $(5,2)$.** $5 - 4 = 1$ ✓ ו-$10 + 2 = 12$ ✓.\n\n**תשובה:** $(5, 2)$. בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "skill_atoms": [
+        "system_substitution"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$(5, 2)$",
+          "$(3, 4)$",
+          "$(1, 0)$",
+          "$(2, 5)$"
+        ],
+        "options_he": [
+          "$(5, 2)$",
+          "$(3, 4)$",
+          "$(1, 0)$",
+          "$(2, 5)$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "ac968e71-38df-5c9a-b029-d084e936abe5",
+      "points_level_min": "3pt",
+      "options_en": [
+        "$(5, 2)$",
+        "$(3, 4)$",
+        "$(1, 0)$",
+        "$(2, 5)$"
+      ],
+      "options_he": [
+        "$(5, 2)$",
+        "$(3, 4)$",
+        "$(1, 0)$",
+        "$(2, 5)$"
+      ],
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ],
+      "id": "systems_linear_equations__4pt-q4"
+    },
+    {
+      "ord": 5,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "For $\\begin{cases} x + y = 5 \\\\ 2x + y = 8 \\end{cases}$ — find $y$.",
+      "stem_he": "עבור $\\begin{cases} x + y = 5 \\\\ 2x + y = 8 \\end{cases}$ — מצאו $y$.",
+      "explanation_en": "**$x = 3$, so $y = 5 - 3 = 2$.**\n\n**Answer:** $y = 2$. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**$x = 3$, ולכן $y = 5 - 3 = 2$.**\n\n**תשובה:** $y = 2$. בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "skill_atoms": [
+        "system_elimination"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "431009cf-af5d-5404-b50a-fdf4229efbe6",
+      "points_level_min": "3pt",
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2
+      },
+      "id": "systems_linear_equations__4pt-q5"
+    },
+    {
+      "ord": 6,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "How many solutions does $\\begin{cases} x + y = 3 \\\\ 2x + 2y = 6 \\end{cases}$ have?",
+      "stem_he": "כמה פתרונות יש ל-$\\begin{cases} x + y = 3 \\\\ 2x + 2y = 6 \\end{cases}$?",
+      "explanation_en": "**The second equation is twice the first** — they are the same line, so infinitely many solutions.\n\n**Answer:** infinitely many. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**המשוואה השנייה היא פי שתיים מהראשונה** — אותו ישר, ולכן אינסוף פתרונות.\n\n**תשובה:** אינסוף. בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "skill_atoms": [
+        "system_dependent"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\text{infinitely many}$",
+          "$\\text{exactly one}$",
+          "$\\text{none}$",
+          "$\\text{two}$"
+        ],
+        "options_he": [
+          "$\\text{infinitely many}$",
+          "$\\text{exactly one}$",
+          "$\\text{none}$",
+          "$\\text{two}$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "2f3d8b00-16f4-5cc3-b57e-7cfd80a57467",
+      "points_level_min": "3pt",
+      "options_en": [
+        "$\\text{infinitely many}$",
+        "$\\text{exactly one}$",
+        "$\\text{none}$",
+        "$\\text{two}$"
+      ],
+      "options_he": [
+        "$\\text{infinitely many}$",
+        "$\\text{exactly one}$",
+        "$\\text{none}$",
+        "$\\text{two}$"
+      ],
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ],
+      "id": "systems_linear_equations__4pt-q6"
+    },
+    {
+      "ord": 7,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Solve $\\begin{cases} 3x - y = 5 \\\\ x + y = 7 \\end{cases}$ — find $x$.",
+      "stem_he": "פתרו $\\begin{cases} 3x - y = 5 \\\\ x + y = 7 \\end{cases}$ — מצאו $x$.",
+      "explanation_en": "**Add equations.** $4x = 12 \\Rightarrow x = 3$.\n\n**Answer:** $x = 3$. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**מחברים משוואות.** $4x = 12 \\Rightarrow x = 3$.\n\n**תשובה:** $x = 3$. בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "skill_atoms": [
+        "system_elimination"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "7e9cde71-7012-5481-97fc-5cf37ee77b6b",
+      "points_level_min": "3pt",
+      "correct_answer": "3",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "3",
+        "expected": 3
+      },
+      "id": "systems_linear_equations__4pt-q7"
+    },
+    {
+      "ord": 8,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $\\begin{cases} 3x - y = 5 \\\\ x + y = 7 \\end{cases}$ — find $y$.",
+      "stem_he": "עבור $\\begin{cases} 3x - y = 5 \\\\ x + y = 7 \\end{cases}$ — מצאו $y$.",
+      "explanation_en": "**$x = 3$, so $y = 7 - 3 = 4$.**\n\n**Answer:** $y = 4$. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**$x = 3$, ולכן $y = 4$.**\n\n**תשובה:** $y = 4$. בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "skill_atoms": [
+        "system_elimination"
+      ],
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "ace80edb-9e9c-5ed0-afb5-2718ee03507d",
+      "points_level_min": "3pt",
+      "correct_answer": "4",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "4",
+        "expected": 4
+      },
+      "id": "systems_linear_equations__4pt-q8"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Solve $\\begin{cases} 2x + 3y = 12 \\\\ x = 3 \\end{cases}$ — find $y$.",
+      "stem_he": "פתרו $\\begin{cases} 2x + 3y = 12 \\\\ x = 3 \\end{cases}$ — מצאו $y$.",
+      "explanation_en": "**Substitute $x = 3$.** $6 + 3y = 12 \\Rightarrow 3y = 6 \\Rightarrow y = 2$.\n\n**Answer:** $y = 2$. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**מציבים $x = 3$.** $6 + 3y = 12 \\Rightarrow y = 2$.\n\n**תשובה:** $y = 2$. בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "skill_atoms": [
+        "system_substitution"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "c7acfa7e-4726-59d6-9da6-aba453716ff7",
+      "points_level_min": "3pt",
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2
+      },
+      "id": "systems_linear_equations__4pt-q9"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Solve $\\begin{cases} 4x + y = 14 \\\\ x - y = 1 \\end{cases}$ — find $x$.",
+      "stem_he": "פתרו $\\begin{cases} 4x + y = 14 \\\\ x - y = 1 \\end{cases}$ — מצאו $x$.",
+      "explanation_en": "**Add equations.** $5x = 15 \\Rightarrow x = 3$.\n\n**Answer:** $x = 3$. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**מחברים.** $5x = 15 \\Rightarrow x = 3$.\n\n**תשובה:** $x = 3$. בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "skill_atoms": [
+        "system_elimination"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "1c5c31e9-1d17-5a17-8c0c-689f13979085",
+      "points_level_min": "3pt",
+      "correct_answer": "3",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "3",
+        "expected": 3
+      },
+      "id": "systems_linear_equations__4pt-q10"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $\\begin{cases} 4x + y = 14 \\\\ x - y = 1 \\end{cases}$ — find $y$.",
+      "stem_he": "עבור $\\begin{cases} 4x + y = 14 \\\\ x - y = 1 \\end{cases}$ — מצאו $y$.",
+      "explanation_en": "**$x = 3$, so $y = x - 1 = 2$.**\n\n**Answer:** $y = 2$. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**$x = 3$, ולכן $y = 2$.**\n\n**תשובה:** $y = 2$. בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "skill_atoms": [
+        "system_elimination"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "7d273a9f-33b7-5a15-a48a-0b8849600858",
+      "points_level_min": "3pt",
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2
+      },
+      "id": "systems_linear_equations__4pt-q11"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Solve $\\begin{cases} y = 2x \\\\ x + y = 9 \\end{cases}$ — find $x$.",
+      "stem_he": "פתרו $\\begin{cases} y = 2x \\\\ x + y = 9 \\end{cases}$ — מצאו $x$.",
+      "explanation_en": "**Substitute.** $x + 2x = 9 \\Rightarrow 3x = 9 \\Rightarrow x = 3$.\n\n**Answer:** $x = 3$. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**הצבה.** $3x = 9 \\Rightarrow x = 3$.\n\n**תשובה:** $x = 3$. בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "skill_atoms": [
+        "system_substitution"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "699ed225-0108-5623-8da0-a348523430fc",
+      "points_level_min": "3pt",
+      "correct_answer": "3",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "3",
+        "expected": 3
+      },
+      "id": "systems_linear_equations__4pt-q12"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Solve $\\begin{cases} 2x + y = 10 \\\\ 2x - y = 2 \\end{cases}$ — find $x$.",
+      "stem_he": "פתרו $\\begin{cases} 2x + y = 10 \\\\ 2x - y = 2 \\end{cases}$ — מצאו $x$.",
+      "explanation_en": "**Add equations.** $4x = 12 \\Rightarrow x = 3$.\n\n**Answer:** $x = 3$. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**מחברים.** $4x = 12 \\Rightarrow x = 3$.\n\n**תשובה:** $x = 3$. בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "skill_atoms": [
+        "system_elimination"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "77afd4be-1fec-5591-a471-0246bc8c8afa",
+      "points_level_min": "3pt",
+      "correct_answer": "3",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "3",
+        "expected": 3
+      },
+      "id": "systems_linear_equations__4pt-q13"
+    },
+    {
+      "ord": 14,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: $\\begin{cases} x + y = 2 \\\\ x + y = 5 \\end{cases}$ has no solution.",
+      "stem_he": "נכון או לא נכון: ל-$\\begin{cases} x + y = 2 \\\\ x + y = 5 \\end{cases}$ אין פתרון.",
+      "explanation_en": "**Same left side, different right side** — parallel lines, no intersection. **True**. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**אותו אגף שמאל, אגף ימין שונה** — ישרים מקבילים, אין חיתוך. **נכון**. בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "skill_atoms": [
+        "system_inconsistent"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "c3ef0caa-0e2f-5568-9b1e-41b3c6264a86",
+      "points_level_min": "3pt",
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ],
+      "id": "systems_linear_equations__4pt-q14"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Solve $\\begin{cases} 5x + 2y = 19 \\\\ 3x - 2y = 5 \\end{cases}$ — find $x$.",
+      "stem_he": "פתרו $\\begin{cases} 5x + 2y = 19 \\\\ 3x - 2y = 5 \\end{cases}$ — מצאו $x$.",
+      "explanation_en": "**Add equations (the $2y$ cancels).** $8x = 24 \\Rightarrow x = 3$.\n\n**Answer:** $x = 3$. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**מחברים (ה-$2y$ מצטמצם).** $8x = 24 \\Rightarrow x = 3$.\n\n**תשובה:** $x = 3$. בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "skill_atoms": [
+        "system_elimination"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "13fdcdec-5d2c-5d47-a3b0-226a45b849a4",
+      "points_level_min": "3pt",
+      "correct_answer": "3",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "3",
+        "expected": 3
+      },
+      "id": "systems_linear_equations__4pt-q15"
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "system_check"
+      ],
+      "ord": 16,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "System $y=x$, $x+y=4$; find $x$.",
+      "stem_he": "מערכת $y=x$, $x+y=4$; מצאו $x$.",
+      "explanation_en": "**Step 1 — Set up.** Use the expression $4/2$.\n\n**Step 2 — Compute.** Obtain $2$.\n\n**Step 3 — Check.** Re-evaluate or substitute back. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**שלב 1 — הצבה.** הביטוי $4/2$.\n\n**שלב 2 — חישוב.** מתקבל $2$.\n\n**שלב 3 — בדיקה.** בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "answer_payload": {
+        "value": 2
+      },
+      "correct_answer": "2",
+      "verify": {
+        "expr": "4/2",
+        "expected": 2
+      },
+      "id": "systems_linear_equations__4pt-q16"
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "system_check"
+      ],
+      "ord": 17,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "$x+y=5$, $x-y=1$; find $x$.",
+      "stem_he": "$x+y=5$, $x-y=1$; מצאו $x$.",
+      "explanation_en": "**Step 1 — Set up.** Use the expression $(5+1)/2$.\n\n**Step 2 — Compute.** Obtain $3$.\n\n**Step 3 — Check.** Re-evaluate or substitute back. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**שלב 1 — הצבה.** הביטוי $(5+1)/2$.\n\n**שלב 2 — חישוב.** מתקבל $3$.\n\n**שלב 3 — בדיקה.** בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "answer_payload": {
+        "value": 3
+      },
+      "correct_answer": "3",
+      "verify": {
+        "expr": "(5+1)/2",
+        "expected": 3
+      },
+      "id": "systems_linear_equations__4pt-q17"
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "system_check"
+      ],
+      "ord": 18,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "From $a+b=10$, $2a+b=20$; find $a$.",
+      "stem_he": "מ-$a+b=10$, $2a+b=20$; מצאו $a$.",
+      "explanation_en": "**Step 1 — Set up.** Use the expression $20-10$.\n\n**Step 2 — Compute.** Obtain $10$.\n\n**Step 3 — Check.** Re-evaluate or substitute back. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**שלב 1 — הצבה.** הביטוי $20-10$.\n\n**שלב 2 — חישוב.** מתקבל $10$.\n\n**שלב 3 — בדיקה.** בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "answer_payload": {
+        "value": 10
+      },
+      "correct_answer": "10",
+      "verify": {
+        "expr": "20-10",
+        "expected": 10
+      },
+      "id": "systems_linear_equations__4pt-q18"
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "system_check"
+      ],
+      "ord": 19,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "graphical"
+      ],
+      "stem_en": "Which statement best matches this lesson (systems linear equations)?",
+      "stem_he": "איזו טענה הכי מתאימה לשיעור זה?",
+      "explanation_en": "**Step 1 — Read options.** Choose the definition/property taught here.\n\n**Step 2 — Eliminate distractors** that mix adjacent topics.\n\n**Step 3 — Confirm** with a quick example from the lesson. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**שלב 1 — קריאת אפשרויות.**\n\n**שלב 2 — פסילת מסיחים.**\n\n**שלב 3 — אימות בדוגמה.** בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "answer_payload": {
+        "options_en": [
+          "Apply the core definition/method from this lesson carefully",
+          "Always divide by zero to finish faster",
+          "Skip checking because algebra never errs",
+          "Ignore domain restrictions always"
+        ],
+        "options_he": [
+          "ליישם בזהירות את ההגדרה/השיטה המרכזית של השיעור",
+          "תמיד לחלק באפס כדי לסיים מהר",
+          "לדלג על בדיקה כי אלגברה לא טועה",
+          "להתעלם תמיד מהגבלות תחום"
+        ],
+        "correct_index": 0
+      },
+      "id": "systems_linear_equations__4pt-q19"
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "system_check"
+      ],
+      "ord": 20,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "stem_en": "True or false: checking a solution by substitution is good exam hygiene.",
+      "stem_he": "נכון או לא: בדיקת פתרון בהצבה היא הרגל בחינה טוב.",
+      "explanation_en": "**Step 1 — Policy.** Substitution catches arithmetic slips.\n\n**Step 2 — True.**\n\n**Step 3 — Keep the check written for method marks. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**שלב 1 — מדיניות.** הצבה תופסת טעויות.\n\n**שלב 2 — נכון.**\n\n**שלב 3 — כותבים בדיקה.** בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "answer_payload": {
+        "correct": true
+      },
+      "id": "systems_linear_equations__4pt-q20"
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "system_check"
+      ],
+      "ord": 21,
+      "kind": "fill_blank",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "To keep an equation balanced, perform the same operation on \\underline{\\hspace{2cm}} sides.",
+      "stem_he": "כדי לשמור על איזון משוואה, מבצעים אותה פעולה ב\\underline{\\hspace{2cm}} האגפים.",
+      "explanation_en": "**Step 1 — Equality property.** Same operation both sides.\n\n**Step 2 — Fill: both / two.**\n\n**Step 3 — Never operate on one side only. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**שלב 1 — תכונת שוויון.**\n\n**שלב 2 — שני האגפים.**\n\n**שלב 3 — לא על אגף אחד.** בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "both",
+          "two",
+          "שני",
+          "שניים"
+        ],
+        "case_sensitive": false
+      },
+      "correct_answer": "both",
+      "id": "systems_linear_equations__4pt-q21"
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "system_dependent"
+      ],
+      "ord": 22,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "reverse"
+      ],
+      "stem_en": "In one short phrase, name the main method this lesson trains (English or Hebrew).",
+      "stem_he": "במשפט קצר, ציינו את השיטה המרכזית שהשיעור מתרגל.",
+      "explanation_en": "**Step 1 — Identify the skill atom focus.**\n\n**Step 2 — Name it clearly (e.g. isolate variable / factor / compose).**\n\n**Step 3 — Connect to a worked example from the lesson. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**שלב 1 — זיהוי המיומנות.**\n\n**שלב 2 — שם ברור.**\n\n**שלב 3 — קישור לדוגמה.** בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "system_check",
+          "system check",
+          "lesson method",
+          "שיטת השיעור"
+        ],
+        "case_sensitive": false
+      },
+      "correct_answer": "system_check",
+      "id": "systems_linear_equations__4pt-q22"
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "system_check"
+      ],
+      "ord": 23,
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "error_analysis",
+        "conceptual"
+      ],
+      "stem_en": "Which habits help on Bagrut algebra items? (Select all.)",
+      "stem_he": "אילו הרגלים עוזרים בבגרות באלגברה? (בחרו הכל.)",
+      "explanation_en": "**Evaluate.** Checking, naming inverse ops, tracking domain, and writing steps earn marks. Dividing by zero never helps.\n\n**Correct: A, B, C, E.** On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**הערכה.** בדיקה, פעולות הפוכות, תחום וכתיבת צעדים. לא לחלק באפס.\n\n**נכונים: A, B, C, E.** בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "answer_payload": {
+        "options_en": [
+          "Check by substitution",
+          "Name inverse operations",
+          "Track domain restrictions",
+          "Divide by zero to finish",
+          "Write method steps clearly"
+        ],
+        "options_he": [
+          "בדיקה בהצבה",
+          "ציון פעולות הפוכות",
+          "מעקב אחר הגבלות תחום",
+          "חילוק באפס לסיום",
+          "כתיבת צעדי שיטה"
+        ],
+        "correct_indices": [
+          0,
+          1,
+          2,
+          4
+        ]
+      },
+      "id": "systems_linear_equations__4pt-q23"
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "system_check"
+      ],
+      "ord": 24,
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "stem_en": "Match each action to its purpose.",
+      "stem_he": "התאימו כל פעולה למטרתה.",
+      "explanation_en": "**Pairing.** Inverse ops isolate; checks catch slips; domain avoids undefined; modeling turns words into equations. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**התאמה.** פעולות הפוכות מבודדות; בדיקות תופסות טעויות; תחום מונע אי-הגדרה; מידול הופך מילים למשוואות. בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "answer_payload": {
+        "left_en": [
+          "Inverse operation",
+          "Substitution check",
+          "Domain check",
+          "Define a variable"
+        ],
+        "left_he": [
+          "פעולה הפוכה",
+          "בדיקת הצבה",
+          "בדיקת תחום",
+          "הגדרת משתנה"
+        ],
+        "right_en": [
+          "Isolate the unknown",
+          "Catch arithmetic errors",
+          "Avoid undefined values",
+          "Start a word problem"
+        ],
+        "right_he": [
+          "בידוד הנעלם",
+          "תפיסת טעויות חשבון",
+          "הימנעות מערכים לא מוגדרים",
+          "פתיחת בעיית מילים"
+        ],
+        "correct_pairs": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "id": "systems_linear_equations__4pt-q24"
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "system_check"
+      ],
+      "ord": 25,
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural",
+        "proof"
+      ],
+      "stem_en": "Order a general solve-and-check workflow.",
+      "stem_he": "סדרו תהליך כללי של פתרון ובדיקה.",
+      "explanation_en": "**Order matters.** Understand → transform → solve → check. Skipping the check loses easy marks. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**הסדר חשוב.** הבנה → שינוי צורה → פתרון → בדיקה. בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "answer_payload": {
+        "steps_en": [
+          "Read and identify the goal",
+          "Apply the lesson transformation/rule",
+          "Solve for the unknown",
+          "Check by substitution or reasonableness"
+        ],
+        "steps_he": [
+          "קריאה וזיהוי המטרה",
+          "יישום כלל/טרנספורמציה מהשיעור",
+          "פתרון עבור הנעלם",
+          "בדיקה בהצבה או בסבירות"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "id": "systems_linear_equations__4pt-q25"
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "word_problem"
+      ],
+      "ord": 26,
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application"
+      ],
+      "needs_review": true,
+      "stem_en": "Write a short original word/application item that uses a skill from systems linear equations, solve it, and check.",
+      "stem_he": "כתבו פריט יישומי קצר מהשיעור, פתרו ובדקו.",
+      "explanation_en": "**Step 1 — Model.** Define a variable and write an equation/expression from the story.\n\n**Step 2 — Solve** with the lesson method.\n\n**Step 3 — Check** by substitution and units/reasonableness. On the Bagrut algebra paper, name each inverse operation, check by substitution, and keep method marks even if arithmetic slips at the end.",
+      "explanation_he": "**שלב 1 — מידול.** מגדירים משתנה וכותבים משוואה.\n\n**שלב 2 — פתרון.**\n\n**שלב 3 — בדיקה.** בבגרות באלגברה ציינו כל פעולה הפוכה, בדקו בהצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון בסוף.",
+      "answer_payload": {
+        "steps_en": [
+          "Define variable + equation",
+          "Solve",
+          "Check"
+        ],
+        "steps_he": [
+          "הגדרת משתנה + משוואה",
+          "פתרון",
+          "בדיקה"
+        ]
+      },
+      "rubric_en": "Full marks: model + solve + check. Partial: model only.",
+      "rubric_he": "מלא: מידול+פתרון+בדיקה. חלקי: מידול בלבד.",
+      "id": "systems_linear_equations__4pt-q26"
+    },
+    {
+      "id": "systems_linear_equations__4pt-facet-auto",
+      "ord": 27,
+      "kind": "open",
+      "difficulty": "medium",
+      "facets": [
+        "parametric_root_conditions",
+        "word_problem_setup"
+      ],
+      "stem_en": "Apply the lesson facets (parametric_root_conditions, word_problem_setup): give a short worked example.",
+      "stem_he": "יישמו את פני השיעור (parametric_root_conditions, word_problem_setup): תנו דוגמה פתורה קצרה.",
+      "explanation_en": "**Facet practice.** Identify which facet applies, write the governing relation, compute or justify in two steps, then verify by substitution or a limiting case. See the facet theory section in this lesson for the checklist keywords and worked patterns. Keep method marks visible even if arithmetic slips.",
+      "explanation_he": "**תרגול פנים.** זהו איזה פן חל, כתבו את הקשר השולט, חשבו או הצדיקו בשני שלבים, ואמתו בהצבה או במקרה גבול. ראו את סעיף הפנים בשיעור לרשימת מילות המפתח ולדפוסים. השאירו ניקוד שיטה גלוי גם אם יש טעות חשבון.",
+      "correct_answer": "see facet section",
+      "skill_atoms": []
+    }
+  ],
+  "est_minutes": 55,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
+}
