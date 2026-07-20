@@ -45,7 +45,7 @@ function upsertQuestions(lesson, tag, questions) {
       ...q,
       id: `${lesson.concept_id}-${tag}-${ord}`,
       ord,
-      skill_atoms: q.skill_atoms || (lesson.skill_atom_bank || []).slice(0, 2),
+      skill_atoms: q.skill_atoms || (lesson.skill_atom_bank || []).slice(0, 2).concat(['exam_archetype']).slice(0, 2),
     });
     for (const f of q.facets || []) existing.add(f);
   }
