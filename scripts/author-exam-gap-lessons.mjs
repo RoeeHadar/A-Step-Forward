@@ -412,7 +412,7 @@ function rewriteIntro(lesson, title_en, title_he, summary_en, summary_he, intro_
       stem_en:
         'From a two-way contingency table of pass/fail × morning/evening, compute $P(\\text{pass}|\\text{morning})$ from cell and column totals.',
       stem_he:
-        'מטבלת עבר/נכשל × בוקר/ערב, חשבו $P(\\text{עבר}|\\text{בוקר})$ מסכומי תא ועמודה.',
+        'מטבלת עבר/נכשל × בוקר/ערב, חשבו $P(\\text{pass}|\\text{morning})$ מסכומי תא ועמודה.',
       correct_answer: 'cell / morning column total',
       explanation_en:
         'Conditional probability from a two-way table is the joint cell divided by the conditioning margin. Do not divide by the grand total unless you want the joint, not the conditional.',
@@ -427,7 +427,7 @@ function rewriteIntro(lesson, title_en, title_he, summary_en, summary_he, intro_
       stem_en:
         'A three-way table classifies students by track × gender × pass. Explain how to read $P(\\text{pass}|\\text{5pt},\\text{female})$ by slicing to a two-way layer.',
       stem_he:
-        'טבלה תלת-ממדית מסווגת לפי מסלול × מגדר × עבר. הסבירו איך קוראים $P(\\text{עבר}|\\text{5 יח׳},\\text{נקבה})$ על ידי חיתוך לשכבה דו-ממדית.',
+        'טבלה תלת-ממדית מסווגת לפי מסלול × מגדר × עבר. הסבירו איך קוראים $P(\\text{pass}|\\text{5pt},\\text{female})$ על ידי חיתוך לשכבה דו-ממדית.',
       correct_answer: 'fix 5pt layer; female column; pass cell / female total in that layer',
       explanation_en:
         'Fix the third factor (track = 5pt) to get a two-way gender × pass table, then compute the conditional as in a two-way table. Three-way tables are layered two-ways — name the slice explicitly.',
@@ -465,7 +465,7 @@ function rewriteIntro(lesson, title_en, title_he, summary_en, summary_he, intro_
     body_en_md: `**Bernoulli.** One trial: $P(\\text{success})=p$, $P(\\text{failure})=1-p$. Mean $p$, variance $p(1-p)$.
 
 **Binomial setup.** $n$ independent Bernoulli($p$) trials $\\Rightarrow X\\sim\\mathrm{Bin}(n,p)$ with $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$. Checklist: fixed $n$, same $p$, independence, success/failure coding.`,
-    body_he_md: `**ברנולי.** ניסוי אחד: $P(\\text{הצלחה})=p$. תוחלת $p$, שונות $p(1-p)$.
+    body_he_md: `**ברנולי.** ניסוי אחד: $P(\\text{success})=p$. תוחלת $p$, שונות $p(1-p)$.
 
 **הצבה בינומית.** $n$ ניסויי Bernoulli בלתי תלויים $\\Rightarrow X\\sim\\mathrm{Bin}(n,p)$. רשימת בדיקה: $n$ קבוע, אותו $p$, אי-תלות, קידוד הצלחה/כישלון.`,
   });
@@ -493,7 +493,7 @@ function rewriteIntro(lesson, title_en, title_he, summary_en, summary_he, intro_
       stem_en:
         'A student answers 5 independent true/false items with $P(\\text{correct})=0.5$. Set up $X\\sim\\mathrm{Bin}(n,p)$ and write $P(X=3)$.',
       stem_he:
-        'תלמיד עונה על 5 שאלות נכון/לא נכון בלתי תלויות עם $P(\\text{נכון})=0.5$. הציבו $X\\sim\\mathrm{Bin}(n,p)$ וכתבו $P(X=3)$.',
+        'תלמיד עונה על 5 שאלות נכון/לא נכון בלתי תלויות עם $P(\\text{correct})=0.5$. הציבו $X\\sim\\mathrm{Bin}(n,p)$ וכתבו $P(X=3)$.',
       correct_answer: 'Bin(5,0.5); P(X=3)=C(5,3)(0.5)^5',
       explanation_en:
         '$n=5$, $p=0.5$, independence OK. $P(X=3)=\\binom{5}{3}(0.5)^3(0.5)^2=\\binom{5}{3}(0.5)^5$. The binomial setup is naming $n$ and $p$ before computing.',
