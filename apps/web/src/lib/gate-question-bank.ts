@@ -8,6 +8,7 @@
 import { createHash } from 'node:crypto';
 import { getBundledLesson } from '@/lib/lesson-bundle';
 import { resolveConceptAlias } from '@/lib/concept-aliases';
+import { resolveCorrectBool } from '@/lib/answer-normalize';
 import type { LessonQuestionRow, LessonPointsLevel } from '@/lib/neon-db';
 
 /** v3: exam-style multipart corpus preferred; v2 lesson-bank hard items still accepted. */
@@ -192,9 +193,10 @@ function toGatePick(
   }
 
   if (kind === 'true_false') {
-    const correctBool =
-      q.answer_payload?.correct_bool ??
-      (q.correct_answer?.toLowerCase() === 'true' || q.correct_answer === '1');
+    const correctBool = resolveCorrectBool(q.answer_payload, {
+      correct_answer: q.correct_answer,
+    });
+    if (correctBool == null) return null;
     const yes = locale === 'he' ? 'נכון' : 'True';
     const no = locale === 'he' ? 'לא נכון' : 'False';
     base.options = [

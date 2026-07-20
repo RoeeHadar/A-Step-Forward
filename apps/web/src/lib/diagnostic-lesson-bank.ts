@@ -7,6 +7,7 @@ import 'server-only';
 import { createHash } from 'node:crypto';
 import { getBundledLesson } from '@/lib/lesson-bundle';
 import { resolveConceptAlias, resolveConceptAliasCanonical } from '@/lib/concept-aliases';
+import { resolveCorrectBool } from '@/lib/answer-normalize';
 import type { DiagnosticItem, LearnerProfileRow, LessonQuestionRow } from '@/lib/neon-db';
 import { isTemplateDiagnosticStem } from '@/lib/neon-db';
 import {
@@ -40,9 +41,10 @@ function buildOptions(
   q: LessonQuestionRow,
 ): { options: DiagnosticItem['options']; options_he: DiagnosticItem['options_he'] } | null {
   if (q.kind === 'true_false') {
-    const correctBool =
-      q.answer_payload?.correct_bool ??
-      (q.correct_answer?.toLowerCase() === 'true');
+    const correctBool = resolveCorrectBool(q.answer_payload, {
+      correct_answer: q.correct_answer,
+    });
+    if (correctBool == null) return null;
     const correct = correctBool ? 'A' : 'B';
     return {
       options: { choices: ['True', 'False'], correct },

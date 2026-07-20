@@ -83,6 +83,10 @@ function normalizeQuestion(q, index) {
     if (out.kind === 'true_false' && out.correct_bool === undefined) {
       if (typeof p.value === 'boolean') out.correct_bool = p.value;
       else if (typeof p.correct_bool === 'boolean') out.correct_bool = p.correct_bool;
+      else if (typeof p.correct === 'boolean') out.correct_bool = p.correct;
+    }
+    if (out.kind === 'true_false' && typeof out.correct_bool === 'boolean') {
+      out.answer_payload = { ...(typeof p === 'object' && p ? p : {}), correct_bool: out.correct_bool };
     }
     if ((out.kind === 'numeric' || out.kind === 'fill_blank') && (out.correct_answer === undefined || out.correct_answer === null)) {
       const v = p.value ?? p.answer ?? (Array.isArray(p.acceptable_answers) ? p.acceptable_answers[0] : undefined);

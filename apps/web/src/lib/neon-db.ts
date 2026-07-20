@@ -61,7 +61,14 @@ import {
 import { conceptMatchesSubjects } from './concept-scope';
 import { resolveConceptAlias } from './concept-aliases';
 import { resolveLessonConceptId } from './lesson-concept-resolve';
-import { answersMatch, coerceBooleanAnswer, coerceOptionIndex, getAcceptedAnswers, numericClose } from './answer-normalize';
+import {
+  answersMatch,
+  coerceBooleanAnswer,
+  coerceOptionIndex,
+  getAcceptedAnswers,
+  numericClose,
+  resolveCorrectBool,
+} from './answer-normalize';
 
 neonConfig.fetchConnectionCache = true;
 
@@ -2867,7 +2874,9 @@ export function gradeLessonAnswer(
       return { correct: setEqual(picked, expected), graded_by: 'server' };
     }
     case 'true_false': {
-      const expected = coerceBooleanAnswer(q.answer_payload?.correct_bool);
+      const expected = resolveCorrectBool(q.answer_payload, {
+        correct_answer: q.correct_answer,
+      });
       const picked = coerceBooleanAnswer(userAnswer);
       if (picked == null || expected == null) {
         return { correct: false, graded_by: 'server', reason: 'invalid answer' };

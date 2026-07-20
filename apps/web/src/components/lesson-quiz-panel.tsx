@@ -11,7 +11,7 @@ import {
   getAcceptedAnswers,
   numericClose,
   coerceOptionIndex,
-  coerceBooleanAnswer,
+  resolveCorrectBool,
 } from '@/lib/answer-normalize';
 import type {
   LessonQuestionKind,
@@ -190,7 +190,9 @@ function QuestionCard({
   }
 
   const correctOptionIndex = coerceOptionIndex(question.correct_index);
-  const correctBool = coerceBooleanAnswer(payload?.correct_bool);
+  const correctBool = resolveCorrectBool(payload, {
+    correct_answer: question.correct_answer,
+  });
   const correctMultiIndices = (payload?.correct_indices ?? [])
     .map((v) => coerceOptionIndex(v))
     .filter((v): v is number => v != null);
@@ -418,7 +420,7 @@ function QuestionCard({
             ] as const
           ).map((opt) => {
             const isUser = state.userAnswer === opt.v;
-            const isCorrect = opt.v === (correctBool ?? false);
+            const isCorrect = correctBool != null && opt.v === correctBool;
             let cls = 'border-border bg-surface-1/50 hover:border-primary/40';
             if (state.submitted) {
               if (isCorrect) cls = 'border-emerald-500/60 bg-emerald-500/10';

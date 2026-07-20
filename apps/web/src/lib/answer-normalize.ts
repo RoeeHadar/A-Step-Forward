@@ -98,6 +98,28 @@ export function coerceBooleanAnswer(value: unknown): boolean | null {
   return null;
 }
 
+/**
+ * Resolve the authored true/false key from heterogeneous seed shapes.
+ * Lessons historically store `answer_payload.value` or `.correct`; graders
+ * historically only read `.correct_bool` — accept all three (+ top-level).
+ */
+export function resolveCorrectBool(
+  payload: unknown,
+  fallbacks?: { correct_bool?: unknown; correct_answer?: string | null },
+): boolean | null {
+  if (payload && typeof payload === 'object') {
+    const p = payload as Record<string, unknown>;
+    const fromPayload = coerceBooleanAnswer(p.correct_bool ?? p.value ?? p.correct);
+    if (fromPayload != null) return fromPayload;
+  }
+  const fromTop = coerceBooleanAnswer(fallbacks?.correct_bool);
+  if (fromTop != null) return fromTop;
+  const ca = fallbacks?.correct_answer?.trim().toLowerCase();
+  if (ca === 'true' || ca === '1' || ca === 'yes') return true;
+  if (ca === 'false' || ca === '0' || ca === 'no') return false;
+  return null;
+}
+
 export function answersMatch(
   userAnswer: string,
   accepted: string[],

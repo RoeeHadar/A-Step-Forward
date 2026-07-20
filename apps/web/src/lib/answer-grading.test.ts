@@ -3,35 +3,47 @@ import {
   coerceBooleanAnswer,
   coerceOptionIndex,
   getAcceptedAnswers,
+  resolveCorrectBool,
 } from './answer-normalize';
-import { gradeLessonAnswer } from './neon-db';
+
+/** Mirrors neon-db gradeLessonAnswer true_false branch (no Neon import). */
+function gradeTrueFalse(
+  payload: unknown,
+  userAnswer: unknown,
+  correctAnswer?: string | null,
+): boolean {
+  const expected = resolveCorrectBool(payload, { correct_answer: correctAnswer });
+  const picked = coerceBooleanAnswer(userAnswer);
+  if (picked == null || expected == null) return false;
+  return picked === expected;
+}
 
 describe('answer grading coercion', () => {
-  it('coerces string correct_index from Postgres JSON', () => {
+  it('coerces string correct_index', () => {
     expect(coerceOptionIndex('0')).toBe(0);
     expect(coerceOptionIndex(2)).toBe(2);
-    expect(
-      gradeLessonAnswer(
-        { kind: 'mcq', correct_index: '1' as unknown as number, correct_answer: null, answer_payload: null },
-        1,
-        undefined,
-      ).correct,
-    ).toBe(true);
   });
 
-  it('coerces string correct_bool', () => {
-    expect(
-      gradeLessonAnswer(
-        {
-          kind: 'true_false',
-          correct_index: null,
-          correct_answer: null,
-          answer_payload: { correct_bool: 'true' as unknown as boolean },
-        },
-        true,
-        undefined,
-      ).correct,
-    ).toBe(true);
+  it('coerces string correct_bool via resolveCorrectBool', () => {
+    expect(resolveCorrectBool({ correct_bool: 'true' })).toBe(true);
+    expect(gradeTrueFalse({ correct_bool: 'true' }, true)).toBe(true);
+  });
+
+  it('grades true_false from answer_payload.value (seed alias)', () => {
+    expect(gradeTrueFalse({ value: true }, true)).toBe(true);
+    expect(gradeTrueFalse({ value: true }, false)).toBe(false);
+  });
+
+  it('grades true_false from answer_payload.correct (seed alias)', () => {
+    expect(gradeTrueFalse({ correct: false }, false)).toBe(true);
+  });
+
+  it('resolveCorrectBool prefers correct_bool then value then correct', () => {
+    expect(resolveCorrectBool({ correct_bool: true, value: false })).toBe(true);
+    expect(resolveCorrectBool({ value: false })).toBe(false);
+    expect(resolveCorrectBool({ correct: true })).toBe(true);
+    expect(resolveCorrectBool({}, { correct_answer: 'true' })).toBe(true);
+    expect(resolveCorrectBool(null)).toBeNull();
   });
 
   it('extracts concise answers from polluted acceptable_answers seeds', () => {
