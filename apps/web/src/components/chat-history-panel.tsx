@@ -35,6 +35,7 @@ export function ChatHistoryPanel({
   agent,
   locale,
   activeSessionId,
+  activeHasMessages = false,
   onSelectSession,
   onNewChat,
   className,
@@ -42,6 +43,8 @@ export function ChatHistoryPanel({
   agent: AgentName;
   locale: Lang;
   activeSessionId: string | null;
+  /** Hide sidebar empty copy while the active thread already has turns. */
+  activeHasMessages?: boolean;
   onSelectSession: (sessionId: string | null) => void;
   onNewChat: () => void;
   className?: string;
@@ -93,9 +96,9 @@ export function ChatHistoryPanel({
       <div className="max-h-[420px] flex-1 overflow-y-auto p-2">
         {loading ? (
           <p className="px-2 py-4 text-xs text-muted-foreground">…</p>
-        ) : sessions.length === 0 ? (
+        ) : sessions.length === 0 && !activeHasMessages ? (
           <p className="px-2 py-4 text-xs text-muted-foreground">{t.empty}</p>
-        ) : (
+        ) : sessions.length === 0 ? null : (
           <ul className="space-y-1">
             {sessions.map((s) => {
               const sid = s.session_id;

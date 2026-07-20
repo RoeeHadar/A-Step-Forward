@@ -7,6 +7,7 @@ import {
   resolveGoalConceptId,
   ROLLING_VISIBLE_WEEKS,
 } from './plan-worklist';
+import { getFrontier } from './plan-pacing';
 
 const mockBuildLearningPlan = vi.fn();
 
@@ -66,9 +67,9 @@ describe('buildUnifiedPlanConceptOrder', () => {
     });
 
     expect(ordered[0]).toBe('functions_quadratic');
-    expect(ordered).toContain('limits');
-    expect(ordered.indexOf('functions_quadratic')).toBeLessThan(ordered.indexOf('limits'));
-    expect(mockBuildLearningPlan).toHaveBeenCalled();
+    expect(ordered.length).toBeGreaterThan(0);
+    // Frontier-anchored selection is preferred over BFS for goals with a manifest.
+    expect(mockBuildLearningPlan).not.toHaveBeenCalled();
   });
 
   it('focusConceptsOnly filters to prepend and priority set', async () => {
@@ -126,6 +127,32 @@ describe('buildFastPlanConceptOrder', () => {
 
     expect(ordered.length).toBeGreaterThan(0);
     expect(ordered).toContain('limits');
+  });
+
+  it('anchors bagrut_math_5 mid-mastery away from 3pt foundations', () => {
+    const frontier = getFrontier('bagrut_math_5')!;
+    const criticalIds = frontier.core.filter((c) => c.critical).map((c) => c.id);
+    const nonCritical = frontier.core.filter((c) => !c.critical).map((c) => c.id);
+    const nMasterCritical = Math.floor(criticalIds.length * 0.82);
+    const mastered = [
+      ...criticalIds.slice(0, nMasterCritical),
+      ...nonCritical.slice(0, 8),
+    ];
+    const mastery = Object.fromEntries(mastered.map((id) => [id, 0.88]));
+
+    const ordered = buildFastPlanConceptOrder({
+      profile: baseProfile,
+      mastery,
+    });
+
+    expect(ordered.length).toBeGreaterThan(0);
+    expect(ordered).not.toContain('quadrilaterals');
+    expect(ordered).not.toContain('arithmetic');
+    const depthById = new Map(frontier.core.map((c) => [c.id, c.depth]));
+    for (const id of ordered.slice(0, 4)) {
+      expect(depthById.get(id)!).toBeGreaterThanOrEqual(7);
+    }
+    expect(mockBuildLearningPlan).not.toHaveBeenCalled();
   });
 });
 

@@ -20,14 +20,19 @@
  * Usage (Windows / corporate proxy):
  *   $env:NODE_TLS_REJECT_UNAUTHORIZED='0'
  *   $env:DATABASE_URL='<prod Neon URL — never commit>'
- *   node scripts/seed-pilot-demo.mjs --variant building [--user-id user_xxx] [--goal bagrut_math_5]
+ *   node scripts/seed-pilot-demo.mjs --variant building [--user-id user_xxx | --email a@b.com] [--goal bagrut_math_5] [--anxiety 8] [--hours 3]
  *
  * Idempotent: replaces the learner's plan + re-seeds mastery each run. Safe to re-run
  * and to flip between variants. Never commits secrets. One account = one state at a time.
+ *
+ * Cohort pilot: prefer `node scripts/seed-cohort-pilot.mjs` (reads docs/qa/cohort-pilot/roster.json).
  */
+import fs from 'node:fs';
+import path from 'node:path';
 import { neon } from '@neondatabase/serverless';
 import { randomUUID } from 'node:crypto';
 import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
 
 const require = createRequire(import.meta.url);
 const frontiers = require('../apps/web/src/lib/goal-frontiers.generated.json');
@@ -41,19 +46,94 @@ const VARIANTS = {
   'goal-complete': { criticalFrac: 1, extra: 'all', deadlineDays: 30, passedMock: true, hours: 10 },
 };
 
+function loadEnvLocal() {
+  const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+  const envPath = path.join(root, 'apps/web/.env.local');
+  if (!fs.existsSync(envPath)) return;
+  for (const raw of fs.readFileSync(envPath, 'utf8').split('\n')) {
+    const line = raw.replace(/\r$/, '');
+    const m = line.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+    if (!m) continue;
+    let val = m[2].trim();
+    if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+      val = val.slice(1, -1);
+    }
+    if (val && !process.env[m[1]]) process.env[m[1]] = val;
+  }
+}
+
 const args = process.argv.slice(2);
 const getArg = (name, def) => {
   const i = args.indexOf(name);
   return i >= 0 && args[i + 1] ? args[i + 1] : def;
 };
-const LEARNER = getArg('--user-id', 'user_3FakzyAcsPAfzap2ule6sVHNahk');
+
+loadEnvLocal();
+
+const EMAIL = getArg('--email', null);
 const GOAL = getArg('--goal', 'bagrut_math_5');
 const VARIANT = getArg('--variant', 'building');
+const ANXIETY_RAW = getArg('--anxiety', null);
+const HOURS_RAW = getArg('--hours', null);
 if (!VARIANTS[VARIANT]) {
   console.error(`Unknown --variant "${VARIANT}". Use one of: ${Object.keys(VARIANTS).join(', ')}`);
   process.exit(1);
 }
-const cfg = VARIANTS[VARIANT];
+const cfg = { ...VARIANTS[VARIANT] };
+if (HOURS_RAW != null) {
+  const h = Number(HOURS_RAW);
+  if (!Number.isFinite(h) || h <= 0) {
+    console.error(`Invalid --hours "${HOURS_RAW}"`);
+    process.exit(1);
+  }
+  cfg.hours = h;
+}
+const anxiety =
+  ANXIETY_RAW == null
+    ? null
+    : (() => {
+        const n = Number(ANXIETY_RAW);
+        if (!Number.isFinite(n) || n < 0 || n > 10) {
+          console.error(`Invalid --anxiety "${ANXIETY_RAW}" (use 0–10)`);
+          process.exit(1);
+        }
+        return n;
+      })();
+
+async function resolveLearnerId() {
+  const fromArg = getArg('--user-id', null);
+  if (fromArg) return fromArg;
+  if (EMAIL) {
+    const secret = process.env.CLERK_SECRET_KEY;
+    if (!secret) {
+      console.error('CLERK_SECRET_KEY missing (apps/web/.env.local) for --email lookup');
+      process.exit(1);
+    }
+    const url = new URL('https://api.clerk.com/v1/users');
+    url.searchParams.set('email_address', EMAIL);
+    url.searchParams.set('limit', '10');
+    const res = await fetch(url, { headers: { Authorization: `Bearer ${secret}` } });
+    if (!res.ok) {
+      console.error(`Clerk API ${res.status}: ${await res.text()}`);
+      process.exit(1);
+    }
+    const data = await res.json();
+    const users = Array.isArray(data) ? data : data.data ?? [];
+    const match = users.find((u) =>
+      (u.email_addresses ?? []).some(
+        (e) => e.email_address?.toLowerCase() === EMAIL.toLowerCase(),
+      ),
+    );
+    if (!match?.id) {
+      console.error(`No Clerk user for ${EMAIL}`);
+      process.exit(1);
+    }
+    return match.id;
+  }
+  return 'user_3FakzyAcsPAfzap2ule6sVHNahk';
+}
+
+const LEARNER = await resolveLearnerId();
 
 const url = process.env.DATABASE_URL ?? process.env.POSTGRES_URL;
 if (!url) { console.error('DATABASE_URL not set'); process.exit(1); }
@@ -66,6 +146,55 @@ const core = goal.core;
 const criticalIds = core.filter((c) => c.critical).map((c) => c.id);
 const nonCritical = core.filter((c) => !c.critical).map((c) => c.id);
 const MASTER_SCORE = 0.88;
+const MASTERY_THRESHOLD = 0.8;
+const CONCEPTS_PER_WEEK = 4;
+
+/** Mirrors apps/web/src/lib/plan-pacing.ts selectNextConcepts (manifest-only). */
+function selectNextConceptsFromFrontier(args) {
+  const goal = frontiers.goals[args.goalKey];
+  if (!goal) return [];
+  const threshold = args.threshold ?? MASTERY_THRESHOLD;
+  const mastered = args.masteredConceptIds
+    ? new Set(args.masteredConceptIds)
+    : new Set(
+        Object.entries(args.masteryScores ?? {})
+          .filter(([, score]) => typeof score === 'number' && score >= threshold)
+          .map(([id]) => id),
+      );
+  const excluded = new Set(args.excludeConceptIds ?? []);
+  const weak = new Set(args.weakConceptIds ?? []);
+  const engaged = new Set(args.engagedConceptIds ?? []);
+  for (const id of mastered) engaged.add(id);
+  let anchorDepth = 0;
+  for (const entry of goal.core) {
+    if (engaged.has(entry.id) && entry.depth > anchorDepth) anchorDepth = entry.depth;
+  }
+  const lookback = args.anchorLookback ?? 0;
+  const minDepth = Math.max(0, anchorDepth - lookback);
+  const out = [];
+  for (const entry of goal.core) {
+    if (out.length >= args.limit) break;
+    if (mastered.has(entry.id)) continue;
+    if (excluded.has(entry.id) && !weak.has(entry.id)) continue;
+    if (entry.depth >= minDepth || engaged.has(entry.id) || weak.has(entry.id)) {
+      out.push(entry.id);
+    }
+  }
+  return out;
+}
+
+function chunkConceptsIntoWeeks(concepts, numWeeks, perWeek = CONCEPTS_PER_WEEK) {
+  const weeks = Math.max(1, numWeeks);
+  const cap = Math.max(1, perWeek);
+  const limited = concepts.slice(0, weeks * cap);
+  const groups = Array.from({ length: weeks }, () => []);
+  for (let i = 0; i < limited.length; i += 1) {
+    const weekIdx = Math.min(weeks - 1, Math.floor(i / cap));
+    groups[weekIdx].push(limited[i]);
+  }
+  if (groups[0].length === 0 && limited.length > 0) groups[0].push(limited[0]);
+  return groups.filter((g) => g.length > 0);
+}
 
 const nMasterCritical = Math.floor(criticalIds.length * cfg.criticalFrac);
 const masteredCritical = criticalIds.slice(0, nMasterCritical);
@@ -73,9 +202,16 @@ const masteredExtra = cfg.extra === 'all' ? nonCritical : nonCritical.slice(0, c
 const masteredSet = new Set([...masteredCritical, ...masteredExtra]);
 
 const unmastered = core.map((c) => c.id).filter((id) => !masteredSet.has(id));
-let weekGroups = [unmastered.slice(0, 4), unmastered.slice(4, 8), unmastered.slice(8, 12)].filter(
-  (g) => g.length > 0,
-);
+const masteryScores = Object.fromEntries([...masteredSet].map((id) => [id, MASTER_SCORE]));
+const orderedConcepts = selectNextConceptsFromFrontier({
+  goalKey: GOAL,
+  masteryScores,
+  engagedConceptIds: [...masteredSet],
+  limit: 12,
+});
+const planConcepts =
+  orderedConcepts.length > 0 ? orderedConcepts : unmastered;
+let weekGroups = chunkConceptsIntoWeeks(planConcepts, 3, CONCEPTS_PER_WEEK);
 // Goal-complete / no unmastered → a maintenance-review week on top critical concepts.
 if (weekGroups.length === 0) weekGroups = [criticalIds.slice(0, 4)];
 
@@ -85,29 +221,40 @@ const startStr = now.toISOString().slice(0, 10);
 const endDate = new Date(now); endDate.setDate(endDate.getDate() + 21);
 const endStr = endDate.toISOString().slice(0, 10);
 
-console.log(`Seeding ${LEARNER} — variant "${VARIANT}" — goal ${GOAL}`);
+console.log(`Seeding ${LEARNER} — variant "${VARIANT}" — goal ${GOAL}${EMAIL ? ` (${EMAIL})` : ''}`);
 console.log(`  critical: ${criticalIds.length} total, mastering ${masteredCritical.length} (+${masteredExtra.length} non-critical)`);
+console.log(`  plan week-1 concepts: ${weekGroups[0]?.join(', ') ?? '(none)'}`);
 console.log(`  deadline: +${cfg.deadlineDays}d   hours/wk: ${cfg.hours}   passed mock: ${cfg.passedMock}   plan weeks: ${weekGroups.map((g) => g.length).join(' / ')}`);
+if (anxiety != null) console.log(`  anxiety: ${anxiety}/10`);
 
 try {
   // 1) Profile
-  const existing = await sql`SELECT personality_profile FROM learner_profiles WHERE learner_id = ${LEARNER} LIMIT 1`;
+  const existing = await sql`SELECT personality_profile, mental_state FROM learner_profiles WHERE learner_id = ${LEARNER} LIMIT 1`;
   const prevPP = existing[0]?.personality_profile && typeof existing[0].personality_profile === 'object'
     ? existing[0].personality_profile : {};
   const pp = { ...prevPP, goal_key: GOAL, attention_span_min: 40 };
+  const prevMs =
+    existing[0]?.mental_state && typeof existing[0].mental_state === 'object'
+      ? existing[0].mental_state
+      : {};
+  const mentalState =
+    anxiety != null ? { ...prevMs, anxiety, source: 'seed-pilot-demo' } : prevMs;
+  const mentalJson = JSON.stringify(mentalState);
   if (existing.length > 0) {
     await sql`
       UPDATE learner_profiles SET goal=${GOAL}, points_group=${goal.points_group}, subjects=${goal.subjects},
         hours_per_week=${cfg.hours}, attention_span=40, next_test_date=${deadline.toISOString().slice(0, 10)},
-        personality_profile=${JSON.stringify(pp)}::jsonb, updated_at=NOW()
+        personality_profile=${JSON.stringify(pp)}::jsonb,
+        mental_state=${mentalJson}::jsonb,
+        updated_at=NOW()
       WHERE learner_id=${LEARNER}`;
     console.log('  \u2713 profile updated');
   } else {
     await sql`
       INSERT INTO learner_profiles (learner_id, goal, points_group, subjects, hours_per_week, attention_span,
-        next_test_date, personality_profile, created_at, updated_at)
+        next_test_date, personality_profile, mental_state, created_at, updated_at)
       VALUES (${LEARNER}, ${GOAL}, ${goal.points_group}, ${goal.subjects}, ${cfg.hours}, 40,
-        ${deadline.toISOString().slice(0, 10)}, ${JSON.stringify(pp)}::jsonb, NOW(), NOW())`;
+        ${deadline.toISOString().slice(0, 10)}, ${JSON.stringify(pp)}::jsonb, ${mentalJson}::jsonb, NOW(), NOW())`;
     console.log('  \u2713 profile inserted');
   }
 

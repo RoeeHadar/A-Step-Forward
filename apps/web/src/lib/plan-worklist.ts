@@ -11,6 +11,7 @@ import {
   conceptMatchesSubjects,
   subjectSetForPlan,
 } from '@/lib/concept-scope';
+import { hasFrontier, selectNextConcepts } from '@/lib/plan-pacing';
 
 export const PLAN_SCHEMA_VERSION = 2;
 
@@ -246,6 +247,46 @@ function extractPathConceptIds(path: Array<{ concept_id: string; relation: strin
   return [...nonSelf, ...self];
 }
 
+function engagedConceptIdsFromMastery(mastery: Record<string, number>): string[] {
+  return Object.entries(mastery)
+    .filter(([, score]) => score >= WEAK_THRESHOLD)
+    .map(([id]) => id);
+}
+
+function weakConceptIdsFromMastery(mastery: Record<string, number>): string[] {
+  return Object.entries(mastery)
+    .filter(([, score]) => score < WEAK_THRESHOLD)
+    .map(([id]) => id);
+}
+
+function frontierAnchoredConceptOrder(args: {
+  profile: PlanWorklistProfile;
+  mastery: Record<string, number>;
+  options: PlanWorklistOptions;
+  limit: number;
+}): string[] {
+  const goalKey = goalKeyFromProfile(args.profile);
+  if (!goalKey || !hasFrontier(goalKey)) return [];
+
+  const excludeConcepts = args.options.excludeConcepts ?? [];
+  const priorityConcepts = args.options.priorityConcepts ?? [];
+  const prependConcepts = args.options.prependConcepts ?? [];
+
+  return selectNextConcepts({
+    goalKey,
+    masteryScores: args.mastery,
+    engagedConceptIds: [
+      ...engagedConceptIdsFromMastery(args.mastery),
+      ...Object.keys(args.profile.self_scores ?? {}),
+      ...prependConcepts,
+      ...priorityConcepts,
+    ],
+    excludeConceptIds: excludeConcepts,
+    weakConceptIds: [...weakConceptIdsFromMastery(args.mastery), ...priorityConcepts],
+    limit: args.limit,
+  });
+}
+
 function mergeConceptOrder(args: {
   prependConcepts: string[];
   priorityConcepts: string[];
@@ -291,6 +332,22 @@ export function buildFastPlanConceptOrder(args: {
   const priorityConcepts = options.priorityConcepts ?? [];
   const excludeConcepts = options.excludeConcepts ?? [];
   const focusConceptsOnly = options.focusConceptsOnly === true;
+
+  const anchored = frontierAnchoredConceptOrder({
+    profile: args.profile,
+    mastery: args.mastery,
+    options,
+    limit: ROLLING_VISIBLE_WEEKS * CONCEPTS_PER_ROLLING_WEEK,
+  });
+  if (anchored.length > 0) {
+    return mergeConceptOrder({
+      prependConcepts,
+      priorityConcepts,
+      pathIds: anchored,
+      excludeConcepts,
+      focusConceptsOnly,
+    });
+  }
 
   const worklist = collectWorklistFallback(
     args.mastery,
@@ -385,9 +442,14 @@ export async function buildUnifiedPlanConceptOrder(args: {
   const goalConceptId = resolveGoalConceptId(args.profile, args.mastery, options);
   const maxNodes = Math.max(24, args.numWeeks * 4);
 
-  let pathIds: string[] = [];
+  let pathIds: string[] = frontierAnchoredConceptOrder({
+    profile: args.profile,
+    mastery: args.mastery,
+    options,
+    limit: maxNodes,
+  });
 
-  if (goalConceptId) {
+  if (pathIds.length === 0 && goalConceptId) {
     const plan = await buildLearningPlan({
       learnerId: args.learnerId,
       goalConceptId,

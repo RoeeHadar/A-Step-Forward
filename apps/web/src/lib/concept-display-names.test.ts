@@ -36,4 +36,12 @@ describe('concept-display-names', () => {
     const dupes = titles.filter((t, i) => titles.indexOf(t) !== i);
     expect(dupes).toEqual([]);
   });
+
+  it('uses the learner points_group variant title when available', () => {
+    const base = resolveConceptTitles('quadrilaterals');
+    const fivePt = resolveConceptTitles('quadrilaterals', null, '5pt');
+    expect(base.title_he).toContain('3');
+    expect(fivePt.title_he).toContain('5');
+    expect(fivePt.title_he).not.toBe(base.title_he);
+  });
 });

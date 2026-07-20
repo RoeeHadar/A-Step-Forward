@@ -218,7 +218,12 @@ export function computePacing(inputs: PacingInputs): PacingResult | null {
       : baseLoad;
   const weekly_load = clamp(Math.round(easedLoad), 1, CONCEPTS_PER_ROLLING_WEEK);
 
-  const next_concepts = remaining_ordered.slice(0, weekly_load);
+  const next_concepts = selectNextConcepts({
+    goalKey: frontier.goal_key,
+    masteryScores: inputs.masteryScores,
+    masteredConceptIds: inputs.masteredConceptIds,
+    limit: weekly_load,
+  });
 
   return {
     goal_key: frontier.goal_key,

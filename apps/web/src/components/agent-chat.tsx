@@ -335,6 +335,7 @@ export function AgentChat({
   }
 
   const agentAccent = agentColors[agentName] ?? agentColors.tutor;
+  const hasChatContent = messages.length > 0 || isLoading;
 
   return (
     <div
@@ -351,6 +352,7 @@ export function AgentChat({
           agent={agentName}
           locale={locale === 'he' ? 'he' : 'en'}
           activeSessionId={sessionId}
+          activeHasMessages={hasChatContent}
           onSelectSession={(sid) => {
             if (sid) {
               localStorage.setItem(chatSessionKey(agentName), sid);
@@ -425,7 +427,7 @@ export function AgentChat({
           aria-live="polite"
           aria-label="Chat messages"
         >
-          {messages.length === 0 ? (
+          {!hasChatContent ? (
             <p className="text-center text-muted-foreground">{i18nMessages.chat.empty}</p>
           ) : (
             messages.map((m) => (

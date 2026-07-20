@@ -476,7 +476,9 @@ async function loadActivePlanStub(learnerId: string): Promise<LearningPlan | nul
       id: w.id,
       plan_id: plan.id,
       week_number: w.week_number,
-      concepts: w.concepts.map((cid) => litePlanConcept(cid, subjects, mastery)),
+      concepts: w.concepts.map((cid) =>
+        litePlanConcept(cid, subjects, mastery, profile?.points_group),
+      ),
       quiz_due_at: w.quiz_due_at,
       status: w.status,
     })),
@@ -1137,10 +1139,11 @@ function litePlanConcept(
   cid: string,
   learnerSubjects: string[],
   mastery: Record<string, number>,
+  pointsGroup?: string | null,
 ): PlanConcept {
   const kgInfo = kgById[cid];
   const subject = kgInfo?.subject ?? inferSubject(cid, learnerSubjects);
-  const titles = resolveConceptTitles(cid);
+  const titles = resolveConceptTitles(cid, null, pointsGroup);
   return {
     concept_id: cid,
     name: titles.title_en,
@@ -1157,6 +1160,7 @@ async function hydratePlanConcept(
   learnerSubjects: string[],
   mastery: Record<string, number>,
   cache: SubjectContentCache,
+  pointsGroup?: string | null,
 ): Promise<PlanConcept> {
   const kgInfo = kgById[cid];
   const subject = kgInfo?.subject ?? inferSubject(cid, learnerSubjects);
@@ -1164,7 +1168,7 @@ async function hydratePlanConcept(
     cachedSuggestedSections(cache, subject),
     cachedBagrutExams(cache, subject),
   ]);
-  const titles = resolveConceptTitles(cid);
+  const titles = resolveConceptTitles(cid, null, pointsGroup);
   return {
     concept_id: cid,
     name: titles.title_en,
@@ -1496,7 +1500,7 @@ async function persistLearningPlanTransaction(args: {
       plan_id: planId,
       week_number: w.weekNumber,
       concepts: w.concepts.map((cid) =>
-        litePlanConcept(cid, profile.subjects, mastery),
+        litePlanConcept(cid, profile.subjects, mastery, profile.points_group),
       ),
       quiz_due_at: w.quizDue,
       status: w.status,
@@ -2069,7 +2073,9 @@ export async function getCurrentPlan(learnerId: string): Promise<LearningPlan | 
   for (const w of weekRows) {
     const hydrated: PlanConcept[] = [];
     for (const cid of w.concepts) {
-      hydrated.push(await hydratePlanConcept(cid, subjects, mastery, contentCache));
+      hydrated.push(
+        await hydratePlanConcept(cid, subjects, mastery, contentCache, profile?.points_group),
+      );
     }
     weeks.push({
       id: w.id,

@@ -8,6 +8,7 @@ import kg from './kg-data.json';
 import lessonsIndex from './lessons-index.generated.json';
 import { resolveConceptAlias, resolveConceptAliasCanonical, isAliasConceptId } from './concept-aliases';
 import { isConceptInLessonIndex } from './lesson-index';
+import { resolveVariantLessonId } from './lesson-concept-resolve';
 
 interface KgConcept {
   id: string;
@@ -175,13 +176,23 @@ function resolveCanonicalTitles(conceptId: string): ConceptTitles {
 export function resolveConceptTitles(
   conceptId: string,
   lessonMeta?: { title_en: string | null; title_he: string | null } | null,
+  pointsGroup?: string | null,
 ): ConceptTitles {
   // Never throw: a single unresolved/exotic id must not take down a whole
   // page that maps over many concepts (e.g. /app/progress). Fall back to a
   // humanized id instead of propagating.
   let canonical: ConceptTitles;
   try {
-    canonical = resolveCanonicalTitles(conceptId);
+    if (pointsGroup) {
+      const variantId = resolveVariantLessonId(conceptId, pointsGroup);
+      if (variantId !== conceptId) {
+        canonical = resolveCanonicalTitles(variantId);
+      } else {
+        canonical = resolveCanonicalTitles(conceptId);
+      }
+    } else {
+      canonical = resolveCanonicalTitles(conceptId);
+    }
   } catch {
     canonical = { title_en: humanizeId(conceptId), title_he: null };
   }

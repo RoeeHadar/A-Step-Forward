@@ -5,6 +5,12 @@ onboarding → final-exam journey can be walked deterministically. Pair with
 [ADR-0010](../adr/0010-assessment-driven-progression.md) and
 [ADR-0009](../adr/0009-goal-paced-adaptive-planning.md).
 
+## Related — multi-student cohort pilot
+
+For a **10 students + 1 teacher** human pilot (personas, forms, batch seed), see
+[`docs/qa/cohort-pilot/README.md`](./cohort-pilot/README.md) and
+`node scripts/seed-cohort-pilot.mjs`.
+
 ## Setup
 
 Seed a state with the reusable ops script (never commit the URL):

@@ -292,6 +292,31 @@ describe('plan-pacing: selectNextConcepts (anchored)', () => {
     // …but a non-weak used concept is not.
     expect(picked).not.toContain(used[1]!);
   });
+
+  it('building variant (~82% critical) does not regress to 3pt foundations', () => {
+    const frontier = getFrontier(GOAL)!;
+    const criticalIds = frontier.core.filter((c) => c.critical).map((c) => c.id);
+    const nonCritical = frontier.core.filter((c) => !c.critical).map((c) => c.id);
+    const nMasterCritical = Math.floor(criticalIds.length * 0.82);
+    const mastered = new Set([
+      ...criticalIds.slice(0, nMasterCritical),
+      ...nonCritical.slice(0, 8),
+    ]);
+    const masteryScores = Object.fromEntries([...mastered].map((id) => [id, 0.88]));
+    const picked = selectNextConcepts({
+      goalKey: GOAL,
+      masteryScores,
+      engagedConceptIds: [...mastered],
+      limit: 4,
+    });
+    const depth = depthOf(GOAL);
+    expect(picked.length).toBe(4);
+    for (const id of picked) {
+      expect(depth.get(id)!).toBeGreaterThanOrEqual(7);
+    }
+    expect(picked).not.toContain('quadrilaterals');
+    expect(picked).not.toContain('arithmetic');
+  });
 });
 
 describe('plan-pacing: evaluateGatePass (critical-concept floor)', () => {

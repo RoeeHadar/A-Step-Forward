@@ -146,6 +146,8 @@ const STR = {
     s0_nextTestDate: 'Date of next event',
     s0_finalGoalDate: 'Final goal date',
     s0_timelineHint: 'Optional — leave blank if you do not have a specific deadline yet.',
+    s0_missingPrefix: 'To continue:',
+    s0_missingYearsGap: 'Time since last studied ({subject})',
     s1_title: 'Tell us about yourself',
     s1_sub: 'This calibrates your plan difficulty and pacing.',
     s1_hours: 'Weekly study time (optional)',
@@ -254,6 +256,8 @@ const STR = {
     s0_finalGoalDate: 'תאריך היעד הסופי',
     s0_timelineHint:
       'לא חובה — אפשר להשאיר ריק אם אין תאריך יעד ספציפי כרגע.',
+    s0_missingPrefix: 'כדי להמשיך:',
+    s0_missingYearsGap: 'זמן מאז למידה ({subject})',
     s1_title: 'ספר/י לנו על עצמך',
     s1_sub: 'זה מכייל את רמת הקושי והקצב של התוכנית שלך.',
     s1_hours: 'זמן לימוד שבועי (לא חובה)',
@@ -575,6 +579,36 @@ const primaryBtnCls =
 const secondaryBtnCls =
   'flex-1 rounded-xl border border-border py-3 text-sm text-muted-foreground transition-colors hover:border-border-bright hover:text-foreground';
 
+function getStep0MissingFields(input: {
+  s1: Step1;
+  isAdultLearner: boolean;
+  needsPointsGroup: boolean;
+  needsUniversity: boolean;
+  lang: Lang;
+  t: (typeof STR)[Lang];
+}): string[] {
+  const { s1, isAdultLearner, needsPointsGroup, needsUniversity, lang, t } = input;
+  const missing: string[] = [];
+
+  if (s1.subjects.length === 0) missing.push(t.s0_subjects);
+  if (!s1.gradeLevel) missing.push(t.s0_grade);
+  if (needsPointsGroup && !s1.pointsGroup) missing.push(t.s0_units);
+  if (needsUniversity && !s1.targetUniversity) missing.push(t.s0_university);
+
+  if (isAdultLearner) {
+    if (!s1.adultGoal) missing.push(t.s0_adultGoal);
+    for (const sub of s1.subjects) {
+      if (!s1.yearsGapBySubject[sub]) {
+        missing.push(tx(t.s0_missingYearsGap, { subject: subjectLabel(sub, lang) }));
+      }
+    }
+  } else if (!s1.goal) {
+    missing.push(t.s0_goal);
+  }
+
+  return missing;
+}
+
 // ── Main page ────────────────────────────────────────────────────────────────
 
 export default function OnboardingPage() {
@@ -769,6 +803,16 @@ export default function OnboardingPage() {
 
   const isPhysicsOnly =
     s1.subjects.includes('physics') && !s1.subjects.includes('math');
+
+  const step0MissingFields = getStep0MissingFields({
+    s1,
+    isAdultLearner,
+    needsPointsGroup,
+    needsUniversity,
+    lang,
+    t,
+  });
+  const step0CanProceed = step0MissingFields.length === 0;
 
   function normalizePointsGroup(raw: string): string {
     if (raw === '3' || raw === '4' || raw === '5') return `${raw}pt`;
@@ -1211,17 +1255,22 @@ export default function OnboardingPage() {
               </p>
             </div>
 
+            {!step0CanProceed ? (
+              <p
+                id="step0-missing-hint"
+                className="text-sm text-muted-foreground"
+                role="status"
+                aria-live="polite"
+              >
+                {t.s0_missingPrefix}{' '}
+                {step0MissingFields.join(lang === 'he' ? ' · ' : ', ')}
+              </p>
+            ) : null}
+
             <button
               type="button"
-              disabled={
-                s1.subjects.length === 0 ||
-                !s1.gradeLevel ||
-                (needsUniversity && !s1.targetUniversity) ||
-                (isAdultLearner
-                  ? !s1.adultGoal ||
-                    !s1.subjects.every((sub) => Boolean(s1.yearsGapBySubject[sub]))
-                  : !s1.goal || (needsPointsGroup && !s1.pointsGroup))
-              }
+              disabled={!step0CanProceed}
+              aria-describedby={!step0CanProceed ? 'step0-missing-hint' : undefined}
               onClick={() => setStep(1)}
               className={primaryBtnCls}
             >

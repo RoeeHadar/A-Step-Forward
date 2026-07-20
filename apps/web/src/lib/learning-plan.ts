@@ -92,8 +92,7 @@ export interface LearningPlan {
   generated_at: string;
 }
 
-/**
- * Pulls per-atom mastery for the given learner. Returns an empty map if Neon
+/** Pulls per-atom mastery for the given learner. Returns an empty map if Neon
  * is not configured or the learner has no practice yet.
  */
 export async function fetchLearnerMastery(
@@ -120,6 +119,28 @@ export async function fetchLearnerMastery(
   } catch (err) {
     if (process.env.NODE_ENV !== 'production') {
       console.warn('fetchLearnerMastery failed:', err);
+    }
+    return out;
+  }
+}
+
+/** Per-concept mastery from `concept_mastery` (seed/diagnostic/gate scores). */
+async function fetchConceptMasteryScores(
+  learnerId: string,
+): Promise<Map<string, number>> {
+  const out = new Map<string, number>();
+  if (!sql) return out;
+  try {
+    const rows = (await sql`
+      SELECT concept_id, score
+      FROM concept_mastery
+      WHERE learner_id = ${learnerId}
+    `) as Array<{ concept_id: string; score: number }>;
+    for (const r of rows) out.set(r.concept_id, Number(r.score));
+    return out;
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('fetchConceptMasteryScores failed:', err);
     }
     return out;
   }
@@ -192,8 +213,9 @@ export async function buildLearningPlan(args: {
   const MAX_NODES = args.maxNodes ?? 12;
   const MASTERY_THRESHOLD = 0.8;
 
-  const [mastery, lessonSet] = await Promise.all([
+  const [mastery, conceptMastery, lessonSet] = await Promise.all([
     fetchLearnerMastery(args.learnerId),
+    fetchConceptMasteryScores(args.learnerId),
     fetchLessonConceptSet(),
   ]);
 
@@ -285,6 +307,14 @@ export async function buildLearningPlan(args: {
     weakAtoms.sort((a, b) => a.mastery - b.mastery);
 
     // Skip already-mastered prerequisites (but always keep the goal).
+    const conceptScore = conceptMastery.get(id);
+    if (
+      id !== goal.id &&
+      conceptScore !== undefined &&
+      conceptScore >= MASTERY_THRESHOLD
+    ) {
+      continue;
+    }
     if (id !== goal.id && anyPracticed && meanMastery >= MASTERY_THRESHOLD) continue;
 
     const why_en =
