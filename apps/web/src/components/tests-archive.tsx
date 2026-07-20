@@ -113,11 +113,21 @@ export function TestsArchiveList({ items }: { items: TestAttemptListItem[] }) {
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-lg font-semibold tabular-nums">
-                      {Math.round(a.score * 100)}%
+                      {a.score == null
+                        ? lang === 'he'
+                          ? 'בבדיקה…'
+                          : 'Reviewing…'
+                        : `${Math.round(a.score * 100)}%`}
                     </span>
-                    <Badge variant={a.passed ? 'success' : 'warning'}>
-                      {a.passed ? t.passed : t.failed}
-                    </Badge>
+                    {a.passed != null ? (
+                      <Badge variant={a.passed ? 'success' : 'warning'}>
+                        {a.passed ? t.passed : t.failed}
+                      </Badge>
+                    ) : (
+                      <Badge variant="secondary">
+                        {lang === 'he' ? 'ממתין למשוב' : 'Awaiting feedback'}
+                      </Badge>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -150,10 +160,24 @@ export function TestAttemptView({ attempt }: { attempt: TestAttemptDetail }) {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-2xl font-semibold tabular-nums">
-            {Math.round(attempt.score * 100)}%
+            {attempt.score == null
+              ? lang === 'he'
+                ? 'בבדיקה…'
+                : 'Reviewing…'
+              : `${Math.round(attempt.score * 100)}%`}
           </span>
-          <Badge variant={attempt.passed ? 'success' : 'warning'}>
-            {attempt.passed ? t.passed : t.failed}
+          <Badge
+            variant={
+              attempt.passed == null ? 'secondary' : attempt.passed ? 'success' : 'warning'
+            }
+          >
+            {attempt.passed == null
+              ? isHe
+                ? 'ממתין למשוב'
+                : 'Awaiting feedback'
+              : attempt.passed
+                ? t.passed
+                : t.failed}
           </Badge>
         </div>
       </header>

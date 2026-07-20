@@ -34,9 +34,7 @@ def upgrade() -> None:
     op.execute(
         "CREATE UNIQUE INDEX IF NOT EXISTS ux_app_users_username_lower ON app_users (lower(username))"
     )
-    op.execute(
-        "CREATE INDEX IF NOT EXISTS ix_app_users_real_name ON app_users (lower(real_name))"
-    )
+    op.execute("CREATE INDEX IF NOT EXISTS ix_app_users_real_name ON app_users (lower(real_name))")
     op.execute("CREATE INDEX IF NOT EXISTS ix_app_users_role ON app_users (role)")
 
     op.execute(
