@@ -6,7 +6,9 @@ import { syncClerkRole } from '@/lib/auth';
 import { dbConfigured } from '@/lib/neon-db';
 import {
   getAppUser,
+  normalizeUsername,
   upsertAppUser,
+  validateRealName,
   validateUsername,
   type SocialRole,
 } from '@/lib/social-db';
@@ -40,13 +42,14 @@ export async function POST(req: Request) {
       ? existing.role
       : roleRaw;
 
-  const username = String(body.username ?? '').trim();
-  const realName = String(body.real_name ?? '').trim();
+  const username = normalizeUsername(String(body.username ?? ''));
+  const realName = String(body.real_name ?? '').trim().replace(/\s+/g, ' ');
+
+  const realErr = validateRealName(realName);
+  if (realErr) return Response.json({ error: realErr }, { status: 400 });
+
   const usernameErr = validateUsername(username);
   if (usernameErr) return Response.json({ error: usernameErr }, { status: 400 });
-  if (realName.length < 2) {
-    return Response.json({ error: 'Real name is required' }, { status: 400 });
-  }
 
   try {
     const user = await upsertAppUser({
@@ -54,7 +57,6 @@ export async function POST(req: Request) {
       role,
       username,
       realName,
-      // Username is the public handle; no separate nickname.
       nickname: null,
       aboutMe: role === 'educator' ? body.about_me : null,
       profileComplete: true,

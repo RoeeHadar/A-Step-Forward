@@ -5,8 +5,30 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@asf/ui/button';
 import { Input } from '@asf/ui/input';
 import { useI18n } from '@/providers/i18n-provider';
+import {
+  normalizeUsername,
+  suggestUsernameFromRealName,
+  validateRealName,
+  validateUsername,
+} from '@/lib/social-identity';
 
 type RoleChoice = 'learner' | 'educator';
+
+function heError(en: string): string {
+  if (en.includes('Real name must use English')) {
+    return 'השם המלא חייב להיות באנגלית בלבד (ניתן רווח, מקף וגרש).';
+  }
+  if (en.includes('Real name is required')) {
+    return 'יש להזין שם מלא באנגלית.';
+  }
+  if (en.includes('already taken')) {
+    return 'שם המשתמש תפוס — בחרו שם אחר.';
+  }
+  if (en.includes('at least 3') || en.includes('3–24') || en.includes('3-24')) {
+    return 'שם משתמש: 3–24 תווים באנגלית, מספרים וקו תחתון בלבד (בלי רווחים — רווח הופך ל־_).';
+  }
+  return en;
+}
 
 export function IdentitySetupForm({
   initialRole,
@@ -28,25 +50,57 @@ export function IdentitySetupForm({
   const [aboutMe, setAboutMe] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [usernameTouched, setUsernameTouched] = useState(false);
+
+  function onRealNameChange(value: string) {
+    setRealName(value);
+    if (!usernameTouched) {
+      const suggestion = suggestUsernameFromRealName(value);
+      if (suggestion) setUsername(suggestion);
+    }
+  }
+
+  function onUsernameChange(value: string) {
+    setUsernameTouched(true);
+    // Live-normalize spaces so "Alon Oren" becomes alon_oren as they type.
+    setUsername(normalizeUsername(value) || value.replace(/\s+/g, '_').toLowerCase());
+  }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
     setError(null);
+
+    const realErr = validateRealName(realName);
+    if (realErr) {
+      setError(isHe ? heError(realErr) : realErr);
+      setSaving(false);
+      return;
+    }
+    const normalized = normalizeUsername(username);
+    const userErr = validateUsername(normalized);
+    if (userErr) {
+      setError(isHe ? heError(userErr) : userErr);
+      setSaving(false);
+      return;
+    }
+    setUsername(normalized);
+
     try {
       const res = await fetch('/api/identity', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           role,
-          username,
-          real_name: realName,
+          username: normalized,
+          real_name: realName.trim().replace(/\s+/g, ' '),
           about_me: role === 'educator' ? aboutMe || null : null,
         }),
       });
       const data = (await res.json()) as { error?: string; redirect?: string };
       if (!res.ok) {
-        setError(data.error ?? (isHe ? 'שמירה נכשלה' : 'Save failed'));
+        const msg = data.error ?? (isHe ? 'שמירה נכשלה' : 'Save failed');
+        setError(isHe ? heError(msg) : msg);
         setSaving(false);
         return;
       }
@@ -66,8 +120,8 @@ export function IdentitySetupForm({
         </h1>
         <p className="text-sm text-muted-foreground">
           {isHe
-            ? 'בחרו תפקיד, שם משתמש ושם מלא — נדרש לחיבורים במערכת.'
-            : 'Choose a role, username, and real name — required for connections.'}
+            ? 'שם מלא באנגלית (יכול להיות משותף) ושם משתמש ייחודי באנגלית.'
+            : 'English real name (may be shared) and a unique English username.'}
         </p>
       </header>
 
@@ -109,43 +163,50 @@ export function IdentitySetupForm({
 
       <div className="space-y-4">
         <label className="block space-y-1.5">
-          <span className="text-sm font-medium">{isHe ? 'שם מלא (אמיתי)' : 'Real full name'}</span>
+          <span className="text-sm font-medium">
+            {isHe ? 'שם מלא באנגלית' : 'Real full name (English)'}
+          </span>
           <Input
             value={realName}
-            onChange={(e) => setRealName(e.target.value)}
-            placeholder={isHe ? 'ישראל ישראלי' : 'Jane Cohen'}
+            onChange={(e) => onRealNameChange(e.target.value)}
+            placeholder="Alon Oren"
             required
             autoComplete="name"
+            dir="ltr"
+            className="text-start"
           />
           <span className="text-xs text-muted-foreground">
             {isHe
-              ? 'המורים מחפשים לפי שם מלא ושם משתמש — לא לפי אימייל'
-              : 'Teachers find you by real name and username — not email'}
+              ? 'באנגלית בלבד. כמה אנשים יכולים לחלוק אותו שם — החיפוש יציג את כולם עם שם המשתמש.'
+              : 'English only. Several people may share a name — search lists all matches with usernames.'}
           </span>
         </label>
 
         <label className="block space-y-1.5">
-          <span className="text-sm font-medium">{isHe ? 'שם משתמש' : 'Username'}</span>
+          <span className="text-sm font-medium">
+            {isHe ? 'שם משתמש ייחודי' : 'Unique username'}
+          </span>
           <Input
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="student_anna"
+            onChange={(e) => onUsernameChange(e.target.value)}
+            onBlur={() => setUsername(normalizeUsername(username))}
+            placeholder="alon_oren"
             required
             autoComplete="username"
             dir="ltr"
-            className="font-mono"
+            className="font-mono text-start"
           />
           <span className="text-xs text-muted-foreground">
             {isHe
-              ? 'הכינוי במערכת — 3–24 תווים, אותיות באנגלית, מספרים וקו תחתון'
-              : 'Your handle on the site — 3–24 chars, letters, numbers, underscore'}
+              ? 'ייחודי במערכת · 3–24 תווים · אותיות באנגלית, מספרים ו־_ · רווחים הופכים ל־_'
+              : 'Must be unique · 3–24 chars · English letters, numbers, _ · spaces become _'}
           </span>
         </label>
 
         {role === 'educator' ? (
           <label className="block space-y-1.5">
             <span className="text-sm font-medium">
-              {isHe ? 'אודותיי (אופציונלי)' : 'About me (optional)'}
+              {isHe ? 'אודותיי (אופציונלי, עברית או אנגלית)' : 'About me (optional, Hebrew or English)'}
             </span>
             <textarea
               value={aboutMe}

@@ -18,6 +18,8 @@ interface SearchHit {
   clerk_user_id: string;
   username: string;
   real_name: string;
+  goal?: string | null;
+  plan_summary?: string | null;
 }
 
 export function EducatorStudentsClient({
@@ -106,10 +108,21 @@ export function EducatorStudentsClient({
                 key={h.clerk_user_id}
                 className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border px-3 py-2 text-sm"
               >
-                <span>
-                  {h.real_name}{' '}
-                  <span className="font-mono text-muted-foreground">@{h.username}</span>
-                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium">
+                    {h.real_name}{' '}
+                    <span className="font-mono text-muted-foreground">@{h.username}</span>
+                  </p>
+                  {h.plan_summary || h.goal ? (
+                    <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">
+                      {h.plan_summary || h.goal}
+                    </p>
+                  ) : (
+                    <p className="mt-0.5 text-xs text-muted-foreground">
+                      {isHe ? 'אין סיכום תוכנית עדיין' : 'No plan summary yet'}
+                    </p>
+                  )}
+                </div>
                 <Button type="button" size="sm" onClick={() => void invite(h.clerk_user_id)}>
                   {isHe ? 'שלח בקשה' : 'Invite'}
                 </Button>

@@ -68,7 +68,7 @@ function MathText({ text, dir }: { text: string; dir?: 'ltr' | 'rtl' }) {
 type Lang = 'en' | 'he';
 
 // Points levels in ascending order — used for "at least X" filtering
-const LEVEL_ORDER: LessonPointsLevel[] = ['3pt', '4pt', '5pt', 'hs_physics', 'calc1', 'la'];
+const LEVEL_ORDER: LessonPointsLevel[] = ['3pt', '4pt', '5pt', 'hs_physics', 'calc1', 'la', 'uni'];
 
 function levelIndex(l: LessonPointsLevel): number {
   return LEVEL_ORDER.indexOf(l);
@@ -117,6 +117,7 @@ const LEVEL_LABELS: Record<LessonPointsLevel, { en: string; he: string; color: s
   'hs_physics': { en: 'HS Physics', he: 'פיזיקה תיכון', color: 'bg-orange-500/15 text-orange-700 dark:text-orange-400 border-orange-500/30' },
   'calc1': { en: 'Calc I', he: 'חשבון דיפרנציאלי', color: 'bg-pink-500/15 text-pink-700 dark:text-pink-400 border-pink-500/30' },
   'la': { en: 'Linear Algebra', he: 'אלגברה לינארית', color: 'bg-cyan-500/15 text-cyan-700 dark:text-cyan-400 border-cyan-500/30' },
+  'uni': { en: 'University', he: 'אוניברסיטה', color: 'bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30' },
 };
 
 const SECTION_META: Record<

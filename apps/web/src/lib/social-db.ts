@@ -8,6 +8,18 @@ import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import { logger } from '@/lib/logger';
 import type { AppRole } from '@/lib/auth';
+import {
+  normalizeUsername,
+  validateRealName,
+  validateUsername,
+} from '@/lib/social-identity';
+
+export {
+  normalizeUsername,
+  suggestUsernameFromRealName,
+  validateRealName,
+  validateUsername,
+} from '@/lib/social-identity';
 
 neonConfig.fetchConnectionCache = true;
 
@@ -169,16 +181,6 @@ function requireSql() {
   return sql;
 }
 
-const USERNAME_RE = /^[a-zA-Z0-9_]{3,24}$/;
-
-export function validateUsername(username: string): string | null {
-  const u = username.trim();
-  if (!USERNAME_RE.test(u)) {
-    return 'Username must be 3–24 characters (letters, numbers, underscore).';
-  }
-  return null;
-}
-
 export async function getAppUser(clerkUserId: string): Promise<AppUser | null> {
   if (!sql) return null;
   await ensureSocialTables();
@@ -214,8 +216,10 @@ export async function upsertAppUser(input: {
   await ensureSocialTables();
   const err = validateUsername(input.username);
   if (err) throw new Error(err);
-  const realName = input.realName.trim();
-  if (realName.length < 2) throw new Error('Real name is required.');
+  const username = normalizeUsername(input.username);
+  const realName = input.realName.trim().replace(/\s+/g, ' ');
+  const realErr = validateRealName(realName);
+  if (realErr) throw new Error(realErr);
 
   const rows = (await s`
     INSERT INTO app_users (
@@ -224,7 +228,7 @@ export async function upsertAppUser(input: {
     VALUES (
       ${input.clerkUserId},
       ${input.role},
-      ${input.username.trim()},
+      ${username},
       ${realName},
       ${input.nickname?.trim() || null},
       ${input.aboutMe?.trim() || null},
