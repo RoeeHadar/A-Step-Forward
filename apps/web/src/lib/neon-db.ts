@@ -4680,7 +4680,10 @@ export interface PublicShareStats {
   estimated_grade: number | null;
   subject: string | null;
   subjects_studied: string[];
+  /** Legacy 7-day boolean bars (true if any activity). */
   week_activity: boolean[];
+  /** Coarse 28-day heatmap with intensity counts. */
+  activity_heatmap: Array<{ date: string; count: number }>;
 }
 
 export interface MockExamHistoryItem {
@@ -4698,7 +4701,7 @@ export async function getPublicShareStats(userId: string): Promise<PublicShareSt
     const profile = await getLearnerProfile(userId);
     if (!profile) return null;
 
-    const [streak, masteryRows, daily, gradeResult] = await Promise.all([
+    const [streak, masteryRows, daily, daily28, gradeResult] = await Promise.all([
       getLearnerStreak(userId),
       sql`
         SELECT score::float AS score
@@ -4706,6 +4709,7 @@ export async function getPublicShareStats(userId: string): Promise<PublicShareSt
         WHERE learner_id = ${userId}
       `,
       getDailyActivity(userId, 7),
+      getDailyActivity(userId, 28),
       getEstimatedBagrutScore(userId, deriveSubjectFromProfile(profile)),
     ]);
 
@@ -4727,6 +4731,7 @@ export async function getPublicShareStats(userId: string): Promise<PublicShareSt
       subject,
       subjects_studied: deriveSubjectsStudied(profile),
       week_activity: daily.map((d) => d.count > 0),
+      activity_heatmap: daily28.map((d) => ({ date: d.date, count: d.count })),
     };
   } catch (err) {
     if (process.env.NODE_ENV !== 'production') {

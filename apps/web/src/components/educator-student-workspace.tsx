@@ -6,14 +6,43 @@ import { Button } from '@asf/ui/button';
 import { Input } from '@asf/ui/input';
 import { useI18n } from '@/providers/i18n-provider';
 
+interface PlanWeekView {
+  week_number: number;
+  status: string;
+  quiz_due_at: string | null;
+  concepts: Array<{ concept_id: string; name: string; mastery?: number | null }>;
+}
+
+interface ProgressView {
+  streak_days: number;
+  lessons_completed: number;
+  avg_mastery: number;
+  atoms_practiced: number;
+  total_minutes: number;
+  concepts: Array<{ concept_id: string; title: string; score: number }>;
+  daily_activity: Array<{ date: string; count: number }>;
+}
+
+interface MemoryView {
+  persona: string | null;
+  profile_goal: string | null;
+  subjects: string[];
+  weak: Array<{ concept_id: string; score: number }>;
+  strong: Array<{ concept_id: string; score: number }>;
+  notes_by_agent: Array<{ agent: string; count: number; preview: string | null }>;
+  recent_chat: Array<{ agent: string; role: string; content: string; created_at: string }>;
+}
+
 interface Props {
   studentId: string;
   studentName: string;
   username: string;
   goal: string | null;
   hoursPerWeek: number | null;
+  planWeeks: PlanWeekView[];
   planWeekConcepts: string[];
-  masterySample: Array<{ concept_id: string; score: number }>;
+  progress: ProgressView | null;
+  memory: MemoryView | null;
   attempts: Array<{
     id: string;
     kind: string;
@@ -21,7 +50,6 @@ interface Props {
     passed: boolean | null;
     created_at: string;
   }>;
-  personaPreview: string | null;
   notes: Array<{ id: string; kind: string; content: string; created_at: string }>;
 }
 
@@ -31,10 +59,11 @@ export function EducatorStudentWorkspace({
   username,
   goal,
   hoursPerWeek,
+  planWeeks,
   planWeekConcepts,
-  masterySample,
+  progress,
+  memory,
   attempts,
-  personaPreview,
   notes,
 }: Props) {
   const { locale } = useI18n();
@@ -55,6 +84,9 @@ export function EducatorStudentWorkspace({
   const [score, setScore] = useState('0.75');
   const [passed, setPassed] = useState(true);
   const [reopen, setReopen] = useState(false);
+
+  const activeWeek =
+    planWeeks.find((w) => w.status === 'active') ?? planWeeks[0] ?? null;
 
   async function savePlan() {
     setMsg(null);
@@ -133,6 +165,8 @@ export function EducatorStudentWorkspace({
     { id: 'memory' as const, label: isHe ? 'זיכרון' : 'Memory' },
   ];
 
+  const maxHeat = Math.max(1, ...(progress?.daily_activity.map((d) => d.count) ?? [1]));
+
   return (
     <div className="space-y-6" dir={isHe ? 'rtl' : 'ltr'}>
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -165,70 +199,182 @@ export function EducatorStudentWorkspace({
 
       {msg ? <p className="text-sm text-muted-foreground">{msg}</p> : null}
 
-      {tab === 'overview' || tab === 'progress' ? (
+      {tab === 'overview' ? (
         <div className="grid gap-4 lg:grid-cols-2">
           <section className="rounded-xl border border-border p-4">
-            <h2 className="font-semibold">{isHe ? 'התקדמות' : 'Progress'}</h2>
+            <h2 className="font-semibold">{isHe ? 'מצב כללי' : 'At a glance'}</h2>
+            <dl className="mt-3 grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <dt className="text-muted-foreground">{isHe ? 'רצף' : 'Streak'}</dt>
+                <dd className="text-xl font-semibold tabular-nums">{progress?.streak_days ?? 0}</dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">{isHe ? 'שליטה ממוצעת' : 'Avg mastery'}</dt>
+                <dd className="text-xl font-semibold tabular-nums">
+                  {Math.round((progress?.avg_mastery ?? 0) * 100)}%
+                </dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">{isHe ? 'מטרה' : 'Goal'}</dt>
+                <dd className="mt-1 line-clamp-3">{goal || (isHe ? '—' : '—')}</dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">{isHe ? 'שעות/שבוע' : 'Hours/week'}</dt>
+                <dd className="text-xl font-semibold tabular-nums">{hoursPerWeek ?? '—'}</dd>
+              </div>
+            </dl>
+          </section>
+          <section className="rounded-xl border border-border p-4">
+            <h2 className="font-semibold">{isHe ? 'מיקוד השבוע הפעיל' : 'Active week focus'}</h2>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {activeWeek
+                ? `${isHe ? 'שבוע' : 'Week'} ${activeWeek.week_number} · ${activeWeek.status}`
+                : isHe
+                  ? 'אין תוכנית'
+                  : 'No plan'}
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {(activeWeek?.concepts ?? []).length === 0 ? (
+                <span className="text-sm text-muted-foreground">{isHe ? 'אין' : 'None'}</span>
+              ) : (
+                activeWeek!.concepts.map((c) => (
+                  <span key={c.concept_id} className="rounded-full bg-surface-2 px-2 py-1 text-xs">
+                    {c.name || c.concept_id}
+                  </span>
+                ))
+              )}
+            </div>
+          </section>
+        </div>
+      ) : null}
+
+      {tab === 'plan' ? (
+        <div className="space-y-4">
+          <section className="rounded-xl border border-border p-4">
+            <h2 className="font-semibold">{isHe ? 'תוכנית נוכחית (קריאה)' : 'Current plan (read)'}</h2>
+            {planWeeks.length === 0 ? (
+              <p className="mt-2 text-sm text-muted-foreground">
+                {isHe ? 'לתלמיד אין תוכנית עדיין.' : 'Student has no plan yet.'}
+              </p>
+            ) : (
+              <ul className="mt-3 space-y-3">
+                {planWeeks.map((w) => (
+                  <li key={w.week_number} className="rounded-lg border border-border/60 px-3 py-2 text-sm">
+                    <div className="flex flex-wrap justify-between gap-2">
+                      <span className="font-medium">
+                        {isHe ? 'שבוע' : 'Week'} {w.week_number} · {w.status}
+                      </span>
+                      <span className="text-muted-foreground">
+                        {w.quiz_due_at
+                          ? `${isHe ? 'שער עד' : 'Gate due'} ${new Date(w.quiz_due_at).toLocaleDateString(isHe ? 'he-IL' : 'en-US')}`
+                          : '—'}
+                      </span>
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {w.concepts.map((c) => (
+                        <span key={c.concept_id} className="rounded bg-surface-2 px-2 py-0.5 text-xs">
+                          {c.name || c.concept_id}
+                          {c.mastery != null ? ` · ${Math.round(c.mastery * 100)}%` : ''}
+                        </span>
+                      ))}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+
+          <section className="space-y-4 rounded-xl border border-border p-4">
+            <h2 className="font-semibold">{isHe ? 'עריכת תוכנית' : 'Edit plan'}</h2>
+            <p className="text-sm text-muted-foreground">
+              {isHe
+                ? 'חובה לציין סיבה — התלמיד יקבל התראה והזיכרון יתעדכן.'
+                : 'A reason is required — the student is notified and memory updates.'}
+            </p>
+            <label className="block space-y-1 text-sm">
+              <span>{isHe ? 'סיבה (חובה)' : 'Reason (required)'}</span>
+              <Input value={reason} onChange={(e) => setReason(e.target.value)} required />
+            </label>
+            <label className="block space-y-1 text-sm">
+              <span>{isHe ? 'מטרה' : 'Goal'}</span>
+              <Input value={goalEdit} onChange={(e) => setGoalEdit(e.target.value)} />
+            </label>
+            <label className="block space-y-1 text-sm">
+              <span>{isHe ? 'שעות בשבוע' : 'Hours / week'}</span>
+              <Input value={hoursEdit} onChange={(e) => setHoursEdit(e.target.value)} type="number" min={1} />
+            </label>
+            <label className="block space-y-1 text-sm">
+              <span>{isHe ? 'מושגים בעדיפות (מופרדים בפסיק)' : 'Priority concepts (comma-separated)'}</span>
+              <Input value={priority} onChange={(e) => setPriority(e.target.value)} dir="ltr" />
+            </label>
+            <Button type="button" onClick={() => void savePlan()}>
+              {isHe ? 'שמור תוכנית' : 'Save plan'}
+            </Button>
+          </section>
+        </div>
+      ) : null}
+
+      {tab === 'progress' ? (
+        <div className="space-y-4">
+          <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { label: isHe ? 'רצף ימים' : 'Streak', value: progress?.streak_days ?? 0 },
+              {
+                label: isHe ? 'שיעורים שהושלמו' : 'Lessons done',
+                value: progress?.lessons_completed ?? 0,
+              },
+              {
+                label: isHe ? 'שליטה ממוצעת' : 'Avg mastery',
+                value: `${Math.round((progress?.avg_mastery ?? 0) * 100)}%`,
+              },
+              {
+                label: isHe ? 'דקות משוערות' : 'Est. minutes',
+                value: progress?.total_minutes ?? 0,
+              },
+            ].map((c) => (
+              <div key={c.label} className="rounded-xl border border-border p-4">
+                <p className="text-xs text-muted-foreground">{c.label}</p>
+                <p className="mt-1 text-2xl font-semibold tabular-nums">{c.value}</p>
+              </div>
+            ))}
+          </section>
+          <section className="rounded-xl border border-border p-4">
+            <h2 className="font-semibold">{isHe ? 'פעילות 30 יום' : '30-day activity'}</h2>
+            <div className="mt-3 flex flex-wrap gap-1" aria-hidden>
+              {(progress?.daily_activity ?? []).map((d) => {
+                const intensity = d.count / maxHeat;
+                return (
+                  <span
+                    key={d.date}
+                    title={`${d.date}: ${d.count}`}
+                    className="h-4 w-4 rounded-sm"
+                    style={{
+                      backgroundColor:
+                        d.count === 0
+                          ? 'hsl(var(--muted))'
+                          : `hsl(var(--primary) / ${0.25 + intensity * 0.75})`,
+                    }}
+                  />
+                );
+              })}
+            </div>
+          </section>
+          <section className="rounded-xl border border-border p-4">
+            <h2 className="font-semibold">{isHe ? 'מושגים' : 'Concepts'}</h2>
             <ul className="mt-3 space-y-2 text-sm">
-              {masterySample.length === 0 ? (
+              {(progress?.concepts ?? []).length === 0 ? (
                 <li className="text-muted-foreground">{isHe ? 'אין נתונים' : 'No data'}</li>
               ) : (
-                masterySample.map((m) => (
+                (progress?.concepts ?? []).map((m) => (
                   <li key={m.concept_id} className="flex justify-between gap-2">
-                    <span className="font-mono text-xs">{m.concept_id}</span>
-                    <span>{Math.round(m.score * 100)}%</span>
+                    <span>{m.title}</span>
+                    <span className="tabular-nums">{Math.round(m.score * 100)}%</span>
                   </li>
                 ))
               )}
             </ul>
           </section>
-          {tab === 'overview' ? (
-            <section className="rounded-xl border border-border p-4">
-              <h2 className="font-semibold">{isHe ? 'מיקוד השבוע' : 'This week focus'}</h2>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {planWeekConcepts.length === 0 ? (
-                  <span className="text-sm text-muted-foreground">{isHe ? 'אין' : 'None'}</span>
-                ) : (
-                  planWeekConcepts.map((id) => (
-                    <span key={id} className="rounded-full bg-surface-2 px-2 py-1 text-xs font-mono">
-                      {id}
-                    </span>
-                  ))
-                )}
-              </div>
-            </section>
-          ) : null}
         </div>
-      ) : null}
-
-      {tab === 'plan' ? (
-        <section className="space-y-4 rounded-xl border border-border p-4">
-          <h2 className="font-semibold">{isHe ? 'עריכת תוכנית' : 'Edit plan'}</h2>
-          <p className="text-sm text-muted-foreground">
-            {isHe
-              ? 'חובה לציין סיבה — התלמיד יקבל התראה והזיכרון יתעדכן.'
-              : 'A reason is required — the student is notified and memory updates.'}
-          </p>
-          <label className="block space-y-1 text-sm">
-            <span>{isHe ? 'סיבה (חובה)' : 'Reason (required)'}</span>
-            <Input value={reason} onChange={(e) => setReason(e.target.value)} required />
-          </label>
-          <label className="block space-y-1 text-sm">
-            <span>{isHe ? 'מטרה' : 'Goal'}</span>
-            <Input value={goalEdit} onChange={(e) => setGoalEdit(e.target.value)} />
-          </label>
-          <label className="block space-y-1 text-sm">
-            <span>{isHe ? 'שעות בשבוע' : 'Hours / week'}</span>
-            <Input value={hoursEdit} onChange={(e) => setHoursEdit(e.target.value)} type="number" min={1} />
-          </label>
-          <label className="block space-y-1 text-sm">
-            <span>{isHe ? 'מושגים בעדיפות (מופרדים בפסיק)' : 'Priority concepts (comma-separated)'}</span>
-            <Input value={priority} onChange={(e) => setPriority(e.target.value)} dir="ltr" />
-          </label>
-          <Button type="button" onClick={() => void savePlan()}>
-            {isHe ? 'שמור תוכנית' : 'Save plan'}
-          </Button>
-        </section>
       ) : null}
 
       {tab === 'tests' ? (
@@ -279,9 +425,15 @@ export function EducatorStudentWorkspace({
                 step="0.01"
                 min={0}
                 max={1}
+                disabled={reopen}
               />
               <label className="flex items-center gap-2 text-sm">
-                <input type="checkbox" checked={passed} onChange={(e) => setPassed(e.target.checked)} disabled={reopen} />
+                <input
+                  type="checkbox"
+                  checked={passed}
+                  onChange={(e) => setPassed(e.target.checked)}
+                  disabled={reopen}
+                />
                 {isHe ? 'עבר' : 'Passed'}
               </label>
               <label className="flex items-center gap-2 text-sm">
@@ -299,9 +451,68 @@ export function EducatorStudentWorkspace({
       {tab === 'memory' ? (
         <section className="space-y-4 rounded-xl border border-border p-4">
           <h2 className="font-semibold">{isHe ? 'זיכרון' : 'Memory'}</h2>
-          <pre className="max-h-64 overflow-auto whitespace-pre-wrap rounded-lg bg-surface-1/50 p-3 text-xs">
-            {personaPreview?.trim() || (isHe ? 'אין פרסונה עדיין' : 'No persona yet')}
-          </pre>
+          <div className="grid gap-4 lg:grid-cols-2">
+            <div>
+              <h3 className="text-sm font-medium">{isHe ? 'פרסונה' : 'Persona'}</h3>
+              <pre className="mt-2 max-h-48 overflow-auto whitespace-pre-wrap rounded-lg bg-surface-1/50 p-3 text-xs">
+                {memory?.persona?.trim() || (isHe ? 'אין פרסונה עדיין' : 'No persona yet')}
+              </pre>
+            </div>
+            <div>
+              <h3 className="text-sm font-medium">{isHe ? 'פרופיל' : 'Profile'}</h3>
+              <p className="mt-2 text-sm">{memory?.profile_goal || goal || '—'}</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {(memory?.subjects ?? []).join(', ') || '—'}
+              </p>
+              <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                <div>
+                  <p className="font-medium text-muted-foreground">{isHe ? 'חלש' : 'Weak'}</p>
+                  <ul className="mt-1 space-y-1">
+                    {(memory?.weak ?? []).slice(0, 5).map((c) => (
+                      <li key={c.concept_id} className="font-mono">
+                        {c.concept_id} · {Math.round(c.score * 100)}%
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="font-medium text-muted-foreground">{isHe ? 'חזק' : 'Strong'}</p>
+                  <ul className="mt-1 space-y-1">
+                    {(memory?.strong ?? []).slice(0, 5).map((c) => (
+                      <li key={c.concept_id} className="font-mono">
+                        {c.concept_id} · {Math.round(c.score * 100)}%
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-medium">{isHe ? 'הערות סוכנים' : 'Agent notes'}</h3>
+            <ul className="mt-2 space-y-2 text-sm">
+              {(memory?.notes_by_agent ?? []).map((n) => (
+                <li key={n.agent} className="rounded-lg border border-border/60 px-3 py-2">
+                  <span className="font-medium">{n.agent}</span>
+                  <span className="ms-2 text-xs text-muted-foreground">({n.count})</span>
+                  {n.preview ? <p className="mt-1 text-muted-foreground line-clamp-2">{n.preview}</p> : null}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-medium">{isHe ? 'צ׳אט אחרון' : 'Recent chat'}</h3>
+            <ul className="mt-2 max-h-40 space-y-1 overflow-auto text-xs">
+              {(memory?.recent_chat ?? []).slice(0, 8).map((c, i) => (
+                <li key={`${c.created_at}-${i}`} className="rounded bg-surface-1/40 px-2 py-1">
+                  <span className="font-medium">{c.agent}/{c.role}</span>: {c.content.slice(0, 120)}
+                </li>
+              ))}
+            </ul>
+          </div>
+
           <h3 className="text-sm font-medium">{isHe ? 'הערות מורה' : 'Teacher notes'}</h3>
           <ul className="space-y-2 text-sm">
             {notes.map((n) => (

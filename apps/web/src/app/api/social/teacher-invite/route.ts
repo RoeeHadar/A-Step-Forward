@@ -1,6 +1,7 @@
 import { auth } from '@clerk/nextjs/server';
 import { dbConfigured } from '@/lib/neon-db';
 import { getAppUser, searchLearnersForInvite, sendTeacherInvite } from '@/lib/social-db';
+import { checkSocialRateLimit } from '@/lib/social-rate-limit';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -11,6 +12,16 @@ export async function GET(req: Request) {
   const me = await getAppUser(userId);
   if (!me || me.role !== 'educator') {
     return Response.json({ error: 'Forbidden' }, { status: 403 });
+  }
+  const limited = checkSocialRateLimit(`teacher-search:${userId}`, {
+    limit: 20,
+    windowMs: 60_000,
+  });
+  if (!limited.ok) {
+    return Response.json(
+      { error: 'Too many searches. Try again shortly.', retry_after: limited.retryAfterSec },
+      { status: 429, headers: { 'Retry-After': String(limited.retryAfterSec) } },
+    );
   }
   const q = new URL(req.url).searchParams.get('q') ?? '';
   const results = dbConfigured ? await searchLearnersForInvite(q) : [];

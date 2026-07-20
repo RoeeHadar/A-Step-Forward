@@ -9,12 +9,13 @@ import {
   listTeacherNotes,
 } from '@/lib/social-db';
 import {
-  getConceptMastery,
   getCurrentPlan,
-  getLearnerPersona,
+  getLearnerMemorySnapshot,
   getLearnerProfile,
+  getProgressFromNeon,
 } from '@/lib/neon-db';
 import { listTestAttempts } from '@/lib/test-attempts';
+import { pickConceptTitle, resolveConceptTitles } from '@/lib/concept-display-names';
 
 export const dynamic = 'force-dynamic';
 
@@ -39,21 +40,72 @@ export default async function EducatorStudentPage({
   const student = await getAppUser(studentId);
   if (!student) notFound();
 
-  const [profile, plan, mastery, persona, attempts, notes] = await Promise.all([
+  const [profile, plan, progress, memory, attempts, notes] = await Promise.all([
     getLearnerProfile(studentId).catch(() => null),
     getCurrentPlan(studentId).catch(() => null),
-    getConceptMastery(studentId).catch(() => ({}) as Record<string, number>),
-    getLearnerPersona(studentId).catch(() => null),
+    getProgressFromNeon(studentId).catch(() => null),
+    getLearnerMemorySnapshot(studentId).catch(() => null),
     listTestAttempts(studentId, 20).catch(() => []),
     listTeacherNotes(studentId).catch(() => []),
   ]);
 
   const activeWeek = plan?.weeks.find((w) => w.status === 'active') ?? plan?.weeks[0];
   const planWeekConcepts = activeWeek?.concepts.map((c) => c.concept_id) ?? [];
-  const masterySample = Object.entries(mastery)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 12)
-    .map(([concept_id, score]) => ({ concept_id, score }));
+
+  const planWeeks =
+    plan?.weeks.map((w) => ({
+      week_number: w.week_number,
+      status: w.status,
+      quiz_due_at: w.quiz_due_at ?? null,
+      concepts: w.concepts.map((c) => ({
+        concept_id: c.concept_id,
+        name: c.name_he || c.name || c.concept_id,
+        mastery: c.mastery ?? null,
+      })),
+    })) ?? [];
+
+  const progressView = progress
+    ? {
+        streak_days: progress.streak.current_days,
+        lessons_completed: progress.lessons_completed,
+        avg_mastery: progress.avg_mastery,
+        atoms_practiced: progress.atoms_practiced,
+        total_minutes: progress.total_minutes,
+        concepts: progress.concepts.slice(0, 20).map((c) => {
+          const titles = resolveConceptTitles(c.concept_id, {
+            title_en: c.concept_name,
+            title_he: c.concept_name_he,
+          });
+          return {
+            concept_id: c.concept_id,
+            title: pickConceptTitle(titles, 'he'),
+            score: c.current_score,
+          };
+        }),
+        daily_activity: progress.daily_activity,
+      }
+    : null;
+
+  const memoryView = memory
+    ? {
+        persona: memory.persona.text,
+        profile_goal: memory.profile?.goal ?? null,
+        subjects: memory.profile?.subjects ?? [],
+        weak: memory.weakConcepts,
+        strong: memory.strongConcepts,
+        notes_by_agent: Object.entries(memory.notesByAgent).map(([agent, list]) => ({
+          agent,
+          count: list.length,
+          preview: list[0]?.content ?? null,
+        })),
+        recent_chat: memory.recentChatTurns.slice(0, 12).map((t) => ({
+          agent: t.agent,
+          role: t.role,
+          content: t.content,
+          created_at: t.created_at,
+        })),
+      }
+    : null;
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -65,8 +117,10 @@ export default async function EducatorStudentPage({
           username={student.username}
           goal={profile?.goal ?? null}
           hoursPerWeek={profile?.hours_per_week ?? null}
+          planWeeks={planWeeks}
           planWeekConcepts={planWeekConcepts}
-          masterySample={masterySample}
+          progress={progressView}
+          memory={memoryView}
           attempts={attempts.map((a) => ({
             id: a.id,
             kind: a.kind,
@@ -74,7 +128,6 @@ export default async function EducatorStudentPage({
             passed: a.passed,
             created_at: a.created_at,
           }))}
-          personaPreview={persona?.text ?? null}
           notes={notes}
         />
       </main>

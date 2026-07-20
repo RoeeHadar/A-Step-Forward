@@ -414,6 +414,21 @@ export async function listTeacherStudents(
   `) as Array<AppUser & { linked_at: string }>;
 }
 
+/** Accepted links for cron sweeps (weekly-gate-due, etc.). */
+export async function listAcceptedTeacherStudentPairs(
+  limit = 200,
+): Promise<Array<{ teacher_id: string; student_id: string }>> {
+  if (!sql) return [];
+  await ensureSocialTables();
+  return (await sql`
+    SELECT teacher_id, student_id
+    FROM teacher_student_links
+    WHERE status = 'accepted'
+    ORDER BY updated_at DESC
+    LIMIT ${limit}
+  `) as Array<{ teacher_id: string; student_id: string }>;
+}
+
 export async function countTeacherStudents(teacherId: string): Promise<number> {
   if (!sql) return 0;
   await ensureSocialTables();

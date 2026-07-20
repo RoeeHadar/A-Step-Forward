@@ -90,14 +90,35 @@ export default async function PublicProfilePage({
                   </div>
                 </dl>
                 <div>
-                  <p className="mb-2 text-xs text-muted-foreground">Activity (7 days)</p>
-                  <div className="flex gap-1.5" aria-hidden>
-                    {stats.week_activity.map((on, i) => (
-                      <span
-                        key={i}
-                        className={`h-8 w-8 rounded-md ${on ? 'bg-primary/70' : 'bg-surface-2'}`}
-                      />
-                    ))}
+                  <p className="mb-2 text-xs text-muted-foreground">Activity (28 days)</p>
+                  <div className="flex flex-wrap gap-1" aria-hidden>
+                    {(stats.activity_heatmap.length > 0
+                      ? stats.activity_heatmap
+                      : stats.week_activity.map((on, i) => ({
+                          date: String(i),
+                          count: on ? 1 : 0,
+                        }))
+                    ).map((d) => {
+                      const max = Math.max(
+                        1,
+                        ...stats.activity_heatmap.map((x) => x.count),
+                        1,
+                      );
+                      const intensity = d.count / max;
+                      return (
+                        <span
+                          key={d.date}
+                          title={`${d.date}: ${d.count}`}
+                          className="h-3.5 w-3.5 rounded-sm"
+                          style={{
+                            backgroundColor:
+                              d.count === 0
+                                ? 'hsl(var(--muted))'
+                                : `hsl(var(--primary) / ${0.25 + intensity * 0.75})`,
+                          }}
+                        />
+                      );
+                    })}
                   </div>
                 </div>
               </section>

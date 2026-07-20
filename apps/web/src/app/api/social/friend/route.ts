@@ -12,6 +12,7 @@ import {
   searchLearnersForFriends,
   sendFriendRequest,
 } from '@/lib/social-db';
+import { checkSocialRateLimit } from '@/lib/social-rate-limit';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -29,6 +30,19 @@ export async function GET(req: Request) {
   }
 
   const q = new URL(req.url).searchParams.get('q')?.trim() ?? '';
+  if (q.length >= 2) {
+    const limited = checkSocialRateLimit(`friend-search:${userId}`, {
+      limit: 20,
+      windowMs: 60_000,
+    });
+    if (!limited.ok) {
+      return Response.json(
+        { error: 'Too many searches. Try again shortly.', retry_after: limited.retryAfterSec },
+        { status: 429, headers: { 'Retry-After': String(limited.retryAfterSec) } },
+      );
+    }
+  }
+
   const [friends, pending, results] = await Promise.all([
     listFriends(userId),
     listPendingFriendRequests(userId),
