@@ -10,15 +10,67 @@ export const VARIANT_TRACKS = ['3pt', '4pt', '5pt', 'uni'] as const;
 export type VariantTrack = (typeof VARIANT_TRACKS)[number];
 
 const VARIANT_SUFFIX_RE = /__(?:3pt|4pt|5pt|uni)$/;
+/** Underscore track-named lessons: `limits_4pt`, `analytic_geometry_5pt`, `combinatorics_5pt`. */
+const UNDERSCORE_TRACK_RE = /_(3pt|4pt|5pt|uni)$/;
 
-/** Strip a `__3pt|__4pt|__5pt|__uni` suffix to the catalog/KG canonical id. */
+/**
+ * Canonical syllabus id → preferred authored lesson id per learner track.
+ * Covers track-named files that do not use the `__track` suffix convention.
+ */
+export const TRACK_NAMED_LESSONS: Record<string, Partial<Record<VariantTrack, string>>> = {
+  limits: { '4pt': 'limits_4pt', '5pt': 'limits_5pt', uni: 'limits_epsilon_delta' },
+  combinatorics: { '5pt': 'combinatorics__5pt' },
+  sequences_arithmetic: { '5pt': 'sequences_5pt' },
+  sequences_geometric: { '5pt': 'sequences_5pt' },
+  logarithms: { '5pt': 'logarithms__5pt' },
+  function_analysis_4pt: { '4pt': 'function_analysis_4pt', '5pt': 'function_analysis_5pt' },
+  function_analysis_5pt: { '5pt': 'function_analysis_5pt' },
+  plane_trigonometry_right_triangle: {
+    '5pt': 'plane_trigonometry_right_triangle__5pt',
+  },
+  euclidean_geometry_circles: { '5pt': 'euclidean_geometry_circles__5pt' },
+  riemann_integral_ftc: { '5pt': 'riemann_integral_ftc__5pt', uni: 'riemann_integral_ftc' },
+  implicit_differentiation: {
+    '5pt': 'implicit_differentiation',
+    uni: 'implicit_differentiation__uni',
+  },
+  analytic_geometry: {
+    '4pt': 'analytic_geometry_4pt',
+    '5pt': 'analytic_geometry__5pt',
+  },
+};
+
+/** Strip a `__3pt|__4pt|__5pt|__uni` or `_3pt|_4pt|_5pt|_uni` suffix to the catalog id. */
 export function stripVariantSuffix(conceptId: string): string {
-  return String(conceptId || '').replace(VARIANT_SUFFIX_RE, '');
+  const raw = String(conceptId || '');
+  if (VARIANT_SUFFIX_RE.test(raw)) return raw.replace(VARIANT_SUFFIX_RE, '');
+  // Only strip underscore track suffixes for known track-named families
+  const m = raw.match(UNDERSCORE_TRACK_RE);
+  if (!m) return raw;
+  const base = raw.replace(UNDERSCORE_TRACK_RE, '');
+  if (base in TRACK_NAMED_LESSONS || Object.values(TRACK_NAMED_LESSONS).some((m) => Object.values(m).includes(raw))) {
+    return base;
+  }
+  // analytic_geometry_4pt → analytic_geometry; combinatorics_5pt → combinatorics
+  if (
+    base === 'analytic_geometry' ||
+    base === 'limits' ||
+    base === 'combinatorics' ||
+    base === 'sequences' ||
+    base === 'function_analysis'
+  ) {
+    return base === 'sequences' ? 'sequences_arithmetic' : base;
+  }
+  return raw;
 }
 
 /** True when this id is a track-owned variant file, not the canonical lesson. */
 export function isTrackVariantLessonId(conceptId: string): boolean {
-  return VARIANT_SUFFIX_RE.test(String(conceptId || ''));
+  const id = String(conceptId || '');
+  if (VARIANT_SUFFIX_RE.test(id)) return true;
+  if (!UNDERSCORE_TRACK_RE.test(id)) return false;
+  const stripped = stripVariantSuffix(id);
+  return stripped !== id;
 }
 
 /**
@@ -52,9 +104,18 @@ function trackForLevel(level: string | null | undefined): VariantTrack | null {
   return null;
 }
 
+function pickTrackNamed(canonical: string, track: VariantTrack): string | null {
+  const mapped = TRACK_NAMED_LESSONS[canonical]?.[track];
+  if (mapped && isConceptInLessonIndex(mapped)) return mapped;
+  // Generic underscore form: limits_4pt, analytic_geometry_5pt
+  const underscored = `${canonical}_${track === 'uni' ? 'uni' : track}`;
+  if (isConceptInLessonIndex(underscored)) return underscored;
+  return null;
+}
+
 /**
  * Pick the most level-appropriate authored lesson id for a catalog / URL concept.
- * Per-track variants use the id form `<canonical>__<track>` (file / bundle key).
+ * Tries `__track` variants, then track-named aliases (`limits_4pt`), then canonical.
  */
 export function resolveVariantLessonId(
   conceptId: string,
@@ -66,8 +127,10 @@ export function resolveVariantLessonId(
     : resolveLessonConceptId(stripped);
   const track = trackForLevel(learnerLevel);
   if (track) {
-    const variant = `${canonical}__${track}`;
-    if (isConceptInLessonIndex(variant)) return variant;
+    const dunder = `${canonical}__${track}`;
+    if (isConceptInLessonIndex(dunder)) return dunder;
+    const named = pickTrackNamed(canonical, track);
+    if (named) return named;
   }
   if (isConceptInLessonIndex(canonical)) return canonical;
   return resolveLessonConceptId(stripped);
@@ -82,9 +145,14 @@ export function variantLessonIds(
     ? stripped
     : resolveLessonConceptId(stripped);
   const out: { track: VariantTrack; lessonId: string }[] = [];
+  const seen = new Set<string>();
   for (const track of VARIANT_TRACKS) {
-    const variant = `${canonical}__${track}`;
-    if (isConceptInLessonIndex(variant)) out.push({ track, lessonId: variant });
+    const dunder = `${canonical}__${track}`;
+    const named = pickTrackNamed(canonical, track);
+    const lessonId = isConceptInLessonIndex(dunder) ? dunder : named;
+    if (!lessonId || seen.has(lessonId)) continue;
+    seen.add(lessonId);
+    out.push({ track, lessonId });
   }
   return out;
 }

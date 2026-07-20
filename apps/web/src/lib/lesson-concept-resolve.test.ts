@@ -53,6 +53,16 @@ describe('resolveVariantLessonId', () => {
     expect(resolveVariantLessonId('equations_quadratic', 'calc1')).toBe('equations_quadratic__uni');
   });
 
+  it('resolves track-named lessons (limits_4pt / analytic_geometry_5pt)', () => {
+    expect(resolveVariantLessonId('limits', '4pt')).toBe('limits_4pt');
+    expect(resolveVariantLessonId('limits', '5pt')).toBe('limits_5pt');
+    expect(resolveVariantLessonId('limits', 'uni')).toBe('limits_epsilon_delta');
+    expect(resolveVariantLessonId('analytic_geometry', '4pt')).toBe('analytic_geometry_4pt');
+    // Prefer __5pt when both analytic_geometry__5pt and analytic_geometry_5pt exist
+    expect(resolveVariantLessonId('analytic_geometry', '5pt')).toBe('analytic_geometry__5pt');
+    expect(resolveVariantLessonId('combinatorics', '5pt')).toBe('combinatorics__5pt');
+  });
+
   it('never invents a variant id that is not in the lesson index', () => {
     for (const level of ['3pt', '4pt', '5pt', 'uni']) {
       // fluids has no track variants authored
@@ -78,6 +88,13 @@ describe('catalogDedupeKey', () => {
   it('collapses track variants to the canonical id', () => {
     expect(catalogDedupeKey('equations_quadratic__4pt')).toBe('equations_quadratic');
     expect(stripVariantSuffix('algebra_basics__uni')).toBe('algebra_basics');
+  });
+
+  it('collapses track-named siblings like limits_4pt', async () => {
+    const { catalogDedupeKey: aliasKey } = await import('./concept-aliases');
+    expect(aliasKey('limits_4pt')).toBe('limits');
+    expect(aliasKey('analytic_geometry_5pt')).toBe('analytic_geometry');
+    expect(catalogDedupeKey('limits_4pt')).toBe('limits');
   });
 });
 

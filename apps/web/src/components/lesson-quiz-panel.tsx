@@ -20,7 +20,7 @@ import type {
   LessonWithQuestions,
 } from '@/lib/neon-db';
 
-const LEVEL_ORDER: LessonPointsLevel[] = ['3pt', '4pt', '5pt', 'hs_physics', 'calc1', 'la'];
+const LEVEL_ORDER: LessonPointsLevel[] = ['3pt', '4pt', '5pt', 'hs_physics', 'calc1', 'la', 'uni'];
 function levelIndex(l: LessonPointsLevel) {
   return LEVEL_ORDER.indexOf(l);
 }

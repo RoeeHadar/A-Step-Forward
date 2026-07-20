@@ -1,0 +1,1139 @@
+{
+  "concept_id": "riemann_integral_ftc__5pt",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": [
+    "5pt"
+  ],
+  "title_en": "Riemann Sums, the Definite Integral, and the Fundamental Theorem of Calculus — 5pt mastery",
+  "title_he": "סכומי רימן, האינטגרל המסוים ומשפט היסוד של החשבון — שליטה 5 יחידות",
+  "summary_en": "The definite integral is the limit of Riemann sums. FTC Part 1: d/dx ∫₀ˣ f(t)dt = f(x). FTC Part 2: ∫ₐᵇ f'(x)dx = f(b)-f(a). These two parts connect differentiation and integration.",
+  "summary_he": "האינטגרל המסוים הוא גבול של סכומי רימן. מ\"י חלק 1: d/dx ∫₀ˣ f(t)dt = f(x). מ\"י חלק 2: ∫ₐᵇ f'(x)dx = f(b)-f(a). שני חלקים אלה מחברים דיפרנציאציה ואינטגרציה.",
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "From Area to Algebra",
+      "title_he": "משטח לאלגברה",
+      "body_en_md": "How do you find the area under a curve? Ancient Greeks approximated it by filling the region with rectangles. Riemann (1826–1866) made this rigorous by taking the limit as the rectangles become infinitely thin. The shocking discovery — the **Fundamental Theorem of Calculus** — is that this area-computing process is the exact inverse of differentiation.\n\n**Why this matters:**\n- Without FTC, computing areas would require solving limits of complicated sums.\n- With FTC, you just find an antiderivative and evaluate it at the endpoints.\n- FTC Part 1 and Part 2 together explain *why* integration and differentiation are inverse operations.\n\n**Topics in this lesson:**\n- Riemann sums (left, right, midpoint endpoints).\n- The definite integral as the limit of Riemann sums.\n- FTC Part 1: the derivative of a definite integral with variable upper limit.\n- FTC Part 2: evaluation theorem — $\\int_a^b f(x)\\,dx = F(b)-F(a)$.\n- Proof connecting both parts.\n\n**5pt focus:** Short justifications, edge cases, MoE-faithful (no uni limit reasoning drills).",
+      "body_he_md": "כיצד מוצאים את השטח מתחת לעקומה? היוונים הקדמונים קירבו אותו על ידי מילוי האזור במלבנים. רימן (1826–1866) הפך זאת לקפדני על ידי לקיחת הגבול כאשר המלבנים הופכים לדקים אינסוף. הגילוי המדהים — **משפט היסוד של החשבון** — הוא שתהליך חישוב השטח הזה הוא ההופכי המדויק של דיפרנציאציה.\n\n**מדוע זה חשוב:**\n- ללא מ\"י, חישוב שטחים היה מצריך פתרון גבולות של סכומים מסובכים.\n- עם מ\"י, פשוט מוצאים פונקציה קדומה ומעריכים אותה בנקודות הקצה.\n- מ\"י חלק 1 וחלק 2 יחד מסבירים *מדוע* אינטגרציה ודיפרנציאציה הן פעולות הפוכות.\n\n**נושאים בשיעור זה:**\n- סכומי רימן (נקודות קצה שמאל, ימין, אמצע).\n- האינטגרל המסוים כגבול של סכומי רימן.\n- מ\"י חלק 1: הנגזרת של אינטגרל מסוים עם גבול עליון משתנה.\n- מ\"י חלק 2: משפט ההערכה — $\\int_a^b f(x)\\,dx = F(b)-F(a)$.\n- הוכחה המחברת את שני החלקים.\n\n**מיקוד 5 יחידות:** הוכחות קצרות, מקרי קצה, נאמן למשרד (בלי תרגילי limit reasoning אוניברסיטאיים)."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Riemann Sums and the Definite Integral",
+      "title_he": "סכומי רימן והאינטגרל המסוים",
+      "body_en_md": "**Partition:** Divide $[a, b]$ into $n$ sub-intervals of equal width $\\Delta x = \\dfrac{b-a}{n}$. Label the partition points $x_0=a, x_1, \\ldots, x_n=b$ where $x_i = a + i\\Delta x$.\n\n**Right-endpoint Riemann sum** (sample at the right end of each sub-interval):\n$$R_n = \\sum_{i=1}^{n} f(x_i)\\,\\Delta x, \\quad x_i = a + i\\Delta x$$\n\n**Left-endpoint Riemann sum** (sample at the left end):\n$$L_n = \\sum_{i=0}^{n-1} f(x_i)\\,\\Delta x, \\quad x_i = a + i\\Delta x$$\n\n**Midpoint Riemann sum** (often more accurate for a fixed $n$):\n$$M_n = \\sum_{i=1}^{n} f\\!\\left(a + \\left(i-\\tfrac{1}{2}\\right)\\Delta x\\right)\\Delta x$$\n\n**Definite integral (Riemann definition):**\n$$\\int_a^b f(x)\\,dx = \\lim_{n\\to\\infty} R_n = \\lim_{n\\to\\infty}\\sum_{i=1}^{n} f(x_i)\\,\\Delta x$$\nwhen this limit exists; then $f$ is called **Riemann integrable** on $[a,b]$. For continuous functions the limit always exists — that is the case you meet most often in Calc 1 and first-year calculus.\n\n**Geometric meaning:** $\\int_a^b f(x)\\,dx$ equals the **signed area** between the graph of $f$ and the $x$-axis: regions above the axis contribute positively, regions below contribute negatively. If the question asks for **total area**, integrate $|f(x)|$ instead.\n\n**Linearity properties** (used constantly with FTC):\n- $\\int_a^b [f(x)+g(x)]\\,dx = \\int_a^b f\\,dx + \\int_a^b g\\,dx$\n- $\\int_a^b kf(x)\\,dx = k\\int_a^b f(x)\\,dx$ for constant $k$\n- Reversing limits flips the sign: $\\int_a^b f\\,dx = -\\int_b^a f\\,dx$\n\n**Fundamental Theorem of Calculus:**\n- **Part 1:** If $f$ is continuous on $[a,b]$, then $G(x) = \\int_a^x f(t)\\,dt$ is differentiable on $(a,b)$ and $G'(x) = f(x)$.\n- **Part 2:** If $F$ is any antiderivative of $f$ on $[a,b]$ (i.e., $F' = f$), then $\\int_a^b f(x)\\,dx = F(b) - F(a)$, often written $[F(x)]_a^b$.",
+      "body_he_md": "**חלוקה:** חלקו את $[a, b]$ ל-$n$ תת-קטעים ברוחב שווה $\\Delta x = \\dfrac{b-a}{n}$. סמנו נקודות חלוקה $x_0=a, x_1, \\ldots, x_n=b$ כאשר $x_i = a + i\\Delta x$.\n\n**סכום רימן עם נקודות ימין** (דגימה בקצה הימני של כל תת-קטע):\n$$R_n = \\sum_{i=1}^{n} f(x_i)\\,\\Delta x, \\quad x_i = a + i\\Delta x$$\n\n**סכום רימן עם נקודות שמאל** (דגימה בקצה השמאלי):\n$$L_n = \\sum_{i=0}^{n-1} f(x_i)\\,\\Delta x, \\quad x_i = a + i\\Delta x$$\n\n**סכום רימן עם נקודות אמצע** (לעיתים מדויק יותר עבור $n$ קבוע):\n$$M_n = \\sum_{i=1}^{n} f\\!\\left(a + \\left(i-\\tfrac{1}{2}\\right)\\Delta x\\right)\\Delta x$$\n\n**אינטגרל מסוים (הגדרת רימן):**\n$$\\int_a^b f(x)\\,dx = \\lim_{n\\to\\infty} R_n = \\lim_{n\\to\\infty}\\sum_{i=1}^{n} f(x_i)\\,\\Delta x$$\nכאשר הגבול קיים; אז $f$ נקראת **אינטגרבילית לפי רימן** על $[a,b]$. לפונקציות רציפות הגבול תמיד קיים — זה המקרה הנפוץ בחדו״א 1 ובקורס אוניברסיטאי 5 יחידות.\n\n**משמעות גאומטרית:** $\\int_a^b f(x)\\,dx$ שווה ל**שטח מסומן** בין גרף $f$ לציר $x$: אזורים מעל הציר תורמים חיובית, מתחת — שלילית. אם השאלה מבקשת **שטח כולל**, יש לאינטגרל $|f(x)|$.\n\n**תכונות ליניאריות** (בשימוש מתמיד עם מ\"י):\n- $\\int_a^b [f(x)+g(x)]\\,dx = \\int_a^b f\\,dx + \\int_a^b g\\,dx$\n- $\\int_a^b kf(x)\\,dx = k\\int_a^b f(x)\\,dx$ לקבוע $k$\n- החלפת גבולות הופכת סימן: $\\int_a^b f\\,dx = -\\int_b^a f\\,dx$\n\n**משפט היסוד של החשבון:**\n- **חלק 1:** אם $f$ רציפה על $[a,b]$, אז $G(x) = \\int_a^x f(t)\\,dt$ גזירה ב-$(a,b)$ ו-$G'(x) = f(x)$.\n- **חלק 2:** אם $F$ היא פונקציה קדומה של $f$ על $[a,b]$ (כלומר $F' = f$), אז $\\int_a^b f(x)\\,dx = F(b) - F(a)$, לעיתים מסומן $[F(x)]_a^b$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Why FTC Works — The Connection Between the Two Parts",
+      "title_he": "מדוע מ\"י עובד — הקשר בין שני החלקים",
+      "body_en_md": "The Fundamental Theorem is not a trick — it is the rigorous bridge between **limits of sums** (Riemann) and **antiderivatives** (indefinite integration). Understanding both parts together explains why differentiation and integration are inverse operations.\n\n**FTC Part 1 — proof sketch (accumulation function):**\nLet $G(x) = \\int_a^x f(t)\\,dt$ with $f$ continuous. The difference quotient is\n$$\\frac{G(x+h)-G(x)}{h} = \\frac{1}{h}\\int_x^{x+h}f(t)\\,dt.$$\nGeometrically, $\\int_x^{x+h}f(t)\\,dt$ is the signed area of a thin vertical strip of width $h$. For small $h$, continuity forces $f$ to stay near $f(x)$ on $[x,x+h]$, so the area is approximately $f(x)\\cdot h$. Dividing by $h$ and taking $h\\to 0$ gives $G'(x)=f(x)$.\n\nA rigorous version uses the **Mean Value Theorem for Integrals**: there exists $c\\in[x,x+h]$ with $\\int_x^{x+h}f(t)\\,dt = f(c)\\cdot h$, so the quotient equals $f(c)$ and $c\\to x$ as $h\\to 0$.\n\n**FTC Part 2 — proof (evaluation theorem):**\nLet $F$ be any antiderivative of $f$, and define $G(x)=\\int_a^x f(t)\\,dt$. By Part 1, $G'(x)=f(x)=F'(x)$, hence $G(x)=F(x)+C$ on $[a,b]$. At $x=a$: $G(a)=\\int_a^a f=0$, so $0=F(a)+C$ and $C=-F(a)$. At $x=b$:\n$$\\int_a^b f(x)\\,dx = G(b) = F(b)-F(a). \\quad \\checkmark$$\n\n**The deep connection:**\n- Part 1 constructs an antiderivative *from the integral itself* — every continuous $f$ has an antiderivative $G$.\n- Part 2 says evaluating a definite integral is the same as finding *any* antiderivative and subtracting endpoint values — you never need the limit of Riemann sums in practice.\n- Special case: $\\int_a^b f'(x)\\,dx = f(b)-f(a)$. Integrating a rate of change recovers the **net change** in the original quantity.\n\n**Exam relevance:** first-year calculus and university Calc 1 regularly ask you to prove Part 1 from the integral definition, apply Part 2 to evaluate areas, or differentiate an integral with variable limits (Part 1 + chain rule).",
+      "body_he_md": "משפט היסוד אינו טריק — הוא הגשר הקפדני בין **גבולות של סכומים** (רימן) ל**פונקציות קדומות** (אינטגרציה לא מסוימת). הבנת שני החלקים יחד מסבירה מדוע דיפרנציאציה ואינטגרציה הן פעולות הפוכות.\n\n**מ\"י חלק 1 — הוכחה מקוצרת (פונקציית צבירה):**\nתהי $G(x) = \\int_a^x f(t)\\,dt$ כאשר $f$ רציפה. מנת ההפרש היא\n$$\\frac{G(x+h)-G(x)}{h} = \\frac{1}{h}\\int_x^{x+h}f(t)\\,dt.$$\nגאומטרית, $\\int_x^{x+h}f(t)\\,dt$ הוא השטח המסומן של פס דק ברוחב $h$. עבור $h$ קטן, רציפות $f$ גורמת לה להישאר קרובה ל-$f(x)$ ב-$[x,x+h]$, ולכן השטח בקירוב $f(x)\\cdot h$. חלוקה ב-$h$ וגבול $h\\to 0$ נותנים $G'(x)=f(x)$.\n\nגרסה קפדנית משתמשת ב**משפט ערך הממוצע לאינטגרלים**: קיים $c\\in[x,x+h]$ כך ש-$\\int_x^{x+h}f(t)\\,dt = f(c)\\cdot h$, ולכן המנה שווה ל-$f(c)$ ו-$c\\to x$ כאשר $h\\to 0$.\n\n**מ\"י חלק 2 — הוכחה (משפט ההערכה):**\nתהי $F$ פונקציה קדומה של $f$, והגדר $G(x)=\\int_a^x f(t)\\,dt$. לפי חלק 1, $G'(x)=f(x)=F'(x)$, ולכן $G(x)=F(x)+C$ על $[a,b]$. ב-$x=a$: $G(a)=0$, כלומר $C=-F(a)$. ב-$x=b$:\n$$\\int_a^b f(x)\\,dx = G(b) = F(b)-F(a). \\quad \\checkmark$$\n\n**הקשר העמוק:**\n- חלק 1 בונה פונקציה קדומה *מהאינטגרל עצמו* — לכל $f$ רציפה יש פונקציה קדומה $G$.\n- חלק 2 אומר שהערכת אינטגרל מסוים שווה למציאת *כל* פונקציה קדומה וחיסור ערכי הקצה — בפועל אין צורך בגבול סכומי רימן.\n- מקרה מיוחד: $\\int_a^b f'(x)\\,dx = f(b)-f(a)$. אינטגרציה של קצב שינוי משחזרת את **השינוי הנטו** בכמות המקורית.\n\n**רלוונטיות לבחינה:** בקורס אוניברסיטאי 5 יחידות ובחדו״א 1 מבקשים לעיתים להוכיח חלק 1 מההגדרה, ליישם חלק 2 לשטחים, או לגזור אינטגרל עם גבולות משתנים (חלק 1 + כלל שרשרת)."
+    },
+    {
+      "kind": "theory",
+      "title_en": "FTC I vs FTC II and Net Change",
+      "title_he": "FTC I מול FTC II ושינוי מצטבר",
+      "body_en_md": "**Riemann sum limit.** The definite integral $\\int_a^b f$ is the limit of Riemann sums $\\sum f(x_i^*)\\Delta x$ when the mesh → 0, provided $f$ is integrable (e.g. continuous on $[a,b]$).\n\n**FTC Part 1 (derivative of integral).** If $F(x)=\\int_a^x f(t)\\,dt$ with $f$ continuous, then $F'(x)=f(x)$. Differentiation undoes accumulation.\n\n**FTC Part 2 (evaluation).** If $F'=f$, then $\\int_a^b f=F(b)-F(a)$. Antiderivatives turn definite integrals into arithmetic.\n\n**Net change.** $\\int_a^b v(t)\\,dt$ is net displacement when $v$ is velocity — signed accumulation, not total distance (use $\\int|v|$ for distance).",
+      "body_he_md": "**גבול סכומי רימן.** האינטגרל המסוים $\\int_a^b f$ הוא הגבול של סכומי רימן $\\sum f(x_i^*)\\Delta x$ כאשר הרשת שואפת לאפס, בתנאי ש-$f$ אינטגרבילית (למשל רציפה על $[a,b]$).\n\n**FTC חלק 1 (נגזרת של אינטגרל).** אם $F(x)=\\int_a^x f(t)\\,dt$ עם $f$ רציפה, אז $F'(x)=f(x)$. גזירה מבטלת את פעולת הצבירה ומשחזרת את האינטגרנד בגבול העליון.\n\n**FTC חלק 2 (הערכה).** אם $F'=f$, אז $\\int_a^b f=F(b)-F(a)$. פונקציות קדומות הופכות אינטגרלים מסוימים לחישוב אריתמטי עם הצבות בקצות.\n\n**שינוי מצטבר.** $\\int_a^b v(t)\\,dt$ הוא תזוזה נטו כאשר $v$ מהירות — צבירה חתומה, לא מרחק כולל (למרחק משתמשים ב-$\\int|v|$). ההבחנה בין נטו למרחק היא מלכודת בחינה קלאסית."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Right-Endpoint Riemann Sum",
+      "title_he": "דוגמה פתורה 1 — סכום רימן עם נקודות ימין",
+      "body_en_md": "**Given:** Approximate $\\int_0^2 x\\,dx$ using a right-endpoint Riemann sum with $n = 4$ rectangles, then compare to the exact value.\n\nThis is the standard Riemann-sum setup on first-year calculus and Calc 1 exams: partition the interval, identify sample points, form $\\sum f(x_i)\\Delta x$, and interpret over/under-estimation for monotone functions.\n\n### Move 1: Partition the interval and list right endpoints.\n$$\\Delta x = \\frac{2-0}{4} = \\frac{1}{2}.$$\nRight endpoints (not left!): $x_1 = 0.5$, $x_2 = 1.0$, $x_3 = 1.5$, $x_4 = 2.0$. The left endpoint $x_0=0$ is **not** used in a right sum.\n\n### Move 2: Evaluate $f(x)=x$ at each sample and sum.\n$$R_4 = \\sum_{i=1}^{4} f(x_i)\\,\\Delta x = \\Delta x\\left[f(0.5)+f(1.0)+f(1.5)+f(2.0)\\right]$$\n$$= \\frac{1}{2}[0.5+1.0+1.5+2.0] = \\frac{1}{2}\\times 5 = 2.5.$$\n\n### Move 3: Compare with the exact integral via FTC Part 2.\n$$\\int_0^2 x\\,dx = \\left[\\frac{x^2}{2}\\right]_0^2 = 2 - 0 = 2.$$\n\n**Answer:** $R_4 = 2.5$. Error $= 0.5$.\n\n**Interpretation:** $f(x)=x$ is increasing on $[0,2]$, so right-endpoint rectangles sit above the curve and **overestimate** area — $2.5 > 2$. The left sum $L_4=1.5$ would underestimate; their average is exactly $2$ (trapezoid rule is exact for linear $f$).\n\n**Exam note:** Always show $\\Delta x$, list all $x_i$, and state whether your sum is an over- or under-estimate when $f$ is monotone.",
+      "body_he_md": "**נתון:** קרבו את $\\int_0^2 x\\,dx$ בסכום רימן עם נקודות ימין ו-$n = 4$ מלבנים, והשוו לערך המדויק.\n\nזו הגדרת סכום רימן סטנדרטית בקורס אוניברסיטאי 5 יחידות ובחדו״א 1: חלוקת הקטע, זיהוי נקודות דגימה, בניית $\\sum f(x_i)\\Delta x$, ופרשנות הערכת יתר/חסר לפונקציות מונוטוניות.\n\n### צעד 1: חלוקת הקטע ורשימת נקודות ימין.\n$$\\Delta x = \\frac{2-0}{4} = \\frac{1}{2}.$$\nנקודות ימין (לא שמאל!): $x_1 = 0.5$, $x_2 = 1.0$, $x_3 = 1.5$, $x_4 = 2.0$. נקודת השמאל $x_0=0$ **לא** בשימוש בסכום ימין.\n\n### צעד 2: הצבת $f(x)=x$ בכל נקודה וסיכום.\n$$R_4 = \\Delta x\\left[f(0.5)+f(1.0)+f(1.5)+f(2.0)\\right] = \\frac{1}{2}\\times 5 = 2.5.$$\n\n### צעד 3: השוואה לאינטגרל המדויק דרך מ\"י חלק 2.\n$$\\int_0^2 x\\,dx = \\left[\\frac{x^2}{2}\\right]_0^2 = 2.$$\n\n**תשובה:** $R_4 = 2.5$. שגיאה $= 0.5$.\n\n**פרשנות:** $f(x)=x$ עולה ב-$[0,2]$, ולכן מלבני נקודות ימין מעל העקומה ו**מעריכים יתר** — $2.5 > 2$. סכום שמאל $L_4=1.5$ יעריך חסר; ממוצעם בדיוק $2$ (כלל הטרפז מדויק לפונקציה לינארית).\n\n**הערה לבחינה:** הציגו $\\Delta x$, פרטו כל $x_i$, וציינו האם הסכום מעריך יתר או חסר כש-$f$ מונוטונית."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Compute the left-endpoint Riemann sum $L_4$ for $f(x) = x$ on $[0,2]$ with $n=4$ and compare to the exact value $2$.",
+      "body_he_md": "חשב את סכום רימן עם נקודות שמאל $L_4$ עבור $f(x) = x$ על $[0,2]$ עם $n=4$ והשווה לערך המדויק $2$.",
+      "checkpoint_solution_en": "**Step 1 — Set up the partition (same as the right-sum example).**\n$\\Delta x = (2-0)/4 = 0.5$. Left endpoints use $x_0, x_1, x_2, x_3$ — the **last** sub-interval uses $x_3=1.5$, not $x_4=2$.\n\n**Step 2 — Compute $L_4$.**\nLeft points: $x_0=0$, $x_1=0.5$, $x_2=1$, $x_3=1.5$.\n$$L_4 = \\Delta x\\,[f(0)+f(0.5)+f(1)+f(1.5)] = 0.5\\,[0+0.5+1+1.5] = 0.5\\times 3 = 1.5.$$\n\n**Step 3 — Compare to the exact value and to $R_4$.**\nExact: $\\int_0^2 x\\,dx = 2$. Error of $L_4$: $|2-1.5|=0.5$ (underestimates, as expected for an increasing function). Earlier $R_4=2.5$ overestimates by $0.5$. Average $(1.5+2.5)/2 = 2$ — the trapezoid rule is exact for linear functions, which is a useful exam sanity check.",
+      "checkpoint_solution_he": "**צעד 1 — הכנת החלוקה (כמו בדוגמת סכום ימין).**\n$\\Delta x = 0.5$. נקודות שמאל משתמשות ב-$x_0, x_1, x_2, x_3$ — תת-הקטע האחרון ב-$x_3=1.5$, לא $x_4=2$.\n\n**צעד 2 — חישוב $L_4$.**\nנקודות שמאל: $x_0=0$, $x_1=0.5$, $x_2=1$, $x_3=1.5$.\n$$L_4 = 0.5\\,[0+0.5+1+1.5] = 1.5.$$\n\n**צעד 3 — השוואה לערך המדויק ול-$R_4$.**\nמדויק: $\\int_0^2 x\\,dx = 2$. שגיאת $L_4$: $0.5$ (הערכת חסר, כצפוי לפונקציה עולה). $R_4=2.5$ מעריך יתר ב-$0.5$. ממוצע $(1.5+2.5)/2 = 2$ — כלל הטרפז מדויק לפונקציה לינארית, בדיקת סבירות שימושית בבחינה."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — FTC Part 1",
+      "title_he": "דוגמה פתורה 2 — מ\"י חלק 1",
+      "body_en_md": "**Given:** $G(x) = \\int_0^x \\sin(t^2)\\,dt$. Find $G'(x)$.\n\nThis problem tests FTC Part 1 in its cleanest form: variable upper limit $x$, fixed lower limit $0$, continuous integrand. No antiderivative is required — a key exam time-saver.\n\n### Move 1: Identify the structure.\n$G(x)$ is an accumulation function $\\int_a^x f(t)\\,dt$ with $a=0$ and $f(t)=\\sin(t^2)$. The variable $x$ appears only as the upper limit of integration.\n\n### Move 2: Apply FTC Part 1 directly.\n$$G'(x) = f(x) = \\sin(x^2).$$\n\n**Answer:** $G'(x) = \\sin(x^2)$.\n\n**Why no antiderivative is needed:** $\\sin(t^2)$ has no elementary antiderivative (its integral defines the Fresnel functions). Attempting integration by parts wastes time. Part 1 bypasses antidifferentiation entirely.\n\n### Move 3: Extension — chain rule with a nonlinear upper limit.\nIf $G(x) = \\int_0^{x^3} \\sin(t^2)\\,dt$, the upper limit is $g(x)=x^3$:\n$$G'(x) = \\sin((x^3)^2) \\cdot \\frac{d}{dx}(x^3) = 3x^2\\sin(x^6).$$\n\n**Exam note:** State Part 1 in words before writing the formula. If the upper limit is not plain $x$, multiply by the derivative of that limit.",
+      "body_he_md": "**נתון:** $G(x) = \\int_0^x \\sin(t^2)\\,dt$. מצאו $G'(x)$.\n\nבעיה זו בוחנת מ\"י חלק 1 בצורתו הנקייה: גבול עליון משתנה $x$, תחתון קבוע $0$, אינטגרנד רציף. אין צורך בפונקציה קדומה — חיסכון זמן משמעותי בבחינה.\n\n### צעד 1: זיהוי המבנה.\n$G(x)$ היא פונקציית צבירה $\\int_a^x f(t)\\,dt$ עם $a=0$ ו-$f(t)=\\sin(t^2)$. המשתנה $x$ מופיע רק כגבול עליון.\n\n### צעד 2: יישום ישיר של מ\"י חלק 1.\n$$G'(x) = f(x) = \\sin(x^2).$$\n\n**תשובה:** $G'(x) = \\sin(x^2)$.\n\n**למה אין צורך בפונקציה קדומה:** ל-$\\sin(t^2)$ אין פונקציה קדומה אלמנטרית. ניסיון אינטגרציה בחלקים מבזבז זמן. חלק 1 עוקף אינטגרציה לגמרי.\n\n### צעד 3: הרחבה — כלל שרשרת עם גבול עליון לא לינארי.\nאם $G(x) = \\int_0^{x^3} \\sin(t^2)\\,dt$, הגבול העליון הוא $g(x)=x^3$:\n$$G'(x) = \\sin(x^6) \\cdot 3x^2 = 3x^2\\sin(x^6).$$\n\n**הערה לבחינה:** נסחו חלק 1 במילים לפני הנוסחה. אם הגבול העליון אינו $x$ פשוט, הכפילו בנגזרת הגבול."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find $\\dfrac{d}{dx}\\int_1^{x^2} \\cos(t^3)\\,dt$.",
+      "body_he_md": "מצאו $\\dfrac{d}{dx}\\int_1^{x^2} \\cos(t^3)\\,dt$.",
+      "checkpoint_solution_en": "**Step 1 — Recognize the pattern: upper limit is $g(x)=x^2$, lower limit is constant $1$.**\nThe integral $\\int_1^{x^2} \\cos(t^3)\\,dt$ fits FTC Part 1 + chain rule with $f(t)=\\cos(t^3)$.\n\n**Step 2 — Apply Part 1: substitute the upper limit into the integrand.**\nReplace $t$ by $x^2$: $f(x^2)=\\cos((x^2)^3)=\\cos(x^6)$.\n\n**Step 3 — Multiply by the derivative of the upper limit.**\n$\\frac{d}{dx}(x^2)=2x$, so\n$$\\frac{d}{dx}\\int_1^{x^2} \\cos(t^3)\\,dt = \\cos(x^6)\\cdot 2x = 2x\\cos(x^6).$$\n\n**Check:** At $x=0$ the integral is $\\int_1^0 \\cos(t^3)\\,dt$ (negative area), and the derivative formula gives $0$ — consistent with the integral starting at a fixed point and initially not moving with $x$.",
+      "checkpoint_solution_he": "**צעד 1 — זיהוי הדפוס: גבול עליון $g(x)=x^2$, תחתון קבוע $1$.**\nהאינטגרל $\\int_1^{x^2} \\cos(t^3)\\,dt$ מתאים למ\"י חלק 1 + כלל שרשרת עם $f(t)=\\cos(t^3)$.\n\n**צעד 2 — יישום חלק 1: הצבת הגבול העליון באינטגרנד.**\nמחליפים $t$ ב-$x^2$: $f(x^2)=\\cos(x^6)$.\n\n**צעד 3 — הכפלה בנגזרת הגבול העליון.**\n$\\frac{d}{dx}(x^2)=2x$, ולכן\n$$\\frac{d}{dx}\\int_1^{x^2} \\cos(t^3)\\,dt = 2x\\cos(x^6).$$\n\n**בדיקה:** ב-$x=0$ האינטגרל הוא $\\int_1^0 \\cos(t^3)\\,dt$, והנוסחה נותנת $0$ — עקבי עם התחלה בנקודה קבועה."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Proving FTC Part 2 and the Integral of $f'$",
+      "title_he": "דוגמה פתורה 3 — הוכחת מ\"י חלק 2 ואינטגרל של $f'$",
+      "body_en_md": "**Goal:** Prove $\\int_a^b f'(x)\\,dx = f(b)-f(a)$ (FTC Part 2 for derivatives) and connect it to Part 1.\n\nThis proof appears on university Calc 1 exams and shows how the two FTC parts fit together: Part 1 builds an antiderivative from the integral; Part 2 evaluates any antiderivative at endpoints.\n\n### Move 1: Define the accumulation function and invoke Part 1.\nAssume $f$ is differentiable on $[a,b]$ with continuous derivative $f'$. Define\n$$G(x) = \\int_a^x f'(t)\\,dt.$$\nBy FTC Part 1 (continuous integrand): $G'(x) = f'(x)$ for all $x \\in [a,b]$.\n\n### Move 2: Conclude $G$ and $f$ differ by a constant.\nSince $G'(x) = f'(x)$, we have $(G-f)'=0$, so $G(x) = f(x) + C$ on $[a,b]$.\n\n### Move 3: Pin down $C$ using the lower limit $x=a$.\n$$G(a) = \\int_a^a f'(t)\\,dt = 0.$$\nAlso $G(a) = f(a)+C$, hence $C = -f(a)$.\n\n### Move 4: Evaluate at $x=b$ to finish the proof.\n$$\\int_a^b f'(x)\\,dx = G(b) = f(b)+C = f(b)-f(a). \\quad \\checkmark$$\n\n**Physical meaning:** If $f(t)$ is position and $f'(t)$ is velocity, the integral of velocity over $[a,b]$ equals net displacement $f(b)-f(a)$ — not total distance unless speed is always nonnegative.\n\n**Exam note:** Label each step (define $G$, apply Part 1, constant argument, evaluate endpoints). This structure earns full proof credit even when you skip limit reasoning details.",
+      "body_he_md": "**מטרה:** הוכיחו $\\int_a^b f'(x)\\,dx = f(b)-f(a)$ (מ\"י חלק 2 לנגזרות) וחברו לחלק 1.\n\nהוכחה זו מופיעה בבחינות חדו״א 1 ומראה כיצד שני חלקי מ\"י מתחברים: חלק 1 בונה פונקציה קדומה מהאינטגרל; חלק 2 מעריך כל פונקציה קדומה בקצוות.\n\n### צעד 1: הגדרת פונקציית צבירה ויישום חלק 1.\nהניחו ש-$f$ גזירה על $[a,b]$ עם נגזרת רציפה $f'$. הגדרו\n$$G(x) = \\int_a^x f'(t)\\,dt.$$\nלפי מ\"י חלק 1: $G'(x) = f'(x)$ לכל $x \\in [a,b]$.\n\n### צעד 2: מסקנה ש-$G$ ו-$f$ שונות בקבוע.\nמאחר ש-$G'(x) = f'(x)$, מתקיים $(G-f)'=0$, ולכן $G(x) = f(x) + C$.\n\n### צעד 3: קביעת $C$ באמצעות הגבול $x=a$.\n$$G(a) = 0 = f(a)+C \\Rightarrow C = -f(a).$$\n\n### צעד 4: הצבה ב-$x=b$ לסיום ההוכחה.\n$$\\int_a^b f'(x)\\,dx = G(b) = f(b)-f(a). \\quad \\checkmark$$\n\n**משמעות פיזיקלית:** אם $f(t)$ מיקום ו-$f'(t)$ מהירות, אינטגרל המהירות על $[a,b]$ שווה לתזוזה נטו $f(b)-f(a)$ — לא מרחק כולל אלא אם המהירות תמיד לא שלילית.\n\n**הערה לבחינה:** סמנו כל שלב (הגדרת $G$, חלק 1, טיעון קבוע, הצבת קצוות). מבנה זה מזכה בניקוד מלא גם בלי פרטי הגדרה פורמלית."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — FTC1 with Variable Limits",
+      "title_he": "דוגמה פתורה 4 — FTC1 עם גבולות משתנים",
+      "body_en_md": "**Differentiate** $F(x)=\\int_0^{x^2}\\sin(t^2)\\,dt$.\n\n### Move 1 — Recognize composition\nInner upper limit is $u(x)=x^2$, integrand continuous.\n\n### Move 2 — Chain rule + FTC1\n$$F'(x)=\\sin((x^2)^2)\\cdot (x^2)'=\\sin(x^4)\\cdot 2x.$$\n\n### Move 3 — Simplified form\n$F'(x)=2x\\sin(x^4)$.\n\n### Move 4 — Check at 0\n$F'(0)=0$, matching the flat start of the accumulation from a stationary upper limit at 0.",
+      "body_he_md": "**גזרו** $F(x)=\\int_0^{x^2}\\sin(t^2)\\,dt$.\n\n### צעד 1 — הרכבה\nגבול עליון $u=x^2$.\n\n### צעד 2 — כלל שרשרת + FTC1\n$$F'(x)=\\sin(x^4)\\cdot 2x.$$\n\n### צעד 3 — פישוט\n$F'(x)=2x\\sin(x^4)$.\n\n### צעד 4 — בדיקה ב-0\n$F'(0)=0$."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Integral Problems Strategy",
+      "title_he": "מדריך שיטות — אסטרטגיה לבעיות אינטגרל",
+      "body_en_md": "**When asked for a Riemann sum:**\n1. Compute $\\Delta x = (b-a)/n$.\n2. Find the sample points (right: $x_i = a+i\\Delta x$; left: $x_{i-1}$).\n3. Evaluate $f$ at each sample point and sum.\n\n**When asked to apply FTC Part 1:**\n- If $G(x) = \\int_a^x f(t)\\,dt$, then $G'(x) = f(x)$.\n- If the upper limit is $g(x)$ (not just $x$): use the chain rule: $G'(x) = f(g(x))\\cdot g'(x)$.\n- If the lower limit is variable, reverse limits and negate.\n\n**When asked to evaluate $\\int_a^b f(x)\\,dx$ using FTC Part 2:**\n1. Find an antiderivative $F$ of $f$.\n2. Compute $F(b)-F(a)$ using the notation $[F(x)]_a^b$.\n\n**Connection between the two parts:**\n- Part 1 says the integral (as a function of its upper limit) is differentiable and its derivative is the integrand.\n- Part 2 says that to evaluate an integral, find an antiderivative (reverse of Part 1) and subtract.",
+      "body_he_md": "**כאשר מתבקש סכום רימן:**\n1. חשב $\\Delta x = (b-a)/n$.\n2. מצאו את נקודות הדגימה (ימין: $x_i = a+i\\Delta x$; שמאל: $x_{i-1}$).\n3. הערך את $f$ בכל נקודת דגימה וסכם.\n\n**כאשר מתבקש ליישם מ\"י חלק 1:**\n- אם $G(x) = \\int_a^x f(t)\\,dt$, אז $G'(x) = f(x)$.\n- אם הגבול העליון הוא $g(x)$ (לא רק $x$): השתמש בכלל שרשרת: $G'(x) = f(g(x))\\cdot g'(x)$.\n- אם הגבול התחתון הוא משתנה, הפוך את הגבולות ושלל.\n\n**כאשר מתבקש להעריך $\\int_a^b f(x)\\,dx$ באמצעות מ\"י חלק 2:**\n1. מצאו פונקציה קדומה $F$ של $f$.\n2. חשב $F(b)-F(a)$ באמצעות הסימון $[F(x)]_a^b$.\n\n**הקשר בין שני החלקים:**\n- חלק 1 אומר שהאינטגרל (כפונקציה של גבולו העליון) גזיר ונגזרתו היא האינטגרנד.\n- חלק 2 אומר שכדי להעריך אינטגרל, מצאו פונקציה קדומה (הפוך של חלק 1) וחסרו."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Compute the right-endpoint Riemann sum $R_4$ for $f(x) = x^2$ on $[0,2]$.",
+          "body_he": "חשב את סכום רימן עם נקודות ימין $R_4$ עבור $f(x) = x^2$ על $[0,2]$.",
+          "solution_en": "$\\Delta x = 0.5$. $R_4 = 0.5[f(0.5)+f(1)+f(1.5)+f(2)] = 0.5[0.25+1+2.25+4] = 0.5\\times 7.5 = 3.75$. (Exact: $[x^3/3]_0^2 = 8/3 \\approx 2.67$.)",
+          "solution_he": "$\\Delta x = 0.5$. $R_4 = 0.5[f(0.5)+f(1)+f(1.5)+f(2)] = 0.5[0.25+1+2.25+4] = 0.5\\times 7.5 = 3.75$. (מדויק: $[x^3/3]_0^2 = 8/3 \\approx 2.67$.)",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Evaluate $\\int_1^4 \\sqrt{x}\\,dx$ using FTC Part 2.",
+          "body_he": "חשב $\\int_1^4 \\sqrt{x}\\,dx$ תוך שימוש במ\"י חלק 2.",
+          "solution_en": "**Solution:**\n\n$F(x) = \\frac{2}{3}x^{3/2}$. $\\int_1^4 = F(4)-F(1) = \\frac{2}{3}(8) - \\frac{2}{3}(1) = \\frac{16}{3}-\\frac{2}{3} = \\frac{14}{3}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$F(x) = \\frac{2}{3}x^{3/2}$. $\\int_1^4 = F(4)-F(1) = \\frac{2}{3}(8) - \\frac{2}{3}(1) = \\frac{16}{3}-\\frac{2}{3} = \\frac{14}{3}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Find $G'(x)$ for $G(x) = \\int_0^x e^{t^2}\\,dt$.",
+          "body_he": "מצאו $G'(x)$ עבור $G(x) = \\int_0^x e^{t^2}\\,dt$.",
+          "solution_en": "By FTC Part 1: $G'(x) = e^{x^2}$.",
+          "solution_he": "לפי מ\"י חלק 1: $G'(x) = e^{x^2}$.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Compute $\\int_0^{\\pi} \\sin x\\,dx$.",
+          "body_he": "חשב $\\int_0^{\\pi} \\sin x\\,dx$.",
+          "solution_en": "**Solution:**\n\n$[-\\cos x]_0^{\\pi} = -\\cos\\pi+\\cos 0 = 1+1 = 2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$[-\\cos x]_0^{\\pi} = -\\cos\\pi+\\cos 0 = 1+1 = 2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Find $\\dfrac{d}{dx}\\int_x^3 \\tan(t^2)\\,dt$.",
+          "body_he": "מצאו $\\dfrac{d}{dx}\\int_x^3 \\tan(t^2)\\,dt$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nReverse limits: $-\\int_3^x \\tan(t^2)\\,dt$. FTC Part 1: $-\\tan(x^2)$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nהפוך גבולות: $-\\int_3^x \\tan(t^2)\\,dt$. מ\"י חלק 1: $-\\tan(x^2)$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Express $\\int_0^n i^2$ as a closed-form sum, then take $n\\to\\infty$ to show $\\int_0^1 x^2\\,dx = 1/3$.",
+          "body_he": "הבע $\\sum_{i=1}^n i^2$ כנוסחה סגורה, ואז קח $n\\to\\infty$ להראות ש-$\\int_0^1 x^2\\,dx = 1/3$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$R_n = \\frac{1}{n}\\sum_{i=1}^n (i/n)^2 = \\frac{1}{n^3}\\sum i^2 = \\frac{1}{n^3}\\cdot\\frac{n(n+1)(2n+1)}{6}$. As $n\\to\\infty$: $\\to \\frac{2n^3}{6n^3} = \\frac{1}{3}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$R_n = \\frac{1}{n}\\sum_{i=1}^n (i/n)^2 = \\frac{1}{n^3}\\sum i^2 = \\frac{1}{n^3}\\cdot\\frac{n(n+1)(2n+1)}{6}$. כאשר $n\\to\\infty$: $\\to \\frac{2n^3}{6n^3} = \\frac{1}{3}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Compute $\\int_1^e \\frac{\\ln x}{x}\\,dx$.",
+          "body_he": "חשב $\\int_1^e \\frac{\\ln x}{x}\\,dx$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nAntiderivative of $\\ln x/x$ is $(\\ln x)^2/2$. $[(\\ln x)^2/2]_1^e = (1)^2/2 - 0 = 1/2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nפונקציה קדומה של $\\ln x/x$ היא $(\\ln x)^2/2$. $[(\\ln x)^2/2]_1^e = (1)^2/2 - 0 = 1/2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Find $G'(x)$ for $G(x) = \\int_{x}^{x^2} \\cos t\\,dt$.",
+          "body_he": "מצאו $G'(x)$ עבור $G(x) = \\int_{x}^{x^2} \\cos t\\,dt$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nSplit: $G(x) = \\int_0^{x^2}\\cos t\\,dt - \\int_0^x \\cos t\\,dt$. $G'(x) = \\cos(x^2)\\cdot 2x - \\cos x = 2x\\cos(x^2)-\\cos x$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nפצל: $G(x) = \\int_0^{x^2}\\cos t\\,dt - \\int_0^x \\cos t\\,dt$. $G'(x) = \\cos(x^2)\\cdot 2x - \\cos x = 2x\\cos(x^2)-\\cos x$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Verify FTC Part 2 numerically: compute $\\int_0^2 e^x\\,dx$ using both the formula $[e^x]_0^2$ and a calculator approximation.",
+          "body_he": "אמת מ\"י חלק 2 מספרית: חשב $\\int_0^2 e^x\\,dx$ הן בנוסחה $[e^x]_0^2$ והן בקירוב מחשבון.",
+          "solution_en": "$[e^x]_0^2 = e^2-e^0 = e^2-1 \\approx 7.389-1 = 6.389$. A numerical approximation (e.g., midpoint rule with $n=4$) gives $\\approx 6.42$, close to the exact value.",
+          "solution_he": "$[e^x]_0^2 = e^2-e^0 = e^2-1 \\approx 7.389-1 = 6.389$. קירוב מספרי (כמו כלל נקודת האמצע עם $n=4$) נותן $\\approx 6.42$, קרוב לערך המדויק.",
+          "points": 5
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove FTC Part 1 rigorously: if $f$ is continuous on $[a,b]$ and $G(x) = \\int_a^x f(t)\\,dt$, then $G'(x) = f(x)$.",
+          "body_he": "הוכח בקפדנות את מ\"י חלק 1: אם $f$ רציפה על $[a,b]$ ו-$G(x) = \\int_a^x f(t)\\,dt$, אז $G'(x) = f(x)$.",
+          "solution_en": "$G(x+h)-G(x) = \\int_x^{x+h}f(t)\\,dt$. By the mean value theorem for integrals: $= f(c)\\cdot h$ for some $c$ between $x$ and $x+h$. So $(G(x+h)-G(x))/h = f(c)$. As $h\\to 0$, $c\\to x$, so by continuity of $f$: $G'(x) = \\lim_{h\\to 0}f(c) = f(x)$.",
+          "solution_he": "$G(x+h)-G(x) = \\int_x^{x+h}f(t)\\,dt$. לפי משפט הערך הממוצע לאינטגרלים: $= f(c)\\cdot h$ לאיזשהו $c$ בין $x$ ל-$x+h$. לכן $(G(x+h)-G(x))/h = f(c)$. כאשר $h\\to 0$, $c\\to x$, לכן לפי רציפות $f$: $G'(x) = \\lim_{h\\to 0}f(c) = f(x)$.",
+          "points": 5
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Use Riemann sums to prove $\\int_0^1 x\\,dx = 1/2$ by computing $\\lim_{n\\to\\infty}R_n$.",
+          "body_he": "השתמש בסכומי רימן להוכחה ש-$\\int_0^1 x\\,dx = 1/2$ על ידי חישוב $\\lim_{n\\to\\infty}R_n$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$\\Delta x = 1/n$, $x_i = i/n$. $R_n = \\sum_{i=1}^n (i/n)(1/n) = \\frac{1}{n^2}\\sum_{i=1}^n i = \\frac{1}{n^2}\\cdot\\frac{n(n+1)}{2} = \\frac{n+1}{2n}$. As $n\\to\\infty$: $R_n\\to 1/2$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$\\Delta x = 1/n$, $x_i = i/n$. $R_n = \\sum_{i=1}^n (i/n)(1/n) = \\frac{1}{n^2}\\sum_{i=1}^n i = \\frac{1}{n^2}\\cdot\\frac{n(n+1)}{2} = \\frac{n+1}{2n}$. כאשר $n\\to\\infty$: $R_n\\to 1/2$. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "A particle moves with velocity $v(t) = \\sin(\\pi t)$ m/s. Find the total distance travelled from $t=0$ to $t=2$.",
+          "body_he": "חלקיק נע במהירות $v(t) = \\sin(\\pi t)$ מ'/ש'. מצאו את המרחק הכולל שנסע מ-$t=0$ עד $t=2$.",
+          "solution_en": "Total distance $= \\int_0^2|v(t)|\\,dt$. $v(t)\\geq 0$ on $[0,1]$ and $v(t)\\leq 0$ on $[1,2]$. $\\int_0^1\\sin(\\pi t)\\,dt = [-\\cos(\\pi t)/\\pi]_0^1 = 2/\\pi$. By symmetry, $\\int_1^2|\\sin(\\pi t)|\\,dt = 2/\\pi$. Total $= 4/\\pi$.",
+          "solution_he": "מרחק כולל $= \\int_0^2|v(t)|\\,dt$. $v(t)\\geq 0$ על $[0,1]$ ו-$v(t)\\leq 0$ על $[1,2]$. $\\int_0^1\\sin(\\pi t)\\,dt = [-\\cos(\\pi t)/\\pi]_0^1 = 2/\\pi$. בגלל סימטריה, $\\int_1^2|\\sin(\\pi t)|\\,dt = 2/\\pi$. סה\"כ $= 4/\\pi$.",
+          "points": 5
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Let $F(x) = \\int_0^x f(t)\\,dt$ where $f$ is continuous. Show that if $f(t) > 0$ for all $t$, then $F$ is strictly increasing.",
+          "body_he": "תהי $F(x) = \\int_0^x f(t)\\,dt$ כאשר $f$ רציפה. הראה שאם $f(t) > 0$ לכל $t$, אז $F$ עולה ממש.",
+          "solution_en": "By FTC Part 1: $F'(x) = f(x) > 0$ for all $x$. A function with positive derivative is strictly increasing (by the mean value theorem: for $x_1 < x_2$, $F(x_2)-F(x_1) = F'(c)(x_2-x_1) > 0$).",
+          "solution_he": "לפי מ\"י חלק 1: $F'(x) = f(x) > 0$ לכל $x$. פונקציה עם נגזרת חיובית עולה ממש (לפי משפט ערך הממוצע: לכל $x_1 < x_2$, $F(x_2)-F(x_1) = F'(c)(x_2-x_1) > 0$).",
+          "points": 5
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Mistakes",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "1. **FTC Part 1 with chain rule:** If the upper limit is $g(x)$ (not just $x$), you MUST multiply by $g'(x)$. E.g., $\\frac{d}{dx}\\int_0^{x^2}f(t)\\,dt = f(x^2)\\cdot 2x$.\n\n2. **Forgetting the constant of integration:** FTC Part 2 uses a specific antiderivative evaluated at the endpoints — constants cancel anyway, but don't forget to include them when finding indefinite integrals.\n\n3. **Riemann sum with wrong endpoints:** For right-endpoint sums, the first point is $x_1 = a+\\Delta x$ (NOT $x_0 = a$). For left-endpoint, the last point is $x_{n-1}$ (NOT $x_n = b$).\n\n4. **Signed area:** $\\int_a^b f(x)\\,dx$ can be negative if $f < 0$. If the question asks for total area, compute $\\int_a^b |f(x)|\\,dx$.\n\n5. **Variable lower limit:** $\\frac{d}{dx}\\int_x^b f(t)\\,dt = -f(x)$ (reverse the limits first).",
+      "body_he_md": "1. **מ\"י חלק 1 עם כלל שרשרת:** אם הגבול העליון הוא $g(x)$ (לא רק $x$), חייב להכפיל ב-$g'(x)$. לדוגמה: $\\frac{d}{dx}\\int_0^{x^2}f(t)\\,dt = f(x^2)\\cdot 2x$.\n\n2. **שכחת קבוע האינטגרציה:** מ\"י חלק 2 משתמש בפונקציה קדומה ספציפית המוערכת בנקודות הקצה — הקבועים מתבטלים ממילא, אבל אל תשכח לכלול אותם כשמוצאים אינטגרלים לא-מסוימים.\n\n3. **סכום רימן עם נקודות קצה שגויות:** לסכומי נקודות ימין, הנקודה הראשונה היא $x_1 = a+\\Delta x$ (לא $x_0 = a$). לנקודות שמאל, הנקודה האחרונה היא $x_{n-1}$ (לא $x_n = b$).\n\n4. **שטח מסומן:** $\\int_a^b f(x)\\,dx$ יכול להיות שלילי אם $f < 0$. אם השאלה מבקשת שטח כולל, חשב $\\int_a^b |f(x)|\\,dx$.\n\n5. **גבול תחתון משתנה:** $\\frac{d}{dx}\\int_x^b f(t)\\,dt = -f(x)$ (הפוך את הגבולות תחילה)."
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "Riemann sums and the FTC are the conceptual heart of integral calculus — every later technique (substitution, parts, improper integrals, double integrals) assumes you understand **what** $\\int_a^b f\\,dx$ means and **why** antiderivatives evaluate it.\n\n**Downstream connections on A Step Forward:**\n- `integrals_intro` — antiderivatives and basic rules feed directly into FTC Part 2.\n- `integrals_substitution` and `integrals_techniques` — finding $F$ in Part 2 requires these skills.\n- `areas_between_curves` and `volumes_of_revolution` — area formulas are definite integrals evaluated by FTC.\n- University physics (`work_energy`, `uni_kinematics`) — displacement and work are $\\int v\\,dt$ and $\\int F\\,dx$.\n\n**Why it matters for exams:** first-year calculus regularly assigns a $n=4$ Riemann sum plus one FTC evaluation in the same question block. University Calc 1 adds proofs of Part 1 and derivatives of integrals with variable limits. The transferable skill is recognizing **which part** of FTC applies: differentiate an accumulation function (Part 1) vs. evaluate a number (Part 2).\n\n**Study habit:** After every FTC calculation, ask: \"Could I approximate this with rectangles? Would the approximation be high or low?\" Linking sums and antiderivatives prevents treating them as unrelated chapters.",
+      "body_he_md": "סכומי רימן ומ\"י הם לב האינטגרל המסוים — כל טכניקה מאוחרת (הצבה, חלקים, אינטגרלים מאולצים, אינטגרלים כפולים) מניחה שמבינים **מה** $\\int_a^b f\\,dx$ אומר ו**למה** פונקציות קדומות מעריכות אותו.\n\n**קשרים בהמשך המסלול ב-A Step Forward:**\n- `integrals_intro` — פונקציות קדומות וכללים בסיסיים מזינים ישירות את מ\"י חלק 2.\n- `integrals_substitution` ו-`integrals_techniques` — מציאת $F$ בחלק 2 דורשת מיומנויות אלה.\n- `areas_between_curves` ו-`volumes_of_revolution` — נוסחאות שטח הן אינטגרלים מסוימים שמוערכים ב-FTC.\n- פיזיקה אוניברסיטאית (`work_energy`, `uni_kinematics`) — תזוזה ועבודה הם $\\int v\\,dt$ ו-$\\int F\\,dx$.\n\n**למה זה חשוב לבחינות:** בקורס אוניברסיטאי 5 יחידות מופיעים לעיתים סכום רימן עם $n=4$ ועוד הערכת FTC באותו בלוק. בחדו״א 1 מוסיפים הוכחות של חלק 1 ונגזרות של אינטגרלים עם גבולות משתנים. המיומנות הניתנת להעברה: לזהות **איזה חלק** של מ\"י חל — גזירת פונקציית צבירה (חלק 1) לעומת הערכת מספר (חלק 2).\n\n**הרגל לימוד:** אחרי כל חישוב FTC, שאלו: \"האם אפשר לקרב במלבנים? הקירוב גבוה או נמוך?\" חיבור סכומים ופונקציות קדומות מונע התייחסות אליהם כפרקים נפרדים."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Key formulas (memorize cold):**\n$$R_n = \\sum_{i=1}^{n} f\\!\\left(a+i\\frac{b-a}{n}\\right)\\frac{b-a}{n}, \\quad \\int_a^b f(x)\\,dx = \\lim_{n\\to\\infty}R_n$$\n$$\\frac{d}{dx}\\int_a^x f(t)\\,dt = f(x), \\quad \\frac{d}{dx}\\int_a^{g(x)} f(t)\\,dt = f(g(x))\\cdot g'(x)$$\n$$\\int_a^b f(x)\\,dx = [F(x)]_a^b = F(b)-F(a) \\quad \\text{where } F'=f$$\n\n**Typical exam patterns:**\n1. **Riemann sum with $n=4$:** compute $\\Delta x$, list endpoints, sum, compare to exact value; state over/under-estimate.\n2. **FTC Part 1:** differentiate $\\int_a^{g(x)} f(t)\\,dt$; watch for variable **lower** limit (reverse first).\n3. **FTC Part 2:** find antiderivative, evaluate $F(b)-F(a)$; watch signs on trig and log endpoints.\n4. **Proof sketch:** Part 1 via mean-value theorem for integrals; Part 2 via $G(x)=\\int_a^x f$.\n5. **Physics interpretation:** $\\int_a^b f'(x)\\,dx$ = net change; $\\int_a^b |f'(x)|\\,dx$ = total distance.\n\n**Time-saving checklist:** (a) Can I avoid finding an antiderivative? → try Part 1. (b) Is the integrand a derivative of something obvious? → reverse chain rule before integrating. (c) Both limits variable? → split at a constant.",
+      "body_he_md": "**נוסחאות מרכזיות (לשינון):**\n$$R_n = \\sum_{i=1}^{n} f\\!\\left(a+i\\frac{b-a}{n}\\right)\\frac{b-a}{n}, \\quad \\int_a^b f(x)\\,dx = \\lim_{n\\to\\infty}R_n$$\n$$\\frac{d}{dx}\\int_a^x f(t)\\,dt = f(x), \\quad \\frac{d}{dx}\\int_a^{g(x)} f(t)\\,dt = f(g(x))\\cdot g'(x)$$\n$$\\int_a^b f(x)\\,dx = [F(x)]_a^b = F(b)-F(a) \\quad \\text{when } F'=f$$\n\n**תבניות אופייניות בבחינה:**\n1. **סכום רימן עם $n=4$:** חישוב $\\Delta x$, פירוט נקודות, סכום, השוואה לערך מדויק; ציון הערכת יתר/חסר.\n2. **מ\"י חלק 1:** גזירת $\\int_a^{g(x)} f(t)\\,dt$; שימו לב לגבול תחתון משתנה (החליפו קודם).\n3. **מ\"י חלק 2:** מציאת פונקציה קדומה, חישוב $F(b)-F(a)$; זהירות בסימנים בטריגו ולוג.\n4. **הוכחה מקוצרת:** חלק 1 דרך משפט ערך ממוצע לאינטגרלים; חלק 2 דרך $G(x)=\\int_a^x f$.\n5. **פרשנות פיזיקלית:** $\\int_a^b f'(x)\\,dx$ = שינוי נטו; $\\int_a^b |f'(x)|\\,dx$ = מרחק כולל.\n\n**צ'קליסט לחיסכון זמן:** (א) האם אפשר לוותר על פונקציה קדומה? → נסו חלק 1. (ב) האם האינטגרנד נגזרת של משהו מוכר? → הפוך כלל שרשרת לפני אינטגרציה. (ג) שני גבולות משתנים? → פצלו בקבוע."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Lesson Summary",
+      "title_he": "סיכום השיעור",
+      "body_en_md": "- **Riemann sum:** approximates $\\int_a^b f\\,dx$ as $\\sum f(x_i)\\Delta x$; exact in the limit $n\\to\\infty$.\n- **FTC Part 1:** $\\frac{d}{dx}\\int_a^x f(t)\\,dt = f(x)$ — the accumulation function is an antiderivative of the integrand.\n- **FTC Part 2:** $\\int_a^b f(x)\\,dx = F(b)-F(a)$ — evaluation by antiderivatives.\n- **The deep connection:** Part 1 shows every continuous function has an antiderivative; Part 2 shows how to use it. Together they prove that differentiation and integration are inverse operations.\n- **Signed area:** the integral computes net (signed) area; use $|f|$ for total area.",
+      "body_he_md": "- **סכום רימן:** מקרב $\\int_a^b f\\,dx$ כ-$\\sum f(x_i)\\Delta x$; מדויק בגבול $n\\to\\infty$.\n- **מ\"י חלק 1:** $\\frac{d}{dx}\\int_a^x f(t)\\,dt = f(x)$ — פונקציית ה'צבירה' היא פונקציה קדומה של האינטגרנד.\n- **מ\"י חלק 2:** $\\int_a^b f(x)\\,dx = F(b)-F(a)$ — הערכה על ידי פונקציות קדומות.\n- **הקשר העמוק:** חלק 1 מראה שלכל פונקציה רציפה יש פונקציה קדומה; חלק 2 מראה כיצד להשתמש בה. יחד הם מוכיחים שדיפרנציאציה ואינטגרציה הן פעולות הפוכות.\n- **שטח מסומן:** האינטגרל מחשב שטח נטו (מסומן); השתמש ב-$|f|$ לשטח כולל."
+    }
+  ],
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "definite_integral",
+      "ftc",
+      "riemann_sum"
+    ]
+  },
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "The Fundamental Theorem (part 2) states $\\displaystyle\\int_a^b f(x)\\,dx=$",
+      "stem_he": "המשפט היסודי (חלק 2) קובע $\\displaystyle\\int_a^b f(x)\\,dx=$",
+      "explanation_en": "**$\\int_a^b f=F(b)-F(a)$ where $F'=f$.**\n\n**Answer:** $F(b)-F(a)$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\int_a^b f=F(b)-F(a)$.**\n\n**תשובה:** $F(b)-F(a)$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "ftc"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$F(b)-F(a)$",
+          "$F(a)-F(b)$",
+          "$F(b)+F(a)$",
+          "$f'(b)-f'(a)$"
+        ],
+        "options_he": [
+          "$F(b)-F(a)$",
+          "$F(a)-F(b)$",
+          "$F(b)+F(a)$",
+          "$f'(b)-f'(a)$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "54dd5346-25f1-5cb7-85a7-460ea408922a",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$F(b)-F(a)$",
+        "$F(a)-F(b)$",
+        "$F(b)+F(a)$",
+        "$f'(b)-f'(a)$"
+      ],
+      "options_he": [
+        "$F(b)-F(a)$",
+        "$F(a)-F(b)$",
+        "$F(b)+F(a)$",
+        "$f'(b)-f'(a)$"
+      ],
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ],
+      "id": "riemann_integral_ftc__5pt-q1"
+    },
+    {
+      "ord": 2,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int_0^{3} 2x\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{3} 2x\\,dx$.",
+      "explanation_en": "**$[x^2]_0^3=9$.**\n\n**Answer:** $9$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$[x^2]_0^3=9$.**\n\n**תשובה:** $9$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "definite_integral"
+      ],
+      "answer_payload": {
+        "value": 9
+      },
+      "source_item_id": "046637d2-c91a-5d32-b8b9-69366c14808b",
+      "points_level_min": "5pt",
+      "correct_answer": "9",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "3^2",
+        "expected": 9,
+        "tol": 0.000001
+      },
+      "id": "riemann_integral_ftc__5pt-q2"
+    },
+    {
+      "ord": 3,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_0^{2} x^2\\,dx$ using the FTC.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{2} x^2\\,dx$ בעזרת המשפט היסודי.",
+      "explanation_en": "**Step 1 — Antiderivative.** $F(x)=\\dfrac{x^3}{3}$.\n\n**Step 2 — Evaluate.** $F(2)=\\dfrac{8}{3}$, $F(0)=0$.\n\n**Step 3 — Subtract.** $\\dfrac{8}{3}-0=\\dfrac{8}{3}$.\n\n**Answer:** $\\approx 2.6667$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1 — פונקציה קדומה.** $\\dfrac{x^3}{3}$.\n\n**שלב 2 — הצבה.** $\\dfrac83$ ו-$0$.\n\n**שלב 3 — חיסור.** $\\dfrac83$.\n\n**תשובה:** $\\approx 2.6667$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "ftc"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Antiderivative.** $F(x)=\\dfrac{x^3}{3}$.",
+          "**Step 2 — Evaluate.** $F(2)=\\dfrac{8}{3}$, $F(0)=0$.",
+          "**Step 3 — Subtract.** $\\dfrac{8}{3}-0=\\dfrac{8}{3}$.",
+          "**Answer:** $\\approx 2.6667$."
+        ],
+        "steps_he": [
+          "**שלב 1 — פונקציה קדומה.** $\\dfrac{x^3}{3}$.",
+          "**שלב 2 — הצבה.** $\\dfrac83$ ו-$0$.",
+          "**שלב 3 — חיסור.** $\\dfrac83$.",
+          "**תשובה:** $\\approx 2.6667$."
+        ]
+      },
+      "source_item_id": "d7fe3f6a-cc66-5118-9096-08ca30e74343",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt",
+      "archetypes": [
+        "application"
+      ],
+      "needs_review": true,
+      "id": "riemann_integral_ftc__5pt-q3"
+    },
+    {
+      "ord": 4,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: the FTC links differentiation and integration as inverse processes.",
+      "stem_he": "נכון או לא נכון: המשפט היסודי מקשר בין גזירה לאינטגרציה כתהליכים הפוכים.",
+      "explanation_en": "**Yes — that is exactly what the FTC says** — **true**.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**כן — זה בדיוק מה שהמשפט היסודי אומר** — **נכון**.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "ftc"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "55ec204f-dc80-5907-8205-5ca1dfa2a93e",
+      "points_level_min": "5pt",
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ],
+      "id": "riemann_integral_ftc__5pt-q4"
+    },
+    {
+      "ord": 5,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int_0^{2} x^2\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{2} x^2\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**$\\left[\\dfrac{x^3}{3}\\right]_0^2=\\dfrac{8}{3}\\approx 2.6667$.**\n\n**Answer:** $\\approx 2.6667$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$=\\dfrac83\\approx 2.6667$.**\n\n**תשובה:** $\\approx 2.6667$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "definite_integral"
+      ],
+      "answer_payload": {
+        "value": 2.666667
+      },
+      "source_item_id": "e629d85c-8fa5-55ee-9ab3-00a94564036f",
+      "points_level_min": "5pt",
+      "correct_answer": "2.666667",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2.666667",
+        "expected": 2.666667,
+        "tol": 0.000001
+      },
+      "id": "riemann_integral_ftc__5pt-q5"
+    },
+    {
+      "ord": 6,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the area under $f(x)=x$ from $0$ to $4$ (a triangle).",
+      "stem_he": "מצאו את השטח מתחת ל-$f(x)=x$ מ-$0$ עד $4$ (משולש).",
+      "explanation_en": "**Area $=\\tfrac12\\cdot 4\\cdot 4=8$** (matches $\\int_0^4 x\\,dx$).\n\n**Answer:** $8$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שטח $=\\tfrac12\\cdot 4\\cdot 4=8$.**\n\n**תשובה:** $8$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "riemann_sum"
+      ],
+      "answer_payload": {
+        "value": 8
+      },
+      "source_item_id": "896640bd-a3b9-5311-b3f4-5d4a3b63b726",
+      "points_level_min": "5pt",
+      "correct_answer": "8",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2^3",
+        "expected": 8,
+        "tol": 0.000001
+      },
+      "id": "riemann_integral_ftc__5pt-q6"
+    },
+    {
+      "ord": 7,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int_0^{5} 3\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{5} 3\\,dx$.",
+      "explanation_en": "**$[3x]_0^5=15$.**\n\n**Answer:** $15$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$[3x]_0^5=15$.**\n\n**תשובה:** $15$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "definite_integral"
+      ],
+      "answer_payload": {
+        "value": 15
+      },
+      "source_item_id": "846401aa-3e71-5b6a-ac97-5b1578d251db",
+      "points_level_min": "5pt",
+      "correct_answer": "15",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "15",
+        "expected": 15,
+        "tol": 0.000001
+      },
+      "id": "riemann_integral_ftc__5pt-q7"
+    },
+    {
+      "ord": 8,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "By the FTC (part 1), $\\dfrac{d}{dx}\\displaystyle\\int_a^x f(t)\\,dt=$",
+      "stem_he": "לפי המשפט היסודי (חלק 1), $\\dfrac{d}{dx}\\displaystyle\\int_a^x f(t)\\,dt=$",
+      "explanation_en": "**Differentiating the integral recovers the integrand: $f(x)$.**\n\n**Answer:** $f(x)$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**גזירת האינטגרל מחזירה את הפונקציה: $f(x)$.**\n\n**תשובה:** $f(x)$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "ftc"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$f(x)$",
+          "$f'(x)$",
+          "$F(x)$",
+          "$f(a)$"
+        ],
+        "options_he": [
+          "$f(x)$",
+          "$f'(x)$",
+          "$F(x)$",
+          "$f(a)$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "02f493ca-926e-5eda-b8e9-64fb0a1cad66",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$f(x)$",
+        "$f'(x)$",
+        "$F(x)$",
+        "$f(a)$"
+      ],
+      "options_he": [
+        "$f(x)$",
+        "$f'(x)$",
+        "$F(x)$",
+        "$f(a)$"
+      ],
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ],
+      "id": "riemann_integral_ftc__5pt-q8"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_1^{2} x^2\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_1^{2} x^2\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**$\\left[\\dfrac{x^3}{3}\\right]_1^2=\\dfrac{7}{3}\\approx 2.3333$.**\n\n**Answer:** $\\approx 2.3333$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$=\\dfrac73\\approx 2.3333$.**\n\n**תשובה:** $\\approx 2.3333$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "definite_integral"
+      ],
+      "answer_payload": {
+        "value": 2.333333
+      },
+      "source_item_id": "f7bcdca2-02d4-5384-889c-c8f26cead5f2",
+      "points_level_min": "5pt",
+      "correct_answer": "2.333333",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2.333333",
+        "expected": 2.333333,
+        "tol": 0.000001
+      },
+      "id": "riemann_integral_ftc__5pt-q9"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_0^{2} (2x+1)\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{2} (2x+1)\\,dx$.",
+      "explanation_en": "**$[x^2+x]_0^2=4+2=6$.**\n\n**Answer:** $6$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$[x^2+x]_0^2=6$.**\n\n**תשובה:** $6$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "definite_integral"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "634534ac-60de-5e2d-841c-f6f094084479",
+      "points_level_min": "5pt",
+      "correct_answer": "6",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "6",
+        "expected": 6,
+        "tol": 0.000001
+      },
+      "id": "riemann_integral_ftc__5pt-q10"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the area under $f(x)=x$ from $0$ to $6$.",
+      "stem_he": "מצאו את השטח מתחת ל-$f(x)=x$ מ-$0$ עד $6$.",
+      "explanation_en": "**$\\tfrac12\\cdot 6\\cdot 6=18$.**\n\n**Answer:** $18$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\tfrac12\\cdot 6\\cdot 6=18$.**\n\n**תשובה:** $18$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "riemann_sum"
+      ],
+      "answer_payload": {
+        "value": 18
+      },
+      "source_item_id": "ddde1ae3-fde8-58d7-be3b-cca395ed8555",
+      "points_level_min": "5pt",
+      "correct_answer": "18",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "18",
+        "expected": 18,
+        "tol": 0.000001
+      },
+      "id": "riemann_integral_ftc__5pt-q11"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_0^{1} 4x^3\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{1} 4x^3\\,dx$.",
+      "explanation_en": "**$[x^4]_0^1=1$.**\n\n**Answer:** $1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$[x^4]_0^1=1$.**\n\n**תשובה:** $1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "definite_integral"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "9c20d602-1177-5310-b814-1e1e222dc691",
+      "points_level_min": "5pt",
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      },
+      "id": "riemann_integral_ftc__5pt-q12"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_0^{3} (x^2+2x)\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{3} (x^2+2x)\\,dx$.",
+      "explanation_en": "**$\\left[\\dfrac{x^3}{3}+x^2\\right]_0^3=9+9=18$.**\n\n**Answer:** $18$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$=9+9=18$.**\n\n**תשובה:** $18$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "definite_integral"
+      ],
+      "answer_payload": {
+        "value": 18
+      },
+      "source_item_id": "e18161bb-a482-5620-8d18-719c0dd75e88",
+      "points_level_min": "5pt",
+      "correct_answer": "18",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "18",
+        "expected": 18,
+        "tol": 0.000001
+      },
+      "id": "riemann_integral_ftc__5pt-q13"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_1^{2} (3x^2-1)\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_1^{2} (3x^2-1)\\,dx$.",
+      "explanation_en": "**$[x^3-x]_1^2=(8-2)-(1-1)=6$.**\n\n**Answer:** $6$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$[x^3-x]_1^2=6$.**\n\n**תשובה:** $6$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "definite_integral"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "fc042e6f-b6c8-5305-b303-727abe572880",
+      "points_level_min": "5pt",
+      "correct_answer": "6",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "6",
+        "expected": 6,
+        "tol": 0.000001
+      },
+      "id": "riemann_integral_ftc__5pt-q14"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_0^{2} x^3\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{2} x^3\\,dx$.",
+      "explanation_en": "**$\\left[\\dfrac{x^4}{4}\\right]_0^2=\\dfrac{16}{4}=4$.**\n\n**Answer:** $4$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$=4$.**\n\n**תשובה:** $4$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "definite_integral"
+      ],
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "44e62a44-1b14-5479-ac8b-104c53e508e9",
+      "points_level_min": "5pt",
+      "correct_answer": "4",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2^2",
+        "expected": 4,
+        "tol": 0.000001
+      },
+      "id": "riemann_integral_ftc__5pt-q15"
+    },
+    {
+      "ord": 16,
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "ftc"
+      ],
+      "points_level_min": "university",
+      "stem_en": "FTC2: $\\int_a^b f = F(b)-F($ ____ $)$ when $F'=f$.",
+      "stem_he": "FTC2: $\\int_a^b f = F(b)-F($ ____ $)$ כאשר $F'=f$.",
+      "explanation_en": "**Step 1.** Recall the definition from this lesson.\n\n**Step 2.** The missing token completes the standard formula.\n\n**Step 3.** Answer: a.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** נזכרים בהגדרה מהשיעור.\n\n**שלב 2.** המילה החסרה משלימה את הנוסחה.\n\n**שלב 3.** תשובה: a.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "a",
+          "A"
+        ]
+      },
+      "id": "riemann_integral_ftc__5pt-q16"
+    },
+    {
+      "ord": 17,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "ftc"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Does FTC1 say $\\frac{d}{dx}\\int_a^x f(t)\\,dt = f(x)$ for continuous $f$? (yes/no)",
+      "stem_he": "האם FTC1 אומר $\\frac{d}{dx}\\int_a^x f = f(x)$ לרציפה? (yes/no)",
+      "explanation_en": "**Step 1.** Apply the core definition carefully.\n\n**Step 2.** Avoid the common misconception named in the stem.\n\n**Step 3.** Answer: yes.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** מפעילים את ההגדרה בזהירות.\n\n**שלב 2.** נמנעים מהטעות הנפוצה.\n\n**שלב 3.** תשובה: yes.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "yes",
+          "Yes"
+        ]
+      },
+      "id": "riemann_integral_ftc__5pt-q17"
+    },
+    {
+      "ord": 18,
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "ftc"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Match each concept to the correct description.",
+      "stem_he": "התאימו כל מושג לתיאור הנכון.",
+      "explanation_en": "Matching separates definitions that students often conflate on exams.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "ההתאמה מפרידה הגדרות שסטודנטים מערבבים לעיתים בבחינה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "pairs_en": [
+          {
+            "left": "Riemann sum",
+            "right": "Σ f(x_i*)Δx"
+          },
+          {
+            "left": "FTC1",
+            "right": "derivative of integral"
+          },
+          {
+            "left": "FTC2",
+            "right": "evaluate via antiderivative"
+          },
+          {
+            "left": "Net change",
+            "right": "$\\int_a^b F' = F(b)-F(a)$"
+          }
+        ],
+        "pairs_he": [
+          {
+            "left": "סכום רימן",
+            "right": "Σ f(x_i*)Δx"
+          },
+          {
+            "left": "FTC1",
+            "right": "נגזרת של אינטגרל"
+          },
+          {
+            "left": "FTC2",
+            "right": "חישוב דרך קדומה"
+          },
+          {
+            "left": "שינוי נטו",
+            "right": "$\\int F' = F(b)-F(a)$"
+          }
+        ]
+      },
+      "id": "riemann_integral_ftc__5pt-q18"
+    },
+    {
+      "ord": 19,
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "ftc"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Order the steps of the standard solution method for this topic.",
+      "stem_he": "סדרו את שלבי שיטת הפתרון הסטנדרטית לנושא זה.",
+      "explanation_en": "A stable step order prevents algebra-before-setup mistakes.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "סדר שלבים יציב מונע טעויות אלגברה-לפני-הצבה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "order_en": [
+          "Set up Riemann/definite integral",
+          "Find antiderivative if using FTC2",
+          "Evaluate F(b)−F(a)",
+          "Interpret net change"
+        ],
+        "order_he": [
+          "הציבו אינטגרל",
+          "מצאו קדומה אם FTC2",
+          "חשבו F(b)−F(a)",
+          "פרשו שינוי נטו"
+        ]
+      },
+      "id": "riemann_integral_ftc__5pt-q19"
+    },
+    {
+      "ord": 20,
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "ftc"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Select **all** correct statements.",
+      "stem_he": "סמנו את **כל** ההיגדים הנכונים.",
+      "explanation_en": "Each false option encodes a standard exam misconception for this topic.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "כל אפשרות שגויה מקודדת טעות בחינה אופיינית לנושא.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "Continuous functions on [a,b] are integrable",
+        "FTC1 differentiates an integral with variable upper limit",
+        "∫|v| and ∫v always give the same displacement",
+        "FTC2 converts definite integrals into arithmetic with antiderivatives"
+      ],
+      "options_he": [
+        "פונקציות רציפות על [a,b] אינטגרביליות",
+        "FTC1 גוזר אינטגרל עם גבול עליון משתנה",
+        "∫|v| ו-∫v תמיד נותנים אותה תזוזה",
+        "FTC2 הופך אינטגרלים מסוימים לחשבון עם קדומות"
+      ],
+      "correct_indices": [
+        0,
+        1,
+        3
+      ],
+      "answer_payload": {
+        "options_en": [
+          "Continuous functions on [a,b] are integrable",
+          "FTC1 differentiates an integral with variable upper limit",
+          "∫|v| and ∫v always give the same displacement",
+          "FTC2 converts definite integrals into arithmetic with antiderivatives"
+        ],
+        "options_he": [
+          "פונקציות רציפות על [a,b] אינטגרביליות",
+          "FTC1 גוזר אינטגרל עם גבול עליון משתנה",
+          "∫|v| ו-∫v תמיד נותנים אותה תזוזה",
+          "FTC2 הופך אינטגרלים מסוימים לחשבון עם קדומות"
+        ],
+        "correct_indices": [
+          0,
+          1,
+          3
+        ]
+      },
+      "id": "riemann_integral_ftc__5pt-q20"
+    },
+    {
+      "ord": 21,
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof",
+        "parametric"
+      ],
+      "skill_atoms": [
+        "ftc"
+      ],
+      "points_level_min": "university",
+      "needs_review": true,
+      "stem_en": "State FTC1 and FTC2 carefully, including hypotheses.",
+      "stem_he": "נסחו FTC1 ו-FTC2 בזהירות, כולל הנחות.",
+      "explanation_en": "**Step 1.** Write hypotheses.\n\n**Step 2.** Apply the lesson’s main theorem.\n\n**Step 3.** Finish the derivation to the claimed identity.\n\n**Step 4.** Box the final statement and note any hypotheses used.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** כתבו הנחות.\n\n**שלב 2.** הפעילו את משפט השיעור.\n\n**שלב 3.** סיימו את הגזירה.\n\n**שלב 4.** סמנו את הטענה הסופית וציינו הנחות.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "State hypotheses / setup.",
+          "Apply the key theorem or identity.",
+          "Carry out the algebraic derivation.",
+          "Conclude with the boxed result."
+        ],
+        "steps_he": [
+          "ציינו הנחות / הצבה.",
+          "הפעילו את המשפט או הזהות.",
+          "בצעו את הגזירה האלגברית.",
+          "סיימו עם התוצאה המסומנת."
+        ]
+      },
+      "rubric_en": "Full marks: clear derivation with hypotheses stated and a justified conclusion.",
+      "rubric_he": "ניקוד מלא: גזירה ברורה עם הנחות ומסקנה מנומקת.",
+      "id": "riemann_integral_ftc__5pt-q21"
+    },
+    {
+      "ord": 22,
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application"
+      ],
+      "skill_atoms": [
+        "ftc"
+      ],
+      "points_level_min": "university",
+      "needs_review": true,
+      "stem_en": "Compute $\\int_0^2 3x^2\\,dx$.",
+      "stem_he": "חשבו $\\int_0^2 3x^2\\,dx$.",
+      "explanation_en": "**Step 1.** Set up from definitions.\n\n**Step 2.** Compute carefully.\n\n**Step 3.** Final answer: 8.\n\n**Step 4.** State what the number means in the model.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** הציבו מההגדרות.\n\n**שלב 2.** חשבו בזהירות.\n\n**שלב 3.** תשובה: 8.\n\n**שלב 4.** פרשו את המספר במודל.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "Set up using the lesson definition.",
+          "Compute intermediate quantities.",
+          "Obtain 8.",
+          "Interpret briefly in context."
+        ],
+        "steps_he": [
+          "הציבו לפי הגדרת השיעור.",
+          "חשבו כמויות ביניים.",
+          "קבלו 8.",
+          "פרשו בקצרה בהקשר."
+        ]
+      },
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה שלב-אחר-שלב ותשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון.",
+      "id": "riemann_integral_ftc__5pt-q22"
+    },
+    {
+      "ord": 23,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "ftc"
+      ],
+      "points_level_min": "university",
+      "stem_en": "$\\frac{d}{dx}\\int_0^{x^2}\\sin(t^2)\\,dt$ equals:",
+      "stem_he": "$\\frac{d}{dx}\\int_0^{x^2}\\sin(t^2)\\,dt$ שווה ל:",
+      "explanation_en": "**Reasoning.** The correct option matches the definition used throughout the lesson.\n\n**Answer index:** 0.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**נימוק.** האפשרות הנכונה תואמת את ההגדרה בשיעור.\n\n**אינדקס:** 0.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "$2x\\sin(x^4)$",
+        "$\\sin(x^2)$",
+        "$\\sin(t^2)$",
+        "$0$"
+      ],
+      "options_he": [
+        "$2x\\sin(x^4)$",
+        "$\\sin(x^2)$",
+        "$\\sin(t^2)$",
+        "$0$"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "$2x\\sin(x^4)$",
+          "$\\sin(x^2)$",
+          "$\\sin(t^2)$",
+          "$0$"
+        ],
+        "options_he": [
+          "$2x\\sin(x^4)$",
+          "$\\sin(x^2)$",
+          "$\\sin(t^2)$",
+          "$0$"
+        ],
+        "correct_index": 0
+      },
+      "id": "riemann_integral_ftc__5pt-q23"
+    },
+    {
+      "ord": 24,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "ftc"
+      ],
+      "points_level_min": "university",
+      "stem_en": "$\\int_0^2 3x^2\\,dx$ equals?",
+      "stem_he": "$\\int_0^2 3x^2\\,dx$ שווה?",
+      "explanation_en": "**Step 1.** Identify the formula.\n\n**Step 2.** Substitute values.\n\n**Step 3.** Result 8.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** זהו את הנוסחה.\n\n**שלב 2.** הציבו ערכים.\n\n**שלב 3.** התוצאה 8.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": "8",
+      "answer_payload": {
+        "value": 8
+      },
+      "verify": {
+        "expr": "2^3",
+        "expected": 8,
+        "tol": 0.000001
+      },
+      "id": "riemann_integral_ftc__5pt-q24"
+    },
+    {
+      "ord": 25,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "ftc"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Net displacement equals ∫ v; total distance uses ∫|v|.",
+      "stem_he": "תזוזה נטו היא ∫ v; מרחק כולל משתמש ב-∫|v|.",
+      "explanation_en": "**Evaluation.** The statement is true by the lesson’s definitions.\n\n**Key point.** Check hypotheses before accepting slogans.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**הערכה.** ההיגד נכון לפי הגדרות השיעור.\n\n**נקודה.** בדקו הנחות לפני שמקבלים סיסמאות.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": true,
+      "answer_payload": {
+        "correct": true
+      },
+      "id": "riemann_integral_ftc__5pt-q25"
+    },
+    {
+      "ord": 26,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural",
+        "reverse"
+      ],
+      "skill_atoms": [
+        "ftc"
+      ],
+      "points_level_min": "university",
+      "stem_en": "F(x)=x³, F(2)−F(0)=?",
+      "stem_he": "F(x)=x³, F(2)−F(0)=?",
+      "explanation_en": "**Step 1.** Rearrange or evaluate the defining expression.\n\n**Step 2.** Use powers carefully (e.g. a^b in verify).\n\n**Step 3.** Result 8.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** סדרו מחדש או העריכו את הביטוי.\n\n**שלב 2.** זהירות בחזקות.\n\n**שלב 3.** התוצאה 8.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": "8",
+      "answer_payload": {
+        "value": 8
+      },
+      "verify": {
+        "expr": "2^3-0",
+        "expected": 8,
+        "tol": 0.000001
+      },
+      "id": "riemann_integral_ftc__5pt-q26"
+    },
+    {
+      "ord": 27,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "archetypes": [
+        "application",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "ftc"
+      ],
+      "points_level_min": "university",
+      "stem_en": "A Riemann sum becomes the integral when mesh →:",
+      "stem_he": "סכום רימן הופך לאינטגרל כאשר הרשת →:",
+      "explanation_en": "**Picture the situation.** The best choice aligns with the geometric/statistical intuition from the worked examples.\n\n**Answer index:** 0.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university Riemann integrals and FTC, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**דמיינו את המצב.** הבחירה הטובה תואמת את האינטואיציה מהדוגמאות.\n\n**אינדקס:** 0.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלי רימן ו-FTC באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "0",
+        "∞",
+        "1",
+        "n"
+      ],
+      "options_he": [
+        "0",
+        "∞",
+        "1",
+        "n"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "0",
+          "∞",
+          "1",
+          "n"
+        ],
+        "options_he": [
+          "0",
+          "∞",
+          "1",
+          "n"
+        ],
+        "correct_index": 0
+      },
+      "id": "riemann_integral_ftc__5pt-q27"
+    }
+  ],
+  "est_minutes": 70,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
+}

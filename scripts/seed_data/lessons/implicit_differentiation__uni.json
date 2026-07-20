@@ -1,0 +1,1118 @@
+{
+  "concept_id": "implicit_differentiation__uni",
+  "subject": "math",
+  "level": "university",
+  "math_track": [
+    "university"
+  ],
+  "title_en": "Implicit Differentiation — university bridge",
+  "title_he": "גזירה סתומה — גשר אוניברסיטאי",
+  "summary_en": "Implicit differentiation finds dy/dx by differentiating both sides of an equation with respect to x, treating y as a function of x and applying the chain rule to every y-term. Used for circles, ellipses, and any curve not given as y = f(x).",
+  "summary_he": "גזירה סתומה מוצאת dy/dx על ידי גזירת שני אגפי משוואה לפי x, תוך התייחסות ל-y כפונקציה של x ויישום כלל השרשרת לכל איבר עם y. מיושמת על מעגלים, אליפסות וכל עקומה שאינה נתונה כ-y = f(x).",
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "When y Cannot Be Isolated",
+      "title_he": "כאשר לא ניתן לבודד y",
+      "body_en_md": "The equation $x^2 + y^2 = 25$ defines a circle. You cannot write it as a single explicit function $y = f(x)$ without splitting into two branches ($y = \\pm\\sqrt{25-x^2}$). Differentiating each branch separately is messy. Implicit differentiation differentiates the equation directly and solves for $dy/dx$ in one step.\n\n**Where implicit differentiation appears:**\n- University Calculus 1: tangent lines to implicit curves.\n- Curves defined by polynomial equations in $x$ and $y$ (conic sections, folium of Descartes, lemniscate).\n- Related rates problems (how fast is one quantity changing as another changes).\n- Deriving inverse function derivatives (e.g., $\\arcsin$, $\\arctan$).\n\nThe central principle: **when you differentiate $y^n$ with respect to $x$, use the chain rule:**\n$$\\frac{d}{dx}(y^n) = ny^{n-1}\\frac{dy}{dx}$$\n\n**University focus:** Precise language, course-exam pacing, no course framing.",
+      "body_he_md": "המשוואה $x^2 + y^2 = 25$ מגדירה מעגל. אי-אפשר לכתוב אותה כפונקציה מפורשת בודדת $y = f(x)$ מבלי לפצל לשני ענפים ($y = \\pm\\sqrt{25-x^2}$). גזירת כל ענף בנפרד מסובכת. גזירה סתומה גוזרת את המשוואה ישירות ופותרת עבור $dy/dx$ בצעד אחד.\n\n**היכן מופיעה גזירה סתומה:**\n- חשבון דיפרנציאלי ואינטגרלי 1 באוניברסיטה: משיקים לעקומות סתומות.\n- עקומות המוגדרות על ידי משוואות פולינומיאליות ב-$x$ וב-$y$ (חתכי חרוט, פוליום של דקארט, למניסקטה).\n- בעיות קצבים קשורים (כמה מהר משתנה כמות אחת כאשר משתנה אחרת).\n- גזירת נגזרות פונקציות הפוכות (כמו $\\arcsin$, $\\arctan$).\n\nהעיקרון המרכזי: **כאשר גוזרים $y^n$ לפי $x$, משתמשים בכלל השרשרת:**\n$$\\frac{d}{dx}(y^n) = ny^{n-1}\\frac{dy}{dx}$$\n\n**מיקוד אוניברסיטאי:** שפה מדויקת, קצב מבחן קורס, בלי מסגור מבחן קורס."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Implicit Differentiation — The Method",
+      "title_he": "גזירה סתומה — השיטה",
+      "body_en_md": "**Definition:** An equation $F(x, y) = 0$ (or $F(x,y)=c$) defines $y$ **implicitly** as a function of $x$ — at least locally near a point where the curve is smooth and passes the vertical line test.\n\n**The four-step method:**\n1. Differentiate both sides with respect to $x$.\n2. For every term involving $y$, apply the chain rule: treat $y$ as $y(x)$ and multiply by $\\dfrac{dy}{dx}$.\n3. Collect all terms containing $\\dfrac{dy}{dx}$ on one side; move everything else to the other.\n4. Factor out $\\dfrac{dy}{dx}$ and solve algebraically.\n\n**Key chain rule instances (memorize):**\n$$\\frac{d}{dx}(y^2) = 2y\\frac{dy}{dx}, \\quad \\frac{d}{dx}(\\sin y) = \\cos y \\cdot \\frac{dy}{dx}, \\quad \\frac{d}{dx}(e^y) = e^y\\frac{dy}{dx}$$\n$$\\frac{d}{dx}(xy) = y + x\\frac{dy}{dx} \\quad (\\text{product rule + chain rule})$$\n\n**Implicit function theorem (shortcut):** When $F(x,y)=0$ and $\\partial F/\\partial y \\neq 0$,\n$$\\frac{dy}{dx} = -\\frac{F_x}{F_y} = -\\frac{\\partial F/\\partial x}{\\partial F/\\partial y}.$$\nUse this to verify answers quickly — but on exams, show the differentiation step for full credit.\n\n**When explicit vs implicit:** If solving for $y$ is quick (linear in $y$), either route works. When $y$ appears inside powers, trig, exponentials, or products with $x$, implicit differentiation is usually faster and less error-prone.",
+      "body_he_md": "**הגדרה:** משוואה $F(x, y) = 0$ (או $F(x,y)=c$) מגדירה את $y$ **סתומה** כפונקציה של $x$ — לפחות מקומית ליד נקודה שבה העקומה חלקה ועוברת את מבחן הקו האנכי.\n\n**שיטה בארבעה שלבים:**\n1. גזור את שני האגפים לפי $x$.\n2. לכל איבר המכיל $y$, יישם כלל שרשרת: התייחס ל-$y$ כ-$y(x)$ והכפל ב-$\\dfrac{dy}{dx}$.\n3. אסוף את כל האיברים המכילים $\\dfrac{dy}{dx}$ לצד אחד; העבר את השאר לצד השני.\n4. הוצא גורם $\\dfrac{dy}{dx}$ ופתור אלגברית.\n\n**יישומי כלל שרשרת מרכזיים (לשינון):**\n$$\\frac{d}{dx}(y^2) = 2y\\frac{dy}{dx}, \\quad \\frac{d}{dx}(\\sin y) = \\cos y \\cdot \\frac{dy}{dx}, \\quad \\frac{d}{dx}(e^y) = e^y\\frac{dy}{dx}$$\n$$\\frac{d}{dx}(xy) = y + x\\frac{dy}{dx} \\quad (\\text{product rule + chain rule})$$\n\n**משפט הפונקציה הסמויה (קיצור):** כש-$F(x,y)=0$ ו-$\\partial F/\\partial y \\neq 0$,\n$$\\frac{dy}{dx} = -\\frac{F_x}{F_y}.$$\nהשתמשו בזה לבדיקה מהירה — אך בבחינה הציגו את שלב הגזירה לקבלת ניקוד מלא.\n\n**מתי מפורש מול סמוי:** אם פתרון ל-$y$ מהיר (לינארי ב-$y$), שני המסלולים עובדים. כש-$y$ מופיע בחזקות, טריגו, מעריכים או מכפלות עם $x$ — גזירה סתומה בדרך כלל מהירה ופחות מועדת לטעויות."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Why Does This Work? — The Chain Rule Perspective",
+      "title_he": "מדוע זה עובד? — פרספקטיבת כלל השרשרת",
+      "body_en_md": "If $y = y(x)$ is a differentiable function of $x$, then any function of $y$ is also a function of $x$ through the chain rule:\n$$\\frac{d}{dx}[f(y)] = f'(y) \\cdot \\frac{dy}{dx}$$\n\n**Example — Differentiating $y^3$:**\n$$\\frac{d}{dx}(y^3) = 3y^2 \\cdot \\frac{dy}{dx}$$\nThis is because $y^3 = (y(x))^3$, so the outer function is $t^3$ with $t = y$:\n$$\\frac{d}{dx}(y(x)^3) = 3y(x)^2 \\cdot y'(x) = 3y^2\\frac{dy}{dx}$$\n\n**Key sub-rules to memorise:**\n- $\\frac{d}{dx}[y^n] = ny^{n-1}\\frac{dy}{dx}$\n- $\\frac{d}{dx}[e^y] = e^y\\frac{dy}{dx}$\n- $\\frac{d}{dx}[\\ln y] = \\frac{1}{y}\\frac{dy}{dx}$\n- $\\frac{d}{dx}[\\sin y] = \\cos y\\,\\frac{dy}{dx}$\n- $\\frac{d}{dx}[xy] = y + x\\frac{dy}{dx}$ (product rule)\n\n**Tangent and normal lines:** Once you have $\\dfrac{dy}{dx}$, evaluate at $(x_0, y_0)$ for slope $m$. Tangent: $y - y_0 = m(x - x_0)$. Normal (perpendicular): slope $=-1/m$ when $m \\neq 0$.\n\n**Horizontal vs vertical tangents:** Set $dy/dx = 0$ for horizontal tangents; $dy/dx$ undefined (denominator zero in $-F_x/F_y$) signals vertical tangents. On $x^2+y^2=r^2$: horizontal at $x=0$; vertical at $y=0$.\n\n**Important:** $\\dfrac{dy}{dx}$ usually contains both $x$ and $y$ — substitute a specific point only when a numerical slope is required.\n\n**Related rates preview:** If $x$ and $y$ both depend on time $t$, differentiate $F(x,y)=0$ with respect to $t$ using the chain rule — the same $y'$ logic, but with $dy/dt$ and $dx/dt$. This is the natural next application of implicit differentiation in Calc 1.",
+      "body_he_md": "אם $y = y(x)$ היא פונקציה גזירה של $x$, אז כל פונקציה של $y$ היא גם פונקציה של $x$ דרך כלל השרשרת:\n$$\\frac{d}{dx}[f(y)] = f'(y) \\cdot \\frac{dy}{dx}$$\n\n**דוגמה — גזירת $y^3$:**\n$$\\frac{d}{dx}(y^3) = 3y^2 \\cdot \\frac{dy}{dx}$$\nזה מכיוון ש-$y^3 = (y(x))^3$, לכן הפונקציה החיצונית היא $t^3$ עם $t = y$:\n$$\\frac{d}{dx}(y(x)^3) = 3y(x)^2 \\cdot y'(x) = 3y^2\\frac{dy}{dx}$$\n\n**כללי משנה לשינון:**\n- $\\frac{d}{dx}[y^n] = ny^{n-1}\\frac{dy}{dx}$\n- $\\frac{d}{dx}[e^y] = e^y\\frac{dy}{dx}$\n- $\\frac{d}{dx}[\\ln y] = \\frac{1}{y}\\frac{dy}{dx}$\n- $\\frac{d}{dx}[\\sin y] = \\cos y\\,\\frac{dy}{dx}$\n- $\\frac{d}{dx}[xy] = y + x\\frac{dy}{dx}$ (כלל מכפלה)\n\n**משיק ונורמל:** לאחר מציאת $\\dfrac{dy}{dx}$, הציבו ב-$(x_0, y_0)$ לקבלת $m$. משיק: $y - y_0 = m(x - x_0)$. נורמל (ניצב): שיפוע $=-1/m$ כש-$m \\neq 0$.\n\n**משיק אופקי מול אנכי:** $dy/dx = 0$ נותן משיק אופקי; $dy/dx$ לא מוגדר (מכנה אפס ב-$-F_x/F_y$) — משיק אנכי. ב-$x^2+y^2=r^2$: אופקי ב-$x=0$; אנכי ב-$y=0$.\n\n**חשוב:** $\\dfrac{dy}{dx}$ בדרך כלל מכיל גם $x$ וגם $y$ — מציבים נקודה ספציפית רק כשנדרש שיפוע מספרי.\n\n**תצוגה מקדימה — קצבי שינוי מקושרים:** אם $x$ ו-$y$ תלויים ב-$t$, גזרו $F(x,y)=0$ לפי $t$ בכלל שרשרת — אותה לוגיקת $y'$, עם $dy/dt$ ו-$dx/dt$. זהו היישום הטבעי הבא של גזירה סתומה בחדו״א 1."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Circle $x^2 + y^2 = 25$",
+      "title_he": "דוגמה פתורה 1 — מעגל $x^2 + y^2 = 25$",
+      "body_en_md": "**Given:** $x^2 + y^2 = 25$. Find $\\dfrac{dy}{dx}$.\n\nCircles are the standard first example — every term is a simple power of $x$ or $y$, and the algebra stays clean. No product rule is needed; only the chain rule on $y^2$.\n\n### Move 1: Differentiate both sides with respect to $x$.\n$$\\frac{d}{dx}(x^2) + \\frac{d}{dx}(y^2) = \\frac{d}{dx}(25)$$\n$$2x + 2y\\frac{dy}{dx} = 0$$\n\n### Move 2: Solve for $dy/dx$.\n$$2y\\frac{dy}{dx} = -2x \\implies \\frac{dy}{dx} = -\\frac{x}{y}$$\n\n**Answer:** $\\dfrac{dy}{dx} = -\\dfrac{x}{y}$.\n\n**Geometric check:** At $(3, 4)$ on the circle: slope $= -3/4$. The radius to $(3,4)$ has slope $4/3$. Product $= (-3/4)(4/3) = -1$ ✓ (tangent ⊥ radius).\n\n**Exam note:** Circle tangent problems appear on every Calc 1 midterm. Show the differentiation step explicitly — graders deduct points for jumping directly to $y'=-x/y$ without derivation.\n\n**Shortcut check:** With $F(x,y)=x^2+y^2-25$, the implicit function theorem gives $dy/dx=-F_x/F_y=-2x/(2y)=-x/y$ — same answer, useful for verification.",
+      "body_he_md": "**נתון:** $x^2 + y^2 = 25$. מצאו $\\dfrac{dy}{dx}$.\n\nמעגלים הם הדוגמה הסטנדרטית הראשונה — כל איבר חזקה פשוטה של $x$ או $y$, והאלגברה נשארת נקייה. אין צורך בכלל מכפלה; רק כלל שרשרת על $y^2$.\n\n### צעד 1: גזירת שני האגפים לפי $x$.\n$$\\frac{d}{dx}(x^2) + \\frac{d}{dx}(y^2) = \\frac{d}{dx}(25)$$\n$$2x + 2y\\frac{dy}{dx} = 0$$\n\n### צעד 2: פתרון עבור $\\dfrac{dy}{dx}$.\n$$2y\\frac{dy}{dx} = -2x \\implies \\frac{dy}{dx} = -\\frac{x}{y}$$\n\n**תשובה:** $\\dfrac{dy}{dx} = -\\dfrac{x}{y}$.\n\n**בדיקה גיאומטרית:** ב-$(3, 4)$ על המעגל: שיפוע $= -3/4$. הרדיוס ל-$(3,4)$ בעל שיפוע $4/3$. מכפלה $= (-3/4)(4/3) = -1$ ✓ (משיק ⊥ רדיוס).\n\n**הערה לבחינה:** בעיות משיק למעגל מופיעות בכל מבחן אמצע בחדו״א 1. הציגו את שלב הגזירה במפורש — מורידים נקודות על קפיצה ישירה ל-$y'=-x/y$ בלי הנגזרת.\n\n**בדיקה מהירה:** עם $F(x,y)=x^2+y^2-25$, משפט הפונקציה הסתומה נותן $dy/dx=-F_x/F_y=-2x/(2y)=-x/y$ — אותה תשובה, שימושי לאימות."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find $dy/dx$ for $x^3 + y^3 = 6xy$ (folium of Descartes).",
+      "body_he_md": "מצאו $dy/dx$ עבור $x^3 + y^3 = 6xy$ (פוליום של דקארט).",
+      "checkpoint_solution_en": "**Step 1 — Identify rules needed:** The right side $6xy$ requires the product rule; $y^3$ needs the chain rule.\n\n**Step 2 — Differentiate both sides:**\n$$3x^2 + 3y^2\\frac{dy}{dx} = 6\\left(y + x\\frac{dy}{dx}\\right).$$\n\n**Step 3 — Expand and collect $dy/dx$ terms:**\n$$3y^2\\frac{dy}{dx} - 6x\\frac{dy}{dx} = 6y - 3x^2$$\n$$\\frac{dy}{dx}(3y^2 - 6x) = 6y - 3x^2.$$\n\n**Step 4 — Solve and simplify:**\n$$\\frac{dy}{dx} = \\frac{6y-3x^2}{3y^2-6x} = \\frac{2y-x^2}{y^2-2x}.$$\n\n**Check:** Vertical tangents occur when $3y^2-6x=0$ (denominator zero). The folium has famous singular points beyond Calc 1 scope.",
+      "checkpoint_solution_he": "**צעד 1 — זיהוי כללים נדרשים:** הצד $6xy$ דורש כלל מכפלה; $y^3$ דורש כלל שרשרת.\n\n**צעד 2 — גזירת שני האגפים:**\n$$3x^2 + 3y^2\\frac{dy}{dx} = 6\\left(y + x\\frac{dy}{dx}\\right).$$\n\n**צעד 3 — פתיחה ואיסוף איברי $dy/dx$:**\n$$3y^2\\frac{dy}{dx} - 6x\\frac{dy}{dx} = 6y - 3x^2$$\n$$\\frac{dy}{dx}(3y^2 - 6x) = 6y - 3x^2.$$\n\n**צעד 4 — פתרון ופישוט:**\n$$\\frac{dy}{dx} = \\frac{6y-3x^2}{3y^2-6x} = \\frac{2y-x^2}{y^2-2x}.$$\n\n**בדיקה:** משיקים אנכיים כש-$3y^2-6x=0$ (מכנה אפס). לפוליום של דקארט יש נקודות סינגולריות ידועות מעבר לחדו״א 1."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Tangent Line to $x^2 + xy + y^2 = 7$ at $(1, 2)$",
+      "title_he": "דוגמה פתורה 2 — קו משיק ל-$x^2 + xy + y^2 = 7$ ב-$(1, 2)$",
+      "body_en_md": "**Given:** $x^2 + xy + y^2 = 7$. Find the equation of the tangent line at $(1, 2)$.\n\nThis equation mixes $x^2$, $y^2$, and the product $xy$ — so both chain rule and product rule appear. Always verify the point first, then differentiate, then substitute the point before solving for the general slope.\n\n### Move 1: Verify the point lies on the curve.\n$$1 + 2 + 4 = 7 \\checkmark$$\n\n### Move 2: Differentiate both sides implicitly.\n$$\\frac{d}{dx}(x^2) + \\frac{d}{dx}(xy) + \\frac{d}{dx}(y^2) = 0$$\n$$2x + \\left(y + x\\frac{dy}{dx}\\right) + 2y\\frac{dy}{dx} = 0$$\n\n### Move 3: Collect $dy/dx$ terms.\n$$2x + y + (x + 2y)\\frac{dy}{dx} = 0$$\n$$(x+2y)\\frac{dy}{dx} = -2x-y$$\n$$\\frac{dy}{dx} = \\frac{-2x-y}{x+2y}$$\n\n### Move 4: Evaluate at $(1, 2)$.\n$$\\frac{dy}{dx}\\bigg|_{(1,2)} = \\frac{-2(1)-2}{1+2(2)} = \\frac{-4}{5}$$\n\n### Move 5: Write the tangent line in point-slope form.\n$$y - 2 = -\\frac{4}{5}(x-1) \\implies y = -\\frac{4}{5}x + \\frac{14}{5}$$\n\n**Answer:** $y = -\\dfrac{4}{5}x + \\dfrac{14}{5}$.\n\n**Exam tip:** Tangent-line problems need two outputs: the slope $m$ and the point-slope equation. Partial credit is split between them on Calc 1 finals.\n\n**Normal line (bonus):** The normal has slope $-1/m = 5/4$ at $(1,2)$: $y-2 = \\frac{5}{4}(x-1)$.",
+      "body_he_md": "**נתון:** $x^2 + xy + y^2 = 7$. מצאו את משוואת קו המשיק ב-$(1, 2)$.\n\nמשוואה זו משלבת $x^2$, $y^2$ ומכפלה $xy$ — לכן מופיעים גם כלל שרשרת וגם כלל מכפלה. תמיד אמתו את הנקודה תחילה, גזרו, ואז הציבו את הנקודה לפני פתרון השיפוע הכללי.\n\n### צעד 1: אימות שהנקודה שוכנת על העקומה.\n$$1 + 2 + 4 = 7 \\checkmark$$\n\n### צעד 2: גזירה סתומה של שני האגפים.\n$$\\frac{d}{dx}(x^2) + \\frac{d}{dx}(xy) + \\frac{d}{dx}(y^2) = 0$$\n$$2x + \\left(y + x\\frac{dy}{dx}\\right) + 2y\\frac{dy}{dx} = 0$$\n\n### צעד 3: איסוף איברי $dy/dx$.\n$$2x + y + (x + 2y)\\frac{dy}{dx} = 0$$\n$$(x+2y)\\frac{dy}{dx} = -2x-y$$\n$$\\frac{dy}{dx} = \\frac{-2x-y}{x+2y}$$\n\n### צעד 4: הצבה ב-$(1, 2)$.\n$$\\frac{dy}{dx}\\bigg|_{(1,2)} = \\frac{-2(1)-2}{1+2(2)} = \\frac{-4}{5}$$\n\n### צעד 5: כתיבת קו המשיק בצורת נקודה-שיפוע.\n$$y - 2 = -\\frac{4}{5}(x-1) \\implies y = -\\frac{4}{5}x + \\frac{14}{5}$$\n\n**תשובה:** $y = -\\dfrac{4}{5}x + \\dfrac{14}{5}$.\n\n**טיפ לבחינה:** בעיות משיק דורשות שני פלטים: השיפוע $m$ ומשוואת נקודה-שיפוע. ניקוד חלקי מחולק ביניהם בבחינות חדו״א 1.\n\n**ישר נורמל (בונוס):** לנורמל שיפוע $-1/m = 5/4$ ב-$(1,2)$: $y-2 = \\frac{5}{4}(x-1)$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find the slope of the tangent to $y^2 = x^3 + 1$ at $(2, 3)$.",
+      "body_he_md": "מצאו את שיפוע המשיק ל-$y^2 = x^3 + 1$ ב-$(2, 3)$.",
+      "checkpoint_solution_en": "**Step 1 — Verify the point:** $y^2 = x^3 + 1$ at $(2,3)$: $9 = 8+1$ ✓. The point lies on the curve.\n\n**Step 2 — Implicit differentiation:** Differentiate $y^2 = x^3 + 1$:\n$$2y\\frac{dy}{dx} = 3x^2.$$\n\n**Step 3 — Solve for $dy/dx$:**\n$$\\frac{dy}{dx} = \\frac{3x^2}{2y}.$$\n\n**Step 4 — Evaluate at $(2,3)$:**\n$$\\left.\\frac{dy}{dx}\\right|_{(2,3)} = \\frac{3(4)}{2(3)} = \\frac{12}{6} = 2.$$\n\n**Check:** This is a cusp-free branch of $y = \\sqrt{x^3+1}$ near $(2,3)$; positive slope matches the rising curve.",
+      "checkpoint_solution_he": "**צעד 1 — אימות הנקודה:** $y^2 = x^3 + 1$ ב-$(2,3)$: $9 = 8+1$ ✓. הנקודה על העקומה.\n\n**צעד 2 — גזירה סתומה:** גזירת $y^2 = x^3 + 1$:\n$$2y\\frac{dy}{dx} = 3x^2.$$\n\n**צעד 3 — פתרון עבור $dy/dx$:**\n$$\\frac{dy}{dx} = \\frac{3x^2}{2y}.$$\n\n**צעד 4 — הצבה ב-$(2,3)$:**\n$$\\left.\\frac{dy}{dx}\\right|_{(2,3)} = \\frac{3(4)}{2(3)} = \\frac{12}{6} = 2.$$\n\n**בדיקה:** זהו ענף ללא קוספ של $y = \\sqrt{x^3+1}$ ליד $(2,3)$; שיפוע חיובי תואם עקומה עולה."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Differentiating $\\sin(xy) = x + y^2$",
+      "title_he": "דוגמה פתורה 3 — גזירה של $\\sin(xy) = x + y^2$",
+      "body_en_md": "**Given:** $\\sin(xy) = x + y^2$. Find $\\dfrac{dy}{dx}$. Then determine if this equation defines a curve passing through $(0, 0)$ and find $dy/dx$ there if it does.\n\nThis hard example layers **chain rule inside chain rule**: the outer function is $\\sin(\\cdot)$ and the inner function $xy$ itself needs the product rule. Such nested compositions appear on university Calc 1 finals.\n\n### Move 1: Differentiate both sides.\nLeft side — chain rule on $\\sin(xy)$, product rule on $xy$:\n$$\\frac{d}{dx}[\\sin(xy)] = \\cos(xy) \\cdot \\frac{d}{dx}(xy) = \\cos(xy)\\left(y + x\\frac{dy}{dx}\\right)$$\nRight side:\n$$\\frac{d}{dx}(x+y^2) = 1 + 2y\\frac{dy}{dx}$$\n\n### Move 2: Collect $dy/dx$ terms.\n$$\\cos(xy)\\left(y + x\\frac{dy}{dx}\\right) = 1 + 2y\\frac{dy}{dx}$$\n$$y\\cos(xy) + x\\cos(xy)\\frac{dy}{dx} = 1 + 2y\\frac{dy}{dx}$$\n$$\\frac{dy}{dx}\\left(x\\cos(xy) - 2y\\right) = 1 - y\\cos(xy)$$\n$$\\frac{dy}{dx} = \\frac{1-y\\cos(xy)}{x\\cos(xy)-2y}$$\n\n### Move 3: Check if $(0,0)$ lies on the curve.\n$$\\sin(0 \\cdot 0) = 0 + 0^2 \\quad \\Rightarrow \\quad 0 = 0 \\checkmark$$\n\n### Move 4: Evaluate at $(0,0)$.\n$$\\frac{dy}{dx}\\bigg|_{(0,0)} = \\frac{1-0\\cdot\\cos(0)}{0\\cdot\\cos(0)-0} = \\frac{1}{0}$$\nThe denominator is $0$, so the derivative is **undefined** at $(0,0)$ — the tangent is vertical there (a cusp or self-intersection point).\n\n**Answer:** $\\dfrac{dy}{dx} = \\dfrac{1-y\\cos(xy)}{x\\cos(xy)-2y}$; undefined (vertical tangent) at $(0,0)$.\n\n**Exam note:** When $dy/dx$ has form $0/0$ or $1/0$ at a point on the curve, state clearly whether the tangent is vertical, horizontal, or the point is singular.",
+      "body_he_md": "**נתון:** $\\sin(xy) = x + y^2$. מצאו $\\dfrac{dy}{dx}$. לאחר מכן קבעו אם משוואה זו מגדירה עקומה העוברת דרך $(0, 0)$ ומצאו $dy/dx$ שם אם כן.\n\nדוגמה קשה זו משלבת **כלל שרשרת בתוך כלל שרשרת**: הפונקציה החיצונית $\\sin(\\cdot)$ והפנימית $xy$ דורשת גם כלל מכפלה. הרכבות מקוננות כאלה מופיעות בבחינות חדו״א 1 באוניברסיטה.\n\n### צעד 1: גזירת שני האגפים.\nצד שמאל — כלל שרשרת על $\\sin(xy)$, כלל מכפלה על $xy$:\n$$\\frac{d}{dx}[\\sin(xy)] = \\cos(xy)\\left(y + x\\frac{dy}{dx}\\right)$$\nצד ימין:\n$$\\frac{d}{dx}(x+y^2) = 1 + 2y\\frac{dy}{dx}$$\n\n### צעד 2: איסוף איברי $dy/dx$.\n$$\\frac{dy}{dx}\\left(x\\cos(xy) - 2y\\right) = 1 - y\\cos(xy)$$\n$$\\frac{dy}{dx} = \\frac{1-y\\cos(xy)}{x\\cos(xy)-2y}$$\n\n### צעד 3: בדיקה אם $(0,0)$ על העקומה.\n$$\\sin(0 \\cdot 0) = 0 + 0^2 \\quad \\Rightarrow \\quad 0 = 0 \\checkmark$$\n\n### צעד 4: הצבה ב-$(0,0)$.\n$$\\frac{dy}{dx}\\bigg|_{(0,0)} = \\frac{1}{0}$$\nהמכנה הוא $0$, לכן הנגזרת **אינה מוגדרת** ב-$(0,0)$ — המשיק אנכי (נקודת קוספ או חיתוך עצמי).\n\n**תשובה:** $\\dfrac{dy}{dx} = \\dfrac{1-y\\cos(xy)}{x\\cos(xy)-2y}$; אינה מוגדרת (משיק אנכי) ב-$(0,0)$.\n\n**הערה לבחינה:** כש-$dy/dx$ בצורת $0/0$ או $1/0$ בנקודה על העקומה, ציינו במפורש אם המשיק אנכי, אופקי, או שהנקודה סינגולרית."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Why Implicit Differentiation Works — It's Just the Chain Rule on y",
+      "title_he": "למה גזירה סתומה עובדת — זה רק כלל השרשרת על y",
+      "body_en_md": "Implicit differentiation can feel like a magic trick — you differentiate an equation that isn't even solved for $y$ and somehow get $\\dfrac{dy}{dx}$. But there is no magic: it is nothing more than the **chain rule**, applied with the honest admission that $y$ is secretly a function of $x$.\n\n### The one idea behind everything\nWhen a curve is defined by an equation like $x^2+y^2=25$, we cannot (globally) write $y$ as a single function of $x$. But *locally*, along the curve, $y$ **does** depend on $x$: $y=y(x)$. So whenever you differentiate a term containing $y$, you are differentiating a composite function, and the chain rule demands an extra factor of $\\dfrac{dy}{dx}$:\n$$\\frac{d}{dx}\\big[y^2\\big]=2y\\cdot\\frac{dy}{dx},\\qquad \\frac{d}{dx}\\big[\\sin y\\big]=\\cos y\\cdot\\frac{dy}{dx}.$$\nDifferentiating an $x$ term is ordinary ($\\frac{d}{dx}[x^2]=2x$); differentiating a $y$ term tacks on $\\frac{dy}{dx}$ because 'the inside' is $y(x)$. That single asymmetry *is* implicit differentiation.\n\n### The procedure falls out automatically\n1. Differentiate **both sides** of the equation with respect to $x$, treating $y$ as $y(x)$ (every $y$-term earns a $\\frac{dy}{dx}$).\n2. Collect all terms containing $\\frac{dy}{dx}$ on one side, everything else on the other.\n3. Factor out $\\frac{dy}{dx}$ and divide. \n\nNo step is new — steps 2–3 are just algebra to isolate the unknown $\\frac{dy}{dx}$.\n\n### When you *need* it\nImplicit differentiation is the right tool whenever:\n- the equation can't be cleanly solved for $y$ (e.g. $x^3+y^3=6xy$, the folium of Descartes);\n- $x$ and $y$ are tangled together (products like $xy$, requiring the product rule *and* the chain rule);\n- you're doing **related rates**, where several quantities depend on time $t$ and you differentiate the whole relation with respect to $t$ — the same chain-rule move, with $t$ in place of $x$.\n\n### The characteristic feature of the answer\nBecause the curve isn't a function, the slope $\\frac{dy}{dx}$ usually depends on **both** $x$ and $y$. That's expected and correct: at a given $x$ the curve may have two branches (upper and lower semicircle), and plugging in the specific point's $y$ selects the right slope for that branch.",
+      "body_he_md": "גזירה סתומה יכולה להרגיש כמו תעלול קסם — גוזרים משוואה שאפילו אינה פתורה עבור $y$ ואיכשהו מקבלים $\\dfrac{dy}{dx}$. אך אין קסם: זה לא יותר מ**כלל השרשרת**, מיושם עם ההודאה הכנה ש-$y$ הוא בסתר פונקציה של $x$.\n\n### הרעיון היחיד מאחורי הכול\nכשעקומה מוגדרת על ידי משוואה כמו $x^2+y^2=25$, איננו יכולים (גלובלית) לכתוב את $y$ כפונקציה יחידה של $x$. אך *מקומית*, לאורך העקומה, $y$ **כן** תלוי ב-$x$: $y=y(x)$. ולכן בכל פעם שגוזרים איבר המכיל $y$, גוזרים פונקציה מורכבת, וכלל השרשרת דורש גורם נוסף של $\\dfrac{dy}{dx}$:\n$$\\frac{d}{dx}\\big[y^2\\big]=2y\\cdot\\frac{dy}{dx},\\qquad \\frac{d}{dx}\\big[\\sin y\\big]=\\cos y\\cdot\\frac{dy}{dx}.$$\nגזירת איבר $x$ היא רגילה ($\\frac{d}{dx}[x^2]=2x$); גזירת איבר $y$ מוסיפה $\\frac{dy}{dx}$ כי 'הפנים' הם $y(x)$. האסימטריה היחידה הזו *היא* גזירה סתומה.\n\n### התהליך נובע אוטומטית\n1. גזרו את **שני האגפים** של המשוואה ביחס ל-$x$, כשמתייחסים ל-$y$ כ-$y(x)$ (כל איבר $y$ מרוויח $\\frac{dy}{dx}$).\n2. אספו את כל האיברים המכילים $\\frac{dy}{dx}$ לאגף אחד, כל השאר לשני.\n3. הוציאו $\\frac{dy}{dx}$ כגורם וחלקו.\n\nאף צעד אינו חדש — צעדים 2–3 הם רק אלגברה לבידוד הנעלם $\\frac{dy}{dx}$.\n\n### מתי *צריך* אותה\nגזירה סתומה היא הכלי הנכון בכל פעם ש:\n- המשוואה אינה ניתנת לפתרון נקי עבור $y$ (למשל $x^3+y^3=6xy$, עלה דקארט);\n- $x$ ו-$y$ שזורים יחד (מכפלות כמו $xy$, הדורשות את כלל המכפלה *וגם* את כלל השרשרת);\n- אתם עושים **קצבים קשורים**, שבהם כמה גדלים תלויים בזמן $t$ וגוזרים את כל היחס ביחס ל-$t$ — אותו מהלך כלל-שרשרת, עם $t$ במקום $x$.\n\n### המאפיין האופייני של התשובה\nמכיוון שהעקומה אינה פונקציה, השיפוע $\\frac{dy}{dx}$ תלוי בדרך כלל ב**שני** $x$ ו-$y$. זה צפוי ונכון: ב-$x$ נתון לעקומה עשויים להיות שני ענפים (חצי-עיגול עליון ותחתון), והצבת ה-$y$ של הנקודה הספציפית בוחרת את השיפוע הנכון לאותו ענף."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — Tangent Line to a Curve That Isn't a Function",
+      "title_he": "דוגמה פתורה 4 — משיק לעקומה שאינה פונקציה",
+      "body_en_md": "**Problem.** Find the equation of the tangent line to the circle $x^2+y^2=25$ at the point $(3,4)$.\n\n### Step 1: Differentiate both sides implicitly\nDifferentiate with respect to $x$, remembering $y=y(x)$ so the $y^2$ term needs the chain rule:\n$$\\frac{d}{dx}[x^2]+\\frac{d}{dx}[y^2]=\\frac{d}{dx}[25] \\implies 2x+2y\\frac{dy}{dx}=0.$$\n\n### Step 2: Solve for dy/dx\n$$2y\\frac{dy}{dx}=-2x \\implies \\frac{dy}{dx}=-\\frac{x}{y}.$$\nNote the slope depends on **both** coordinates — the signature of an implicit result.\n\n### Step 3: Evaluate the slope at (3, 4)\n$$\\left.\\frac{dy}{dx}\\right|_{(3,4)}=-\\frac{3}{4}.$$\nSanity check: the radius to $(3,4)$ has slope $\\tfrac{4}{3}$, and the tangent is perpendicular to the radius, so its slope should be the negative reciprocal $-\\tfrac{3}{4}$. ✓\n\n### Step 4: Write the tangent line\nUsing point-slope through $(3,4)$:\n$$y-4=-\\frac{3}{4}(x-3).$$\nSimplify: $y=-\\tfrac34 x+\\tfrac94+4=-\\tfrac34 x+\\tfrac{25}{4}$.\n\n**Answer:** $y-4=-\\dfrac{3}{4}(x-3)$, i.e. $y=-\\tfrac34 x+\\tfrac{25}{4}$. Solving the circle for $y$ first would have worked here, but implicit differentiation gave the answer with no square roots and generalises to curves that *can't* be solved for $y$ — exactly why it's the standard tool.",
+      "body_he_md": "**בעיה.** מצאו את משוואת המשיק למעגל $x^2+y^2=25$ בנקודה $(3,4)$.\n\n### שלב 1: גזרו את שני האגפים סתומות\nגזרו ביחס ל-$x$, בזכירה ש-$y=y(x)$ ולכן איבר $y^2$ דורש את כלל השרשרת:\n$$\\frac{d}{dx}[x^2]+\\frac{d}{dx}[y^2]=\\frac{d}{dx}[25] \\implies 2x+2y\\frac{dy}{dx}=0.$$\n\n### שלב 2: פתרו עבור dy/dx\n$$2y\\frac{dy}{dx}=-2x \\implies \\frac{dy}{dx}=-\\frac{x}{y}.$$\nשימו לב שהשיפוע תלוי ב**שתי** הקואורדינטות — החתימה של תוצאה סתומה.\n\n### שלב 3: הציבו את השיפוע ב-(3, 4)\n$$\\left.\\frac{dy}{dx}\\right|_{(3,4)}=-\\frac{3}{4}.$$\nבדיקת היגיון: לרדיוס אל $(3,4)$ שיפוע $\\tfrac{4}{3}$, והמשיק ניצב לרדיוס, ולכן שיפועו צריך להיות ההופכי הנגדי $-\\tfrac{3}{4}$. ✓\n\n### שלב 4: כתבו את המשיק\nבעזרת נקודה-שיפוע דרך $(3,4)$:\n$$y-4=-\\frac{3}{4}(x-3).$$\nפשטו: $y=-\\tfrac34 x+\\tfrac94+4=-\\tfrac34 x+\\tfrac{25}{4}$.\n\n**תשובה:** $y-4=-\\dfrac{3}{4}(x-3)$, כלומר $y=-\\tfrac34 x+\\tfrac{25}{4}$. פתרון המעגל עבור $y$ תחילה היה עובד כאן, אך גזירה סתומה נתנה את התשובה ללא שורשים ומתכללת לעקומות ש*אי אפשר* לפתור עבור $y$ — בדיוק לכן היא הכלי הסטנדרטי."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Implicit Differentiation Steps",
+      "title_he": "מדריך שיטות — שלבי הגזירה הסתומה",
+      "body_en_md": "**Standard procedure:**\n\n1. **Verify the point** (if finding a tangent) — substitute into the equation.\n2. **Differentiate both sides** term by term with respect to $x$.\n3. **Chain rule for $y$-terms:** every $y$-term picks up a factor $dy/dx$.\n4. **Product rule** when $x$ and $y$ are multiplied: $\\frac{d}{dx}(xy) = y + x\\frac{dy}{dx}$.\n5. **Isolate $dy/dx$:** collect on one side, factor, divide.\n6. **Substitute the point** to get the numerical slope.\n7. **Write the tangent line:** $y - y_0 = m(x-x_0)$.\n\n**Special cases:**\n| Term | Derivative |\n|------|------------|\n| $y^n$ | $ny^{n-1}\\frac{dy}{dx}$ |\n| $e^y$ | $e^y\\frac{dy}{dx}$ |\n| $\\ln y$ | $\\frac{1}{y}\\frac{dy}{dx}$ |\n| $\\sin y$ | $\\cos y\\frac{dy}{dx}$ |\n| $x^m y^n$ | $mx^{m-1}y^n + x^m \\cdot ny^{n-1}\\frac{dy}{dx}$ |",
+      "body_he_md": "**הליך סטנדרטי:**\n\n1. **אמת את הנקודה** (אם מוצאים משיק) — הצב במשוואה.\n2. **גזור את שני האגפים** איבר-איבר לפי $x$.\n3. **כלל שרשרת לאיברי $y$:** כל איבר $y$ מקבל גורם $dy/dx$.\n4. **כלל מכפלה** כאשר $x$ ו-$y$ מוכפלים: $\\frac{d}{dx}(xy) = y + x\\frac{dy}{dx}$.\n5. **בודד $dy/dx$:** אסוף לצד אחד, הוצא גורם, חלק.\n6. **הצב את הנקודה** לקבלת השיפוע המספרי.\n7. **כתוב את קו המשיק:** $y - y_0 = m(x-x_0)$.\n\n**מקרים מיוחדים:**\n| איבר | נגזרת |\n|------|-------|\n| $y^n$ | $ny^{n-1}\\frac{dy}{dx}$ |\n| $e^y$ | $e^y\\frac{dy}{dx}$ |\n| $\\ln y$ | $\\frac{1}{y}\\frac{dy}{dx}$ |\n| $\\sin y$ | $\\cos y\\frac{dy}{dx}$ |\n| $x^m y^n$ | $mx^{m-1}y^n + x^m \\cdot ny^{n-1}\\frac{dy}{dx}$ |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Find $dy/dx$ for $x^2 + y^2 = 49$.",
+          "body_he": "מצאו $dy/dx$ עבור $x^2 + y^2 = 49$.",
+          "solution_en": "**Solution:**\n\n$2x + 2y(dy/dx) = 0$. $dy/dx = -x/y$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$2x + 2y(dy/dx) = 0$. $dy/dx = -x/y$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Find $dy/dx$ for $xy = 10$.",
+          "body_he": "מצאו $dy/dx$ עבור $xy = 10$.",
+          "solution_en": "**Solution:**\n\n$y + x(dy/dx) = 0$. $dy/dx = -y/x$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$y + x(dy/dx) = 0$. $dy/dx = -y/x$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Find $dy/dx$ for $x^3 + y^3 = 8$.",
+          "body_he": "מצאו $dy/dx$ עבור $x^3 + y^3 = 8$.",
+          "solution_en": "**Solution:**\n\n$3x^2 + 3y^2(dy/dx) = 0$. $dy/dx = -x^2/y^2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$3x^2 + 3y^2(dy/dx) = 0$. $dy/dx = -x^2/y^2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Find the slope of $x^2 + y^2 = 25$ at $(3, -4)$.",
+          "body_he": "מצאו את שיפוע $x^2 + y^2 = 25$ ב-$(3, -4)$.",
+          "solution_en": "$dy/dx = -x/y$. At $(3,-4)$: $dy/dx = -3/(-4) = 3/4$.",
+          "solution_he": "$dy/dx = -x/y$. ב-$(3,-4)$: $dy/dx = -3/(-4) = 3/4$.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Find $dy/dx$ for $e^y + x^2 y = 5$.",
+          "body_he": "מצאו $dy/dx$ עבור $e^y + x^2 y = 5$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$e^y(dy/dx) + 2xy + x^2(dy/dx) = 0$. $(e^y+x^2)(dy/dx) = -2xy$. $dy/dx = -2xy/(e^y+x^2)$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$e^y(dy/dx) + 2xy + x^2(dy/dx) = 0$. $(e^y+x^2)(dy/dx) = -2xy$. $dy/dx = -2xy/(e^y+x^2)$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Find the tangent line to $x^2 - xy + y^2 = 3$ at $(1, -1)$.",
+          "body_he": "מצאו את קו המשיק ל-$x^2 - xy + y^2 = 3$ ב-$(1, -1)$.",
+          "solution_en": "Verify: $1+1+1=3$ ✓. Differentiate: $2x - y - x(dy/dx) + 2y(dy/dx) = 0$. At $(1,-1)$: $2+1-dy/dx-2(dy/dx)=0$. $3 = 3(dy/dx)$. $dy/dx=1$. Tangent: $y+1=1(x-1)$, i.e., $y=x-2$.",
+          "solution_he": "אימות: $1+1+1=3$ ✓. גזירה: $2x - y - x(dy/dx) + 2y(dy/dx) = 0$. ב-$(1,-1)$: $2+1-dy/dx-2(dy/dx)=0$. $3 = 3(dy/dx)$. $dy/dx=1$. משיק: $y+1=1(x-1)$, כלומר $y=x-2$.",
+          "points": 5
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Derive $\\frac{d}{dx}(\\arctan x) = \\frac{1}{1+x^2}$ using implicit differentiation.",
+          "body_he": "הוכח $\\frac{d}{dx}(\\arctan x) = \\frac{1}{1+x^2}$ תוך שימוש בגזירה סתומה.",
+          "solution_en": "Let $y = \\arctan x$, so $\\tan y = x$. Differentiate: $\\sec^2 y \\cdot (dy/dx) = 1$. So $dy/dx = \\cos^2 y$. Since $\\tan y = x$: $\\sec^2 y = 1+\\tan^2 y = 1+x^2$, so $\\cos^2 y = 1/(1+x^2)$. Thus $dy/dx = 1/(1+x^2)$.",
+          "solution_he": "תהי $y = \\arctan x$, לכן $\\tan y = x$. גזירה: $\\sec^2 y \\cdot (dy/dx) = 1$. לכן $dy/dx = \\cos^2 y$. מאחר ש-$\\tan y = x$: $\\sec^2 y = 1+\\tan^2 y = 1+x^2$, לכן $\\cos^2 y = 1/(1+x^2)$. לפיכך $dy/dx = 1/(1+x^2)$.",
+          "points": 5
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Find the points on $x^2 + y^2 = 25$ where the tangent line is horizontal.",
+          "body_he": "מצאו את הנקודות על $x^2 + y^2 = 25$ שבהן קו המשיק הוא אופקי.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$dy/dx = -x/y = 0 \\Rightarrow x = 0$. Substituting: $y = \\pm 5$. Points: $(0,5)$ and $(0,-5)$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "$dy/dx = -x/y = 0 \\Rightarrow x = 0$. הצבה: $y = \\pm 5$. נקודות: $(0,5)$ ו-$(0,-5)$.",
+          "points": 5
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Find $dy/dx$ for $\\cos(x+y) = y\\sin x$.",
+          "body_he": "מצאו $dy/dx$ עבור $\\cos(x+y) = y\\sin x$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$-\\sin(x+y)(1+dy/dx) = (dy/dx)\\sin x + y\\cos x$. $-\\sin(x+y) - y\\cos x = (dy/dx)(\\sin x + \\sin(x+y))$. $dy/dx = \\frac{-\\sin(x+y)-y\\cos x}{\\sin x+\\sin(x+y)}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$-\\sin(x+y)(1+dy/dx) = (dy/dx)\\sin x + y\\cos x$. $-\\sin(x+y) - y\\cos x = (dy/dx)(\\sin x + \\sin(x+y))$. $dy/dx = \\frac{-\\sin(x+y)-y\\cos x}{\\sin x+\\sin(x+y)}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "For $x^2/9 + y^2/4 = 1$ (ellipse), find $dy/dx$ and the tangent at $(3\\cos t, 2\\sin t)$ for general parameter $t$.",
+          "body_he": "עבור $x^2/9 + y^2/4 = 1$ (אליפסה), מצאו $dy/dx$ ואת המשיק ב-$(3\\cos t, 2\\sin t)$ לפרמטר כללי $t$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nDifferentiate: $2x/9 + 2y(dy/dx)/4 = 0$. $dy/dx = -4x/(9\\cdot 2y) = -2x/(9y)$. At $(3\\cos t, 2\\sin t)$: $dy/dx = -2(3\\cos t)/(9(2\\sin t)) = -\\cos t/(3\\sin t)$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nגזירה: $2x/9 + 2y(dy/dx)/4 = 0$. $dy/dx = -4x/(9\\cdot 2y) = -2x/(9y)$. ב-$(3\\cos t, 2\\sin t)$: $dy/dx = -2(3\\cos t)/(9(2\\sin t)) = -\\cos t/(3\\sin t)$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Find the second derivative $d^2y/dx^2$ for $x^2 + y^2 = r^2$.",
+          "body_he": "מצאו את הנגזרת השנייה $d^2y/dx^2$ עבור $x^2 + y^2 = r^2$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$dy/dx = -x/y$. Differentiate again: $d^2y/dx^2 = -(y-x(dy/dx))/y^2 = -(y-x(-x/y))/y^2 = -(y+x^2/y)/y^2 = -(y^2+x^2)/y^3 = -r^2/y^3$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$dy/dx = -x/y$. גזירה שנייה: $d^2y/dx^2 = -(y-x(dy/dx))/y^2 = -(y-x(-x/y))/y^2 = -(y+x^2/y)/y^2 = -(y^2+x^2)/y^3 = -r^2/y^3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Derive $\\frac{d}{dx}(\\arcsin x) = \\frac{1}{\\sqrt{1-x^2}}$ using implicit differentiation.",
+          "body_he": "הוכח $\\frac{d}{dx}(\\arcsin x) = \\frac{1}{\\sqrt{1-x^2}}$ תוך שימוש בגזירה סתומה.",
+          "solution_en": "Let $y = \\arcsin x$, so $\\sin y = x$. Differentiate: $\\cos y (dy/dx) = 1$. $dy/dx = 1/\\cos y$. Since $\\sin y = x$: $\\cos y = \\sqrt{1-\\sin^2 y} = \\sqrt{1-x^2}$ (taking positive root since $y \\in (-\\pi/2,\\pi/2)$). Thus $dy/dx = 1/\\sqrt{1-x^2}$.",
+          "solution_he": "תהי $y = \\arcsin x$, לכן $\\sin y = x$. גזירה: $\\cos y (dy/dx) = 1$. $dy/dx = 1/\\cos y$. מאחר ש-$\\sin y = x$: $\\cos y = \\sqrt{1-\\sin^2 y} = \\sqrt{1-x^2}$ (שורש חיובי כי $y \\in (-\\pi/2,\\pi/2)$). לפיכך $dy/dx = 1/\\sqrt{1-x^2}$.",
+          "points": 5
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Use implicit differentiation to show that the product of the slopes of a circle and its radius at any point is $-1$ (perpendicularity of tangent and radius).",
+          "body_he": "השתמש בגזירה סתומה להראות שמכפלת שיפועי המעגל והרדיוס שלו בכל נקודה היא $-1$ (ניצביות משיק ורדיוס).",
+          "solution_en": "Circle $x^2+y^2=r^2$. Tangent slope at $(x_0,y_0)$: $dy/dx = -x_0/y_0$. Radius slope (from origin to $(x_0,y_0)$): $y_0/x_0$. Product: $(-x_0/y_0)(y_0/x_0) = -1$. ✓ So tangent ⊥ radius.",
+          "solution_he": "מעגל $x^2+y^2=r^2$. שיפוע משיק ב-$(x_0,y_0)$: $dy/dx = -x_0/y_0$. שיפוע רדיוס (מהראשית ל-$(x_0,y_0)$): $y_0/x_0$. מכפלה: $(-x_0/y_0)(y_0/x_0) = -1$. ✓ לכן משיק ⊥ רדיוס.",
+          "points": 5
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Mistakes",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "1. **Forgetting $dy/dx$ when differentiating $y$-terms:** Every time you differentiate a term containing $y$ with respect to $x$, you must multiply by $dy/dx$ (chain rule). Example: $(y^2)' = 2y\\,dy/dx$, NOT just $2y$.\n\n2. **Product rule on $xy$ terms:** $\\frac{d}{dx}(xy) = y + x\\frac{dy}{dx}$. Students often write just $y$ or just $x\\frac{dy}{dx}$.\n\n3. **Forgetting to verify the point lies on the curve** before computing a tangent line.\n\n4. **$dy/dx$ contains both $x$ and $y$:** Do not try to simplify $dy/dx$ by expressing $y$ in terms of $x$ — the point of implicit differentiation is to avoid this.\n\n5. **Division by zero:** If the denominator of $dy/dx$ is zero at a point, the tangent is vertical (or the curve has a cusp). State this explicitly.",
+      "body_he_md": "1. **שכחת $dy/dx$ בגזירת איברי $y$:** בכל פעם שגוזרים איבר המכיל $y$ לפי $x$, חייב להכפיל ב-$dy/dx$ (כלל שרשרת). דוגמה: $(y^2)' = 2y\\,dy/dx$, לא רק $2y$.\n\n2. **כלל מכפלה על איברי $xy$:** $\\frac{d}{dx}(xy) = y + x\\frac{dy}{dx}$. תלמידים לעתים כותבים רק $y$ או רק $x\\frac{dy}{dx}$.\n\n3. **שכחת אימות שהנקודה שוכנת על העקומה** לפני חישוב קו משיק.\n\n4. **$dy/dx$ מכיל גם $x$ וגם $y$:** אל תנסה לפשט $dy/dx$ על ידי הבעת $y$ כפונקציה של $x$ — מטרת הגזירה הסתומה היא להימנע מכך.\n\n5. **חלוקה באפס:** אם המכנה של $dy/dx$ הוא אפס בנקודה, המשיק הוא אנכי (או שיש לעקומה קוספ). ציין זאת במפורש."
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "Implicit differentiation is the bridge between **explicit derivatives** (chain rule, product rule) and **geometry of curves** you cannot write as $y=f(x)$.\n\n**Connections in your learning path:**\n- **Related rates** (next topic): differentiate $F(x,y,t)=0$ with respect to time — same $y'$ logic with $dy/dt$ and $dx/dt$.\n- **Inverse trig derivatives:** $(\\arcsin x)'$ and $(\\arctan x)'$ are derived implicitly from $\\sin y=x$ and $\\tan y=x$.\n- **Optimization with constraints:** Lagrange multipliers generalise the idea of differentiating an equation relating $x$ and $y$.\n- **Physics:** equipotential lines, level curves of energy, and orbit equations are all implicit curves.\n\n**Why it matters for exams:** first-year calculus and university Calc 1 both test tangent lines to circles/ellipses, inverse-function proofs, and horizontal/vertical tangent location. Mastering the chain-rule bookkeeping here prevents errors in every later application.",
+      "body_he_md": "גזירה סתומה היא הגשר בין **נגזרות מפורשות** (כלל שרשרת, כלל מכפלה) לבין **גיאומטריה של עקומות** שלא ניתן לכתוב כ-$y=f(x)$.\n\n**קשרים במסלול הלימוד:**\n- **קצבי שינוי מקושרים** (נושא הבא): גזירת $F(x,y,t)=0$ לפי זמן — אותה לוגיקת $y'$ עם $dy/dt$ ו-$dx/dt$.\n- **נגזרות טריגו הפוכות:** $(\\arcsin x)'$ ו-$(\\arctan x)'$ נגזרות סמוית מ-$\\sin y=x$ ו-$\\tan y=x$.\n- **אופטימיזציה עם אילוצים:** כפל לגרנז' מכליל את הרעיון של גזירת משוואה הקושרת $x$ ו-$y$.\n- **פיזיקה:** קווי שווי-פוטנציאל, עקומות רמה של אנרגיה, ומשוואות מסלול — כולם עקומות סתומות.\n\n**למה זה חשוב לבחינות:** קורס אוניברסיטאי 5 יחידות וחדו״א 1 באוניברסיטה בוחנים משיקים למעגלים/אליפסות, הוכחות פונקציות הפוכות, ואיתור משיקים אופקיים/אנכיים. שליטה בניהול כלל השרשרת כאן מונעת טעויות בכל יישום מאוחר יותר."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**The method in 5 steps:**\n1. Differentiate both sides w.r.t. $x$.\n2. Chain rule on every $y$-term (multiply by $dy/dx$).\n3. Product rule on $xy$-terms.\n4. Collect $dy/dx$ on one side, factor, divide.\n5. Substitute the point for a numerical slope.\n\n**Key formulas:**\n$$\\frac{d}{dx}(y^n) = ny^{n-1}\\frac{dy}{dx}, \\quad \\frac{d}{dx}(e^y) = e^y\\frac{dy}{dx}, \\quad \\frac{d}{dx}(\\ln y) = \\frac{1}{y}\\frac{dy}{dx}$$\n$$\\frac{d}{dx}(xy) = y + x\\frac{dy}{dx}$$\n\n**Typical exam patterns:**\n- Find $dy/dx$ for a given implicit equation.\n- Find the tangent line at a given point (verify the point first!).\n- Derive an inverse trig derivative ($\\arcsin$, $\\arctan$).\n- Find horizontal/vertical tangents ($dy/dx=0$ or denominator $=0$).\n- Second derivative: differentiate $dy/dx$ again using quotient/product rule.\n\n**Time-saving tip:** For tangent problems, substitute the point into the differentiated equation before solving for $dy/dx$ — it cuts algebra in half.",
+      "body_he_md": "**השיטה ב-5 שלבים:**\n1. גזור את שני האגפים לפי $x$.\n2. כלל שרשרת על כל איבר $y$ (הכפל ב-$dy/dx$).\n3. כלל מכפלה על איברי $xy$.\n4. אסוף $dy/dx$ לצד אחד, הוצא גורם, חלק.\n5. הצב את הנקודה לקבלת שיפוע מספרי.\n\n**נוסחאות מרכזיות:**\n$$\\frac{d}{dx}(y^n) = ny^{n-1}\\frac{dy}{dx}, \\quad \\frac{d}{dx}(e^y) = e^y\\frac{dy}{dx}, \\quad \\frac{d}{dx}(\\ln y) = \\frac{1}{y}\\frac{dy}{dx}$$\n$$\\frac{d}{dx}(xy) = y + x\\frac{dy}{dx}$$\n\n**תבניות אופייניות בבחינה:**\n- מציאת $dy/dx$ עבור משוואה סתומה נתונה.\n- מציאת קו המשיק בנקודה נתונה (אמתו את הנקודה תחילה!).\n- גזירת נגזרת טריגונומטרית הפוכה ($\\arcsin$, $\\arctan$).\n- מציאת משיקים אופקיים/אנכיים ($dy/dx=0$ או מכנה $=0$).\n- נגזרת שנייה: גזירה חוזרת של $dy/dx$ בכלל מנה/מכפלה.\n\n**טיפ לחיסכון זמן:** בבעיות משיק, הציבו את הנקודה במשוואה המגוזרת לפני פתרון $dy/dx$ — חותכים בחצי את האלגברה."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Lesson Summary",
+      "title_he": "סיכום השיעור",
+      "body_en_md": "- **Implicit differentiation:** differentiate both sides w.r.t. $x$, applying the chain rule to every $y$-term.\n- **Key rule:** $(y^n)' = ny^{n-1}\\frac{dy}{dx}$; $(xy)' = y + x\\frac{dy}{dx}$.\n- **Finding tangents:** evaluate $dy/dx$ at the given point; if denominator $= 0$, tangent is vertical.\n- **Inverse functions:** implicit differentiation elegantly derives $(\\arcsin x)' = 1/\\sqrt{1-x^2}$ and $(\\arctan x)' = 1/(1+x^2)$.\n- **The result $dy/dx$ contains both $x$ and $y$** — this is normal and expected.\n- **Next step:** related rates uses the same chain-rule bookkeeping with $dy/dt$ and $dx/dt$.",
+      "body_he_md": "- **גזירה סתומה:** גזור את שני האגפים לפי $x$, תוך יישום כלל השרשרת על כל איבר $y$.\n- **כלל מרכזי:** $(y^n)' = ny^{n-1}\\frac{dy}{dx}$; $(xy)' = y + x\\frac{dy}{dx}$.\n- **מציאת משיקים:** הצב $dy/dx$ בנקודה הנתונה; אם המכנה $= 0$, המשיק אנכי.\n- **פונקציות הפוכות:** גזירה סתומה גוזרת בצורה אלגנטית $(\\arcsin x)' = 1/\\sqrt{1-x^2}$ ו-$(\\arctan x)' = 1/(1+x^2)$.\n- **התוצאה $dy/dx$ מכילה גם $x$ וגם $y$** — זה נורמלי ומצופה.\n- **הצעד הבא:** קצבי שינוי מקושרים משתמשים באותו ניהול כלל שרשרת עם $dy/dt$ ו-$dx/dt$."
+    }
+  ],
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "implicit_diff"
+    ]
+  },
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Differentiating $y^2$ with respect to $x$ gives:",
+      "stem_he": "גזירת $y^2$ לפי $x$ נותנת:",
+      "explanation_en": "**Chain rule:** $\\dfrac{d}{dx}y^2=2y\\dfrac{dy}{dx}$.\n\n**Answer:** $2y\\,y'$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**כלל השרשרת:** $2y\\,y'$.\n\n**תשובה:** $2y\\,y'$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$2y\\,y'$",
+          "$2y$",
+          "$y'$",
+          "$2yy''$"
+        ],
+        "options_he": [
+          "$2y\\,y'$",
+          "$2y$",
+          "$y'$",
+          "$2yy''$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "17774d5c-5215-5ce1-8114-1bbe9f4dab30",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$2y\\,y'$",
+        "$2y$",
+        "$y'$",
+        "$2yy''$"
+      ],
+      "options_he": [
+        "$2y\\,y'$",
+        "$2y$",
+        "$y'$",
+        "$2yy''$"
+      ],
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ],
+      "id": "implicit_differentiation__uni-q1"
+    },
+    {
+      "ord": 2,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "For $x^2+y^2=1$, find $\\dfrac{dy}{dx}$ at $(0,1)$.",
+      "stem_he": "עבור $x^2+y^2=1$, מצאו את $\\dfrac{dy}{dx}$ בנקודה $(0,1)$.",
+      "explanation_en": "**$y'=-\\dfrac{x}{y}=0$.**\n\n**Answer:** $0$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$y'=0$.**\n\n**תשובה:** $0$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "85ada643-1864-5468-b0f2-c0204a4ec805",
+      "points_level_min": "5pt",
+      "correct_answer": "0",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0",
+        "expected": 0,
+        "tol": 0.000001
+      },
+      "id": "implicit_differentiation__uni-q2"
+    },
+    {
+      "ord": 3,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "For $x^2+y^2=25$, find $\\dfrac{dy}{dx}$ at $(3,4)$.",
+      "stem_he": "עבור $x^2+y^2=25$, מצאו את $\\dfrac{dy}{dx}$ בנקודה $(3,4)$.",
+      "explanation_en": "**Step 1 — Differentiate.** $2x+2y\\,y'=0$.\n\n**Step 2 — Solve.** $y'=-\\dfrac{x}{y}$.\n\n**Step 3 — Substitute.** $-\\dfrac{3}{4}$.\n\n**Answer:** $-0.75$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1 — גזירה.** $2x+2y\\,y'=0$.\n\n**שלב 2 — בידוד.** $y'=-\\dfrac{x}{y}$.\n\n**שלב 3 — הצבה.** $-\\dfrac34$.\n\n**תשובה:** $-0.75$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Differentiate.** $2x+2y\\,y'=0$.",
+          "**Step 2 — Solve.** $y'=-\\dfrac{x}{y}$.",
+          "**Step 3 — Substitute.** $-\\dfrac{3}{4}$.",
+          "**Answer:** $-0.75$."
+        ],
+        "steps_he": [
+          "**שלב 1 — גזירה.** $2x+2y\\,y'=0$.",
+          "**שלב 2 — בידוד.** $y'=-\\dfrac{x}{y}$.",
+          "**שלב 3 — הצבה.** $-\\dfrac34$.",
+          "**תשובה:** $-0.75$."
+        ]
+      },
+      "source_item_id": "e00a6cfa-5524-558b-bd03-c7a82b6dfbc3",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt",
+      "archetypes": [
+        "application"
+      ],
+      "needs_review": true,
+      "id": "implicit_differentiation__uni-q3"
+    },
+    {
+      "ord": 4,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: implicit differentiation applies the chain rule to every $y$-term.",
+      "stem_he": "נכון או לא נכון: גזירה סתומה מיישמת את כלל השרשרת על כל איבר עם $y$.",
+      "explanation_en": "**Every $y$ is a function of $x$, so the chain rule applies** — **true**.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**כל $y$ הוא פונקציה של $x$** — **נכון**.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "bc47f825-fad9-53ef-9c75-7bf794687773",
+      "points_level_min": "5pt",
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ],
+      "id": "implicit_differentiation__uni-q4"
+    },
+    {
+      "ord": 5,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "For $x^2+y^2=100$, find $\\dfrac{dy}{dx}$ at $(6,8)$.",
+      "stem_he": "עבור $x^2+y^2=100$, מצאו את $\\dfrac{dy}{dx}$ בנקודה $(6,8)$.",
+      "explanation_en": "**$y'=-\\dfrac{x}{y}=-\\dfrac{6}{8}=-0.75$.**\n\n**Answer:** $-0.75$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$y'=-0.75$.**\n\n**תשובה:** $-0.75$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "answer_payload": {
+        "value": -0.75
+      },
+      "source_item_id": "9ea76e75-e55a-538c-8d07-34f0aac87b1f",
+      "points_level_min": "5pt",
+      "correct_answer": "-0.75",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "-0.75",
+        "expected": -0.75,
+        "tol": 0.000001
+      },
+      "id": "implicit_differentiation__uni-q5"
+    },
+    {
+      "ord": 6,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "For $xy=1$, find $\\dfrac{dy}{dx}$ at $(1,1)$.",
+      "stem_he": "עבור $xy=1$, מצאו את $\\dfrac{dy}{dx}$ בנקודה $(1,1)$.",
+      "explanation_en": "**$y+xy'=0\\Rightarrow y'=-\\dfrac{y}{x}=-1$.**\n\n**Answer:** $-1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$y'=-1$.**\n\n**תשובה:** $-1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "answer_payload": {
+        "value": -1
+      },
+      "source_item_id": "8131dc10-0ed7-56d9-bf7c-f851f558c75c",
+      "points_level_min": "5pt",
+      "correct_answer": "-1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "-1",
+        "expected": -1,
+        "tol": 0.000001
+      },
+      "id": "implicit_differentiation__uni-q6"
+    },
+    {
+      "ord": 7,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "For $x+y^2=5$, find $\\dfrac{dy}{dx}$ at $(1,2)$.",
+      "stem_he": "עבור $x+y^2=5$, מצאו את $\\dfrac{dy}{dx}$ בנקודה $(1,2)$.",
+      "explanation_en": "**$1+2y\\,y'=0\\Rightarrow y'=-\\dfrac{1}{2y}=-\\dfrac{1}{4}$.**\n\n**Answer:** $-0.25$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$y'=-\\dfrac{1}{4}$.**\n\n**תשובה:** $-0.25$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "answer_payload": {
+        "value": -0.25
+      },
+      "source_item_id": "f6399267-b610-5526-aecc-d2e764bbe445",
+      "points_level_min": "5pt",
+      "correct_answer": "-0.25",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "-0.25",
+        "expected": -0.25,
+        "tol": 0.000001
+      },
+      "id": "implicit_differentiation__uni-q7"
+    },
+    {
+      "ord": 8,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $x^2+xy=6$, find $\\dfrac{dy}{dx}$ at $(1,5)$.",
+      "stem_he": "עבור $x^2+xy=6$, מצאו את $\\dfrac{dy}{dx}$ בנקודה $(1,5)$.",
+      "explanation_en": "**$2x+y+xy'=0\\Rightarrow y'=-\\dfrac{2x+y}{x}=-7$.**\n\n**Answer:** $-7$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$y'=-\\dfrac{2x+y}{x}=-7$.**\n\n**תשובה:** $-7$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "answer_payload": {
+        "value": -7
+      },
+      "source_item_id": "e2aca4c5-69aa-54ce-a93f-acbae8f70d3f",
+      "points_level_min": "5pt",
+      "correct_answer": "-7",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "-7",
+        "expected": -7,
+        "tol": 0.000001
+      },
+      "id": "implicit_differentiation__uni-q8"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $x^3+y^3=9$, find $\\dfrac{dy}{dx}$ at $(1,2)$.",
+      "stem_he": "עבור $x^3+y^3=9$, מצאו את $\\dfrac{dy}{dx}$ בנקודה $(1,2)$.",
+      "explanation_en": "**$3x^2+3y^2y'=0\\Rightarrow y'=-\\dfrac{x^2}{y^2}=-\\dfrac{1}{4}$.**\n\n**Answer:** $-0.25$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$y'=-\\dfrac{x^2}{y^2}=-\\dfrac14$.**\n\n**תשובה:** $-0.25$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "answer_payload": {
+        "value": -0.25
+      },
+      "source_item_id": "2e466933-b029-5116-82c7-e705bd4ae5d4",
+      "points_level_min": "5pt",
+      "correct_answer": "-0.25",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "-0.25",
+        "expected": -0.25,
+        "tol": 0.000001
+      },
+      "id": "implicit_differentiation__uni-q9"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $e^{y}=x$, find $\\dfrac{dy}{dx}$ at the point where $x=2$.",
+      "stem_he": "עבור $e^{y}=x$, מצאו את $\\dfrac{dy}{dx}$ בנקודה שבה $x=2$.",
+      "explanation_en": "**$e^{y}y'=1\\Rightarrow y'=\\dfrac{1}{e^{y}}=\\dfrac{1}{x}=\\dfrac{1}{2}$.**\n\n**Answer:** $0.5$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$y'=\\dfrac{1}{x}=0.5$.**\n\n**תשובה:** $0.5$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "answer_payload": {
+        "value": 0.5
+      },
+      "source_item_id": "6fd423a6-448b-5f17-9251-6a1258ec527f",
+      "points_level_min": "5pt",
+      "correct_answer": "0.5",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.5",
+        "expected": 0.5,
+        "tol": 0.000001
+      },
+      "id": "implicit_differentiation__uni-q10"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $y^2=x^3$, find $\\dfrac{dy}{dx}$ at $(1,1)$.",
+      "stem_he": "עבור $y^2=x^3$, מצאו את $\\dfrac{dy}{dx}$ בנקודה $(1,1)$.",
+      "explanation_en": "**$2y\\,y'=3x^2\\Rightarrow y'=\\dfrac{3x^2}{2y}=\\dfrac{3}{2}$.**\n\n**Answer:** $1.5$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$y'=\\dfrac{3x^2}{2y}=1.5$.**\n\n**תשובה:** $1.5$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "answer_payload": {
+        "value": 1.5
+      },
+      "source_item_id": "88a8b82f-b083-5cf2-97e9-52773b13c8e1",
+      "points_level_min": "5pt",
+      "correct_answer": "1.5",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1.5",
+        "expected": 1.5,
+        "tol": 0.000001
+      },
+      "id": "implicit_differentiation__uni-q11"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $x^2-y^2=7$, find $\\dfrac{dy}{dx}$ at $(4,3)$.",
+      "stem_he": "עבור $x^2-y^2=7$, מצאו את $\\dfrac{dy}{dx}$ בנקודה $(4,3)$.",
+      "explanation_en": "**$2x-2y\\,y'=0\\Rightarrow y'=\\dfrac{x}{y}=\\dfrac{4}{3}$.**\n\n**Answer:** $\\dfrac43$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$y'=\\dfrac{x}{y}=\\dfrac43$.**\n\n**תשובה:** $\\dfrac43$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "answer_payload": {
+        "value": 1.333333
+      },
+      "source_item_id": "169e2a69-422b-59d5-bdfa-2d050a3b3e87",
+      "points_level_min": "5pt",
+      "correct_answer": "1.333333",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1.333333",
+        "expected": 1.333333,
+        "tol": 0.000001
+      },
+      "id": "implicit_differentiation__uni-q12"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $x^2y=4$, find $\\dfrac{dy}{dx}$ at $(2,1)$.",
+      "stem_he": "עבור $x^2y=4$, מצאו את $\\dfrac{dy}{dx}$ בנקודה $(2,1)$.",
+      "explanation_en": "**$2xy+x^2y'=0\\Rightarrow y'=-\\dfrac{2y}{x}=-1$.**\n\n**Answer:** $-1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$y'=-\\dfrac{2y}{x}=-1$.**\n\n**תשובה:** $-1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "answer_payload": {
+        "value": -1
+      },
+      "source_item_id": "25489aa5-b9ae-5722-9993-e42845898f5a",
+      "points_level_min": "5pt",
+      "correct_answer": "-1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "-1",
+        "expected": -1,
+        "tol": 0.000001
+      },
+      "id": "implicit_differentiation__uni-q13"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $\\sin y=x$, find $\\dfrac{dy}{dx}$ at $(0,0)$.",
+      "stem_he": "עבור $\\sin y=x$, מצאו את $\\dfrac{dy}{dx}$ בנקודה $(0,0)$.",
+      "explanation_en": "**$\\cos y\\,y'=1\\Rightarrow y'=\\dfrac{1}{\\cos y}=\\dfrac{1}{\\cos 0}=1$.**\n\n**Answer:** $1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$y'=\\dfrac{1}{\\cos 0}=1$.**\n\n**תשובה:** $1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "d97a355c-0c2f-5d88-8314-231be80f9fc1",
+      "points_level_min": "5pt",
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      },
+      "id": "implicit_differentiation__uni-q14"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $x^3+y^2=12$, find $\\dfrac{dy}{dx}$ at $(2,2)$.",
+      "stem_he": "עבור $x^3+y^2=12$, מצאו את $\\dfrac{dy}{dx}$ בנקודה $(2,2)$.",
+      "explanation_en": "**$3x^2+2y\\,y'=0\\Rightarrow y'=-\\dfrac{3x^2}{2y}=-3$.**\n\n**Answer:** $-3$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$y'=-\\dfrac{3x^2}{2y}=-3$.**\n\n**תשובה:** $-3$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "answer_payload": {
+        "value": -3
+      },
+      "source_item_id": "2edd4328-a1ec-55ad-b031-305e0d430809",
+      "points_level_min": "5pt",
+      "correct_answer": "-3",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "-3",
+        "expected": -3,
+        "tol": 0.000001
+      },
+      "id": "implicit_differentiation__uni-q15"
+    },
+    {
+      "ord": 16,
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "points_level_min": "university",
+      "stem_en": "From x³+y³=1, differentiating gives 3x²+3y² y′= ____.",
+      "stem_he": "מ-x³+y³=1, גזירה נותנת 3x²+3y² y′= ____.",
+      "explanation_en": "**Step 1.** Recall the definition from this lesson.\n\n**Step 2.** The missing token completes the standard formula.\n\n**Step 3.** Answer: 0.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** נזכרים בהגדרה מהשיעור.\n\n**שלב 2.** המילה החסרה משלימה את הנוסחה.\n\n**שלב 3.** תשובה: 0.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "0",
+          "zero"
+        ]
+      },
+      "id": "implicit_differentiation__uni-q16"
+    },
+    {
+      "ord": 17,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Must you solve for y before differentiating implicitly? (yes/no)",
+      "stem_he": "האם חובה לפתור ל-y לפני גזירה סתומה? (yes/no)",
+      "explanation_en": "**Step 1.** Apply the core definition carefully.\n\n**Step 2.** Avoid the common misconception named in the stem.\n\n**Step 3.** Answer: no.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** מפעילים את ההגדרה בזהירות.\n\n**שלב 2.** נמנעים מהטעות הנפוצה.\n\n**שלב 3.** תשובה: no.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "no",
+          "No"
+        ]
+      },
+      "id": "implicit_differentiation__uni-q17"
+    },
+    {
+      "ord": 18,
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Match each concept to the correct description.",
+      "stem_he": "התאימו כל מושג לתיאור הנכון.",
+      "explanation_en": "Matching separates definitions that students often conflate on exams.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "ההתאמה מפרידה הגדרות שסטודנטים מערבבים לעיתים בבחינה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "pairs_en": [
+          {
+            "left": "Chain rule on y",
+            "right": "2y y′"
+          },
+          {
+            "left": "Solve for y′",
+            "right": "isolate derivative"
+          },
+          {
+            "left": "Circle x²+y²=r²",
+            "right": "y′=-x/y"
+          },
+          {
+            "left": "Higher order",
+            "right": "differentiate y′ again"
+          }
+        ],
+        "pairs_he": [
+          {
+            "left": "שרשרת על y",
+            "right": "2y y′"
+          },
+          {
+            "left": "פתרון ל-y′",
+            "right": "בידוד הנגזרת"
+          },
+          {
+            "left": "מעגל",
+            "right": "y′=-x/y"
+          },
+          {
+            "left": "סדר גבוה",
+            "right": "גזירת y′ שוב"
+          }
+        ]
+      },
+      "id": "implicit_differentiation__uni-q18"
+    },
+    {
+      "ord": 19,
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Order the steps of the standard solution method for this topic.",
+      "stem_he": "סדרו את שלבי שיטת הפתרון הסטנדרטית לנושא זה.",
+      "explanation_en": "A stable step order prevents algebra-before-setup mistakes.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "סדר שלבים יציב מונע טעויות אלגברה-לפני-הצבה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "order_en": [
+          "Differentiate both sides",
+          "Chain rule on y-powers",
+          "Collect y′",
+          "Solve and simplify"
+        ],
+        "order_he": [
+          "גזרו שני אגפים",
+          "שרשרת על חזקות y",
+          "אספו y′",
+          "פתרו ופשטו"
+        ]
+      },
+      "id": "implicit_differentiation__uni-q19"
+    },
+    {
+      "ord": 20,
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Select **all** correct statements.",
+      "stem_he": "סמנו את **כל** ההיגדים הנכונים.",
+      "explanation_en": "Each false option encodes a standard exam misconception for this topic.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "כל אפשרות שגויה מקודדת טעות בחינה אופיינית לנושא.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "Implicit diff works when y is not elementary explicit",
+        "You never need the chain rule",
+        "Points with y=0 on a circle may give vertical tangents",
+        "Second derivative needs differentiating y′ again"
+      ],
+      "options_he": [
+        "גזירה סתומה עובדת כש-y לא מפורש אלמנטרית",
+        "אף פעם לא צריך כלל שרשרת",
+        "בנקודות עם y=0 על מעגל ייתכן משיק אנכי",
+        "נגזרת שנייה דורשת גזירת y′ שוב"
+      ],
+      "correct_indices": [
+        0,
+        2,
+        3
+      ],
+      "answer_payload": {
+        "options_en": [
+          "Implicit diff works when y is not elementary explicit",
+          "You never need the chain rule",
+          "Points with y=0 on a circle may give vertical tangents",
+          "Second derivative needs differentiating y′ again"
+        ],
+        "options_he": [
+          "גזירה סתומה עובדת כש-y לא מפורש אלמנטרית",
+          "אף פעם לא צריך כלל שרשרת",
+          "בנקודות עם y=0 על מעגל ייתכן משיק אנכי",
+          "נגזרת שנייה דורשת גזירת y′ שוב"
+        ],
+        "correct_indices": [
+          0,
+          2,
+          3
+        ]
+      },
+      "id": "implicit_differentiation__uni-q20"
+    },
+    {
+      "ord": 21,
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof",
+        "parametric"
+      ],
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "points_level_min": "university",
+      "needs_review": true,
+      "stem_en": "Starting from x²+y²=r², derive y′=-x/y for y≠0.",
+      "stem_he": "מ-x²+y²=r² גזרו y′=-x/y עבור y≠0.",
+      "explanation_en": "**Step 1.** Write hypotheses.\n\n**Step 2.** Apply the lesson’s main theorem.\n\n**Step 3.** Finish the derivation to the claimed identity.\n\n**Step 4.** Box the final statement and note any hypotheses used.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** כתבו הנחות.\n\n**שלב 2.** הפעילו את משפט השיעור.\n\n**שלב 3.** סיימו את הגזירה.\n\n**שלב 4.** סמנו את הטענה הסופית וציינו הנחות.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "State hypotheses / setup.",
+          "Apply the key theorem or identity.",
+          "Carry out the algebraic derivation.",
+          "Conclude with the boxed result."
+        ],
+        "steps_he": [
+          "ציינו הנחות / הצבה.",
+          "הפעילו את המשפט או הזהות.",
+          "בצעו את הגזירה האלגברית.",
+          "סיימו עם התוצאה המסומנת."
+        ]
+      },
+      "rubric_en": "Full marks: clear derivation with hypotheses stated and a justified conclusion.",
+      "rubric_he": "ניקוד מלא: גזירה ברורה עם הנחות ומסקנה מנומקת.",
+      "id": "implicit_differentiation__uni-q21"
+    },
+    {
+      "ord": 22,
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application"
+      ],
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "points_level_min": "university",
+      "needs_review": true,
+      "stem_en": "Find y′ for xy=1 at (2,1/2).",
+      "stem_he": "מצאו y′ ל-xy=1 ב-(2,1/2).",
+      "explanation_en": "**Step 1.** Set up from definitions.\n\n**Step 2.** Compute carefully.\n\n**Step 3.** Final answer: -1/4.\n\n**Step 4.** State what the number means in the model.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** הציבו מההגדרות.\n\n**שלב 2.** חשבו בזהירות.\n\n**שלב 3.** תשובה: -1/4.\n\n**שלב 4.** פרשו את המספר במודל.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "Set up using the lesson definition.",
+          "Compute intermediate quantities.",
+          "Obtain -1/4.",
+          "Interpret briefly in context."
+        ],
+        "steps_he": [
+          "הציבו לפי הגדרת השיעור.",
+          "חשבו כמויות ביניים.",
+          "קבלו -1/4.",
+          "פרשו בקצרה בהקשר."
+        ]
+      },
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה שלב-אחר-שלב ותשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון.",
+      "id": "implicit_differentiation__uni-q22"
+    },
+    {
+      "ord": 23,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Differentiating cos(y) w.r.t. x gives:",
+      "stem_he": "גזירת cos(y) לפי x נותנת:",
+      "explanation_en": "**Reasoning.** The correct option matches the definition used throughout the lesson.\n\n**Answer index:** 0.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**נימוק.** האפשרות הנכונה תואמת את ההגדרה בשיעור.\n\n**אינדקס:** 0.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "−sin(y)·y′",
+        "−sin(y)",
+        "cos(y′)",
+        "sin(x)"
+      ],
+      "options_he": [
+        "−sin(y)·y′",
+        "−sin(y)",
+        "cos(y′)",
+        "sin(x)"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "−sin(y)·y′",
+          "−sin(y)",
+          "cos(y′)",
+          "sin(x)"
+        ],
+        "options_he": [
+          "−sin(y)·y′",
+          "−sin(y)",
+          "cos(y′)",
+          "sin(x)"
+        ],
+        "correct_index": 0
+      },
+      "id": "implicit_differentiation__uni-q23"
+    },
+    {
+      "ord": 24,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Slope -x/y at (6,8) equals?",
+      "stem_he": "שיפוע -x/y ב-(6,8)?",
+      "explanation_en": "**Step 1.** Identify the formula.\n\n**Step 2.** Substitute values.\n\n**Step 3.** Result -0.75.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** זהו את הנוסחה.\n\n**שלב 2.** הציבו ערכים.\n\n**שלב 3.** התוצאה -0.75.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": "-0.75",
+      "answer_payload": {
+        "value": -0.75
+      },
+      "verify": {
+        "expr": "-6/8",
+        "expected": -0.75,
+        "tol": 0.000001
+      },
+      "id": "implicit_differentiation__uni-q24"
+    },
+    {
+      "ord": 25,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Product rule is often needed in implicit differentiation (e.g. xy).",
+      "stem_he": "כלל מכפלה נחוץ לעיתים בגזירה סתומה (למשל xy).",
+      "explanation_en": "**Evaluation.** The statement is true by the lesson’s definitions.\n\n**Key point.** Check hypotheses before accepting slogans.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**הערכה.** ההיגד נכון לפי הגדרות השיעור.\n\n**נקודה.** בדקו הנחות לפני שמקבלים סיסמאות.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": true,
+      "answer_payload": {
+        "correct": true
+      },
+      "id": "implicit_differentiation__uni-q25"
+    },
+    {
+      "ord": 26,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural",
+        "reverse"
+      ],
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "points_level_min": "university",
+      "stem_en": "For xy=4, if x=2 then y=?",
+      "stem_he": "ל-xy=4, אם x=2 אז y=?",
+      "explanation_en": "**Step 1.** Rearrange or evaluate the defining expression.\n\n**Step 2.** Use powers carefully (e.g. a^b in verify).\n\n**Step 3.** Result 2.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** סדרו מחדש או העריכו את הביטוי.\n\n**שלב 2.** זהירות בחזקות.\n\n**שלב 3.** התוצאה 2.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": "2",
+      "answer_payload": {
+        "value": 2
+      },
+      "verify": {
+        "expr": "4/2",
+        "expected": 2,
+        "tol": 0.000001
+      },
+      "id": "implicit_differentiation__uni-q26"
+    },
+    {
+      "ord": 27,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "archetypes": [
+        "application",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "implicit_diff"
+      ],
+      "points_level_min": "university",
+      "stem_en": "If both F_x and F_y vanish, the implicit function theorem:",
+      "stem_he": "אם גם F_x וגם F_y מתאפסים, משפט הפונקציה הסתומה:",
+      "explanation_en": "**Picture the situation.** The best choice aligns with the geometric/statistical intuition from the worked examples.\n\n**Answer index:** 0.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university implicit differentiation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**דמיינו את המצב.** הבחירה הטובה תואמת את האינטואיציה מהדוגמאות.\n\n**אינדקס:** 0.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בגזירה סתומה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "does not guarantee a unique y(x) graph",
+        "always gives y′=0",
+        "forces a circle",
+        "implies analyticity"
+      ],
+      "options_he": [
+        "לא מבטיח גרף y(x) יחיד",
+        "תמיד נותן y′=0",
+        "כופה מעגל",
+        "גורר אנליטיות"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "does not guarantee a unique y(x) graph",
+          "always gives y′=0",
+          "forces a circle",
+          "implies analyticity"
+        ],
+        "options_he": [
+          "לא מבטיח גרף y(x) יחיד",
+          "תמיד נותן y′=0",
+          "כופה מעגל",
+          "גורר אנליטיות"
+        ],
+        "correct_index": 0
+      },
+      "id": "implicit_differentiation__uni-q27"
+    }
+  ],
+  "est_minutes": 60,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
+}

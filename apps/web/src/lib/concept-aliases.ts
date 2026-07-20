@@ -59,7 +59,7 @@ export const CONCEPT_ID_ALIASES: Record<string, string> = {
   photoelectric_effect: 'modern_physics_intro',
   // University track (KG syllabus ids → existing authored lessons)
   uni_functions_review: 'function_basics_uni',
-  uni_limits: 'limits',
+  uni_limits: 'limits_epsilon_delta',
   uni_derivatives: 'derivatives_intro',
   uni_derivative_applications: 'derivatives_applications',
   uni_integrals: 'integrals_intro',
@@ -100,9 +100,22 @@ export function isAliasConceptId(conceptId: string): boolean {
 
 /** Dedupe key for catalog grids — distinct authored lessons must not collapse. */
 export function catalogDedupeKey(conceptId: string): string {
+  const raw = String(conceptId || '');
   // Track variants (`concept__4pt`) collapse to the canonical syllabus id.
-  const stripped = String(conceptId || '').replace(/__(?:3pt|4pt|5pt|uni)$/, '');
-  if (stripped !== conceptId) return stripped;
+  const dunder = raw.replace(/__(?:3pt|4pt|5pt|uni)$/, '');
+  if (dunder !== raw) return dunder;
+  // Track-named siblings (`limits_4pt`, `analytic_geometry_5pt`, `combinatorics_5pt`)
+  const named = raw.replace(/_(?:3pt|4pt|5pt|uni)$/, '');
+  if (
+    named !== raw &&
+    (named === 'limits' ||
+      named === 'analytic_geometry' ||
+      named === 'combinatorics' ||
+      named === 'function_analysis' ||
+      named === 'sequences')
+  ) {
+    return named === 'sequences' ? 'sequences_arithmetic' : named;
+  }
   if (isConceptInLessonIndex(conceptId)) return conceptId;
   return resolveConceptAliasCanonical(conceptId);
 }
