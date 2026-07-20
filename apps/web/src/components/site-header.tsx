@@ -166,13 +166,7 @@ export function SiteHeader() {
           </SignedOut>
 
           <SignedIn>
-            <NotificationsBell
-              href={
-                pathname.startsWith('/educator')
-                  ? '/educator/notifications'
-                  : '/app/notifications'
-              }
-            />
+            <NotificationsBell />
             <UserButton afterSignOutUrl="/" />
           </SignedIn>
         </div>
