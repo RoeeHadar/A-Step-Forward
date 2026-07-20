@@ -119,12 +119,41 @@ export function NotificationsBell() {
           accept,
         }),
       });
-      const data = (await res.json()) as { error?: string };
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: string;
+        code?: string;
+        ok?: boolean;
+      };
       if (!res.ok) {
-        setActionError(data.error ?? (isHe ? 'הפעולה נכשלה' : 'Action failed'));
+        const code = data.code;
+        if (code === 'internal' || res.status >= 500) {
+          setActionError(
+            isHe ? 'שגיאה פנימית. נסו שוב בעוד רגע.' : 'Internal error. Please try again in a moment.',
+          );
+        } else if (code === 'not_found' || res.status === 404) {
+          // Stale row — remove from UI; nothing left to act on.
+          setItems((prev) => prev.filter((x) => x.id !== n.id));
+          setUnread((u) => Math.max(0, u - (n.read_at ? 0 : 1)));
+          setActionError(
+            isHe ? 'הבקשה כבר לא קיימת.' : 'This invite is no longer available.',
+          );
+        } else {
+          setActionError(
+            isHe
+              ? 'לא הצלחנו לטפל בבקשה. נסו שוב.'
+              : data.error || 'Could not process this invite. Please try again.',
+          );
+        }
         return;
       }
+      // Success (including already-handled): remove from inbox immediately.
+      setItems((prev) => prev.filter((x) => x.id !== n.id));
+      setUnread((u) => Math.max(0, u - (n.read_at ? 0 : 1)));
       reload();
+    } catch {
+      setActionError(
+        isHe ? 'שגיאת רשת. בדקו את החיבור ונסו שוב.' : 'Network error. Check your connection and try again.',
+      );
     } finally {
       setBusyId(null);
     }
@@ -148,14 +177,37 @@ export function NotificationsBell() {
       const res = await fetch('/api/social/friend/respond', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ friendship_id: friendshipId, accept }),
+        body: JSON.stringify({
+          friendship_id: friendshipId,
+          notification_id: n.id,
+          accept,
+        }),
       });
-      const data = (await res.json()) as { error?: string };
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: string;
+        code?: string;
+      };
       if (!res.ok) {
-        setActionError(data.error ?? (isHe ? 'הפעולה נכשלה' : 'Action failed'));
+        if (data.code === 'internal' || res.status >= 500) {
+          setActionError(
+            isHe ? 'שגיאה פנימית. נסו שוב בעוד רגע.' : 'Internal error. Please try again in a moment.',
+          );
+        } else {
+          setActionError(
+            isHe
+              ? 'לא הצלחנו לטפל בבקשה. נסו שוב.'
+              : data.error || 'Could not process this request. Please try again.',
+          );
+        }
         return;
       }
+      setItems((prev) => prev.filter((x) => x.id !== n.id));
+      setUnread((u) => Math.max(0, u - (n.read_at ? 0 : 1)));
       reload();
+    } catch {
+      setActionError(
+        isHe ? 'שגיאת רשת. בדקו את החיבור ונסו שוב.' : 'Network error. Check your connection and try again.',
+      );
     } finally {
       setBusyId(null);
     }

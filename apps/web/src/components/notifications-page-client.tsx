@@ -83,12 +83,33 @@ export function NotificationsPageClient() {
           accept,
         }),
       });
-      const data = (await res.json()) as { error?: string };
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: string;
+        code?: string;
+      };
       if (!res.ok) {
-        setError(data.error ?? (isHe ? 'הפעולה נכשלה' : 'Action failed'));
+        if (data.code === 'internal' || res.status >= 500) {
+          setError(
+            isHe ? 'שגיאה פנימית. נסו שוב בעוד רגע.' : 'Internal error. Please try again in a moment.',
+          );
+        } else if (data.code === 'not_found' || res.status === 404) {
+          setItems((prev) => prev.filter((x) => x.id !== n.id));
+          setError(isHe ? 'הבקשה כבר לא קיימת.' : 'This invite is no longer available.');
+        } else {
+          setError(
+            isHe
+              ? 'לא הצלחנו לטפל בבקשה. נסו שוב.'
+              : data.error || 'Could not process this invite. Please try again.',
+          );
+        }
         return;
       }
+      setItems((prev) => prev.filter((x) => x.id !== n.id));
       reload();
+    } catch {
+      setError(
+        isHe ? 'שגיאת רשת. בדקו את החיבור ונסו שוב.' : 'Network error. Check your connection and try again.',
+      );
     } finally {
       setBusyId(null);
     }
@@ -107,14 +128,36 @@ export function NotificationsPageClient() {
       const res = await fetch('/api/social/friend/respond', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ friendship_id: friendshipId, accept }),
+        body: JSON.stringify({
+          friendship_id: friendshipId,
+          notification_id: n.id,
+          accept,
+        }),
       });
-      const data = (await res.json()) as { error?: string };
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: string;
+        code?: string;
+      };
       if (!res.ok) {
-        setError(data.error ?? (isHe ? 'הפעולה נכשלה' : 'Action failed'));
+        if (data.code === 'internal' || res.status >= 500) {
+          setError(
+            isHe ? 'שגיאה פנימית. נסו שוב בעוד רגע.' : 'Internal error. Please try again in a moment.',
+          );
+        } else {
+          setError(
+            isHe
+              ? 'לא הצלחנו לטפל בבקשה. נסו שוב.'
+              : data.error || 'Could not process this request. Please try again.',
+          );
+        }
         return;
       }
+      setItems((prev) => prev.filter((x) => x.id !== n.id));
       reload();
+    } catch {
+      setError(
+        isHe ? 'שגיאת רשת. בדקו את החיבור ונסו שוב.' : 'Network error. Check your connection and try again.',
+      );
     } finally {
       setBusyId(null);
     }

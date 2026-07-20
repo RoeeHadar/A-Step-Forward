@@ -13,6 +13,10 @@ import {
   validateRealName,
   validateUsername,
 } from '@/lib/social-identity';
+import {
+  normalizeNotifPayload,
+  payloadLinkId,
+} from '@/lib/social-notif-payload';
 
 export {
   normalizeUsername,
@@ -20,6 +24,12 @@ export {
   validateRealName,
   validateUsername,
 } from '@/lib/social-identity';
+
+export {
+  normalizeNotifPayload,
+  payloadFriendshipId,
+  payloadLinkId,
+} from '@/lib/social-notif-payload';
 
 neonConfig.fetchConnectionCache = true;
 
@@ -331,54 +341,16 @@ export async function createNotification(input: {
   }
 }
 
-/** Neon sometimes returns jsonb as a string; normalize to a plain object. */
-export function normalizeNotifPayload(raw: unknown): Record<string, unknown> {
-  if (raw == null) return {};
-  if (typeof raw === 'string') {
-    try {
-      const parsed: unknown = JSON.parse(raw);
-      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-        return parsed as Record<string, unknown>;
-      }
-      // Double-encoded JSON string
-      if (typeof parsed === 'string') {
-        const again: unknown = JSON.parse(parsed);
-        if (again && typeof again === 'object' && !Array.isArray(again)) {
-          return again as Record<string, unknown>;
-        }
-      }
-    } catch {
-      return {};
-    }
-    return {};
-  }
-  if (typeof raw === 'object' && !Array.isArray(raw)) {
-    return raw as Record<string, unknown>;
-  }
-  return {};
-}
-
-export function payloadLinkId(payload: Record<string, unknown>): string | null {
-  const v = payload.link_id ?? payload.linkId;
-  if (typeof v === 'string' && v.trim()) return v.trim();
-  if (typeof v === 'number' && Number.isFinite(v)) return String(v);
-  return null;
-}
-
-export function payloadFriendshipId(payload: Record<string, unknown>): string | null {
-  const v = payload.friendship_id ?? payload.friendshipId;
-  if (typeof v === 'string' && v.trim()) return v.trim();
-  return null;
-}
-
 export async function listNotifications(userId: string, limit = 40): Promise<NotificationRow[]> {
   if (!sql) return [];
   await ensureSocialTables();
+  await purgeStaleTeacherInviteNotifications(userId);
   const rows = (await sql`
     SELECT id::text, user_id, kind, title, body, payload, href,
            read_at::text, created_at::text
     FROM notifications
     WHERE user_id = ${userId}
+      AND kind NOT LIKE '%_ack'
     ORDER BY created_at DESC
     LIMIT ${limit}
   `) as Array<Omit<NotificationRow, 'payload'> & { payload: unknown }>;
@@ -391,9 +363,12 @@ export async function listNotifications(userId: string, limit = 40): Promise<Not
 export async function countUnreadNotifications(userId: string): Promise<number> {
   if (!sql) return 0;
   await ensureSocialTables();
+  await purgeStaleTeacherInviteNotifications(userId);
   const rows = (await sql`
     SELECT COUNT(*)::int AS n FROM notifications
-    WHERE user_id = ${userId} AND read_at IS NULL
+    WHERE user_id = ${userId}
+      AND read_at IS NULL
+      AND kind NOT LIKE '%_ack'
   `) as Array<{ n: number }>;
   return Number(rows[0]?.n ?? 0);
 }
@@ -401,12 +376,19 @@ export async function countUnreadNotifications(userId: string): Promise<number> 
 export async function markNotificationRead(userId: string, notificationId: string): Promise<boolean> {
   if (!sql) return false;
   await ensureSocialTables();
-  const rows = (await sql`
-    UPDATE notifications SET read_at = NOW()
-    WHERE id = ${notificationId}::uuid AND user_id = ${userId} AND read_at IS NULL
-    RETURNING id
-  `) as unknown[];
-  return rows.length > 0;
+  // Guard against invalid UUID casts (bad client ids).
+  if (!/^[0-9a-f-]{36}$/i.test(notificationId.trim())) return false;
+  try {
+    const rows = (await sql`
+      UPDATE notifications SET read_at = NOW()
+      WHERE id = ${notificationId}::uuid AND user_id = ${userId} AND read_at IS NULL
+      RETURNING id
+    `) as unknown[];
+    return rows.length > 0;
+  } catch (err) {
+    logger.error('[social-db] markNotificationRead failed', { err: String(err) });
+    return false;
+  }
 }
 
 export async function markAllNotificationsRead(userId: string): Promise<number> {
@@ -544,81 +526,249 @@ export async function sendTeacherInvite(input: {
   }
 }
 
+export async function dismissTeacherInviteNotifications(input: {
+  studentId: string;
+  linkId?: string | null;
+  teacherId?: string | null;
+  notificationId?: string | null;
+}): Promise<void> {
+  if (!sql) return;
+  await ensureSocialTables();
+  try {
+    if (input.notificationId) {
+      await sql`
+        DELETE FROM notifications
+        WHERE user_id = ${input.studentId}
+          AND id::text = ${input.notificationId}
+      `;
+    }
+    // Only the actionable student invite kind — never teacher-side accepted/declined rows.
+    if (input.linkId) {
+      await sql`
+        DELETE FROM notifications
+        WHERE user_id = ${input.studentId}
+          AND kind = 'teacher_invite'
+          AND payload->>'link_id' = ${input.linkId}
+      `;
+    }
+    if (input.teacherId) {
+      await sql`
+        DELETE FROM notifications
+        WHERE user_id = ${input.studentId}
+          AND kind = 'teacher_invite'
+          AND payload->>'teacher_id' = ${input.teacherId}
+      `;
+    }
+    if (!input.linkId && !input.teacherId && !input.notificationId) {
+      await sql`
+        DELETE FROM notifications
+        WHERE user_id = ${input.studentId}
+          AND kind = 'teacher_invite'
+      `;
+    }
+  } catch (err) {
+    logger.error('[social-db] dismissTeacherInviteNotifications failed', { err: String(err) });
+  }
+}
+
+/** Drop stale invite rows whose link is no longer pending (self-heal inbox). */
+export async function purgeStaleTeacherInviteNotifications(userId: string): Promise<void> {
+  if (!sql) return;
+  await ensureSocialTables();
+  try {
+    await sql`
+      DELETE FROM notifications n
+      WHERE n.user_id = ${userId}
+        AND n.kind = 'teacher_invite'
+        AND (
+          NOT EXISTS (
+            SELECT 1
+            FROM teacher_student_links l
+            WHERE l.student_id = ${userId}
+              AND l.status = 'pending'
+          )
+          OR (
+            COALESCE(n.payload->>'link_id', '') <> ''
+            AND NOT EXISTS (
+              SELECT 1
+              FROM teacher_student_links l
+              WHERE l.student_id = ${userId}
+                AND l.status = 'pending'
+                AND l.id::text = n.payload->>'link_id'
+            )
+          )
+          OR (
+            COALESCE(n.payload->>'link_id', '') = ''
+            AND COALESCE(n.payload->>'teacher_id', '') <> ''
+            AND NOT EXISTS (
+              SELECT 1
+              FROM teacher_student_links l
+              WHERE l.student_id = ${userId}
+                AND l.status = 'pending'
+                AND l.teacher_id = n.payload->>'teacher_id'
+            )
+          )
+        )
+    `;
+  } catch (err) {
+    logger.error('[social-db] purgeStaleTeacherInviteNotifications failed', {
+      err: String(err),
+    });
+  }
+}
+
+type TeacherInviteRespondOk = {
+  ok: true;
+  status: 'accepted' | 'declined' | 'already_accepted' | 'already_declined' | 'cleared';
+};
+
 export async function respondTeacherInvite(input: {
   studentId: string;
   linkId: string;
   accept: boolean;
   notificationId?: string | null;
-}): Promise<{ ok: true } | { ok: false; error: string }> {
+}): Promise<TeacherInviteRespondOk | { ok: false; error: string; code: 'not_found' | 'internal' }> {
   const s = requireSql();
   await ensureSocialTables();
-  const linkId = input.linkId.trim();
 
-  // Prefer exact id match; fall back to the student's sole pending invite
-  // (handles malformed/missing payload link_id from older notifications).
-  let rows = (await s`
-    SELECT id::text, teacher_id, student_id, status
-    FROM teacher_student_links
-    WHERE id::text = ${linkId} AND student_id = ${input.studentId}
-    LIMIT 1
-  `) as Array<{ id: string; teacher_id: string; student_id: string; status: string }>;
+  let linkId = input.linkId.trim();
+  let teacherIdHint: string | null = null;
 
-  if (!rows[0]) {
-    rows = (await s`
+  if (input.notificationId) {
+    const notifRows = (await s`
+      SELECT payload
+      FROM notifications
+      WHERE id::text = ${input.notificationId}
+        AND user_id = ${input.studentId}
+      LIMIT 1
+    `) as Array<{ payload: unknown }>;
+    const payload = normalizeNotifPayload(notifRows[0]?.payload);
+    const fromPayload = payloadLinkId(payload);
+    if (!linkId && fromPayload) linkId = fromPayload;
+    if (typeof payload.teacher_id === 'string' && payload.teacher_id.trim()) {
+      teacherIdHint = payload.teacher_id.trim();
+    }
+  }
+
+  type LinkRow = { id: string; teacher_id: string; student_id: string; status: string };
+
+  async function findPending(): Promise<LinkRow | null> {
+    const pending = (await s`
       SELECT id::text, teacher_id, student_id, status
       FROM teacher_student_links
       WHERE student_id = ${input.studentId} AND status = 'pending'
       ORDER BY created_at DESC
       LIMIT 1
-    `) as Array<{ id: string; teacher_id: string; student_id: string; status: string }>;
+    `) as LinkRow[];
+    return pending[0] ?? null;
   }
 
-  const link = rows[0];
-  if (!link) {
-    return { ok: false, error: 'Invite not found.' };
+  let rows: LinkRow[] = linkId
+    ? ((await s`
+        SELECT id::text, teacher_id, student_id, status
+        FROM teacher_student_links
+        WHERE id::text = ${linkId} AND student_id = ${input.studentId}
+        LIMIT 1
+      `) as LinkRow[])
+    : [];
+
+  if (!rows[0] && teacherIdHint) {
+    rows = (await s`
+      SELECT id::text, teacher_id, student_id, status
+      FROM teacher_student_links
+      WHERE student_id = ${input.studentId}
+        AND teacher_id = ${teacherIdHint}
+      ORDER BY
+        CASE status WHEN 'pending' THEN 0 WHEN 'accepted' THEN 1 ELSE 2 END,
+        updated_at DESC
+      LIMIT 1
+    `) as LinkRow[];
   }
+
+  if (!rows[0]) {
+    const pending = await findPending();
+    if (pending) rows = [pending];
+  }
+
+  let link = rows[0];
+  if (!link) {
+    // Stale notification with no DB row — clear inbox quietly.
+    await dismissTeacherInviteNotifications({
+      studentId: input.studentId,
+      linkId: linkId || null,
+      teacherId: teacherIdHint,
+      notificationId: input.notificationId,
+    });
+    return { ok: true, status: 'cleared' };
+  }
+
+  // Stale link_id must not block a different live pending invite.
   if (link.status !== 'pending') {
-    return { ok: false, error: 'Invite already handled.' };
+    const pending = await findPending();
+    if (pending && pending.id !== link.id) {
+      link = pending;
+    } else if (link.status === 'accepted' || link.status === 'declined') {
+      await dismissTeacherInviteNotifications({
+        studentId: input.studentId,
+        linkId: link.id,
+        teacherId: link.teacher_id,
+        notificationId: input.notificationId,
+      });
+      return {
+        ok: true,
+        status: link.status === 'accepted' ? 'already_accepted' : 'already_declined',
+      };
+    } else {
+      await dismissTeacherInviteNotifications({
+        studentId: input.studentId,
+        linkId: link.id,
+        teacherId: link.teacher_id,
+        notificationId: input.notificationId,
+      });
+      return { ok: true, status: 'cleared' };
+    }
   }
 
   const next = input.accept ? 'accepted' : 'declined';
-  await s`
-    UPDATE teacher_student_links
-    SET status = ${next}, responded_at = NOW(), updated_at = NOW()
-    WHERE id::text = ${link.id}
-  `;
-
-  // Resolve the student notification so Accept/Deny disappear.
-  const resolvedPayload = JSON.stringify({
-    link_id: link.id,
-    teacher_id: link.teacher_id,
-    resolved: true,
-    accepted: input.accept,
-  });
-  if (input.notificationId) {
-    await s`
-      UPDATE notifications
-      SET read_at = COALESCE(read_at, NOW()),
-          kind = ${input.accept ? 'teacher_invite_accepted_ack' : 'teacher_invite_declined_ack'},
-          payload = ${resolvedPayload}::jsonb,
-          title = ${input.accept ? 'אישרת את חיבור המורה' : 'דחית את חיבור המורה'}
-      WHERE id::text = ${input.notificationId} AND user_id = ${input.studentId}
-    `;
-  } else {
-    await s`
-      UPDATE notifications
-      SET read_at = COALESCE(read_at, NOW()),
-          kind = ${input.accept ? 'teacher_invite_accepted_ack' : 'teacher_invite_declined_ack'},
-          payload = ${resolvedPayload}::jsonb,
-          title = ${input.accept ? 'אישרת את חיבור המורה' : 'דחית את חיבור המורה'}
-      WHERE user_id = ${input.studentId}
-        AND kind = 'teacher_invite'
-        AND (
-          payload->>'link_id' = ${link.id}
-          OR payload->>'teacher_id' = ${link.teacher_id}
-        )
-    `;
+  let updated: LinkRow[];
+  try {
+    updated = (await s`
+      UPDATE teacher_student_links
+      SET status = ${next}, responded_at = NOW(), updated_at = NOW()
+      WHERE id::text = ${link.id} AND status = 'pending'
+      RETURNING id::text, teacher_id, student_id, status
+    `) as LinkRow[];
+  } catch (err) {
+    logger.error('[social-db] respondTeacherInvite update failed', { err: String(err) });
+    return { ok: false, error: 'Internal error.', code: 'internal' };
   }
+
+  // Race: another request won — clear inbox using the actual DB status.
+  if (!updated[0]) {
+    const again = (await s`
+      SELECT id::text, teacher_id, student_id, status
+      FROM teacher_student_links
+      WHERE id::text = ${link.id} AND student_id = ${input.studentId}
+      LIMIT 1
+    `) as LinkRow[];
+    const actual = again[0];
+    await dismissTeacherInviteNotifications({
+      studentId: input.studentId,
+      linkId: link.id,
+      teacherId: link.teacher_id,
+      notificationId: input.notificationId,
+    });
+    if (actual?.status === 'accepted') return { ok: true, status: 'already_accepted' };
+    if (actual?.status === 'declined') return { ok: true, status: 'already_declined' };
+    return { ok: true, status: 'cleared' };
+  }
+
+  await dismissTeacherInviteNotifications({
+    studentId: input.studentId,
+    linkId: link.id,
+    teacherId: link.teacher_id,
+    notificationId: input.notificationId,
+  });
 
   const student = await getAppUser(input.studentId);
   await createNotification({
@@ -631,7 +781,7 @@ export async function respondTeacherInvite(input: {
     payload: { link_id: link.id, student_id: input.studentId },
     href: input.accept ? `/educator/students/${input.studentId}` : '/educator',
   });
-  return { ok: true };
+  return { ok: true, status: next };
 }
 
 export async function disconnectTeacherStudent(input: {
@@ -722,34 +872,83 @@ export async function respondFriendRequest(input: {
   userId: string;
   friendshipId: string;
   accept: boolean;
-}): Promise<{ ok: true } | { ok: false; error: string }> {
+  notificationId?: string | null;
+}): Promise<
+  | { ok: true; status: 'accepted' | 'declined' | 'already_accepted' | 'already_declined' | 'cleared' }
+  | { ok: false; error: string; code: 'not_found' | 'internal' }
+> {
   const s = requireSql();
   await ensureSocialTables();
+  const friendshipId = input.friendshipId.trim();
+
   const rows = (await s`
     SELECT id::text, requester_id, addressee_id, status
-    FROM friendships WHERE id::text = ${input.friendshipId.trim()} LIMIT 1
+    FROM friendships WHERE id::text = ${friendshipId} LIMIT 1
   `) as Array<{ id: string; requester_id: string; addressee_id: string; status: string }>;
   const f = rows[0];
-  if (!f || f.addressee_id !== input.userId || f.status !== 'pending') {
-    return { ok: false, error: 'Request not found.' };
+
+  async function dismissFriendRequestNotifs(fid: string) {
+    try {
+      if (input.notificationId) {
+        await s`
+          DELETE FROM notifications
+          WHERE user_id = ${input.userId}
+            AND id::text = ${input.notificationId}
+        `;
+      }
+      await s`
+        DELETE FROM notifications
+        WHERE user_id = ${input.userId}
+          AND kind = 'friend_request'
+          AND payload->>'friendship_id' = ${fid}
+      `;
+    } catch (err) {
+      logger.error('[social-db] dismissFriendRequestNotifs failed', { err: String(err) });
+    }
   }
+
+  if (!f || f.addressee_id !== input.userId) {
+    await dismissFriendRequestNotifs(friendshipId);
+    return { ok: true, status: 'cleared' };
+  }
+
+  if (f.status === 'accepted' || f.status === 'declined') {
+    await dismissFriendRequestNotifs(f.id);
+    return {
+      ok: true,
+      status: f.status === 'accepted' ? 'already_accepted' : 'already_declined',
+    };
+  }
+
+  if (f.status !== 'pending') {
+    await dismissFriendRequestNotifs(f.id);
+    return { ok: true, status: 'cleared' };
+  }
+
   const next = input.accept ? 'accepted' : 'declined';
-  await s`
-    UPDATE friendships
-    SET status = ${next}, responded_at = NOW(), updated_at = NOW()
-    WHERE id::text = ${f.id}
-  `;
-  // Resolve the addressee's friend_request notification.
-  await s`
-    UPDATE notifications
-    SET read_at = COALESCE(read_at, NOW()),
-        kind = ${input.accept ? 'friend_accepted_ack' : 'friend_declined_ack'},
-        title = ${input.accept ? 'אישרת את בקשת החברות' : 'דחית את בקשת החברות'},
-        payload = ${JSON.stringify({ friendship_id: f.id, resolved: true, accepted: input.accept })}::jsonb
-    WHERE user_id = ${input.userId}
-      AND kind = 'friend_request'
-      AND payload->>'friendship_id' = ${f.id}
-  `;
+  let updated: Array<{ id: string }>;
+  try {
+    updated = (await s`
+      UPDATE friendships
+      SET status = ${next}, responded_at = NOW(), updated_at = NOW()
+      WHERE id::text = ${f.id} AND status = 'pending'
+      RETURNING id::text
+    `) as Array<{ id: string }>;
+  } catch (err) {
+    logger.error('[social-db] respondFriendRequest update failed', { err: String(err) });
+    return { ok: false, error: 'Internal error.', code: 'internal' };
+  }
+
+  if (!updated[0]) {
+    await dismissFriendRequestNotifs(f.id);
+    return {
+      ok: true,
+      status: input.accept ? 'already_accepted' : 'already_declined',
+    };
+  }
+
+  await dismissFriendRequestNotifs(f.id);
+
   const me = await getAppUser(input.userId);
   await createNotification({
     userId: f.requester_id,
@@ -759,7 +958,7 @@ export async function respondFriendRequest(input: {
     payload: { friendship_id: f.id },
     href: '/app/friends',
   });
-  return { ok: true };
+  return { ok: true, status: next };
 }
 
 export async function listFriends(userId: string): Promise<AppUser[]> {

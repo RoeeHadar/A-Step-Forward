@@ -69,11 +69,25 @@ export function FriendsPageClient() {
   }
 
   async function respond(friendshipId: string, accept: boolean) {
-    await fetch('/api/social/friend/respond', {
+    setMsg(null);
+    const res = await fetch('/api/social/friend/respond', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ friendship_id: friendshipId, accept }),
     });
+    if (!res.ok) {
+      const data = (await res.json().catch(() => ({}))) as { code?: string; error?: string };
+      setMsg(
+        data.code === 'internal' || res.status >= 500
+          ? isHe
+            ? 'שגיאה פנימית. נסו שוב בעוד רגע.'
+            : 'Internal error. Please try again in a moment.'
+          : isHe
+            ? 'לא הצלחנו לטפל בבקשה. נסו שוב.'
+            : data.error || 'Could not process this request.',
+      );
+      return;
+    }
     reload(q);
   }
 

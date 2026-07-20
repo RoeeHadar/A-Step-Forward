@@ -31,6 +31,11 @@ export async function POST(req: Request) {
     accept: body.accept,
     notificationId: body.notification_id ?? null,
   });
-  if (!result.ok) return Response.json({ error: result.error }, { status: 400 });
-  return Response.json({ ok: true });
+  if (!result.ok) {
+    return Response.json(
+      { error: result.error, code: result.code },
+      { status: result.code === 'not_found' ? 404 : 500 },
+    );
+  }
+  return Response.json({ ok: true, status: result.status });
 }

@@ -10,7 +10,7 @@ export async function POST(req: Request) {
   if (!userId) return Response.json({ error: 'Unauthorized' }, { status: 401 });
   if (!dbConfigured) return Response.json({ error: 'DB unavailable' }, { status: 503 });
 
-  let body: { friendship_id?: string; accept?: boolean };
+  let body: { friendship_id?: string; accept?: boolean; notification_id?: string };
   try {
     body = (await req.json()) as typeof body;
   } catch {
@@ -23,7 +23,13 @@ export async function POST(req: Request) {
     userId,
     friendshipId: body.friendship_id,
     accept: body.accept,
+    notificationId: body.notification_id ?? null,
   });
-  if (!result.ok) return Response.json({ error: result.error }, { status: 400 });
-  return Response.json({ ok: true });
+  if (!result.ok) {
+    return Response.json(
+      { error: result.error, code: result.code },
+      { status: result.code === 'not_found' ? 404 : 500 },
+    );
+  }
+  return Response.json({ ok: true, status: result.status });
 }
