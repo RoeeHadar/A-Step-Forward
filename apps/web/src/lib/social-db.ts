@@ -607,7 +607,7 @@ export async function sendFriendRequest(input: {
       userId: input.addresseeId,
       kind: 'friend_request',
       title: 'בקשת חברות / Friend request',
-      body: `${a.nickname || a.real_name} (@${a.username}) רוצה להיות חבר/ה.`,
+      body: `${a.real_name} (@${a.username}) רוצה להיות חבר/ה.`,
       payload: { friendship_id: id, requester_id: input.requesterId },
       href: '/app/friends',
     });
@@ -644,7 +644,7 @@ export async function respondFriendRequest(input: {
     userId: f.requester_id,
     kind: input.accept ? 'friend_accepted' : 'friend_declined',
     title: input.accept ? 'בקשת החברות אושרה' : 'בקשת החברות נדחתה',
-    body: me ? `${me.nickname || me.real_name} (@${me.username})` : '',
+    body: me ? `${me.real_name} (@${me.username})` : '',
     payload: { friendship_id: f.id },
     href: '/app/friends',
   });
@@ -664,7 +664,7 @@ export async function listFriends(userId: string): Promise<AppUser[]> {
     END
     WHERE f.status = 'accepted'
       AND (f.requester_id = ${userId} OR f.addressee_id = ${userId})
-    ORDER BY COALESCE(u.nickname, u.real_name) ASC
+    ORDER BY u.real_name ASC
   `) as AppUser[];
 }
 

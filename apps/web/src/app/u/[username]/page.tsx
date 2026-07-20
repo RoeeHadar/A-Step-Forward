@@ -35,10 +35,7 @@ export default async function PublicProfilePage({
     user.role === 'educator' ? countTeacherStudents(user.clerk_user_id) : Promise.resolve(0),
   ]);
 
-  const display =
-    user.role === 'learner'
-      ? user.nickname?.trim() || user.real_name
-      : user.real_name;
+  const display = user.real_name;
 
   return (
     <div className="flex min-h-screen flex-col">

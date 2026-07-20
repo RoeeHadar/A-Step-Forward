@@ -78,7 +78,7 @@ export function FriendsPageClient() {
   }
 
   function displayName(u: FriendUser) {
-    return u.nickname?.trim() || u.real_name;
+    return u.real_name;
   }
 
   return (

@@ -25,7 +25,6 @@ export async function POST(req: Request) {
     role?: string;
     username?: string;
     real_name?: string;
-    nickname?: string | null;
     about_me?: string | null;
   };
   try {
@@ -55,7 +54,8 @@ export async function POST(req: Request) {
       role,
       username,
       realName,
-      nickname: role === 'learner' ? body.nickname : null,
+      // Username is the public handle; no separate nickname.
+      nickname: null,
       aboutMe: role === 'educator' ? body.about_me : null,
       profileComplete: true,
     });

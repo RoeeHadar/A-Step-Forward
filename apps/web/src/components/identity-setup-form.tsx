@@ -25,7 +25,6 @@ export function IdentitySetupForm({
   const [role, setRole] = useState<RoleChoice>(initialRole ?? 'learner');
   const [username, setUsername] = useState('');
   const [realName, setRealName] = useState('');
-  const [nickname, setNickname] = useState('');
   const [aboutMe, setAboutMe] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -42,7 +41,6 @@ export function IdentitySetupForm({
           role,
           username,
           real_name: realName,
-          nickname: nickname || null,
           about_me: role === 'educator' ? aboutMe || null : null,
         }),
       });
@@ -111,22 +109,6 @@ export function IdentitySetupForm({
 
       <div className="space-y-4">
         <label className="block space-y-1.5">
-          <span className="text-sm font-medium">{isHe ? 'שם משתמש' : 'Username'}</span>
-          <Input
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="student_anna"
-            required
-            autoComplete="username"
-            dir="ltr"
-            className="font-mono"
-          />
-          <span className="text-xs text-muted-foreground">
-            {isHe ? '3–24 תווים, אותיות באנגלית, מספרים וקו תחתון' : '3–24 chars, letters, numbers, underscore'}
-          </span>
-        </label>
-
-        <label className="block space-y-1.5">
           <span className="text-sm font-medium">{isHe ? 'שם מלא (אמיתי)' : 'Real full name'}</span>
           <Input
             value={realName}
@@ -142,18 +124,25 @@ export function IdentitySetupForm({
           </span>
         </label>
 
-        {role === 'learner' ? (
-          <label className="block space-y-1.5">
-            <span className="text-sm font-medium">
-              {isHe ? 'כינוי (אופציונלי לחברים)' : 'Nickname (optional, for friends)'}
-            </span>
-            <Input
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-              placeholder={isHe ? 'אני' : 'Annie'}
-            />
-          </label>
-        ) : (
+        <label className="block space-y-1.5">
+          <span className="text-sm font-medium">{isHe ? 'שם משתמש' : 'Username'}</span>
+          <Input
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="student_anna"
+            required
+            autoComplete="username"
+            dir="ltr"
+            className="font-mono"
+          />
+          <span className="text-xs text-muted-foreground">
+            {isHe
+              ? 'הכינוי במערכת — 3–24 תווים, אותיות באנגלית, מספרים וקו תחתון'
+              : 'Your handle on the site — 3–24 chars, letters, numbers, underscore'}
+          </span>
+        </label>
+
+        {role === 'educator' ? (
           <label className="block space-y-1.5">
             <span className="text-sm font-medium">
               {isHe ? 'אודותיי (אופציונלי)' : 'About me (optional)'}
@@ -166,7 +155,7 @@ export function IdentitySetupForm({
               placeholder={isHe ? 'מורה למתמטיקה לבגרות…' : 'Math teacher for Bagrut…'}
             />
           </label>
-        )}
+        ) : null}
       </div>
 
       {error ? (
