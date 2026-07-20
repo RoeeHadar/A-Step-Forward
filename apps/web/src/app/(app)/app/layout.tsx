@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getAuthContext } from '@/lib/auth';
+import { ensureIdentityComplete, ensureLearnerNotTeacher } from '@/lib/identity-gate';
 import { ensureOnboarded } from '@/lib/onboarding-gate';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
@@ -14,6 +15,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   }
   if (!auth) redirect('/sign-in');
 
+  await ensureIdentityComplete(auth.userId, '/app');
+  await ensureLearnerNotTeacher(auth.userId);
   await ensureOnboarded(auth.learnerId, '/app');
 
   return (

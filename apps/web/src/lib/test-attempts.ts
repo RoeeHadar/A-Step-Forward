@@ -58,12 +58,13 @@ export interface TestAttemptListItem {
   kind: string;
   plan_id: string | null;
   week_num: number | null;
-  score: number;
-  passed: boolean;
+  score: number | null;
+  passed: boolean | null;
   pass_threshold: number;
   weak_concepts: string[];
   question_count: number;
   created_at: string;
+  grading_status?: 'pending' | 'grading' | 'complete' | 'failed';
 }
 
 export interface TestAttemptDetail extends TestAttemptListItem {
@@ -105,6 +106,11 @@ async function ensureTable(): Promise<boolean> {
       )
     `;
     await sql`CREATE INDEX IF NOT EXISTS ix_test_attempts_learner ON test_attempts (learner_id, created_at DESC)`;
+    await sql`ALTER TABLE test_attempts ADD COLUMN IF NOT EXISTS grading_status TEXT NOT NULL DEFAULT 'complete'`;
+    await sql`ALTER TABLE test_attempts ADD COLUMN IF NOT EXISTS item_feedback JSONB NOT NULL DEFAULT '{}'::jsonb`;
+    await sql`ALTER TABLE test_attempts ADD COLUMN IF NOT EXISTS item_scores JSONB NOT NULL DEFAULT '{}'::jsonb`;
+    await sql`ALTER TABLE test_attempts ADD COLUMN IF NOT EXISTS open_item_ids TEXT[] NOT NULL DEFAULT '{}'`;
+    await sql`ALTER TABLE test_attempts ADD COLUMN IF NOT EXISTS grading_locked_until TIMESTAMPTZ`;
     ensured = true;
     return true;
   } catch (err) {
@@ -167,10 +173,12 @@ export async function listTestAttempts(
   limit = 30,
 ): Promise<TestAttemptListItem[]> {
   if (!sql) return [];
+  await ensureTable();
   try {
     const rows = (await sql`
       SELECT id::text, kind, plan_id, week_num, score::float AS score, passed,
              pass_threshold::float AS pass_threshold, weak_concepts,
+             COALESCE(grading_status, 'complete') AS grading_status,
              jsonb_array_length(questions) AS question_count, created_at
       FROM test_attempts
       WHERE learner_id = ${learnerId}
@@ -188,11 +196,13 @@ export async function getTestAttempt(
   attemptId: string,
 ): Promise<TestAttemptDetail | null> {
   if (!sql) return null;
+  await ensureTable();
   try {
     const rows = (await sql`
       SELECT id::text, kind, plan_id, week_num, score::float AS score, passed,
              pass_threshold::float AS pass_threshold, weak_concepts, locale,
              per_topic, questions, answers,
+             COALESCE(grading_status, 'complete') AS grading_status,
              jsonb_array_length(questions) AS question_count, created_at
       FROM test_attempts
       WHERE id = ${attemptId}::uuid AND learner_id = ${learnerId}
@@ -268,16 +278,78 @@ export async function getLatestGateWeakConcepts(
 }
 
 function mapListRow(row: Record<string, unknown>): TestAttemptListItem {
+  const statusRaw = typeof row.grading_status === 'string' ? row.grading_status : 'complete';
+  const grading_status =
+    statusRaw === 'pending' ||
+    statusRaw === 'grading' ||
+    statusRaw === 'failed' ||
+    statusRaw === 'complete'
+      ? statusRaw
+      : 'complete';
+  const complete = grading_status === 'complete';
   return {
     id: String(row.id),
     kind: typeof row.kind === 'string' ? row.kind : 'weekly_gate',
     plan_id: row.plan_id == null ? null : String(row.plan_id),
     week_num: row.week_num == null ? null : Number(row.week_num),
-    score: Number(row.score ?? 0),
-    passed: Boolean(row.passed),
+    score: complete ? Number(row.score ?? 0) : null,
+    passed: complete ? Boolean(row.passed) : null,
     pass_threshold: Number(row.pass_threshold ?? GATE_PASS_THRESHOLD),
     weak_concepts: Array.isArray(row.weak_concepts) ? (row.weak_concepts as string[]) : [],
     question_count: Number(row.question_count ?? 0),
     created_at: String(row.created_at),
+    grading_status,
   };
+}
+
+/**
+ * Teacher override: feedback + optional score/pass adjustment (audit elsewhere).
+ * Pass `reopen: true` to clear pass/fail and mark the attempt reopened for retake UX.
+ */
+export async function teacherUpdateTestAttempt(input: {
+  learnerId: string;
+  attemptId: string;
+  feedbackText: string;
+  score?: number | null;
+  passed?: boolean | null;
+  reopen?: boolean;
+}): Promise<boolean> {
+  if (!sql) return false;
+  await ensureTable();
+  try {
+    const feedback = {
+      teacher_feedback: input.feedbackText.trim().slice(0, 8000),
+      updated_at: new Date().toISOString(),
+      ...(input.reopen ? { reopened_by_teacher: true } : {}),
+    };
+    if (input.reopen) {
+      await sql`
+        UPDATE test_attempts
+        SET feedback = COALESCE(feedback, '{}'::jsonb) || ${JSON.stringify(feedback)}::jsonb,
+            passed = NULL,
+            grading_status = 'reopened'
+        WHERE id = ${input.attemptId}::uuid AND learner_id = ${input.learnerId}
+      `;
+    } else if (typeof input.score === 'number' && typeof input.passed === 'boolean') {
+      await sql`
+        UPDATE test_attempts
+        SET feedback = COALESCE(feedback, '{}'::jsonb) || ${JSON.stringify(feedback)}::jsonb,
+            score = ${input.score},
+            passed = ${input.passed},
+            grading_status = 'complete'
+        WHERE id = ${input.attemptId}::uuid AND learner_id = ${input.learnerId}
+      `;
+    } else {
+      await sql`
+        UPDATE test_attempts
+        SET feedback = COALESCE(feedback, '{}'::jsonb) || ${JSON.stringify(feedback)}::jsonb,
+            grading_status = 'complete'
+        WHERE id = ${input.attemptId}::uuid AND learner_id = ${input.learnerId}
+      `;
+    }
+    return true;
+  } catch (err) {
+    logger.error('[test-attempts] teacherUpdateTestAttempt failed', { err: String(err) });
+    return false;
+  }
 }

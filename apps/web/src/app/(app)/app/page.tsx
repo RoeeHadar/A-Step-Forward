@@ -15,6 +15,8 @@ import {
 } from '@/lib/neon-db';
 import { PlanChangeBanner } from '@/components/plan-change-banner';
 import { PlanAdjustmentNotice } from '@/components/plan-adjustment-notice';
+import { getAcceptedTeacherForStudent, maybeNotifyWeeklyGateDue } from '@/lib/social-db';
+import { currentActiveWeek } from '@/lib/learning-path-types';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,7 +37,7 @@ export default async function DashboardPage() {
   }
   if (!auth) redirect('/sign-in');
 
-  const [profile, goalStatus, plan, streak, latestPlanChange] = await Promise.all([
+  const [profile, goalStatus, plan, streak, latestPlanChange, teacher] = await Promise.all([
     dbConfigured
       ? getLearnerProfile(auth.learnerId).catch(() => null)
       : Promise.resolve(null),
@@ -51,7 +53,20 @@ export default async function DashboardPage() {
     dbConfigured
       ? getLatestPlanChange(auth.learnerId).catch(() => null)
       : Promise.resolve(null),
+    dbConfigured
+      ? getAcceptedTeacherForStudent(auth.learnerId).catch(() => null)
+      : Promise.resolve(null),
   ]);
+
+  const activeWeek = plan ? currentActiveWeek(plan) : undefined;
+  if (dbConfigured && activeWeek?.quiz_due_at && activeWeek.status === 'active') {
+    void maybeNotifyWeeklyGateDue({
+      learnerId: auth.learnerId,
+      weekId: activeWeek.id,
+      weekNumber: activeWeek.week_number,
+      quizDueAt: activeWeek.quiz_due_at,
+    }).catch(() => undefined);
+  }
 
   return (
     <>
@@ -73,6 +88,11 @@ export default async function DashboardPage() {
         pointsGroup={profile?.points_group ?? null}
         subjects={profile?.subjects ?? null}
         goal={profile?.goal ?? null}
+        teacher={
+          teacher
+            ? { real_name: teacher.real_name, username: teacher.username }
+            : null
+        }
       />
     </>
   );

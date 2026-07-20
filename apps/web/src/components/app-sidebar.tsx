@@ -11,6 +11,8 @@ import {
   TrendingUp,
   ClipboardCheck,
   FileClock,
+  Bell,
+  Users,
 } from 'lucide-react';
 import { cn } from '@asf/ui';
 import { useI18n } from '@/providers/i18n-provider';
@@ -24,6 +26,13 @@ const items = [
   { href: '/app/tests', icon: FileClock, labelKey: 'tests' as const, match: '/app/tests' },
   { href: '/app/memory', icon: Brain, labelKey: 'memory' as const },
   { href: '/app/progress', icon: TrendingUp, labelKey: 'progress' as const },
+  { href: '/app/friends', icon: Users, labelKey: 'friends' as const, match: '/app/friends' },
+  {
+    href: '/app/notifications',
+    icon: Bell,
+    labelKey: 'notifications' as const,
+    match: '/app/notifications',
+  },
 ];
 
 export function AppSidebar() {

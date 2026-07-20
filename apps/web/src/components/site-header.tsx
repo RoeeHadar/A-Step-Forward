@@ -9,11 +9,11 @@ import { cn } from '@asf/ui';
 import { useTheme } from '@/providers/theme-provider';
 import { useI18n } from '@/providers/i18n-provider';
 import { useScrollY } from '@/hooks/use-scroll-y';
+import { NotificationsBell } from '@/components/notifications-bell';
 import type { Locale } from '@/i18n/config';
 
 const publicNavLinks = [
   { href: '/learn', labelKey: 'learn' as const },
-  { href: '/book', labelKey: 'book' as const },
 ];
 
 const appNavLinks = [
@@ -148,12 +148,6 @@ export function SiteHeader() {
           </Button>
 
           <SignedOut>
-            <Link
-              href="/book"
-              className="hidden rounded-lg border border-primary/40 bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary sm:inline-flex"
-            >
-              {messages.nav.book}
-            </Link>
             <SignInButton mode="modal">
               <Button
                 variant="ghost"
@@ -172,6 +166,13 @@ export function SiteHeader() {
           </SignedOut>
 
           <SignedIn>
+            <NotificationsBell
+              href={
+                pathname.startsWith('/educator')
+                  ? '/educator/notifications'
+                  : '/app/notifications'
+              }
+            />
             <UserButton afterSignOutUrl="/" />
           </SignedIn>
         </div>

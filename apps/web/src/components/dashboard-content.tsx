@@ -10,6 +10,7 @@ import type { AgentName } from '@asf/schemas/agents';
 import type { LearningPlan, PlanConcept } from '@asf/schemas/learning_path';
 import { useI18n } from '@/providers/i18n-provider';
 import { DueReviewsWidget } from '@/components/due-reviews-widget';
+import { TeacherChip } from '@/components/teacher-chip';
 import { currentActiveWeek } from '@/lib/learning-path-types';
 import { examPrepContext } from '@/lib/exam-prep';
 import { ExamPrepQuizBanner } from '@/components/exam-prep-quiz-banner';
@@ -325,6 +326,7 @@ export function DashboardContent({
   pointsGroup,
   subjects,
   goal,
+  teacher,
 }: {
   displayName: string;
   plan: LearningPlan | null;
@@ -334,6 +336,7 @@ export function DashboardContent({
   pointsGroup?: string | null;
   subjects?: string[] | null;
   goal?: string | null;
+  teacher?: { real_name: string; username: string } | null;
 }) {
   const { locale } = useI18n();
   const isHe = locale === 'he';
@@ -413,6 +416,9 @@ export function DashboardContent({
           ) : null}
 
           <div className="flex flex-wrap items-center gap-3 pt-1">
+            {teacher ? (
+              <TeacherChip realName={teacher.real_name} username={teacher.username} />
+            ) : null}
             {streakDays > 0 ? (
               <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-4 py-2 text-sm font-medium backdrop-blur-sm">
                 <span aria-hidden>🔥</span>

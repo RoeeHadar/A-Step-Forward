@@ -18,6 +18,8 @@ const messages = {
       signUp: 'Get started',
       learn: 'Learn',
       book: 'Book a Lesson',
+      notifications: 'Notifications',
+      friends: 'Friends',
     },
     landing: {
       hero: 'Learn with AI agents\nthat remember you',
@@ -302,6 +304,8 @@ const messages = {
       signUp: 'התחל',
       learn: 'לימוד',
       book: 'קביעת שיעור',
+      notifications: 'התראות',
+      friends: 'חברים',
     },
     landing: {
       hero: 'למד עם סוכני AI\nשזוכרים אותך',
