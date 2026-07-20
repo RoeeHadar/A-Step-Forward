@@ -140,6 +140,7 @@ for (const spec of SPECS) {
   const lesson = structuredClone(load(spec.donor));
   lesson.concept_id = spec.id;
   lesson.math_track = ['university', 'calc1'];
+  lesson.subject = 'calculus_1';
   lesson.level = 'advanced';
   lesson.title_en = spec.title_en;
   lesson.title_he = spec.title_he;

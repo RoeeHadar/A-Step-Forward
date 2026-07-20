@@ -18,7 +18,7 @@ const CATALOG_ONLY_IDS = [
 ] as const;
 
 describe('learn route 404 guards', () => {
-  it('lists the five syllabus stubs in the curriculum catalog or title table', () => {
+  it('lists the five calc-1 syllabus concepts in the curriculum catalog or title table', () => {
     for (const id of CATALOG_ONLY_IDS) {
       expect(
         isConceptInCurriculumCatalog(id) || isCatalogTitleConcept(id),
@@ -30,13 +30,13 @@ describe('learn route 404 guards', () => {
     }
   });
 
-  it('resolves category for catalog-only calc-1 concepts', () => {
+  it('resolves category for calc-1 syllabus concepts', () => {
     for (const id of CATALOG_ONLY_IDS) {
       expect(findCategoryIdForConcept(id)).toBe('calculus_1');
     }
   });
 
-  it('maps catalog stubs to /learn/.../concept/... legacy hrefs', () => {
+  it('maps calc-1 syllabus concepts to /learn/calculus_1/concept/... hrefs', () => {
     for (const id of CATALOG_ONLY_IDS) {
       expect(resolveLegacyLessonLearnHref(id)).toBe(`/learn/calculus_1/concept/${id}`);
     }
