@@ -2533,7 +2533,7 @@ export async function fetchConceptsWithExplanations(
 
 // ── AI-authored lessons (table: `lessons` + `lesson_questions`) ───────────────
 
-export type LessonPointsLevel = '3pt' | '4pt' | '5pt' | 'hs_physics' | 'calc1' | 'la';
+export type LessonPointsLevel = '3pt' | '4pt' | '5pt' | 'hs_physics' | 'calc1' | 'la' | 'uni';
 
 export interface LessonSection {
   kind:

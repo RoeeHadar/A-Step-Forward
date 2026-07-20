@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
   aliasRedirectTarget,
+  catalogDedupeKey,
   resolveLessonConceptId,
   resolveVariantLessonId,
+  stripVariantSuffix,
   variantLessonIds,
 } from './lesson-concept-resolve';
 
@@ -35,7 +37,6 @@ describe('aliasRedirectTarget', () => {
 
 describe('resolveVariantLessonId', () => {
   it('returns the canonical lesson when no per-track variant exists', () => {
-    expect(resolveVariantLessonId('vectors_2d', '5pt')).toBe('vectors_2d');
     expect(resolveVariantLessonId('fluids_hydrostatics', '3pt')).toBe('fluids_hydrostatics');
   });
 
@@ -44,17 +45,39 @@ describe('resolveVariantLessonId', () => {
     expect(resolveVariantLessonId('vectors_2d', 'hs_physics')).toBe('vectors_2d');
   });
 
+  it('picks authored __4pt / __5pt / __uni variants when present', () => {
+    expect(resolveVariantLessonId('equations_quadratic', '3pt')).toBe('equations_quadratic');
+    expect(resolveVariantLessonId('equations_quadratic', '4pt')).toBe('equations_quadratic__4pt');
+    expect(resolveVariantLessonId('equations_quadratic', '5pt')).toBe('equations_quadratic__5pt');
+    expect(resolveVariantLessonId('equations_quadratic', 'uni')).toBe('equations_quadratic__uni');
+    expect(resolveVariantLessonId('equations_quadratic', 'calc1')).toBe('equations_quadratic__uni');
+  });
+
   it('never invents a variant id that is not in the lesson index', () => {
-    // Until variants are authored, no `__<track>` id should be returned.
-    for (const level of ['3pt', '4pt', '5pt']) {
-      expect(resolveVariantLessonId('vectors_2d', level)).toBe('vectors_2d');
+    for (const level of ['3pt', '4pt', '5pt', 'uni']) {
+      // fluids has no track variants authored
+      expect(resolveVariantLessonId('fluids_hydrostatics', level)).toBe('fluids_hydrostatics');
     }
   });
 });
 
 describe('variantLessonIds', () => {
-  it('returns an empty list when no variants are authored yet', () => {
-    expect(variantLessonIds('vectors_2d')).toEqual([]);
+  it('lists authored siblings for a first-wave concept', () => {
+    const ids = variantLessonIds('equations_quadratic').map((v) => v.lessonId);
+    expect(ids).toContain('equations_quadratic__4pt');
+    expect(ids).toContain('equations_quadratic__5pt');
+    expect(ids).toContain('equations_quadratic__uni');
+  });
+
+  it('returns an empty list when no variants are authored', () => {
+    expect(variantLessonIds('fluids_hydrostatics')).toEqual([]);
+  });
+});
+
+describe('catalogDedupeKey', () => {
+  it('collapses track variants to the canonical id', () => {
+    expect(catalogDedupeKey('equations_quadratic__4pt')).toBe('equations_quadratic');
+    expect(stripVariantSuffix('algebra_basics__uni')).toBe('algebra_basics');
   });
 });
 
@@ -78,5 +101,15 @@ describe('dedupeConceptIdsForCatalog', () => {
     const { dedupeConceptIdsForCatalog } = await import('./concept-aliases');
     const out = dedupeConceptIdsForCatalog(['vectors_2d', 'vectors_plane', 'fluids_hydrostatics']);
     expect(out).toEqual(['vectors_2d', 'vectors_plane', 'fluids_hydrostatics']);
+  });
+
+  it('collapses __track siblings in a mixed allowlist', async () => {
+    const { dedupeConceptIdsForCatalog } = await import('./concept-aliases');
+    const out = dedupeConceptIdsForCatalog([
+      'equations_quadratic',
+      'equations_quadratic__4pt',
+      'equations_quadratic__5pt',
+    ]);
+    expect(out).toEqual(['equations_quadratic']);
   });
 });

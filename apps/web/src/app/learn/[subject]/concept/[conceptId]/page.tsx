@@ -48,7 +48,7 @@ import {
 } from '@/lib/lesson-concept-resolve';
 
 /** Level values the user can explicitly select via the ?level= toggle. */
-const LEVEL_QUERY_OVERRIDES = new Set<LessonPointsLevel>(['3pt', '4pt', '5pt']);
+const LEVEL_QUERY_OVERRIDES = new Set<LessonPointsLevel>(['3pt', '4pt', '5pt', 'uni']);
 
 function parseLevelQueryParam(
   value: string | string[] | undefined,
@@ -108,16 +108,29 @@ export default async function ConceptPage({
       const profile = await getLearnerProfile(userId);
       const pg = profile?.points_group ?? null;
       if (pg) {
-        const num = String(pg).replace(/pt$/i, '').trim();
+        const raw = String(pg).trim().toLowerCase();
+        const num = raw.replace(/pt$/i, '').trim();
         if (num === '3') learnerLevel = '3pt';
         else if (num === '4') learnerLevel = '4pt';
         else if (num === '5') learnerLevel = '5pt';
+        else if (raw === 'calc1' || raw === 'calc2' || raw === 'la' || raw === 'university') {
+          learnerLevel = 'uni';
+        }
       } else if (profile?.goal) {
         const g = profile.goal.toLowerCase();
         if (g.includes('3')) learnerLevel = '3pt';
         else if (g.includes('4')) learnerLevel = '4pt';
         else if (g.includes('5')) learnerLevel = '5pt';
         else if (g.includes('phys')) learnerLevel = 'hs_physics';
+        else if (
+          g.includes('calc') ||
+          g.includes('university') ||
+          g.includes('אוניבר') ||
+          g.includes('linear algebra') ||
+          g.includes('אלגברה לינארית')
+        ) {
+          learnerLevel = 'uni';
+        }
       }
     }
   } catch {
@@ -147,11 +160,20 @@ export default async function ConceptPage({
     })(),
   ]);
 
-  const indexEntry = getLessonIndexEntry(conceptId) ?? getLessonIndexEntry(canonicalLessonId);
+  const indexEntry =
+    getLessonIndexEntry(variantLessonId) ??
+    getLessonIndexEntry(conceptId) ??
+    getLessonIndexEntry(canonicalLessonId);
   const hasDirectLesson =
     Boolean(indexEntry) ||
+    isConceptInBundle(variantLessonId) ||
     isConceptInBundle(conceptId) ||
-    Boolean(lessonData && lessonData.lesson.concept_id === conceptId);
+    Boolean(
+      lessonData &&
+        (lessonData.lesson.concept_id === conceptId ||
+          lessonData.lesson.concept_id === variantLessonId ||
+          lessonData.lesson.concept_id === canonicalLessonId),
+    );
   const hasAuthoredLesson = hasDirectLesson;
 
   // Catalog-listed syllabus topics (and title-only stubs) must render a coming-soon
@@ -178,8 +200,8 @@ export default async function ConceptPage({
   // jump to the version written for a different Bagrut track (e.g. an "advanced version").
   const trackVariants = variantLessonIds(conceptId);
   const trackLabel: Record<string, string> = isHe
-    ? { '3pt': '3 יח״ל', '4pt': '4 יח״ל', '5pt': '5 יח״ל' }
-    : { '3pt': '3-unit', '4pt': '4-unit', '5pt': '5-unit' };
+    ? { '3pt': '3 יח״ל', '4pt': '4 יח״ל', '5pt': '5 יח״ל', uni: 'אוניברסיטה' }
+    : { '3pt': '3-unit', '4pt': '4-unit', '5pt': '5-unit', uni: 'University' };
 
   return (
     <div className="flex min-h-screen flex-col bg-background">

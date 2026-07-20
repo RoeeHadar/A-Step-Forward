@@ -100,6 +100,9 @@ export function isAliasConceptId(conceptId: string): boolean {
 
 /** Dedupe key for catalog grids — distinct authored lessons must not collapse. */
 export function catalogDedupeKey(conceptId: string): string {
+  // Track variants (`concept__4pt`) collapse to the canonical syllabus id.
+  const stripped = String(conceptId || '').replace(/__(?:3pt|4pt|5pt|uni)$/, '');
+  if (stripped !== conceptId) return stripped;
   if (isConceptInLessonIndex(conceptId)) return conceptId;
   return resolveConceptAliasCanonical(conceptId);
 }
