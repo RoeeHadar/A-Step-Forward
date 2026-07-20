@@ -30,6 +30,8 @@ export function NotificationsBell() {
   const [items, setItems] = useState<Notif[]>([]);
   const [unread, setUnread] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   const archiveHref = pathname.startsWith('/educator')
     ? '/educator/notifications'
@@ -98,24 +100,65 @@ export function NotificationsBell() {
     }
   }
 
-  async function respondTeacher(linkId: string, accept: boolean, notifId: string) {
-    await fetch('/api/social/teacher-invite/respond', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ link_id: linkId, accept }),
-    });
-    await markOne(notifId);
-    reload();
+  async function respondTeacher(n: Notif, accept: boolean) {
+    setActionError(null);
+    setBusyId(n.id);
+    try {
+      const linkId =
+        typeof n.payload.link_id === 'string'
+          ? n.payload.link_id
+          : typeof n.payload.linkId === 'string'
+            ? n.payload.linkId
+            : undefined;
+      const res = await fetch('/api/social/teacher-invite/respond', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          link_id: linkId,
+          notification_id: n.id,
+          accept,
+        }),
+      });
+      const data = (await res.json()) as { error?: string };
+      if (!res.ok) {
+        setActionError(data.error ?? (isHe ? 'הפעולה נכשלה' : 'Action failed'));
+        return;
+      }
+      reload();
+    } finally {
+      setBusyId(null);
+    }
   }
 
-  async function respondFriend(friendshipId: string, accept: boolean, notifId: string) {
-    await fetch('/api/social/friend/respond', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ friendship_id: friendshipId, accept }),
-    });
-    await markOne(notifId);
-    reload();
+  async function respondFriend(n: Notif, accept: boolean) {
+    setActionError(null);
+    setBusyId(n.id);
+    const friendshipId =
+      typeof n.payload.friendship_id === 'string'
+        ? n.payload.friendship_id
+        : typeof n.payload.friendshipId === 'string'
+          ? n.payload.friendshipId
+          : null;
+    if (!friendshipId) {
+      setActionError(isHe ? 'בקשה לא תקינה' : 'Invalid request');
+      setBusyId(null);
+      return;
+    }
+    try {
+      const res = await fetch('/api/social/friend/respond', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ friendship_id: friendshipId, accept }),
+      });
+      const data = (await res.json()) as { error?: string };
+      if (!res.ok) {
+        setActionError(data.error ?? (isHe ? 'הפעולה נכשלה' : 'Action failed'));
+        return;
+      }
+      reload();
+    } finally {
+      setBusyId(null);
+    }
   }
 
   return (
@@ -156,6 +199,10 @@ export function NotificationsBell() {
             </Button>
           </div>
 
+          {actionError ? (
+            <p className="border-b border-border px-3 py-2 text-xs text-destructive">{actionError}</p>
+          ) : null}
+
           <div className="max-h-[min(24rem,70vh)] overflow-y-auto">
             {loading && items.length === 0 ? (
               <p className="px-3 py-6 text-center text-sm text-muted-foreground">
@@ -169,9 +216,10 @@ export function NotificationsBell() {
               <ul>
                 {items.map((n) => {
                   const unreadItem = !n.read_at;
-                  const isActionable =
-                    (n.kind === 'teacher_invite' && typeof n.payload.link_id === 'string') ||
-                    (n.kind === 'friend_request' && typeof n.payload.friendship_id === 'string');
+                  const resolved = n.payload?.resolved === true || n.kind.endsWith('_ack');
+                  const showTeacher = n.kind === 'teacher_invite' && !resolved;
+                  const showFriend = n.kind === 'friend_request' && !resolved;
+                  const isActionable = showTeacher || showFriend;
 
                   return (
                     <li key={n.id} className="border-b border-border/60 last:border-b-0">
@@ -199,13 +247,17 @@ export function NotificationsBell() {
                         </p>
                       </button>
 
-                      {n.kind === 'teacher_invite' && typeof n.payload.link_id === 'string' ? (
+                      {showTeacher ? (
                         <div className="flex gap-2 px-3 pb-2.5">
                           <Button
                             type="button"
                             size="sm"
                             className="h-7"
-                            onClick={() => void respondTeacher(String(n.payload.link_id), true, n.id)}
+                            disabled={busyId === n.id}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              void respondTeacher(n, true);
+                            }}
                           >
                             {isHe ? 'אשר' : 'Accept'}
                           </Button>
@@ -214,20 +266,28 @@ export function NotificationsBell() {
                             size="sm"
                             variant="outline"
                             className="h-7"
-                            onClick={() => void respondTeacher(String(n.payload.link_id), false, n.id)}
+                            disabled={busyId === n.id}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              void respondTeacher(n, false);
+                            }}
                           >
                             {isHe ? 'דחה' : 'Decline'}
                           </Button>
                         </div>
                       ) : null}
 
-                      {n.kind === 'friend_request' && typeof n.payload.friendship_id === 'string' ? (
+                      {showFriend ? (
                         <div className="flex gap-2 px-3 pb-2.5">
                           <Button
                             type="button"
                             size="sm"
                             className="h-7"
-                            onClick={() => void respondFriend(String(n.payload.friendship_id), true, n.id)}
+                            disabled={busyId === n.id}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              void respondFriend(n, true);
+                            }}
                           >
                             {isHe ? 'אשר' : 'Accept'}
                           </Button>
@@ -236,7 +296,11 @@ export function NotificationsBell() {
                             size="sm"
                             variant="outline"
                             className="h-7"
-                            onClick={() => void respondFriend(String(n.payload.friendship_id), false, n.id)}
+                            disabled={busyId === n.id}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              void respondFriend(n, false);
+                            }}
                           >
                             {isHe ? 'דחה' : 'Decline'}
                           </Button>
