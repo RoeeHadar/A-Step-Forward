@@ -151,7 +151,9 @@ export const quizSubmitResponseSchema = z.object({
   passed: z.boolean().nullable().optional(),
   pass_threshold: z.number().optional(),
   attempt_id: z.string().nullable().optional(),
-  grading_status: z.enum(['pending', 'grading', 'complete', 'failed']).optional(),
+  grading_status: z
+    .enum(['pending', 'grading', 'needs_human', 'complete', 'failed', 'reopened'])
+    .optional(),
   item_feedback: z.record(z.string(), processFeedbackSchema).optional(),
   item_scores: z.record(z.string(), z.number()).optional(),
   open_pending: z.number().optional(),

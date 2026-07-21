@@ -51,6 +51,7 @@ interface Props {
     score: number | null;
     passed: boolean | null;
     created_at: string;
+    grading_status?: string | null;
   }>;
   notes: Array<{ id: string; kind: string; content: string; created_at: string }>;
 }
@@ -86,6 +87,8 @@ export function EducatorStudentWorkspace({
   const [score, setScore] = useState('0.75');
   const [passed, setPassed] = useState(true);
   const [reopen, setReopen] = useState(false);
+  const [reviewText, setReviewText] = useState<string | null>(null);
+  const [reviewLoading, setReviewLoading] = useState(false);
 
   const activeWeek =
     planWeeks.find((w) => w.status === 'active') ?? planWeeks[0] ?? null;
@@ -128,6 +131,56 @@ export function EducatorStudentWorkspace({
     const data = (await res.json()) as { error?: string };
     setMsg(res.ok ? (isHe ? 'נשמר' : 'Saved') : data.error ?? 'Failed');
     if (res.ok) setNote('');
+  }
+
+  async function loadAttemptReview(attemptId: string) {
+    if (!attemptId) return;
+    setReviewLoading(true);
+    setReviewText(null);
+    try {
+      const res = await fetch(
+        `/api/educator/students/${studentId}/attempts/${attemptId}`,
+      );
+      const data = (await res.json()) as {
+        attempt?: {
+          grading_status?: string;
+          score?: number | null;
+          questions?: Array<{ id: string; stem: string }>;
+          answers?: Array<{ item_id: string; chosen: string }>;
+          item_feedback?: Record<
+            string,
+            { strengths?: string; next_fix?: string; process_score?: number; status?: string }
+          >;
+        };
+        error?: string;
+      };
+      if (!res.ok || !data.attempt) {
+        setReviewText(data.error ?? 'Failed to load');
+        return;
+      }
+      const a = data.attempt;
+      const lines: string[] = [
+        `status=${a.grading_status ?? '?'} score=${a.score == null ? '—' : Math.round(a.score * 100) + '%'}`,
+      ];
+      for (const q of a.questions ?? []) {
+        const ans = a.answers?.find((x) => x.item_id === q.id)?.chosen ?? '';
+        const fb = a.item_feedback?.[q.id];
+        lines.push(`---`);
+        lines.push(q.stem.slice(0, 200));
+        lines.push(`answer: ${ans.slice(0, 300)}`);
+        if (fb) {
+          lines.push(
+            `feedback (${fb.status ?? ''}, ${Math.round((fb.process_score ?? 0) * 100)}%): ${fb.strengths ?? ''} | ${fb.next_fix ?? ''}`,
+          );
+        }
+      }
+      setReviewText(lines.join('\n'));
+      if (typeof a.score === 'number') setScore(String(a.score));
+    } catch {
+      setReviewText('Failed to load');
+    } finally {
+      setReviewLoading(false);
+    }
   }
 
   async function gradeTest() {
@@ -387,6 +440,11 @@ export function EducatorStudentWorkspace({
               <li key={a.id} className="flex flex-wrap justify-between gap-2 rounded-lg bg-surface-1/40 px-3 py-2">
                 <span>
                   {a.kind} · {new Date(a.created_at).toLocaleDateString(isHe ? 'he-IL' : 'en-US')}
+                  {a.grading_status === 'needs_human' ? (
+                    <span className="ms-2 text-amber-700 dark:text-amber-400">
+                      {isHe ? 'דורש בדיקה' : 'Needs review'}
+                    </span>
+                  ) : null}
                 </span>
                 <span>
                   {a.score == null ? '—' : `${Math.round(a.score * 100)}%`}
@@ -402,15 +460,39 @@ export function EducatorStudentWorkspace({
               <select
                 className="w-full rounded-lg border border-border bg-background px-3 py-2"
                 value={gradeAttemptId}
-                onChange={(e) => setGradeAttemptId(e.target.value)}
+                onChange={(e) => {
+                  setGradeAttemptId(e.target.value);
+                  void loadAttemptReview(e.target.value);
+                }}
               >
                 {attempts.map((a) => (
                   <option key={a.id} value={a.id}>
-                    {a.kind} — {a.id.slice(0, 8)}
+                    {a.kind}
+                    {a.grading_status === 'needs_human' ? ' ⚠' : ''} — {a.id.slice(0, 8)}
                   </option>
                 ))}
               </select>
             </label>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              disabled={!gradeAttemptId || reviewLoading}
+              onClick={() => void loadAttemptReview(gradeAttemptId)}
+            >
+              {reviewLoading
+                ? isHe
+                  ? 'טוען…'
+                  : 'Loading…'
+                : isHe
+                  ? 'טען סקירת בדיקה'
+                  : 'Load grader review'}
+            </Button>
+            {reviewText ? (
+              <pre className="max-h-64 overflow-auto whitespace-pre-wrap rounded-lg bg-surface-1/50 p-3 text-xs">
+                {reviewText}
+              </pre>
+            ) : null}
             <textarea
               className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
               rows={3}

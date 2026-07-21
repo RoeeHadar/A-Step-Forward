@@ -3,6 +3,11 @@
  * Keep this file free of `server-only` so client UI can share `gradingUiPhase`.
  */
 
+import {
+  gradingUiPhaseSealed,
+  settleOpenOutcome,
+} from '@/lib/sealed-attempt-visibility';
+
 export const GRADE_ITEM_MAX_RETRIES = 3;
 
 export type FeedbackStatus = 'pending' | 'graded' | 'failed';
@@ -41,6 +46,8 @@ export function opensStillPending(
   return selectNextOpenItemId(openIds, feedback, maxRetries) != null;
 }
 
+export { settleOpenOutcome };
+
 /**
  * Apply permanent-failure zeros and fill missing open scores before aggregate.
  * Mutates `scores` in place and returns it.
@@ -65,12 +72,9 @@ export function gradingUiPhase(input: {
   grading_status?: string | null;
   score?: number | null;
 }): 'pending' | 'failed' | 'complete' {
-  const status = input.grading_status ?? (input.score != null ? 'complete' : 'pending');
-  if (status === 'failed') return 'failed';
-  if (status === 'complete' && input.score != null) return 'complete';
-  if (status === 'complete' && input.score == null) return 'failed';
-  if (status === 'pending' || status === 'grading') return 'pending';
-  return input.score != null ? 'complete' : 'pending';
+  const phase = gradingUiPhaseSealed(input);
+  if (phase === 'needs_human') return 'pending';
+  return phase;
 }
 
 /** Bound client poll loops so a stuck grader cannot hang the tab forever. */

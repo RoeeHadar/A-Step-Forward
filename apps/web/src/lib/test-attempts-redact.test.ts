@@ -26,7 +26,7 @@ describe('redactQuestionsUntilGraded', () => {
   });
 
   it('strips correct/model_answer/rubric while pending/grading/failed', () => {
-    for (const status of ['pending', 'grading', 'failed'] as const) {
+    for (const status of ['pending', 'grading', 'failed', 'needs_human', 'reopened'] as const) {
       const q = redactQuestionsUntilGraded(sample, status)[0]!;
       expect(q.correct).toBe('');
       expect(q).not.toHaveProperty('model_answer');

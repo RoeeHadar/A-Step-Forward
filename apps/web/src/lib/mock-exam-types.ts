@@ -24,7 +24,7 @@ export interface MockExamSubmitResponse {
   max_mcq: number;
   feedback_by_question: MockExamSubmitFeedback[];
   attempt_id?: string | null;
-  grading_status?: 'pending' | 'grading' | 'complete' | 'failed';
+  grading_status?: 'pending' | 'grading' | 'needs_human' | 'complete' | 'failed' | 'reopened';
   /** Overall process-aware score; null until grading complete */
   score?: number | null;
   passed?: boolean | null;

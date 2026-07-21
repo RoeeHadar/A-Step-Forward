@@ -23,14 +23,26 @@ import {
   isOpenAssessmentKind,
   opensStillPending,
   selectNextOpenItemId,
+  settleOpenOutcome,
   GRADE_ITEM_MAX_RETRIES,
 } from '@/lib/assessment-grading-logic';
+import { sealGradingViewForClient } from '@/lib/sealed-attempt-visibility';
+import {
+  notifyAttemptNeedsHuman,
+  notifyAttemptReleased,
+} from '@/lib/attempt-release-notify';
 
 neonConfig.fetchConnectionCache = true;
 const url = process.env.DATABASE_URL ?? process.env.POSTGRES_URL ?? '';
 const sql = url ? neon(url) : null;
 
-export type GradingStatus = 'pending' | 'grading' | 'complete' | 'failed';
+export type GradingStatus =
+  | 'pending'
+  | 'grading'
+  | 'needs_human'
+  | 'complete'
+  | 'failed'
+  | 'reopened';
 
 export interface AssessmentQuestionForGrade {
   id: string;
@@ -113,6 +125,7 @@ async function ensureGradingSchema(): Promise<boolean> {
     await sql`ALTER TABLE test_attempts ADD COLUMN IF NOT EXISTS open_item_ids TEXT[] NOT NULL DEFAULT '{}'`;
     await sql`ALTER TABLE test_attempts ADD COLUMN IF NOT EXISTS grading_locked_until TIMESTAMPTZ`;
     await sql`CREATE INDEX IF NOT EXISTS ix_test_attempts_learner ON test_attempts (learner_id, created_at DESC)`;
+    await sql`CREATE INDEX IF NOT EXISTS ix_test_attempts_grading_status ON test_attempts (grading_status, created_at ASC)`;
     await sql`
       CREATE TABLE IF NOT EXISTS grading_slots (
         id TEXT PRIMARY KEY DEFAULT 'global',
@@ -239,9 +252,9 @@ export async function createPendingAttempt(
     `) as Array<{ id: string }>;
     const id = rows[0]?.id;
     if (!id) return null;
-    return {
+    const released = {
       attempt_id: id,
-      grading_status: 'complete',
+      grading_status: 'complete' as const,
       score,
       passed: gate.passed,
       pass_threshold: passThreshold,
@@ -254,6 +267,14 @@ export async function createPendingAttempt(
       open_total: 0,
       graded_open: 0,
     };
+    void notifyAttemptReleased({
+      learnerId: input.learnerId,
+      attemptId: id,
+      score,
+      passed: gate.passed,
+      kind: input.kind,
+    });
+    return released;
   }
 
   // Open present: NO headline score yet.
@@ -444,19 +465,20 @@ export async function getAttemptGradingView(
   if (!row) return null;
   const status = (row.grading_status as GradingStatus) || 'complete';
   const openIds = Array.isArray(row.open_item_ids) ? row.open_item_ids : [];
-  return viewFromState({
+  const raw = viewFromState({
     attempt_id: row.id,
     grading_status: status,
     score: status === 'complete' ? Number(row.score) : null,
     passed: status === 'complete' ? Boolean(row.passed) : null,
     pass_threshold: Number(row.pass_threshold ?? GATE_PASS_THRESHOLD),
-    per_topic: row.per_topic ?? {},
-    weak_concepts: row.weak_concepts ?? [],
+    per_topic: status === 'complete' ? (row.per_topic ?? {}) : {},
+    weak_concepts: status === 'complete' ? (row.weak_concepts ?? []) : [],
     plan_adapted: false,
-    item_feedback: row.item_feedback ?? {},
-    item_scores: row.item_scores ?? {},
+    item_feedback: status === 'complete' ? (row.item_feedback ?? {}) : {},
+    item_scores: status === 'complete' ? (row.item_scores ?? {}) : {},
     open_item_ids: openIds,
   });
+  return sealGradingViewForClient(raw);
 }
 
 /**
@@ -486,45 +508,102 @@ export async function gradeNextOpenItem(
   const locale = row.locale === 'en' ? 'en' : 'he';
 
   if (row.grading_status === 'complete') {
-    return viewFromState({
-      attempt_id: row.id,
-      grading_status: 'complete',
-      score: Number(row.score),
-      passed: Boolean(row.passed),
-      pass_threshold: Number(row.pass_threshold),
-      per_topic: row.per_topic ?? {},
-      weak_concepts: row.weak_concepts ?? [],
-      plan_adapted: false,
-      item_feedback: feedback,
-      item_scores: scores,
-      open_item_ids: openIds,
-    });
+    return sealGradingViewForClient(
+      viewFromState({
+        attempt_id: row.id,
+        grading_status: 'complete',
+        score: Number(row.score),
+        passed: Boolean(row.passed),
+        pass_threshold: Number(row.pass_threshold),
+        per_topic: row.per_topic ?? {},
+        weak_concepts: row.weak_concepts ?? [],
+        plan_adapted: false,
+        item_feedback: feedback,
+        item_scores: scores,
+        open_item_ids: openIds,
+      }),
+    );
+  }
+
+  if (row.grading_status === 'needs_human') {
+    return sealGradingViewForClient(
+      viewFromState({
+        attempt_id: row.id,
+        grading_status: 'needs_human',
+        score: null,
+        passed: null,
+        pass_threshold: Number(row.pass_threshold),
+        per_topic: {},
+        weak_concepts: [],
+        plan_adapted: false,
+        item_feedback: {},
+        item_scores: {},
+        open_item_ids: openIds,
+        message:
+          locale === 'he'
+            ? 'ממתין לבדיקת מורה…'
+            : 'Awaiting teacher review…',
+      }),
+    );
   }
 
   const nextId = selectNextOpenItemId(openIds, feedback, GRADE_ITEM_MAX_RETRIES);
 
   if (!nextId) {
-    // All opens graded or permanently failed → finalize (failed items score 0).
+    const outcome = settleOpenOutcome(openIds, feedback, GRADE_ITEM_MAX_RETRIES);
+    if (outcome === 'needs_human') {
+      await sql`
+        UPDATE test_attempts
+        SET grading_status = 'needs_human',
+            item_feedback = ${JSON.stringify(feedback)}::jsonb,
+            item_scores = ${JSON.stringify(scores)}::jsonb,
+            grading_locked_until = NULL
+        WHERE id = ${attemptId}::uuid AND learner_id = ${learnerId}
+      `;
+      void notifyAttemptNeedsHuman({ learnerId, attemptId });
+      return sealGradingViewForClient(
+        viewFromState({
+          attempt_id: row.id,
+          grading_status: 'needs_human',
+          score: null,
+          passed: null,
+          pass_threshold: Number(row.pass_threshold),
+          per_topic: {},
+          weak_concepts: [],
+          plan_adapted: false,
+          item_feedback: {},
+          item_scores: {},
+          open_item_ids: openIds,
+          message:
+            locale === 'he'
+              ? 'ממתין לבדיקת מורה…'
+              : 'Awaiting teacher review…',
+        }),
+      );
+    }
+    // All opens graded successfully → finalize (release).
     return finalizeAttempt(row, feedback, scores, opts);
   }
 
   const gotSlot = await tryAcquireSlot();
   if (!gotSlot) {
-    return viewFromState({
-      attempt_id: row.id,
-      grading_status: 'pending',
-      score: null,
-      passed: null,
-      pass_threshold: Number(row.pass_threshold),
-      per_topic: {},
-      weak_concepts: [],
-      plan_adapted: false,
-      item_feedback: feedback,
-      item_scores: scores,
-      open_item_ids: openIds,
-      busy: true,
-      message: locale === 'he' ? 'הבודק עסוק — מנסים שוב…' : 'Grader busy — retrying…',
-    });
+    return sealGradingViewForClient(
+      viewFromState({
+        attempt_id: row.id,
+        grading_status: 'pending',
+        score: null,
+        passed: null,
+        pass_threshold: Number(row.pass_threshold),
+        per_topic: {},
+        weak_concepts: [],
+        plan_adapted: false,
+        item_feedback: {},
+        item_scores: {},
+        open_item_ids: openIds,
+        busy: true,
+        message: locale === 'he' ? 'הבודק עסוק — מנסים שוב…' : 'Grader busy — retrying…',
+      }),
+    );
   }
 
   try {
@@ -546,6 +625,8 @@ export async function gradeNextOpenItem(
       rubric: q?.rubric,
       model_answer: q?.model_answer,
       concept_id: q?.topic,
+      subject: q?.subject,
+      skill_atoms: q?.skill_atoms,
       points_available: q?.total_points ?? prior?.points_available ?? 20,
       locale,
       prior_retries: prior?.retries ?? 0,
@@ -568,6 +649,37 @@ export async function gradeNextOpenItem(
     const stillPending = opensStillPending(openIds, feedback, GRADE_ITEM_MAX_RETRIES);
 
     if (!stillPending) {
+      const outcome = settleOpenOutcome(openIds, feedback, GRADE_ITEM_MAX_RETRIES);
+      if (outcome === 'needs_human') {
+        await sql`
+          UPDATE test_attempts
+          SET grading_status = 'needs_human',
+              item_feedback = ${JSON.stringify(feedback)}::jsonb,
+              item_scores = ${JSON.stringify(scores)}::jsonb,
+              grading_locked_until = NULL
+          WHERE id = ${attemptId}::uuid AND learner_id = ${learnerId}
+        `;
+        void notifyAttemptNeedsHuman({ learnerId, attemptId });
+        return sealGradingViewForClient(
+          viewFromState({
+            attempt_id: row.id,
+            grading_status: 'needs_human',
+            score: null,
+            passed: null,
+            pass_threshold: Number(row.pass_threshold),
+            per_topic: {},
+            weak_concepts: [],
+            plan_adapted: false,
+            item_feedback: {},
+            item_scores: {},
+            open_item_ids: openIds,
+            message:
+              locale === 'he'
+                ? 'ממתין לבדיקת מורה…'
+                : 'Awaiting teacher review…',
+          }),
+        );
+      }
       const refreshed = await loadAttempt(learnerId, attemptId);
       if (refreshed) {
         return finalizeAttempt(
@@ -579,19 +691,21 @@ export async function gradeNextOpenItem(
       }
     }
 
-    return viewFromState({
-      attempt_id: row.id,
-      grading_status: 'pending',
-      score: null,
-      passed: null,
-      pass_threshold: Number(row.pass_threshold),
-      per_topic: {},
-      weak_concepts: [],
-      plan_adapted: false,
-      item_feedback: feedback,
-      item_scores: scores,
-      open_item_ids: openIds,
-    });
+    return sealGradingViewForClient(
+      viewFromState({
+        attempt_id: row.id,
+        grading_status: 'pending',
+        score: null,
+        passed: null,
+        pass_threshold: Number(row.pass_threshold),
+        per_topic: {},
+        weak_concepts: [],
+        plan_adapted: false,
+        item_feedback: {},
+        item_scores: {},
+        open_item_ids: openIds,
+      }),
+    );
   } finally {
     await releaseSlot();
   }
@@ -688,6 +802,14 @@ async function finalizeAttempt(
     );
   }
 
+  void notifyAttemptReleased({
+    learnerId: row.learner_id,
+    attemptId: row.id,
+    score,
+    passed: gate.passed,
+    kind: row.kind,
+  });
+
   return viewFromState({
     attempt_id: row.id,
     grading_status: 'complete',
@@ -702,3 +824,60 @@ async function finalizeAttempt(
     open_item_ids: row.open_item_ids ?? [],
   });
 }
+
+/**
+ * Background drain: grade one open item on each pending/grading attempt.
+ * Safe to call from cron; completion does not depend on the learner's browser tab.
+ */
+export async function drainPendingGradeAttempts(limit = 8): Promise<{
+  scanned: number;
+  advanced: number;
+  released: number;
+  needs_human: number;
+}> {
+  if (!sql) return { scanned: 0, advanced: 0, released: 0, needs_human: 0 };
+  await ensureGradingSchema();
+  const cap = Math.max(1, Math.min(20, limit));
+  let rows: Array<{ id: string; learner_id: string }> = [];
+  try {
+    rows = (await sql`
+      SELECT id::text, learner_id
+      FROM test_attempts
+      WHERE grading_status IN ('pending', 'grading')
+        AND (
+          grading_locked_until IS NULL
+          OR grading_locked_until < NOW()
+        )
+      ORDER BY created_at ASC
+      LIMIT ${cap}
+    `) as Array<{ id: string; learner_id: string }>;
+  } catch (err) {
+    logger.error('[assessment-grading] drain list failed', { err: String(err) });
+    return { scanned: 0, advanced: 0, released: 0, needs_human: 0 };
+  }
+
+  let advanced = 0;
+  let released = 0;
+  let needsHuman = 0;
+  for (const row of rows) {
+    try {
+      const view = await gradeNextOpenItem(row.learner_id, row.id);
+      if (!view) continue;
+      advanced += 1;
+      if (view.grading_status === 'complete') released += 1;
+      if (view.grading_status === 'needs_human') needsHuman += 1;
+    } catch (err) {
+      logger.warn('[assessment-grading] drain item failed', {
+        attempt_id: row.id,
+        err: String(err),
+      });
+    }
+  }
+  return {
+    scanned: rows.length,
+    advanced,
+    released,
+    needs_human: needsHuman,
+  };
+}
+

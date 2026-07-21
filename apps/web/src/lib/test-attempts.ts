@@ -34,11 +34,29 @@ export interface TestAttemptQuestionSnapshot {
   stem: string;
   options: { key: string; text: string }[];
   correct: string;
+  kind?: string;
+  /** Present once grading is complete (redacted while pending). */
+  model_answer?: string | null;
 }
 
 export interface TestAttemptAnswerSnapshot {
   item_id: string;
   chosen: string;
+}
+
+/** Process / teacher feedback per item (mirrors ProcessFeedback; client-safe). */
+export interface TestAttemptItemFeedback {
+  item_id: string;
+  status: 'pending' | 'grading' | 'graded' | 'failed' | string;
+  strengths?: string;
+  steps_present?: string;
+  steps_skipped?: string;
+  logic?: string;
+  material_anchoring?: string;
+  points_earned?: number;
+  points_available?: number;
+  process_score?: number;
+  next_fix?: string;
 }
 
 export interface RecordTestAttemptInput {
@@ -67,7 +85,7 @@ export interface TestAttemptListItem {
   weak_concepts: string[];
   question_count: number;
   created_at: string;
-  grading_status?: 'pending' | 'grading' | 'complete' | 'failed';
+  grading_status?: 'pending' | 'grading' | 'needs_human' | 'complete' | 'failed' | 'reopened';
 }
 
 export interface TestAttemptDetail extends TestAttemptListItem {
@@ -75,6 +93,10 @@ export interface TestAttemptDetail extends TestAttemptListItem {
   per_topic: Record<string, number>;
   questions: TestAttemptQuestionSnapshot[];
   answers: TestAttemptAnswerSnapshot[];
+  item_feedback: Record<string, TestAttemptItemFeedback>;
+  item_scores: Record<string, number>;
+  /** Aggregate feedback blob (e.g. teacher override text). */
+  feedback: Record<string, unknown> | null;
 }
 
 let ensured = false;
@@ -220,12 +242,13 @@ export async function listTestAttempts(
 }
 
 /**
- * Load a single attempt for the Tests archive / API. Answer keys are redacted
- * until grading_status === 'complete'.
+ * Load a single attempt for the Tests archive / API. Answer keys and feedback
+ * are sealed until grading_status === 'complete' (released).
  */
 export async function getTestAttempt(
   learnerId: string,
   attemptId: string,
+  opts?: { forEducator?: boolean },
 ): Promise<TestAttemptDetail | null> {
   if (!sql) return null;
   await ensureTable();
@@ -233,7 +256,9 @@ export async function getTestAttempt(
     const rows = (await sql`
       SELECT id::text, kind, plan_id, week_num, score::float AS score, passed,
              pass_threshold::float AS pass_threshold, weak_concepts, locale,
-             per_topic, questions, answers,
+             per_topic, questions, answers, feedback,
+             COALESCE(item_feedback, '{}'::jsonb) AS item_feedback,
+             COALESCE(item_scores, '{}'::jsonb) AS item_scores,
              COALESCE(grading_status, 'complete') AS grading_status,
              jsonb_array_length(questions) AS question_count, created_at
       FROM test_attempts
@@ -244,12 +269,37 @@ export async function getTestAttempt(
     if (!row) return null;
     const list = mapListRow(row);
     const questions = (row.questions as TestAttemptQuestionSnapshot[]) ?? [];
+    const released = list.grading_status === 'complete' || opts?.forEducator === true;
+    const itemFeedback =
+      released &&
+      row.item_feedback &&
+      typeof row.item_feedback === 'object' &&
+      !Array.isArray(row.item_feedback)
+        ? (row.item_feedback as Record<string, TestAttemptItemFeedback>)
+        : {};
+    const itemScores =
+      released &&
+      row.item_scores &&
+      typeof row.item_scores === 'object' &&
+      !Array.isArray(row.item_scores)
+        ? (row.item_scores as Record<string, number>)
+        : {};
+    const feedback =
+      row.feedback && typeof row.feedback === 'object' && !Array.isArray(row.feedback)
+        ? (row.feedback as Record<string, unknown>)
+        : null;
     return {
       ...list,
       locale: typeof row.locale === 'string' ? row.locale : 'he',
-      per_topic: (row.per_topic as Record<string, number>) ?? {},
-      questions: redactQuestionsUntilGraded(questions, list.grading_status),
+      per_topic: released ? ((row.per_topic as Record<string, number>) ?? {}) : {},
+      questions:
+        opts?.forEducator === true
+          ? questions
+          : redactQuestionsUntilGraded(questions, list.grading_status),
       answers: (row.answers as TestAttemptAnswerSnapshot[]) ?? [],
+      item_feedback: itemFeedback,
+      item_scores: itemScores,
+      feedback: released || opts?.forEducator ? feedback : null,
     };
   } catch {
     return null;
@@ -317,7 +367,9 @@ function mapListRow(row: Record<string, unknown>): TestAttemptListItem {
     statusRaw === 'pending' ||
     statusRaw === 'grading' ||
     statusRaw === 'failed' ||
-    statusRaw === 'complete'
+    statusRaw === 'complete' ||
+    statusRaw === 'needs_human' ||
+    statusRaw === 'reopened'
       ? statusRaw
       : 'complete';
   const complete = grading_status === 'complete';
@@ -329,7 +381,11 @@ function mapListRow(row: Record<string, unknown>): TestAttemptListItem {
     score: complete ? Number(row.score ?? 0) : null,
     passed: complete ? Boolean(row.passed) : null,
     pass_threshold: Number(row.pass_threshold ?? GATE_PASS_THRESHOLD),
-    weak_concepts: Array.isArray(row.weak_concepts) ? (row.weak_concepts as string[]) : [],
+    weak_concepts: complete
+      ? Array.isArray(row.weak_concepts)
+        ? (row.weak_concepts as string[])
+        : []
+      : [],
     question_count: Number(row.question_count ?? 0),
     created_at: String(row.created_at),
     grading_status,

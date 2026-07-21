@@ -1,13 +1,17 @@
 /**
- * Process-first open-item grader (ADR-0010 feedback-first).
+ * Process-first open-item grader (ADR-0010 feedback-first + sealed release).
  *
- * Grades ONE open/written response at a time against rubric + model answer.
- * Returns structured process feedback + partial credit — never a lone boolean.
- * Correct final answers without valid method do not get full credit.
+ * Grades ONE open/written response at a time against playbook + rubric + model
+ * answer + exam-corpus exemplars. Returns structured process feedback + partial
+ * credit — never a lone boolean.
  */
 import 'server-only';
 import { llmCompleteJson } from '@/lib/llm-provider';
 import { GRADE_ITEM_MAX_RETRIES } from '@/lib/assessment-grading-logic';
+import { pickExamStyleItems } from '@/lib/exam-style-corpus';
+import { loadGraderPlaybook } from '@/lib/grader-playbook';
+
+export { loadGraderPlaybook } from '@/lib/grader-playbook';
 
 export const MAX_ITEM_GRADE_RETRIES = GRADE_ITEM_MAX_RETRIES;
 /** Soft site-wide cap on concurrent LLM grade calls (free-tier safety). */
@@ -19,21 +23,14 @@ export interface ProcessFeedback {
   item_id: string;
   status: ItemGradeStatus;
   retries: number;
-  /** What the learner did well */
   strengths: string;
-  /** Steps that were present */
   steps_present: string;
-  /** Steps skipped or jumped */
   steps_skipped: string;
-  /** Logic / intermediate reasoning quality */
   logic: string;
-  /** Whether method is anchored in required material */
   material_anchoring: string;
   points_earned: number;
   points_available: number;
-  /** 0–1 process score (earned/available); drives gate math */
   process_score: number;
-  /** Concrete next fix */
   next_fix: string;
   graded_at?: string;
 }
@@ -45,10 +42,40 @@ export interface GradeOpenItemInput {
   rubric?: string | null;
   model_answer?: string | null;
   concept_id?: string | null;
+  subject?: string | null;
   skill_atoms?: string[];
   points_available?: number;
   locale?: 'he' | 'en';
   prior_retries?: number;
+}
+
+function exemplarBlock(
+  conceptId: string | null | undefined,
+  subject: string | null | undefined,
+  locale: 'he' | 'en',
+): string {
+  try {
+    const concepts = conceptId ? [conceptId] : [];
+    const picks = pickExamStyleItems({
+      conceptIds: concepts,
+      goalKey: null,
+      count: 2,
+      rotation: (conceptId ?? subject ?? 'x').length,
+    });
+    if (!picks.length) return '';
+    return picks
+      .map((it, i) => {
+        const stem = locale === 'he' ? it.stem_he : it.stem_en;
+        const rubric = locale === 'he' ? it.rubric_he : it.rubric_en;
+        const parts = (it.parts ?? [])
+          .map((p) => `${p.label}(${p.points}pt)`)
+          .join(', ');
+        return `Exemplar ${i + 1} [${it.subject}/${it.level}]: ${stem.slice(0, 400)}\nParts: ${parts || 'n/a'}\nRubric: ${rubric.slice(0, 400)}`;
+      })
+      .join('\n\n');
+  } catch {
+    return '';
+  }
 }
 
 function emptyFeedback(
@@ -102,9 +129,17 @@ export async function gradeOpenItemProcess(
     };
   }
 
-  const system = `You are a strict Israeli Bagrut / university exam Reviewer.
+  const playbook = loadGraderPlaybook();
+  const exemplars = exemplarBlock(input.concept_id, input.subject, locale);
+
+  const system = `You are a strict Israeli Bagrut / university exam Reviewer (A Step Forward Grader agent).
 Grade ONE learner written solution for PROCESS, not just the final answer.
 A correct final number with missing/wrong steps must NOT receive full credit.
+
+## Playbook (KPIs)
+${playbook}
+
+${exemplars ? `## Exam-style exemplars (style / depth reference)\n${exemplars}\n` : ''}
 
 Return ONLY JSON:
 {
@@ -119,14 +154,14 @@ Return ONLY JSON:
 
 Rules:
 - Language of all string fields: ${locale === 'he' ? 'Hebrew' : 'English'}.
-- Evaluate: required steps present vs skipped; intermediate reasoning; method anchored in the topic/skill atoms; misconceptions.
-- points_earned is partial credit on the rubric (0 to points_available). Be strict but fair.
-- Empty / off-topic / one-line guesses → points_earned near 0.
+- Evaluate against the item rubric and model answer below.
+- points_earned is partial credit (0 to points_available). Be strict but fair.
 - Never invent steps the learner did not write.`;
 
   const user = JSON.stringify({
     item_id: input.item_id,
     concept_id: input.concept_id ?? null,
+    subject: input.subject ?? null,
     skill_atoms: input.skill_atoms ?? [],
     points_available: pointsAvailable,
     stem: input.stem.slice(0, 1500),

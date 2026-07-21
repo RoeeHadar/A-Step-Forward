@@ -5,7 +5,8 @@ import {
   createNotification,
   writeTeacherAudit,
 } from '@/lib/social-db';
-import { teacherUpdateTestAttempt } from '@/lib/test-attempts';
+import { getTestAttempt, teacherUpdateTestAttempt } from '@/lib/test-attempts';
+import { syncGateAfterTeacherOverride } from '@/lib/teacher-gate-sync';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -41,33 +42,56 @@ export async function POST(req: Request) {
   const okLink = await assertTeacherOfStudent(userId, body.student_id);
   if (!okLink) return Response.json({ error: 'Forbidden' }, { status: 403 });
 
+  const before = await getTestAttempt(body.student_id, body.attempt_id, {
+    forEducator: true,
+  });
+
+  const reopen = Boolean(body.reopen);
+  const passed = typeof body.passed === 'boolean' ? body.passed : null;
+  const score = typeof body.score === 'number' ? body.score : null;
+
   const ok = await teacherUpdateTestAttempt({
     learnerId: body.student_id,
     attemptId: body.attempt_id,
     feedbackText: body.feedback ?? reason,
-    score: typeof body.score === 'number' ? body.score : null,
-    passed: typeof body.passed === 'boolean' ? body.passed : null,
-    reopen: Boolean(body.reopen),
+    score,
+    passed,
+    reopen,
   });
   if (!ok) return Response.json({ error: 'Update failed' }, { status: 500 });
+
+  const gateSync =
+    before && (reopen || passed !== null)
+      ? await syncGateAfterTeacherOverride({
+          learnerId: body.student_id,
+          attemptId: body.attempt_id,
+          kind: before.kind,
+          planId: before.plan_id,
+          weekNum: before.week_num,
+          passed,
+          reopen,
+        })
+      : { advanced: false, revoked: false };
 
   await writeTeacherAudit({
     teacherId: userId,
     studentId: body.student_id,
-    action: body.reopen ? 'test_reopen' : 'test_grade',
+    action: reopen ? 'test_reopen' : 'test_grade',
     reason,
     payload: {
       attempt_id: body.attempt_id,
-      score: body.score ?? null,
-      passed: body.passed ?? null,
-      reopen: Boolean(body.reopen),
+      score: score,
+      passed,
+      reopen,
+      gate_advanced: gateSync.advanced,
+      gate_revoked: gateSync.revoked,
     },
   });
 
   await createNotification({
     userId: body.student_id,
-    kind: body.reopen ? 'test_reopened' : 'test_checked',
-    title: body.reopen ? 'המורה פתח מבחן מחדש' : 'המורה סיים לבדוק מבחן',
+    kind: reopen ? 'test_reopened' : 'test_checked',
+    title: reopen ? 'המורה פתח מבחן מחדש' : 'המורה עדכן את בדיקת המבחן',
     body: reason.slice(0, 240),
     payload: { attempt_id: body.attempt_id, teacher_id: userId },
     href: `/app/tests/${body.attempt_id}`,
@@ -76,10 +100,10 @@ export async function POST(req: Request) {
   await appendLearnerPersonaLine(
     body.student_id,
     'תצפיות אחרונות',
-    body.reopen
+    reopen
       ? `המורה פתח מבחן מחדש: ${reason.slice(0, 180)}`
-      : `המורה בדק מבחן: ${reason.slice(0, 180)}`,
+      : `המורה עדכן בדיקת מבחן: ${reason.slice(0, 180)}`,
   ).catch(() => null);
 
-  return Response.json({ ok: true });
+  return Response.json({ ok: true, gate: gateSync });
 }

@@ -7,8 +7,8 @@
  *   builder ── POST /api/quiz/custom ──► running ── submit ──► grading ──► results
  *
  * Open answers go through chunked process review (`/api/quiz/custom/submit` +
- * `/api/quiz/grade-next`). Score is shown only after feedback is complete.
- * Mastery sync to `/api/lesson/answer` is best-effort after finalize.
+ * `/api/quiz/grade-next` and/or cron `/api/cron/grade-attempts`). Score and
+ * feedback are sealed until the Grader agent releases the attempt.
  */
 
 import { useMemo, useState, useEffect } from 'react';

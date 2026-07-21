@@ -129,6 +129,7 @@ export default async function EducatorStudentPage({
             score: a.score,
             passed: a.passed,
             created_at: a.created_at,
+            grading_status: a.grading_status ?? null,
           }))}
           notes={notes}
         />
