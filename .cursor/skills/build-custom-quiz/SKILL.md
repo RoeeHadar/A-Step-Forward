@@ -18,7 +18,7 @@ This is the runtime backbone of the `/app/quiz` page and the recommended way for
 
 - The corpus of authored lesson questions covers a fixed set of skill atoms per concept; learners frequently want to test themselves on a different cross-section ("just trigonometry word problems, 15 minutes, mixed").
 - A single endpoint that takes a kind-mix + time-budget + topic set, and returns a graded-able envelope, gives every consumer (UI, agents) the same predictable building block.
-- Quizzes generated this way are **ephemeral**: they are not persisted as lessons. Mastery / skill-practice updates still happen through the regular `/api/lesson/answer` pipeline when the learner submits an item, so the planner sees the practice.
+- Quizzes generated this way are **not authored lessons**, but answer keys **are** persisted server-side in Neon `custom_quizzes` (learner-scoped) so grading cannot trust the client. The start response strips solutions/keys; reveal arrives after grading completes. Mastery / skill-practice updates still happen through `/api/lesson/answer` on submit.
 
 ## Public surface
 
@@ -38,7 +38,7 @@ Returns `CustomQuizEnvelope`:
 
 ```jsonc
 {
-  "quiz_id":       "uuid",            // not persisted; in-memory only
+  "quiz_id":       "uuid",            // Neon custom_quizzes.id for this learner
   "kind_mix":      "mixed",
   "time_limit_s":  600,
   "picked_reason": "user_topics" | "weakest_mastery" | "subject_bootstrap",
@@ -122,7 +122,7 @@ Any question failing validation is dropped silently. If zero pass validation the
 
 ## Pitfalls
 
-- **Stateful in the client only.** Refreshing the `/app/quiz` page mid-quiz throws the envelope away. This is by design — the alternative is a new `quiz_sessions` table, which we don't want to pay for ephemeral content. If you need persistence, write to `lesson_questions` instead.
+- **Server-held keys.** Start envelope omits `correct_index` / solutions / rubrics. Submit `{ quiz_id, answers[] }` only — never client-supplied `questions[]` with keys.
 - **Groq required.** If `GROQ_API_KEY` is missing the endpoint returns 503. Local dev without Groq → use authored lesson quizzes instead.
 - **No durable id.** `quiz_id` is a random UUID generated at build time; it's only useful for keying `/api/lesson/answer` writes so the practice pipeline can see them and attribute mastery.
 - **Grading is honest for closed kinds, self-reported for open kinds.** The results screen surfaces a 3-way self-assessment (correct / partial / wrong) for open questions; the score reported in the breakdown reflects that choice.
