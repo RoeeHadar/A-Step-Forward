@@ -5,8 +5,9 @@
 | Seed variant | `building` (locked — all crews) |
 | Focus | Pilot + ADR-0010 |
 | Runtime | Cursor Auto (CrewAI YAML = contract only) |
-| Mode | Plan + report → Cursor streams execute |
-| Iteration | 1 / 4 max |
+| Mode | Closed (ADR-0010 P0 journeys green on prod) |
+| Iteration | **3 / 4** (closed; unanimous-clean false — F1/F2 + Playwright + Clerk HTTP deferred) |
+| Ship | `0b61077b` mock-exam RSC + gate advance |
 
 ## Layout
 
