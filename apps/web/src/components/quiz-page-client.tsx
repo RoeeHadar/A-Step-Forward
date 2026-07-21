@@ -24,7 +24,6 @@ import {
   Sparkles,
   Check,
   X,
-  HelpCircle,
 } from 'lucide-react';
 import { Button } from '@asf/ui/button';
 import { Badge } from '@asf/ui/badge';
@@ -51,6 +50,7 @@ interface QuizQuestionPart {
 }
 
 interface CustomQuizQuestion {
+  id?: string;
   ord: number;
   kind: 'open' | 'mcq' | 'true_false' | 'numeric' | 'short_answer'; // legacy kinds gracefully handled
   difficulty: 'easy' | 'medium' | 'hard';
@@ -61,10 +61,11 @@ interface CustomQuizQuestion {
   // Multi-part structure (Bagrut / university style)
   parts?: QuizQuestionPart[];
   total_points: number;
-  sample_solution_en: string;
-  sample_solution_he: string;
-  rubric_en: string;
-  rubric_he: string;
+  /** Present only after grade reveal — never on start envelope. */
+  sample_solution_en?: string;
+  sample_solution_he?: string;
+  rubric_en?: string;
+  rubric_he?: string;
   // MCQ only (university_mixed mode)
   options_en?: string[];
   options_he?: string[];
@@ -426,9 +427,9 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
   }
 
   function questionPoints(q: CustomQuizQuestion, a: AnswerState): number | null {
+    // MCQ correctness comes from server grade only (keys are not on the client).
     if (q.kind === 'mcq') {
-      if (a.mcq == null || q.correct_index == null) return null;
-      return a.mcq === q.correct_index ? 1 : 0;
+      return null;
     }
     if (
       q.kind === 'open' ||
@@ -473,6 +474,18 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
     open_total?: number;
     graded_open?: number;
     message?: string;
+    reveal?: Record<
+      string,
+      {
+        sample_solution_en: string;
+        sample_solution_he: string;
+        rubric_en: string;
+        rubric_he: string;
+        correct_index?: number;
+        explanation_en?: string;
+        explanation_he?: string;
+      }
+    >;
   } | null>(null);
 
   const displayResults = useMemo(() => {
@@ -507,33 +520,10 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
             ? String.fromCharCode(65 + a.mcq)
             : '';
         return {
-          item_id: `cq-${i}-${q.concept_id}`,
+          item_id: q.id ?? `cq-${i}-${q.concept_id}`,
           chosen: written.trim() || mcqChosen,
         };
       });
-
-      const questionsPayload = envelope.questions.map((q, i) => ({
-        id: `cq-${i}-${q.concept_id}`,
-        concept_id: q.concept_id,
-        kind: q.kind,
-        stem: (lang === 'he' ? q.stem_he : q.stem_en) || q.stem_he || q.stem_en,
-        rubric: (lang === 'he' ? q.rubric_he : q.rubric_en) || q.rubric_he || q.rubric_en,
-        model_answer:
-          (lang === 'he' ? q.sample_solution_he : q.sample_solution_en) ||
-          q.sample_solution_he ||
-          q.sample_solution_en,
-        parts: q.parts,
-        total_points: q.total_points,
-        skill_atoms: q.skill_atoms,
-        correct:
-          q.kind === 'mcq' && typeof q.correct_index === 'number'
-            ? String.fromCharCode(65 + q.correct_index)
-            : undefined,
-        options: (lang === 'he' ? q.options_he : q.options_en)?.map((text, oi) => ({
-          key: String.fromCharCode(65 + oi),
-          text,
-        })),
-      }));
 
       const res = await fetch('/api/quiz/custom/submit', {
         method: 'POST',
@@ -541,7 +531,6 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
         body: JSON.stringify({
           quiz_id: envelope.quiz_id,
           locale: lang,
-          questions: questionsPayload,
           answers: answerRows,
         }),
       });
@@ -602,7 +591,7 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
       // Best-effort mastery sync from process scores
       void Promise.allSettled(
         envelope.questions.map((q, i) => {
-          const id = `cq-${i}-${q.concept_id}`;
+          const id = q.id ?? `cq-${i}-${q.concept_id}`;
           const ps = data.item_scores?.[id] ?? data.item_feedback?.[id]?.process_score ?? 0;
           return fetch('/api/lesson/answer', {
             method: 'POST',
@@ -963,16 +952,7 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
                 />
               )}
 
-              {/* Rubric (shown during the question to guide the student) */}
-              {(q.rubric_en || q.rubric_he) ? (
-                <div className="rounded-lg border border-dashed border-border p-3 text-xs text-muted-foreground">
-                  <div className="mb-1 inline-flex items-center gap-1 font-semibold uppercase tracking-wider">
-                    <HelpCircle className="h-3 w-3" aria-hidden />
-                    {t.rubricLabel}
-                  </div>
-                  <MarkdownInline content={isHe ? (q.rubric_he ?? '') : (q.rubric_en ?? '')} dir={dir} />
-                </div>
-              ) : null}
+              {/* Rubrics/solutions are server-revealed after grading only (Sec-F1). */}
             </div>
           ) : null}
         </section>
@@ -1168,7 +1148,7 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
           <ul className="space-y-6">
             {envelope.questions.map((q, i) => {
               const a = answers[i] ?? {};
-              const itemId = `cq-${i}-${q.concept_id}`;
+              const itemId = q.id ?? `cq-${i}-${q.concept_id}`;
               const processScore =
                 gradeView?.item_scores?.[itemId] ??
                 gradeView?.item_feedback?.[itemId]?.process_score;
@@ -1178,8 +1158,21 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
                   : questionPoints(q, a);
               const fb = gradeView?.item_feedback?.[itemId];
               const stem = isHe ? q.stem_he : q.stem_en;
-              const sampleSolution = isHe ? q.sample_solution_he : q.sample_solution_en;
-              const rubric = isHe ? q.rubric_he : q.rubric_en;
+              const revealedKeys = gradeView?.reveal?.[itemId];
+              const sampleSolution = revealedKeys
+                ? isHe
+                  ? revealedKeys.sample_solution_he
+                  : revealedKeys.sample_solution_en
+                : isHe
+                  ? (q.sample_solution_he ?? '')
+                  : (q.sample_solution_en ?? '');
+              const rubric = revealedKeys
+                ? isHe
+                  ? revealedKeys.rubric_he
+                  : revealedKeys.rubric_en
+                : isHe
+                  ? (q.rubric_he ?? '')
+                  : (q.rubric_en ?? '');
               const revealed = a.solutionRevealed ?? false;
 
               function toggleReveal() {

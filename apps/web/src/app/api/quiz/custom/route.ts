@@ -2,20 +2,12 @@
  * POST /api/quiz/custom
  *
  * Builds a fit-to-purpose AI quiz for the authenticated learner.
- * Mode (bagrut_open vs university_open) is determined server-side from the
- * learner's profile — the client's kind_mix hint is accepted for compat
- * but no longer controls question style.
- *
- * Body shape:
- *   {
- *     "kind_mix"?: string,           // ignored — kept for backward compat
- *     "time_limit_min": number,      // clamped to [3, 90]
- *     "topics"?: string[]            // concept ids; falls back to weakest mastery
- *   }
+ * Persists full keys server-side; returns stripped envelope only (Sec-F1).
  */
 import { auth } from '@clerk/nextjs/server';
 import { getAuthContext } from '@/lib/auth';
 import { buildCustomQuiz } from '@/lib/quiz-builder';
+import { persistCustomQuiz } from '@/lib/custom-quiz';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -63,5 +55,16 @@ export async function POST(req: Request) {
       { status: 503 },
     );
   }
-  return Response.json(envelope);
+
+  const publicEnvelope = await persistCustomQuiz(ctx.learnerId, envelope);
+  if (!publicEnvelope) {
+    return Response.json(
+      {
+        error: 'quiz_persist_failed',
+        message: 'Could not save the quiz. Please retry.',
+      },
+      { status: 503 },
+    );
+  }
+  return Response.json(publicEnvelope);
 }

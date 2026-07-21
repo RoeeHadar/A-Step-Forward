@@ -9,10 +9,23 @@
 import { auth } from '@clerk/nextjs/server';
 import { continueWeeklyQuizGrading } from '@/lib/weekly-quiz';
 import { getAttemptGradingView } from '@/lib/assessment-grading';
+import { buildRevealMap, getCustomQuizForLearner } from '@/lib/custom-quiz';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
+
+async function withCustomReveal(
+  userId: string,
+  result: Record<string, unknown>,
+): Promise<Record<string, unknown>> {
+  if (result.grading_status !== 'complete') return result;
+  const quizId = typeof result.quiz_id === 'string' ? result.quiz_id : null;
+  if (!quizId) return result;
+  const loaded = await getCustomQuizForLearner(userId, quizId);
+  if (!loaded) return result;
+  return { ...result, reveal: buildRevealMap(loaded.questions) };
+}
 
 export async function POST(req: Request) {
   const { userId } = await auth();
@@ -36,7 +49,7 @@ export async function POST(req: Request) {
   if (!result) {
     return Response.json({ error: 'attempt_not_found' }, { status: 404 });
   }
-  return Response.json(result);
+  return Response.json(await withCustomReveal(userId, result as unknown as Record<string, unknown>));
 }
 
 export async function GET(req: Request) {

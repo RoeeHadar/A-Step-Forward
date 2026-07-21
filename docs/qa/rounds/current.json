@@ -1,14 +1,26 @@
 {
-  "round_id": "2026-07-21-adr0010-building",
+  "round_id": "2026-07-22-open-debt",
   "seed_variant": "building",
-  "suite_focus": "pilot + ADR-0010",
+  "suite_focus": "deferred open action items from adr0010-building",
   "target_env": "production",
   "runtime": "cursor-auto",
-  "mode": "closed",
-  "iteration": 3,
-  "max_iterations": 4,
-  "status": "round_closed",
+  "mode": "execute",
+  "iteration": 1,
+  "max_iterations": 5,
+  "status": "iteration_1_in_progress",
   "unanimous_clean": false,
-  "closed_reason": "ADR-0010 P0 journeys green on prod (B03/B11); deferred Security F1/F2, Playwright twins, Clerk HTTP",
-  "notes": "Coordinator closed after deliberation-execute-3. Deploy 0b61077b. Iter 3/4."
+  "close_rules": {
+    "no_open_action_items_or_max_iterations": true,
+    "circuit_breaker_iterations": 5
+  },
+  "backlog": [
+    {"id": "Sec-F1", "priority": "P0", "status": "in_progress"},
+    {"id": "Sec-F2", "priority": "P0", "status": "pending"},
+    {"id": "UI-PW", "priority": "P1", "status": "pending"},
+    {"id": "Int-Clerk", "priority": "P1", "status": "pending"},
+    {"id": "QA-P1-7-8", "priority": "P2", "status": "pending"},
+    {"id": "Docs-ledger", "priority": "P3", "status": "pending"},
+    {"id": "Local-progress-dashboard", "priority": "P3", "status": "pending"}
+  ],
+  "notes": "Successor to 2026-07-21-adr0010-building. Fix→retest→deliberate until backlog empty or 5 iters."
 }

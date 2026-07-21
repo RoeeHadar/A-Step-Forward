@@ -93,6 +93,13 @@ import {
   stripMemoryMachineTags,
 } from '@/lib/chat-memory-persist';
 import { isWithinExamPrepWindow } from '@/lib/exam-prep';
+import {
+  refusalFor,
+  refusalStreamResponse,
+  resolveChildMode,
+  ruleClassify,
+  type SafetyKind,
+} from '@/lib/chat-safety';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -106,14 +113,19 @@ async function saveAssistantTurn(
   content: string,
   sessionId: string | undefined,
   locale: 'he' | 'en',
+  childMode: boolean,
 ): Promise<void> {
   const cleaned = stripMemoryMachineTags(content);
-  await applyMemoryTagsFromAssistant(userId, agent, content);
+  const postHit = ruleClassify(cleaned, { childMode });
+  const toStore = postHit ? refusalFor(postHit) : cleaned;
+  if (!postHit) {
+    await applyMemoryTagsFromAssistant(userId, agent, content);
+  }
   await recordChatTurn(
     userId,
     agent,
     'assistant',
-    compactStoredTurnContent(cleaned, 'assistant', locale),
+    compactStoredTurnContent(toStore, 'assistant', locale),
     sessionId,
   );
   void maybeDreamLearnerNotes(userId, agent);
@@ -144,9 +156,11 @@ const kgByName: Record<string, KgConcept> = Object.fromEntries(
 
 export async function POST(req: Request) {
   let userId: string | null = null;
+  let sessionClaims: Record<string, unknown> | null = null;
   try {
     const a = await auth();
     userId = a.userId;
+    sessionClaims = (a.sessionClaims as Record<string, unknown> | null) ?? null;
   } catch (err) {
     logger.error('chat: auth() threw', { err: String(err) });
     return Response.json({ error: 'auth_failed' }, { status: 401 });
@@ -179,6 +193,20 @@ export async function POST(req: Request) {
   const topic = body.topic?.trim() || undefined;
   const cookieStore = await cookies();
   const locale = resolveLocale(cookieStore.get(LOCALE_COOKIE)?.value);
+
+  const meta = (sessionClaims?.metadata ??
+    sessionClaims?.publicMetadata ??
+    {}) as { child_mode?: boolean; age?: number };
+  const childMode = resolveChildMode({
+    age: typeof meta.age === 'number' ? meta.age : null,
+    childModeFlag: Boolean(meta.child_mode),
+  });
+
+  const preHit = ruleClassify(lastMessage, { childMode });
+  if (preHit) {
+    logger.warn('chat: safety pre-filter', { kind: preHit as SafetyKind, agent });
+    return refusalStreamResponse(refusalFor(preHit));
+  }
 
   // Record user turn before streaming so memory is durable for retries.
   await recordChatTurn(
@@ -258,7 +286,7 @@ export async function POST(req: Request) {
     if (planResult) appendPlanResult(controller, planResult);
     const visible = stripPlanMachineTags(assistantBuffer).trim();
     if (visible) {
-      await saveAssistantTurn(userId, agent, visible, sessionId, locale);
+      await saveAssistantTurn(userId, agent, visible, sessionId, locale, childMode);
       void maybeDreamLearnerNotes(userId, agent);
     }
     controller.enqueue(encodeFinish());
@@ -337,6 +365,7 @@ export async function POST(req: Request) {
               assistantBuffer,
               sessionId,
               locale,
+              childMode,
               (status) => {
                 if (status === 'applying') {
                   const applying = buildPlanApplyingNotice(locale);
@@ -389,6 +418,7 @@ export async function POST(req: Request) {
             assistantBuffer,
             sessionId,
             locale,
+            childMode,
             undefined,
             planAlreadyApplied,
             planEagerAttempted,
@@ -418,8 +448,9 @@ async function finalizeAssistantTurn(
   agent: string,
   userMessage: string,
   assistantRaw: string,
-  sessionId?: string,
-  locale: 'he' | 'en' = 'he',
+  sessionId: string | undefined,
+  locale: 'he' | 'en',
+  childMode: boolean,
   onStatus?: (status: 'applying') => void,
   planAlreadyApplied = false,
   planEagerAttempted = false,
@@ -428,7 +459,7 @@ async function finalizeAssistantTurn(
   const isPlanAgent = agent === 'tutor';
 
   if (!isPlanAgent) {
-    await saveAssistantTurn(userId, agent, visible, sessionId, locale);
+    await saveAssistantTurn(userId, agent, visible, sessionId, locale, childMode);
     return null;
   }
 
@@ -451,7 +482,7 @@ async function finalizeAssistantTurn(
         userMessage: userMessage.slice(0, 80),
       });
       const failureNotice = buildPlanApplyFailureNotice(locale, 'missing_payload');
-      await saveAssistantTurn(userId, agent, `${visible}\n\n${failureNotice}`, sessionId, locale);
+      await saveAssistantTurn(userId, agent, `${visible}\n\n${failureNotice}`, sessionId, locale, childMode);
       return { applied: false, error: 'missing_payload', failureNotice };
     }
 
@@ -464,7 +495,7 @@ async function finalizeAssistantTurn(
         const notice =
           locale === 'en' ? result.noticeEn ?? '' : result.noticeHe ?? '';
         const full = notice ? `${visible}\n\n${notice}` : visible;
-        await saveAssistantTurn(userId, agent, full, sessionId, locale);
+        await saveAssistantTurn(userId, agent, full, sessionId, locale, childMode);
         logger.info('chat: plan updated', {
           agent,
           reason: payload.reason,
@@ -485,12 +516,12 @@ async function finalizeAssistantTurn(
       const saved = planEagerAttempted
         ? visible
         : `${visible}\n\n${failureNotice}`;
-      await saveAssistantTurn(userId, agent, saved, sessionId, locale);
+      await saveAssistantTurn(userId, agent, saved, sessionId, locale, childMode);
       return { ...result, failureNotice };
     } catch (err) {
       logger.warn('chat: plan update threw', { err: String(err) });
       const failureNotice = buildPlanApplyFailureNotice(locale, String(err));
-      await saveAssistantTurn(userId, agent, `${visible}\n\n${failureNotice}`, sessionId, locale);
+      await saveAssistantTurn(userId, agent, `${visible}\n\n${failureNotice}`, sessionId, locale, childMode);
       return { applied: false, error: String(err), failureNotice };
     }
   }
@@ -500,7 +531,7 @@ async function finalizeAssistantTurn(
     logger.warn('chat: ASF_PLAN_UPDATE ignored — learner did not confirm in this turn');
   }
 
-  await saveAssistantTurn(userId, agent, visible, sessionId, locale);
+  await saveAssistantTurn(userId, agent, visible, sessionId, locale, childMode);
   return null;
 }
 
