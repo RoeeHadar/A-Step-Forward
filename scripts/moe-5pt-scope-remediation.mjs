@@ -56,15 +56,11 @@ function upsertQuestions(lesson, tag, questions) {
       needs_review: q.kind === 'open' || q.kind === 'derivation' ? true : q.needs_review,
       skill_atoms: q.skill_atoms || (lesson.skill_atom_bank || ['limit_algebra', 'moe_5pt']).slice(0, 2),
       explanation_en:
-        (q.explanation_en || '') +
-        (q.kind === 'open' || q.kind === 'derivation'
-          ? ' Worked path: restate the given form, apply the MoE technique, simplify, and state the finite or infinite limit.'
-          : ''),
+        q.explanation_en ||
+        '**Step 1.** Restate the given MoE form.\n\n**Step 2.** Apply the track technique (degree comparison, focus–directrix, or trig-limit toolkit).\n\n**Step 3.** Simplify and state the final answer clearly.\n\n**Wrong path.** Skipping the setup and jumping to a guessed number.',
       explanation_he:
-        (q.explanation_he || '') +
-        (q.kind === 'open' || q.kind === 'derivation'
-          ? ' דרך פתרון: נסחו מחדש, יישמו את שיטת התוכנית, פשטו, וציינו גבול סופי או אינסופי.'
-          : ''),
+        q.explanation_he ||
+        '**שלב 1.** נסחו מחדש את הצורה הנתון מהתוכנית.\n\n**שלב 2.** יישמו את השיטה (השוואת מעלות, מוקד–מכוון, או ארגז גבולות טריג).\n\n**שלב 3.** פשטו וציינו את התשובה הסופית בבירור.\n\n**דרך שגויה.** לדלג על ההכנה ולנחש מספר.',
     });
     for (const f of q.facets || []) existing.add(f);
   }
