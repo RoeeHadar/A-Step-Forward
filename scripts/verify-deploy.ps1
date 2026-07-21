@@ -41,14 +41,21 @@ if ($failed.Count -gt 0) {
 
 Write-Host "GitHub Actions: OK"
 
-$deployment = gh api "repos/$repo/deployments?sha=$resolvedSha&per_page=1" | ConvertFrom-Json | Select-Object -First 1
+$deploymentJson = gh api "repos/$repo/deployments?sha=$resolvedSha&per_page=5"
+$deployments = $deploymentJson | ConvertFrom-Json
+if ($deployments -isnot [System.Array]) { $deployments = @($deployments) }
+$deployment = $deployments | Select-Object -First 1
 if (-not $deployment) {
   Write-Host "WARN: no GitHub deployment record for SHA (Vercel may still be building)"
 } else {
-  $status = gh api $deployment.statuses_url | ConvertFrom-Json | Select-Object -First 1
-  Write-Host "Vercel deployment state: $($status.state)"
-  if ($status.state -ne "success") {
-    Write-Host $status.description
+  $statusJson = gh api $deployment.statuses_url
+  $statuses = $statusJson | ConvertFrom-Json
+  if ($statuses -isnot [System.Array]) { $statuses = @($statuses) }
+  # API returns newest first; take the latest state's name only (not member-enumeration).
+  $latestState = [string]$statuses[0].state
+  Write-Host "Vercel deployment state: $latestState ($($deployment.environment))"
+  if ($latestState -ne "success") {
+    Write-Host ([string]$statuses[0].description)
     exit 1
   }
 }
