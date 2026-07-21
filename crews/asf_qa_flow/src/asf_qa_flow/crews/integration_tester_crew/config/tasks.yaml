@@ -1,0 +1,64 @@
+scout_integration_surface:
+  description: >
+    Scout the integration test surface for A Step Forward focusing on {suite_focus}.
+    Charter seed_variant is {seed_variant} — cite it; do not switch variants.
+
+    Read and ground your map in:
+    0. docs/qa/rounds/current.json (STOP if seed_variant ≠ {seed_variant})
+    1. PLAN.md §3 Testing + §11 Evals
+    2. .cursor/rules/60-testing.mdc
+    3. .cursor/skills/neon-direct-route/SKILL.md
+    4. .cursor/skills/diagnostic-plan-golden-path/SKILL.md
+    5. .cursor/skills/onboarding-flow/SKILL.md
+    6. .cursor/skills/chat-memory-context/SKILL.md
+    7. Existing suites: apps/api/tests/, tests/, services/*/tests/
+
+    Identify:
+    - Critical-path routes (onboarding, plans, chat, learn, diagnostic)
+    - Auth/JWT boundaries
+    - Cross-service contracts that must not regress
+    - Gaps vs. coverage targets (≥80% services)
+
+    Constraints: do not invent endpoints; cite real paths. Free-tier path
+    must not depend on Render.
+  expected_output: >
+    A markdown surface map with sections: Critical paths, Existing tests,
+    Gaps, Suggested check order. Each item cites a file path.
+  agent: test_scout
+
+execute_integration_plan:
+  description: >
+    Using the scout map, produce an executable integration test plan for
+    {suite_focus} targeting environment {target_env} with seed_variant
+    {seed_variant}.
+
+    For each check include: name, command or pytest/vitest path, expected
+    result, severity if fail (P0–P3), and dependency on Docker Compose.
+
+    Prefer extending existing tests over new files when possible.
+  expected_output: >
+    A numbered checklist of ≤20 integration checks with exact commands,
+    expected outcomes, and P0–P3 severity. Flag any check that requires
+    secrets or live prod as BLOCKED-PENDING-APPROVAL. Echo seed_variant.
+  agent: test_executor
+  context:
+    - scout_integration_surface
+
+report_integration_findings:
+  description: >
+    Compile the final integration findings report for {suite_focus} on
+    {target_env} for seed_variant {seed_variant}. If checks were only
+    planned (not executed), label status as PLANNED vs EXECUTED honestly.
+
+    Structure: Executive summary → Blockers → High → Medium → Gaps →
+    Recommended next PR/actions for Coordinator.
+    Footer MUST include: seed_variant: {seed_variant}
+  expected_output: >
+    A markdown report for docs/qa/rounds/<round_id>/integration.md
+    with severity tags and file citations. No fabricated pass results.
+    Footer: seed_variant and round_id.
+  agent: findings_reporter
+  context:
+    - scout_integration_surface
+    - execute_integration_plan
+  output_file: output/integration_report.md

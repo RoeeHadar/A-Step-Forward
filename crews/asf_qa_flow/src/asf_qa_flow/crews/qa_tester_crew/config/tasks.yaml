@@ -1,0 +1,49 @@
+design_qa_scenarios:
+  description: >
+    Design product QA scenarios for {suite_focus} on A Step Forward.
+    Charter seed_variant is {seed_variant} — prioritize cases for that
+    variant; do not switch without Coordinator.
+
+    Ground in:
+    0. docs/qa/rounds/current.json (STOP if seed_variant ≠ {seed_variant})
+    1. docs/qa/adr-0010-manual-test-plan.md
+    2. docs/adr/0010-assessment-driven-progression.md (if present)
+    3. .cursor/skills/use-learning-plan/SKILL.md
+    4. .cursor/skills/diagnostic-plan-golden-path/SKILL.md
+    5. .cursor/skills/onboarding-flow/SKILL.md
+    6. obsidian-vault/_active-context.md pilot focus
+    7. scripts/seed-pilot-demo.mjs variants
+
+    Prefer covering: onboarding→first plan, gate pass/fail, readiness banner,
+    anti-gaming retake, wellbeing load bias, chat memory continuity.
+  expected_output: >
+    Scenario matrix: id, ADR decision link, seed variant, steps summary,
+    expected outcome. Max 16 scenarios prioritized P0–P2.
+  agent: qa_scenario_designer
+
+execute_qa_scripts:
+  description: >
+    Expand prioritized scenarios into executable QA scripts for {suite_focus}
+    on {target_env} with seed_variant {seed_variant}. Setup must use
+    `node scripts/seed-pilot-demo.mjs --variant {seed_variant}`.
+    Flag prod-destructive steps.
+  expected_output: >
+    Detailed scripts for the top ≤8 P0/P1 scenarios with exact expected
+    results and failure signals. Echo seed_variant.
+  agent: qa_executor
+  context:
+    - design_qa_scenarios
+
+report_qa_findings:
+  description: >
+    Compile product QA findings for {suite_focus} / seed_variant
+    {seed_variant}. Label PLANNED vs EXECUTED. Tie each result to ADR IDs.
+    Footer MUST include: seed_variant: {seed_variant}
+  expected_output: >
+    Markdown report for docs/qa/rounds/<round_id>/qa.md with scenario
+    pass/fail/blocked table and coordinator next actions.
+  agent: qa_reporter
+  context:
+    - design_qa_scenarios
+    - execute_qa_scripts
+  output_file: output/qa_report.md

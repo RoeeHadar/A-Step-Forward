@@ -440,17 +440,17 @@ function MockExamRunner({
 
 export function MockExamClient({
   exams,
-  getExam,
+  examsById,
   initialExamId,
 }: {
   exams: MockExamIndexEntry[];
-  getExam: (id: string) => SeedMockExam | null;
+  examsById: Record<string, SeedMockExam>;
   initialExamId?: string | null;
 }) {
   const [lang, setLang] = useState<Lang>('he');
   const [activeId, setActiveId] = useState<string | null>(initialExamId ?? null);
   const isHe = lang === 'he';
-  const activeExam = activeId ? getExam(activeId) : null;
+  const activeExam = activeId ? (examsById[activeId] ?? null) : null;
 
   return (
     <div className="min-h-[60vh] p-4 md:p-6">

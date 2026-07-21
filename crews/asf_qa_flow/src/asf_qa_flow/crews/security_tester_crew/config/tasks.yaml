@@ -1,0 +1,49 @@
+scout_security_surface:
+  description: >
+    Scout the security test surface for {suite_focus} on A Step Forward.
+    Charter seed_variant is {seed_variant} — cite it; do not switch.
+
+    Ground in:
+    0. docs/qa/rounds/current.json (STOP if seed_variant ≠ {seed_variant})
+    1. PLAN.md §10 Security, Safety, Privacy
+    2. .cursor/rules/50-security.mdc
+    3. .cursor/skills/security-safety/SKILL.md
+    4. .cursor/subagent-briefs/10-security-safety.md
+    5. apps/api/tests/test_security.py, apps/api/tests/test_auth_clerk.py
+    6. packages/agents/tests/test_safety.py
+    7. apps/web/middleware.ts CSP headers
+
+    Cover: Clerk JWT, RBAC roles, learner_id IDOR, PII redaction, AES-GCM
+    envelope usage, child_mode, audit logs, jailbreak/moderation, secrets hygiene.
+  expected_output: >
+    Security surface map with controls, existing tests, gaps, and suggested
+    probe order. Cite paths. Flag any live-prod write probe as needing approval.
+  agent: security_scout
+
+execute_security_plan:
+  description: >
+    Produce an executable security test plan for {suite_focus} on {target_env}
+    with seed_variant {seed_variant}.
+
+    Prefer automated pytest cases; list manual probes separately. No exploit
+    payloads — defensive checks and authz denial assertions only.
+  expected_output: >
+    Checklist ≤20 security checks with method, expected deny/allow, severity,
+    and automation status (auto/manual/blocked). Echo seed_variant.
+  agent: security_executor
+  context:
+    - scout_security_surface
+
+report_security_findings:
+  description: >
+    Compile security findings for {suite_focus} / seed_variant {seed_variant}.
+    Label PLANNED vs EXECUTED. Redact secrets/PII. Recommend review-security
+    on related PRs. Footer MUST include: seed_variant: {seed_variant}
+  expected_output: >
+    Markdown report for docs/qa/rounds/<round_id>/security.md with severity,
+    impact, remediation, and owner stream.
+  agent: security_reporter
+  context:
+    - scout_security_surface
+    - execute_security_plan
+  output_file: output/security_report.md

@@ -140,6 +140,11 @@ chat with the starter prompt at the bottom of the brief.
 | `.cursor/skills/skill-creation/SKILL.md` | Authoring, editing, or auditing any skill under `.cursor/skills/`. Encodes Anthropic's skill-building guide (frontmatter, discoverable descriptions, progressive disclosure) + a conformance audit checklist. |
 | `.cursor/skills/grill-me/SKILL.md` | Stress-test a plan or design with a relentless one-question interview before building. User says "grill me" / "/grill-me" / "stress-test this plan". |
 | `.cursor/skills/find-skills/SKILL.md` | Discover/install skills from skills.sh (`npx skills find`) after checking local `.cursor/skills/` + AGENTS.md. User asks "find a skill for X" / "is there a skill that…". |
+| `.agents/skills/getting-started` (CrewAI) | Scaffold CrewAI Flows/Crews (`crewai create flow`). Used for `crews/asf_qa_flow`. |
+| `.agents/skills/design-agent` (CrewAI) | Role/Goal/Backstory + tools for CrewAI Tester agents. |
+| `.agents/skills/design-task` (CrewAI) | Single-purpose CrewAI tasks + expected_output + guardrails. |
+| `.agents/skills/ask-docs` (CrewAI) | Live CrewAI docs lookup while editing crews. |
+| `crews/asf_qa_flow/` | Multi-crew QA Flow: integration, UI, product QA, security, evals Tester teams. |
 | `.cursor/skills/web-agent-shared/SKILL.md` | Shared runtime skills for all four live website agents (memory, bilingual, safety, plan protocol). Injected via `apps/web/src/lib/agent-skills.ts`. |
 | `.cursor/skills/web-agent-tutor/SKILL.md` | Tutor runtime skills: Socratic + Q&A explainer mode. Pair with `web-agent-shared`. |
 | `.cursor/skills/web-agent-mentor/SKILL.md` | Mentor runtime skills: goals, habits, wellbeing, plan updates. |

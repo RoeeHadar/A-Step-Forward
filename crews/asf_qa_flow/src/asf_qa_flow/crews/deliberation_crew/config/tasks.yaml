@@ -1,0 +1,61 @@
+advocate_integration:
+  description: >
+    Read the integration report for round {round_id} / seed_variant
+    {seed_variant}. Present ≤3 recommendations and challenge any other-suite
+    claims that conflict with integration evidence. Flag variant mismatches.
+  expected_output: >
+    Short advocate brief: agreements, challenges, ≤3 suggestions. Echo seed_variant.
+  agent: integration_advocate
+
+advocate_ui:
+  description: >
+    Read the UI report for round {round_id} / seed_variant {seed_variant}.
+    Present ≤3 recommendations; challenge taste-as-blocker and HE/RTL gaps.
+  expected_output: >
+    Short advocate brief: agreements, challenges, ≤3 suggestions. Echo seed_variant.
+  agent: ui_advocate
+
+advocate_qa:
+  description: >
+    Read the product QA report for round {round_id} / seed_variant {seed_variant}.
+    Present ≤3 recommendations; insist ADR-0010 building coverage is adequate.
+  expected_output: >
+    Short advocate brief: agreements, challenges, ≤3 suggestions. Echo seed_variant.
+  agent: qa_advocate
+
+advocate_security:
+  description: >
+    Read the security report for round {round_id} / seed_variant {seed_variant}.
+    Present ≤3 recommendations; escalate real authz risks only.
+  expected_output: >
+    Short advocate brief: agreements, challenges, ≤3 suggestions. Echo seed_variant.
+  agent: security_advocate
+
+advocate_evals:
+  description: >
+    Read the evals report for round {round_id} / seed_variant {seed_variant}.
+    Present ≤3 recommendations; no baseline promote.
+  expected_output: >
+    Short advocate brief: agreements, challenges, ≤3 suggestions. Echo seed_variant.
+  agent: evals_advocate
+
+facilitate_deliberation:
+  description: >
+    Using all five advocate briefs, write the Deliberation brief for
+    seed_variant {seed_variant} and round {round_id}.
+
+    Sections: Agreements | Conflicts | Variant lock check | Suggestions for
+    Coordinator | Unanimous-clean? (yes/no/unknown).
+
+    You MUST NOT issue a binding decision. Note iteration toward the 4-cap.
+  expected_output: >
+    Markdown Deliberation brief for docs/qa/rounds/<round_id>/deliberation.md
+    with clear conflicts and non-binding suggestions. Footer: seed_variant.
+  agent: facilitator
+  context:
+    - advocate_integration
+    - advocate_ui
+    - advocate_qa
+    - advocate_security
+    - advocate_evals
+  output_file: output/deliberation.md

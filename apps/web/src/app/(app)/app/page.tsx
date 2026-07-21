@@ -6,6 +6,7 @@ import { MicroWinToast } from '@/components/micro-win-toast';
 import { GoalCompletionBanner } from '@/components/goal-completion-banner';
 import { getAuthContext } from '@/lib/auth';
 import {
+  advanceRollingPlanWindow,
   getLearnerProfile,
   getGoalCompletionStatus,
   getCurrentPlan,
@@ -36,6 +37,10 @@ export default async function DashboardPage() {
     redirect('/sign-in');
   }
   if (!auth) redirect('/sign-in');
+
+  if (dbConfigured) {
+    await advanceRollingPlanWindow(auth.learnerId).catch(() => null);
+  }
 
   const [profile, goalStatus, plan, streak, latestPlanChange, teacher] = await Promise.all([
     dbConfigured

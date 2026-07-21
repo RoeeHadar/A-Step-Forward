@@ -8,7 +8,12 @@
 import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import { randomUUID } from 'node:crypto';
-import { appendLearnerPersonaLine, getConceptMastery, getLearnerProfile } from './neon-db';
+import {
+  advanceRollingPlanWindow,
+  appendLearnerPersonaLine,
+  getConceptMastery,
+  getLearnerProfile,
+} from './neon-db';
 import { countGateAttempts, GATE_PASS_THRESHOLD } from './test-attempts';
 import {
   GATE_BANK_FORMAT_VERSION,
@@ -787,7 +792,8 @@ export async function submitWeeklyQuizForUser(
   const view = await createPendingAttempt({
     learnerId: userId,
     kind: 'weekly_gate',
-    planId: row.plan_id ?? args.planId,
+    // Ownership from quiz row only — do not trust client plan_id for gate metadata.
+    planId: row.plan_id,
     weekNum: row.week_num ?? args.weekNum,
     quizId,
     locale,
@@ -828,13 +834,24 @@ export async function submitWeeklyQuizForUser(
     // best-effort
   }
 
-  // Closed-only complete path: may advance immediately.
+  // Closed-only complete path: mark week completed, then roll the window so the
+  // next week becomes active (mark alone leaves no 'active' week).
+  // Prefer stored quiz ownership only — never advance from client plan_id alone.
   let planAdapted = false;
   if (view.grading_status === 'complete' && view.passed) {
-    planAdapted = await markWeekCompleted(
-      row.plan_id ?? args.planId,
-      row.week_num ?? args.weekNum,
-    );
+    if (row.plan_id) {
+      const marked = await markWeekCompleted(
+        userId,
+        row.plan_id,
+        row.week_num ?? args.weekNum,
+      );
+      if (marked) {
+        const rolled = await advanceRollingPlanWindow(userId).catch(() => ({
+          advanced: false,
+        }));
+        planAdapted = rolled.advanced;
+      }
+    }
     if (view.score != null) {
       const pct = Math.round(view.score * 100);
       const personaLine =
@@ -870,16 +887,25 @@ export async function submitWeeklyQuizForUser(
   };
 }
 
-async function markWeekCompleted(planId: string, weekNum: number): Promise<boolean> {
+async function markWeekCompleted(
+  learnerId: string,
+  planId: string,
+  weekNum: number,
+): Promise<boolean> {
   if (!sql) return false;
   try {
+    // Defense-in-depth: join learning_plans so a known plan UUID cannot
+    // complete another learner's active week (mirrors fetchPlanWeekConceptIds).
     const updated = (await sql`
-      UPDATE plan_weeks
+      UPDATE plan_weeks pw
       SET status = 'completed'
-      WHERE plan_id = ${planId}::uuid
-        AND week_number = ${weekNum}
-        AND status = 'active'
-      RETURNING id
+      FROM learning_plans lp
+      WHERE pw.plan_id = lp.id
+        AND lp.id = ${planId}::uuid
+        AND lp.learner_id = ${learnerId}
+        AND pw.week_number = ${weekNum}
+        AND pw.status = 'active'
+      RETURNING pw.id
     `) as Array<{ id: string }>;
     return updated.length > 0;
   } catch {
@@ -896,12 +922,16 @@ export async function continueWeeklyQuizGrading(
   const view = await gradeNextOpenItem(userId, attemptId, {
     onPassed: async ({ planId, weekNum, score }) => {
       if (!planId || weekNum == null) return false;
-      const ok = await markWeekCompleted(planId, weekNum);
+      const ok = await markWeekCompleted(userId, planId, weekNum);
       if (ok) {
+        const rolled = await advanceRollingPlanWindow(userId).catch(() => ({
+          advanced: false,
+        }));
         const personaLine = `שער שבוע ${weekNum}: ציון ${Math.round(score * 100)}% (עבר/ה) — לאחר בדיקת תהליך.`;
         void appendLearnerPersonaLine(userId, 'תצפיות אחרונות', personaLine).catch(() => null);
+        return rolled.advanced;
       }
-      return ok;
+      return false;
     },
   });
   if (!view) return null;

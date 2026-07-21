@@ -1,0 +1,52 @@
+scout_ui_flows:
+  description: >
+    Scout UI / E2E coverage for {suite_focus} on A Step Forward.
+    Charter seed_variant is {seed_variant} — cite it; do not switch.
+
+    Ground in:
+    0. docs/qa/rounds/current.json (STOP if seed_variant ≠ {seed_variant})
+    1. PLAN.md Testing row (Vitest + Playwright)
+    2. .cursor/skills/add-a-frontend-page/SKILL.md
+    3. .cursor/skills/taste/SKILL.md (functional vs taste — do not block on taste)
+    4. .cursor/skills/diagnostic-plan-golden-path/SKILL.md
+    5. .cursor/skills/math-notation-integrity/SKILL.md
+    6. apps/web/tests/e2e/, docs/qa/adr-0010-manual-test-plan.md
+    7. Live URL https://a-step-forward-waij.vercel.app (smoke only if approved)
+
+    Map flows: sign-in, onboarding, dashboard/plan, /learn, chat agents,
+    tests/quizzes, settings/persona. Note HE default + RTL issues.
+  expected_output: >
+    Markdown flow map: Covered by Playwright, Manual-only, Gaps, Suggested
+    new specs. Cite file paths.
+  agent: ui_scout
+
+execute_ui_plan:
+  description: >
+    Produce an executable UI/E2E plan for {suite_focus} on {target_env}
+    with seed_variant {seed_variant}.
+
+    Include Playwright test titles, high-level steps, locale matrix (HE
+    primary, EN secondary), and mobile (375) + desktop (1280) checks.
+    Mark anything needing Clerk auth / pilot seed as gated.
+  expected_output: >
+    Numbered checklist ≤20 UI checks with steps, expected UI, severity.
+    Include suggested Playwright file paths under apps/web/tests/e2e/.
+    Echo seed_variant.
+  agent: ui_executor
+  context:
+    - scout_ui_flows
+
+report_ui_findings:
+  description: >
+    Compile UI/E2E findings for {suite_focus} on {target_env} for
+    seed_variant {seed_variant}. Label PLANNED vs EXECUTED honestly.
+    Separate functional blockers from taste notes.
+    Footer MUST include: seed_variant: {seed_variant}
+  expected_output: >
+    Markdown report for docs/qa/rounds/<round_id>/ui.md with severity tags,
+    locale/viewport, and repro steps. No fabricated passes.
+  agent: ui_reporter
+  context:
+    - scout_ui_flows
+    - execute_ui_plan
+  output_file: output/ui_report.md

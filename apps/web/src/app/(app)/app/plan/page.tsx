@@ -1,6 +1,12 @@
 import { redirect } from 'next/navigation';
 import { getAuthContext } from '@/lib/auth';
-import { dbConfigured, getCurrentPlan, getLearnerProfile, getLatestPlanChange } from '@/lib/neon-db';
+import {
+  advanceRollingPlanWindow,
+  dbConfigured,
+  getCurrentPlan,
+  getLearnerProfile,
+  getLatestPlanChange,
+} from '@/lib/neon-db';
 import { LearningPlanDashboard } from '@/components/learning-plan-dashboard';
 import { PlanChangeBanner } from '@/components/plan-change-banner';
 import { PlanAdjustmentNotice } from '@/components/plan-adjustment-notice';
@@ -15,6 +21,11 @@ export default async function LearningPlanPage() {
     redirect('/sign-in');
   }
   if (!auth) redirect('/sign-in');
+
+  // Promote completed/soft-override weeks before rendering (same as GET /api/plans/current).
+  if (dbConfigured) {
+    await advanceRollingPlanWindow(auth.learnerId).catch(() => null);
+  }
 
   const [plan, profile, latestChange] = await Promise.all([
     dbConfigured

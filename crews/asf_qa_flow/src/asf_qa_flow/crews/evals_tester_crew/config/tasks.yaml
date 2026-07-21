@@ -1,0 +1,48 @@
+scout_evals_coverage:
+  description: >
+    Scout eval coverage for {suite_focus} on A Step Forward.
+    Charter seed_variant is {seed_variant} — cite it; do not switch.
+
+    Ground in:
+    0. docs/qa/rounds/current.json (STOP if seed_variant ≠ {seed_variant})
+    1. PLAN.md §11 Observability & Evals
+    2. .cursor/rules/60-testing.mdc
+    3. .cursor/skills/run-evals/SKILL.md
+    4. .cursor/subagent-briefs/08-evals-qa.md
+    5. evals/agents/, evals/retrieval/, evals/memory/, evals/runner.py
+
+    Note active-context deferred item: full promptfoo/DeepEval harness may be
+    incomplete for live learners — report gaps truthfully.
+  expected_output: >
+    Coverage matrix by agent/suite type with baseline presence, thresholds,
+    and CI gate status. List top gaps.
+  agent: evals_scout
+
+execute_evals_plan:
+  description: >
+    Produce an executable evals plan for {suite_focus} on {target_env}
+    with seed_variant {seed_variant}.
+
+    Include make evals / runner.py --touched / specific promptfoo & DeepEval
+    commands. Mark suites that need API keys or will flake without mocks.
+    Do NOT recommend baseline promote this round.
+  expected_output: >
+    Checklist of eval runs with commands, expected gate behavior, and
+    severity if fail/regress. Echo seed_variant. No baseline-promote.
+  agent: evals_executor
+  context:
+    - scout_evals_coverage
+
+report_evals_findings:
+  description: >
+    Compile evals findings for {suite_focus} / seed_variant {seed_variant}.
+    Label PLANNED vs EXECUTED. Coverage/gap only — no baseline promote.
+    Footer MUST include: seed_variant: {seed_variant}
+  expected_output: >
+    Markdown report for docs/qa/rounds/<round_id>/evals.md with coverage gaps,
+    regression risks, and coordinator actions.
+  agent: evals_reporter
+  context:
+    - scout_evals_coverage
+    - execute_evals_plan
+  output_file: output/evals_report.md
