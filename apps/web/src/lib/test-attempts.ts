@@ -15,6 +15,9 @@
 import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import { logger } from '@/lib/logger';
+import { redactQuestionsUntilGraded } from '@/lib/test-attempt-redact';
+
+export { redactQuestionsUntilGraded } from '@/lib/test-attempt-redact';
 
 neonConfig.fetchConnectionCache = true;
 
@@ -216,6 +219,10 @@ export async function listTestAttempts(
   }
 }
 
+/**
+ * Load a single attempt for the Tests archive / API. Answer keys are redacted
+ * until grading_status === 'complete'.
+ */
 export async function getTestAttempt(
   learnerId: string,
   attemptId: string,
@@ -235,11 +242,13 @@ export async function getTestAttempt(
     `) as Array<Record<string, unknown>>;
     const row = rows[0];
     if (!row) return null;
+    const list = mapListRow(row);
+    const questions = (row.questions as TestAttemptQuestionSnapshot[]) ?? [];
     return {
-      ...mapListRow(row),
+      ...list,
       locale: typeof row.locale === 'string' ? row.locale : 'he',
       per_topic: (row.per_topic as Record<string, number>) ?? {},
-      questions: (row.questions as TestAttemptQuestionSnapshot[]) ?? [],
+      questions: redactQuestionsUntilGraded(questions, list.grading_status),
       answers: (row.answers as TestAttemptAnswerSnapshot[]) ?? [],
     };
   } catch {

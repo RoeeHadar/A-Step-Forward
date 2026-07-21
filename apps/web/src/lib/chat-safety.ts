@@ -45,12 +45,25 @@ const REFUSAL_TEMPLATES: Record<SafetyKind, string> = {
     "For your privacy, please don't share personal details like IDs or payment information here. We can continue without those.",
 };
 
+/**
+ * When Clerk age/child_mode are unset, treat school grades 1–7 as under-13
+ * (Israeli/US mapping; adult_bagrut and 8+ are not child mode).
+ */
+export function gradeImpliesChildMode(gradeLevel: string | null | undefined): boolean {
+  if (!gradeLevel || gradeLevel === 'adult_bagrut') return false;
+  const n = Number.parseInt(gradeLevel, 10);
+  return Number.isFinite(n) && n >= 1 && n < 8;
+}
+
 export function resolveChildMode(opts: {
   age: number | null;
   childModeFlag: boolean;
+  /** Neon learner_profiles.grade_level — used only when age is unset. */
+  gradeLevel?: string | null;
 }): boolean {
   if (opts.childModeFlag) return true;
-  return opts.age != null && opts.age < COPPA_AGE_THRESHOLD;
+  if (opts.age != null) return opts.age < COPPA_AGE_THRESHOLD;
+  return gradeImpliesChildMode(opts.gradeLevel);
 }
 
 export function childModeViolation(text: string): boolean {

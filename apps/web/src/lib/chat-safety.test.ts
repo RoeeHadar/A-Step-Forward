@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  gradeImpliesChildMode,
   refusalFor,
   resolveChildMode,
   ruleClassify,
@@ -49,6 +50,33 @@ describe('chat-safety resolveChildMode', () => {
     expect(resolveChildMode({ age: 12, childModeFlag: false })).toBe(true);
     expect(resolveChildMode({ age: 13, childModeFlag: false })).toBe(false);
     expect(resolveChildMode({ age: null, childModeFlag: true })).toBe(true);
+  });
+
+  it('infers child mode from grade 1–7 when age unset', () => {
+    expect(
+      resolveChildMode({ age: null, childModeFlag: false, gradeLevel: '6' }),
+    ).toBe(true);
+    expect(
+      resolveChildMode({ age: null, childModeFlag: false, gradeLevel: '12' }),
+    ).toBe(false);
+    expect(
+      resolveChildMode({ age: null, childModeFlag: false, gradeLevel: 'adult_bagrut' }),
+    ).toBe(false);
+  });
+
+  it('explicit adult age wins over low grade', () => {
+    expect(
+      resolveChildMode({ age: 16, childModeFlag: false, gradeLevel: '6' }),
+    ).toBe(false);
+  });
+});
+
+describe('chat-safety gradeImpliesChildMode', () => {
+  it('maps grades 1–7 only', () => {
+    expect(gradeImpliesChildMode('1')).toBe(true);
+    expect(gradeImpliesChildMode('7')).toBe(true);
+    expect(gradeImpliesChildMode('8')).toBe(false);
+    expect(gradeImpliesChildMode(null)).toBe(false);
   });
 });
 

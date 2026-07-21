@@ -3,6 +3,7 @@
  */
 import 'server-only';
 import { appendAgentNote, fetchAgentNotes } from '@/lib/neon-db';
+import { ruleClassify } from '@/lib/chat-safety';
 
 const MEMORY_NOTE_RE = /\[\[ASF_MEMORY_NOTE:(\{[\s\S]*?\})\]\]/g;
 
@@ -24,13 +25,17 @@ export async function applyMemoryTagsFromAssistant(
   learnerId: string,
   agent: string,
   assistantContent: string,
+  opts?: { childMode?: boolean },
 ): Promise<number> {
+  const childMode = opts?.childMode ?? false;
   let applied = 0;
   for (const match of assistantContent.matchAll(MEMORY_NOTE_RE)) {
     try {
       const parsed = JSON.parse(match[1]!) as MemoryNotePayload;
       const content = parsed.content?.trim();
       if (!content) continue;
+      // Classify note payloads (stripped from learner-visible chat) before write.
+      if (ruleClassify(content, { childMode })) continue;
       await appendAgentNote(learnerId, agent, {
         kind: parsed.kind ?? 'observation',
         content,

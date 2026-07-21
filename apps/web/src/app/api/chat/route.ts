@@ -119,7 +119,7 @@ async function saveAssistantTurn(
   const postHit = ruleClassify(cleaned, { childMode });
   const toStore = postHit ? refusalFor(postHit) : cleaned;
   if (!postHit) {
-    await applyMemoryTagsFromAssistant(userId, agent, content);
+    await applyMemoryTagsFromAssistant(userId, agent, content, { childMode });
   }
   await recordChatTurn(
     userId,
@@ -197,9 +197,12 @@ export async function POST(req: Request) {
   const meta = (sessionClaims?.metadata ??
     sessionClaims?.publicMetadata ??
     {}) as { child_mode?: boolean; age?: number };
+  // Neon grade_level fills COPPA gap when Clerk age/child_mode are unset.
+  const profileForSafety = await getLearnerProfile(userId).catch(() => null);
   const childMode = resolveChildMode({
     age: typeof meta.age === 'number' ? meta.age : null,
     childModeFlag: Boolean(meta.child_mode),
+    gradeLevel: profileForSafety?.grade_level ?? null,
   });
 
   const preHit = ruleClassify(lastMessage, { childMode });
