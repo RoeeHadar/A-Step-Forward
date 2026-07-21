@@ -19,6 +19,8 @@ export const learnerProgressSchema = z.object({
   concepts: z.array(conceptProgressSchema),
   streak_days: z.number(),
   total_minutes: z.number(),
+  total_xp: z.number().optional(),
+  level: z.number().optional(),
   lessons_completed: z.number(),
 });
 export type LearnerProgress = z.infer<typeof learnerProgressSchema>;

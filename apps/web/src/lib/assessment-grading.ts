@@ -665,6 +665,29 @@ async function finalizeAttempt(
     });
   }
 
+  if (gate.passed) {
+    void import('./learner-xp').then(
+      ({ XP_REWARDS, awardXp, gateSourceId, quizPassSourceId, maybeAwardStreakXp }) => {
+        if (row.kind === 'weekly_gate' && (row.plan_id || row.week_num != null)) {
+          void awardXp({
+            learnerId: row.learner_id,
+            amount: XP_REWARDS.gate_pass,
+            reason: 'gate_pass',
+            sourceId: gateSourceId(`${row.plan_id ?? 'plan'}:${row.week_num ?? 0}`),
+          });
+        } else {
+          void awardXp({
+            learnerId: row.learner_id,
+            amount: XP_REWARDS.quiz_pass,
+            reason: 'quiz_pass',
+            sourceId: quizPassSourceId(row.id),
+          });
+        }
+        void maybeAwardStreakXp(row.learner_id);
+      },
+    );
+  }
+
   return viewFromState({
     attempt_id: row.id,
     grading_status: 'complete',

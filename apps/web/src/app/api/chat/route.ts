@@ -688,6 +688,17 @@ async function buildContextPrompt(
     context += `\n${trimPersonaForChat(persona.text)}`;
   }
 
+  if (!minimal) {
+    try {
+      const { ensureXpSnapshot, formatXpContextBlock } = await import('@/lib/learner-xp');
+      const xpSnap = await ensureXpSnapshot(userId);
+      const xpLocale = locale === 'en' ? 'en' : 'he';
+      context += `\n\n${formatXpContextBlock(xpSnap, xpLocale)}`;
+    } catch {
+      // XP is optional context
+    }
+  }
+
   if (!minimal && agentNotes.length > 0) {
     context += `\n\n## My private notes on this learner (agent: ${agent})`;
     for (const n of agentNotes) {

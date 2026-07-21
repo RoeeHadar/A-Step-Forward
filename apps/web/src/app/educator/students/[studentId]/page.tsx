@@ -71,6 +71,8 @@ export default async function EducatorStudentPage({
         avg_mastery: progress.avg_mastery,
         atoms_practiced: progress.atoms_practiced,
         total_minutes: progress.total_minutes,
+        total_xp: progress.total_xp,
+        level: progress.level,
         concepts: progress.concepts.slice(0, 20).map((c) => {
           const titles = resolveConceptTitles(c.concept_id, {
             title_en: c.concept_name,

@@ -7,6 +7,12 @@ import {
   recordCustomQuizPractice,
   recordLessonAnswer,
 } from '@/lib/neon-db';
+import {
+  XP_REWARDS,
+  answerSourceId,
+  awardXp,
+  maybeAwardStreakXp,
+} from '@/lib/learner-xp';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -58,6 +64,9 @@ export async function POST(req: Request) {
         correct,
         skillAtoms,
       });
+      if (correct) {
+        void maybeAwardStreakXp(userId);
+      }
       return Response.json({ ok: true, correct, graded_by: 'client' });
     } catch (err) {
       return Response.json(
@@ -94,6 +103,25 @@ export async function POST(req: Request) {
       skillAtoms,
       timeSpentS: typeof body.time_spent_s === 'number' ? body.time_spent_s : null,
     });
+    const closedKinds = new Set([
+      'mcq',
+      'mcq_multi',
+      'true_false',
+      'numeric',
+      'short_answer',
+      'fill_blank',
+      'match',
+      'ordering',
+    ]);
+    if (graded.correct && closedKinds.has(question.kind)) {
+      void awardXp({
+        learnerId: userId,
+        amount: XP_REWARDS.correct_answer,
+        reason: 'correct_answer',
+        sourceId: answerSourceId(question_id),
+      });
+      void maybeAwardStreakXp(userId);
+    }
     return Response.json({
       ok: true,
       correct: graded.correct,

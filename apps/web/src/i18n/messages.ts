@@ -179,6 +179,11 @@ const messages = {
       description: 'Track your mastery, streaks, and learning trends',
       streak: 'Streak',
       totalTime: 'Total time',
+      xp: 'XP',
+      xpLevel: 'Level {level}',
+      xpHintTitle: 'What is XP?',
+      xpHintBody:
+        'XP (experience) grows when you learn — not from leaving a tab open. You earn +5 for a correct closed answer, +40 the first time a concept reaches mastery (≥70%), +25 for passing a week gate or quiz, and +10 once per active day (streak). Level = 1 + floor(XP ÷ 100).',
       lessonsDone: 'Lessons done',
       days: 'days',
       masteryByConcept: 'Mastery by concept',
@@ -462,6 +467,11 @@ const messages = {
       description: 'עקוב אחר השליטה, הרצפים ומגמות הלמידה שלך',
       streak: 'רצף ימים',
       totalTime: 'זמן כולל',
+      xp: 'XP',
+      xpLevel: 'רמה {level}',
+      xpHintTitle: 'מה זה XP?',
+      xpHintBody:
+        'XP (ניסיון) גדל מלמידה אמיתית — לא מהשארת לשונית פתוחה. מקבלים +5 על תשובה סגורה נכונה, +40 בפעם הראשונה שמושג מגיע לשליטה (≥70%), +25 על מעבר שער שבועי או מבחן, ו-+10 פעם ביום פעיל (רצף). רמה = 1 + floor(XP ÷ 100).',
       lessonsDone: 'שיעורים שהושלמו',
       days: 'ימים',
       masteryByConcept: 'שליטה לפי מושג',

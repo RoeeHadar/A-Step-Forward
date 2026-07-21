@@ -158,7 +158,32 @@ export async function recordTestAttempt(input: RecordTestAttemptInput): Promise<
       )
       RETURNING id::text
     `) as Array<{ id: string }>;
-    return rows[0]?.id ?? null;
+    const attemptId = rows[0]?.id ?? null;
+    if (attemptId && passed) {
+      void import('./learner-xp').then(
+        ({ XP_REWARDS, awardXp, gateSourceId, quizPassSourceId, maybeAwardStreakXp }) => {
+          const kind = input.kind ?? 'weekly_gate';
+          if (kind === 'weekly_gate' && (input.planId || input.weekNum != null)) {
+            const weekKey = `${input.planId ?? 'plan'}:${input.weekNum ?? 0}`;
+            void awardXp({
+              learnerId: input.learnerId,
+              amount: XP_REWARDS.gate_pass,
+              reason: 'gate_pass',
+              sourceId: gateSourceId(weekKey),
+            });
+          } else {
+            void awardXp({
+              learnerId: input.learnerId,
+              amount: XP_REWARDS.quiz_pass,
+              reason: 'quiz_pass',
+              sourceId: quizPassSourceId(attemptId),
+            });
+          }
+          void maybeAwardStreakXp(input.learnerId);
+        },
+      );
+    }
+    return attemptId;
   } catch (err) {
     logger.error('[test-attempts] recordTestAttempt insert failed', {
       err: String(err),

@@ -19,6 +19,8 @@ interface ProgressView {
   avg_mastery: number;
   atoms_practiced: number;
   total_minutes: number;
+  total_xp?: number;
+  level?: number;
   concepts: Array<{ concept_id: string; title: string; score: number }>;
   daily_activity: Array<{ date: string; count: number }>;
 }
@@ -328,8 +330,8 @@ export function EducatorStudentWorkspace({
                 value: `${Math.round((progress?.avg_mastery ?? 0) * 100)}%`,
               },
               {
-                label: isHe ? 'דקות משוערות' : 'Est. minutes',
-                value: progress?.total_minutes ?? 0,
+                label: isHe ? 'XP' : 'XP',
+                value: progress?.total_xp ?? progress?.total_minutes ?? 0,
               },
             ].map((c) => (
               <div key={c.label} className="rounded-xl border border-border p-4">

@@ -3068,6 +3068,11 @@ async function applyPracticeMasteryUpdate(
   void import('./adaptive-plan-refresh').then(({ scheduleAdaptivePlanRefresh }) => {
     scheduleAdaptivePlanRefresh(learnerId, 'mastery_update');
   });
+
+  void import('./learner-xp').then(({ maybeAwardMasteryXp, maybeAwardStreakXp }) => {
+    void maybeAwardMasteryXp(learnerId, conceptId);
+    void maybeAwardStreakXp(learnerId);
+  });
 }
 
 // ── Learner persona (CLAUDE.md-style, shared across every agent) ─────────────
@@ -3713,9 +3718,7 @@ const EMPTY_DASHBOARD: DashboardSnapshot = {
  * yet" empty state instead of the legacy "Introduction to Fractions" mock.
  *
  * "Lessons completed" = count of concepts where the learner's `concept_mastery.score`
- * is >= 0.7. "Level" = 1 + floor(completed/3 + atoms_practiced/12) — chosen so
- * a brand-new learner is level 1, and the number actually moves as they
- * progress (1 completion ≈ partial level; 3 completions = 1 level).
+ * is >= 0.7. "Level" = 1 + floor(total_xp / 100) from the XP ledger.
  *
  * `recent_lessons` is built from `concept_mastery.last_activity` joined with
  * the in-process KG (for bilingual names) and `lessons` (for the
@@ -3727,7 +3730,8 @@ export async function getDashboardSnapshot(
 ): Promise<DashboardSnapshot> {
   if (!sql) return EMPTY_DASHBOARD;
   try {
-    const [streak, masteryRowsRaw, atomCountRowsRaw] = await Promise.all([
+    const { ensureXpSnapshot } = await import('./learner-xp');
+    const [streak, masteryRowsRaw, atomCountRowsRaw, xpSnap] = await Promise.all([
       getLearnerStreak(learnerId).catch(() => ({
         current_days: 0,
         longest_days: 0,
@@ -3747,6 +3751,14 @@ export async function getDashboardSnapshot(
         FROM skill_practice
         WHERE learner_id = ${learnerId} AND attempts > 0
       `,
+      ensureXpSnapshot(learnerId).catch(() => ({
+        total_xp: 0,
+        level: 1,
+        into_level: 0,
+        to_next: 100,
+        week_xp: 0,
+        recent: [],
+      })),
     ]);
     const allMastery = masteryRowsRaw as Array<{
       concept_id: string;
@@ -3756,13 +3768,8 @@ export async function getDashboardSnapshot(
     const atomCountRows = atomCountRowsRaw as Array<{ n: number }>;
     const completed = allMastery.filter((r) => Number(r.score) >= 0.7).length;
     const atomsPracticed = atomCountRows[0]?.n ?? 0;
-    // Conservative gamification curve: 1 by default; 1 extra level per 3
-    // completions or per 12 practiced atoms (whichever helps first). Never
-    // goes down.
-    const level =
-      1 +
-      Math.floor(completed / 3) +
-      Math.floor(Number(atomsPracticed) / 12);
+    void atomsPracticed;
+    const level = xpSnap.level;
 
     // Lesson availability for the top recent concepts so we can deep-link.
     const conceptsForLessons = allMastery.slice(0, 6).map((r) => r.concept_id);
@@ -3857,8 +3864,19 @@ export interface ProgressConceptRow {
 
 export interface ProgressSnapshot {
   streak: LearnerStreak;
-  /** Total estimated study time in minutes (chat_turns × 4 + completed_concepts × 20). */
+  /**
+   * @deprecated Estimated study minutes (chat×4 + mastery×20). Prefer total_xp.
+   * Kept for educator legacy fields until callers migrate.
+   */
   total_minutes: number;
+  /** Durable gamification XP (ledger). */
+  total_xp: number;
+  /** Level = 1 + floor(total_xp / 100). */
+  level: number;
+  /** XP earned within the current level (0..99). */
+  xp_into_level: number;
+  /** XP remaining until next level. */
+  xp_to_next: number;
   /** Concepts where mastery score >= 0.7 (plan/subject scoped when possible). */
   lessons_completed: number;
   /** Average mastery across scoped concepts (0–1). */
@@ -3882,6 +3900,10 @@ function emptyProgressSnapshot(): ProgressSnapshot {
   return {
     streak: { ...EMPTY_STREAK },
     total_minutes: 0,
+    total_xp: 0,
+    level: 1,
+    xp_into_level: 0,
+    xp_to_next: 100,
     lessons_completed: 0,
     avg_mastery: 0,
     atoms_practiced: 0,
@@ -3908,10 +3930,8 @@ function emptyProgressSnapshot(): ProgressSnapshot {
  * Mastery rows are filtered to the learner's active plan when one exists,
  * otherwise to enrolled subjects — same scope as the Memory tab.
  *
- * `total_minutes` is estimated:
- *   (user chat turns × 4 min) + (mastered concepts × 20 min)
- * — rough but consistent across both pages. There is no explicit session-time
- * column yet.
+ * Primary engagement metric is `total_xp` (ledger). `total_minutes` remains a
+ * legacy estimate for educator compatibility only.
  */
 /** Coerce Neon timestamp (string | Date) to YYYY-MM-DD; never throws. */
 function toIsoDateKey(value: unknown): string | null {
@@ -3937,6 +3957,7 @@ export async function getProgressFromNeon(learnerId: string): Promise<ProgressSn
   if (!sql) return emptyProgressSnapshot();
   try {
     await ensureTestAttemptsTable().catch(() => false);
+    const { ensureXpSnapshot } = await import('./learner-xp');
     const [
       streak,
       masteryRowsRaw,
@@ -3946,6 +3967,7 @@ export async function getProgressFromNeon(learnerId: string): Promise<ProgressSn
       daily_activity,
       weekly_recap,
       recent_activity,
+      xpSnap,
     ] = await Promise.all([
       getLearnerStreak(learnerId).catch(() => ({ ...EMPTY_STREAK })),
       sql`
@@ -3968,6 +3990,14 @@ export async function getProgressFromNeon(learnerId: string): Promise<ProgressSn
       getDailyActivity(learnerId, 30),
       getWeeklyRecap(learnerId),
       getRecentActivity(learnerId, 8),
+      ensureXpSnapshot(learnerId).catch(() => ({
+        total_xp: 0,
+        level: 1,
+        into_level: 0,
+        to_next: 100,
+        week_xp: 0,
+        recent: [],
+      })),
     ]);
 
     const subjects = profile?.subjects ?? [];
@@ -4022,6 +4052,10 @@ export async function getProgressFromNeon(learnerId: string): Promise<ProgressSn
     return {
       streak,
       total_minutes: totalMinutes,
+      total_xp: xpSnap.total_xp,
+      level: xpSnap.level,
+      xp_into_level: xpSnap.into_level,
+      xp_to_next: xpSnap.to_next,
       lessons_completed: completed,
       avg_mastery: avgMastery,
       atoms_practiced: atomsPracticed,
@@ -4911,6 +4945,7 @@ export async function resetLearnerData(
   const deletes = [
     s`DELETE FROM chat_turns WHERE learner_id = ${learnerId}`,
     s`DELETE FROM learner_agent_notes WHERE learner_id = ${learnerId}`,
+    s`DELETE FROM learner_xp_events WHERE learner_id = ${learnerId}`,
     s`DELETE FROM concept_mastery WHERE learner_id = ${learnerId}`,
     s`DELETE FROM skill_practice WHERE learner_id = ${learnerId}`,
     s`DELETE FROM diagnostic_sessions WHERE learner_id = ${learnerId}`,
@@ -4929,7 +4964,8 @@ export async function resetLearnerData(
           wellbeing_plan_bias = NULL,
           weak_concepts = NULL,
           strong_concepts = NULL,
-          lessons_completed_count = 0
+          lessons_completed_count = 0,
+          total_xp = 0
       WHERE learner_id = ${learnerId}
     `);
   }
@@ -4970,6 +5006,7 @@ async function resetLearnerDataLegacy(
 
   await optional(() => s`DELETE FROM chat_turns WHERE learner_id = ${learnerId}`);
   await optional(() => s`DELETE FROM learner_agent_notes WHERE learner_id = ${learnerId}`);
+  await optional(() => s`DELETE FROM learner_xp_events WHERE learner_id = ${learnerId}`);
   await optional(() => s`DELETE FROM concept_mastery WHERE learner_id = ${learnerId}`);
   await optional(() => s`DELETE FROM skill_practice WHERE learner_id = ${learnerId}`);
   await optional(() => s`DELETE FROM diagnostic_sessions WHERE learner_id = ${learnerId}`);
@@ -4989,7 +5026,8 @@ async function resetLearnerDataLegacy(
           wellbeing_plan_bias = NULL,
           weak_concepts = NULL,
           strong_concepts = NULL,
-          lessons_completed_count = 0
+          lessons_completed_count = 0,
+          total_xp = 0
       WHERE learner_id = ${learnerId}
     `);
   }

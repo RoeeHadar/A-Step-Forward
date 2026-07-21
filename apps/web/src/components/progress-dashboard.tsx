@@ -13,7 +13,7 @@ import {
   BarChart,
   Bar,
 } from 'recharts';
-import { Share2 } from 'lucide-react';
+import { Share2, HelpCircle } from 'lucide-react';
 import type { LearnerProgress } from '@asf/schemas/progress';
 import { Button } from '@asf/ui/button';
 import { cn } from '@asf/ui';
@@ -22,6 +22,7 @@ import { AnimatedCounter } from '@/components/animated-counter';
 import { ActivityHeatmap } from '@/components/activity-heatmap';
 import { LearnerStreakCard } from '@/components/learner-streak-card';
 import type { ProgressSnapshot } from '@/lib/neon-db';
+import { XP_PER_LEVEL } from '@/lib/learner-xp-math';
 
 type GradeEstimate = {
   estimatedGrade: number;
@@ -200,18 +201,59 @@ export function ProgressDashboard({
           gradient="from-accent-amber to-accent-magenta"
         />
         <StatCard
-          title={t.totalTime}
-          value={
-            <>
-              <AnimatedCounter
-                key={`minutes-${progress.total_minutes}`}
-                end={progress.total_minutes}
-                className="font-display text-3xl font-bold"
-              />
-              <span className="ms-1 text-lg font-normal text-muted-foreground">
-                {messages.dashboard.minutes}
+          title={
+            <span className="inline-flex items-center gap-1.5">
+              {t.xp}
+              <span className="group relative inline-flex">
+                <HelpCircle
+                  className="h-3.5 w-3.5 text-muted-foreground"
+                  aria-hidden
+                />
+                <span
+                  role="tooltip"
+                  className="pointer-events-none absolute start-0 top-full z-20 mt-2 hidden w-64 rounded-lg border border-border bg-surface-1 p-3 text-xs font-normal leading-relaxed text-foreground shadow-lg group-hover:block group-focus-within:block"
+                >
+                  <span className="font-semibold">{t.xpHintTitle}</span>
+                  <span className="mt-1 block text-muted-foreground">{t.xpHintBody}</span>
+                </span>
+                <button
+                  type="button"
+                  className="sr-only"
+                  aria-label={t.xpHintTitle}
+                >
+                  {t.xpHintTitle}
+                </button>
               </span>
-            </>
+            </span>
+          }
+          value={
+            <div className="w-full space-y-2">
+              <div className="flex items-baseline gap-2">
+                <AnimatedCounter
+                  key={`xp-${snapshot.total_xp}`}
+                  end={snapshot.total_xp}
+                  className="font-display text-3xl font-bold"
+                />
+                <span className="text-sm font-medium text-muted-foreground">
+                  {t.xpLevel.replace('{level}', String(snapshot.level))}
+                </span>
+              </div>
+              <div
+                className="h-1.5 w-full overflow-hidden rounded-full bg-muted/60"
+                role="progressbar"
+                aria-valuenow={snapshot.xp_into_level}
+                aria-valuemin={0}
+                aria-valuemax={XP_PER_LEVEL}
+                aria-label={t.xpLevel.replace('{level}', String(snapshot.level))}
+              >
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-accent-cyan to-primary transition-[width] duration-500"
+                  style={{
+                    width: `${Math.min(100, (snapshot.xp_into_level / XP_PER_LEVEL) * 100)}%`,
+                  }}
+                />
+              </div>
+            </div>
           }
           gradient="from-accent-cyan to-primary"
         />
@@ -342,7 +384,7 @@ function StatCard({
   value,
   gradient,
 }: {
-  title: string;
+  title: ReactNode;
   value: ReactNode;
   gradient: string;
 }) {
