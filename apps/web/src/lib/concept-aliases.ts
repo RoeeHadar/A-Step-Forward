@@ -39,7 +39,7 @@ export const CONCEPT_ID_ALIASES: Record<string, string> = {
   eigenvalues_eigenvectors: 'la_eigenvalues',
   probability_conditional_bayes: 'probability_basic',
   trigonometry_plane_sine_cosine_law: 'trigonometry_sine_cosine_laws',
-  analytic_geometry_conics: 'analytic_geometry_parabola',
+  analytic_geometry_conics: 'analytic_geometry_classification',
   hypothesis_testing_z_t: 'hypothesis_testing',
   correlation_coefficient: 'descriptive_stats',
   analytic_geometry_lines_circles: 'analytic_geometry',

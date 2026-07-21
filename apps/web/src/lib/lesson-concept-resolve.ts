@@ -31,12 +31,16 @@ export const TRACK_NAMED_LESSONS: Record<string, Partial<Record<VariantTrack, st
   euclidean_geometry_circles: { '5pt': 'euclidean_geometry_circles__5pt' },
   riemann_integral_ftc: { '5pt': 'riemann_integral_ftc__5pt', uni: 'riemann_integral_ftc' },
   implicit_differentiation: {
-    '5pt': 'implicit_differentiation',
+    // Not a MoE 5pt syllabus topic — route only to university variant
     uni: 'implicit_differentiation__uni',
   },
   analytic_geometry: {
     '4pt': 'analytic_geometry_4pt',
-    '5pt': 'analytic_geometry__5pt',
+    '5pt': 'analytic_geometry_5pt',
+  },
+  exponential_growth_decay_models: {
+    '4pt': 'exponential_growth_decay_models',
+    '5pt': 'exponential_growth_decay_models__5pt',
   },
 };
 
