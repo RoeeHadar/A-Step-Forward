@@ -338,18 +338,20 @@ export function formatXpContextBlock(snap: XpSnapshot, locale: 'he' | 'en' = 'he
           .join(locale === 'he' ? ' · ' : '; ');
   if (locale === 'he') {
     return [
-      '## XP של הלומד',
+      '## XP של הלומד (פנימי — אל תדביק גולמי)',
       `- סה״כ XP: ${snap.total_xp} · רמה ${snap.level} (עוד ${snap.to_next} לרמה הבאה)`,
       `- XP בשבוע האחרון: ${snap.week_xp}`,
       `- אחרונים: ${recent}`,
       '- אל תמציא XP; השתמש רק במספרים האלה. XP משקף פעולות למידה, לא זמן שעון.',
+      '- כשמספרים סטטוס ללומד: נסח בעברית פשוטה (רמה + התקדמות), בלי שורות XP גולמיות ובלי רשימות אירועים כפולות.',
     ].join('\n');
   }
   return [
-    '## Learner XP',
+    '## Learner XP (internal — do not paste raw)',
     `- Total XP: ${snap.total_xp} · Level ${snap.level} (${snap.to_next} XP to next)`,
     `- XP last 7 days: ${snap.week_xp}`,
     `- Recent: ${recent}`,
     '- Do not invent XP; use only these numbers. XP reflects learning actions, not clock time.',
+    '- When reporting status: plain paraphrase (level + progress); never dump raw XP lines or duplicate event lists.',
   ].join('\n');
 }

@@ -57,15 +57,25 @@ import {
   compactStoredTurnContent,
   fitSystemPrompt,
   formatPlanWeeksCompact,
+  resolveChatMaxTokens,
   trimPersonaForChat,
   truncateChatText,
+  truncationContinueNotice,
 } from '@/lib/chat-context-policy';
 import {
   appendTutorContractToContext,
   buildTutorInteractionContract,
   classifyTutorChatIntent,
+  wantsExpandedOutputBudget,
   type TutorIntentContext,
 } from '@/lib/learner-chat-intent';
+import {
+  buildBilingualProgressBriefing,
+  PROGRESS_STATUS_TURN_INSTRUCTION,
+  RECOVERY_TURN_INSTRUCTION,
+  WORKED_SOLUTION_TURN_INSTRUCTION,
+} from '@/lib/learner-progress-briefing';
+import { computeReadiness } from '@/lib/readiness';
 import { dreamLearnerMemory } from '@/lib/agent-memory-dream';
 import kg from '@/lib/kg-data.json';
 import { buildCompactAgentBaseline } from '@/lib/agent-baseline';
@@ -566,6 +576,10 @@ async function* streamAgentResponse(
     failure = classifyFetchError(err, getLLMConfig().providerLabel);
     logger.warn('llm stream raised', { err: String(err) });
   }
+  if (emitted && failure?.model === 'length_cap') {
+    yield truncationContinueNotice(locale);
+    return;
+  }
   if (!emitted) {
     logger.warn('chat: all LLM attempts failed — learner fallback', {
       agent,
@@ -655,7 +669,8 @@ async function buildContextPrompt(
 
   let tutorContract: ReturnType<typeof buildTutorInteractionContract> | null = null;
   let tutorIntent: ReturnType<typeof classifyTutorChatIntent> | null = null;
-  if (agent === 'tutor' && !minimal) {
+  const liveAgents = agent === 'tutor' || agent === 'mentor' || agent === 'coach' || agent === 'reviewer';
+  if (liveAgents && !minimal) {
     const tutorMode =
       (profile?.personality_profile as { tutor_mode?: string } | null)?.tutor_mode ?? null;
     const wellbeingProfileInput = profile
@@ -680,7 +695,9 @@ async function buildContextPrompt(
         : null,
     };
     tutorIntent = classifyTutorChatIntent(message, intentCtx);
-    tutorContract = buildTutorInteractionContract(tutorIntent, locale, intentCtx);
+    if (agent === 'tutor') {
+      tutorContract = buildTutorInteractionContract(tutorIntent, locale, intentCtx);
+    }
 
     if (tutorIntent === 'exam_anxiety') {
       void setWellbeingChatTrigger(userId, 'exam_anxiety').catch((err) =>
@@ -720,12 +737,18 @@ async function buildContextPrompt(
   if (!minimal && persona?.text && persona.text.trim().length > 0) {
     context += `\n\n## What I know about this learner (shared persona)`;
     context += `\n${trimPersonaForChat(persona.text)}`;
+    context += `\n- Persona hygiene: do not paste gate-score lines or observations verbatim; paraphrase into learner language.`;
   }
 
+  let xpSnapForBriefing: {
+    total_xp: number;
+    level: number;
+  } | null = null;
   if (!minimal) {
     try {
       const { ensureXpSnapshot, formatXpContextBlock } = await import('@/lib/learner-xp');
       const xpSnap = await ensureXpSnapshot(userId);
+      xpSnapForBriefing = { total_xp: xpSnap.total_xp, level: xpSnap.level };
       const xpLocale = locale === 'en' ? 'en' : 'he';
       context += `\n\n${formatXpContextBlock(xpSnap, xpLocale)}`;
     } catch {
@@ -741,7 +764,7 @@ async function buildContextPrompt(
     }
   }
   if (profile) {
-    context += `\n\n## Learner profile`;
+    context += `\n\n## Learner profile (internal facts — paraphrase; never dump field-by-field)`;
     context += `\n- Goal: ${profile.goal}`;
     if (profile.grade_level) context += `\n- Grade level: ${profile.grade_level}`;
     if (profile.points_group) context += `\n- Math units: ${profile.points_group}`;
@@ -1138,6 +1161,71 @@ async function buildContextPrompt(
     }
   }
 
+  // ADR-0011: bilingual progress briefing + turn blocks for all live agents
+  if (!minimal && liveAgents && profile) {
+    const goalKey =
+      (profile.personality_profile as { goal_key?: string } | null)?.goal_key ?? null;
+    const mental = profile.mental_state as Record<string, unknown> | null;
+    const pacingForBrief = computePlanPacing(profile, mastery);
+    const daysLeft = daysUntilExam(
+      {
+        subjects: profile.subjects,
+        mental_state: profile.mental_state,
+        next_test_date: profile.next_test_date,
+        personality_profile: profile.personality_profile,
+        points_group: profile.points_group,
+        wellbeing_plan_bias: profile.wellbeing_plan_bias,
+      },
+      new Date(),
+    );
+    const readiness = computeReadiness({
+      goalKey,
+      masteryScores: mastery,
+      daysToExam: daysLeft,
+    });
+    const activeWeek =
+      currentPlan?.weeks.find((w) => w.status === 'active') ?? currentPlan?.weeks[0];
+    const nameOf = (id: string) => {
+      const kgInfo = kgByName[id];
+      return kgInfo?.name_he || kgInfo?.name || id;
+    };
+    context += `\n\n${buildBilingualProgressBriefing({
+      goalKey,
+      goalLabel: profile.goal,
+      examDateLabel: profile.next_test_date
+        ? String(profile.next_test_date).slice(0, 10)
+        : null,
+      daysToExam: daysLeft,
+      hoursPerWeek: profile.hours_per_week,
+      pointsGroup: profile.points_group,
+      subjects: profile.subjects,
+      anxiety: typeof mental?.anxiety === 'number' ? mental.anxiety : null,
+      motivation: typeof mental?.motivation === 'number' ? mental.motivation : null,
+      strongConcepts: strongConcepts.map(nameOf),
+      weakConcepts: weakConcepts.map(nameOf),
+      activeWeekNumber: activeWeek?.week_number ?? null,
+      activeWeekConcepts: activeWeek?.concepts.map(
+        (c) => c.name_he || c.name || c.concept_id,
+      ),
+      xpLevel: xpSnapForBriefing?.level ?? null,
+      xpTotal: xpSnapForBriefing?.total_xp ?? null,
+      readinessPct: readiness ? Math.round(readiness.readiness * 100) : null,
+      readinessBand: readiness?.band ?? null,
+      readinessPhase: readiness?.phase ?? null,
+      paceStatus: pacingForBrief?.status ?? null,
+    })}`;
+
+    if (tutorIntent === 'progress_status' || tutorIntent === 'exam_readiness') {
+      context += `\n\n${PROGRESS_STATUS_TURN_INSTRUCTION}`;
+    }
+    if (tutorIntent === 'recovery_simplify') {
+      context += `\n\n${RECOVERY_TURN_INSTRUCTION}`;
+    }
+    if (tutorIntent === 'worked_solution' || tutorIntent === 'conversation_advance') {
+      context += `\n\n${WORKED_SOLUTION_TURN_INSTRUCTION}`;
+    }
+  }
+
   context += `\n\n${CHAT_BREVITY_RULE}`;
 
   const system = fitSystemPrompt(context);
@@ -1197,17 +1285,24 @@ async function* streamFromLLM(
     });
   }
 
+  const maxTokens = resolveChatMaxTokens({
+    wantsWorkedSolution: wantsExpandedOutputBudget(message),
+    wantsContinue: wantsExpandedOutputBudget(message),
+  });
+
   for (let i = 0; i < attempts.length; i++) {
     const { label, context } = attempts[i]!;
     const failureSink = { current: null as LLMFailureInfo | null };
+    const finishSink = { current: null as string | null };
     const llmOpts = {
       system: context.system,
       messages: [...context.memory, { role: 'user' as const, content: message }],
-      maxTokens: CHAT_CONTEXT.maxOutputTokens,
+      maxTokens,
       temperature: 0.4,
       timeoutMs: CHAT_LLM_TIMEOUT_MS,
       models: resolveChatModelChain(),
       failureSink,
+      finishSink,
     };
 
     let emitted = false;
@@ -1225,6 +1320,10 @@ async function* streamFromLLM(
         return undefined;
       }
     } else {
+      if (finishSink.current === 'length') {
+        // Signal truncation to the outer stream via a sentinel return kind.
+        return { kind: 'stream_interrupted', provider: cfg.providerLabel, model: 'length_cap' };
+      }
       return undefined;
     }
 

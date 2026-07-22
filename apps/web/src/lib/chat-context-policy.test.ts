@@ -4,7 +4,6 @@ import {
   compactMemoryTurns,
   compactStoredTurnContent,
   formatPlanWeeksCompact,
-  isReadinessFollowUp,
   wantsConversationAdvance,
   wantsExamReadinessAnswer,
   wantsLearningPlanSnapshot,
@@ -76,12 +75,21 @@ describe('chat-context-policy', () => {
     expect(wantsConversationAdvance('כן אני יודע את הנושאים')).toBe(false);
   });
 
-  it('detects readiness follow-up affirmations', () => {
-    const recent = [
-      { role: 'user', content: 'הבגרות שלי עוד שבוע, האם התוכנית תכין אותי?' },
-      { role: 'assistant', content: 'התוכנית כוללת 5 שעות...' },
-    ];
-    expect(isReadinessFollowUp('כן אני יודע את הנושאים האלו', recent)).toBe(true);
-    expect(isReadinessFollowUp('כן אני יודע את הנושאים האלו', [])).toBe(false);
+  it('detects bagrut odds as exam readiness', () => {
+    expect(
+      wantsExamReadinessAnswer('איך אתה חושב שיהיה לי בבגרות אם אמשיך בקצב הזה'),
+    ).toBe(true);
+  });
+
+  it('resolveChatMaxTokens raises budget for worked / continue turns', async () => {
+    const { resolveChatMaxTokens, truncationContinueNotice } = await import(
+      './chat-context-policy'
+    );
+    expect(resolveChatMaxTokens({})).toBe(CHAT_CONTEXT.maxOutputTokens);
+    expect(
+      resolveChatMaxTokens({ wantsWorkedSolution: true }),
+    ).toBe(CHAT_CONTEXT.maxOutputTokensWorked);
+    expect(truncationContinueNotice('he')).toContain('המשך');
+    expect(truncationContinueNotice('en')).toContain('continue');
   });
 });

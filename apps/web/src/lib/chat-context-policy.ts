@@ -12,6 +12,10 @@ export {
   wantsExamAnxietySupport,
   wantsStudyHoursIncrease,
   isReadinessFollowUp,
+  wantsProgressStatus,
+  wantsRecoverySimplify,
+  wantsWorkedSolution,
+  wantsExpandedOutputBudget,
 } from '@/lib/learner-chat-intent';
 
 export const CHAT_CONTEXT = {
@@ -22,7 +26,10 @@ export const CHAT_CONTEXT = {
   maxAgentNotes: 3,
   maxAgentNoteChars: 280,
   maxSystemChars: 18_000,
+  /** Default reply budget — keeps cost/latency down for normal turns. */
   maxOutputTokens: 768,
+  /** Worked solutions / continue-from-partial (ADR-0011). */
+  maxOutputTokensWorked: 1400,
   maxStoredTurnChars: 2_800,
   dreamNoteThreshold: 22,
   maxWeakStrongConcepts: 3,
@@ -32,10 +39,27 @@ export const CHAT_CONTEXT = {
 export const CHAT_BREVITY_RULE = `## Response style (mandatory)
 - Be concise and relevant: answer the learner's question first.
 - Default length: 2–4 short paragraphs (or ≤6 bullets) unless they ask for depth.
-- Do not repeat injected profile/plan/persona back to them.
-- Never open with meta-phrases like "אני חושב שאני יודע מה קרה" or repeat the same checklist from your prior turn.
+- Do not repeat injected profile/plan/persona/XP back to them — paraphrase the bilingual progress briefing.
+- Never open with meta-phrases like "אני חושב שאני יודע מה קרה", "אני חושב שזה יעזור", "אני צריך להסביר זאת בצורה שונה", or repeat the same checklist from your prior turn.
 - End with one clear next step or one focused question — not both unless needed.
-- Follow the ## Interaction mode block for this turn — it overrides default Socratic behavior.`;
+- Follow the ## Interaction mode / THIS TURN block for this turn — it overrides default Socratic behavior.`;
+
+/** Whether this turn should use the higher output token budget. */
+export function resolveChatMaxTokens(opts: {
+  wantsWorkedSolution?: boolean;
+  wantsContinue?: boolean;
+}): number {
+  if (opts.wantsWorkedSolution || opts.wantsContinue) {
+    return CHAT_CONTEXT.maxOutputTokensWorked;
+  }
+  return CHAT_CONTEXT.maxOutputTokens;
+}
+
+export function truncationContinueNotice(locale: 'he' | 'en'): string {
+  return locale === 'he'
+    ? '\n\n—\nהתשובה נחתכה באמצע בגלל אורך. כתוב «המשך» ואמשיך בדיוק מהמקום שעצרתי (בלי לחזור על השלבים הקודמים).'
+    : '\n\n—\nThe answer was cut off due to length. Reply “continue” and I will resume exactly where I stopped (without repeating earlier steps).';
+}
 
 const ERROR_MARKERS = ['**מה קרה:**', '**What happened:**', '[שירות המודל לא זמין', '[Model service temporarily'];
 

@@ -10,8 +10,22 @@ if (fs.existsSync(envLocal)) {
     const eq = trimmed.indexOf('=');
     if (eq <= 0) continue;
     const key = trimmed.slice(0, eq).trim();
-    const value = trimmed.slice(eq + 1).trim();
-    if (process.env[key] == null) process.env[key] = value;
+    let value = trimmed.slice(eq + 1).trim();
+    // Strip surrounding quotes from dotenv-style values ("https://…" / '…')
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+    if (process.env[key] == null || process.env[key] === '') process.env[key] = value;
+    // Prefer unquoted .env.local over a previously quoted shell/process value
+    else if (
+      (process.env[key].startsWith('"') && process.env[key].endsWith('"')) ||
+      (process.env[key].startsWith("'") && process.env[key].endsWith("'"))
+    ) {
+      process.env[key] = value;
+    }
   }
 }
 

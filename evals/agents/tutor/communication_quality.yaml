@@ -1,0 +1,36 @@
+# Tutor communication quality — ADR-0011 regression matrix
+# Unit-test counterparts live in apps/web (intent + skills + briefing).
+# Run with promptfoo when a live/mock provider is wired for HE chat smoke.
+description: Grounded correctness + anti-filler (transcript-derived)
+prompts:
+  - file://../../../prompts/tutor/v1.md
+providers:
+  - id: file://../../providers/tutor_mock.js
+tests:
+  - description: status ask — must not dump XP/ISO (mock smoke; full assert in vitest)
+    vars:
+      message: "מה הסטטוס הנוכחי שלי"
+    assert:
+      - type: javascript
+        value: |
+          const out = JSON.parse(output);
+          const r = String(out.reply || '');
+          return !/GMT\+0000/.test(r) && !/סה["״]כ XP:\s*\d{3,}/.test(r);
+  - description: bagrut odds — no ~100% guarantee language
+    vars:
+      message: "איך אתה חושב שיהיה לי בבגרות אם אמשיך בקצב הזה"
+    assert:
+      - type: javascript
+        value: |
+          const out = JSON.parse(output);
+          const r = String(out.reply || '');
+          return !/~?\s*100%/.test(r) && !/guaranteed/i.test(r);
+  - description: filler ban-list absent
+    vars:
+      message: "תסביר יותר לעומק, אני לא מבין"
+    assert:
+      - type: javascript
+        value: |
+          const out = JSON.parse(output);
+          const r = String(out.reply || '');
+          return !r.includes('אני חושב שזה יעזור') && !r.includes('אני חושב שאני צריך להסביר זאת בצורה שונה');
