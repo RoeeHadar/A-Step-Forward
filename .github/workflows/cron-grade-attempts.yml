@@ -1,0 +1,39 @@
+name: Cron — Grade attempts drain (backstop)
+
+# Hobby Vercel only allows daily crons; frequent drain runs here instead.
+# Also available via workflow_dispatch.
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Max attempts to advance per invocation"
+        required: false
+        default: "8"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  call-endpoint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Trigger grade-attempts drain
+        env:
+          BASE_URL: ${{ secrets.WEB_BASE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          LIMIT: ${{ inputs.limit || '8' }}
+        run: |
+          if [ -z "$BASE_URL" ] || [ -z "$CRON_SECRET" ]; then
+            echo "BASE_URL or CRON_SECRET secret missing; skipping (set in repo Secrets)."
+            exit 0
+          fi
+          set -euo pipefail
+          curl -sS -X POST \
+            -H "x-cron-secret: $CRON_SECRET" \
+            -w '\nHTTP %{http_code}\n' \
+            "$BASE_URL/api/cron/grade-attempts?limit=$LIMIT"
