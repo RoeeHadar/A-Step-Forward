@@ -57,6 +57,8 @@ export interface LLMCompletionOptions {
   models?: string[];
   /** Updated when an attempt fails (keeps the most specific failure). */
   failureSink?: { current: LLMFailureInfo | null };
+  /** Last stream finish_reason when known (e.g. stop | length). */
+  finishSink?: { current: string | null };
 }
 
 export interface LLMCompletionResult {
@@ -78,9 +80,21 @@ function trimSlash(url: string): string {
   return url.replace(/\/+$/, '');
 }
 
+/** Strip accidental surrounding quotes from env values. */
+function unquoteEnv(raw: string | undefined): string {
+  const v = (raw ?? '').trim();
+  if (
+    (v.startsWith('"') && v.endsWith('"')) ||
+    (v.startsWith("'") && v.endsWith("'"))
+  ) {
+    return v.slice(1, -1).trim();
+  }
+  return v;
+}
+
 function parseModelList(raw: string | undefined, fallback: string[]): string[] {
   if (!raw?.trim()) return fallback;
-  const parts = raw
+  const parts = unquoteEnv(raw)
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean);
@@ -105,14 +119,14 @@ export function getLLMConfig(): LLMProviderConfig {
   if (cachedConfig) return cachedConfig;
 
   const baseUrl = trimSlash(
-    process.env.LLM_BASE_URL?.trim() ||
-      process.env.GROQ_BASE_URL?.trim() ||
+    unquoteEnv(process.env.LLM_BASE_URL) ||
+      unquoteEnv(process.env.GROQ_BASE_URL) ||
       DEFAULT_GROQ_BASE,
   );
 
   const apiKey =
-    process.env.LLM_API_KEY?.trim() ||
-    process.env.GROQ_API_KEY?.trim() ||
+    unquoteEnv(process.env.LLM_API_KEY) ||
+    unquoteEnv(process.env.GROQ_API_KEY) ||
     (detectProviderLabel(baseUrl) === 'ollama' ? 'ollama' : '');
 
   const primaryModels = parseModelList(process.env.LLM_PRIMARY_MODEL, [DEFAULT_PRIMARY]);
@@ -412,9 +426,17 @@ export async function* llmStream(
           if (data === '[DONE]') break;
           try {
             const parsed = JSON.parse(data) as {
-              choices?: Array<{ delta?: { content?: string } }>;
+              choices?: Array<{
+                delta?: { content?: string };
+                finish_reason?: string | null;
+              }>;
             };
-            const token = parsed.choices?.[0]?.delta?.content;
+            const choice = parsed.choices?.[0];
+            const reason = choice?.finish_reason;
+            if (reason && opts.finishSink) {
+              opts.finishSink.current = reason;
+            }
+            const token = choice?.delta?.content;
             if (token) {
               emitted = true;
               yield token;

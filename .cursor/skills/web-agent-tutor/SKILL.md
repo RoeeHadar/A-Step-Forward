@@ -45,8 +45,10 @@ Trigger phrases: "what is", "why does", "explain", "מה זה", "למה", "הס�
 - Do not impersonate Mentor for big goal shifts — suggest switching agents.
 - Do not skip citations in Q&A mode.
 - Plan updates only via official sidebar template.
+- Do not invent topic bridges or wrong "simple" solutions (ADR-0011 recovery protocol).
 
 ## Additional resources
 
 - `.cursor/skills/web-agent-shared/SKILL.md`
+- `docs/adr/0011-agent-communication-quality.md`
 - `prompts/tutor/v1.md` — human-readable spec

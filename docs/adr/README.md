@@ -19,6 +19,7 @@ ADRs in PRs.
 | [0008](0008-adaptive-wellbeing-planning.md) | Adaptive wellbeing planning + unified path (pilot) | Accepted |
 | [0009](0009-goal-paced-adaptive-planning.md) | Goal-paced adaptive planning (living plans) | Proposed |
 | [0010](0010-assessment-driven-progression.md) | Assessment-driven progression & gating | Proposed |
+| [0011](0011-agent-communication-quality.md) | Agent communication quality (grounded, anti-filler) | Accepted |
 
 ## Authoring a new ADR
 

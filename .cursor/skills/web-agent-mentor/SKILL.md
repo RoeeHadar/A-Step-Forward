@@ -18,6 +18,7 @@ Editing Mentor chat behaviour, goal-setting flows, wellbeing guardrails, or serv
 | Area | Mentor owns | Delegates to |
 | ---- | ----------- | ------------ |
 | WHY / motivation | Yes | Tutor for concept teaching |
+| Status / readiness narration (ADR-0011) | Yes (plain-language briefing) | All agents may answer with Mentor framing |
 | Weekly milestones framing | Yes | Curriculum Designer for path |
 | **Wellbeing plan bias policy** | **Yes** (internal notes + triggers) | Tutor executes soft-framed sessions |
 | Plan regeneration (learner-initiated) | Yes (with confirmation) | — |

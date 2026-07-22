@@ -16,6 +16,9 @@ export type TutorChatIntent =
   | 'study_hours_increase'
   | 'exam_anxiety'
   | 'exam_readiness'
+  | 'progress_status'
+  | 'recovery_simplify'
+  | 'worked_solution'
   | 'study_next'
   | 'learn';
 
@@ -65,8 +68,21 @@ const EXAM_READINESS_RE =
 const EXAM_READINESS_EN_RE =
   /(?:will the plan|is the plan|am i ready).{0,40}(?:prepare|ready|enough|in time)/i;
 
+/** Bagrut / exam odds without requiring the word "plan". */
+const EXAM_ODDS_RE =
+  /(?:איך|מה).{0,25}(?:יהיה|יקרה|סיכוי).{0,40}(?:בגרות|מבחן)|how (?:will|would) i (?:do|fare).{0,30}(?:exam|bagrut|test)|bagrut odds|exam (?:odds|chances)/i;
+
+const PROGRESS_STATUS_RE =
+  /(?:מה|what(?:'s| is)?).{0,20}(?:הסטטוס|סטטוס|המצב|status)|איך אני מתקדם|מה המצב שלי|how am i doing|my (?:current )?status|current status|כמה XP|how much xp|מה ה-?XP/i;
+
+const RECOVERY_SIMPLIFY_RE =
+  /(?:מסובך|לא מבין|לא הבנתי|תסביר.{0,20}(?:פשוט|פשוטה|יותר)|בצורה יותר פשוטה|צריך להכיר(?: את)? זה|האם אני צריך|too (?:hard|complicated)|simplify|explain (?:simpler|more simply)|do i need (?:to know )?this|i don'?t understand)/i;
+
+const WORKED_SOLUTION_RE =
+  /(?:פתור|תפתור|הראה לי איך|תן לי את השלבים|שלב אחר שלב|worked example|show me how|solve (?:it|the)|step[- ]by[- ]step|המשך,?\s*התגובה)/i;
+
 const CONVERSATION_ADVANCE_RE =
-  /(?:כתבת את זה כבר|אמרת את זה|חזרת על|תמשיך|המשך|די עם|stop repeating|you already (?:said|wrote|asked)|move on|continue\b)/i;
+  /(?:כתבת את זה כבר|אמרת את זה|חזרת על|תמשיך|המשך|די עם|stop repeating|you already (?:said|wrote|asked)|move on|continue\b|נעצרה באמצע|cut off|was cut)/i;
 
 const READINESS_AFFIRM_RE =
   /^(?:כן(?:\s|,|$)|נכון|בטח|ברור|יודע|אני יודע|כן,? אני יודע|yes\b|i know|i do\b)/i;
@@ -88,14 +104,36 @@ export function wantsExamReadinessAnswer(message: string): boolean {
   return (
     EXAM_READINESS_RE.test(t) ||
     EXAM_READINESS_EN_RE.test(lower) ||
+    EXAM_ODDS_RE.test(t) ||
     /(?:התוכנית|the plan).{0,40}(?:תכין|מספיק|prepare|ready|enough).{0,40}(?:מבחן|בגרות|exam|test)/i.test(
       t,
     )
   );
 }
 
+export function wantsProgressStatus(message: string): boolean {
+  return PROGRESS_STATUS_RE.test(message.trim());
+}
+
+export function wantsRecoverySimplify(message: string): boolean {
+  return RECOVERY_SIMPLIFY_RE.test(message.trim());
+}
+
+export function wantsWorkedSolution(message: string): boolean {
+  return WORKED_SOLUTION_RE.test(message.trim());
+}
+
 export function wantsConversationAdvance(message: string): boolean {
   return CONVERSATION_ADVANCE_RE.test(message.trim());
+}
+
+/** Higher maxTokens budget for continue / step-by-step asks (ADR-0011). */
+export function wantsExpandedOutputBudget(message: string): boolean {
+  return (
+    wantsConversationAdvance(message) ||
+    wantsWorkedSolution(message) ||
+    wantsRecoverySimplify(message)
+  );
 }
 
 export function wantsExamAnxietySupport(message: string): boolean {
@@ -136,6 +174,9 @@ export function classifyTutorChatIntent(
   if (wantsExamReadinessAnswer(message) || isReadinessFollowUp(message, recent)) {
     return 'exam_readiness';
   }
+  if (wantsProgressStatus(message)) return 'progress_status';
+  if (wantsRecoverySimplify(message)) return 'recovery_simplify';
+  if (wantsWorkedSolution(message)) return 'worked_solution';
   if (wantsLearningPlanSnapshot(message)) return 'study_next';
   return 'learn';
 }
@@ -143,15 +184,37 @@ export function classifyTutorChatIntent(
 // --- Mode contracts ---
 
 const EXAM_READINESS_INSTRUCTION = `## Interaction mode: EXAM READINESS (mandatory)
-Answer DIRECTLY — timeline verdict using days until exam, hours/week, plan topics, mastery gaps.
+Answer DIRECTLY — timeline verdict using days until exam, hours/week, plan topics, mastery gaps, and the bilingual progress briefing.
 - No Socratic opening. No topic-by-topic diagnostic checklist unless explicitly requested.
+- Never claim 100% / ~100% / "מאה אחוז" / "guaranteed" for bagrut success — not even as an aspirational target. Use humble readiness band/pace only (ADR-0010/0011).
 - If learner already affirmed they know topics, accept it → recommend practice/drills.
 - End with ONE concrete action for remaining days.
 - Plan edits: Tutor sidebar template only — never "נסער את התוכנית" from chat.`;
 
 const CONVERSATION_ADVANCE_INSTRUCTION = `## Interaction mode: CONTINUE (mandatory)
-Learner asked you to stop repeating. Do NOT repeat prior questions or bullet lists.
-Acknowledge briefly, then advance with the next step or a short summary.`;
+Learner asked you to stop repeating or to resume after a cut-off.
+- Do NOT repeat prior questions, bullet lists, or earlier solution steps.
+- If the prior assistant turn was cut mid-solution: resume from the unfinished step only.
+- Do NOT say you need to "explain differently" unless you actually change method.
+Acknowledge briefly, then advance.`;
+
+const PROGRESS_STATUS_INSTRUCTION = `## Interaction mode: PROGRESS STATUS (mandatory)
+Answer with a short plain-language status from the bilingual progress briefing (Mentor framing).
+- No XP/ISO/raw dumps; no repeated gate score lines; no guaranteed bagrut %.
+- Optional one-clause Mentor nudge for deeper goals talk.
+- End with one concrete next step.`;
+
+const RECOVERY_SIMPLIFY_INSTRUCTION = `## Interaction mode: RECOVERY / SIMPLIFY (mandatory)
+1. Drop any failed explanation path from prior turns.
+2. Say whether the topic is required for the current plan / bagrut track, or optional.
+3. Teach the simplest CORRECT method from injected corpus context only.
+4. Never invent a wrong "simple" answer. One short example, then check understanding.
+5. Optional private note (misconception/strategy).`;
+
+const WORKED_SOLUTION_INSTRUCTION = `## Interaction mode: WORKED SOLUTION (mandatory)
+- Ground every step in corpus/KG; no invented bridges.
+- If >~8 steps: roadmap + first 2–3 steps, then ask to continue.
+- Math in \`$...$\` / \`$$...$$\`. No filler closers.`;
 
 const EXAM_ANXIETY_INSTRUCTION = `## Interaction mode: EXAM ANXIETY (mandatory)
 Validate concern briefly. Use the **learning-plan snapshot** (server-selected concepts) — do NOT improvise gap names or ask the learner to pick topics.
@@ -361,11 +424,45 @@ export function buildTutorInteractionContract(
         allowTopicChecklist: false,
         planGuidanceLine:
           locale === 'he'
-            ? 'תן פסק דין ישיר על מוכנות לפי התוכנית (ימים, שעות, נושאים). בלי רשימת נושאים.'
-            : 'Direct readiness verdict from plan (days, hours, topics). No topic checklist.',
+            ? 'תן פסק דין ישיר על מוכנות לפי התוכנית (ימים, שעות, נושאים). בלי רשימת נושאים. לעולם אל תבטיח הצלחה.'
+            : 'Direct readiness verdict from plan (days, hours, topics). No topic checklist. Never promise success.',
         turnInstruction: EXAM_READINESS_INSTRUCTION,
         learnerPreferenceOverride:
           'LEARNER PREFERENCE OVERRIDE: Direct mode — readiness verdict first, not discovery questions.',
+      };
+
+    case 'progress_status':
+      return {
+        ...base,
+        teachingStyle: 'direct',
+        allowSocraticOpening: false,
+        allowTopicChecklist: false,
+        turnInstruction: PROGRESS_STATUS_INSTRUCTION,
+        learnerPreferenceOverride:
+          'LEARNER PREFERENCE OVERRIDE: Direct Mentor-style status — paraphrase briefing only.',
+      };
+
+    case 'recovery_simplify':
+      return {
+        ...base,
+        teachingStyle: 'direct',
+        allowSocraticOpening: false,
+        allowTopicChecklist: false,
+        injectLearningPlanSnapshot: true,
+        turnInstruction: RECOVERY_SIMPLIFY_INSTRUCTION,
+        learnerPreferenceOverride:
+          'LEARNER PREFERENCE OVERRIDE: Direct recovery — simplest correct corpus method.',
+      };
+
+    case 'worked_solution':
+      return {
+        ...base,
+        teachingStyle: 'direct',
+        allowSocraticOpening: false,
+        allowTopicChecklist: false,
+        turnInstruction: WORKED_SOLUTION_INSTRUCTION,
+        learnerPreferenceOverride:
+          'LEARNER PREFERENCE OVERRIDE: Direct worked solution — chunk long proofs.',
       };
 
     case 'study_next':
