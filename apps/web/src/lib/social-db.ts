@@ -1090,6 +1090,150 @@ export function toSocialRole(role: AppRole | string | undefined): SocialRole {
   return role === 'educator' ? 'educator' : 'learner';
 }
 
+export type EducatorAttentionItem = {
+  id: string;
+  type: 'needs_human' | 'concern' | 'overdue_gate';
+  student_id: string;
+  student_name: string;
+  username: string;
+  created_at: string;
+  href: string;
+  label: string;
+  preview?: string;
+};
+
+/** Queue for /educator home: needs_human attempts, concern notes, overdue gates. */
+export async function listEducatorNeedsAttention(
+  teacherId: string,
+  limit = 40,
+): Promise<EducatorAttentionItem[]> {
+  if (!sql) return [];
+  await ensureSocialTables();
+  const items: EducatorAttentionItem[] = [];
+
+  try {
+    const attemptRows = (await sql`
+      SELECT ta.id::text AS id, ta.learner_id AS student_id, ta.kind,
+             ta.created_at::text AS created_at,
+             u.real_name AS student_name, u.username
+      FROM test_attempts ta
+      JOIN teacher_student_links l
+        ON l.student_id = ta.learner_id AND l.status = 'accepted'
+      JOIN app_users u ON u.clerk_user_id = ta.learner_id
+      WHERE l.teacher_id = ${teacherId}
+        AND COALESCE(ta.grading_status, 'complete') = 'needs_human'
+      ORDER BY ta.created_at DESC
+      LIMIT ${limit}
+    `) as Array<{
+      id: string;
+      student_id: string;
+      kind: string;
+      created_at: string;
+      student_name: string;
+      username: string;
+    }>;
+    for (const row of attemptRows) {
+      items.push({
+        id: `attempt:${row.id}`,
+        type: 'needs_human',
+        student_id: row.student_id,
+        student_name: row.student_name,
+        username: row.username,
+        created_at: row.created_at,
+        href: `/educator/students/${row.student_id}?tab=tests&attempt=${row.id}`,
+        label: row.kind,
+        preview: undefined,
+      });
+    }
+  } catch {
+    /* test_attempts may be missing before migration */
+  }
+
+  try {
+    const concernRows = (await sql`
+      SELECT n.id::text AS id, n.student_id, n.content,
+             n.created_at::text AS created_at,
+             u.real_name AS student_name, u.username
+      FROM teacher_notes n
+      JOIN teacher_student_links l
+        ON l.student_id = n.student_id
+       AND l.teacher_id = n.teacher_id
+       AND l.status = 'accepted'
+      JOIN app_users u ON u.clerk_user_id = n.student_id
+      WHERE n.teacher_id = ${teacherId}
+        AND n.kind = 'concern'
+      ORDER BY n.created_at DESC
+      LIMIT ${Math.min(20, limit)}
+    `) as Array<{
+      id: string;
+      student_id: string;
+      content: string;
+      created_at: string;
+      student_name: string;
+      username: string;
+    }>;
+    for (const row of concernRows) {
+      items.push({
+        id: `concern:${row.id}`,
+        type: 'concern',
+        student_id: row.student_id,
+        student_name: row.student_name,
+        username: row.username,
+        created_at: row.created_at,
+        href: `/educator/students/${row.student_id}?tab=memory`,
+        label: 'concern',
+        preview: row.content.slice(0, 160),
+      });
+    }
+  } catch {
+    /* ignore */
+  }
+
+  try {
+    const gateRows = (await sql`
+      SELECT pw.id::text AS id, pw.week_number, pw.quiz_due_at::text AS created_at,
+             lp.learner_id AS student_id,
+             u.real_name AS student_name, u.username
+      FROM plan_weeks pw
+      JOIN learning_plans lp ON lp.id = pw.plan_id
+      JOIN teacher_student_links l
+        ON l.student_id = lp.learner_id AND l.status = 'accepted'
+      JOIN app_users u ON u.clerk_user_id = lp.learner_id
+      WHERE l.teacher_id = ${teacherId}
+        AND pw.status = 'active'
+        AND pw.quiz_due_at IS NOT NULL
+        AND pw.quiz_due_at < NOW()
+      ORDER BY pw.quiz_due_at ASC
+      LIMIT ${Math.min(20, limit)}
+    `) as Array<{
+      id: string;
+      week_number: number;
+      created_at: string;
+      student_id: string;
+      student_name: string;
+      username: string;
+    }>;
+    for (const row of gateRows) {
+      items.push({
+        id: `gate:${row.id}`,
+        type: 'overdue_gate',
+        student_id: row.student_id,
+        student_name: row.student_name,
+        username: row.username,
+        created_at: row.created_at,
+        href: `/educator/students/${row.student_id}?tab=overview`,
+        label: `week ${row.week_number}`,
+        preview: undefined,
+      });
+    }
+  } catch {
+    /* ignore */
+  }
+
+  items.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  return items.slice(0, limit);
+}
+
 /**
  * Notify linked teacher (and student) when the active weekly gate is overdue.
  * Dedupes per (learner, week) for 7 days.

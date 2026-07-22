@@ -24,6 +24,17 @@ export async function POST(req: Request) {
     passed?: boolean;
     reason?: string;
     reopen?: boolean;
+    item_feedback?: Record<
+      string,
+      {
+        strengths?: string;
+        next_fix?: string;
+        logic?: string;
+        process_score?: number;
+        status?: string;
+      }
+    >;
+    item_scores?: Record<string, number>;
   };
   try {
     body = (await req.json()) as typeof body;
@@ -50,6 +61,28 @@ export async function POST(req: Request) {
   const passed = typeof body.passed === 'boolean' ? body.passed : null;
   const score = typeof body.score === 'number' ? body.score : null;
 
+  const itemFeedbackPatch =
+    body.item_feedback && typeof body.item_feedback === 'object'
+      ? Object.fromEntries(
+          Object.entries(body.item_feedback).map(([id, fb]) => [
+            id,
+            {
+              item_id: id,
+              status: (fb.status ?? 'graded') as string,
+              strengths: fb.strengths,
+              next_fix: fb.next_fix,
+              logic: fb.logic,
+              process_score:
+                typeof fb.process_score === 'number'
+                  ? fb.process_score
+                  : typeof body.item_scores?.[id] === 'number'
+                    ? body.item_scores[id]
+                    : undefined,
+            },
+          ]),
+        )
+      : null;
+
   const ok = await teacherUpdateTestAttempt({
     learnerId: body.student_id,
     attemptId: body.attempt_id,
@@ -57,6 +90,8 @@ export async function POST(req: Request) {
     score,
     passed,
     reopen,
+    itemFeedback: itemFeedbackPatch,
+    itemScores: body.item_scores ?? null,
   });
   if (!ok) return Response.json({ error: 'Update failed' }, { status: 500 });
 

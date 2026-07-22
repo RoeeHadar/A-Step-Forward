@@ -1,4 +1,5 @@
 import { redirect, notFound } from 'next/navigation';
+import { Suspense } from 'react';
 import { SiteHeader } from '@/components/site-header';
 import { EducatorStudentWorkspace } from '@/components/educator-student-workspace';
 import { getAuthContext, requireRole } from '@/lib/auth';
@@ -45,7 +46,7 @@ export default async function EducatorStudentPage({
     getCurrentPlan(studentId).catch(() => null),
     getProgressFromNeon(studentId).catch(() => null),
     getLearnerMemorySnapshot(studentId).catch(() => null),
-    listTestAttempts(studentId, 20).catch(() => []),
+    listTestAttempts(studentId, 40, { forEducator: true }).catch(() => []),
     listTeacherNotes(studentId).catch(() => []),
   ]);
 
@@ -73,7 +74,7 @@ export default async function EducatorStudentPage({
         total_minutes: progress.total_minutes,
         total_xp: progress.total_xp,
         level: progress.level,
-        concepts: progress.concepts.slice(0, 20).map((c) => {
+        concepts: progress.concepts.slice(0, 40).map((c) => {
           const titles = resolveConceptTitles(c.concept_id, {
             title_en: c.concept_name,
             title_he: c.concept_name_he,
@@ -93,14 +94,22 @@ export default async function EducatorStudentPage({
         persona: memory.persona.text,
         profile_goal: memory.profile?.goal ?? null,
         subjects: memory.profile?.subjects ?? [],
+        preferred_style: memory.profile?.preferred_style ?? null,
+        hours_per_week: memory.profile?.hours_per_week ?? null,
+        background_notes: memory.profile?.background_notes ?? null,
         weak: memory.weakConcepts,
         strong: memory.strongConcepts,
         notes_by_agent: Object.entries(memory.notesByAgent).map(([agent, list]) => ({
           agent,
           count: list.length,
-          preview: list[0]?.content ?? null,
+          notes: list.slice(0, 12).map((n) => ({
+            content: n.content,
+            kind: n.kind,
+            created_at: n.created_at,
+            importance: n.importance,
+          })),
         })),
-        recent_chat: memory.recentChatTurns.slice(0, 12).map((t) => ({
+        recent_chat: memory.recentChatTurns.slice(0, 24).map((t) => ({
           agent: t.agent,
           role: t.role,
           content: t.content,
@@ -113,26 +122,28 @@ export default async function EducatorStudentPage({
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6">
-        <EducatorStudentWorkspace
-          studentId={studentId}
-          studentName={student.real_name}
-          username={student.username}
-          goal={profile?.goal ?? null}
-          hoursPerWeek={profile?.hours_per_week ?? null}
-          planWeeks={planWeeks}
-          planWeekConcepts={planWeekConcepts}
-          progress={progressView}
-          memory={memoryView}
-          attempts={attempts.map((a) => ({
-            id: a.id,
-            kind: a.kind,
-            score: a.score,
-            passed: a.passed,
-            created_at: a.created_at,
-            grading_status: a.grading_status ?? null,
-          }))}
-          notes={notes}
-        />
+        <Suspense fallback={<p className="text-sm text-muted-foreground">Loading…</p>}>
+          <EducatorStudentWorkspace
+            studentId={studentId}
+            studentName={student.real_name}
+            username={student.username}
+            goal={profile?.goal ?? null}
+            hoursPerWeek={profile?.hours_per_week ?? null}
+            planWeeks={planWeeks}
+            planWeekConcepts={planWeekConcepts}
+            progress={progressView}
+            memory={memoryView}
+            attempts={attempts.map((a) => ({
+              id: a.id,
+              kind: a.kind,
+              score: a.score,
+              passed: a.passed,
+              created_at: a.created_at,
+              grading_status: a.grading_status ?? null,
+            }))}
+            notes={notes}
+          />
+        </Suspense>
       </main>
     </div>
   );

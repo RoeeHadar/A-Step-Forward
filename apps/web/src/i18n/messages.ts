@@ -20,6 +20,8 @@ const messages = {
       book: 'Book a Lesson',
       notifications: 'Notifications',
       friends: 'Friends',
+      roster: 'Students',
+      profile: 'Profile',
     },
     landing: {
       hero: 'Learn with AI agents\nthat remember you',
@@ -311,6 +313,8 @@ const messages = {
       book: 'קביעת שיעור',
       notifications: 'התראות',
       friends: 'חברים',
+      roster: 'תלמידים',
+      profile: 'פרופיל',
     },
     landing: {
       hero: 'למד עם סוכני AI\nשזוכרים אותך',

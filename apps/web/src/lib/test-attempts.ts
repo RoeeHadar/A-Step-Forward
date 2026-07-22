@@ -37,6 +37,7 @@ export interface TestAttemptQuestionSnapshot {
   kind?: string;
   /** Present once grading is complete (redacted while pending). */
   model_answer?: string | null;
+  rubric?: string | null;
 }
 
 export interface TestAttemptAnswerSnapshot {
@@ -221,6 +222,7 @@ export async function recordTestAttempt(input: RecordTestAttemptInput): Promise<
 export async function listTestAttempts(
   learnerId: string,
   limit = 30,
+  opts?: { forEducator?: boolean },
 ): Promise<TestAttemptListItem[]> {
   if (!sql) return [];
   await ensureTable();
@@ -235,7 +237,7 @@ export async function listTestAttempts(
       ORDER BY created_at DESC
       LIMIT ${limit}
     `) as Array<Record<string, unknown>>;
-    return rows.map(mapListRow);
+    return rows.map((row) => mapListRow(row, opts));
   } catch {
     return [];
   }
@@ -244,6 +246,7 @@ export async function listTestAttempts(
 /**
  * Load a single attempt for the Tests archive / API. Answer keys and feedback
  * are sealed until grading_status === 'complete' (released).
+ * Teachers (`forEducator`) always get full questions, keys, feedback, and scores.
  */
 export async function getTestAttempt(
   learnerId: string,
@@ -267,9 +270,10 @@ export async function getTestAttempt(
     `) as Array<Record<string, unknown>>;
     const row = rows[0];
     if (!row) return null;
-    const list = mapListRow(row);
+    const forEducator = opts?.forEducator === true;
+    const list = mapListRow(row, { forEducator });
     const questions = (row.questions as TestAttemptQuestionSnapshot[]) ?? [];
-    const released = list.grading_status === 'complete' || opts?.forEducator === true;
+    const released = list.grading_status === 'complete' || forEducator;
     const itemFeedback =
       released &&
       row.item_feedback &&
@@ -292,14 +296,13 @@ export async function getTestAttempt(
       ...list,
       locale: typeof row.locale === 'string' ? row.locale : 'he',
       per_topic: released ? ((row.per_topic as Record<string, number>) ?? {}) : {},
-      questions:
-        opts?.forEducator === true
-          ? questions
-          : redactQuestionsUntilGraded(questions, list.grading_status),
+      questions: forEducator
+        ? questions
+        : redactQuestionsUntilGraded(questions, list.grading_status),
       answers: (row.answers as TestAttemptAnswerSnapshot[]) ?? [],
       item_feedback: itemFeedback,
       item_scores: itemScores,
-      feedback: released || opts?.forEducator ? feedback : null,
+      feedback: released || forEducator ? feedback : null,
     };
   } catch {
     return null;
@@ -361,7 +364,10 @@ export async function getLatestGateWeakConcepts(
   }
 }
 
-function mapListRow(row: Record<string, unknown>): TestAttemptListItem {
+function mapListRow(
+  row: Record<string, unknown>,
+  opts?: { forEducator?: boolean },
+): TestAttemptListItem {
   const statusRaw = typeof row.grading_status === 'string' ? row.grading_status : 'complete';
   const grading_status =
     statusRaw === 'pending' ||
@@ -373,15 +379,16 @@ function mapListRow(row: Record<string, unknown>): TestAttemptListItem {
       ? statusRaw
       : 'complete';
   const complete = grading_status === 'complete';
+  const reveal = complete || opts?.forEducator === true;
   return {
     id: String(row.id),
     kind: typeof row.kind === 'string' ? row.kind : 'weekly_gate',
     plan_id: row.plan_id == null ? null : String(row.plan_id),
     week_num: row.week_num == null ? null : Number(row.week_num),
-    score: complete ? Number(row.score ?? 0) : null,
-    passed: complete ? Boolean(row.passed) : null,
+    score: reveal ? (row.score == null ? null : Number(row.score)) : null,
+    passed: reveal ? (row.passed == null ? null : Boolean(row.passed)) : null,
     pass_threshold: Number(row.pass_threshold ?? GATE_PASS_THRESHOLD),
-    weak_concepts: complete
+    weak_concepts: reveal
       ? Array.isArray(row.weak_concepts)
         ? (row.weak_concepts as string[])
         : []
@@ -395,6 +402,7 @@ function mapListRow(row: Record<string, unknown>): TestAttemptListItem {
 /**
  * Teacher override: feedback + optional score/pass adjustment (audit elsewhere).
  * Pass `reopen: true` to clear pass/fail and mark the attempt reopened for retake UX.
+ * Optional `itemFeedback` / `itemScores` replace Grader draft analysis for those items.
  */
 export async function teacherUpdateTestAttempt(input: {
   learnerId: string;
@@ -403,6 +411,8 @@ export async function teacherUpdateTestAttempt(input: {
   score?: number | null;
   passed?: boolean | null;
   reopen?: boolean;
+  itemFeedback?: Record<string, TestAttemptItemFeedback> | null;
+  itemScores?: Record<string, number> | null;
 }): Promise<boolean> {
   if (!sql) return false;
   await ensureTable();
@@ -412,21 +422,61 @@ export async function teacherUpdateTestAttempt(input: {
       updated_at: new Date().toISOString(),
       ...(input.reopen ? { reopened_by_teacher: true } : {}),
     };
+    const hasItemPatch =
+      (input.itemFeedback && Object.keys(input.itemFeedback).length > 0) ||
+      (input.itemScores && Object.keys(input.itemScores).length > 0);
+    const itemFeedbackJson = JSON.stringify(input.itemFeedback ?? {});
+    const itemScoresJson = JSON.stringify(input.itemScores ?? {});
+
     if (input.reopen) {
-      await sql`
-        UPDATE test_attempts
-        SET feedback = COALESCE(feedback, '{}'::jsonb) || ${JSON.stringify(feedback)}::jsonb,
-            passed = NULL,
-            grading_status = 'reopened'
-        WHERE id = ${input.attemptId}::uuid AND learner_id = ${input.learnerId}
-      `;
+      if (hasItemPatch) {
+        await sql`
+          UPDATE test_attempts
+          SET feedback = COALESCE(feedback, '{}'::jsonb) || ${JSON.stringify(feedback)}::jsonb,
+              passed = NULL,
+              grading_status = 'reopened',
+              item_feedback = COALESCE(item_feedback, '{}'::jsonb) || ${itemFeedbackJson}::jsonb,
+              item_scores = COALESCE(item_scores, '{}'::jsonb) || ${itemScoresJson}::jsonb
+          WHERE id = ${input.attemptId}::uuid AND learner_id = ${input.learnerId}
+        `;
+      } else {
+        await sql`
+          UPDATE test_attempts
+          SET feedback = COALESCE(feedback, '{}'::jsonb) || ${JSON.stringify(feedback)}::jsonb,
+              passed = NULL,
+              grading_status = 'reopened'
+          WHERE id = ${input.attemptId}::uuid AND learner_id = ${input.learnerId}
+        `;
+      }
     } else if (typeof input.score === 'number' && typeof input.passed === 'boolean') {
+      if (hasItemPatch) {
+        await sql`
+          UPDATE test_attempts
+          SET feedback = COALESCE(feedback, '{}'::jsonb) || ${JSON.stringify(feedback)}::jsonb,
+              score = ${input.score},
+              passed = ${input.passed},
+              grading_status = 'complete',
+              item_feedback = COALESCE(item_feedback, '{}'::jsonb) || ${itemFeedbackJson}::jsonb,
+              item_scores = COALESCE(item_scores, '{}'::jsonb) || ${itemScoresJson}::jsonb
+          WHERE id = ${input.attemptId}::uuid AND learner_id = ${input.learnerId}
+        `;
+      } else {
+        await sql`
+          UPDATE test_attempts
+          SET feedback = COALESCE(feedback, '{}'::jsonb) || ${JSON.stringify(feedback)}::jsonb,
+              score = ${input.score},
+              passed = ${input.passed},
+              grading_status = 'complete'
+          WHERE id = ${input.attemptId}::uuid AND learner_id = ${input.learnerId}
+        `;
+      }
+    } else if (hasItemPatch) {
       await sql`
         UPDATE test_attempts
         SET feedback = COALESCE(feedback, '{}'::jsonb) || ${JSON.stringify(feedback)}::jsonb,
-            score = ${input.score},
-            passed = ${input.passed},
-            grading_status = 'complete'
+            grading_status = 'complete',
+            item_feedback = COALESCE(item_feedback, '{}'::jsonb) || ${itemFeedbackJson}::jsonb,
+            item_scores = COALESCE(item_scores, '{}'::jsonb) || ${itemScoresJson}::jsonb
         WHERE id = ${input.attemptId}::uuid AND learner_id = ${input.learnerId}
       `;
     } else {

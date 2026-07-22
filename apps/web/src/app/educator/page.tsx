@@ -3,7 +3,11 @@ import { SiteHeader } from '@/components/site-header';
 import { EducatorStudentsClient } from '@/components/educator-students-client';
 import { getAuthContext, requireRole } from '@/lib/auth';
 import { ensureIdentityComplete } from '@/lib/identity-gate';
-import { getAppUser, listTeacherStudents } from '@/lib/social-db';
+import {
+  getAppUser,
+  listEducatorNeedsAttention,
+  listTeacherStudents,
+} from '@/lib/social-db';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,7 +25,10 @@ export default async function EducatorHomePage() {
   const me = await getAppUser(auth.userId);
   if (!me || me.role !== 'educator') redirect('/identity');
 
-  const students = await listTeacherStudents(auth.userId);
+  const [students, attention] = await Promise.all([
+    listTeacherStudents(auth.userId),
+    listEducatorNeedsAttention(auth.userId).catch(() => []),
+  ]);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -30,6 +37,7 @@ export default async function EducatorHomePage() {
         <EducatorStudentsClient
           students={students}
           aboutMe={me.about_me}
+          attention={attention}
         />
       </main>
     </div>

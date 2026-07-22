@@ -12,15 +12,19 @@ import { useScrollY } from '@/hooks/use-scroll-y';
 import { NotificationsBell } from '@/components/notifications-bell';
 import type { Locale } from '@/i18n/config';
 
-const publicNavLinks = [
-  { href: '/learn', labelKey: 'learn' as const },
-];
+const publicNavLinks = [{ href: '/learn', labelKey: 'learn' as const }];
 
 const appNavLinks = [
   { href: '/app', labelKey: 'dashboard' as const },
   { href: '/learn', labelKey: 'learn' as const },
   { href: '/app/progress', labelKey: 'progress' as const },
   { href: '/app/memory', labelKey: 'memory' as const },
+];
+
+const educatorNavLinks = [
+  { href: '/educator', labelKey: 'roster' as const, exact: true },
+  { href: '/educator/notifications', labelKey: 'notifications' as const },
+  { href: '/educator/profile', labelKey: 'profile' as const },
 ];
 
 const localeToggleLabel: Record<Locale, string> = {
@@ -34,11 +38,16 @@ export function SiteHeader() {
   const { messages, locale, setLocale } = useI18n();
   const toggleTheme = () => setTheme(resolved === 'dark' ? 'light' : 'dark');
   const otherLocale: Locale = locale === 'he' ? 'en' : 'he';
+  const isEducatorShell = pathname.startsWith('/educator');
 
-  const isActive = (href: string) =>
-    pathname === href || (href !== '/' && pathname.startsWith(href + '/'));
+  const isActive = (href: string, exact = false) => {
+    if (exact) return pathname === href;
+    return pathname === href || (href !== '/' && pathname.startsWith(`${href}/`));
+  };
 
   const scrolled = useScrollY(8);
+
+  const brandHref = isEducatorShell ? '/educator' : '/';
 
   return (
     <header
@@ -50,10 +59,9 @@ export function SiteHeader() {
       )}
     >
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
-        {/* Brand */}
         <div className="flex items-center gap-6">
           <Link
-            href="/"
+            href={brandHref}
             className="flex items-center gap-2 transition-opacity hover:opacity-80"
           >
             <span
@@ -71,34 +79,38 @@ export function SiteHeader() {
             className="hidden items-center gap-1 md:flex"
             aria-label={messages.common.mainNavigation}
           >
-            {publicNavLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  'relative px-3 py-2 text-sm transition-colors hover:text-foreground',
-                  isActive(link.href) ? 'font-medium text-foreground' : 'text-muted-foreground',
-                )}
-              >
-                {messages.nav[link.labelKey]}
-                {isActive(link.href) && (
-                  <span
-                    className="absolute inset-x-3 -bottom-[13px] h-0.5 rounded-full bg-primary"
-                    aria-hidden
-                  />
-                )}
-              </Link>
-            ))}
-            <SignedIn>
-              {appNavLinks
-                .filter((link) => !publicNavLinks.some((p) => p.href === link.href))
-                .map((link) => (
+            {isEducatorShell ? (
+              educatorNavLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    'relative px-3 py-2 text-sm transition-colors hover:text-foreground',
+                    isActive(link.href, link.exact)
+                      ? 'font-medium text-foreground'
+                      : 'text-muted-foreground',
+                  )}
+                >
+                  {messages.nav[link.labelKey]}
+                  {isActive(link.href, link.exact) && (
+                    <span
+                      className="absolute inset-x-3 -bottom-[13px] h-0.5 rounded-full bg-primary"
+                      aria-hidden
+                    />
+                  )}
+                </Link>
+              ))
+            ) : (
+              <>
+                {publicNavLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
                     className={cn(
                       'relative px-3 py-2 text-sm transition-colors hover:text-foreground',
-                      isActive(link.href) ? 'font-medium text-foreground' : 'text-muted-foreground',
+                      isActive(link.href)
+                        ? 'font-medium text-foreground'
+                        : 'text-muted-foreground',
                     )}
                   >
                     {messages.nav[link.labelKey]}
@@ -110,23 +122,61 @@ export function SiteHeader() {
                     )}
                   </Link>
                 ))}
-            </SignedIn>
+                <SignedIn>
+                  {appNavLinks
+                    .filter((link) => !publicNavLinks.some((p) => p.href === link.href))
+                    .map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className={cn(
+                          'relative px-3 py-2 text-sm transition-colors hover:text-foreground',
+                          isActive(link.href)
+                            ? 'font-medium text-foreground'
+                            : 'text-muted-foreground',
+                        )}
+                      >
+                        {messages.nav[link.labelKey]}
+                        {isActive(link.href) && (
+                          <span
+                            className="absolute inset-x-3 -bottom-[13px] h-0.5 rounded-full bg-primary"
+                            aria-hidden
+                          />
+                        )}
+                      </Link>
+                    ))}
+                </SignedIn>
+              </>
+            )}
           </nav>
         </div>
 
-        {/* Right-side controls */}
         <div className="flex items-center gap-2">
-          <Link
-            href="/learn"
-            className={cn(
-              'inline-flex rounded-lg px-2.5 py-1.5 text-sm font-medium md:hidden',
-              isActive('/learn')
-                ? 'bg-primary/15 text-primary'
-                : 'text-muted-foreground hover:text-foreground',
-            )}
-          >
-            {messages.nav.learn}
-          </Link>
+          {isEducatorShell ? (
+            <Link
+              href="/educator"
+              className={cn(
+                'inline-flex rounded-lg px-2.5 py-1.5 text-sm font-medium md:hidden',
+                pathname === '/educator'
+                  ? 'bg-primary/15 text-primary'
+                  : 'text-muted-foreground hover:text-foreground',
+              )}
+            >
+              {messages.nav.roster}
+            </Link>
+          ) : (
+            <Link
+              href="/learn"
+              className={cn(
+                'inline-flex rounded-lg px-2.5 py-1.5 text-sm font-medium md:hidden',
+                isActive('/learn')
+                  ? 'bg-primary/15 text-primary'
+                  : 'text-muted-foreground hover:text-foreground',
+              )}
+            >
+              {messages.nav.learn}
+            </Link>
+          )}
           <Button
             variant="ghost"
             size="sm"
