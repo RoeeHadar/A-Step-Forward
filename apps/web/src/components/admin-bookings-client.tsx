@@ -1,11 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@asf/ui/button';
 import { Input } from '@asf/ui/input';
 import { Label } from '@asf/ui/label';
 import { Textarea } from '@asf/ui/textarea';
+import { cn } from '@asf/ui';
+import { PageHeader } from '@/components/page-header';
+import { useI18n } from '@/providers/i18n-provider';
 
 type AdminBooking = {
   token: string;
@@ -54,7 +57,16 @@ type SettingsPayload = {
   bookings?: AdminBooking[];
 };
 
+type TabId = 'requests' | 'calendar' | 'contacts';
+
+const REDIRECT_URI = 'https://a-step-forward-waij.vercel.app/api/book/gcal/oauth/callback';
+
 export function AdminBookingsClient({ gcalQuery }: { gcalQuery: string | null }) {
+  const { messages, locale } = useI18n();
+  const t = messages.admin;
+  const dateLocale = locale === 'he' ? 'he-IL' : 'en-GB';
+
+  const [tab, setTab] = useState<TabId>('requests');
   const [data, setData] = useState<SettingsPayload | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [phone, setPhone] = useState('');
@@ -63,12 +75,26 @@ export function AdminBookingsClient({ gcalQuery }: { gcalQuery: string | null })
   const [calendarId, setCalendarId] = useState('primary');
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [showTestingHelp, setShowTestingHelp] = useState(false);
+
+  const statusLabel = useMemo(() => {
+    const map: Record<string, string> = {
+      submitted: t.statusSubmitted,
+      proposal_sent: t.statusProposalSent,
+      pick_pending: t.statusPickPending,
+      confirmed: t.statusConfirmed,
+      rejected: t.statusRejected,
+      cancelled: t.statusCancelled,
+      expired: t.statusExpired,
+    };
+    return (status: string) => map[status] ?? status;
+  }, [t]);
 
   async function load() {
     setError(null);
     const res = await fetch('/api/admin/bookings/settings');
     if (!res.ok) {
-      setError('Failed to load settings');
+      setError(t.loadFailed);
       return;
     }
     const json = (await res.json()) as SettingsPayload;
@@ -79,6 +105,7 @@ export function AdminBookingsClient({ gcalQuery }: { gcalQuery: string | null })
 
   useEffect(() => {
     void load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- load once on mount
   }, []);
 
   useEffect(() => {
@@ -89,21 +116,29 @@ export function AdminBookingsClient({ gcalQuery }: { gcalQuery: string | null })
     const gcal = params.get('gcal') ?? '';
     const watchErr = params.get('watch');
     const map: Record<string, string> = {
-      connected: 'Google Calendar connected.',
-      denied: 'Google consent was denied.',
-      exchange_failed: 'OAuth token exchange failed.',
-      save_failed: 'Could not save refresh token (check BOOKING_SECRETS_KEY).',
-      state_mismatch: 'OAuth state mismatch — try again.',
-      not_configured: 'Google OAuth env vars are missing.',
-      unauthorized: 'Sign in as admin first.',
-      forbidden: 'Admin role required.',
+      connected: t.msgConnected,
+      denied: t.msgDenied,
+      exchange_failed: t.msgExchangeFailed,
+      save_failed: t.msgSaveFailed,
+      state_mismatch: t.msgStateMismatch,
+      not_configured: t.msgNotConfigured,
+      unauthorized: t.msgUnauthorized,
+      forbidden: t.msgForbidden,
     };
+    if (gcal === 'denied') {
+      setShowTestingHelp(true);
+      setTab('calendar');
+    }
+    if (gcal === 'connected') {
+      setShowTestingHelp(false);
+      setTab('calendar');
+    }
     setMessage(
       `${map[gcal] ?? (gcal ? `Google Calendar: ${gcal}` : '')}${
-        watchErr ? ` (watch: ${watchErr} — renew later from this page)` : ''
+        watchErr ? ` (watch: ${watchErr})` : ''
       }`.trim() || null,
     );
-  }, [gcalQuery]);
+  }, [gcalQuery, t]);
 
   async function saveContacts(e: React.FormEvent) {
     e.preventDefault();
@@ -122,10 +157,10 @@ export function AdminBookingsClient({ gcalQuery }: { gcalQuery: string | null })
       });
       const json = (await res.json()) as { error?: string };
       if (!res.ok) {
-        setMessage(json.error ?? 'Save failed');
+        setMessage(json.error ?? t.saveFailed);
         return;
       }
-      setMessage('Saved.');
+      setMessage(t.saved);
       setPhone('');
       setAddress('');
       await load();
@@ -148,31 +183,22 @@ export function AdminBookingsClient({ gcalQuery }: { gcalQuery: string | null })
         detail?: string | null;
         busyCount?: number;
         notifyEmail?: string;
-        fromAddress?: string;
-        usesTestFrom?: boolean;
         id?: string | null;
       };
       if (!res.ok) {
         setMessage(
-          [
-            json.error ?? 'Action failed',
-            json.detail ? `— ${json.detail}` : '',
-            json.fromAddress ? `(from ${json.fromAddress}` : '',
-            json.notifyEmail ? ` → ${json.notifyEmail})` : json.fromAddress ? ')' : '',
-          ]
+          [json.error ?? t.msgActionFailed, json.detail ? `— ${json.detail}` : '']
             .filter(Boolean)
             .join(' '),
         );
         return;
       }
       if (actionName === 'refresh_busy') {
-        setMessage(`Busy refreshed (${json.busyCount ?? 0} blocks).`);
+        setMessage(t.msgBusyRefreshed.replace('{count}', String(json.busyCount ?? 0)));
       } else if (actionName === 'test_email') {
-        setMessage(
-          `Test email sent to ${json.notifyEmail ?? 'notify address'} (Resend id: ${json.id ?? 'ok'}). Check inbox + spam.`,
-        );
+        setMessage(t.msgTestEmail.replace('{email}', json.notifyEmail ?? '—'));
       } else {
-        setMessage('Watch channel renewed.');
+        setMessage(t.msgWatchRenewed);
       }
       await load();
     } finally {
@@ -180,10 +206,32 @@ export function AdminBookingsClient({ gcalQuery }: { gcalQuery: string | null })
     }
   }
 
+  const connected = Boolean(data?.settings?.hasRefreshToken);
+  const pendingCount =
+    data?.bookings?.filter((b) =>
+      ['submitted', 'proposal_sent', 'pick_pending'].includes(b.status),
+    ).length ?? 0;
+
+  const tabs: { id: TabId; label: string; badge?: number }[] = [
+    { id: 'requests', label: t.tabRequests, badge: pendingCount || undefined },
+    { id: 'calendar', label: t.tabCalendar },
+    { id: 'contacts', label: t.tabContacts },
+  ];
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
+      <PageHeader title={t.bookingsTitle} description={t.bookingsSubtitle} backHref="/admin" />
+
       {message ? (
-        <p className="rounded-lg border border-border bg-surface-2 px-4 py-3 text-sm" role="status">
+        <p
+          className={cn(
+            'rounded-xl border px-4 py-3 text-sm',
+            showTestingHelp
+              ? 'border-accent-amber/40 bg-accent-amber/10'
+              : 'border-border bg-surface-2',
+          )}
+          role="status"
+        >
           {message}
         </p>
       ) : null}
@@ -193,216 +241,273 @@ export function AdminBookingsClient({ gcalQuery }: { gcalQuery: string | null })
         </p>
       ) : null}
 
-      <section className="space-y-3 rounded-2xl border border-border bg-surface-1 p-6">
-        <h2 className="font-display text-lg font-semibold">Incoming requests</h2>
-
-        <div
-          className={
-            data?.resendConfigured
-              ? 'rounded-lg border border-border bg-surface-2 px-3 py-3 text-sm'
-              : 'rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-3 text-sm'
-          }
-        >
-          <p className="font-medium text-foreground">
-            {data?.resendConfigured
-              ? 'Resend key present on this deployment'
-              : 'RESEND_API_KEY is NOT visible to production'}
-          </p>
-          <ul className="mt-2 space-y-1 font-mono text-xs text-muted-foreground">
-            <li>RESEND_API_KEY: {data?.emailEnv?.RESEND_API_KEY ? 'yes' : 'NO'}</li>
-            <li>RESEND_FROM: {data?.emailEnv?.RESEND_FROM ? 'yes' : 'no (using onboarding@resend.dev)'}</li>
-            <li>
-              BOOKING_NOTIFY_EMAIL:{' '}
-              {data?.emailEnv?.BOOKING_NOTIFY_EMAIL ? 'yes' : 'no (default roeehadar@gmail.com)'}
-            </li>
-            <li>Notify → {data?.notifyEmail ?? '—'}</li>
-            <li>From → {data?.fromAddress ?? '—'}</li>
-          </ul>
-          {!data?.resendConfigured ? (
-            <ol className="mt-3 list-decimal space-y-1 ps-5 text-sm text-foreground">
-              <li>
-                Open Vercel → project <strong>a-step-forward-waij</strong> (the live web app)
-              </li>
-              <li>Settings → Environment Variables</li>
-              <li>
-                Add <code>RESEND_API_KEY</code> exactly (no quotes), Environment ={' '}
-                <strong>Production</strong> (and Preview if you want)
-              </li>
-              <li>
-                Optional: <code>BOOKING_NOTIFY_EMAIL</code>=roeehadar@gmail.com,{' '}
-                <code>RESEND_FROM</code> after you verify a domain
-              </li>
-              <li>
-                Deployments → … on latest Production → <strong>Redeploy</strong> (env vars apply only
-                after redeploy)
-              </li>
-              <li>Hard-refresh this page — RESEND_API_KEY must show yes</li>
-            </ol>
-          ) : null}
-        </div>
-
-        {data?.usesTestFrom && data?.resendConfigured ? (
-          <p className="rounded-lg border border-accent-magenta/40 bg-accent-magenta/10 px-3 py-2 text-sm">
-            You are using Resend&apos;s <strong>test</strong> sender (<code>onboarding@resend.dev</code>).
-            It can only deliver to the email address on your Resend account — not arbitrary Gmail
-            addresses. Fix: verify a domain in Resend → Domains, then set{' '}
-            <code>RESEND_FROM</code> to e.g. <code>A Step Forward &lt;bookings@yourdomain.com&gt;</code>{' '}
-            and redeploy. Or set <code>BOOKING_NOTIFY_EMAIL</code> to the exact email you used to sign
-            up for Resend (for testing only).
-          </p>
-        ) : null}
-        <Button
-          type="button"
-          variant="secondary"
-          disabled={saving || !data?.resendConfigured}
-          onClick={() => void action('test_email')}
-        >
-          Send test email now
-        </Button>
-        {!data?.bookings?.length ? (
-          <p className="text-sm text-muted-foreground">No booking requests yet.</p>
-        ) : (
-          <ul className="space-y-3">
-            {data.bookings.map((b) => (
-              <li
-                key={b.token}
-                className="rounded-xl border border-border bg-surface-2 px-4 py-3 text-sm"
-              >
-                <div className="flex flex-wrap items-baseline justify-between gap-2">
-                  <span className="font-medium">
-                    {b.learnerName} · {b.status}
-                  </span>
-                  <span className="text-muted-foreground">
-                    {new Date(b.createdAt).toLocaleString('he-IL', { timeZone: 'Asia/Jerusalem' })}
-                  </span>
-                </div>
-                <p className="mt-1 text-muted-foreground">
-                  {b.requesterName} &lt;{b.requesterEmail}&gt; · {b.requesterPhone}
-                </p>
-                <p className="mt-1">
-                  {b.modality === 'haifa' ? 'Haifa' : 'Online'} · {b.durationH}h · ₪{b.priceIls}
-                </p>
-                <p className="mt-1 text-muted-foreground">
-                  Preferred:{' '}
-                  {new Date(b.preferredStart).toLocaleString('he-IL', {
-                    timeZone: 'Asia/Jerusalem',
-                  })}
-                </p>
-                {b.goalText ? <p className="mt-1">Goal: {b.goalText}</p> : null}
-                <Link
-                  href={`/book/r/${b.token}`}
-                  className="mt-2 inline-flex text-primary underline-offset-4 hover:underline"
-                >
-                  Open status page
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      <section className="space-y-3 rounded-2xl border border-border bg-surface-1 p-6">
-        <h2 className="font-display text-lg font-semibold">Google Calendar</h2>
-        <ul className="space-y-1 text-sm text-muted-foreground">
-          <li>OAuth client: {data?.oauthConfigured ? 'configured' : 'missing env'}</li>
-          <li>Secrets key: {data?.secretsKeyConfigured ? 'configured' : 'missing BOOKING_SECRETS_KEY'}</li>
-          <li>Refresh token: {data?.settings?.hasRefreshToken ? 'yes' : 'not connected'}</li>
-          <li>Calendar id: {data?.settings?.calendarId ?? '—'}</li>
-          <li>
-            Watch:{' '}
-            {data?.settings?.googleChannelId
-              ? `active until ${data.settings.googleChannelExpiration ?? '?'}`
-              : 'not registered'}
-          </li>
-          <li>
-            Busy cache:{' '}
-            {data?.busyPreview
-              ? `${data.busyPreview.count} blocks (${data.busyPreview.source}) · ${data.busyPreview.syncedAt ?? 'n/a'}`
-              : '—'}
-          </li>
-        </ul>
-        <div className="flex flex-wrap gap-2 pt-2">
-          <Button asChild disabled={!data?.oauthConfigured}>
-            <Link href={data?.connectUrl ?? '#'}>Connect / reconnect Google</Link>
-          </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            disabled={saving || !data?.settings?.hasRefreshToken}
-            onClick={() => void action('refresh_busy')}
-          >
-            Refresh busy now
-          </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            disabled={saving || !data?.settings?.hasRefreshToken}
-            onClick={() => void action('renew_watch')}
-          >
-            Renew push watch
-          </Button>
-        </div>
-        <p className="text-xs text-muted-foreground">
-          Sync the same Google account on your iPhone so events appear in Apple Calendar.
-          Push webhooks invalidate busy cache immediately; we also refresh at most every ~45s.
-        </p>
-      </section>
-
-      <form
-        onSubmit={saveContacts}
-        className="space-y-4 rounded-2xl border border-border bg-surface-1 p-6"
+      <div
+        className="flex flex-wrap gap-1 rounded-xl border border-border bg-surface-1 p-1"
+        role="tablist"
+        aria-label={t.bookingsTitle}
       >
-        <h2 className="font-display text-lg font-semibold">Contact details (private)</h2>
-        <p className="text-sm text-muted-foreground">
-          Sent to learners only after you accept an in-person (Haifa) or online booking. Never shown
-          on the public /book page.
-        </p>
-        <div className="space-y-1.5">
-          <Label htmlFor="cal-id">Google calendar id</Label>
-          <Input
-            id="cal-id"
-            value={calendarId}
-            onChange={(e) => setCalendarId(e.target.value)}
-            placeholder="primary"
-          />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="meet">Default meeting link (online)</Label>
-          <Input
-            id="meet"
-            value={meetingLink}
-            onChange={(e) => setMeetingLink(e.target.value)}
-            placeholder="https://meet.google.com/..."
-          />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="phone">
-            Phone {data?.settings?.hasPhone ? '(set — leave blank to keep)' : ''}
-          </Label>
-          <Input
-            id="phone"
-            type="tel"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            autoComplete="off"
-          />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="address">
-            Full Haifa address {data?.settings?.hasAddress ? '(set — leave blank to keep)' : ''}
-          </Label>
-          <Textarea
-            id="address"
-            rows={2}
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            autoComplete="off"
-          />
-        </div>
-        <Button type="submit" disabled={saving}>
-          {saving ? 'Saving…' : 'Save'}
-        </Button>
-      </form>
+        {tabs.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            role="tab"
+            aria-selected={tab === item.id}
+            className={cn(
+              'inline-flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors sm:flex-none',
+              tab === item.id
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-surface-2 hover:text-foreground',
+            )}
+            onClick={() => setTab(item.id)}
+          >
+            {item.label}
+            {item.badge ? (
+              <span
+                className={cn(
+                  'rounded-md px-1.5 py-0.5 text-[11px] tabular-nums',
+                  tab === item.id ? 'bg-primary-foreground/20' : 'bg-surface-2',
+                )}
+              >
+                {item.badge}
+              </span>
+            ) : null}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'requests' ? (
+        <section className="space-y-4 rounded-2xl border border-border bg-surface-1 p-6">
+          <h2 className="font-display text-lg font-semibold">{t.incomingTitle}</h2>
+
+          <div
+            className={cn(
+              'rounded-xl border px-4 py-3 text-sm',
+              data?.resendConfigured
+                ? 'border-border bg-surface-2'
+                : 'border-destructive/40 bg-destructive/10',
+            )}
+          >
+            <p className="font-medium text-foreground">
+              {data?.resendConfigured ? t.resendOk : t.resendMissing}
+            </p>
+            <ul className="mt-2 space-y-1 font-mono text-xs text-muted-foreground">
+              <li>RESEND_API_KEY: {data?.emailEnv?.RESEND_API_KEY ? 'yes' : 'NO'}</li>
+              <li>Notify → {data?.notifyEmail ?? '—'}</li>
+              <li>From → {data?.fromAddress ?? '—'}</li>
+            </ul>
+            <Button
+              type="button"
+              variant="secondary"
+              className="mt-3"
+              disabled={saving || !data?.resendConfigured}
+              onClick={() => void action('test_email')}
+            >
+              {t.sendTestEmail}
+            </Button>
+          </div>
+
+          {!data?.bookings?.length ? (
+            <p className="text-sm text-muted-foreground">{t.incomingEmpty}</p>
+          ) : (
+            <ul className="space-y-3">
+              {data.bookings.map((b) => (
+                <li
+                  key={b.token}
+                  className="rounded-xl border border-border bg-surface-2 px-4 py-3 text-sm"
+                >
+                  <div className="flex flex-wrap items-baseline justify-between gap-2">
+                    <span className="font-medium">
+                      {b.learnerName}{' '}
+                      <span className="text-muted-foreground">· {statusLabel(b.status)}</span>
+                    </span>
+                    <span className="text-muted-foreground">
+                      {new Date(b.createdAt).toLocaleString(dateLocale, {
+                        timeZone: 'Asia/Jerusalem',
+                      })}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-muted-foreground">
+                    {b.requesterName} &lt;{b.requesterEmail}&gt; · {b.requesterPhone}
+                  </p>
+                  <p className="mt-1">
+                    {b.modality === 'haifa' ? t.modalityHaifa : t.modalityOnline} · {b.durationH}
+                    h · ₪{b.priceIls}
+                  </p>
+                  <p className="mt-1 text-muted-foreground">
+                    {t.preferred}:{' '}
+                    {new Date(b.preferredStart).toLocaleString(dateLocale, {
+                      timeZone: 'Asia/Jerusalem',
+                    })}
+                  </p>
+                  {b.goalText ? (
+                    <p className="mt-1">
+                      {t.goal}: {b.goalText}
+                    </p>
+                  ) : null}
+                  <Link
+                    href={`/book/r/${b.token}`}
+                    className="mt-2 inline-flex text-primary underline-offset-4 hover:underline"
+                  >
+                    {t.openStatus}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      ) : null}
+
+      {tab === 'calendar' ? (
+        <section className="space-y-4 rounded-2xl border border-border bg-surface-1 p-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="font-display text-lg font-semibold">{t.calendarTitle}</h2>
+            <span
+              className={cn(
+                'rounded-md px-2 py-1 text-xs font-semibold uppercase tracking-wide',
+                connected ? 'bg-primary/15 text-primary' : 'bg-accent-amber/15 text-foreground',
+              )}
+            >
+              {connected ? t.calendarConnected : t.calendarNotConnected}
+            </span>
+          </div>
+
+          {(!connected || showTestingHelp) && (
+            <div className="space-y-3 rounded-xl border border-accent-amber/40 bg-accent-amber/10 px-4 py-3 text-sm">
+              <p className="font-medium text-foreground">{t.testingTitle}</p>
+              <p className="text-muted-foreground">{t.testingBody}</p>
+              <p className="font-medium text-foreground">{t.testingStepsTitle}</p>
+              <ol className="list-decimal space-y-1 ps-5 text-foreground">
+                <li>{t.testingStep1}</li>
+                <li>{t.testingStep2}</li>
+                <li>{t.testingStep3}</li>
+                <li>
+                  {t.testingStep4.replace('{uri}', REDIRECT_URI)}
+                  <code className="mt-1 block break-all rounded-md bg-surface-2 px-2 py-1 text-xs" dir="ltr">
+                    {REDIRECT_URI}
+                  </code>
+                </li>
+                <li>{t.testingStep5}</li>
+              </ol>
+              <p className="text-xs text-muted-foreground">{t.testingPublish}</p>
+            </div>
+          )}
+
+          <ul className="space-y-1 text-sm text-muted-foreground">
+            <li>{data?.oauthConfigured ? t.oauthOk : t.oauthMissing}</li>
+            <li>{data?.secretsKeyConfigured ? t.secretsOk : t.secretsMissing}</li>
+            <li>{connected ? t.refreshTokenYes : t.refreshTokenNo}</li>
+            <li>
+              {data?.settings?.googleChannelId
+                ? t.watchActive.replace(
+                    '{when}',
+                    data.settings.googleChannelExpiration
+                      ? new Date(data.settings.googleChannelExpiration).toLocaleString(dateLocale, {
+                          timeZone: 'Asia/Jerusalem',
+                        })
+                      : '—',
+                  )
+                : t.watchInactive}
+            </li>
+            <li>
+              {data?.busyPreview
+                ? t.busyCache
+                    .replace('{count}', String(data.busyPreview.count))
+                    .replace(
+                      '{synced}',
+                      data.busyPreview.syncedAt
+                        ? new Date(data.busyPreview.syncedAt).toLocaleString(dateLocale, {
+                            timeZone: 'Asia/Jerusalem',
+                          })
+                        : '—',
+                    )
+                : '—'}
+            </li>
+          </ul>
+
+          <div className="flex flex-wrap gap-2 pt-1">
+            <Button asChild disabled={!data?.oauthConfigured}>
+              <Link href={data?.connectUrl ?? '#'}>
+                {connected ? t.reconnectGoogle : t.connectGoogle}
+              </Link>
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              disabled={saving || !connected}
+              onClick={() => void action('refresh_busy')}
+            >
+              {t.refreshBusy}
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              disabled={saving || !connected}
+              onClick={() => void action('renew_watch')}
+            >
+              {t.renewWatch}
+            </Button>
+          </div>
+          <p className="text-xs text-muted-foreground">{t.calendarHint}</p>
+        </section>
+      ) : null}
+
+      {tab === 'contacts' ? (
+        <form
+          onSubmit={saveContacts}
+          className="space-y-4 rounded-2xl border border-border bg-surface-1 p-6"
+        >
+          <h2 className="font-display text-lg font-semibold">{t.contactsTitle}</h2>
+          <p className="text-sm text-muted-foreground">{t.contactsBody}</p>
+          <div className="space-y-1.5">
+            <Label htmlFor="cal-id">{t.calendarId}</Label>
+            <Input
+              id="cal-id"
+              value={calendarId}
+              onChange={(e) => setCalendarId(e.target.value)}
+              placeholder="primary"
+              dir="ltr"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="meet">{t.meetingLink}</Label>
+            <Input
+              id="meet"
+              value={meetingLink}
+              onChange={(e) => setMeetingLink(e.target.value)}
+              placeholder="https://meet.google.com/..."
+              dir="ltr"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="phone">
+              {t.phone} {data?.settings?.hasPhone ? t.phoneSet : ''}
+            </Label>
+            <Input
+              id="phone"
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              autoComplete="off"
+              dir="ltr"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="address">
+              {t.address} {data?.settings?.hasAddress ? t.addressSet : ''}
+            </Label>
+            <Textarea
+              id="address"
+              rows={2}
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              autoComplete="off"
+            />
+          </div>
+          <Button type="submit" disabled={saving}>
+            {saving ? t.saving : t.save}
+          </Button>
+        </form>
+      ) : null}
     </div>
   );
 }
