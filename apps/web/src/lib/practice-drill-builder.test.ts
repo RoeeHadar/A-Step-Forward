@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { buildHintLadder, isPracticeArenaKind, stemLooksLanguageMixed } from './practice-arena';
+import {
+  buildHintLadder,
+  isPracticeArenaKind,
+  stemLooksLanguageMixed,
+  stemLooksVagueOrMeta,
+} from './practice-arena';
 
 /** Local mirror of open-first validate rules (no LLM). */
 function validateOpenShape(raw: {
@@ -13,6 +18,7 @@ function validateOpenShape(raw: {
   if (raw.kind === 'mcq' || raw.kind === 'true_false') return false;
   if (raw.stem_en.length < 12 || raw.stem_he.length < 12) return false;
   if (stemLooksLanguageMixed(raw.stem_en) || stemLooksLanguageMixed(raw.stem_he)) return false;
+  if (stemLooksVagueOrMeta(raw.stem_en) || stemLooksVagueOrMeta(raw.stem_he)) return false;
   if (raw.kind === 'open') return Boolean(raw.model_answer_en);
   return Boolean(raw.correct_answer);
 }
@@ -22,8 +28,8 @@ describe('practice-drill-builder validation helpers (v2 open)', () => {
     expect(
       validateOpenShape({
         kind: 'open',
-        stem_en: 'Prove the derivative of x^2 using first principles.',
-        stem_he: 'הוכיחו את נגזרת x^2 מההגדרה עם גבול.',
+        stem_en: 'Prove the derivative of $x^2$ using first principles.',
+        stem_he: 'הוכיחו את נגזרת $x^2$ מההגדרה עם גבול.',
         model_answer_en: 'Use lim h->0 ...',
       }),
     ).toBe(true);
@@ -36,6 +42,19 @@ describe('practice-drill-builder validation helpers (v2 open)', () => {
         stem_en: 'What is the power rule for x^n here?',
         stem_he: 'מהו כלל החזקה עבור x^n כאן עכשיו?',
       }),
+    ).toBe(false);
+  });
+
+  it('rejects vague meta stems about f(x)=k without concrete f', () => {
+    expect(
+      stemLooksVagueOrMeta(
+        'מהגרף של y=f(x) (או מנוסחה מפורשת אם ניתנה בשיעור), הסבירו כמה פתרונות יכולה להיות למשוואה f(x)=k כשהישר האופקי y=k זז.',
+      ),
+    ).toBe(true);
+    expect(
+      stemLooksVagueOrMeta(
+        'עבור $f(x)=x^2-4x$ מצאו את ערכי $k$ שעבורם למשוואה $f(x)=k$ יש שני פתרונות שונים.',
+      ),
     ).toBe(false);
   });
 

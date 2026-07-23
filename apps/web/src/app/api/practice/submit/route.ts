@@ -24,6 +24,7 @@ import kg from '@/lib/kg-data.json';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
 
 type KgConcept = { id: string; subject: string };
 
@@ -67,6 +68,7 @@ export async function POST(req: Request) {
   let correct = false;
   let processScore: number | null = null;
   let processFeedback: Awaited<ReturnType<typeof gradeOpenItemProcess>> | null = null;
+  let gradingUnavailable = false;
 
   if (gaveUp) {
     correct = false;
@@ -86,10 +88,28 @@ export async function POST(req: Request) {
       locale,
     });
     if (processFeedback.status === 'failed') {
-      return Response.json({ error: 'grading_failed' }, { status: 503 });
+      // Soft-fail: still unlock solution so the learner can continue.
+      gradingUnavailable = true;
+      processScore = 0;
+      correct = false;
+      processFeedback = {
+        ...processFeedback,
+        status: 'graded',
+        strengths:
+          locale === 'he'
+            ? 'הבדיקה האוטומטית לא הייתה זמינה כרגע.'
+            : 'Automatic grading was temporarily unavailable.',
+        next_fix:
+          locale === 'he'
+            ? 'השוו לפתרון המודל למטה והמשיכו לשאלה הבאה.'
+            : 'Compare with the model solution below, then continue.',
+        process_score: 0,
+        points_earned: 0,
+      };
+    } else {
+      processScore = processFeedback.process_score;
+      correct = practiceSuccessFromProcess(processScore);
     }
-    processScore = processFeedback.process_score;
-    correct = practiceSuccessFromProcess(processScore);
   } else {
     const graded = gradePracticeItem(item, body.answer);
     correct = graded.correct;
@@ -115,8 +135,8 @@ export async function POST(req: Request) {
       });
     }
   } catch (err) {
-    console.warn('[practice/submit] mastery update failed', err);
-    return Response.json({ error: 'mastery_update_failed' }, { status: 503 });
+    // Mastery must not block feedback / progression.
+    console.warn('[practice/submit] mastery update failed (continuing)', err);
   }
 
   if (correct) {
@@ -148,6 +168,7 @@ export async function POST(req: Request) {
   const feedback = {
     correct,
     gave_up: gaveUp,
+    grading_unavailable: gradingUnavailable,
     process_score: processScore,
     process: processFeedback
       ? {

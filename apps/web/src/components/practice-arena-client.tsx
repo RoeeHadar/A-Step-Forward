@@ -19,7 +19,7 @@ import type {
   PracticeSessionPublic,
   PracticeSessionSummary,
 } from '@/lib/practice-arena';
-import { PRACTICE_TOPICS, practiceTopicLabels } from '@/lib/practice-topics';
+import { practiceTopicLabels, practiceTopicsByGroup } from '@/lib/practice-topics';
 import { Loader2, Lightbulb, ArrowRight, Flag, Square } from 'lucide-react';
 
 type Phase = 'pick' | 'loading' | 'active' | 'feedback' | 'done' | 'error';
@@ -27,6 +27,7 @@ type Phase = 'pick' | 'loading' | 'active' | 'feedback' | 'done' | 'error';
 interface FeedbackPayload {
   correct: boolean;
   gave_up: boolean;
+  grading_unavailable?: boolean;
   process_score?: number | null;
   process?: {
     strengths: string;
@@ -40,6 +41,27 @@ interface FeedbackPayload {
   explanation_en: string;
   explanation_he: string;
   correct_answer?: string;
+}
+
+async function fetchJson<T>(
+  url: string,
+  init: RequestInit,
+  timeoutMs = 45_000,
+): Promise<{ ok: boolean; status: number; data: T }> {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, { ...init, signal: ctrl.signal });
+    let data = {} as T;
+    try {
+      data = (await res.json()) as T;
+    } catch {
+      /* non-JSON */
+    }
+    return { ok: res.ok, status: res.status, data };
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 export function PracticeArenaClient({
@@ -61,7 +83,12 @@ export function PracticeArenaClient({
   const [feedback, setFeedback] = useState<FeedbackPayload | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [busyAction, setBusyAction] = useState<'hint' | 'submit' | 'giveup' | 'next' | 'finish' | null>(
+    null,
+  );
   const [summary, setSummary] = useState<PracticeSessionSummary | null>(null);
+
+  const topicGroups = useMemo(() => practiceTopicsByGroup(he ? 'he' : 'en'), [he]);
 
   const stem = useMemo(() => {
     if (!item) return '';
@@ -90,7 +117,7 @@ export function PracticeArenaClient({
 
   const toggleTopic = (id: string) => {
     setTopicIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id].slice(0, 8),
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id].slice(0, 12),
     );
   };
 
@@ -103,7 +130,9 @@ export function PracticeArenaClient({
     setError(null);
     setPhase('loading');
     try {
-      const res = await fetch('/api/practice/start', {
+      const { ok, data } = await fetchJson<
+        PracticeSessionPublic & { error?: string; message?: string }
+      >('/api/practice/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -112,12 +141,8 @@ export function PracticeArenaClient({
           goal_items: 10,
           goal_minutes: 15,
         }),
-      });
-      const data = (await res.json()) as PracticeSessionPublic & {
-        error?: string;
-        message?: string;
-      };
-      if (!res.ok) {
+      }, 90_000);
+      if (!ok) {
         setError(data.message || data.error || 'Failed to start');
         setPhase('error');
         return;
@@ -129,8 +154,11 @@ export function PracticeArenaClient({
       setFeedback(null);
       setSummary(null);
       setPhase(data.item ? 'active' : 'error');
+      if (!data.item) {
+        setError(he ? 'לא נמצאו שאלות לנושאים אלה' : 'No items for these topics');
+      }
     } catch {
-      setError(he ? 'שגיאת רשת' : 'Network error');
+      setError(he ? 'שגיאת רשת או פג תוקף הבקשה' : 'Network error or request timed out');
       setPhase('error');
     } finally {
       setBusy(false);
@@ -140,77 +168,123 @@ export function PracticeArenaClient({
   const requestHint = useCallback(async () => {
     if (!session || busy) return;
     setBusy(true);
+    setBusyAction('hint');
+    setError(null);
     try {
-      const res = await fetch('/api/practice/hint', {
+      const { ok, data } = await fetchJson<{
+        session?: PracticeSessionPublic;
+        error?: string;
+      }>('/api/practice/hint', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ session_id: session.session_id }),
-      });
-      const data = (await res.json()) as {
-        session?: PracticeSessionPublic;
-      };
-      if (res.ok && data.session) {
+      }, 30_000);
+      if (!ok) {
+        setError(
+          data.error === 'already_submitted'
+            ? he
+              ? 'השאלה כבר נבדקה'
+              : 'Item already graded'
+            : data.error || (he ? 'לא ניתן לטעון רמז' : 'Could not load hint'),
+        );
+        return;
+      }
+      if (data.session) {
         setSession(data.session);
         setItem(data.session.item);
       }
+    } catch {
+      setError(he ? 'רמז נכשל — נסו שוב' : 'Hint failed — try again');
     } finally {
       setBusy(false);
+      setBusyAction(null);
     }
-  }, [busy, session]);
+  }, [busy, he, session]);
 
   const submit = useCallback(
     async (giveUp = false) => {
       if (!session || !item || busy) return;
+      if (!giveUp && item.kind !== 'mcq' && !answer.trim()) {
+        setError(he ? 'כתבו תשובה לפני שליחה, או ויתרו להצגת הפתרון' : 'Write an answer, or give up to see the solution');
+        return;
+      }
+      if (!giveUp && item.kind === 'mcq' && mcqIndex === null) {
+        setError(he ? 'בחרו אפשרות' : 'Select an option');
+        return;
+      }
       setBusy(true);
+      setBusyAction(giveUp ? 'giveup' : 'submit');
+      setError(null);
       try {
         let payload: unknown = answer;
         if (item.kind === 'mcq') payload = mcqIndex;
 
-        const res = await fetch('/api/practice/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            session_id: session.session_id,
-            item_id: item.id,
-            answer: payload,
-            give_up: giveUp,
-          }),
-        });
-        const data = (await res.json()) as {
+        const { ok, data } = await fetchJson<{
           feedback?: FeedbackPayload;
           session?: PracticeSessionPublic;
           error?: string;
-        };
-        if (!res.ok) {
-          setError(data.error || 'Submit failed');
+        }>(
+          '/api/practice/submit',
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              session_id: session.session_id,
+              item_id: item.id,
+              answer: payload,
+              give_up: giveUp,
+            }),
+          },
+          55_000,
+        );
+        if (!ok) {
+          setError(
+            data.error === 'grading_failed'
+              ? he
+                ? 'הבדיקה נכשלה זמנית — נסו שוב או ויתרו להצגת פתרון'
+                : 'Grading failed temporarily — retry or give up to see the solution'
+              : data.error || (he ? 'שליחה נכשלה' : 'Submit failed'),
+          );
           return;
         }
         if (data.session) setSession(data.session);
         if (data.feedback) setFeedback(data.feedback);
         setPhase('feedback');
+      } catch {
+        setError(
+          he
+            ? 'שליחה נכשלה או פג תוקף — נסו שוב, או ויתרו להצגת פתרון'
+            : 'Submit failed or timed out — retry, or give up to see the solution',
+        );
       } finally {
         setBusy(false);
+        setBusyAction(null);
       }
     },
-    [answer, busy, item, mcqIndex, session],
+    [answer, busy, he, item, mcqIndex, session],
   );
 
   const continueNext = useCallback(async () => {
     if (!session || busy) return;
     setBusy(true);
+    setBusyAction('next');
     setFeedback(null);
+    setError(null);
     try {
-      const res = await fetch('/api/practice/next', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ session_id: session.session_id }),
-      });
-      const data = (await res.json()) as {
+      const { ok, data } = await fetchJson<{
         session?: PracticeSessionPublic;
         ended?: boolean;
         error?: string;
         message?: string;
-      };
+      }>(
+        '/api/practice/next',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ session_id: session.session_id }),
+        },
+        90_000,
+      );
       if (data.ended || data.error === 'thin_topic') {
         if (data.session) {
           setSession(data.session);
@@ -219,7 +293,7 @@ export function PracticeArenaClient({
         setPhase('done');
         return;
       }
-      if (!res.ok) {
+      if (!ok) {
         setError(data.message || data.error || 'No more items');
         setPhase('error');
         return;
@@ -233,40 +307,51 @@ export function PracticeArenaClient({
       setAnswer('');
       setMcqIndex(null);
       setPhase('active');
+    } catch {
+      setError(he ? 'טעינת השאלה הבאה נכשלה' : 'Failed to load next item');
     } finally {
       setBusy(false);
+      setBusyAction(null);
     }
-  }, [busy, session]);
+  }, [busy, he, session]);
 
   const finish = useCallback(async () => {
     if (!session || busy) return;
     setBusy(true);
+    setBusyAction('finish');
     try {
-      const res = await fetch('/api/practice/finish', {
+      const { ok, data } = await fetchJson<{
+        session?: PracticeSessionPublic;
+        error?: string;
+      }>('/api/practice/finish', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ session_id: session.session_id }),
-      });
-      const data = (await res.json()) as {
-        session?: PracticeSessionPublic;
-        error?: string;
-      };
-      if (res.ok && data.session) {
+      }, 30_000);
+      if (ok && data.session) {
         setSession(data.session);
         setSummary(data.session.summary ?? null);
         setPhase('done');
       } else {
         setError(data.error || 'Finish failed');
       }
+    } catch {
+      setError(he ? 'סיום נכשל' : 'Finish failed');
     } finally {
       setBusy(false);
+      setBusyAction(null);
     }
-  }, [busy, session]);
+  }, [busy, he, session]);
 
   const topicLabelList = practiceTopicLabels(session?.topic_ids ?? topicIds, he ? 'he' : 'en');
+  const explanation = feedback
+    ? he
+      ? feedback.explanation_he
+      : feedback.explanation_en
+    : '';
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-8">
+    <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-8">
       <header className="space-y-2">
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
           {he ? 'זירת תרגול' : 'Practice arena'}
@@ -280,6 +365,12 @@ export function PracticeArenaClient({
             : 'Pick topics, answer open bagrut/uni-style questions, and finish when ready — no timer.'}
         </p>
       </header>
+
+      {error ? (
+        <p className="rounded-lg border border-destructive/40 bg-destructive/5 px-3 py-2 text-sm text-destructive" role="alert">
+          {error}
+        </p>
+      ) : null}
 
       {session && phase !== 'pick' ? (
         <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
@@ -306,7 +397,11 @@ export function PracticeArenaClient({
               onClick={() => void finish()}
               disabled={busy}
             >
-              <Square className="me-2 h-3.5 w-3.5" />
+              {busyAction === 'finish' ? (
+                <Loader2 className="me-2 h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <Square className="me-2 h-3.5 w-3.5" />
+              )}
               {he ? 'סיים תרגול' : 'Finish training'}
             </Button>
           ) : null}
@@ -315,32 +410,38 @@ export function PracticeArenaClient({
 
       {(phase === 'pick' || phase === 'error') && !session ? (
         <div className="space-y-4 rounded-xl border border-border/60 bg-surface-1/50 p-6">
-          {error ? <p className="text-sm text-destructive">{error}</p> : null}
-          <fieldset className="space-y-3">
+          <fieldset className="space-y-4">
             <legend className="text-sm font-medium">
               {he ? 'מה תרצו לתרגל?' : 'What do you want to train?'}
             </legend>
-            <div className="flex flex-wrap gap-2">
-              {PRACTICE_TOPICS.map((t) => {
-                const on = topicIds.includes(t.id);
-                return (
-                  <button
-                    key={t.id}
-                    type="button"
-                    onClick={() => toggleTopic(t.id)}
-                    className={cn(
-                      'rounded-lg border px-3 py-1.5 text-sm transition-colors',
-                      on
-                        ? 'border-primary bg-primary/10'
-                        : 'border-border/70 hover:bg-surface-2/50',
-                    )}
-                    aria-pressed={on}
-                  >
-                    {he ? t.label_he : t.label_en}
-                  </button>
-                );
-              })}
-            </div>
+            {topicGroups.map(({ group, topics }) => (
+              <div key={group} className="space-y-2">
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {group}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {topics.map((t) => {
+                    const on = topicIds.includes(t.id);
+                    return (
+                      <button
+                        key={t.id}
+                        type="button"
+                        onClick={() => toggleTopic(t.id)}
+                        className={cn(
+                          'rounded-lg border px-3 py-1.5 text-sm transition-colors',
+                          on
+                            ? 'border-primary bg-primary/10'
+                            : 'border-border/70 hover:bg-surface-2/50',
+                        )}
+                        aria-pressed={on}
+                      >
+                        {he ? t.label_he : t.label_en}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </fieldset>
           <Button onClick={() => void start()} disabled={busy || (!topicIds.length && !initialConceptId)}>
             {busy ? <Loader2 className="me-2 h-4 w-4 animate-spin" /> : null}
@@ -348,8 +449,8 @@ export function PracticeArenaClient({
           </Button>
           <p className="text-xs text-muted-foreground">
             {he
-              ? 'יעד רך: ~10 שאלות · אפשר לסיים בכל רגע'
-              : 'Soft goal: ~10 items · finish anytime'}
+              ? 'יעד רך: ~10 שאלות · עד 12 נושאים · אפשר לסיים בכל רגע'
+              : 'Soft goal: ~10 items · up to 12 topics · finish anytime'}
           </p>
           <p className="text-xs text-muted-foreground">
             <Link href="/app/practice/history" className="underline-offset-2 hover:underline">
@@ -367,7 +468,7 @@ export function PracticeArenaClient({
       ) : null}
 
       {(phase === 'active' || phase === 'feedback') && item ? (
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_240px]">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,340px)]">
           <div className="space-y-5 rounded-xl border border-border/60 bg-surface-1/40 p-6">
             <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
               <span>
@@ -447,11 +548,17 @@ export function PracticeArenaClient({
                     onClick={() => void requestHint()}
                     disabled={busy || (item.hint_step ?? 0) >= 3}
                   >
-                    <Lightbulb className="me-2 h-4 w-4" />
+                    {busyAction === 'hint' ? (
+                      <Loader2 className="me-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Lightbulb className="me-2 h-4 w-4" />
+                    )}
                     {he ? 'רמז' : 'Hint'}
                   </Button>
                   <Button type="button" onClick={() => void submit(false)} disabled={busy}>
-                    {busy ? <Loader2 className="me-2 h-4 w-4 animate-spin" /> : null}
+                    {busyAction === 'submit' ? (
+                      <Loader2 className="me-2 h-4 w-4 animate-spin" />
+                    ) : null}
                     {he ? 'שלח' : 'Submit'}
                   </Button>
                   <Button
@@ -459,11 +566,25 @@ export function PracticeArenaClient({
                     variant="ghost"
                     onClick={() => void submit(true)}
                     disabled={busy}
+                    title={
+                      he
+                        ? 'מציג את הפתרון ומאפשר מעבר לשאלה הבאה'
+                        : 'Shows the solution, then you can go to the next question'
+                    }
                   >
-                    <Flag className="me-2 h-4 w-4" />
-                    {he ? 'ויתור' : 'Give up'}
+                    {busyAction === 'giveup' ? (
+                      <Loader2 className="me-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Flag className="me-2 h-4 w-4" />
+                    )}
+                    {he ? 'ויתור + פתרון → הבא' : 'Give up + solution → next'}
                   </Button>
                 </div>
+                <p className="text-xs text-muted-foreground">
+                  {he
+                    ? 'ויתור מציג את הפתרון המלא; אחר כך לחצו «השאלה הבאה».'
+                    : 'Give up reveals the full solution; then click “Next question”.'}
+                </p>
               </>
             ) : null}
 
@@ -481,8 +602,8 @@ export function PracticeArenaClient({
                       : 'Success (process score met)'
                     : feedback.gave_up
                       ? he
-                        ? 'ויתרת — הנה הפתרון'
-                        : 'Gave up — here’s the solution'
+                        ? 'ויתרת — הנה הפתרון. אפשר להמשיך לשאלה הבאה.'
+                        : 'Gave up — here’s the solution. Continue to the next question.'
                       : he
                         ? 'עדיין לא — הנה משוב'
                         : 'Not yet — here’s feedback'}
@@ -490,19 +611,43 @@ export function PracticeArenaClient({
                     ? ` · ${(feedback.process_score * 100).toFixed(0)}%`
                     : ''}
                 </p>
+                {feedback.grading_unavailable ? (
+                  <p className="text-xs text-muted-foreground">
+                    {he
+                      ? 'הבדיקה האוטומטית לא הייתה זמינה; הוצג פתרון המודל.'
+                      : 'Auto-grading was unavailable; model solution shown.'}
+                  </p>
+                ) : null}
                 {feedback.process ? (
                   <div className="space-y-1 text-sm text-muted-foreground" dir={he ? 'rtl' : 'ltr'}>
                     {feedback.process.strengths ? <p>{feedback.process.strengths}</p> : null}
                     {feedback.process.next_fix ? <p>{feedback.process.next_fix}</p> : null}
                   </div>
                 ) : null}
-                <div className="prose prose-sm dark:prose-invert max-w-none" dir={he ? 'rtl' : 'ltr'}>
-                  <MarkdownMath>
-                    {he ? feedback.explanation_he : feedback.explanation_en}
-                  </MarkdownMath>
-                </div>
+                {explanation ? (
+                  <div className="space-y-1">
+                    <p className="text-xs font-medium text-muted-foreground">
+                      {he ? 'פתרון / הסבר' : 'Solution / explanation'}
+                    </p>
+                    <div
+                      className="prose prose-sm dark:prose-invert max-w-none rounded-lg border border-border/50 bg-surface-2/30 p-3"
+                      dir={he ? 'rtl' : 'ltr'}
+                    >
+                      <MarkdownMath>{explanation}</MarkdownMath>
+                    </div>
+                  </div>
+                ) : null}
+                {feedback.correct_answer ? (
+                  <p className="text-sm" dir="ltr">
+                    {he ? 'תשובה: ' : 'Answer: '}
+                    <MarkdownMath>{String(feedback.correct_answer)}</MarkdownMath>
+                  </p>
+                ) : null}
                 <Button type="button" onClick={() => void continueNext()} disabled={busy}>
-                  {he ? 'הבא' : 'Next'}
+                  {busyAction === 'next' ? (
+                    <Loader2 className="me-2 h-4 w-4 animate-spin" />
+                  ) : null}
+                  {he ? 'השאלה הבאה' : 'Next question'}
                   <ArrowRight className="ms-2 h-4 w-4" />
                 </Button>
               </div>
@@ -537,6 +682,7 @@ export function PracticeArenaClient({
                 setSession(null);
                 setItem(null);
                 setPhase('pick');
+                setError(null);
               }}
             >
               {he ? 'סבב נוסף' : 'Another round'}
