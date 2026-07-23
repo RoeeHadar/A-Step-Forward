@@ -219,10 +219,12 @@ export function PracticeArenaClient({
         let payload: unknown = answer;
         if (item.kind === 'mcq') payload = mcqIndex;
 
+        // Client budget must exceed route maxDuration (60s) so we rarely abort mid-grade.
         const { ok, data } = await fetchJson<{
           feedback?: FeedbackPayload;
           session?: PracticeSessionPublic;
           error?: string;
+          recovered?: boolean;
         }>(
           '/api/practice/submit',
           {
@@ -235,7 +237,7 @@ export function PracticeArenaClient({
               give_up: giveUp,
             }),
           },
-          55_000,
+          75_000,
         );
         if (!ok) {
           setError(
@@ -251,6 +253,34 @@ export function PracticeArenaClient({
         if (data.feedback) setFeedback(data.feedback);
         setPhase('feedback');
       } catch {
+        // Timed out while server may still have graded — recover via idempotent resubmit.
+        try {
+          const recover = await fetchJson<{
+            feedback?: FeedbackPayload;
+            session?: PracticeSessionPublic;
+          }>(
+            '/api/practice/submit',
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                session_id: session.session_id,
+                item_id: item.id,
+                answer: giveUp ? '' : answer,
+                give_up: giveUp,
+              }),
+            },
+            20_000,
+          );
+          if (recover.ok && recover.data.feedback) {
+            if (recover.data.session) setSession(recover.data.session);
+            setFeedback(recover.data.feedback);
+            setPhase('feedback');
+            return;
+          }
+        } catch {
+          /* fall through */
+        }
         setError(
           he
             ? 'שליחה נכשלה או פג תוקף — נסו שוב, או ויתרו להצגת פתרון'
@@ -268,7 +298,6 @@ export function PracticeArenaClient({
     if (!session || busy) return;
     setBusy(true);
     setBusyAction('next');
-    setFeedback(null);
     setError(null);
     try {
       const { ok, data } = await fetchJson<{
@@ -290,15 +319,17 @@ export function PracticeArenaClient({
           setSession(data.session);
           setSummary(data.session.summary ?? null);
         }
+        setFeedback(null);
         setPhase('done');
         return;
       }
       if (!ok) {
         setError(data.message || data.error || 'No more items');
-        setPhase('error');
+        // Keep feedback/solution visible so the learner can retry Next.
         return;
       }
       if (!data.session?.item) {
+        setFeedback(null);
         setPhase('done');
         return;
       }
@@ -306,6 +337,7 @@ export function PracticeArenaClient({
       setItem(data.session.item);
       setAnswer('');
       setMcqIndex(null);
+      setFeedback(null);
       setPhase('active');
     } catch {
       setError(he ? 'טעינת השאלה הבאה נכשלה' : 'Failed to load next item');

@@ -57,7 +57,30 @@ export async function POST(req: Request) {
     return Response.json({ error: 'item_mismatch' }, { status: 409 });
   }
   if (session.current_graded) {
-    return Response.json({ error: 'already_submitted' }, { status: 409 });
+    // Idempotent recovery: client may have timed out after the server graded.
+    const item = session.current_item;
+    const last = [...session.attempt_log]
+      .reverse()
+      .find((a) => a.item_id === item.id);
+    return Response.json({
+      error: 'already_submitted',
+      recovered: true,
+      feedback: {
+        correct: last?.correct ?? false,
+        gave_up: last?.gave_up ?? false,
+        grading_unavailable: false,
+        process_score: last?.process_score ?? null,
+        process: null,
+        explanation_en: item.explanation_en || item.model_answer_en || '',
+        explanation_he: item.explanation_he || item.model_answer_he || '',
+        correct_answer:
+          item.kind === 'numeric' || item.kind === 'short_answer' || item.kind === 'fill_blank'
+            ? item.correct_answer
+            : undefined,
+      },
+      session: toPracticeSessionPublic(session),
+      goal_reached: session.attempted >= session.goal_items,
+    }, { status: 200 });
   }
 
   const item = session.current_item;
