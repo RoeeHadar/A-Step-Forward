@@ -5,31 +5,70 @@ import 'server-only';
 import { logger } from '@/lib/logger';
 import type { LessonBookingRow } from '@/lib/lesson-bookings-db';
 
+/** Trim + strip wrapping quotes people often paste into Vercel. */
+function envVal(...keys: string[]): string {
+  for (const key of keys) {
+    const raw = process.env[key];
+    if (raw == null || raw === '') continue;
+    const cleaned = raw.trim().replace(/^['"]|['"]$/g, '').trim();
+    if (cleaned) return cleaned;
+  }
+  return '';
+}
+
 export function bookingNotifyEmail(): string {
-  return (
-    process.env.BOOKING_NOTIFY_EMAIL?.trim() ||
-    process.env.TUTOR_EMAIL?.trim() ||
-    'roeehadar@gmail.com'
-  );
+  return envVal('BOOKING_NOTIFY_EMAIL', 'TUTOR_EMAIL') || 'roeehadar@gmail.com';
 }
 
 export function bookingFromAddress(): string {
-  return process.env.RESEND_FROM?.trim() || 'A Step Forward <onboarding@resend.dev>';
+  return envVal('RESEND_FROM') || 'A Step Forward <onboarding@resend.dev>';
+}
+
+export function resendApiKey(): string {
+  return envVal('RESEND_API_KEY', 'RESEND_KEY');
 }
 
 export function resendConfigured(): boolean {
-  return Boolean(process.env.RESEND_API_KEY?.trim());
+  return Boolean(resendApiKey());
+}
+
+/** Safe diagnostics for admin UI (booleans only — never leak secret values). */
+export function bookingEmailEnvDiagnostics(): {
+  RESEND_API_KEY: boolean;
+  RESEND_FROM: boolean;
+  BOOKING_NOTIFY_EMAIL: boolean;
+  TUTOR_EMAIL: boolean;
+  notifyEmail: string;
+  fromAddress: string;
+  usesTestFrom: boolean;
+} {
+  return {
+    RESEND_API_KEY: Boolean(resendApiKey()),
+    RESEND_FROM: Boolean(envVal('RESEND_FROM')),
+    BOOKING_NOTIFY_EMAIL: Boolean(envVal('BOOKING_NOTIFY_EMAIL')),
+    TUTOR_EMAIL: Boolean(envVal('TUTOR_EMAIL')),
+    notifyEmail: bookingNotifyEmail(),
+    fromAddress: bookingFromAddress(),
+    usesTestFrom: usesResendTestFrom(),
+  };
 }
 
 export function usesResendTestFrom(): boolean {
-  return /@resend\.dev>?$/i.test(bookingFromAddress()) || /onboarding@resend\.dev/i.test(bookingFromAddress());
+  return (
+    /@resend\.dev>?$/i.test(bookingFromAddress()) ||
+    /onboarding@resend\.dev/i.test(bookingFromAddress())
+  );
 }
 
 function appOrigin(): string {
   const base =
-    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ||
+    envVal('NEXT_PUBLIC_APP_URL').replace(/\/$/, '') ||
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL.replace(/\/$/, '')}` : '');
-  return base.startsWith('http') ? base : base ? `https://${base}` : 'https://a-step-forward-waij.vercel.app';
+  return base.startsWith('http')
+    ? base
+    : base
+      ? `https://${base}`
+      : 'https://a-step-forward-waij.vercel.app';
 }
 
 function formatJerusalem(iso: string): string {
@@ -53,7 +92,7 @@ async function sendResendEmail(input: {
   subject: string;
   html: string;
 }): Promise<BookingEmailResult> {
-  const apiKey = process.env.RESEND_API_KEY?.trim();
+  const apiKey = resendApiKey();
   if (!apiKey) {
     logger.warn('[booking-email] RESEND_API_KEY missing — skipping notify');
     return { ok: false, error: 'resend_not_configured' };
@@ -84,10 +123,7 @@ async function sendResendEmail(input: {
 
     if (!res.ok) {
       const detail =
-        parsed.message ||
-        parsed.name ||
-        text.slice(0, 500) ||
-        `HTTP ${res.status}`;
+        parsed.message || parsed.name || text.slice(0, 500) || `HTTP ${res.status}`;
       logger.error('[booking-email] Resend failed', {
         status: res.status,
         detail,

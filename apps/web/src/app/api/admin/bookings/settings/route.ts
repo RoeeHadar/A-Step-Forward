@@ -14,7 +14,14 @@ import {
 } from '@/lib/lesson-booking-settings-db';
 import { listLessonBookingsAdmin, toPublicBookingView } from '@/lib/lesson-bookings-db';
 import { bookingSecretsConfigured } from '@/lib/booking-secrets-crypto';
-import { bookingNotifyEmail, bookingFromAddress, resendConfigured, sendBookingTestEmail, usesResendTestFrom } from '@/lib/booking-email';
+import {
+  bookingEmailEnvDiagnostics,
+  bookingNotifyEmail,
+  bookingFromAddress,
+  resendConfigured,
+  sendBookingTestEmail,
+  usesResendTestFrom,
+} from '@/lib/booking-email';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -54,6 +61,7 @@ export async function GET() {
     notifyEmail: bookingNotifyEmail(),
     fromAddress: bookingFromAddress(),
     usesTestFrom: usesResendTestFrom(),
+    emailEnv: bookingEmailEnvDiagnostics(),
     settings: settings
       ? {
           calendarId: settings.calendarId,

@@ -30,6 +30,15 @@ type SettingsPayload = {
   notifyEmail?: string;
   fromAddress?: string;
   usesTestFrom?: boolean;
+  emailEnv?: {
+    RESEND_API_KEY: boolean;
+    RESEND_FROM: boolean;
+    BOOKING_NOTIFY_EMAIL: boolean;
+    TUTOR_EMAIL: boolean;
+    notifyEmail: string;
+    fromAddress: string;
+    usesTestFrom: boolean;
+  };
   connectUrl: string;
   settings: {
     calendarId: string;
@@ -186,13 +195,53 @@ export function AdminBookingsClient({ gcalQuery }: { gcalQuery: string | null })
 
       <section className="space-y-3 rounded-2xl border border-border bg-surface-1 p-6">
         <h2 className="font-display text-lg font-semibold">Incoming requests</h2>
-        <p className="text-sm text-muted-foreground">
-          Email notify:{' '}
-          {data?.resendConfigured
-            ? `Resend key present · from ${data.fromAddress ?? '—'} → ${data.notifyEmail ?? '—'}`
-            : 'RESEND_API_KEY missing — emails will not send until you add it in Vercel (Production)'}
-        </p>
-        {data?.usesTestFrom ? (
+
+        <div
+          className={
+            data?.resendConfigured
+              ? 'rounded-lg border border-border bg-surface-2 px-3 py-3 text-sm'
+              : 'rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-3 text-sm'
+          }
+        >
+          <p className="font-medium text-foreground">
+            {data?.resendConfigured
+              ? 'Resend key present on this deployment'
+              : 'RESEND_API_KEY is NOT visible to production'}
+          </p>
+          <ul className="mt-2 space-y-1 font-mono text-xs text-muted-foreground">
+            <li>RESEND_API_KEY: {data?.emailEnv?.RESEND_API_KEY ? 'yes' : 'NO'}</li>
+            <li>RESEND_FROM: {data?.emailEnv?.RESEND_FROM ? 'yes' : 'no (using onboarding@resend.dev)'}</li>
+            <li>
+              BOOKING_NOTIFY_EMAIL:{' '}
+              {data?.emailEnv?.BOOKING_NOTIFY_EMAIL ? 'yes' : 'no (default roeehadar@gmail.com)'}
+            </li>
+            <li>Notify → {data?.notifyEmail ?? '—'}</li>
+            <li>From → {data?.fromAddress ?? '—'}</li>
+          </ul>
+          {!data?.resendConfigured ? (
+            <ol className="mt-3 list-decimal space-y-1 ps-5 text-sm text-foreground">
+              <li>
+                Open Vercel → project <strong>a-step-forward-waij</strong> (the live web app)
+              </li>
+              <li>Settings → Environment Variables</li>
+              <li>
+                Add <code>RESEND_API_KEY</code> exactly (no quotes), Environment ={' '}
+                <strong>Production</strong> (and Preview if you want)
+              </li>
+              <li>
+                Optional: <code>BOOKING_NOTIFY_EMAIL</code>=roeehadar@gmail.com,{' '}
+                <code>RESEND_FROM</code> after you verify a domain
+              </li>
+              <li>
+                Deployments → … on latest Production → <strong>Redeploy</strong> (env vars apply only
+                after redeploy)
+              </li>
+              <li>Hard-refresh this page — RESEND_API_KEY must show yes</li>
+            </ol>
+          ) : null}
+        </div>
+
+        {data?.usesTestFrom && data?.resendConfigured ? (
           <p className="rounded-lg border border-accent-magenta/40 bg-accent-magenta/10 px-3 py-2 text-sm">
             You are using Resend&apos;s <strong>test</strong> sender (<code>onboarding@resend.dev</code>).
             It can only deliver to the email address on your Resend account — not arbitrary Gmail
