@@ -1,48 +1,40 @@
 import { describe, expect, it } from 'vitest';
-import { buildHintLadder, isPracticeClosedKind } from './practice-arena';
+import { buildHintLadder, isPracticeArenaKind, stemLooksLanguageMixed } from './practice-arena';
 
-/** Local mirror of validate rules used by the drill builder (no LLM). */
-function validateShape(raw: {
+/** Local mirror of open-first validate rules (no LLM). */
+function validateOpenShape(raw: {
   kind: string;
   stem_en: string;
   stem_he: string;
-  correct_index?: number;
-  options_en?: string[];
-  options_he?: string[];
+  model_answer_en?: string;
+  correct_answer?: string;
 }): boolean {
-  if (!isPracticeClosedKind(raw.kind)) return false;
-  if (raw.stem_en.length < 8 || raw.stem_he.length < 8) return false;
-  if (raw.kind === 'mcq') {
-    return (
-      (raw.options_en?.length ?? 0) >= 3 &&
-      (raw.options_he?.length ?? 0) >= 3 &&
-      typeof raw.correct_index === 'number' &&
-      raw.correct_index >= 0
-    );
-  }
-  return true;
+  if (!isPracticeArenaKind(raw.kind)) return false;
+  if (raw.kind === 'mcq' || raw.kind === 'true_false') return false;
+  if (raw.stem_en.length < 12 || raw.stem_he.length < 12) return false;
+  if (stemLooksLanguageMixed(raw.stem_en) || stemLooksLanguageMixed(raw.stem_he)) return false;
+  if (raw.kind === 'open') return Boolean(raw.model_answer_en);
+  return Boolean(raw.correct_answer);
 }
 
-describe('practice-drill-builder validation helpers', () => {
-  it('accepts well-formed MCQ shapes', () => {
+describe('practice-drill-builder validation helpers (v2 open)', () => {
+  it('accepts well-formed open shapes', () => {
     expect(
-      validateShape({
-        kind: 'mcq',
-        stem_en: 'What is the power rule for x^n?',
-        stem_he: 'מהו כלל החזקה עבור x^n?',
-        options_en: ['a', 'b', 'c', 'd'],
-        options_he: ['א', 'ב', 'ג', 'ד'],
-        correct_index: 0,
+      validateOpenShape({
+        kind: 'open',
+        stem_en: 'Prove the derivative of x^2 using first principles.',
+        stem_he: 'הוכיחו את נגזרת x^2 מההגדרה עם גבול.',
+        model_answer_en: 'Use lim h->0 ...',
       }),
     ).toBe(true);
   });
 
-  it('rejects open / unknown kinds', () => {
+  it('rejects mcq for the open-first arena', () => {
     expect(
-      validateShape({
-        kind: 'open',
-        stem_en: 'Prove something long enough',
-        stem_he: 'הוכח משהו באורך מספיק',
+      validateOpenShape({
+        kind: 'mcq',
+        stem_en: 'What is the power rule for x^n here?',
+        stem_he: 'מהו כלל החזקה עבור x^n כאן עכשיו?',
       }),
     ).toBe(false);
   });

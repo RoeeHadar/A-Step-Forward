@@ -8,7 +8,7 @@ import { Input } from '@asf/ui/input';
 import { MarkdownMath } from '@/components/markdown-math';
 import { useI18n } from '@/providers/i18n-provider';
 
-type TabId = 'overview' | 'plan' | 'progress' | 'tests' | 'memory';
+type TabId = 'overview' | 'plan' | 'progress' | 'tests' | 'practice' | 'memory';
 
 interface PlanWeekView {
   week_number: number;
@@ -94,6 +94,17 @@ interface ItemEdit {
   process_score: string;
 }
 
+interface PracticeSessionRow {
+  session_id: string;
+  status: string;
+  topic_ids: string[];
+  attempted: number;
+  correct_count: number;
+  created_at: string | null;
+  ended_at?: string | null;
+  avg_process_score?: number | null;
+}
+
 interface Props {
   studentId: string;
   studentName: string;
@@ -105,10 +116,11 @@ interface Props {
   progress: ProgressView | null;
   memory: MemoryView | null;
   attempts: AttemptRow[];
+  practiceSessions: PracticeSessionRow[];
   notes: Array<{ id: string; kind: string; content: string; created_at: string }>;
 }
 
-const TAB_IDS: TabId[] = ['overview', 'plan', 'progress', 'tests', 'memory'];
+const TAB_IDS: TabId[] = ['overview', 'plan', 'progress', 'tests', 'practice', 'memory'];
 
 function parseTab(raw: string | null): TabId {
   if (raw && TAB_IDS.includes(raw as TabId)) return raw as TabId;
@@ -126,6 +138,7 @@ export function EducatorStudentWorkspace({
   progress,
   memory,
   attempts,
+  practiceSessions,
   notes,
 }: Props) {
   const { locale } = useI18n();
@@ -359,6 +372,7 @@ export function EducatorStudentWorkspace({
     { id: 'plan' as const, label: isHe ? 'תוכנית' : 'Plan' },
     { id: 'progress' as const, label: isHe ? 'התקדמות' : 'Progress' },
     { id: 'tests' as const, label: isHe ? 'מבחנים' : 'Tests' },
+    { id: 'practice' as const, label: isHe ? 'תרגול' : 'Practice' },
     { id: 'memory' as const, label: isHe ? 'זיכרון' : 'Memory' },
   ];
 
@@ -1060,6 +1074,41 @@ export function EducatorStudentWorkspace({
             )}
           </section>
         </div>
+      ) : null}
+
+      {tab === 'practice' ? (
+        <section className="rounded-xl border border-border p-4">
+          <h2 className="text-sm font-semibold">
+            {isHe ? 'סשני תרגול' : 'Practice sessions'}
+          </h2>
+          {practiceSessions.length === 0 ? (
+            <p className="mt-3 text-sm text-muted-foreground">
+              {isHe ? 'אין תרגולים עדיין.' : 'No practice sessions yet.'}
+            </p>
+          ) : (
+            <ul className="mt-3 space-y-2">
+              {practiceSessions.map((s) => (
+                <li
+                  key={s.session_id}
+                  className="rounded-lg border border-border/60 bg-surface-1/40 px-3 py-2 text-sm"
+                >
+                  <p className="font-medium">
+                    {s.created_at
+                      ? new Date(s.created_at).toLocaleString(isHe ? 'he-IL' : 'en-GB')
+                      : s.session_id.slice(0, 8)}
+                  </p>
+                  <p className="text-muted-foreground">
+                    {s.status} · {s.correct_count}/{s.attempted}
+                    {s.topic_ids.length ? ` · ${s.topic_ids.join(', ')}` : ''}
+                    {s.avg_process_score != null
+                      ? ` · ${(s.avg_process_score * 100).toFixed(0)}%`
+                      : ''}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
       ) : null}
 
       {tab === 'memory' ? (

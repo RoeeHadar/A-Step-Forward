@@ -1,38 +1,39 @@
 # ADR 0013: Intensive practice arena
 
-- **Status:** Accepted
+- **Status:** Accepted (v2 — open exam-style, 2026-07-23 grill)
 - **Date:** 2026-07-23
-- **Deciders:** Product owner + Composer (grilling session)
-- **Related:** [ADR-0011](0011-agent-communication-quality.md), [ADR-0012](0012-agent-context-under-pressure.md), custom quiz seal pattern
+- **Deciders:** Product owner + Composer (grilling sessions)
+- **Related:** [ADR-0011](0011-agent-communication-quality.md), [ADR-0012](0012-agent-context-under-pressure.md), custom quiz / process-grader seal pattern
 
 ## Context
 
-Learners currently get exercises mainly inside lessons and as timed custom quizzes. They need a **continuous practice arena**: non-stop reps at the right topic and level, with teacher-style hints that never expose the answer until submit or give-up. This is a core foundation surface, distinct from teach-then-practice lessons and exam-like timed quizzes.
+Learners need a **continuous practice arena** distinct from lessons and timed mock exams: deliberate open exam-style reps on topics they choose, with trustworthy supply, no recycle, Finish → summary, and student/teacher review.
 
-## Decision
+## Decision (v2)
 
 ### Product
 
-1. First-class surface **`/app/practice`** (also `/practice` → redirect): one item at a time, infinite queue feel, soft session goals (~10 items / ~15 min).
-2. **Coach** owns the arena voice; in-panel Coach on `/app/practice` is bound to the current sealed item with a hard no-answer contract (until submit/give-up). Tutor stays for theory/lessons.
-3. Queue is **server-owned**: weak atoms under active plan week → planner/weak concepts → difficulty from recent success; optional concept narrow. Explicit opt-in modes: `?mode=due` (FSRS due) and `?mode=explore` (outside active week). Bootstrap from onboarding subjects/goal if no plan.
-4. **Corpus-first** authored closed questions; **LLM ephemeral fill** when the bank is thin (same seal pattern as custom quiz).
-5. **Hint ladder** (3 steps: concept → strategy → scaffold). Full solution only after submit or give-up.
-6. Wave 1 is **closed-first** (mcq, true/false, numeric, short_answer / fill_blank). Mastery + light XP via existing helpers.
-7. Keys and unused hints never leave Neon until authorized.
+1. Surface **`/app/practice`**: one item at a time; **no timer**. Soft goals optional; always-visible **Finish training**.
+2. **Topic multi-select** from a curated bilingual full-catalog topic list (not limited to the active plan). Remember last selection. Topics locked for the session.
+3. **Open-first** (≥~90%): `open` / constructed response; rare closed only when exam-faithful. Typed answers + side KaTeX cheat sheet. Bilingual stems by UI locale; no language mix; math integrity gates.
+4. **Exam register** from learner goal (bagrut/uni); difficulty adapts from recent process success (≥~0.6) and light mastery.
+5. **No recycle** permanently per learner (authored `question_id` + generated stem fingerprint). Authored-first + gated LLM fill + promote path; honest thin-topic UI — never recycle, never junk MCQ filler.
+6. **Hints + Coach**: 3-step ladder + in-panel Coach no-answer until graded.
+7. **Grading**: process/rubric for open (partial credit); mastery + XP on success.
+8. **Review**: finished sessions persisted; learner history + linked teacher (test-attempts RBAC pattern).
 
-### Wave 1 out of scope
+### Replaces wave-1 defaults
 
-Explore as the *default* queue (opt-in only), open-heavy Reviewer grading, separate points currency, FSRS-due-only as the only mode, social streaks.
+Closed-first server queue, due/explore as main modes, and MCQ-as-default are superseded on the same route.
 
 ## Consequences
 
-**Positive:** Learners can grind deliberately; hints stay honest; mastery/XP stay unified.
+**Positive:** Learners train what they intend; exam thinking + form; durable history for teachers.
 
-**Risks:** LLM fill cost/latency — throttle per session; intent to keep corpus coverage growing.
+**Risks:** Open grading latency/cost; topic bank depth — mitigate with gates + authored expansion.
 
 ## Alternatives considered
 
-- Fold into `/app/quiz` as a mode — rejected (different job: timed set vs endless reps).
-- Ladder-only with no Coach chat in v1 — deferred; wave 1 includes ladder + deep-link to Coach with contract.
-- Authored-only until banks grow — rejected for “non-stop” volume; hybrid wins.
+- Server-picked weak-atom queue only — rejected (learners know what they want).
+- Fold into mock exam — rejected (no clock; endless reps).
+- Photo upload of work — deferred.

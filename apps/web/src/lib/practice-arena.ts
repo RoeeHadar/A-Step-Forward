@@ -1,5 +1,5 @@
 /**
- * Pure helpers for the intensive practice arena (ADR-0013).
+ * Pure helpers for the intensive practice arena (ADR-0013 v2).
  * No Neon — safe for unit tests.
  */
 
@@ -13,9 +13,24 @@ export const PRACTICE_CLOSED_KINDS = [
 
 export type PracticeClosedKind = (typeof PRACTICE_CLOSED_KINDS)[number];
 
+/** Preferred arena kinds — open-first; closed only as rare exam-faithful exceptions. */
+export const PRACTICE_ARENA_KINDS = [
+  'open',
+  'numeric',
+  'short_answer',
+  'mcq',
+  'true_false',
+  'fill_blank',
+] as const;
+
+export type PracticeItemKind = (typeof PRACTICE_ARENA_KINDS)[number];
+
 export type PracticeDifficulty = 'easy' | 'medium' | 'hard';
 
 export type PracticeQueueMode = 'default' | 'due' | 'explore';
+
+/** Process score at or above this counts as success for adaptation / XP. */
+export const PRACTICE_SUCCESS_PROCESS_SCORE = 0.6;
 
 export function parsePracticeQueueMode(v: unknown): PracticeQueueMode {
   if (v === 'due' || v === 'explore') return v;
@@ -51,7 +66,9 @@ export interface PracticeItemSealed {
   source: 'authored' | 'generated';
   lesson_id?: string | null;
   question_id?: string | null;
-  kind: PracticeClosedKind;
+  /** Durable de-dupe key (authored id or fingerprint). */
+  fingerprint: string;
+  kind: PracticeItemKind;
   difficulty: PracticeDifficulty;
   concept_id: string;
   skill_atoms: string[];
@@ -66,8 +83,14 @@ export interface PracticeItemSealed {
     acceptable_answers?: string[];
     case_sensitive?: boolean;
   } | null;
+  /** Rubric / model answer for open grading (sealed until after grade). */
+  rubric_en?: string | null;
+  rubric_he?: string | null;
+  model_answer_en?: string | null;
+  model_answer_he?: string | null;
   explanation_en: string;
   explanation_he: string;
+  points_available?: number;
   hints: [PracticeHintStep, PracticeHintStep, PracticeHintStep];
 }
 
@@ -75,7 +98,7 @@ export interface PracticeItemSealed {
 export interface PracticeItemPublic {
   id: string;
   source: 'authored' | 'generated';
-  kind: PracticeClosedKind;
+  kind: PracticeItemKind;
   difficulty: PracticeDifficulty;
   concept_id: string;
   skill_atoms: string[];
@@ -83,8 +106,32 @@ export interface PracticeItemPublic {
   stem_he: string;
   options_en?: string[] | null;
   options_he?: string[] | null;
+  points_available?: number;
   hint_step: number;
   unlocked_hints: PracticeHintStep[];
+}
+
+export interface PracticeAttemptLogEntry {
+  item_id: string;
+  concept_id: string;
+  kind: string;
+  difficulty: string;
+  correct: boolean;
+  process_score: number | null;
+  gave_up: boolean;
+  stem_en: string;
+  stem_he: string;
+}
+
+export interface PracticeSessionSummary {
+  topic_ids: string[];
+  attempted: number;
+  correct_count: number;
+  hints_used: number;
+  avg_process_score: number | null;
+  difficulty_end: PracticeDifficulty | null;
+  weak_concepts: string[];
+  attempts: PracticeAttemptLogEntry[];
 }
 
 export interface PracticeSessionPublic {
@@ -96,11 +143,13 @@ export interface PracticeSessionPublic {
   hints_used: number;
   concept_filter: string | null;
   focus_concept_id: string | null;
+  topic_ids: string[];
   item: PracticeItemPublic | null;
   /** True after submit/give-up until the client advances via /next. */
   item_graded: boolean;
   queue_mode?: PracticeQueueMode;
   status: 'active' | 'ended';
+  summary?: PracticeSessionSummary | null;
 }
 
 /** Sent from /app/practice Coach panel → /api/chat (ADR-0013). */
@@ -160,6 +209,89 @@ export function isPracticeClosedKind(kind: string): kind is PracticeClosedKind {
   return (PRACTICE_CLOSED_KINDS as readonly string[]).includes(kind);
 }
 
+export function isPracticeArenaKind(kind: string): kind is PracticeItemKind {
+  return (PRACTICE_ARENA_KINDS as readonly string[]).includes(kind);
+}
+
+export function isPracticeOpenKind(kind: string): boolean {
+  return kind === 'open';
+}
+
+export function normalizeStemForFingerprint(s: string): string {
+  return s
+    .toLowerCase()
+    .replace(/\$+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 600);
+}
+
+/** Stable content fingerprint for generated (and authored fallback) de-dupe. */
+export function practiceItemFingerprint(opts: {
+  conceptId: string;
+  stemEn: string;
+  stemHe: string;
+  questionId?: string | null;
+}): string {
+  if (opts.questionId && opts.questionId.trim()) {
+    return `q:${opts.questionId.trim()}`;
+  }
+  const raw = [
+    opts.conceptId,
+    normalizeStemForFingerprint(opts.stemEn),
+    normalizeStemForFingerprint(opts.stemHe),
+  ].join('|');
+  let h = 2166136261;
+  for (let i = 0; i < raw.length; i++) {
+    h ^= raw.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return `fp:${(h >>> 0).toString(16)}`;
+}
+
+export function practiceSuccessFromProcess(score: number | null | undefined): boolean {
+  if (typeof score !== 'number' || !Number.isFinite(score)) return false;
+  return score >= PRACTICE_SUCCESS_PROCESS_SCORE;
+}
+
+export function buildPracticeSessionSummary(opts: {
+  topicIds: string[];
+  attempted: number;
+  correctCount: number;
+  hintsUsed: number;
+  attempts: PracticeAttemptLogEntry[];
+  difficultyEnd?: PracticeDifficulty | null;
+}): PracticeSessionSummary {
+  const scores = opts.attempts
+    .map((a) => a.process_score)
+    .filter((s): s is number => typeof s === 'number' && Number.isFinite(s));
+  const avg =
+    scores.length > 0
+      ? scores.reduce((a, b) => a + b, 0) / scores.length
+      : null;
+  const failByConcept = new Map<string, number>();
+  for (const a of opts.attempts) {
+    if (!a.correct) {
+      failByConcept.set(a.concept_id, (failByConcept.get(a.concept_id) ?? 0) + 1);
+    }
+  }
+  const weak_concepts = [...failByConcept.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([id]) => id);
+
+  return {
+    topic_ids: opts.topicIds,
+    attempted: opts.attempted,
+    correct_count: opts.correctCount,
+    hints_used: opts.hintsUsed,
+    avg_process_score: avg,
+    difficulty_end: opts.difficultyEnd ?? null,
+    weak_concepts,
+    attempts: opts.attempts,
+  };
+}
+
 export function stripPracticeItemForClient(
   item: PracticeItemSealed,
   hintStep: number,
@@ -176,6 +308,7 @@ export function stripPracticeItemForClient(
     stem_he: item.stem_he,
     options_en: item.options_en ?? null,
     options_he: item.options_he ?? null,
+    points_available: item.points_available ?? (item.kind === 'open' ? 20 : 5),
     hint_step: step,
     unlocked_hints: item.hints.slice(0, step),
   };
@@ -192,7 +325,6 @@ export function buildHintLadder(opts: {
   const atom = opts.skillAtoms[0];
   const conceptEn = opts.conceptLabelEn || 'this topic';
   const conceptHe = opts.conceptLabelHe || 'הנושא הזה';
-  // Never paraphrase explanations into hints — they frequently open with the keyed result.
   void opts.explanationEn;
   void opts.explanationHe;
 
@@ -233,15 +365,19 @@ export function practiceXpSourceId(sessionId: string, itemId: string): string {
 /** Soft defaults from ADR grilling. */
 export const PRACTICE_DEFAULT_GOAL_ITEMS = 10;
 export const PRACTICE_DEFAULT_GOAL_MINUTES = 15;
-export const PRACTICE_MAX_GENERATED_PER_SESSION = 6;
+export const PRACTICE_MAX_GENERATED_PER_SESSION = 8;
 
 /**
  * Grade a sealed practice item server-side (closed kinds only).
+ * Open kinds must use process grading.
  */
 export function gradePracticeItem(
   item: PracticeItemSealed,
   userAnswer: unknown,
 ): { correct: boolean; reason?: string } {
+  if (item.kind === 'open') {
+    return { correct: false, reason: 'open_requires_process_grade' };
+  }
   switch (item.kind) {
     case 'mcq': {
       const expected = item.correct_index;
@@ -306,4 +442,12 @@ export function gradePracticeItem(
     default:
       return { correct: false, reason: 'unsupported kind' };
   }
+}
+
+/** Reject stems that mix Hebrew letters with English prose outside math. Simple heuristic. */
+export function stemLooksLanguageMixed(stem: string): boolean {
+  const withoutMath = stem.replace(/\$\$[\s\S]*?\$\$/g, ' ').replace(/\$[^$]+\$/g, ' ');
+  const hasHe = /[\u0590-\u05FF]/.test(withoutMath);
+  const hasEnWord = /[A-Za-z]{3,}/.test(withoutMath);
+  return hasHe && hasEnWord;
 }
