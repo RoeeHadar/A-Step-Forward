@@ -3,10 +3,15 @@
  */
 import 'server-only';
 import { llmCompleteJson } from '@/lib/llm-provider';
-import { fetchLessonAgentHintsByConceptIds, getLearnerProfile } from '@/lib/neon-db';
+import {
+  fetchLessonAgentHintsByConceptIds,
+  fetchLessonByConceptId,
+  getLearnerProfile,
+} from '@/lib/neon-db';
 import {
   buildHintLadder,
   isPracticeArenaKind,
+  isPracticeExamWorthyItem,
   practiceItemFingerprint,
   stemLooksLanguageMixed,
   stemLooksVagueOrMeta,
@@ -64,17 +69,23 @@ Rules:
 - No external links, no PII
 - Do NOT put the final answer in the stem
 - open items: include rubric_en, rubric_he, model_answer_en, model_answer_he, explanation_en, explanation_he
-- explanations / model answers may contain the solution (shown only after submit)
-- Stems should feel like final-test questions (multi-part OK with (א)/(ב) or (a)/(b))
+- Model answers must be a REAL worked solution for THAT stem (numbers, algebra steps) — never meta instructions like "identify which facet applies"
+- Stems must look like a real bagrut/university exam item — not lesson pedagogy
 - Keep stems under 900 chars
 - difficulty must match the requested difficulty
 - Stay on the given concept_id — no topic drift
 
-Clarity (mandatory — a teacher must instantly know what skill is tested):
-- Give a CONCRETE prompt: specific function/numbers/figure data IN the stem (e.g. $f(x)=x^2-4x$, or a table of values). Never say "from the graph/formula if given in the lesson".
-- State the task verb clearly: compute / prove / explain with a numerical example / find all / show that…
-- Do NOT ask vague comparative questions like "how many solutions can f(x)=k have as y=k moves" without defining a concrete $f$ and concrete $k$ values to analyze.
-- Prefer one clear assessment target (e.g. "find intersection multiplicity for this parabola and line") over abstract meta-talk about graphs in general.`
+FORBIDDEN stems (instant reject):
+- "Apply the lesson facets…" / "יישמו את פני השיעור…"
+- "Numeric-first check for this lesson…" / "בדיקה מספרית-תחילה…"
+- "give a short worked example" without a concrete problem
+- Any prompt that refers to "the lesson", "facets", or skill-atom English ids
+
+Clarity (mandatory):
+- Concrete data IN the stem (specific $f$, numbers, lengths, voltages, etc.)
+- Clear task verb: compute / prove / find all / show that / explain with calculation
+- Multipart OK: (א)/(ב) or (a)/(b)`;
+
 
 function newItemId(): string {
   return (
@@ -102,6 +113,33 @@ function validateRaw(
   if (stemLooksLanguageMixed(stem_en) || stemLooksLanguageMixed(stem_he)) return null;
   if (stemLooksVagueOrMeta(stem_en) || stemLooksVagueOrMeta(stem_he)) return null;
 
+  const explanation_en =
+    typeof raw.explanation_en === 'string' ? raw.explanation_en.trim().slice(0, 1200) : '';
+  const explanation_he =
+    typeof raw.explanation_he === 'string' ? raw.explanation_he.trim().slice(0, 1200) : '';
+  const model_answer_en =
+    typeof raw.model_answer_en === 'string'
+      ? raw.model_answer_en.trim().slice(0, 1200)
+      : explanation_en;
+  const model_answer_he =
+    typeof raw.model_answer_he === 'string'
+      ? raw.model_answer_he.trim().slice(0, 1200)
+      : explanation_he;
+
+  if (
+    !isPracticeExamWorthyItem({
+      stemEn: stem_en,
+      stemHe: stem_he,
+      explanationEn: explanation_en || model_answer_en,
+      explanationHe: explanation_he || model_answer_he,
+    })
+  ) {
+    return null;
+  }
+  if (stemLooksVagueOrMeta(model_answer_en) || stemLooksVagueOrMeta(model_answer_he)) {
+    return null;
+  }
+
   const labels = {
     en: kgById[conceptId]?.name || conceptId,
     he: kgById[conceptId]?.name_he || kgById[conceptId]?.name || conceptId,
@@ -111,22 +149,10 @@ function validateRaw(
       ? raw.skill_atoms.filter((a): a is string => typeof a === 'string').slice(0, 4)
       : atoms.slice(0, 3);
 
-  const explanation_en =
-    typeof raw.explanation_en === 'string' ? raw.explanation_en.trim().slice(0, 1200) : '';
-  const explanation_he =
-    typeof raw.explanation_he === 'string' ? raw.explanation_he.trim().slice(0, 1200) : '';
   const rubric_en =
     typeof raw.rubric_en === 'string' ? raw.rubric_en.trim().slice(0, 800) : explanation_en;
   const rubric_he =
     typeof raw.rubric_he === 'string' ? raw.rubric_he.trim().slice(0, 800) : explanation_he;
-  const model_answer_en =
-    typeof raw.model_answer_en === 'string'
-      ? raw.model_answer_en.trim().slice(0, 1200)
-      : explanation_en;
-  const model_answer_he =
-    typeof raw.model_answer_he === 'string'
-      ? raw.model_answer_he.trim().slice(0, 1200)
-      : explanation_he;
 
   const fingerprint = practiceItemFingerprint({
     conceptId,
@@ -201,11 +227,12 @@ export async function buildPracticeDrillItem(
   const difficulty: PracticeDifficulty = req.difficulty ?? 'medium';
   const count = Math.min(2, Math.max(1, req.count ?? 1));
 
-  const [hintsRows, profile] = await Promise.all([
+  const [hintsRows, profile, lesson] = await Promise.all([
     fetchLessonAgentHintsByConceptIds([req.conceptId]).catch(() => []),
     req.learnerId
       ? getLearnerProfile(req.learnerId).catch(() => null)
       : Promise.resolve(null),
+    fetchLessonByConceptId(req.conceptId).catch(() => null),
   ]);
   const lessonHints = hintsRows[0]?.agent_hints;
   const atoms =
@@ -216,6 +243,22 @@ export async function buildPracticeDrillItem(
     (profile?.personality_profile as { goal_key?: string } | null)?.goal_key ??
     profile?.goal ??
     'bagrut_math_5';
+
+  const exemplars = (lesson?.questions ?? [])
+    .filter((q) =>
+      isPracticeExamWorthyItem({
+        stemEn: q.stem_en ?? '',
+        stemHe: q.stem_he ?? '',
+        explanationEn: q.explanation_en,
+        explanationHe: q.explanation_he,
+        questionId: q.id,
+      }),
+    )
+    .slice(0, 2)
+    .map((q) => ({
+      stem_he: (q.stem_he ?? '').slice(0, 280),
+      stem_en: (q.stem_en ?? '').slice(0, 280),
+    }));
 
   const userPrompt = [
     `concept_id: ${req.conceptId}`,
@@ -228,8 +271,11 @@ export async function buildPracticeDrillItem(
     lessonHints?.key_insights?.length
       ? `key_insights: ${JSON.stringify(lessonHints.key_insights.slice(0, 4))}`
       : null,
-    `Generate exactly ${count} OPEN exam-style question(s). Prefer kind "open".`,
-    `Each stem must be self-contained with concrete data (no "if given in the lesson").`,
+    exemplars.length
+      ? `Style exemplars from the same lesson bank (imitate concreteness, do NOT copy):\n${JSON.stringify(exemplars)}`
+      : null,
+    `Generate exactly ${count} OPEN bagrut/uni exam-style question(s). Prefer kind "open".`,
+    `Each stem must be self-contained with concrete data. Model answer = full worked solution for that stem.`,
   ]
     .filter(Boolean)
     .join('\n');
@@ -238,7 +284,7 @@ export async function buildPracticeDrillItem(
     system: SYSTEM,
     messages: [{ role: 'user', content: userPrompt }],
     maxTokens: 2800,
-    temperature: 0.45,
+    temperature: 0.4,
   });
   if (!result?.json?.questions?.length) return null;
 

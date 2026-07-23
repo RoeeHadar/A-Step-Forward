@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   buildHintLadder,
   isPracticeArenaKind,
+  isPracticeExamWorthyItem,
+  practiceQuestionIdLooksBoilerplate,
   stemLooksLanguageMixed,
   stemLooksVagueOrMeta,
 } from './practice-arena';
@@ -19,6 +21,16 @@ function validateOpenShape(raw: {
   if (raw.stem_en.length < 12 || raw.stem_he.length < 12) return false;
   if (stemLooksLanguageMixed(raw.stem_en) || stemLooksLanguageMixed(raw.stem_he)) return false;
   if (stemLooksVagueOrMeta(raw.stem_en) || stemLooksVagueOrMeta(raw.stem_he)) return false;
+  if (
+    !isPracticeExamWorthyItem({
+      stemEn: raw.stem_en,
+      stemHe: raw.stem_he,
+      explanationEn: raw.model_answer_en,
+      explanationHe: raw.model_answer_en,
+    })
+  ) {
+    return false;
+  }
   if (raw.kind === 'open') return Boolean(raw.model_answer_en);
   return Boolean(raw.correct_answer);
 }
@@ -30,7 +42,7 @@ describe('practice-drill-builder validation helpers (v2 open)', () => {
         kind: 'open',
         stem_en: 'Prove the derivative of $x^2$ using first principles.',
         stem_he: 'הוכיחו את נגזרת $x^2$ מההגדרה עם גבול.',
-        model_answer_en: 'Use lim h->0 ...',
+        model_answer_en: 'Use lim h->0 of ( (x+h)^2 - x^2 ) / h = 2x.',
       }),
     ).toBe(true);
   });
@@ -56,6 +68,35 @@ describe('practice-drill-builder validation helpers (v2 open)', () => {
         'עבור $f(x)=x^2-4x$ מצאו את ערכי $k$ שעבורם למשוואה $f(x)=k$ יש שני פתרונות שונים.',
       ),
     ).toBe(false);
+  });
+
+  it('rejects lesson-facet pedagogical boilerplate', () => {
+    expect(
+      stemLooksVagueOrMeta(
+        'יישמו את פני השיעור (expression_structure, error_analysis): תנו דוגמה פתורה קצרה.',
+      ),
+    ).toBe(true);
+    expect(practiceQuestionIdLooksBoilerplate('algebra_basics-facet-auto')).toBe(true);
+    expect(
+      isPracticeExamWorthyItem({
+        stemEn: 'Apply the lesson facets (expression_structure): give a short worked example.',
+        stemHe: 'יישמו את פני השיעור (expression_structure): תנו דוגמה פתורה קצרה.',
+        explanationEn: '**Facet drill.** Identify which facet applies…',
+        explanationHe: '**תרגול פנים.** זהו איזה פן חל…',
+        questionId: 'algebra_basics-facet-auto',
+      }),
+    ).toBe(false);
+    expect(
+      isPracticeExamWorthyItem({
+        stemEn:
+          'A square of side $a+b$ has area $(a+b)^2$. Expand and explain what $2ab$ means geometrically.',
+        stemHe:
+          'לריבוע צלע $a+b$ יש שטח $(a+b)^2$. פתחו את השטח והסבירו מה מייצג $2ab$ גאומטרית.',
+        explanationEn: 'Expand to $a^2+2ab+b^2$; the middle term is two rectangles.',
+        explanationHe: '$(a+b)^2=a^2+2ab+b^2$ — איבר האמצע הוא שני מלבנים.',
+        questionId: 'algebra_basics-q3',
+      }),
+    ).toBe(true);
   });
 
   it('hint ladder stays answer-free even with leaky explanations passed through', () => {
