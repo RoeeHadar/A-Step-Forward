@@ -30,18 +30,33 @@ export async function POST(req: Request) {
   if (!session || session.status !== 'active' || !session.current_item) {
     return Response.json({ error: 'session_not_found' }, { status: 404 });
   }
+  if (session.current_graded) {
+    return Response.json({ error: 'already_submitted' }, { status: 409 });
+  }
 
   const nextStep = Math.min(3, session.hint_step + 1);
-  const updated = await updatePracticeSession(userId, sessionId, {
-    hint_step: nextStep,
-    hints_used: session.hints_used + (nextStep > session.hint_step ? 1 : 0),
-  });
+  if (nextStep === session.hint_step) {
+    return Response.json({
+      session: toPracticeSessionPublic(session),
+      hint: session.current_item.hints[Math.max(0, nextStep - 1)],
+    });
+  }
+
+  const updated = await updatePracticeSession(
+    userId,
+    sessionId,
+    {
+      hint_step: nextStep,
+      hints_used: session.hints_used + 1,
+    },
+    session.version,
+  );
+  if (!updated) {
+    return Response.json({ error: 'session_conflict' }, { status: 409 });
+  }
 
   return Response.json({
-    session: toPracticeSessionPublic(updated ?? session),
-    hint:
-      nextStep > 0 && updated?.current_item
-        ? updated.current_item.hints[nextStep - 1]
-        : session.current_item.hints[Math.max(0, nextStep - 1)],
+    session: toPracticeSessionPublic(updated),
+    hint: updated.current_item?.hints[nextStep - 1] ?? null,
   });
 }

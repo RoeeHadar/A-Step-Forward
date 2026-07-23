@@ -258,7 +258,7 @@ export function PracticeArenaClient({
             <MarkdownMath>{stem}</MarkdownMath>
           </div>
 
-          {phase === 'active' ? (
+              {phase === 'active' && !session?.item_graded ? (
             <>
               {item.kind === 'mcq' ? (
                 <ul className="space-y-2">

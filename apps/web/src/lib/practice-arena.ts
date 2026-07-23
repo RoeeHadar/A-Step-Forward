@@ -72,6 +72,8 @@ export interface PracticeSessionPublic {
   concept_filter: string | null;
   focus_concept_id: string | null;
   item: PracticeItemPublic | null;
+  /** True after submit/give-up until the client advances via /next. */
+  item_graded: boolean;
   status: 'active' | 'ended';
 }
 
@@ -104,27 +106,16 @@ export function buildHintLadder(opts: {
   conceptLabelEn: string;
   conceptLabelHe: string;
   skillAtoms: string[];
+  /** Intentionally unused — authored explanations often contain the answer. */
   explanationEn?: string | null;
   explanationHe?: string | null;
 }): [PracticeHintStep, PracticeHintStep, PracticeHintStep] {
   const atom = opts.skillAtoms[0];
   const conceptEn = opts.conceptLabelEn || 'this topic';
   const conceptHe = opts.conceptLabelHe || 'הנושא הזה';
-  const explEn = (opts.explanationEn ?? '').trim();
-  const explHe = (opts.explanationHe ?? '').trim();
-  const firstSentence = (text: string) => {
-    const m = text.split(/(?<=[.!?。])\s+/)[0]?.trim();
-    if (!m) return null;
-    // Avoid leaking a short "answer-only" explanation as a hint.
-    if (m.length < 12 || /^=|^\$\s*\\?frac/.test(m)) return null;
-    return m.slice(0, 180);
-  };
-  const stratEn =
-    firstSentence(explEn) ??
-    `Start from the definition or core rule for ${conceptEn}${atom ? ` (${atom})` : ''}.`;
-  const stratHe =
-    firstSentence(explHe) ??
-    `התחל מההגדרה או מהכלל המרכזי של ${conceptHe}${atom ? ` (${atom})` : ''}.`;
+  // Never paraphrase explanations into hints — they frequently open with the keyed result.
+  void opts.explanationEn;
+  void opts.explanationHe;
 
   return [
     {
@@ -132,8 +123,8 @@ export function buildHintLadder(opts: {
       he: `השאלה על ${conceptHe}${atom ? ` — מיומנות: ${atom}` : ''}.`,
     },
     {
-      en: stratEn,
-      he: stratHe,
+      en: `Recall the core definition or rule for ${conceptEn}, then decide which form applies here.`,
+      he: `הזכר את ההגדרה או הכלל המרכזי של ${conceptHe}, ואז בחר איזו צורה מתאימה כאן.`,
     },
     {
       en: `Set up the work: write the formula / first step for ${conceptEn}, but do not evaluate the final answer yet.`,

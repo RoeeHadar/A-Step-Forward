@@ -1,6 +1,5 @@
 /**
- * POST /api/practice/next — continue after feedback (or skip to next without grading).
- * Prefer submit with give_up for honest mastery; this loads another item when session still active.
+ * POST /api/practice/next — advance only after the current item was submitted/given up.
  */
 import { auth } from '@clerk/nextjs/server';
 import { advancePracticeItem } from '@/lib/practice-queue';
@@ -38,6 +37,12 @@ export async function POST(req: Request) {
       ended: true,
     });
   }
+  if (session.current_item && !session.current_graded) {
+    return Response.json(
+      { error: 'submit_required', message: 'Submit or give up before loading the next item.' },
+      { status: 409 },
+    );
+  }
 
   const advanced = await advancePracticeItem({
     learnerId: userId,
@@ -55,19 +60,28 @@ export async function POST(req: Request) {
   if (advanced.item.question_id) seen.push(advanced.item.question_id);
   seen.push(advanced.item.id);
 
-  const updated = await updatePracticeSession(userId, sessionId, {
-    current_item: advanced.item,
-    hint_step: 0,
-    focus_concept_id: advanced.focusConceptId,
-    seen_ids: seen,
-    generated_count:
-      advanced.item.source === 'generated'
-        ? session.generated_count + 1
-        : session.generated_count,
-  });
+  const updated = await updatePracticeSession(
+    userId,
+    sessionId,
+    {
+      current_item: advanced.item,
+      hint_step: 0,
+      current_graded: false,
+      focus_concept_id: advanced.focusConceptId,
+      seen_ids: seen,
+      generated_count:
+        advanced.item.source === 'generated'
+          ? session.generated_count + 1
+          : session.generated_count,
+    },
+    session.version,
+  );
+  if (!updated) {
+    return Response.json({ error: 'session_conflict' }, { status: 409 });
+  }
 
   return Response.json({
-    session: toPracticeSessionPublic(updated ?? session),
+    session: toPracticeSessionPublic(updated),
     ended: false,
   });
 }

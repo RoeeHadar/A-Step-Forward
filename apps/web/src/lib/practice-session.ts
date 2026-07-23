@@ -32,6 +32,9 @@ export interface PracticeSessionRow {
   recent_correct: boolean[];
   current_item: PracticeItemSealed | null;
   hint_step: number;
+  /** True after submit/give-up on current_item until /next advances. */
+  current_graded: boolean;
+  version: number;
   status: 'active' | 'ended';
 }
 
@@ -54,11 +57,15 @@ async function ensurePracticeTables(): Promise<void> {
         recent_correct    JSONB NOT NULL DEFAULT '[]'::jsonb,
         current_item      JSONB,
         hint_step         INT NOT NULL DEFAULT 0,
+        current_graded    BOOLEAN NOT NULL DEFAULT FALSE,
+        version           INT NOT NULL DEFAULT 0,
         status            TEXT NOT NULL DEFAULT 'active',
         created_at        TIMESTAMPTZ DEFAULT NOW(),
         ended_at          TIMESTAMPTZ
       )
     `;
+    await sql`ALTER TABLE practice_sessions ADD COLUMN IF NOT EXISTS current_graded BOOLEAN NOT NULL DEFAULT FALSE`;
+    await sql`ALTER TABLE practice_sessions ADD COLUMN IF NOT EXISTS version INT NOT NULL DEFAULT 0`;
     await sql`
       CREATE INDEX IF NOT EXISTS ix_practice_sessions_user
       ON practice_sessions (user_id, created_at DESC)
@@ -97,6 +104,8 @@ function rowToSession(r: Record<string, unknown>): PracticeSessionRow {
     recent_correct: parseJsonArray<boolean>(r.recent_correct, []),
     current_item: (r.current_item as PracticeItemSealed | null) ?? null,
     hint_step: Number(r.hint_step) || 0,
+    current_graded: Boolean(r.current_graded),
+    version: Number(r.version) || 0,
     status: r.status === 'ended' ? 'ended' : 'active',
   };
 }
@@ -114,6 +123,7 @@ export function toPracticeSessionPublic(row: PracticeSessionRow): PracticeSessio
     item: row.current_item
       ? stripPracticeItemForClient(row.current_item, row.hint_step)
       : null,
+    item_graded: row.current_graded,
     status: row.status,
   };
 }
@@ -137,12 +147,14 @@ export async function createPracticeSession(opts: {
   try {
     const rows = (await sql`
       INSERT INTO practice_sessions (
-        user_id, goal_items, goal_minutes, concept_filter
+        user_id, goal_items, goal_minutes, concept_filter, current_graded, version
       ) VALUES (
         ${opts.learnerId},
         ${goalItems},
         ${goalMinutes},
-        ${opts.conceptFilter ?? null}
+        ${opts.conceptFilter ?? null},
+        FALSE,
+        0
       )
       RETURNING *
     `) as Array<Record<string, unknown>>;
@@ -172,26 +184,34 @@ export async function getPracticeSessionForLearner(
   }
 }
 
+export type PracticeSessionPatch = Partial<{
+  focus_concept_id: string | null;
+  attempted: number;
+  correct_count: number;
+  hints_used: number;
+  generated_count: number;
+  seen_ids: string[];
+  recent_correct: boolean[];
+  current_item: PracticeItemSealed | null;
+  hint_step: number;
+  current_graded: boolean;
+  status: 'active' | 'ended';
+}>;
+
+/**
+ * Optimistic update: fails (returns null) if `expectedVersion` does not match.
+ */
 export async function updatePracticeSession(
   learnerId: string,
   sessionId: string,
-  patch: Partial<{
-    focus_concept_id: string | null;
-    attempted: number;
-    correct_count: number;
-    hints_used: number;
-    generated_count: number;
-    seen_ids: string[];
-    recent_correct: boolean[];
-    current_item: PracticeItemSealed | null;
-    hint_step: number;
-    status: 'active' | 'ended';
-  }>,
+  patch: PracticeSessionPatch,
+  expectedVersion: number,
 ): Promise<PracticeSessionRow | null> {
   if (!sql) return null;
   await ensurePracticeTables();
   const current = await getPracticeSessionForLearner(learnerId, sessionId);
   if (!current) return null;
+  if (current.version !== expectedVersion) return null;
 
   const next: PracticeSessionRow = {
     ...current,
@@ -205,7 +225,10 @@ export async function updatePracticeSession(
     recent_correct: patch.recent_correct ?? current.recent_correct,
     current_item: patch.current_item !== undefined ? patch.current_item : current.current_item,
     hint_step: patch.hint_step ?? current.hint_step,
+    current_graded:
+      patch.current_graded !== undefined ? patch.current_graded : current.current_graded,
     status: patch.status ?? current.status,
+    version: current.version + 1,
   };
 
   try {
@@ -220,9 +243,13 @@ export async function updatePracticeSession(
         recent_correct = ${JSON.stringify(next.recent_correct)}::jsonb,
         current_item = ${next.current_item ? JSON.stringify(next.current_item) : null}::jsonb,
         hint_step = ${next.hint_step},
+        current_graded = ${next.current_graded},
+        version = ${next.version},
         status = ${next.status},
         ended_at = CASE WHEN ${next.status} = 'ended' THEN NOW() ELSE ended_at END
-      WHERE id = ${sessionId}::uuid AND user_id = ${learnerId}
+      WHERE id = ${sessionId}::uuid
+        AND user_id = ${learnerId}
+        AND version = ${expectedVersion}
       RETURNING *
     `) as Array<Record<string, unknown>>;
     return rows[0] ? rowToSession(rows[0]) : null;
