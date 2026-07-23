@@ -22,12 +22,14 @@ const STR = {
     dueOne: 'פריט אחד לחזרה היום:',
     more: (n: number) => `+${n} נוספים`,
     cta: 'Coach מהיר (15 דק׳)',
+    practiceCta: 'תרגול אינטנסיבי',
   },
   en: {
     due: (n: number) => `${n} items due for review today:`,
     dueOne: '1 item due for review today:',
     more: (n: number) => `+${n} more`,
     cta: 'Quick Coach (15 min)',
+    practiceCta: 'Intensive practice',
   },
 } as const;
 
@@ -107,9 +109,22 @@ export function DueReviewsWidget({
             )}
           </div>
         </div>
-        <Button asChild size="sm" className="shrink-0 self-start">
-          <Link href="/app/chat/coach?mode=quick&duration=15">{t.cta}</Link>
-        </Button>
+        <div className="flex shrink-0 flex-col gap-2 self-start sm:items-end">
+          <Button asChild size="sm">
+            <Link
+              href={
+                visibleItems[0]?.concept_id
+                  ? `/app/practice?concept=${encodeURIComponent(visibleItems[0].concept_id)}`
+                  : '/app/practice'
+              }
+            >
+              {t.practiceCta}
+            </Link>
+          </Button>
+          <Button asChild size="sm" variant="outline">
+            <Link href="/app/chat/coach?mode=quick&duration=15">{t.cta}</Link>
+          </Button>
+        </div>
       </div>
       </div>
     </section>

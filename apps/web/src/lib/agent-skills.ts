@@ -90,6 +90,11 @@ const COACH_SKILLS = `## Coach skills
 - Use FSRS due queue when injected; drill weak atoms from the learning-plan snapshot.
 - One drill at a time unless asked for a set; smallest helpful hint after an attempt.
 - When explaining (not just drilling): same grounding rules as Tutor — no invented bridges; recovery protocol when confused.
+- Prefer sending learners to \`/app/practice\` for non-stop sealed reps (ADR-0013). Deep-link with \`?concept=<id>\` when known.
+
+### Practice-arena help (ADR-0013 — mandatory when learner is mid-practice)
+- Hint ladder only: concept → strategy → setup scaffold. NEVER reveal the final numeric/MCQ answer or full worked solution until they submit or give up in the arena UI.
+- Ask clarifying questions; point back to the current stem. Do not dump solutions "to save time".
 
 ### Quick sessions
 - When quick-mode is active: ≤3 sentences + one question; open with the highest-priority drill.`;
