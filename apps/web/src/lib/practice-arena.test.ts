@@ -1,8 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
   buildHintLadder,
+  formatPracticeArenaChatBlock,
   gradePracticeItem,
   nextDifficulty,
+  parsePracticeChatContext,
+  parsePracticeQueueMode,
+  pickExploreFocusConceptId,
   practiceXpSourceId,
   stripPracticeItemForClient,
   type PracticeItemSealed,
@@ -36,8 +40,17 @@ describe('practice-arena (ADR-0013)', () => {
     const pub = stripPracticeItemForClient(sample, 1);
     expect(pub).not.toHaveProperty('correct_index');
     expect(pub).not.toHaveProperty('explanation_en');
+    expect(pub).not.toHaveProperty('correct_answer');
+    expect(pub).not.toHaveProperty('answer_payload');
     expect(pub.unlocked_hints).toHaveLength(1);
     expect(pub.hint_step).toBe(1);
+  });
+
+  it('never exposes sealed fields even at hint_step 3', () => {
+    const pub = stripPracticeItemForClient(sample, 3);
+    expect(pub.unlocked_hints).toHaveLength(3);
+    expect(JSON.stringify(pub)).not.toContain('correct_index');
+    expect(JSON.stringify(pub)).not.toContain('Power rule: increase');
   });
 
   it('grades MCQ server-side', () => {
@@ -66,5 +79,53 @@ describe('practice-arena (ADR-0013)', () => {
 
   it('builds stable XP source ids', () => {
     expect(practiceXpSourceId('sess', 'item')).toBe('practice:sess:item');
+  });
+
+  it('parses queue modes including explore', () => {
+    expect(parsePracticeQueueMode('due')).toBe('due');
+    expect(parsePracticeQueueMode('explore')).toBe('explore');
+    expect(parsePracticeQueueMode('nope')).toBe('default');
+  });
+
+  it('explore picker prefers weakest mastery outside the active week', () => {
+    expect(
+      pickExploreFocusConceptId({
+        masteryMap: { a: 0.9, b: 0.2, c: 0.1 },
+        activeConceptIds: ['a', 'c'],
+        candidateConceptIds: ['a', 'b', 'c', 'd'],
+      }),
+    ).toBe('b');
+  });
+
+  it('explore picker falls back to any candidate outside active week', () => {
+    expect(
+      pickExploreFocusConceptId({
+        masteryMap: {},
+        activeConceptIds: ['a'],
+        candidateConceptIds: ['a', 'd'],
+      }),
+    ).toBe('d');
+  });
+
+  it('parses and formats practice chat context without answer keys', () => {
+    const ctx = parsePracticeChatContext({
+      session_id: 's1',
+      item_id: 'i1',
+      concept_id: 'integration_intro',
+      kind: 'mcq',
+      difficulty: 'medium',
+      hint_step: 1,
+      stem_en: 'What is ∫x dx?',
+      stem_he: 'מהו?',
+      item_graded: false,
+      correct_index: 0,
+    });
+    expect(ctx).not.toBeNull();
+    const block = formatPracticeArenaChatBlock(ctx!);
+    expect(block).toContain('PRACTICE ARENA');
+    expect(block).toContain('graded=false');
+    expect(block).toContain('NEVER reveal');
+    expect(block).not.toContain('correct_index');
+    expect(parsePracticeChatContext({ session_id: 'x' })).toBeNull();
   });
 });

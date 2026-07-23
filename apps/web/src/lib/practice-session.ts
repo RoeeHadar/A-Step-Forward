@@ -5,8 +5,10 @@
 import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import {
+  parsePracticeQueueMode,
   stripPracticeItemForClient,
   type PracticeItemSealed,
+  type PracticeQueueMode,
   type PracticeSessionPublic,
   PRACTICE_DEFAULT_GOAL_ITEMS,
   PRACTICE_DEFAULT_GOAL_MINUTES,
@@ -35,7 +37,7 @@ export interface PracticeSessionRow {
   /** True after submit/give-up on current_item until /next advances. */
   current_graded: boolean;
   version: number;
-  queue_mode: 'default' | 'due';
+  queue_mode: PracticeQueueMode;
   status: 'active' | 'ended';
 }
 
@@ -109,7 +111,7 @@ function rowToSession(r: Record<string, unknown>): PracticeSessionRow {
     hint_step: Number(r.hint_step) || 0,
     current_graded: Boolean(r.current_graded),
     version: Number(r.version) || 0,
-    queue_mode: r.queue_mode === 'due' ? 'due' : 'default',
+    queue_mode: parsePracticeQueueMode(r.queue_mode),
     status: r.status === 'ended' ? 'ended' : 'active',
   };
 }
@@ -138,7 +140,7 @@ export async function createPracticeSession(opts: {
   goalItems?: number;
   goalMinutes?: number;
   conceptFilter?: string | null;
-  queueMode?: 'default' | 'due';
+  queueMode?: PracticeQueueMode;
 }): Promise<PracticeSessionRow | null> {
   if (!sql) return null;
   await ensurePracticeTables();
@@ -150,7 +152,7 @@ export async function createPracticeSession(opts: {
     90,
     Math.max(5, opts.goalMinutes ?? PRACTICE_DEFAULT_GOAL_MINUTES),
   );
-  const queueMode = opts.queueMode === 'due' ? 'due' : 'default';
+  const queueMode = parsePracticeQueueMode(opts.queueMode);
   try {
     const rows = (await sql`
       INSERT INTO practice_sessions (

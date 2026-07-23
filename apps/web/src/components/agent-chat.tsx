@@ -19,6 +19,7 @@ import { PremiumBadge } from '@/components/premium-badge';
 import { useI18n } from '@/providers/i18n-provider';
 import { useChatUiStore } from '@/stores/ui-store';
 import { agentAccentVars, agentColors } from '@/lib/design-tokens';
+import type { PracticeChatContext } from '@/lib/practice-arena';
 
 const CONNECTING_DELAY_MS = 800;
 const WARMUP_BANNER_DELAY_MS = 3000;
@@ -48,11 +49,13 @@ function stripPlanTag(content: string): string {
 export function AgentChat({
   agent,
   topic,
+  practiceContext = null,
   compact = false,
   showHistory = true,
 }: {
   agent: string;
   topic?: string;
+  practiceContext?: PracticeChatContext | null;
   compact?: boolean;
   showHistory?: boolean;
 }) {
@@ -162,18 +165,19 @@ export function AgentChat({
   }
 
   const topicFromUrl = searchParams.get('topic') ?? undefined;
-  const studyTopic = topic ?? topicFromUrl;
+  const studyTopic = topic ?? practiceContext?.concept_id ?? topicFromUrl;
 
   const { messages, input, handleInputChange, handleSubmit, isLoading, error, reload, setMessages, setInput, append, data } =
     useChat({
     api: '/api/chat',
-    id: `${agentName}-${sessionId ?? 'pending'}-${chatKey}`,
+    id: `${agentName}-${sessionId ?? 'pending'}-${chatKey}-${practiceContext?.item_id ?? 'n'}`,
     body: {
       agent: agentName,
       quickMode,
       quickDuration: quickMode ? quickDuration : undefined,
       sessionId,
       topic: studyTopic,
+      practiceContext: practiceContext ?? undefined,
     },
     initialMessages: undefined,
     onError: () => {

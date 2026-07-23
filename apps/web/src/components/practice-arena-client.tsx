@@ -10,8 +10,14 @@ import Link from 'next/link';
 import { Button } from '@asf/ui/button';
 import { cn } from '@asf/ui';
 import { MarkdownMath } from '@/components/markdown-math';
+import { AgentSidePanel } from '@/components/agent-side-panel';
 import { useLanguagePreference } from '@/hooks/use-language-preference';
-import type { PracticeItemPublic, PracticeSessionPublic } from '@/lib/practice-arena';
+import type {
+  PracticeChatContext,
+  PracticeItemPublic,
+  PracticeQueueMode,
+  PracticeSessionPublic,
+} from '@/lib/practice-arena';
 import { Loader2, Lightbulb, ArrowRight, Flag } from 'lucide-react';
 
 type Phase = 'idle' | 'loading' | 'active' | 'feedback' | 'done' | 'error';
@@ -28,12 +34,13 @@ export function PracticeArenaClient({
   initialMode = 'default',
 }: {
   initialConceptId?: string | null;
-  initialMode?: 'default' | 'due';
+  initialMode?: PracticeQueueMode;
 }) {
   const [lang] = useLanguagePreference();
   const he = lang === 'he';
 
   const [phase, setPhase] = useState<Phase>('idle');
+  const [queueMode, setQueueMode] = useState<PracticeQueueMode>(initialMode);
   const [session, setSession] = useState<PracticeSessionPublic | null>(null);
   const [item, setItem] = useState<PracticeItemPublic | null>(null);
   const [answer, setAnswer] = useState<string>('');
@@ -53,6 +60,21 @@ export function PracticeArenaClient({
     return (he ? item.options_he : item.options_en) ?? [];
   }, [item, he]);
 
+  const practiceContext = useMemo((): PracticeChatContext | null => {
+    if (!session || !item) return null;
+    return {
+      session_id: session.session_id,
+      item_id: item.id,
+      concept_id: item.concept_id,
+      kind: item.kind,
+      difficulty: item.difficulty,
+      hint_step: item.hint_step,
+      stem_en: item.stem_en,
+      stem_he: item.stem_he,
+      item_graded: session.item_graded || phase === 'feedback',
+    };
+  }, [session, item, phase]);
+
   const start = useCallback(async () => {
     setBusy(true);
     setError(null);
@@ -63,7 +85,7 @@ export function PracticeArenaClient({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           concept_id: initialConceptId || undefined,
-          mode: initialMode === 'due' ? 'due' : undefined,
+          mode: queueMode === 'default' ? undefined : queueMode,
           goal_items: 10,
           goal_minutes: 15,
         }),
@@ -90,7 +112,7 @@ export function PracticeArenaClient({
     } finally {
       setBusy(false);
     }
-  }, [he, initialConceptId, initialMode]);
+  }, [he, initialConceptId, queueMode]);
 
   const requestHint = useCallback(async () => {
     if (!session || busy) return;
@@ -193,6 +215,17 @@ export function PracticeArenaClient({
     }
   }, [busy, session]);
 
+  const modeBlurb =
+    queueMode === 'due'
+      ? he
+        ? 'מצב חזרה: עדיפות לפריטים שמגיע זמנם.'
+        : 'Due mode: prioritizing items that are due for review.'
+      : queueMode === 'explore'
+        ? he
+          ? 'מצב גילוי: מושגים מחוץ לשבוע הפעיל.'
+          : 'Explore mode: concepts outside your active week.'
+        : null;
+
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-8">
       <header className="space-y-2">
@@ -206,11 +239,7 @@ export function PracticeArenaClient({
           {he
             ? 'שאלה אחת בכל פעם, לפי מה שאתה צריך. רמזים בלי לחשוף את התשובה.'
             : 'One question at a time, matched to what you need. Hints never reveal the answer.'}
-          {initialMode === 'due'
-            ? he
-              ? ' מצב חזרה: עדיפות לפריטים שמגיע זמנם.'
-              : ' Due mode: prioritizing items that are due for review.'
-            : null}
+          {modeBlurb ? ` ${modeBlurb}` : null}
         </p>
       </header>
 
@@ -231,6 +260,37 @@ export function PracticeArenaClient({
       {phase === 'idle' || phase === 'error' ? (
         <div className="space-y-4 rounded-xl border border-border/60 bg-surface-1/50 p-6">
           {error ? <p className="text-sm text-destructive">{error}</p> : null}
+          {!initialConceptId ? (
+            <fieldset className="space-y-2">
+              <legend className="text-sm font-medium">
+                {he ? 'מצב תור' : 'Queue mode'}
+              </legend>
+              <div className="flex flex-wrap gap-2">
+                {(
+                  [
+                    ['default', he ? 'לפי תוכנית' : 'Plan focus'],
+                    ['due', he ? 'חזרות' : 'Due reviews'],
+                    ['explore', he ? 'גילוי' : 'Explore'],
+                  ] as const
+                ).map(([mode, label]) => (
+                  <button
+                    key={mode}
+                    type="button"
+                    onClick={() => setQueueMode(mode)}
+                    className={cn(
+                      'rounded-lg border px-3 py-1.5 text-sm transition-colors',
+                      queueMode === mode
+                        ? 'border-primary bg-primary/10'
+                        : 'border-border/70 hover:bg-surface-2/50',
+                    )}
+                    aria-pressed={queueMode === mode}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+          ) : null}
           <Button onClick={() => void start()} disabled={busy}>
             {busy ? <Loader2 className="me-2 h-4 w-4 animate-spin" /> : null}
             {he ? 'התחל תרגול' : 'Start practice'}
@@ -254,19 +314,13 @@ export function PracticeArenaClient({
             <span>
               {item.difficulty} · {item.kind} · {item.source}
             </span>
-            <Link
-              href={`/app/chat/coach?practice=${encodeURIComponent(item.concept_id)}`}
-              className="underline-offset-2 hover:underline"
-            >
-              {he ? 'עזרה ממאמן' : 'Ask Coach'}
-            </Link>
           </div>
 
           <div className="prose prose-sm dark:prose-invert max-w-none" dir={he ? 'rtl' : 'ltr'}>
             <MarkdownMath>{stem}</MarkdownMath>
           </div>
 
-              {phase === 'active' && !session?.item_graded ? (
+          {phase === 'active' && !session?.item_graded ? (
             <>
               {item.kind === 'mcq' ? (
                 <ul className="space-y-2">
@@ -408,6 +462,14 @@ export function PracticeArenaClient({
             </Button>
           </div>
         </div>
+      ) : null}
+
+      {practiceContext ? (
+        <AgentSidePanel
+          practiceContext={practiceContext}
+          defaultAgent="coach"
+          fabLabel={{ he: 'עזרה ממאמן', en: 'Ask Coach' }}
+        />
       ) : null}
     </div>
   );

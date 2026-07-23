@@ -17,7 +17,8 @@ export default async function PracticePage({
   const sp = await searchParams;
   const concept =
     typeof sp.concept === 'string' && sp.concept.trim() ? sp.concept.trim() : null;
-  const mode = sp.mode === 'due' ? 'due' : 'default';
+  const mode =
+    sp.mode === 'due' || sp.mode === 'explore' ? sp.mode : 'default';
 
   return <PracticeArenaClient initialConceptId={concept} initialMode={mode} />;
 }
