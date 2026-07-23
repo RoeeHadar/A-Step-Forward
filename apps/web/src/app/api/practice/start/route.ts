@@ -63,16 +63,25 @@ export async function POST(req: Request) {
   if (advanced.item.question_id) seen.push(advanced.item.question_id);
   seen.push(advanced.item.id);
 
-  const updated = await updatePracticeSession(userId, session.id, {
-    current_item: advanced.item,
-    hint_step: 0,
-    focus_concept_id: advanced.focusConceptId,
-    seen_ids: seen,
-    generated_count:
-      advanced.item.source === 'generated'
-        ? session.generated_count + 1
-        : session.generated_count,
-  });
+  const updated = await updatePracticeSession(
+    userId,
+    session.id,
+    {
+      current_item: advanced.item,
+      hint_step: 0,
+      current_graded: false,
+      focus_concept_id: advanced.focusConceptId,
+      seen_ids: seen,
+      generated_count:
+        advanced.item.source === 'generated'
+          ? session.generated_count + 1
+          : session.generated_count,
+    },
+    session.version,
+  );
+  if (!updated) {
+    return Response.json({ error: 'session_conflict' }, { status: 409 });
+  }
 
-  return Response.json(toPracticeSessionPublic(updated ?? session));
+  return Response.json(toPracticeSessionPublic(updated));
 }

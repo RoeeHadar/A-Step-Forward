@@ -39,6 +39,9 @@ export async function POST(req: Request) {
   if (session.current_item.id !== itemId) {
     return Response.json({ error: 'item_mismatch' }, { status: 409 });
   }
+  if (session.current_graded) {
+    return Response.json({ error: 'already_submitted' }, { status: 409 });
+  }
 
   const item = session.current_item;
   const graded = gradePracticeItem(item, body.answer);
@@ -65,6 +68,7 @@ export async function POST(req: Request) {
     }
   } catch (err) {
     console.warn('[practice/submit] mastery update failed', err);
+    return Response.json({ error: 'mastery_update_failed' }, { status: 503 });
   }
 
   if (correct) {
@@ -94,18 +98,26 @@ export async function POST(req: Request) {
   };
 
   const hitGoal = attempted >= session.goal_items;
-  const nextSession = await updatePracticeSession(userId, sessionId, {
-    attempted,
-    correct_count: correctCount,
-    recent_correct: recent,
-    // Keep sealed item until client advances — strip still hides keys; feedback carries reveal.
-    hint_step: 3,
-    status: hitGoal ? 'ended' : 'active',
-  });
+  const nextSession = await updatePracticeSession(
+    userId,
+    sessionId,
+    {
+      attempted,
+      correct_count: correctCount,
+      recent_correct: recent,
+      hint_step: 3,
+      current_graded: true,
+      status: hitGoal ? 'ended' : 'active',
+    },
+    session.version,
+  );
+  if (!nextSession) {
+    return Response.json({ error: 'session_conflict' }, { status: 409 });
+  }
 
   return Response.json({
     feedback,
-    session: toPracticeSessionPublic(nextSession ?? session),
+    session: toPracticeSessionPublic(nextSession),
     goal_reached: hitGoal,
   });
 }

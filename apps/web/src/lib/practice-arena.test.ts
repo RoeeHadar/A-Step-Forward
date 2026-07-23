@@ -45,12 +45,18 @@ describe('practice-arena (ADR-0013)', () => {
     expect(gradePracticeItem(sample, 1).correct).toBe(false);
   });
 
-  it('hint ladder never contains the exact MCQ correct option as step text', () => {
-    const [a, b, c] = sample.hints;
-    for (const step of [a, b, c]) {
-      expect(step.en).not.toContain('x^2/2 + C');
-      expect(step.he).not.toContain('x^2/2 + C');
-    }
+  it('hint ladder never uses explanation text that contains the answer', () => {
+    const leaky = buildHintLadder({
+      conceptLabelEn: 'Integrals',
+      conceptLabelHe: 'אינטגרלים',
+      skillAtoms: ['power_rule'],
+      explanationEn: 'Answer: x^2/2 + C is correct.',
+      explanationHe: 'התשובה: x^2/2 + C',
+    });
+    const joined = leaky.map((s) => `${s.en}\n${s.he}`).join('\n');
+    expect(joined).not.toContain('x^2/2 + C');
+    expect(joined).not.toMatch(/Answer:\s*x\^2/i);
+    expect(joined).not.toContain('התשובה: x^2');
   });
 
   it('adapts difficulty from recent results', () => {
