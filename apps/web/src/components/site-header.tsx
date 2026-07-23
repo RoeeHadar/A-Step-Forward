@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs';
-import { Moon, Sun, Sprout } from 'lucide-react';
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/nextjs';
+import { Moon, Sun, Sprout, Shield, CalendarDays } from 'lucide-react';
 import { Button } from '@asf/ui/button';
 import { cn } from '@asf/ui';
 import { useTheme } from '@/providers/theme-provider';
@@ -36,13 +36,20 @@ const localeToggleLabel: Record<Locale, string> = {
   en: 'עב',
 };
 
+function isClerkAdmin(user: ReturnType<typeof useUser>['user']): boolean {
+  return (user?.publicMetadata?.role as string | undefined) === 'admin';
+}
+
 export function SiteHeader() {
   const pathname = usePathname();
   const { resolved, setTheme } = useTheme();
   const { messages, locale, setLocale } = useI18n();
+  const { user } = useUser();
+  const isAdmin = isClerkAdmin(user);
   const toggleTheme = () => setTheme(resolved === 'dark' ? 'light' : 'dark');
   const otherLocale: Locale = locale === 'he' ? 'en' : 'he';
   const isEducatorShell = pathname.startsWith('/educator');
+  const isAdminShell = pathname.startsWith('/admin');
 
   const isActive = (href: string, exact = false) => {
     if (exact) return pathname === href;
@@ -51,7 +58,12 @@ export function SiteHeader() {
 
   const scrolled = useScrollY(8);
 
-  const brandHref = isEducatorShell ? '/educator' : '/';
+  const brandHref = isEducatorShell ? '/educator' : isAdminShell ? '/admin' : '/';
+
+  const visiblePublicLinks = publicNavLinks.filter(
+    (link) => !(isAdmin && link.href === '/book'),
+  );
+  const visibleAppLinks = appNavLinks.filter((link) => !(isAdmin && link.href === '/book'));
 
   return (
     <header
@@ -106,7 +118,7 @@ export function SiteHeader() {
               ))
             ) : (
               <>
-                {publicNavLinks.map((link) => (
+                {visiblePublicLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
@@ -127,7 +139,7 @@ export function SiteHeader() {
                   </Link>
                 ))}
                 <SignedIn>
-                  {appNavLinks
+                  {visibleAppLinks
                     .filter((link) => !publicNavLinks.some((p) => p.href === link.href))
                     .map((link) => (
                       <Link
@@ -149,6 +161,25 @@ export function SiteHeader() {
                         )}
                       </Link>
                     ))}
+                  {isAdmin ? (
+                    <Link
+                      href="/admin"
+                      className={cn(
+                        'relative px-3 py-2 text-sm transition-colors hover:text-foreground',
+                        isActive('/admin')
+                          ? 'font-medium text-foreground'
+                          : 'text-muted-foreground',
+                      )}
+                    >
+                      {messages.nav.admin}
+                      {isActive('/admin') && (
+                        <span
+                          className="absolute inset-x-3 -bottom-[13px] h-0.5 rounded-full bg-primary"
+                          aria-hidden
+                        />
+                      )}
+                    </Link>
+                  ) : null}
                 </SignedIn>
               </>
             )}
@@ -181,17 +212,31 @@ export function SiteHeader() {
               >
                 {messages.nav.learn}
               </Link>
-              <Link
-                href="/book"
-                className={cn(
-                  'inline-flex rounded-lg px-2.5 py-1.5 text-sm font-medium md:hidden',
-                  isActive('/book')
-                    ? 'bg-primary/15 text-primary'
-                    : 'text-muted-foreground hover:text-foreground',
-                )}
-              >
-                {messages.nav.book}
-              </Link>
+              {isAdmin ? (
+                <Link
+                  href="/admin"
+                  className={cn(
+                    'inline-flex rounded-lg px-2.5 py-1.5 text-sm font-medium md:hidden',
+                    isActive('/admin')
+                      ? 'bg-primary/15 text-primary'
+                      : 'text-muted-foreground hover:text-foreground',
+                  )}
+                >
+                  {messages.nav.admin}
+                </Link>
+              ) : (
+                <Link
+                  href="/book"
+                  className={cn(
+                    'inline-flex rounded-lg px-2.5 py-1.5 text-sm font-medium md:hidden',
+                    isActive('/book')
+                      ? 'bg-primary/15 text-primary'
+                      : 'text-muted-foreground hover:text-foreground',
+                  )}
+                >
+                  {messages.nav.book}
+                </Link>
+              )}
             </>
           )}
           <Button
@@ -233,8 +278,31 @@ export function SiteHeader() {
           </SignedOut>
 
           <SignedIn>
+            {isAdmin ? (
+              <span
+                className="hidden rounded-md border border-border bg-surface-1 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground sm:inline"
+                title={messages.nav.admin}
+              >
+                {messages.nav.admin}
+              </span>
+            ) : null}
             <NotificationsBell />
-            <UserButton afterSignOutUrl="/" />
+            <UserButton afterSignOutUrl="/">
+              {isAdmin ? (
+                <UserButton.MenuItems>
+                  <UserButton.Link
+                    label={messages.nav.admin}
+                    href="/admin"
+                    labelIcon={<Shield className="h-4 w-4" />}
+                  />
+                  <UserButton.Link
+                    label={messages.book.adminBookingsCta}
+                    href="/admin/bookings"
+                    labelIcon={<CalendarDays className="h-4 w-4" />}
+                  />
+                </UserButton.MenuItems>
+              ) : null}
+            </UserButton>
           </SignedIn>
         </div>
       </div>

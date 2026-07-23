@@ -2,6 +2,7 @@
  * Book-a-Lesson API — create request + list mine.
  */
 import { auth } from '@clerk/nextjs/server';
+import { getAuthContext } from '@/lib/auth';
 import { normalizeCreateLessonBooking, type CreateLessonBookingInput } from '@/lib/lesson-booking';
 import {
   insertLessonBooking,
@@ -28,6 +29,11 @@ export async function POST(req: Request) {
   }
 
   const { userId } = await auth();
+  const authCtx = await getAuthContext();
+  if (authCtx?.role === 'admin') {
+    return Response.json({ error: 'admin_cannot_book' }, { status: 403 });
+  }
+
   const rl = checkSocialRateLimit(clientKey(req, userId), { limit: 8, windowMs: 60_000 });
   if (!rl.ok) {
     return Response.json(

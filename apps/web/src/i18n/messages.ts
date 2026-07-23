@@ -314,6 +314,10 @@ const messages = {
       cancelPolicy:
         'Please cancel or reschedule at least 24 hours before the lesson when possible.',
       formTitle: 'Request a lesson',
+      adminCannotBookTitle: 'You manage these lessons',
+      adminCannotBookBody:
+        'This account is an admin (the tutor). You cannot request a private lesson for yourself — open the bookings inbox to review learner requests instead.',
+      adminBookingsCta: 'Open bookings inbox',
       calendarNote:
         'Confirmed times on Roee’s calendar are blocked below. Pending requests do not hold a slot — he confirms one and may propose alternatives to others.',
       calendarSynced: 'Calendar last synced: {time}',
@@ -389,6 +393,7 @@ const messages = {
         slot_busy: 'That time overlaps a confirmed booking. Please choose another slot.',
         calendar_unavailable:
           'Calendar sync is temporarily unavailable. Please try again in a few minutes.',
+        admin_cannot_book: 'Admin accounts cannot request private lessons.',
       },
     },
   },
@@ -699,6 +704,10 @@ const messages = {
       paymentMethods: 'התשלום מתבצע מחוץ לאתר אחרי אישור: ביט, PayBox, מזומן או העברה בנקאית.',
       cancelPolicy: 'נא לבטל או לדחות לפחות 24 שעות לפני השיעור כשאפשר.',
       formTitle: 'בקשת שיעור',
+      adminCannotBookTitle: 'אתם מנהלים את השיעורים האלה',
+      adminCannotBookBody:
+        'חשבון זה הוא מנהל (המורה). לא ניתן לבקש שיעור פרטי לעצמכם — עברו לתיבת הבקשות כדי לטפל בבקשות תלמידים.',
+      adminBookingsCta: 'פתיחת תיבת בקשות',
       calendarNote:
         'זמנים מאושרים ביומן של רועי חסומים למטה. בקשות ממתינות לא תופסות מקום — הוא מאשר אחת ויכול להציע חלופות לאחרים.',
       calendarSynced: 'סנכרון יומן אחרון: {time}',
@@ -773,6 +782,7 @@ const messages = {
         insert_failed: 'לא הצלחנו לשמור את הבקשה. נסו שוב.',
         slot_busy: 'הזמן חופף לשיעור מאושר. בחרו מועד אחר.',
         calendar_unavailable: 'סנכרון היומן אינו זמין כרגע. נסו שוב בעוד כמה דקות.',
+        admin_cannot_book: 'חשבון מנהל לא יכול לבקש שיעור פרטי.',
       },
     },
   },
