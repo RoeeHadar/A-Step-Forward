@@ -16,6 +16,7 @@ import {
   getProgressFromNeon,
 } from '@/lib/neon-db';
 import { listTestAttempts } from '@/lib/test-attempts';
+import { listPracticeSessionsForLearner } from '@/lib/practice-session';
 import { pickConceptTitle, resolveConceptTitles } from '@/lib/concept-display-names';
 
 export const dynamic = 'force-dynamic';
@@ -41,13 +42,14 @@ export default async function EducatorStudentPage({
   const student = await getAppUser(studentId);
   if (!student) notFound();
 
-  const [profile, plan, progress, memory, attempts, notes] = await Promise.all([
+  const [profile, plan, progress, memory, attempts, notes, practiceRows] = await Promise.all([
     getLearnerProfile(studentId).catch(() => null),
     getCurrentPlan(studentId).catch(() => null),
     getProgressFromNeon(studentId).catch(() => null),
     getLearnerMemorySnapshot(studentId).catch(() => null),
     listTestAttempts(studentId, 40, { forEducator: true }).catch(() => []),
     listTeacherNotes(studentId).catch(() => []),
+    listPracticeSessionsForLearner(studentId, 40).catch(() => []),
   ]);
 
   const activeWeek = plan?.weeks.find((w) => w.status === 'active') ?? plan?.weeks[0];
@@ -140,6 +142,16 @@ export default async function EducatorStudentPage({
               passed: a.passed,
               created_at: a.created_at,
               grading_status: a.grading_status ?? null,
+            }))}
+            practiceSessions={practiceRows.map((r) => ({
+              session_id: r.id,
+              status: r.status,
+              topic_ids: r.topic_ids,
+              attempted: r.attempted,
+              correct_count: r.correct_count,
+              created_at: r.created_at ?? null,
+              ended_at: r.ended_at ?? null,
+              avg_process_score: r.summary?.avg_process_score ?? null,
             }))}
             notes={notes}
           />

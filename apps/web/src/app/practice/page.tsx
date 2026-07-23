@@ -4,14 +4,16 @@ import { redirect } from 'next/navigation';
 export default async function PracticeRedirect({
   searchParams,
 }: {
-  searchParams: Promise<{ concept?: string; mode?: string }>;
+  searchParams: Promise<{ concept?: string; mode?: string; topics?: string }>;
 }) {
   const sp = await searchParams;
   const params = new URLSearchParams();
   if (typeof sp.concept === 'string' && sp.concept.trim()) {
     params.set('concept', sp.concept.trim());
   }
-  if (sp.mode === 'due' || sp.mode === 'explore') params.set('mode', sp.mode);
+  if (typeof sp.topics === 'string' && sp.topics.trim()) {
+    params.set('topics', sp.topics.trim());
+  }
   const q = params.toString();
   redirect(`/app/practice${q ? `?${q}` : ''}`);
 }

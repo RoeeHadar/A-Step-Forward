@@ -5,6 +5,7 @@ import { auth } from '@clerk/nextjs/server';
 import { advancePracticeItem } from '@/lib/practice-queue';
 import {
   getPracticeSessionForLearner,
+  markPracticeFingerprintSeen,
   toPracticeSessionPublic,
   updatePracticeSession,
 } from '@/lib/practice-session';
@@ -47,14 +48,38 @@ export async function POST(req: Request) {
   const advanced = await advancePracticeItem({
     learnerId: userId,
     conceptFilter: session.concept_filter,
+    topicIds: session.topic_ids,
     queueMode: session.queue_mode,
     seenIds: session.seen_ids,
     recentCorrect: session.recent_correct,
     generatedCount: session.generated_count,
     previousDifficulty: session.current_item?.difficulty,
   });
-  if (!advanced) {
-    return Response.json({ error: 'no_items' }, { status: 503 });
+
+  if (!advanced || 'thin_topic' in advanced) {
+    const ended = await updatePracticeSession(
+      userId,
+      sessionId,
+      { status: 'ended', current_graded: true },
+      session.version,
+    );
+    if (!ended) {
+      return Response.json(
+        {
+          error: 'thin_topic',
+          message: 'No more unused exam-style items for these topics right now.',
+          session: toPracticeSessionPublic(session),
+          ended: false,
+        },
+        { status: 409 },
+      );
+    }
+    return Response.json({
+      error: 'thin_topic',
+      message: 'No more unused exam-style items for these topics right now.',
+      session: toPracticeSessionPublic(ended),
+      ended: true,
+    });
   }
 
   const seen = [...session.seen_ids];
@@ -80,6 +105,12 @@ export async function POST(req: Request) {
   if (!updated) {
     return Response.json({ error: 'session_conflict' }, { status: 409 });
   }
+
+  await markPracticeFingerprintSeen({
+    learnerId: userId,
+    fingerprint: advanced.item.fingerprint,
+    conceptId: advanced.item.concept_id,
+  });
 
   return Response.json({
     session: toPracticeSessionPublic(updated),

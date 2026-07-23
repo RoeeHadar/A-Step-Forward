@@ -1,27 +1,30 @@
 /**
- * Server-side queue + item sourcing for the practice arena (ADR-0013).
+ * Server-side queue + item sourcing for the practice arena (ADR-0013 v2).
  */
 import 'server-only';
 import {
   buildHintLadder,
-  isPracticeClosedKind,
+  isPracticeArenaKind,
+  isPracticeOpenKind,
   nextDifficulty,
-  pickExploreFocusConceptId,
+  practiceItemFingerprint,
   PRACTICE_MAX_GENERATED_PER_SESSION,
   type PracticeDifficulty,
   type PracticeItemSealed,
   type PracticeQueueMode,
 } from '@/lib/practice-arena';
-import { pickPressureNextStep } from '@/lib/pressure-next-step';
+import { conceptIdsForTopics } from '@/lib/practice-topics';
 import {
   fetchLessonByConceptId,
   getConceptMastery,
-  getCurrentPlan,
-  getDueReviews,
   getLearnerProfile,
   type LessonQuestionRow,
 } from '@/lib/neon-db';
 import { buildPracticeDrillItem } from '@/lib/practice-drill-builder';
+import {
+  isPracticeFingerprintSeen,
+  listPracticeFingerprintsSeen,
+} from '@/lib/practice-session';
 import kg from '@/lib/kg-data.json';
 
 type KgConcept = {
@@ -55,23 +58,32 @@ function authoredToSealed(
   conceptId: string,
   lessonId: string,
 ): PracticeItemSealed | null {
-  if (!isPracticeClosedKind(q.kind)) return null;
+  if (!isPracticeArenaKind(q.kind)) return null;
+  // Prefer open / constructed; skip MCQ/TF for v2 default bank use.
+  if (q.kind === 'mcq' || q.kind === 'true_false') return null;
   const labels = conceptLabel(conceptId);
   const payload = q.answer_payload as PracticeItemSealed['answer_payload'];
+  const fingerprint = practiceItemFingerprint({
+    conceptId,
+    stemEn: q.stem_en,
+    stemHe: q.stem_he,
+    questionId: q.id,
+  });
   return {
     id: newItemId(),
     source: 'authored',
     lesson_id: lessonId,
     question_id: q.id,
-    kind: q.kind,
+    fingerprint,
+    kind: q.kind === 'fill_blank' ? 'short_answer' : (q.kind as PracticeItemSealed['kind']),
     difficulty: q.difficulty,
     concept_id: conceptId,
     skill_atoms: Array.isArray(q.skill_atoms) ? q.skill_atoms : [],
     stem_en: q.stem_en,
     stem_he: q.stem_he,
-    options_en: q.options_en,
-    options_he: q.options_he,
-    correct_index: q.correct_index,
+    options_en: null,
+    options_he: null,
+    correct_index: null,
     correct_answer: q.correct_answer,
     answer_payload: payload
       ? {
@@ -83,12 +95,15 @@ function authoredToSealed(
       : null,
     explanation_en: q.explanation_en || '',
     explanation_he: q.explanation_he || '',
+    rubric_en: q.explanation_en || '',
+    rubric_he: q.explanation_he || '',
+    model_answer_en: q.explanation_en || q.correct_answer || '',
+    model_answer_he: q.explanation_he || q.correct_answer || '',
+    points_available: isPracticeOpenKind(q.kind) ? 20 : 5,
     hints: buildHintLadder({
       conceptLabelEn: labels.en,
       conceptLabelHe: labels.he,
       skillAtoms: q.skill_atoms ?? [],
-      explanationEn: q.explanation_en,
-      explanationHe: q.explanation_he,
     }),
   };
 }
@@ -96,160 +111,155 @@ function authoredToSealed(
 export async function pickPracticeFocusConcept(opts: {
   learnerId: string;
   conceptFilter?: string | null;
+  topicIds?: string[];
   queueMode?: PracticeQueueMode;
 }): Promise<string | null> {
   if (opts.conceptFilter && kgById[opts.conceptFilter]) {
     return opts.conceptFilter;
   }
 
-  if (opts.queueMode === 'due') {
-    const due = await getDueReviews(opts.learnerId).catch(() => []);
-    const dueConcept = due.find((d) => d.concept_id && kgById[d.concept_id]);
-    if (dueConcept) return dueConcept.concept_id;
+  const topicConcepts = conceptIdsForTopics(opts.topicIds ?? []).filter((id) => kgById[id]);
+  if (topicConcepts.length) {
+    const mastery = (await getConceptMastery(opts.learnerId).catch(
+      () => ({}),
+    )) as Record<string, number>;
+    const ranked = [...topicConcepts].sort((a, b) => {
+      const ma = typeof mastery[a] === 'number' ? mastery[a]! : 0.5;
+      const mb = typeof mastery[b] === 'number' ? mastery[b]! : 0.5;
+      return ma - mb;
+    });
+    return ranked[Math.floor(Math.random() * Math.min(3, ranked.length))] ?? ranked[0]!;
   }
 
-  const [profile, mastery, plan] = await Promise.all([
+  const [profile, mastery] = await Promise.all([
     getLearnerProfile(opts.learnerId).catch(() => null),
     getConceptMastery(opts.learnerId).catch(() => ({}) as Record<string, number>),
-    getCurrentPlan(opts.learnerId).catch(() => null),
   ]);
-
   const masteryMap = mastery as Record<string, number>;
-  const activeWeek =
-    plan?.weeks.find((w) => w.status === 'active') ?? plan?.weeks[0];
-  const activeIds = (activeWeek?.concepts ?? []).map((c) => c.concept_id);
-  const subjects = profile?.subjects ?? [];
-  const subjectCandidates = (kg.concepts as KgConcept[])
-    .filter((c) => subjects.length === 0 || subjects.includes(c.subject))
-    .map((c) => c.id);
-
-  if (opts.queueMode === 'explore') {
-    const allIds = (kg.concepts as KgConcept[]).map((c) => c.id);
-    const explorePick =
-      pickExploreFocusConceptId({
-        masteryMap,
-        activeConceptIds: activeIds,
-        candidateConceptIds:
-          subjectCandidates.length > 0 ? subjectCandidates : allIds,
-      }) ??
-      pickExploreFocusConceptId({
-        masteryMap,
-        activeConceptIds: activeIds,
-        candidateConceptIds: allIds,
-      }) ??
-      allIds.find((id) => !activeIds.includes(id)) ??
-      null;
-    if (explorePick) return explorePick;
-    // Active week covers the whole KG — still honor explore intent (weakest overall).
-    const weakExplore = Object.entries(masteryMap)
-      .filter(([, s]) => typeof s === 'number')
-      .sort((a, b) => a[1] - b[1])[0];
-    if (weakExplore) return weakExplore[0];
-    return allIds[0] ?? null;
-  }
-
-  if (activeWeek?.concepts?.length) {
-    const pick = pickPressureNextStep({
-      activeWeekConcepts: activeWeek.concepts.map((c) => ({
-        conceptId: c.concept_id,
-        nameHe: c.name_he,
-        nameEn: c.name,
-        mastery: masteryMap[c.concept_id] ?? null,
-      })),
-    });
-    if (pick) return pick.conceptId;
-  }
-
-  // Weakest measured concepts, then subject bootstrap from KG.
   const weak = Object.entries(masteryMap)
     .filter(([, s]) => typeof s === 'number')
     .sort((a, b) => a[1] - b[1])[0];
-  if (weak) return weak[0];
+  if (weak && kgById[weak[0]]) return weak[0];
 
-  return (
-    subjectCandidates[0] ??
-    (kg.concepts as KgConcept[])[0]?.id ??
-    null
+  const subjects = profile?.subjects ?? [];
+  const roots = (kg.concepts as KgConcept[]).filter(
+    (c) => subjects.length === 0 || subjects.includes(c.subject),
   );
+  return roots[0]?.id ?? (kg.concepts as KgConcept[])[0]?.id ?? null;
 }
 
 async function pickAuthoredItem(opts: {
+  learnerId: string;
   conceptId: string;
   seenIds: string[];
+  seenFingerprints: Set<string>;
   difficulty: PracticeDifficulty;
 }): Promise<PracticeItemSealed | null> {
   const lesson = await fetchLessonByConceptId(opts.conceptId).catch(() => null);
   if (!lesson?.questions?.length) return null;
 
-  const closed = lesson.questions.filter(
-    (q) =>
-      isPracticeClosedKind(q.kind) &&
-      !opts.seenIds.includes(q.id) &&
-      q.stem_en &&
-      q.stem_he,
-  );
+  const closed = lesson.questions.filter((q) => {
+    if (!isPracticeArenaKind(q.kind)) return false;
+    if (q.kind === 'mcq' || q.kind === 'true_false') return false;
+    if (opts.seenIds.includes(q.id)) return false;
+    if (!q.stem_en || !q.stem_he) return false;
+    const fp = practiceItemFingerprint({
+      conceptId: opts.conceptId,
+      stemEn: q.stem_en,
+      stemHe: q.stem_he,
+      questionId: q.id,
+    });
+    if (opts.seenFingerprints.has(fp)) return false;
+    return true;
+  });
   if (!closed.length) return null;
 
-  const prefer = closed.filter((q) => q.difficulty === opts.difficulty);
-  const pool = prefer.length ? prefer : closed;
+  const preferOpen = closed.filter((q) => q.kind === 'open');
+  const preferDiff = (preferOpen.length ? preferOpen : closed).filter(
+    (q) => q.difficulty === opts.difficulty,
+  );
+  const pool = preferDiff.length ? preferDiff : preferOpen.length ? preferOpen : closed;
   const q = pool[Math.floor(Math.random() * pool.length)]!;
   return authoredToSealed(q, opts.conceptId, lesson.lesson.id);
 }
 
 async function pickGeneratedItem(opts: {
+  learnerId: string;
   conceptId: string;
   generatedCount: number;
   difficulty: PracticeDifficulty;
+  seenFingerprints: Set<string>;
 }): Promise<PracticeItemSealed | null> {
   if (opts.generatedCount >= PRACTICE_MAX_GENERATED_PER_SESSION) return null;
-  return buildPracticeDrillItem({
-    conceptId: opts.conceptId,
-    difficulty: opts.difficulty,
-    count: 1,
-  });
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const item = await buildPracticeDrillItem({
+      conceptId: opts.conceptId,
+      difficulty: opts.difficulty,
+      learnerId: opts.learnerId,
+      count: 1,
+    });
+    if (!item) continue;
+    if (opts.seenFingerprints.has(item.fingerprint)) continue;
+    const already = await isPracticeFingerprintSeen(opts.learnerId, item.fingerprint);
+    if (already) continue;
+    return item;
+  }
+  return null;
 }
 
 export async function advancePracticeItem(opts: {
   learnerId: string;
   conceptFilter?: string | null;
+  topicIds?: string[];
   queueMode?: PracticeQueueMode;
   seenIds: string[];
   recentCorrect: boolean[];
   generatedCount: number;
   previousDifficulty?: PracticeDifficulty;
-}): Promise<{ item: PracticeItemSealed; focusConceptId: string } | null> {
+}): Promise<
+  | { item: PracticeItemSealed; focusConceptId: string }
+  | { thin_topic: true; focusConceptId: string | null }
+  | null
+> {
+  const seenFingerprints = await listPracticeFingerprintsSeen(opts.learnerId);
   const focusConceptId = await pickPracticeFocusConcept({
     learnerId: opts.learnerId,
     conceptFilter: opts.conceptFilter,
+    topicIds: opts.topicIds,
     queueMode: opts.queueMode,
   });
-  if (!focusConceptId) return null;
+  if (!focusConceptId) return { thin_topic: true, focusConceptId: null };
 
   const difficulty = nextDifficulty(
     opts.recentCorrect,
     opts.previousDifficulty ?? 'medium',
   );
 
-  const authored = await pickAuthoredItem({
-    conceptId: focusConceptId,
-    seenIds: opts.seenIds,
-    difficulty,
-  });
-  if (authored) return { item: authored, focusConceptId };
+  const topicPool = conceptIdsForTopics(opts.topicIds ?? []);
+  const tryConcepts = [
+    focusConceptId,
+    ...topicPool.filter((id) => id !== focusConceptId).slice(0, 4),
+  ];
 
-  const generated = await pickGeneratedItem({
-    conceptId: focusConceptId,
-    generatedCount: opts.generatedCount,
-    difficulty,
-  });
-  if (generated) return { item: generated, focusConceptId };
+  for (const conceptId of tryConcepts) {
+    const authored = await pickAuthoredItem({
+      learnerId: opts.learnerId,
+      conceptId,
+      seenIds: opts.seenIds,
+      seenFingerprints,
+      difficulty,
+    });
+    if (authored) return { item: authored, focusConceptId: conceptId };
 
-  // Last resort: allow re-use of authored (ignore seen) so the arena never hard-stops.
-  const lesson = await fetchLessonByConceptId(focusConceptId).catch(() => null);
-  const any = lesson?.questions.find((q) => isPracticeClosedKind(q.kind));
-  if (any && lesson) {
-    const sealed = authoredToSealed(any, focusConceptId, lesson.lesson.id);
-    if (sealed) return { item: sealed, focusConceptId };
+    const generated = await pickGeneratedItem({
+      learnerId: opts.learnerId,
+      conceptId,
+      generatedCount: opts.generatedCount,
+      difficulty,
+      seenFingerprints,
+    });
+    if (generated) return { item: generated, focusConceptId: conceptId };
   }
-  return null;
+
+  return { thin_topic: true, focusConceptId };
 }
