@@ -1,0 +1,249 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { Button } from '@asf/ui/button';
+import { Input } from '@asf/ui/input';
+import { Label } from '@asf/ui/label';
+import { Textarea } from '@asf/ui/textarea';
+
+type SettingsPayload = {
+  oauthConfigured: boolean;
+  secretsKeyConfigured: boolean;
+  connectUrl: string;
+  settings: {
+    calendarId: string;
+    hasRefreshToken: boolean;
+    googleChannelId: string | null;
+    googleChannelExpiration: string | null;
+    meetingLink: string | null;
+    hasPhone: boolean;
+    hasAddress: boolean;
+    busyCacheUpdatedAt: string | null;
+  } | null;
+  busyPreview: { count: number; syncedAt: string | null; source: string } | null;
+};
+
+export function AdminBookingsClient({ gcalQuery }: { gcalQuery: string | null }) {
+  const [data, setData] = useState<SettingsPayload | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+  const [meetingLink, setMeetingLink] = useState('');
+  const [calendarId, setCalendarId] = useState('primary');
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+
+  async function load() {
+    setError(null);
+    const res = await fetch('/api/admin/bookings/settings');
+    if (!res.ok) {
+      setError('Failed to load settings');
+      return;
+    }
+    const json = (await res.json()) as SettingsPayload;
+    setData(json);
+    setCalendarId(json.settings?.calendarId ?? 'primary');
+    setMeetingLink(json.settings?.meetingLink ?? '');
+  }
+
+  useEffect(() => {
+    void load();
+  }, []);
+
+  useEffect(() => {
+    if (!gcalQuery) return;
+    const params = new URLSearchParams(
+      gcalQuery.includes('=') ? gcalQuery : `gcal=${gcalQuery}`,
+    );
+    const gcal = params.get('gcal') ?? '';
+    const watchErr = params.get('watch');
+    const map: Record<string, string> = {
+      connected: 'Google Calendar connected.',
+      denied: 'Google consent was denied.',
+      exchange_failed: 'OAuth token exchange failed.',
+      save_failed: 'Could not save refresh token (check BOOKING_SECRETS_KEY).',
+      state_mismatch: 'OAuth state mismatch — try again.',
+      not_configured: 'Google OAuth env vars are missing.',
+      unauthorized: 'Sign in as admin first.',
+      forbidden: 'Admin role required.',
+    };
+    setMessage(
+      `${map[gcal] ?? (gcal ? `Google Calendar: ${gcal}` : '')}${
+        watchErr ? ` (watch: ${watchErr} — renew later from this page)` : ''
+      }`.trim() || null,
+    );
+  }, [gcalQuery]);
+
+  async function saveContacts(e: React.FormEvent) {
+    e.preventDefault();
+    setSaving(true);
+    setMessage(null);
+    try {
+      const res = await fetch('/api/admin/bookings/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phone: phone || undefined,
+          address: address || undefined,
+          meetingLink,
+          calendarId,
+        }),
+      });
+      const json = (await res.json()) as { error?: string };
+      if (!res.ok) {
+        setMessage(json.error ?? 'Save failed');
+        return;
+      }
+      setMessage('Saved.');
+      setPhone('');
+      setAddress('');
+      await load();
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function action(actionName: 'renew_watch' | 'refresh_busy') {
+    setSaving(true);
+    setMessage(null);
+    try {
+      const res = await fetch('/api/admin/bookings/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: actionName }),
+      });
+      const json = (await res.json()) as { error?: string; busyCount?: number };
+      if (!res.ok) {
+        setMessage(json.error ?? 'Action failed');
+        return;
+      }
+      setMessage(
+        actionName === 'refresh_busy'
+          ? `Busy refreshed (${json.busyCount ?? 0} blocks).`
+          : 'Watch channel renewed.',
+      );
+      await load();
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="space-y-8">
+      {message ? (
+        <p className="rounded-lg border border-border bg-surface-2 px-4 py-3 text-sm" role="status">
+          {message}
+        </p>
+      ) : null}
+      {error ? (
+        <p className="text-sm text-destructive" role="alert">
+          {error}
+        </p>
+      ) : null}
+
+      <section className="space-y-3 rounded-2xl border border-border bg-surface-1 p-6">
+        <h2 className="font-display text-lg font-semibold">Google Calendar</h2>
+        <ul className="space-y-1 text-sm text-muted-foreground">
+          <li>OAuth client: {data?.oauthConfigured ? 'configured' : 'missing env'}</li>
+          <li>Secrets key: {data?.secretsKeyConfigured ? 'configured' : 'missing BOOKING_SECRETS_KEY'}</li>
+          <li>Refresh token: {data?.settings?.hasRefreshToken ? 'yes' : 'not connected'}</li>
+          <li>Calendar id: {data?.settings?.calendarId ?? '—'}</li>
+          <li>
+            Watch:{' '}
+            {data?.settings?.googleChannelId
+              ? `active until ${data.settings.googleChannelExpiration ?? '?'}`
+              : 'not registered'}
+          </li>
+          <li>
+            Busy cache:{' '}
+            {data?.busyPreview
+              ? `${data.busyPreview.count} blocks (${data.busyPreview.source}) · ${data.busyPreview.syncedAt ?? 'n/a'}`
+              : '—'}
+          </li>
+        </ul>
+        <div className="flex flex-wrap gap-2 pt-2">
+          <Button asChild disabled={!data?.oauthConfigured}>
+            <Link href={data?.connectUrl ?? '#'}>Connect / reconnect Google</Link>
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            disabled={saving || !data?.settings?.hasRefreshToken}
+            onClick={() => void action('refresh_busy')}
+          >
+            Refresh busy now
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            disabled={saving || !data?.settings?.hasRefreshToken}
+            onClick={() => void action('renew_watch')}
+          >
+            Renew push watch
+          </Button>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Sync the same Google account on your iPhone so events appear in Apple Calendar.
+          Push webhooks invalidate busy cache immediately; we also refresh at most every ~45s.
+        </p>
+      </section>
+
+      <form
+        onSubmit={saveContacts}
+        className="space-y-4 rounded-2xl border border-border bg-surface-1 p-6"
+      >
+        <h2 className="font-display text-lg font-semibold">Contact details (private)</h2>
+        <p className="text-sm text-muted-foreground">
+          Sent to learners only after you accept an in-person (Haifa) or online booking. Never shown
+          on the public /book page.
+        </p>
+        <div className="space-y-1.5">
+          <Label htmlFor="cal-id">Google calendar id</Label>
+          <Input
+            id="cal-id"
+            value={calendarId}
+            onChange={(e) => setCalendarId(e.target.value)}
+            placeholder="primary"
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="meet">Default meeting link (online)</Label>
+          <Input
+            id="meet"
+            value={meetingLink}
+            onChange={(e) => setMeetingLink(e.target.value)}
+            placeholder="https://meet.google.com/..."
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="phone">
+            Phone {data?.settings?.hasPhone ? '(set — leave blank to keep)' : ''}
+          </Label>
+          <Input
+            id="phone"
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            autoComplete="off"
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="address">
+            Full Haifa address {data?.settings?.hasAddress ? '(set — leave blank to keep)' : ''}
+          </Label>
+          <Textarea
+            id="address"
+            rows={2}
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            autoComplete="off"
+          />
+        </div>
+        <Button type="submit" disabled={saving}>
+          {saving ? 'Saving…' : 'Save'}
+        </Button>
+      </form>
+    </div>
+  );
+}

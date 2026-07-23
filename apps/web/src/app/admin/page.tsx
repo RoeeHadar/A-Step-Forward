@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Activity, Brain, Users, Zap } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@asf/ui/card';
@@ -52,6 +53,12 @@ export default async function AdminPage() {
             value={`${stats.avg_latency_ms} ms`}
           />
         </div>
+
+        <p className="mt-8 text-sm">
+          <Link href="/admin/bookings" className="text-primary underline-offset-4 hover:underline">
+            Book a Lesson — calendar &amp; settings
+          </Link>
+        </p>
       </main>
     </div>
   );

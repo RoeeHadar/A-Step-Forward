@@ -12,11 +12,15 @@ import { useScrollY } from '@/hooks/use-scroll-y';
 import { NotificationsBell } from '@/components/notifications-bell';
 import type { Locale } from '@/i18n/config';
 
-const publicNavLinks = [{ href: '/learn', labelKey: 'learn' as const }];
+const publicNavLinks = [
+  { href: '/learn', labelKey: 'learn' as const },
+  { href: '/book', labelKey: 'book' as const },
+];
 
 const appNavLinks = [
   { href: '/app', labelKey: 'dashboard' as const },
   { href: '/learn', labelKey: 'learn' as const },
+  { href: '/book', labelKey: 'book' as const },
   { href: '/app/progress', labelKey: 'progress' as const },
   { href: '/app/memory', labelKey: 'memory' as const },
 ];
@@ -165,17 +169,30 @@ export function SiteHeader() {
               {messages.nav.roster}
             </Link>
           ) : (
-            <Link
-              href="/learn"
-              className={cn(
-                'inline-flex rounded-lg px-2.5 py-1.5 text-sm font-medium md:hidden',
-                isActive('/learn')
-                  ? 'bg-primary/15 text-primary'
-                  : 'text-muted-foreground hover:text-foreground',
-              )}
-            >
-              {messages.nav.learn}
-            </Link>
+            <>
+              <Link
+                href="/learn"
+                className={cn(
+                  'inline-flex rounded-lg px-2.5 py-1.5 text-sm font-medium md:hidden',
+                  isActive('/learn')
+                    ? 'bg-primary/15 text-primary'
+                    : 'text-muted-foreground hover:text-foreground',
+                )}
+              >
+                {messages.nav.learn}
+              </Link>
+              <Link
+                href="/book"
+                className={cn(
+                  'inline-flex rounded-lg px-2.5 py-1.5 text-sm font-medium md:hidden',
+                  isActive('/book')
+                    ? 'bg-primary/15 text-primary'
+                    : 'text-muted-foreground hover:text-foreground',
+                )}
+              >
+                {messages.nav.book}
+              </Link>
+            </>
           )}
           <Button
             variant="ghost"

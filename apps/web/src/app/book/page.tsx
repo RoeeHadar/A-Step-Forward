@@ -1,9 +1,17 @@
-import { redirect } from 'next/navigation';
+import { SiteHeader } from '@/components/site-header';
+import { AmbientBackground } from '@/components/ambient-background';
+import { BookLessonClient } from '@/components/book-lesson-client';
 
-/**
- * Book-a-Lesson is retired for now (will return later).
- * Keep the route so old links don't 404 — send visitors home.
- */
-export default function BookPageRetired() {
-  redirect('/');
+export const dynamic = 'force-dynamic';
+
+export default function BookPage() {
+  return (
+    <div className="relative min-h-screen">
+      <AmbientBackground />
+      <SiteHeader />
+      <main>
+        <BookLessonClient />
+      </main>
+    </div>
+  );
 }
