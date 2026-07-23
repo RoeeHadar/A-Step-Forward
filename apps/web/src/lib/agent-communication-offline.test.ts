@@ -37,6 +37,23 @@ const GOOD_SIMPLE = `נזנח את הסבר הסדרות — הוא לא נחו�
 $$\\int_0^1 x^2\\,dx = \\Big[\\frac{x^3}{3}\\Big]_0^1 = \\frac{1}{3}$$
 רוצה לנסות תרגיל דומה בעצמך?`;
 
+/** ADR-0012 pressure-family bad / good targets from post-0011 transcript. */
+const BAD_PRESSURE = `אני לא יודע את התוכנית שלך כרגע.
+היעד: bagrut_math_5
+פערים: עדיין לא סומנו
+אתה כבר למדת את החומר של 5pt.
+אל תדאג, אתה יכול לעשות הכל.
+בחר נושא:
+1. נגזרות
+2. אינטגרלים
+3. סדרות
+זה חשוך באחריות להביא לדמיון חששותי.`;
+
+const GOOD_PRESSURE = `אני מבין שאתה לחוץ מהלו״ז — זה הגיוני.
+יש לי את התוכנית שלך: מסלול 5 יח׳, שבוע פעיל על מבוא לאינטגרציה, והקצב בסיכון לפיגור — בלי הבטחות על הבגרות.
+הצעד הבא האחד: תרגול קצר על מבוא לאינטגרציה.
+רוצה שנתחיל בזה עכשיו?`;
+
 describe('ADR-0011 offline communication tester', () => {
   it('rejects the original transcript failure modes', () => {
     expect(scoreCommunicationReply(BAD_STATUS, ['no_dump', 'no_filler']).ok).toBe(false);
@@ -63,5 +80,36 @@ describe('ADR-0011 offline communication tester', () => {
         'has_correct_third',
       ]).ok,
     ).toBe(true);
+  });
+});
+
+describe('ADR-0012 offline pressure-family tester', () => {
+  const pressureChecks = [
+    'no_deny_knowledge',
+    'no_dump',
+    'no_points_misread',
+    'no_topic_menu',
+    'no_empty_reassurance',
+    'no_garbage_hebrew',
+    'no_filler',
+  ] as const;
+
+  it('rejects contract non-compliance under pressure', () => {
+    const scored = scoreCommunicationReply(BAD_PRESSURE, [...pressureChecks]);
+    expect(scored.ok).toBe(false);
+    expect(scored.failures).toEqual(
+      expect.arrayContaining([
+        'deny_knowledge',
+        'raw_dump',
+        'points_misread',
+        'topic_menu',
+        'empty_reassurance',
+        'garbage_hebrew',
+      ]),
+    );
+  });
+
+  it('accepts 4-beat grounded pressure reply', () => {
+    expect(scoreCommunicationReply(GOOD_PRESSURE, [...pressureChecks]).ok).toBe(true);
   });
 });

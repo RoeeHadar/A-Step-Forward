@@ -63,18 +63,23 @@ import {
   truncationContinueNotice,
 } from '@/lib/chat-context-policy';
 import {
-  appendTutorContractToContext,
-  buildTutorInteractionContract,
-  classifyTutorChatIntent,
-  wantsExpandedOutputBudget,
-  type TutorIntentContext,
-} from '@/lib/learner-chat-intent';
-import {
   buildBilingualProgressBriefing,
-  PROGRESS_STATUS_TURN_INSTRUCTION,
+  buildLearnerFacingStatusPack,
+  CONTEXT_CHALLENGE_TURN_INSTRUCTION,
+  PLAN_OWNERSHIP_TURN_INSTRUCTION,
+  PRESSURE_FAMILY_TURN_INSTRUCTION,
   RECOVERY_TURN_INSTRUCTION,
   WORKED_SOLUTION_TURN_INSTRUCTION,
 } from '@/lib/learner-progress-briefing';
+import { pickPressureNextStep } from '@/lib/pressure-next-step';
+import {
+  appendTutorContractToContext,
+  buildTutorInteractionContract,
+  classifyTutorChatIntent,
+  isPressureFamilyIntent,
+  wantsExpandedOutputBudget,
+  type TutorIntentContext,
+} from '@/lib/learner-chat-intent';
 import { computeReadiness } from '@/lib/readiness';
 import { dreamLearnerMemory } from '@/lib/agent-memory-dream';
 import kg from '@/lib/kg-data.json';
@@ -1161,7 +1166,7 @@ async function buildContextPrompt(
     }
   }
 
-  // ADR-0011: bilingual progress briefing + turn blocks for all live agents
+  // ADR-0011/0012: bilingual briefing + authoritative learner-facing pack + turn blocks
   if (!minimal && liveAgents && profile) {
     const goalKey =
       (profile.personality_profile as { goal_key?: string } | null)?.goal_key ?? null;
@@ -1189,7 +1194,17 @@ async function buildContextPrompt(
       const kgInfo = kgByName[id];
       return kgInfo?.name_he || kgInfo?.name || id;
     };
-    context += `\n\n${buildBilingualProgressBriefing({
+    const masteryScores = mastery as Record<string, number>;
+    const nextStep = pickPressureNextStep({
+      activeWeekConcepts: activeWeek?.concepts.map((c) => ({
+        conceptId: c.concept_id,
+        nameHe: c.name_he,
+        nameEn: c.name,
+        mastery: masteryScores[c.concept_id] ?? null,
+      })),
+      plannerPathIds: weakConcepts,
+    });
+    const briefingInput = {
       goalKey,
       goalLabel: profile.goal,
       examDateLabel: profile.next_test_date
@@ -1213,10 +1228,21 @@ async function buildContextPrompt(
       readinessBand: readiness?.band ?? null,
       readinessPhase: readiness?.phase ?? null,
       paceStatus: pacingForBrief?.status ?? null,
-    })}`;
+      nextStepHe: nextStep?.labelHe ?? null,
+      nextStepEn: nextStep?.labelEn ?? null,
+      nextStepConceptId: nextStep?.conceptId ?? null,
+    };
+    context += `\n\n${buildBilingualProgressBriefing(briefingInput)}`;
+    context += `\n\n${buildLearnerFacingStatusPack(briefingInput)}`;
 
-    if (tutorIntent === 'progress_status' || tutorIntent === 'exam_readiness') {
-      context += `\n\n${PROGRESS_STATUS_TURN_INSTRUCTION}`;
+    if (tutorIntent && isPressureFamilyIntent(tutorIntent)) {
+      context += `\n\n${PRESSURE_FAMILY_TURN_INSTRUCTION}`;
+      if (tutorIntent === 'context_challenge') {
+        context += `\n\n${CONTEXT_CHALLENGE_TURN_INSTRUCTION}`;
+      }
+      if (tutorIntent === 'plan_ownership') {
+        context += `\n\n${PLAN_OWNERSHIP_TURN_INSTRUCTION}`;
+      }
     }
     if (tutorIntent === 'recovery_simplify') {
       context += `\n\n${RECOVERY_TURN_INSTRUCTION}`;

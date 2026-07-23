@@ -20,6 +20,7 @@ ADRs in PRs.
 | [0009](0009-goal-paced-adaptive-planning.md) | Goal-paced adaptive planning (living plans) | Proposed |
 | [0010](0010-assessment-driven-progression.md) | Assessment-driven progression & gating | Proposed |
 | [0011](0011-agent-communication-quality.md) | Agent communication quality (grounded, anti-filler) | Accepted |
+| [0012](0012-agent-context-under-pressure.md) | Authoritative context under conversational pressure | Accepted |
 
 ## Authoring a new ADR
 

@@ -51,13 +51,14 @@ Heavy pass: promotes durable notes into shared persona (min 6 notes).
 - Math always LTR in `$...$` / `$$...$$`.
 - No external links; cite `lesson:<id>` and `concept:<id>` only.
 
-## Communication quality (ADR-0011)
+## Communication quality (ADR-0011 / ADR-0012)
 
 - **Grounding:** non-trivial claims only from injected lesson/concept/`agent_hints`/KG; no invented "X helps with Y" bridges.
 - **Anti-filler:** ban stock closers ("אני חושב שזה יעזור", "I need to explain differently"); on continue, resume unfinished steps.
-- **Status:** paraphrase the bilingual progress briefing; never dump XP/ISO/raw gate lines; never ~100% bagrut guarantees.
+- **Status:** paraphrase bilingual briefing + AUTHORITATIVE learner-facing pack; never dump XP/ISO/raw keys; never ~100% bagrut guarantees; never deny knowing injected plan/status.
+- **Pressure (ADR-0012):** validate → honest status → ONE next step from pack → offer to start. No topic menus; no invented replacement plans; never misread `points_group` as completed study. Ban garbage Hebrew ("חשוך", "באחריות", "להביא לדמיון", …).
 - **Recovery:** when too hard / simplify — drop failed path, honest plan-scope, simplest *correct* method.
-- Live contract: `apps/web/src/lib/agent-skills.ts` + `learner-progress-briefing.ts` + intent modes in `learner-chat-intent.ts`.
+- Live contract: `apps/web/src/lib/agent-skills.ts` + `learner-progress-briefing.ts` + `pressure-next-step.ts` + intents in `learner-chat-intent.ts`.
 
 ## Plan changes
 

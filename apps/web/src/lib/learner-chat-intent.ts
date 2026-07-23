@@ -12,6 +12,8 @@ import { learnerPlanChangeIntentHeuristic } from '@/lib/plan-actions';
 export type TutorChatIntent =
   | 'plan_template'
   | 'conversation_advance'
+  | 'context_challenge'
+  | 'plan_ownership'
   | 'casual_plan_change'
   | 'study_hours_increase'
   | 'exam_anxiety'
@@ -60,7 +62,7 @@ export interface PlanTemplateSuggestionContext {
 // --- Intent detectors (exported for tests) ---
 
 const STUDY_NEXT_RE =
-  /what should i study|what.?s next|study next|root cause|why am i stuck|what to learn|מה ללמוד|מה הלאה|למה אני תקוע|מה כדאי|הבא בתור|עוד נושא/i;
+  /what should i study|what.?s next|study next|root cause|why am i stuck|what to learn|מה ללמוד|מה הלאה|למה אני תקוע|מה כדאי|הבא בתור|עוד נושא|על מה (?:כדאי )?שאעבוד|what should i (?:work on|do) now/i;
 
 const EXAM_READINESS_RE =
   /(?:האם|האם\s+התוכנית).{0,50}(?:תכין|מספיק|מוכן|בזמן)/i;
@@ -88,7 +90,13 @@ const READINESS_AFFIRM_RE =
   /^(?:כן(?:\s|,|$)|נכון|בטח|ברור|יודע|אני יודע|כן,? אני יודע|yes\b|i know|i do\b)/i;
 
 const EXAM_ANXIETY_RE =
-  /(?:לא מוכן|לא אהיה מוכן|לא מספיק|עוד נושאים|נושאים נוספים|חסר|לא נגענו|missing topics|not ready|won't be ready|מרגיש שאני לא)/i;
+  /(?:לא מוכן|לא אהיה מוכן|לא מספיק|עוד נושאים|נושאים נוספים|חסר|לא נגענו|missing topics|not ready|won't be ready|מרגיש שאני לא|לפי הלו.?ז|לפי הלוז|אני לחוץ|לחוץ ממש|stressed|overwhelmed)/i;
+
+const CONTEXT_CHALLENGE_RE =
+  /(?:אתה לא יודע|אתה אמור|אתה המורה|תגיד לי מה (?:ה)?מצב|you (?:don'?t|do not) know|you should know|you'?re (?:my )?teacher|tell me (?:my )?status)/i;
+
+const PLAN_OWNERSHIP_RE =
+  /(?:יש לי כבר תוכנית|אתה מציע לשנות|לא לשנות את התוכנית|I already have (?:a )?plan|are you (?:suggesting|proposing) (?:to )?change|don'?t change my plan)/i;
 
 const STUDY_HOURS_RE =
   /(?:יותר שעות|הגדיל|להגדיל|להוסיף שעות|more hours|increase.*hours|study more|ללמוד יותר|כמה שצריך|כמה זמן שצריך)/i;
@@ -140,8 +148,28 @@ export function wantsExamAnxietySupport(message: string): boolean {
   return EXAM_ANXIETY_RE.test(message.trim());
 }
 
+export function wantsContextChallenge(message: string): boolean {
+  return CONTEXT_CHALLENGE_RE.test(message.trim());
+}
+
+export function wantsPlanOwnership(message: string): boolean {
+  return PLAN_OWNERSHIP_RE.test(message.trim());
+}
+
 export function wantsStudyHoursIncrease(message: string): boolean {
   return STUDY_HOURS_RE.test(message.trim());
+}
+
+/** ADR-0012 pressure-family intents that require authoritative status packs. */
+export function isPressureFamilyIntent(intent: TutorChatIntent): boolean {
+  return (
+    intent === 'exam_anxiety' ||
+    intent === 'exam_readiness' ||
+    intent === 'progress_status' ||
+    intent === 'study_next' ||
+    intent === 'context_challenge' ||
+    intent === 'plan_ownership'
+  );
 }
 
 export function isReadinessFollowUp(
@@ -166,6 +194,8 @@ export function classifyTutorChatIntent(
 
   if (isPlanChangeTemplate(normalized)) return 'plan_template';
   if (wantsConversationAdvance(message)) return 'conversation_advance';
+  if (wantsContextChallenge(message)) return 'context_challenge';
+  if (wantsPlanOwnership(message)) return 'plan_ownership';
   if (learnerPlanChangeIntentHeuristic(message) && !isPlanChangeTemplate(normalized)) {
     return 'casual_plan_change';
   }
@@ -198,11 +228,29 @@ Learner asked you to stop repeating or to resume after a cut-off.
 - Do NOT say you need to "explain differently" unless you actually change method.
 Acknowledge briefly, then advance.`;
 
-const PROGRESS_STATUS_INSTRUCTION = `## Interaction mode: PROGRESS STATUS (mandatory)
-Answer with a short plain-language status from the bilingual progress briefing (Mentor framing).
-- No XP/ISO/raw dumps; no repeated gate score lines; no guaranteed bagrut %.
-- Optional one-clause Mentor nudge for deeper goals talk.
-- End with one concrete next step.`;
+const EXAM_ANXIETY_INSTRUCTION = `## Interaction mode: EXAM ANXIETY (ADR-0012, mandatory)
+Follow the pressure-family 4-beat contract.
+- Validate briefly in natural language.
+- Honest status from the AUTHORITATIVE learner-facing pack (pace + readiness). If at_risk: no empty reassurance.
+- Exactly ONE next step from the pack — never a topic menu; never invent a new plan.
+- Offer to start that one topic.
+- Plan/hour changes only via sidebar template if they explicitly ask — do NOT volunteer a rewrite or paste a template example on this turn.`;
+
+const CONTEXT_CHALLENGE_INSTRUCTION = `## Interaction mode: CONTEXT CHALLENGE (ADR-0012, mandatory)
+Learner challenges that you don't know their plan/status.
+- You DO know — use the AUTHORITATIVE pack immediately.
+- Never say you don't know. One next step from the pack.`;
+
+const PLAN_OWNERSHIP_INSTRUCTION = `## Interaction mode: PLAN OWNERSHIP (ADR-0012, mandatory)
+Learner already has a plan; asks if you want to change it.
+- You are NOT replacing their plan. No new daily/weekly plan offer.
+- Changes → sidebar template only if they insist.
+- Address concern via status pack + one next step.`;
+
+const PROGRESS_STATUS_INSTRUCTION = `## Interaction mode: PROGRESS STATUS (ADR-0012, mandatory)
+Answer from the AUTHORITATIVE learner-facing status pack (Mentor framing).
+- No XP/ISO/raw dumps; no "gaps: none flagged"; no knowledge denial.
+- End with the pack's single next step.`;
 
 const RECOVERY_SIMPLIFY_INSTRUCTION = `## Interaction mode: RECOVERY / SIMPLIFY (mandatory)
 1. Drop any failed explanation path from prior turns.
@@ -215,11 +263,6 @@ const WORKED_SOLUTION_INSTRUCTION = `## Interaction mode: WORKED SOLUTION (manda
 - Ground every step in corpus/KG; no invented bridges.
 - If >~8 steps: roadmap + first 2–3 steps, then ask to continue.
 - Math in \`$...$\` / \`$$...$$\`. No filler closers.`;
-
-const EXAM_ANXIETY_INSTRUCTION = `## Interaction mode: EXAM ANXIETY (mandatory)
-Validate concern briefly. Use the **learning-plan snapshot** (server-selected concepts) — do NOT improvise gap names or ask the learner to pick topics.
-Frame priorities softly and rationally (e.g. "נחזק את הבסיס השבוע…" / "let's solidify foundations this week…"). Some snapshot topics may support confidence and pacing — do NOT reveal selection mechanism unless the learner asks directly.
-Give a realistic cram strategy from the snapshot. For plan/hour changes, show the sidebar template example — never defer to parents/teachers.`;
 
 const STUDY_HOURS_INSTRUCTION = `## Interaction mode: STUDY HOURS INCREASE (mandatory)
 Acknowledge commitment. Hours change via sidebar template **עדכון תוכנית לימוד** with notes (e.g. "5 שעות ביום").
@@ -308,9 +351,7 @@ export function buildTutorInteractionContract(
     hoursPerWeek: ctx.hoursPerWeek,
   };
   const templateSuggestion =
-    intent === 'casual_plan_change' ||
-    intent === 'study_hours_increase' ||
-    intent === 'exam_anxiety'
+    intent === 'casual_plan_change' || intent === 'study_hours_increase'
       ? buildPlanTemplateSuggestion(suggestionCtx, locale)
       : null;
 
@@ -360,6 +401,29 @@ export function buildTutorInteractionContract(
           'LEARNER PREFERENCE OVERRIDE: Direct mode — advance the conversation, no repeated questions.',
       };
 
+    case 'context_challenge':
+      return {
+        ...base,
+        teachingStyle: 'direct',
+        allowSocraticOpening: false,
+        allowTopicChecklist: false,
+        injectLearningPlanSnapshot: true,
+        turnInstruction: CONTEXT_CHALLENGE_INSTRUCTION,
+        learnerPreferenceOverride:
+          'LEARNER PREFERENCE OVERRIDE: Direct — you know their plan; use the status pack.',
+      };
+
+    case 'plan_ownership':
+      return {
+        ...base,
+        teachingStyle: 'direct',
+        allowSocraticOpening: false,
+        allowTopicChecklist: false,
+        turnInstruction: PLAN_OWNERSHIP_INSTRUCTION,
+        learnerPreferenceOverride:
+          'LEARNER PREFERENCE OVERRIDE: Direct — keep existing plan; no rewrite offer.',
+      };
+
     case 'casual_plan_change':
       return {
         ...base,
@@ -400,20 +464,15 @@ export function buildTutorInteractionContract(
         teachingStyle: 'direct',
         allowSocraticOpening: false,
         allowTopicChecklist: false,
-        injectCasualPlanChangeGuide: true,
+        injectCasualPlanChangeGuide: false,
         injectLearningPlanSnapshot: true,
         planGuidanceLine:
           locale === 'he'
-            ? 'לשינוי תוכנית/שעות — תבנית בצד שמאל. עכשיו: עזרה ללמידה ולחרדה, לא רשימת נושאים פתוחה.'
-            : 'For plan/hour changes — sidebar template. Now: learning + anxiety support, not open topic quiz.',
-        turnInstruction: [
-          EXAM_ANXIETY_INSTRUCTION,
-          templateSuggestion ?? '',
-        ]
-          .filter(Boolean)
-          .join('\n\n'),
+            ? 'אל תציע תוכנית חדשה. צעד אחד מהשבוע הפעיל. שינוי תוכנית — רק אם ביקשו במפורש דרך התבנית.'
+            : 'Do not offer a new plan. One step from the active week. Plan edits only if they explicitly ask via template.',
+        turnInstruction: EXAM_ANXIETY_INSTRUCTION,
         learnerPreferenceOverride:
-          'LEARNER PREFERENCE OVERRIDE: Direct, reassuring mode — no Socratic checklist.',
+          'LEARNER PREFERENCE OVERRIDE: Direct 4-beat pressure mode — no topic menu, no plan rewrite.',
       };
 
     case 'exam_readiness':
@@ -470,13 +529,14 @@ export function buildTutorInteractionContract(
         ...base,
         teachingStyle: 'direct',
         allowSocraticOpening: false,
+        allowTopicChecklist: false,
         injectLearningPlanSnapshot: true,
         turnInstruction:
           locale === 'he'
-            ? '## Interaction mode: STUDY NEXT\nהשתמש ב-learning-plan snapshot. הצע את הצעד הבא המבוסס מסטר.'
-            : '## Interaction mode: STUDY NEXT\nUse learning-plan snapshot. Recommend next step from mastery.',
+            ? '## Interaction mode: STUDY NEXT (ADR-0012)\nהשתמש ב-AUTHORITATIVE pack. צעד אחד בלבד מהחבילה — בלי תפריט נושאים.'
+            : '## Interaction mode: STUDY NEXT (ADR-0012)\nUse AUTHORITATIVE pack. Exactly one next step — no topic menu.',
         learnerPreferenceOverride:
-          'LEARNER PREFERENCE OVERRIDE: Direct recommendation from planner data.',
+          'LEARNER PREFERENCE OVERRIDE: Direct — one next step from the status pack.',
       };
 
     case 'learn':

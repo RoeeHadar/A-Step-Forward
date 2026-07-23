@@ -13,16 +13,20 @@ import { CHAT_BREVITY_RULE } from './chat-context-policy';
 import {
   buildTutorInteractionContract,
   classifyTutorChatIntent,
+  isPressureFamilyIntent,
 } from './learner-chat-intent';
 import {
   buildBilingualProgressBriefing,
-  PROGRESS_STATUS_TURN_INSTRUCTION,
+  buildLearnerFacingStatusPack,
+  CONTEXT_CHALLENGE_TURN_INSTRUCTION,
+  PLAN_OWNERSHIP_TURN_INSTRUCTION,
+  PRESSURE_FAMILY_TURN_INSTRUCTION,
   RECOVERY_TURN_INSTRUCTION,
   WORKED_SOLUTION_TURN_INSTRUCTION,
 } from './learner-progress-briefing';
 import { getLLMConfig, llmComplete, llmConfigured, resetLLMConfigCache } from './llm-provider';
 
-const BRIEFING = buildBilingualProgressBriefing({
+const BRIEFING_INPUT = {
   goalKey: 'bagrut_math_5',
   goalLabel: 'בגרות מתמטיקה 5 יח״ל',
   examDateLabel: '2026-09-15',
@@ -38,19 +42,28 @@ const BRIEFING = buildBilingualProgressBriefing({
   xpLevel: 10,
   xpTotal: 985,
   readinessPct: 42,
-  readinessBand: 'building',
-  readinessPhase: 'building',
-  paceStatus: 'on_track',
+  readinessBand: 'building' as const,
+  readinessPhase: 'building' as const,
+  paceStatus: 'at_risk' as const,
   recentGateSummaryHe: 'שער שבוע 1 עבר (~94%)',
   recentGateSummaryEn: 'Week 1 gate passed (~94%)',
-});
+  nextStepHe: 'מבוא לאינטגרציה',
+  nextStepEn: 'Integration intro',
+  nextStepConceptId: 'integration_intro',
+};
 
-const COMPACT_SKILLS = `## Tutor (ADR-0011)
+const BRIEFING = buildBilingualProgressBriefing(BRIEFING_INPUT);
+const STATUS_PACK = buildLearnerFacingStatusPack(BRIEFING_INPUT);
+
+const COMPACT_SKILLS = `## Tutor (ADR-0011 / ADR-0012)
 - Hebrew; math in $...$ only. Cite lesson:/concept: only.
-- Answer the question first. Paraphrase the bilingual briefing — never dump XP/ISO/raw gates.
+- Answer the question first. Paraphrase briefing + AUTHORITATIVE status pack — never dump XP/ISO/raw keys.
+- You KNOW the plan when packs are present — never deny. Never misread 5pt as already learned.
+- Pressure: 4-beat — validate → honest status → ONE next step from pack → offer to start. No topic menus.
 - Grounding: no invented topic bridges (e.g. geometric series → ∫x²). Redirect to corpus method.
 - Never use 100% / "~100%" / "guaranteed" for bagrut or exam success — even as a goal. Use readiness band + pace only.
 - Ban filler: "אני חושב שזה יעזור", "אני צריך להסביר זאת בצורה שונה".
+- Ban garbage Hebrew: חשוך, באחריות, להביא לדמיון.
 - Recovery: drop failed path; simplest CORRECT method; for ∫₀¹ x² state the value **1/3** after the power-rule antiderivative.
 - Continue: resume unfinished step only.`;
 
@@ -79,12 +92,15 @@ function buildSystem(message: string): string {
     'You are the Tutor on A Step Forward.',
     COMPACT_SKILLS,
     BRIEFING,
+    STATUS_PACK,
     CORPUS,
     CHAT_BREVITY_RULE,
   ];
   if (contract.turnInstruction) parts.push(contract.turnInstruction);
-  if (intent === 'progress_status' || intent === 'exam_readiness') {
-    parts.push(PROGRESS_STATUS_TURN_INSTRUCTION);
+  if (isPressureFamilyIntent(intent)) {
+    parts.push(PRESSURE_FAMILY_TURN_INSTRUCTION);
+    if (intent === 'context_challenge') parts.push(CONTEXT_CHALLENGE_TURN_INSTRUCTION);
+    if (intent === 'plan_ownership') parts.push(PLAN_OWNERSHIP_TURN_INSTRUCTION);
   }
   if (intent === 'recovery_simplify') parts.push(RECOVERY_TURN_INSTRUCTION);
   if (intent === 'worked_solution' || intent === 'conversation_advance') {
@@ -195,5 +211,38 @@ describe.skipIf(!LIVE)('ADR-0011 live LLM communication quality', () => {
     const reply = await ask('המשך, התגובה שלך נעצרה באמצע', history);
     expect(reply.length).toBeGreaterThan(20);
     expect(scoreCommunicationReply(reply, ['no_filler']).failures, reply).toEqual([]);
+  }, 200_000);
+
+  it('ADR-0012 anxiety: know plan, one next step, no deny/menu/dump', async () => {
+    await sleep(20_000);
+    const reply = await ask('אני לחוץ ממש לפי הלוז, מרגיש שאני לא אהיה מוכן');
+    expect(reply.length).toBeGreaterThan(40);
+    expect(
+      scoreCommunicationReply(reply, [
+        'no_deny_knowledge',
+        'no_dump',
+        'no_points_misread',
+        'no_topic_menu',
+        'no_empty_reassurance',
+        'no_garbage_hebrew',
+        'no_filler',
+      ]).failures,
+      reply,
+    ).toEqual([]);
+  }, 200_000);
+
+  it('ADR-0012 context challenge: never claim ignorance', async () => {
+    await sleep(20_000);
+    const reply = await ask('אתה לא יודע מה המצב שלי? אתה המורה');
+    expect(reply.length).toBeGreaterThan(30);
+    expect(
+      scoreCommunicationReply(reply, [
+        'no_deny_knowledge',
+        'no_dump',
+        'no_garbage_hebrew',
+        'no_filler',
+      ]).failures,
+      reply,
+    ).toEqual([]);
   }, 200_000);
 });
