@@ -93,13 +93,20 @@ export async function POST(req: Request) {
   });
 
   if (!advanced || 'thin_topic' in advanced) {
+    // End orphan empty session so history stays clean.
+    await updatePracticeSession(
+      userId,
+      session.id,
+      { status: 'ended', current_graded: true },
+      session.version,
+    ).catch(() => null);
     return Response.json(
       {
         error: 'thin_topic',
         message:
           'Not enough quality exam-style items for these topics yet. Try another topic or check back soon.',
-        session_id: session.id,
-        focus_concept_id: advanced && 'focusConceptId' in advanced ? advanced.focusConceptId : null,
+        focus_concept_id:
+          advanced && 'focusConceptId' in advanced ? advanced.focusConceptId : null,
       },
       { status: 503 },
     );
@@ -108,12 +115,6 @@ export async function POST(req: Request) {
   const seen = [...session.seen_ids];
   if (advanced.item.question_id) seen.push(advanced.item.question_id);
   seen.push(advanced.item.id);
-
-  await markPracticeFingerprintSeen({
-    learnerId: userId,
-    fingerprint: advanced.item.fingerprint,
-    conceptId: advanced.item.concept_id,
-  });
 
   const updated = await updatePracticeSession(
     userId,
@@ -134,6 +135,13 @@ export async function POST(req: Request) {
   if (!updated) {
     return Response.json({ error: 'session_conflict' }, { status: 409 });
   }
+
+  // Only burn the fingerprint after the learner actually received the item.
+  await markPracticeFingerprintSeen({
+    learnerId: userId,
+    fingerprint: advanced.item.fingerprint,
+    conceptId: advanced.item.concept_id,
+  });
 
   return Response.json(toPracticeSessionPublic(updated));
 }

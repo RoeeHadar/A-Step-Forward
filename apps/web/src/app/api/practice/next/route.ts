@@ -63,10 +63,21 @@ export async function POST(req: Request) {
       { status: 'ended', current_graded: true },
       session.version,
     );
+    if (!ended) {
+      return Response.json(
+        {
+          error: 'thin_topic',
+          message: 'No more unused exam-style items for these topics right now.',
+          session: toPracticeSessionPublic(session),
+          ended: false,
+        },
+        { status: 409 },
+      );
+    }
     return Response.json({
       error: 'thin_topic',
       message: 'No more unused exam-style items for these topics right now.',
-      session: ended ? toPracticeSessionPublic(ended) : toPracticeSessionPublic(session),
+      session: toPracticeSessionPublic(ended),
       ended: true,
     });
   }
@@ -74,12 +85,6 @@ export async function POST(req: Request) {
   const seen = [...session.seen_ids];
   if (advanced.item.question_id) seen.push(advanced.item.question_id);
   seen.push(advanced.item.id);
-
-  await markPracticeFingerprintSeen({
-    learnerId: userId,
-    fingerprint: advanced.item.fingerprint,
-    conceptId: advanced.item.concept_id,
-  });
 
   const updated = await updatePracticeSession(
     userId,
@@ -100,6 +105,12 @@ export async function POST(req: Request) {
   if (!updated) {
     return Response.json({ error: 'session_conflict' }, { status: 409 });
   }
+
+  await markPracticeFingerprintSeen({
+    learnerId: userId,
+    fingerprint: advanced.item.fingerprint,
+    conceptId: advanced.item.concept_id,
+  });
 
   return Response.json({
     session: toPracticeSessionPublic(updated),
