@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation';
 import { SiteHeader } from '@/components/site-header';
-import { PageHeader } from '@/components/page-header';
 import { AdminBookingsClient } from '@/components/admin-bookings-client';
 import { getAuthContext, requireRole } from '@/lib/auth';
 
@@ -26,10 +25,6 @@ export default async function AdminBookingsPage({ searchParams }: Props) {
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
       <main className="mx-auto w-full max-w-3xl space-y-6 p-6">
-        <PageHeader
-          title="Book a Lesson"
-          description="Connect Google Calendar, manage private contact details, and monitor free/busy sync."
-        />
         <AdminBookingsClient gcalQuery={gcalQuery} />
       </main>
     </div>
