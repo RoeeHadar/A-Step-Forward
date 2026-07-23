@@ -22,14 +22,15 @@ export async function getAuthContext(): Promise<AuthContext | null> {
   const user = await currentUser();
   const metaRole = (user?.publicMetadata?.role as AppRole | undefined) ?? 'learner';
   const appUser = await getAppUser(userId).catch(() => null);
+  // Clerk publicMetadata.role=admin must win over Neon app_users (e.g. educator
+  // from identity setup). Otherwise admins look like educators and lose /admin +
+  // booking-guard behavior.
   const role: AppRole =
-    appUser?.role === 'educator'
-      ? 'educator'
-      : metaRole === 'admin' || metaRole === 'parent'
-        ? metaRole
-        : metaRole === 'educator'
-          ? 'educator'
-          : 'learner';
+    metaRole === 'admin' || metaRole === 'parent'
+      ? metaRole
+      : appUser?.role === 'educator' || metaRole === 'educator'
+        ? 'educator'
+        : 'learner';
 
   const displayName =
     appUser?.real_name ??
@@ -58,6 +59,11 @@ export function requireRole(ctx: AuthContext, allowed: AppRole[]): void {
 /** Best-effort sync of Clerk publicMetadata.role with app_users. */
 export async function syncClerkRole(userId: string, role: SocialRole): Promise<void> {
   try {
+    const existing = await clerkClient.users.getUser(userId);
+    if ((existing.publicMetadata?.role as string | undefined) === 'admin') {
+      // Never demote an admin via social/identity sync.
+      return;
+    }
     // Clerk session JWT may lag; Neon app_users is authoritative for routing.
     await clerkClient.users.updateUserMetadata(userId, {
       publicMetadata: { role },

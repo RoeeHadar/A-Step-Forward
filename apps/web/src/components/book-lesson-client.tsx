@@ -69,7 +69,7 @@ function toggleSubject(list: LessonSubject[], s: LessonSubject): LessonSubject[]
   return [...list, s];
 }
 
-export function BookLessonClient() {
+export function BookLessonClient({ isAdmin = false }: { isAdmin?: boolean }) {
   const { messages, locale } = useI18n();
   const t = messages.book;
   const { isSignedIn } = useAuth();
@@ -223,7 +223,25 @@ export function BookLessonClient() {
         <p className="text-sm text-muted-foreground">{t.cancelPolicy}</p>
       </section>
 
-      {statusUrl ? (
+      {isAdmin ? (
+        <section
+          className="space-y-4 rounded-2xl border border-border bg-surface-1 p-6 md:p-8"
+          aria-labelledby="admin-book-notice"
+        >
+          <h2 id="admin-book-notice" className="font-display text-xl font-semibold">
+            {t.adminCannotBookTitle}
+          </h2>
+          <p className="text-sm leading-relaxed text-muted-foreground">{t.adminCannotBookBody}</p>
+          <Link
+            href="/admin/bookings"
+            className="inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+          >
+            {t.adminBookingsCta}
+          </Link>
+        </section>
+      ) : null}
+
+      {!isAdmin && statusUrl ? (
         <div
           ref={successRef}
           id="book-request-success"
@@ -254,7 +272,7 @@ export function BookLessonClient() {
         </div>
       ) : null}
 
-      {!statusUrl ? (
+      {!isAdmin && !statusUrl ? (
       <form onSubmit={onSubmit} className="space-y-8 rounded-2xl border border-border bg-surface-1 p-6 md:p-8">
         <h2 className="font-display text-xl font-semibold">{t.formTitle}</h2>
         <p className="text-sm text-muted-foreground">{t.calendarNote}</p>
