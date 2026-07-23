@@ -98,15 +98,17 @@ describe('buildTutorInteractionContract — mode contracts', () => {
     expect(c.turnInstruction).toContain('EXAM READINESS');
   });
 
-  it('exam_anxiety includes template suggestion for physics learners', () => {
+  it('exam_anxiety uses 4-beat pressure mode without volunteering a template', () => {
     const c = buildTutorInteractionContract('exam_anxiety', 'he', {
       subjects: ['physics'],
       goalKey: 'bagrut_physics',
     });
-    expect(c.templateSuggestion).toContain('036-361');
+    expect(c.templateSuggestion).toBeNull();
+    expect(c.injectCasualPlanChangeGuide).toBe(false);
     expect(c.allowTopicChecklist).toBe(false);
     expect(c.injectLearningPlanSnapshot).toBe(true);
-    expect(c.turnInstruction).toContain('learning-plan snapshot');
+    expect(c.turnInstruction).toContain('ADR-0012');
+    expect(c.turnInstruction).toContain('4-beat');
     expect(c.turnInstruction).not.toMatch(/Name 2–3|improvise gaps/i);
   });
 
