@@ -47,6 +47,7 @@ export async function POST(req: Request) {
   const advanced = await advancePracticeItem({
     learnerId: userId,
     conceptFilter: session.concept_filter,
+    queueMode: session.queue_mode,
     seenIds: session.seen_ids,
     recentCorrect: session.recent_correct,
     generatedCount: session.generated_count,

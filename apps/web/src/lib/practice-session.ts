@@ -35,6 +35,7 @@ export interface PracticeSessionRow {
   /** True after submit/give-up on current_item until /next advances. */
   current_graded: boolean;
   version: number;
+  queue_mode: 'default' | 'due';
   status: 'active' | 'ended';
 }
 
@@ -59,6 +60,7 @@ async function ensurePracticeTables(): Promise<void> {
         hint_step         INT NOT NULL DEFAULT 0,
         current_graded    BOOLEAN NOT NULL DEFAULT FALSE,
         version           INT NOT NULL DEFAULT 0,
+        queue_mode        TEXT NOT NULL DEFAULT 'default',
         status            TEXT NOT NULL DEFAULT 'active',
         created_at        TIMESTAMPTZ DEFAULT NOW(),
         ended_at          TIMESTAMPTZ
@@ -66,6 +68,7 @@ async function ensurePracticeTables(): Promise<void> {
     `;
     await sql`ALTER TABLE practice_sessions ADD COLUMN IF NOT EXISTS current_graded BOOLEAN NOT NULL DEFAULT FALSE`;
     await sql`ALTER TABLE practice_sessions ADD COLUMN IF NOT EXISTS version INT NOT NULL DEFAULT 0`;
+    await sql`ALTER TABLE practice_sessions ADD COLUMN IF NOT EXISTS queue_mode TEXT NOT NULL DEFAULT 'default'`;
     await sql`
       CREATE INDEX IF NOT EXISTS ix_practice_sessions_user
       ON practice_sessions (user_id, created_at DESC)
@@ -106,6 +109,7 @@ function rowToSession(r: Record<string, unknown>): PracticeSessionRow {
     hint_step: Number(r.hint_step) || 0,
     current_graded: Boolean(r.current_graded),
     version: Number(r.version) || 0,
+    queue_mode: r.queue_mode === 'due' ? 'due' : 'default',
     status: r.status === 'ended' ? 'ended' : 'active',
   };
 }
@@ -124,6 +128,7 @@ export function toPracticeSessionPublic(row: PracticeSessionRow): PracticeSessio
       ? stripPracticeItemForClient(row.current_item, row.hint_step)
       : null,
     item_graded: row.current_graded,
+    queue_mode: row.queue_mode,
     status: row.status,
   };
 }
@@ -133,6 +138,7 @@ export async function createPracticeSession(opts: {
   goalItems?: number;
   goalMinutes?: number;
   conceptFilter?: string | null;
+  queueMode?: 'default' | 'due';
 }): Promise<PracticeSessionRow | null> {
   if (!sql) return null;
   await ensurePracticeTables();
@@ -144,17 +150,19 @@ export async function createPracticeSession(opts: {
     90,
     Math.max(5, opts.goalMinutes ?? PRACTICE_DEFAULT_GOAL_MINUTES),
   );
+  const queueMode = opts.queueMode === 'due' ? 'due' : 'default';
   try {
     const rows = (await sql`
       INSERT INTO practice_sessions (
-        user_id, goal_items, goal_minutes, concept_filter, current_graded, version
+        user_id, goal_items, goal_minutes, concept_filter, current_graded, version, queue_mode
       ) VALUES (
         ${opts.learnerId},
         ${goalItems},
         ${goalMinutes},
         ${opts.conceptFilter ?? null},
         FALSE,
-        0
+        0,
+        ${queueMode}
       )
       RETURNING *
     `) as Array<Record<string, unknown>>;

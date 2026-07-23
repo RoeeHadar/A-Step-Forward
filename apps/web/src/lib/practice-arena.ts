@@ -74,6 +74,7 @@ export interface PracticeSessionPublic {
   item: PracticeItemPublic | null;
   /** True after submit/give-up until the client advances via /next. */
   item_graded: boolean;
+  queue_mode?: 'default' | 'due';
   status: 'active' | 'ended';
 }
 

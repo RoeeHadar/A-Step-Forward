@@ -111,15 +111,7 @@ export function DueReviewsWidget({
         </div>
         <div className="flex shrink-0 flex-col gap-2 self-start sm:items-end">
           <Button asChild size="sm">
-            <Link
-              href={
-                visibleItems[0]?.concept_id
-                  ? `/app/practice?concept=${encodeURIComponent(visibleItems[0].concept_id)}`
-                  : '/app/practice'
-              }
-            >
-              {t.practiceCta}
-            </Link>
+            <Link href="/app/practice?mode=due">{t.practiceCta}</Link>
           </Button>
           <Button asChild size="sm" variant="outline">
             <Link href="/app/chat/coach?mode=quick&duration=15">{t.cta}</Link>

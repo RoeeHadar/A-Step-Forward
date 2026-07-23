@@ -221,6 +221,20 @@ export default async function ConceptPage({
 
         <header className="mb-8">
           <h1 className="font-display text-3xl font-bold">{conceptName}</h1>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link
+              href={`/app/practice?concept=${encodeURIComponent(conceptId)}`}
+              className="inline-flex rounded-lg bg-gradient-to-r from-primary to-accent-magenta px-4 py-2 text-sm font-semibold text-primary-foreground"
+            >
+              {t.practiceThisTopic}
+            </Link>
+            <Link
+              href={`/app/chat/tutor?topic=${encodeURIComponent(conceptId)}`}
+              className="inline-flex rounded-lg border border-border bg-surface-1/50 px-4 py-2 text-sm font-medium hover:border-primary/40"
+            >
+              {t.chatWithTutorAboutTopic}
+            </Link>
+          </div>
           {prerequisites.length > 0 ? (
             <p className="mt-3 text-sm text-muted-foreground">
               <span className="font-medium text-foreground">{t.prerequisites}:</span>{' '}

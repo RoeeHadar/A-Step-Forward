@@ -162,6 +162,12 @@ export function LessonPageClient({
             }
           />
           <Link
+            href={`/app/practice?concept=${encodeURIComponent(conceptId)}`}
+            className="inline-flex rounded-lg bg-gradient-to-r from-primary to-accent-magenta px-5 py-2.5 text-sm font-semibold text-primary-foreground"
+          >
+            {lang === 'he' ? 'תרגל את הנושא' : 'Practice this topic'}
+          </Link>
+          <Link
             href="/app"
             className="inline-flex rounded-lg border border-border bg-surface-1/50 px-5 py-2.5 text-sm font-medium hover:border-primary/40"
           >

@@ -15,10 +15,11 @@ import {
   fetchLessonByConceptId,
   getConceptMastery,
   getCurrentPlan,
+  getDueReviews,
   getLearnerProfile,
   type LessonQuestionRow,
 } from '@/lib/neon-db';
-import { buildCustomQuiz } from '@/lib/quiz-builder';
+import { buildPracticeDrillItem } from '@/lib/practice-drill-builder';
 import kg from '@/lib/kg-data.json';
 
 type KgConcept = {
@@ -93,9 +94,16 @@ function authoredToSealed(
 export async function pickPracticeFocusConcept(opts: {
   learnerId: string;
   conceptFilter?: string | null;
+  queueMode?: 'default' | 'due';
 }): Promise<string | null> {
   if (opts.conceptFilter && kgById[opts.conceptFilter]) {
     return opts.conceptFilter;
+  }
+
+  if (opts.queueMode === 'due') {
+    const due = await getDueReviews(opts.learnerId).catch(() => []);
+    const dueConcept = due.find((d) => d.concept_id && kgById[d.concept_id]);
+    if (dueConcept) return dueConcept.concept_id;
   }
 
   const [profile, mastery, plan] = await Promise.all([
@@ -157,53 +165,22 @@ async function pickAuthoredItem(opts: {
 }
 
 async function pickGeneratedItem(opts: {
-  learnerId: string;
   conceptId: string;
   generatedCount: number;
+  difficulty: PracticeDifficulty;
 }): Promise<PracticeItemSealed | null> {
   if (opts.generatedCount >= PRACTICE_MAX_GENERATED_PER_SESSION) return null;
-  // Custom quiz builder is exam-oriented (open/mcq). Use only when it yields MCQ.
-  const envelope = await buildCustomQuiz(opts.learnerId, {
-    kind_mix: 'closed',
-    time_limit_min: 22,
-    topics: [opts.conceptId],
-  }).catch(() => null);
-  if (!envelope?.questions?.length) return null;
-  const q = envelope.questions.find((x) => x.kind === 'mcq' && typeof x.correct_index === 'number');
-  if (!q) return null;
-  const labels = conceptLabel(opts.conceptId);
-  const atoms = Array.isArray(q.skill_atoms) ? q.skill_atoms : [];
-  return {
-    id: newItemId(),
-    source: 'generated',
-    lesson_id: null,
-    question_id: null,
-    kind: 'mcq',
-    difficulty: 'medium',
-    concept_id: q.concept_id || opts.conceptId,
-    skill_atoms: atoms,
-    stem_en: q.stem_en,
-    stem_he: q.stem_he,
-    options_en: q.options_en ?? null,
-    options_he: q.options_he ?? null,
-    correct_index: q.correct_index ?? null,
-    correct_answer: null,
-    answer_payload: null,
-    explanation_en: q.explanation_en || q.sample_solution_en || '',
-    explanation_he: q.explanation_he || q.sample_solution_he || '',
-    hints: buildHintLadder({
-      conceptLabelEn: labels.en,
-      conceptLabelHe: labels.he,
-      skillAtoms: atoms,
-      explanationEn: q.explanation_en || q.sample_solution_en,
-      explanationHe: q.explanation_he || q.sample_solution_he,
-    }),
-  };
+  return buildPracticeDrillItem({
+    conceptId: opts.conceptId,
+    difficulty: opts.difficulty,
+    count: 1,
+  });
 }
 
 export async function advancePracticeItem(opts: {
   learnerId: string;
   conceptFilter?: string | null;
+  queueMode?: 'default' | 'due';
   seenIds: string[];
   recentCorrect: boolean[];
   generatedCount: number;
@@ -212,6 +189,7 @@ export async function advancePracticeItem(opts: {
   const focusConceptId = await pickPracticeFocusConcept({
     learnerId: opts.learnerId,
     conceptFilter: opts.conceptFilter,
+    queueMode: opts.queueMode,
   });
   if (!focusConceptId) return null;
 
@@ -228,9 +206,9 @@ export async function advancePracticeItem(opts: {
   if (authored) return { item: authored, focusConceptId };
 
   const generated = await pickGeneratedItem({
-    learnerId: opts.learnerId,
     conceptId: focusConceptId,
     generatedCount: opts.generatedCount,
+    difficulty,
   });
   if (generated) return { item: generated, focusConceptId };
 
