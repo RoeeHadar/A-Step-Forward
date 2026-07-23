@@ -36,9 +36,7 @@ def upgrade() -> None:
         )
         """
     )
-    op.execute(
-        "INSERT INTO lesson_booking_settings (id) VALUES (1) ON CONFLICT (id) DO NOTHING"
-    )
+    op.execute("INSERT INTO lesson_booking_settings (id) VALUES (1) ON CONFLICT (id) DO NOTHING")
 
 
 def downgrade() -> None:

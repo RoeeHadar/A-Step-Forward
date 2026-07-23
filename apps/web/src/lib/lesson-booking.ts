@@ -44,8 +44,11 @@ export function wallTimeInZoneToUtc(date: string, time: string, timeZone: string
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(time)) {
     throw new Error('invalid_date_or_time');
   }
-  const [y, m, d] = date.split('-').map(Number);
-  const [hh, mm] = time.split(':').map(Number);
+  const y = Number(date.slice(0, 4));
+  const m = Number(date.slice(5, 7));
+  const d = Number(date.slice(8, 10));
+  const hh = Number(time.slice(0, 2));
+  const mm = Number(time.slice(3, 5));
   let utcMs = Date.UTC(y, m - 1, d, hh, mm, 0);
   for (let i = 0; i < 3; i++) {
     const parts = new Intl.DateTimeFormat('en-US', {
@@ -62,7 +65,14 @@ export function wallTimeInZoneToUtc(date: string, time: string, timeZone: string
       Number(parts.find((p) => p.type === type)?.value ?? NaN);
     let hour = get('hour');
     if (hour === 24) hour = 0;
-    const asLocalMs = Date.UTC(get('year'), get('month') - 1, get('day'), hour, get('minute'), get('second'));
+    const asLocalMs = Date.UTC(
+      get('year'),
+      get('month') - 1,
+      get('day'),
+      hour,
+      get('minute'),
+      get('second'),
+    );
     const desiredMs = Date.UTC(y, m - 1, d, hh, mm, 0);
     utcMs += desiredMs - asLocalMs;
   }
