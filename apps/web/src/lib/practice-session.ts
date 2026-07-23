@@ -10,6 +10,7 @@ import {
   type PracticeItemSealed,
   type PracticeQueueMode,
   type PracticeSessionPublic,
+  type PracticeChatContext,
   PRACTICE_DEFAULT_GOAL_ITEMS,
   PRACTICE_DEFAULT_GOAL_MINUTES,
 } from '@/lib/practice-arena';
@@ -192,6 +193,30 @@ export async function getPracticeSessionForLearner(
     console.warn('[practice-session] get failed', err);
     return null;
   }
+}
+
+/**
+ * Rebuild practice chat context from Neon so clients cannot forge graded=true
+ * or mismatched stems (ADR-0013 no-answer contract).
+ */
+export async function resolveTrustedPracticeChatContext(
+  learnerId: string,
+  client: PracticeChatContext,
+): Promise<PracticeChatContext | null> {
+  const session = await getPracticeSessionForLearner(learnerId, client.session_id);
+  const item = session?.current_item;
+  if (!session || !item || item.id !== client.item_id) return null;
+  return {
+    session_id: session.id,
+    item_id: item.id,
+    concept_id: item.concept_id,
+    kind: item.kind,
+    difficulty: item.difficulty,
+    hint_step: session.hint_step,
+    stem_en: item.stem_en,
+    stem_he: item.stem_he,
+    item_graded: session.current_graded,
+  };
 }
 
 export type PracticeSessionPatch = Partial<{

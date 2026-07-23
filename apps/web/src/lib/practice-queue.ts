@@ -124,15 +124,28 @@ export async function pickPracticeFocusConcept(opts: {
     .map((c) => c.id);
 
   if (opts.queueMode === 'explore') {
-    const explorePick = pickExploreFocusConceptId({
-      masteryMap,
-      activeConceptIds: activeIds,
-      candidateConceptIds:
-        subjectCandidates.length > 0
-          ? subjectCandidates
-          : (kg.concepts as KgConcept[]).map((c) => c.id),
-    });
+    const allIds = (kg.concepts as KgConcept[]).map((c) => c.id);
+    const explorePick =
+      pickExploreFocusConceptId({
+        masteryMap,
+        activeConceptIds: activeIds,
+        candidateConceptIds:
+          subjectCandidates.length > 0 ? subjectCandidates : allIds,
+      }) ??
+      pickExploreFocusConceptId({
+        masteryMap,
+        activeConceptIds: activeIds,
+        candidateConceptIds: allIds,
+      }) ??
+      allIds.find((id) => !activeIds.includes(id)) ??
+      null;
     if (explorePick) return explorePick;
+    // Active week covers the whole KG — still honor explore intent (weakest overall).
+    const weakExplore = Object.entries(masteryMap)
+      .filter(([, s]) => typeof s === 'number')
+      .sort((a, b) => a[1] - b[1])[0];
+    if (weakExplore) return weakExplore[0];
+    return allIds[0] ?? null;
   }
 
   if (activeWeek?.concepts?.length) {

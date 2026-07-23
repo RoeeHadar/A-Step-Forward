@@ -38,7 +38,8 @@ function timerBadgeClass(remaining: number, total: number): string {
   return 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30';
 }
 
-function chatSessionKey(agent: AgentName): string {
+function chatSessionKey(agent: AgentName, practiceItemId?: string | null): string {
+  if (practiceItemId) return `asf-chat-session-${agent}-practice-${practiceItemId}`;
   return `asf-chat-session-${agent}`;
 }
 
@@ -121,13 +122,15 @@ export function AgentChat({
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    let id = localStorage.getItem(chatSessionKey(agentName));
+    const storageKey = chatSessionKey(agentName, practiceContext?.item_id);
+    let id = localStorage.getItem(storageKey);
     if (!id) {
       id = crypto.randomUUID();
-      localStorage.setItem(chatSessionKey(agentName), id);
+      localStorage.setItem(storageKey, id);
     }
     setSessionId(id);
-  }, [agentName]);
+    setHistoryReady(false);
+  }, [agentName, practiceContext?.item_id]);
 
   useEffect(() => {
     if (!sessionId) return;
@@ -158,7 +161,7 @@ export function AgentChat({
 
   function startNewChat() {
     const id = crypto.randomUUID();
-    localStorage.setItem(chatSessionKey(agentName), id);
+    localStorage.setItem(chatSessionKey(agentName, practiceContext?.item_id), id);
     setSessionId(id);
     setChatKey((k) => k + 1);
     setHistoryReady(true);

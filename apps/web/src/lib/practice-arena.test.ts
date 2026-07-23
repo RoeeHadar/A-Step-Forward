@@ -107,6 +107,16 @@ describe('practice-arena (ADR-0013)', () => {
     ).toBe('d');
   });
 
+  it('explore picker returns null when every candidate is in the active week', () => {
+    expect(
+      pickExploreFocusConceptId({
+        masteryMap: { a: 0.1 },
+        activeConceptIds: ['a', 'd'],
+        candidateConceptIds: ['a', 'd'],
+      }),
+    ).toBeNull();
+  });
+
   it('parses and formats practice chat context without answer keys', () => {
     const ctx = parsePracticeChatContext({
       session_id: 's1',

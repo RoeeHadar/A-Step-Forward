@@ -77,6 +77,7 @@ import {
   parsePracticeChatContext,
   type PracticeChatContext,
 } from '@/lib/practice-arena';
+import { resolveTrustedPracticeChatContext } from '@/lib/practice-session';
 import {
   appendTutorContractToContext,
   buildTutorInteractionContract,
@@ -211,7 +212,10 @@ export async function POST(req: Request) {
   const quickMode = body.quickMode === true;
   const quickDuration = body.quickDuration ?? '15';
   const sessionId = body.sessionId?.trim() || undefined;
-  const practiceContext = parsePracticeChatContext(body.practiceContext);
+  const clientPractice = parsePracticeChatContext(body.practiceContext);
+  const practiceContext = clientPractice
+    ? await resolveTrustedPracticeChatContext(userId, clientPractice).catch(() => null)
+    : null;
   const topic =
     body.topic?.trim() || practiceContext?.concept_id || undefined;
   const cookieStore = await cookies();
@@ -945,11 +949,20 @@ async function buildContextPrompt(
     }
   }
 
-  if (topic) {
+  if (topic && !practiceContext) {
     context += `\n\n## Active study context`;
     context += `\nThe learner is currently studying concept \`${topic}\` on the lesson page. Ground your answer in this topic when relevant.`;
     const topicConcept = kgByName[topic];
     if (topicConcept) {
+      context += `\n- ${topicConcept.name} (${topicConcept.id})`;
+      if (topicConcept.prerequisites?.length) {
+        context += ` — prerequisites: ${topicConcept.prerequisites.join(', ')}`;
+      }
+    }
+  } else if (topic && practiceContext) {
+    const topicConcept = kgByName[topic];
+    if (topicConcept) {
+      context += `\n\n## Practice concept grounding`;
       context += `\n- ${topicConcept.name} (${topicConcept.id})`;
       if (topicConcept.prerequisites?.length) {
         context += ` — prerequisites: ${topicConcept.prerequisites.join(', ')}`;
