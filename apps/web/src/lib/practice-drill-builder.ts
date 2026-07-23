@@ -77,14 +77,16 @@ Rules:
 
 FORBIDDEN stems (instant reject):
 - "Apply the lesson facets…" / "יישמו את פני השיעור…"
-- "Numeric-first check for this lesson…" / "בדיקה מספרית-תחילה…"
-- "give a short worked example" without a concrete problem
-- Any prompt that refers to "the lesson", "facets", or skill-atom English ids
+- "תרגיל מסלול…" / "Route drill…" / anything referring to "מהשיעור" / "from the lesson"
+- "תארו והציבו…" without a full exam ask (find g(2), interpret vertex, …)
+- "Numeric-first check…" / skill-atom English ids (free_body_diagram, …)
+- Vague dual verbs with no concrete deliverable
 
 Clarity (mandatory):
 - Concrete data IN the stem (specific $f$, numbers, lengths, voltages, etc.)
-- Clear task verb: compute / prove / find all / show that / explain with calculation
-- Multipart OK: (א)/(ב) or (a)/(b)`;
+- Clear task verb: compute / prove / find all / show that / evaluate
+- Multipart OK: (א)/(ב) or (a)/(b)
+- A teacher must understand the ask in one reading`;
 
 
 function newItemId(): string {

@@ -77,6 +77,9 @@ describe('practice-drill-builder validation helpers (v2 open)', () => {
       ),
     ).toBe(true);
     expect(practiceQuestionIdLooksBoilerplate('algebra_basics-facet-auto')).toBe(true);
+    expect(practiceQuestionIdLooksBoilerplate('derivatives_applications-calc-deriv-depth')).toBe(
+      true,
+    );
     expect(
       isPracticeExamWorthyItem({
         stemEn: 'Apply the lesson facets (expression_structure): give a short worked example.',
@@ -89,7 +92,7 @@ describe('practice-drill-builder validation helpers (v2 open)', () => {
     expect(
       isPracticeExamWorthyItem({
         stemEn:
-          'A square of side $a+b$ has area $(a+b)^2$. Expand and explain what $2ab$ means geometrically.',
+          'A square of side $a+b$ has area $(a+b)^2$. Expand the area and explain what $2ab$ means geometrically.',
         stemHe:
           'לריבוע צלע $a+b$ יש שטח $(a+b)^2$. פתחו את השטח והסבירו מה מייצג $2ab$ גאומטרית.',
         explanationEn: 'Expand to $a^2+2ab+b^2$; the middle term is two rectangles.',
@@ -97,6 +100,31 @@ describe('practice-drill-builder validation helpers (v2 open)', () => {
         questionId: 'algebra_basics-q3',
       }),
     ).toBe(true);
+  });
+
+  it('rejects route-drill and incomplete plug-in stems', () => {
+    expect(
+      stemLooksVagueOrMeta(
+        'תרגיל מסלול: ציינו את כלל הגזירה לפריט מהשיעור, חשבו $f′$, ואז סקצו או תארו את $f′$ מהגרף של $f$ בנקודת ציון אחת.',
+      ),
+    ).toBe(true);
+    expect(
+      isPracticeExamWorthyItem({
+        stemEn:
+          'Route drill: name the differentiation rule for an item from the lesson, compute $f$, then sketch $f$ from the graph at one landmark.',
+        stemHe:
+          'תרגיל מסלול: ציינו את כלל הגזירה לפריט מהשיעור, חשבו $f′$, ואז סקצו או תארו את $f′$ מהגרף של $f$ בנקודת ציון אחת.',
+        questionId: 'derivatives_applications-calc-deriv-depth',
+      }),
+    ).toBe(false);
+    expect(stemLooksVagueOrMeta('תארו והציבו $x=2$ ב-$g(x)=-(x-2)^2+5$.')).toBe(true);
+    expect(
+      isPracticeExamWorthyItem({
+        stemEn: 'Describe and plug $x=2$ into $g(x)=-(x-2)^2+5$.',
+        stemHe: 'תארו והציבו $x=2$ ב-$g(x)=-(x-2)^2+5$.',
+        questionId: 'function_transformations__4pt-q3',
+      }),
+    ).toBe(false);
   });
 
   it('hint ladder stays answer-free even with leaky explanations passed through', () => {
