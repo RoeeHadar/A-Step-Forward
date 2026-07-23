@@ -9,6 +9,7 @@ import {
   isPracticeArenaKind,
   practiceItemFingerprint,
   stemLooksLanguageMixed,
+  stemLooksVagueOrMeta,
   type PracticeDifficulty,
   type PracticeItemKind,
   type PracticeItemSealed,
@@ -67,7 +68,13 @@ Rules:
 - Stems should feel like final-test questions (multi-part OK with (א)/(ב) or (a)/(b))
 - Keep stems under 900 chars
 - difficulty must match the requested difficulty
-- Stay on the given concept_id — no topic drift`;
+- Stay on the given concept_id — no topic drift
+
+Clarity (mandatory — a teacher must instantly know what skill is tested):
+- Give a CONCRETE prompt: specific function/numbers/figure data IN the stem (e.g. $f(x)=x^2-4x$, or a table of values). Never say "from the graph/formula if given in the lesson".
+- State the task verb clearly: compute / prove / explain with a numerical example / find all / show that…
+- Do NOT ask vague comparative questions like "how many solutions can f(x)=k have as y=k moves" without defining a concrete $f$ and concrete $k$ values to analyze.
+- Prefer one clear assessment target (e.g. "find intersection multiplicity for this parabola and line") over abstract meta-talk about graphs in general.`
 
 function newItemId(): string {
   return (
@@ -93,6 +100,7 @@ function validateRaw(
   if (stem_en.length < 12 || stem_he.length < 12) return null;
   if (stem_en.length > 1200 || stem_he.length > 1200) return null;
   if (stemLooksLanguageMixed(stem_en) || stemLooksLanguageMixed(stem_he)) return null;
+  if (stemLooksVagueOrMeta(stem_en) || stemLooksVagueOrMeta(stem_he)) return null;
 
   const labels = {
     en: kgById[conceptId]?.name || conceptId,
@@ -221,6 +229,7 @@ export async function buildPracticeDrillItem(
       ? `key_insights: ${JSON.stringify(lessonHints.key_insights.slice(0, 4))}`
       : null,
     `Generate exactly ${count} OPEN exam-style question(s). Prefer kind "open".`,
+    `Each stem must be self-contained with concrete data (no "if given in the lesson").`,
   ]
     .filter(Boolean)
     .join('\n');

@@ -451,3 +451,21 @@ export function stemLooksLanguageMixed(stem: string): boolean {
   const hasEnWord = /[A-Za-z]{3,}/.test(withoutMath);
   return hasHe && hasEnWord;
 }
+
+export function stemLooksVagueOrMeta(stem: string): boolean {
+  const s = stem.replace(/\s+/g, ' ').trim();
+  const lower = s.toLowerCase();
+  const patterns: RegExp[] = [
+    /if (given|provided|shown) in (the )?lesson/i,
+    /from the (graph|formula|lesson)/i,
+    /או מנוסחה מפורשת אם ניתנה/,
+    /אם ניתנ[הה] בשיעור/,
+    /מהגרף של\s*\$?y\s*=\s*f\s*\(\s*x\s*\)/i,
+    /\(או מנוסחה/,
+    /as (the|a) horizontal line .{0,40}moves/i,
+    /כשהישר האופקי .{0,40}זז/,
+    /how many solutions can .{0,80}have/i,
+    /כמה פתרונות יכולה להיות/,
+  ];
+  return patterns.some((re) => re.test(s) || re.test(lower));
+}

@@ -9,6 +9,7 @@ import {
   nextDifficulty,
   practiceItemFingerprint,
   PRACTICE_MAX_GENERATED_PER_SESSION,
+  stemLooksVagueOrMeta,
   type PracticeDifficulty,
   type PracticeItemSealed,
   type PracticeQueueMode,
@@ -163,6 +164,7 @@ async function pickAuthoredItem(opts: {
     if (q.kind === 'mcq' || q.kind === 'true_false') return false;
     if (opts.seenIds.includes(q.id)) return false;
     if (!q.stem_en || !q.stem_he) return false;
+    if (stemLooksVagueOrMeta(q.stem_en) || stemLooksVagueOrMeta(q.stem_he)) return false;
     const fp = practiceItemFingerprint({
       conceptId: opts.conceptId,
       stemEn: q.stem_en,
