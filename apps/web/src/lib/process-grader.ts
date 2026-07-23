@@ -156,7 +156,9 @@ Rules:
 - Language of all string fields: ${locale === 'he' ? 'Hebrew' : 'English'}.
 - Evaluate against the item rubric and model answer below.
 - points_earned is partial credit (0 to points_available). Be strict but fair.
-- Never invent steps the learner did not write.`;
+- Never invent steps the learner did not write.
+- If the stem asks for a single numeric / short final result and the learner's final result MATCHES the model answer (allowing equivalent forms like $13$, 13, or "תשובה: 13"), award at least 70% of points_available even when the write-up is brief. Only withhold that floor when the final result is wrong or missing.`;
+
 
   const user = JSON.stringify({
     item_id: input.item_id,

@@ -3,6 +3,13 @@
  * No Neon — safe for unit tests.
  */
 
+import {
+  answersMatch,
+  getAcceptedAnswers,
+  normalizeAnswerForGrading,
+  numericClose,
+} from '@/lib/answer-normalize';
+
 export const PRACTICE_CLOSED_KINDS = [
   'mcq',
   'true_false',
@@ -82,6 +89,8 @@ export interface PracticeItemSealed {
     correct_bool?: boolean;
     acceptable_answers?: string[];
     case_sensitive?: boolean;
+    /** Seeded numeric keys often live here as `{ value: 13 }`. */
+    value?: number | string;
   } | null;
   /** Rubric / model answer for open grading (sealed until after grade). */
   rubric_en?: string | null;
@@ -200,8 +209,11 @@ export function formatPracticeArenaChatBlock(ctx: PracticeChatContext): string {
     '### THIS TURN — practice help contract',
     '- The learner is mid-arena on the stem above. Help with the 3-step ladder only: concept → strategy → setup scaffold.',
     '- NEVER reveal the final numeric/MCQ/true-false answer or a full worked solution unless graded=true (already submitted/gave up).',
+    '- Even if they paste the stem and ask for the answer, stay on the ladder until graded=true.',
+    '- If they correct your math: acknowledge in clear complete sentences, re-check the arithmetic, and (until graded) still avoid dumping the sealed final answer — guide them to recompute.',
     '- Ask clarifying questions; point back to the stem. Prefer sending them to use the arena Hint button for ladder unlocks.',
     '- Do not invent a replacement exercise; stay on this item.',
+    '- Do NOT paste status-pack closers ("הצעד הבא המומלץ", "Recommended next step") on this turn.',
   ].join('\n');
 }
 
@@ -369,6 +381,61 @@ export const PRACTICE_MAX_GENERATED_PER_SESSION = 8;
 
 /**
  * Grade a sealed practice item server-side (closed kinds only).
+ * Open kinds must use process grading (with optional deterministic numeric boost).
+ */
+export function resolvePracticeNumericExpected(item: PracticeItemSealed): string | null {
+  const fromCorrect = item.correct_answer?.trim();
+  if (fromCorrect) return fromCorrect;
+  const v = item.answer_payload?.value;
+  if (typeof v === 'number' && Number.isFinite(v)) return String(v);
+  if (typeof v === 'string' && v.trim()) return v.trim();
+  return null;
+}
+
+/** Candidate strings from a free-text response that might be the final numeric answer. */
+export function extractNumericAnswerCandidates(response: string): string[] {
+  const raw = response.trim();
+  if (!raw) return [];
+  const out: string[] = [];
+  const push = (s: string | undefined | null) => {
+    const t = (s ?? '').trim();
+    if (t) out.push(t);
+  };
+
+  push(raw);
+  push(normalizeAnswerForGrading(raw));
+
+  for (const m of raw.matchAll(/\$([^$]+)\$/g)) push(m[1]);
+  const labeled = raw.match(
+    /(?:\*\*)?(?:Answer|תשובה|Final|תוצאה)(?:\*\*)?\s*[:：]?\s*([^\n]+)/i,
+  );
+  if (labeled?.[1]) push(labeled[1]);
+
+  // Last arithmetic result: "... = 13" or "... = 13."
+  const eqs = [...raw.matchAll(/=\s*([-+]?\d+(?:[.,]\d+)?(?:\s*\/\s*\d+)?)/g)];
+  if (eqs.length) push(eqs[eqs.length - 1]?.[1]);
+
+  // Standalone numbers (prefer the last)
+  const nums = [...raw.matchAll(/(?:^|[^\d./-])([-+]?\d+(?:[.,]\d+)?)(?![\d./])/g)];
+  if (nums.length) push(nums[nums.length - 1]?.[1]);
+
+  return [...new Set(out.map((s) => s.replace(/,/g, '.').trim()).filter(Boolean))];
+}
+
+export function gradePracticeNumericResponse(
+  response: string,
+  expected: string,
+): boolean {
+  const exp = expected.trim();
+  if (!exp) return false;
+  for (const cand of extractNumericAnswerCandidates(response)) {
+    if (numericClose(cand, exp)) return true;
+  }
+  return false;
+}
+
+/**
+ * Grade a sealed practice item server-side (closed kinds only).
  * Open kinds must use process grading.
  */
 export function gradePracticeItem(
@@ -408,36 +475,33 @@ export function gradePracticeItem(
       return { correct: picked === expected };
     }
     case 'numeric': {
-      if (typeof userAnswer !== 'string' || !item.correct_answer) {
+      if (typeof userAnswer !== 'string') {
         return { correct: false, reason: 'invalid answer' };
       }
-      const a = Number(String(userAnswer).replace(/,/g, '').trim());
-      const b = Number(String(item.correct_answer).replace(/,/g, '').trim());
-      if (!Number.isFinite(a) || !Number.isFinite(b)) {
-        return {
-          correct:
-            String(userAnswer).trim().toLowerCase() ===
-            String(item.correct_answer).trim().toLowerCase(),
-        };
-      }
-      return { correct: Math.abs(a - b) <= Math.max(1e-6, Math.abs(b) * 1e-4) };
+      const expected = resolvePracticeNumericExpected(item);
+      if (!expected) return { correct: false, reason: 'no key' };
+      return {
+        correct: gradePracticeNumericResponse(userAnswer, expected),
+      };
     }
     case 'short_answer':
     case 'fill_blank': {
       if (typeof userAnswer !== 'string') {
         return { correct: false, reason: 'invalid answer' };
       }
-      const accepted = [
-        ...(item.answer_payload?.acceptable_answers ?? []),
-        ...(item.correct_answer ? [item.correct_answer] : []),
-      ]
-        .map((s) => s.trim())
-        .filter(Boolean);
+      const accepted = getAcceptedAnswers(
+        item.answer_payload?.acceptable_answers,
+        item.correct_answer,
+      );
       if (!accepted.length) return { correct: false, reason: 'no key' };
       const cs = item.answer_payload?.case_sensitive ?? false;
-      const norm = (s: string) => (cs ? s.trim() : s.trim().toLowerCase());
-      const u = norm(userAnswer);
-      return { correct: accepted.some((a) => norm(a) === u) };
+      if (answersMatch(userAnswer, accepted, cs)) return { correct: true };
+      // Also accept numeric-equivalent finals when the key is numeric
+      const expected = resolvePracticeNumericExpected(item);
+      if (expected && gradePracticeNumericResponse(userAnswer, expected)) {
+        return { correct: true };
+      }
+      return { correct: false };
     }
     default:
       return { correct: false, reason: 'unsupported kind' };

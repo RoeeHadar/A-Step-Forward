@@ -5,9 +5,12 @@ import { auth } from '@clerk/nextjs/server';
 import { cookies } from 'next/headers';
 import {
   gradePracticeItem,
+  gradePracticeNumericResponse,
   isPracticeOpenKind,
   practiceSuccessFromProcess,
   practiceXpSourceId,
+  resolvePracticeNumericExpected,
+  extractNumericAnswerCandidates,
   type PracticeAttemptLogEntry,
 } from '@/lib/practice-arena';
 import {
@@ -31,6 +34,20 @@ type KgConcept = { id: string; subject: string };
 const kgById = Object.fromEntries(
   (kg.concepts as KgConcept[]).map((c) => [c.id, c]),
 );
+
+/** Pull a likely final numeric key from a model/explanation string. */
+function extractNumericFromModel(model: string | null | undefined): string | null {
+  if (!model?.trim()) return null;
+  const labeled = model.match(
+    /(?:\*\*)?(?:Answer|תשובה)(?:\*\*)?\s*[:：]?\s*\$?([^\n$]+)/i,
+  );
+  if (labeled?.[1]) {
+    const t = labeled[1].replace(/\$/g, '').trim();
+    if (t) return t;
+  }
+  const cands = extractNumericAnswerCandidates(model);
+  return cands[cands.length - 1] ?? null;
+}
 
 export async function POST(req: Request) {
   const { userId } = await auth();
@@ -98,6 +115,15 @@ export async function POST(req: Request) {
     processScore = 0;
   } else if (isPracticeOpenKind(item.kind)) {
     const answerText = typeof body.answer === 'string' ? body.answer : '';
+    // Deterministic floor when the open item has a clear numeric key / model final.
+    const numericKey =
+      resolvePracticeNumericExpected(item) ||
+      extractNumericFromModel(
+        locale === 'he' ? item.model_answer_he || item.explanation_he : item.model_answer_en || item.explanation_en,
+      );
+    const numericHit =
+      numericKey != null && gradePracticeNumericResponse(answerText, numericKey);
+
     processFeedback = await gradeOpenItemProcess({
       item_id: item.id,
       stem: locale === 'he' ? item.stem_he : item.stem_en,
@@ -113,24 +139,55 @@ export async function POST(req: Request) {
     if (processFeedback.status === 'failed') {
       // Soft-fail: still unlock solution so the learner can continue.
       gradingUnavailable = true;
-      processScore = 0;
-      correct = false;
-      processFeedback = {
-        ...processFeedback,
-        status: 'graded',
-        strengths:
-          locale === 'he'
-            ? 'הבדיקה האוטומטית לא הייתה זמינה כרגע.'
-            : 'Automatic grading was temporarily unavailable.',
-        next_fix:
-          locale === 'he'
-            ? 'השוו לפתרון המודל למטה והמשיכו לשאלה הבאה.'
-            : 'Compare with the model solution below, then continue.',
-        process_score: 0,
-        points_earned: 0,
-      };
+      if (numericHit) {
+        processScore = 0.75;
+        correct = true;
+        processFeedback = {
+          ...processFeedback,
+          status: 'graded',
+          strengths:
+            locale === 'he'
+              ? 'התשובה הסופית נכונה (בדיקה דטרמיניסטית). הבדיקה המילולית לא הייתה זמינה.'
+              : 'Final answer matches (deterministic check). Process LLM was unavailable.',
+          process_score: 0.75,
+          points_earned: Math.round(0.75 * (item.points_available ?? 20)),
+        };
+      } else {
+        processScore = 0;
+        correct = false;
+        processFeedback = {
+          ...processFeedback,
+          status: 'graded',
+          strengths:
+            locale === 'he'
+              ? 'הבדיקה האוטומטית לא הייתה זמינה כרגע.'
+              : 'Automatic grading was temporarily unavailable.',
+          next_fix:
+            locale === 'he'
+              ? 'השוו לפתרון המודל למטה והמשיכו לשאלה הבאה.'
+              : 'Compare with the model solution below, then continue.',
+          process_score: 0,
+          points_earned: 0,
+        };
+      }
     } else {
       processScore = processFeedback.process_score;
+      if (numericHit && processScore < 0.75) {
+        processScore = 0.75;
+        processFeedback = {
+          ...processFeedback,
+          process_score: 0.75,
+          points_earned: Math.max(
+            processFeedback.points_earned,
+            Math.round(0.75 * processFeedback.points_available),
+          ),
+          strengths:
+            (processFeedback.strengths ? `${processFeedback.strengths} ` : '') +
+            (locale === 'he'
+              ? '(התשובה הסופית תואמת את המפתח.)'
+              : '(Final answer matches the key.)'),
+        };
+      }
       correct = practiceSuccessFromProcess(processScore);
     }
   } else {
@@ -208,7 +265,7 @@ export async function POST(req: Request) {
     explanation_he: item.explanation_he || item.model_answer_he || '',
     correct_answer:
       item.kind === 'numeric' || item.kind === 'short_answer' || item.kind === 'fill_blank'
-        ? item.correct_answer
+        ? resolvePracticeNumericExpected(item) ?? item.correct_answer
         : undefined,
   };
 
