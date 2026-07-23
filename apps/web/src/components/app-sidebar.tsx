@@ -13,6 +13,7 @@ import {
   FileClock,
   Bell,
   Users,
+  Dumbbell,
 } from 'lucide-react';
 import { cn } from '@asf/ui';
 import { useI18n } from '@/providers/i18n-provider';
@@ -21,6 +22,7 @@ import { agentAccentVars } from '@/lib/design-tokens';
 const items = [
   { href: '/app', icon: LayoutDashboard, labelKey: 'dashboard' as const },
   { href: '/learn', icon: BookOpen, labelKey: 'learn' as const, match: '/learn' },
+  { href: '/app/practice', icon: Dumbbell, labelKey: 'practice' as const, match: '/app/practice' },
   { href: '/app/chat/tutor', icon: MessageSquare, labelKey: 'chat' as const, match: '/app/chat' },
   { href: '/app/quiz', icon: ClipboardCheck, labelKey: 'quiz' as const, match: '/app/quiz' },
   { href: '/app/tests', icon: FileClock, labelKey: 'tests' as const, match: '/app/tests' },

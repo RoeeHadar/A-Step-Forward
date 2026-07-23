@@ -21,6 +21,7 @@ ADRs in PRs.
 | [0010](0010-assessment-driven-progression.md) | Assessment-driven progression & gating | Proposed |
 | [0011](0011-agent-communication-quality.md) | Agent communication quality (grounded, anti-filler) | Accepted |
 | [0012](0012-agent-context-under-pressure.md) | Authoritative context under conversational pressure | Accepted |
+| [0013](0013-intensive-practice-arena.md) | Intensive practice arena (`/app/practice`) | Accepted |
 
 ## Authoring a new ADR
 

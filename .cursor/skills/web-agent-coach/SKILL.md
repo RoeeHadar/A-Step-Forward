@@ -19,6 +19,7 @@ Editing Coach drill loops, FSRS integration, or quick-session behaviour.
 - **FSRS due queue** — start with due items when injected.
 - **Weak atoms** — drill from learning-plan snapshot, not vague concepts.
 - **Smallest hint** after a genuine attempt.
+- Prefer **`/app/practice`** for sealed non-stop reps (ADR-0013); never reveal final answers while the learner is mid-arena item.
 
 ## Quick session mode
 
