@@ -458,7 +458,8 @@ export function stemLooksVagueOrMeta(stem: string): boolean {
   const patterns: RegExp[] = [
     /if (given|provided|shown) in (the )?lesson/i,
     /from the (graph|formula) if /i,
-    /from the lesson/i,
+    /from (this )?the lesson/i,
+    /from (this )?lesson/i,
     /או מנוסחה מפורשת אם ניתנה/,
     /אם ניתנ[הה] בשיעור/,
     /מהגרף של\s*\$?y\s*=\s*f\s*\(\s*x\s*\)/i,
@@ -467,7 +468,7 @@ export function stemLooksVagueOrMeta(stem: string): boolean {
     /כשהישר האופקי .{0,40}זז/,
     /how many solutions can .{0,80}have/i,
     /כמה פתרונות יכולה להיות/,
-    // Lesson "facet / faces" pedagogy prompts — not exam items
+    // Lesson pedagogy / expansion templates — not exam items
     /יישמו את פני השיעור/,
     /apply the lesson facets?/i,
     /תרגול פנים/,
@@ -476,9 +477,27 @@ export function stemLooksVagueOrMeta(stem: string): boolean {
     /give a short worked example/i,
     /תנו דוגמה פתורה קצרה/,
     /core skill from/i,
-    /מיומנות (השיעור|המרכזית של השיעור)/,
+    /מיומנות (השיעור|המרכזית)/,
     /ראו את סעיף הפנים/,
     /see the facets? section/i,
+    /תרגיל מסלול/,
+    /route drill/i,
+    /מהשיעור/,
+    /לשיעור זה/,
+    /פריט מהשיעור/,
+    /פריט (סטנדרטי |מרכזי )?מהשיעור/,
+    /יישמו את הרגל/,
+    /apply the (habit|habits)/i,
+    /תארו והציבו/,
+    /תאר והצב/,
+    /describe and (plug|substitute|evaluate)/i,
+    /סקצו או תארו/,
+    /sketch or describe/i,
+    /בנקודת ציון/,
+    /landmark point/i,
+    /שרשרת הצדקה/,
+    /תרגיל פרמטר:\s*הכניסו פרמטר/,
+    /\b[a-z]{3,}(?:_[a-z0-9]+){1,}\b/, // skill-atom / habit ids like free_body_diagram
   ];
   return patterns.some((re) => re.test(s) || re.test(lower));
 }
@@ -486,7 +505,19 @@ export function stemLooksVagueOrMeta(stem: string): boolean {
 /** Auto-authored filler ids from lesson expansion (not bagrut/uni exam items). */
 export function practiceQuestionIdLooksBoilerplate(questionId: string | null | undefined): boolean {
   if (!questionId) return false;
-  return /-(facet-auto|facet|algebra-depth|depth-auto|numeric-first)(-|$)/i.test(questionId);
+  return /-(facet-auto|facet|algebra-depth|depth-auto|numeric-first|moe-remainder|[a-z0-9-]*depth)(-|$)/i.test(
+    questionId,
+  );
+}
+
+/** Exam stems must ask a clear computable/provable task — not “describe and plug”. */
+export function stemHasClearExamTask(stem: string): boolean {
+  const s = stem.replace(/\s+/g, ' ').trim();
+  if (s.length < 24) return false;
+  // Clear bagrut/uni task verbs (HE + EN)
+  return /(מצא[ווי]?|חשב[ווי]?|הוכ[חי]|הראה[ווי]?|הצג[ווי]?|פתחו|פתרו|פתור|פתח|כמה|מהו|מהי|מהם|למה|הסבירו|הסבר|find|compute|calculate|evaluate|prove|show that|\bshow\b|solve|determine|obtain|derive|simplify|expand|factor)/i.test(
+    s,
+  );
 }
 
 /**
@@ -503,17 +534,20 @@ export function isPracticeExamWorthyItem(opts: {
   if (practiceQuestionIdLooksBoilerplate(opts.questionId)) return false;
   const stemEn = opts.stemEn.trim();
   const stemHe = opts.stemHe.trim();
-  if (stemEn.length < 16 || stemHe.length < 16) return false;
+  if (stemEn.length < 24 || stemHe.length < 24) return false;
   if (stemLooksLanguageMixed(stemEn) || stemLooksLanguageMixed(stemHe)) return false;
   if (stemLooksVagueOrMeta(stemEn) || stemLooksVagueOrMeta(stemHe)) return false;
+  if (!stemHasClearExamTask(stemHe) && !stemHasClearExamTask(stemEn)) return false;
   const explEn = (opts.explanationEn ?? '').trim();
   const explHe = (opts.explanationHe ?? '').trim();
   if (explEn && stemLooksVagueOrMeta(explEn)) return false;
   if (explHe && stemLooksVagueOrMeta(explHe)) return false;
-  // Prefer concrete data: math delimiters or a clearly numeric task of reasonable length
+  // Require concrete math (or a long clearly numeric word problem)
   const heHasMath = /\$/.test(stemHe);
   const enHasMath = /\$/.test(stemEn);
-  if (!heHasMath && !enHasMath && stemHe.length < 70 && stemEn.length < 70) return false;
+  if (!heHasMath && !enHasMath) return false;
+  // Reject ultra-short "plug in" shells even if they contain $
+  if (stemHe.length < 40 && /הצב|הציבו|plug|substitute/i.test(stemHe + stemEn)) return false;
   return true;
 }
 
@@ -526,5 +560,7 @@ export function practiceExamWorthinessScore(stem: string, kind: string): number 
   if (kind === 'open' || kind === 'derivation') score += 2;
   if (kind === 'numeric' || kind === 'short_answer') score += 1;
   if (/\(א\)|\(ב\)|\(a\)|\(b\)/i.test(stem)) score += 1;
+  if (stemHasClearExamTask(stem)) score += 2;
+  if (/תרגיל מסלול|מהשיעור|תארו והציבו/i.test(stem)) score -= 10;
   return score;
 }
