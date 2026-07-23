@@ -6,9 +6,11 @@ import {
   buildHintLadder,
   isPracticeClosedKind,
   nextDifficulty,
+  pickExploreFocusConceptId,
   PRACTICE_MAX_GENERATED_PER_SESSION,
   type PracticeDifficulty,
   type PracticeItemSealed,
+  type PracticeQueueMode,
 } from '@/lib/practice-arena';
 import { pickPressureNextStep } from '@/lib/pressure-next-step';
 import {
@@ -94,7 +96,7 @@ function authoredToSealed(
 export async function pickPracticeFocusConcept(opts: {
   learnerId: string;
   conceptFilter?: string | null;
-  queueMode?: 'default' | 'due';
+  queueMode?: PracticeQueueMode;
 }): Promise<string | null> {
   if (opts.conceptFilter && kgById[opts.conceptFilter]) {
     return opts.conceptFilter;
@@ -115,6 +117,36 @@ export async function pickPracticeFocusConcept(opts: {
   const masteryMap = mastery as Record<string, number>;
   const activeWeek =
     plan?.weeks.find((w) => w.status === 'active') ?? plan?.weeks[0];
+  const activeIds = (activeWeek?.concepts ?? []).map((c) => c.concept_id);
+  const subjects = profile?.subjects ?? [];
+  const subjectCandidates = (kg.concepts as KgConcept[])
+    .filter((c) => subjects.length === 0 || subjects.includes(c.subject))
+    .map((c) => c.id);
+
+  if (opts.queueMode === 'explore') {
+    const allIds = (kg.concepts as KgConcept[]).map((c) => c.id);
+    const explorePick =
+      pickExploreFocusConceptId({
+        masteryMap,
+        activeConceptIds: activeIds,
+        candidateConceptIds:
+          subjectCandidates.length > 0 ? subjectCandidates : allIds,
+      }) ??
+      pickExploreFocusConceptId({
+        masteryMap,
+        activeConceptIds: activeIds,
+        candidateConceptIds: allIds,
+      }) ??
+      allIds.find((id) => !activeIds.includes(id)) ??
+      null;
+    if (explorePick) return explorePick;
+    // Active week covers the whole KG — still honor explore intent (weakest overall).
+    const weakExplore = Object.entries(masteryMap)
+      .filter(([, s]) => typeof s === 'number')
+      .sort((a, b) => a[1] - b[1])[0];
+    if (weakExplore) return weakExplore[0];
+    return allIds[0] ?? null;
+  }
 
   if (activeWeek?.concepts?.length) {
     const pick = pickPressureNextStep({
@@ -134,11 +166,11 @@ export async function pickPracticeFocusConcept(opts: {
     .sort((a, b) => a[1] - b[1])[0];
   if (weak) return weak[0];
 
-  const subjects = profile?.subjects ?? [];
-  const roots = (kg.concepts as KgConcept[]).filter(
-    (c) => subjects.length === 0 || subjects.includes(c.subject),
+  return (
+    subjectCandidates[0] ??
+    (kg.concepts as KgConcept[])[0]?.id ??
+    null
   );
-  return roots[0]?.id ?? (kg.concepts as KgConcept[])[0]?.id ?? null;
 }
 
 async function pickAuthoredItem(opts: {
@@ -180,7 +212,7 @@ async function pickGeneratedItem(opts: {
 export async function advancePracticeItem(opts: {
   learnerId: string;
   conceptFilter?: string | null;
-  queueMode?: 'default' | 'due';
+  queueMode?: PracticeQueueMode;
   seenIds: string[];
   recentCorrect: boolean[];
   generatedCount: number;

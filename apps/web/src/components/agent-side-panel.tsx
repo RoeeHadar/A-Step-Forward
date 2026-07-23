@@ -15,6 +15,7 @@ import {
   type WebLiveAgent,
 } from '@/lib/web-agents';
 import { resolveConceptTitles } from '@/lib/concept-display-names';
+import type { PracticeChatContext } from '@/lib/practice-arena';
 
 export interface AgentSidePanelProps {
   /** Primary concept id passed to chat context. */
@@ -22,6 +23,8 @@ export interface AgentSidePanelProps {
   topicLabel?: string;
   defaultAgent?: WebLiveAgent;
   fabLabel?: { he: string; en: string };
+  /** When set (practice arena), binds Coach to the current sealed item. */
+  practiceContext?: PracticeChatContext | null;
 }
 
 export function AgentSidePanel({
@@ -29,38 +32,57 @@ export function AgentSidePanel({
   topicLabel,
   defaultAgent = 'tutor',
   fabLabel,
+  practiceContext = null,
 }: AgentSidePanelProps) {
   const [open, setOpen] = useState(false);
   const [lang] = useLanguagePreference('he');
   const isHe = lang === 'he';
   const lastAgent = useChatUiStore((s) => s.lastAgent);
   const setLastAgent = useChatUiStore((s) => s.setLastAgent);
+  const effectiveDefault = practiceContext ? 'coach' : defaultAgent;
   const [agent, setAgent] = useState<WebLiveAgent>(() =>
     resolveWebChatAgent(
-      WEB_LIVE_AGENTS.includes(lastAgent as WebLiveAgent) ? lastAgent : defaultAgent,
+      WEB_LIVE_AGENTS.includes(lastAgent as WebLiveAgent)
+        ? lastAgent
+        : effectiveDefault,
     ),
   );
 
   useEffect(() => {
+    if (practiceContext) {
+      setAgent('coach');
+      return;
+    }
     const resolved = resolveWebChatAgent(
-      WEB_LIVE_AGENTS.includes(lastAgent as WebLiveAgent) ? lastAgent : defaultAgent,
+      WEB_LIVE_AGENTS.includes(lastAgent as WebLiveAgent)
+        ? lastAgent
+        : effectiveDefault,
     );
     setAgent(resolved);
-  }, [lastAgent, defaultAgent]);
+  }, [lastAgent, effectiveDefault, practiceContext]);
+
+  const studyTopic = practiceContext?.concept_id ?? topic;
 
   const resolvedTopicLabel =
     topicLabel ??
-    (topic
+    (studyTopic
       ? (isHe
-          ? (resolveConceptTitles(topic).title_he ?? resolveConceptTitles(topic).title_en)
-          : resolveConceptTitles(topic).title_en)
+          ? (resolveConceptTitles(studyTopic).title_he ??
+            resolveConceptTitles(studyTopic).title_en)
+          : resolveConceptTitles(studyTopic).title_en)
       : isHe
         ? 'למידה'
         : 'Learning');
 
   const fabText =
     fabLabel?.[isHe ? 'he' : 'en'] ??
-    (isHe ? 'שאל את הסוכן' : 'Ask an agent');
+    (practiceContext
+      ? isHe
+        ? 'עזרה ממאמן'
+        : 'Ask Coach'
+      : isHe
+        ? 'שאל את הסוכן'
+        : 'Ask an agent');
 
   function selectAgent(next: WebLiveAgent) {
     setAgent(next);
@@ -141,9 +163,10 @@ export function AgentSidePanel({
           </header>
           <div className="flex min-h-0 flex-1 flex-col overflow-hidden p-3">
             <AgentChat
-              key={agent}
+              key={`${agent}-${practiceContext?.item_id ?? 'none'}`}
               agent={agent}
-              topic={topic}
+              topic={studyTopic}
+              practiceContext={practiceContext}
               compact
               showHistory={false}
             />

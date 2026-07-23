@@ -11,7 +11,7 @@ export default async function PracticeRedirect({
   if (typeof sp.concept === 'string' && sp.concept.trim()) {
     params.set('concept', sp.concept.trim());
   }
-  if (sp.mode === 'due') params.set('mode', 'due');
+  if (sp.mode === 'due' || sp.mode === 'explore') params.set('mode', sp.mode);
   const q = params.toString();
   redirect(`/app/practice${q ? `?${q}` : ''}`);
 }

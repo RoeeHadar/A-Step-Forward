@@ -15,6 +15,31 @@ export type PracticeClosedKind = (typeof PRACTICE_CLOSED_KINDS)[number];
 
 export type PracticeDifficulty = 'easy' | 'medium' | 'hard';
 
+export type PracticeQueueMode = 'default' | 'due' | 'explore';
+
+export function parsePracticeQueueMode(v: unknown): PracticeQueueMode {
+  if (v === 'due' || v === 'explore') return v;
+  return 'default';
+}
+
+/** Pure explore picker: weakest mastery outside the active week, else any candidate outside. */
+export function pickExploreFocusConceptId(opts: {
+  masteryMap: Record<string, number>;
+  activeConceptIds: string[];
+  candidateConceptIds: string[];
+}): string | null {
+  const active = new Set(opts.activeConceptIds);
+  const candidates = new Set(opts.candidateConceptIds);
+  const weakOutside = Object.entries(opts.masteryMap)
+    .filter(
+      ([id, s]) =>
+        typeof s === 'number' && !active.has(id) && candidates.has(id),
+    )
+    .sort((a, b) => a[1] - b[1]);
+  if (weakOutside[0]) return weakOutside[0][0];
+  return opts.candidateConceptIds.find((id) => !active.has(id)) ?? null;
+}
+
 export interface PracticeHintStep {
   en: string;
   he: string;
@@ -74,8 +99,61 @@ export interface PracticeSessionPublic {
   item: PracticeItemPublic | null;
   /** True after submit/give-up until the client advances via /next. */
   item_graded: boolean;
-  queue_mode?: 'default' | 'due';
+  queue_mode?: PracticeQueueMode;
   status: 'active' | 'ended';
+}
+
+/** Sent from /app/practice Coach panel → /api/chat (ADR-0013). */
+export interface PracticeChatContext {
+  session_id: string;
+  item_id: string;
+  concept_id: string;
+  kind: string;
+  difficulty: string;
+  hint_step: number;
+  stem_en: string;
+  stem_he: string;
+  item_graded: boolean;
+}
+
+export function parsePracticeChatContext(raw: unknown): PracticeChatContext | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const o = raw as Record<string, unknown>;
+  const session_id = typeof o.session_id === 'string' ? o.session_id.trim() : '';
+  const item_id = typeof o.item_id === 'string' ? o.item_id.trim() : '';
+  const concept_id = typeof o.concept_id === 'string' ? o.concept_id.trim() : '';
+  const stem_en = typeof o.stem_en === 'string' ? o.stem_en : '';
+  const stem_he = typeof o.stem_he === 'string' ? o.stem_he : '';
+  if (!session_id || !item_id || !concept_id || (!stem_en && !stem_he)) return null;
+  return {
+    session_id,
+    item_id,
+    concept_id,
+    kind: typeof o.kind === 'string' ? o.kind : 'unknown',
+    difficulty: typeof o.difficulty === 'string' ? o.difficulty : 'medium',
+    hint_step:
+      typeof o.hint_step === 'number' && Number.isFinite(o.hint_step)
+        ? Math.max(0, Math.min(3, Math.floor(o.hint_step)))
+        : 0,
+    stem_en,
+    stem_he,
+    item_graded: o.item_graded === true,
+  };
+}
+
+export function formatPracticeArenaChatBlock(ctx: PracticeChatContext): string {
+  return [
+    '## PRACTICE ARENA context (ADR-0013 — mandatory)',
+    `session_id=${ctx.session_id}; item_id=${ctx.item_id}; concept=${ctx.concept_id}; kind=${ctx.kind}; difficulty=${ctx.difficulty}; hint_step=${ctx.hint_step}; graded=${ctx.item_graded}`,
+    `Stem (EN): ${ctx.stem_en.slice(0, 400)}`,
+    `Stem (HE): ${ctx.stem_he.slice(0, 400)}`,
+    '',
+    '### THIS TURN — practice help contract',
+    '- The learner is mid-arena on the stem above. Help with the 3-step ladder only: concept → strategy → setup scaffold.',
+    '- NEVER reveal the final numeric/MCQ/true-false answer or a full worked solution unless graded=true (already submitted/gave up).',
+    '- Ask clarifying questions; point back to the stem. Prefer sending them to use the arena Hint button for ladder unlocks.',
+    '- Do not invent a replacement exercise; stay on this item.',
+  ].join('\n');
 }
 
 export function isPracticeClosedKind(kind: string): kind is PracticeClosedKind {

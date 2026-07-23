@@ -3,6 +3,7 @@
  */
 import { auth } from '@clerk/nextjs/server';
 import { advancePracticeItem } from '@/lib/practice-queue';
+import { parsePracticeQueueMode } from '@/lib/practice-arena';
 import {
   createPracticeSession,
   toPracticeSessionPublic,
@@ -31,7 +32,7 @@ export async function POST(req: Request) {
     typeof body.goal_items === 'number' ? body.goal_items : undefined;
   const goalMinutes =
     typeof body.goal_minutes === 'number' ? body.goal_minutes : undefined;
-  const queueMode = body.mode === 'due' ? 'due' : 'default';
+  const queueMode = parsePracticeQueueMode(body.mode);
 
   const session = await createPracticeSession({
     learnerId: userId,

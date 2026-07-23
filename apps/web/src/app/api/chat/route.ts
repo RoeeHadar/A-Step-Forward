@@ -73,6 +73,12 @@ import {
 } from '@/lib/learner-progress-briefing';
 import { pickPressureNextStep } from '@/lib/pressure-next-step';
 import {
+  formatPracticeArenaChatBlock,
+  parsePracticeChatContext,
+  type PracticeChatContext,
+} from '@/lib/practice-arena';
+import { resolveTrustedPracticeChatContext } from '@/lib/practice-session';
+import {
   appendTutorContractToContext,
   buildTutorInteractionContract,
   classifyTutorChatIntent,
@@ -191,6 +197,7 @@ export async function POST(req: Request) {
     quickDuration?: string;
     sessionId?: string;
     topic?: string;
+    practiceContext?: unknown;
   };
   try {
     body = (await req.json()) as typeof body;
@@ -205,7 +212,12 @@ export async function POST(req: Request) {
   const quickMode = body.quickMode === true;
   const quickDuration = body.quickDuration ?? '15';
   const sessionId = body.sessionId?.trim() || undefined;
-  const topic = body.topic?.trim() || undefined;
+  const clientPractice = parsePracticeChatContext(body.practiceContext);
+  const practiceContext = clientPractice
+    ? await resolveTrustedPracticeChatContext(userId, clientPractice).catch(() => null)
+    : null;
+  const topic =
+    body.topic?.trim() || practiceContext?.concept_id || undefined;
   const cookieStore = await cookies();
   const locale = resolveLocale(cookieStore.get(LOCALE_COOKIE)?.value);
 
@@ -284,6 +296,7 @@ export async function POST(req: Request) {
         topic,
         locale,
         sessionId,
+        practiceContext,
       });
     }
     return gen;
@@ -563,6 +576,7 @@ async function* streamAgentResponse(
     topic?: string;
     locale?: 'he' | 'en';
     sessionId?: string;
+    practiceContext?: PracticeChatContext | null;
   } = {},
 ): AsyncGenerator<string> {
   const locale = opts.locale ?? 'he';
@@ -651,9 +665,17 @@ async function buildContextPrompt(
     topic?: string;
     sessionId?: string;
     minimal?: boolean;
+    practiceContext?: PracticeChatContext | null;
   } = {},
 ): Promise<{ system: string; memory: Array<{ role: 'user' | 'assistant'; content: string }> }> {
-  const { quickMode = false, quickDuration = '15', topic, sessionId, minimal = false } = opts;
+  const {
+    quickMode = false,
+    quickDuration = '15',
+    topic,
+    sessionId,
+    minimal = false,
+    practiceContext = null,
+  } = opts;
   // Each helper catches its own errors so a single DB issue cannot break chat.
   const [profile, mastery, recent, persona, agentNotes, cookieStore] = await Promise.all([
     getLearnerProfile(userId).catch(() => null),
@@ -927,7 +949,7 @@ async function buildContextPrompt(
     }
   }
 
-  if (topic) {
+  if (topic && !practiceContext) {
     context += `\n\n## Active study context`;
     context += `\nThe learner is currently studying concept \`${topic}\` on the lesson page. Ground your answer in this topic when relevant.`;
     const topicConcept = kgByName[topic];
@@ -937,6 +959,19 @@ async function buildContextPrompt(
         context += ` — prerequisites: ${topicConcept.prerequisites.join(', ')}`;
       }
     }
+  } else if (topic && practiceContext) {
+    const topicConcept = kgByName[topic];
+    if (topicConcept) {
+      context += `\n\n## Practice concept grounding`;
+      context += `\n- ${topicConcept.name} (${topicConcept.id})`;
+      if (topicConcept.prerequisites?.length) {
+        context += ` — prerequisites: ${topicConcept.prerequisites.join(', ')}`;
+      }
+    }
+  }
+
+  if (practiceContext) {
+    context += `\n\n${formatPracticeArenaChatBlock(practiceContext)}`;
   }
 
   const searchMessage = topic && !message.trim() ? topic.replace(/_/g, ' ') : message;
@@ -1285,6 +1320,7 @@ async function* streamFromLLM(
     quickDuration?: string;
     topic?: string;
     sessionId?: string;
+    practiceContext?: PracticeChatContext | null;
   } = {},
 ): AsyncGenerator<string, LLMFailureInfo | undefined> {
   const cfg = getLLMConfig();

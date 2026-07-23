@@ -14,8 +14,8 @@ Learners currently get exercises mainly inside lessons and as timed custom quizz
 ### Product
 
 1. First-class surface **`/app/practice`** (also `/practice` → redirect): one item at a time, infinite queue feel, soft session goals (~10 items / ~15 min).
-2. **Coach** owns the arena voice; optional scoped Coach chat with a hard no-answer contract. Tutor stays for theory/lessons.
-3. Queue is **server-owned**: weak atoms under active plan week → planner/weak concepts → difficulty from recent success; optional concept narrow. Bootstrap from onboarding subjects/goal if no plan.
+2. **Coach** owns the arena voice; in-panel Coach on `/app/practice` is bound to the current sealed item with a hard no-answer contract (until submit/give-up). Tutor stays for theory/lessons.
+3. Queue is **server-owned**: weak atoms under active plan week → planner/weak concepts → difficulty from recent success; optional concept narrow. Explicit opt-in modes: `?mode=due` (FSRS due) and `?mode=explore` (outside active week). Bootstrap from onboarding subjects/goal if no plan.
 4. **Corpus-first** authored closed questions; **LLM ephemeral fill** when the bank is thin (same seal pattern as custom quiz).
 5. **Hint ladder** (3 steps: concept → strategy → scaffold). Full solution only after submit or give-up.
 6. Wave 1 is **closed-first** (mcq, true/false, numeric, short_answer / fill_blank). Mastery + light XP via existing helpers.
@@ -23,7 +23,7 @@ Learners currently get exercises mainly inside lessons and as timed custom quizz
 
 ### Wave 1 out of scope
 
-Explore-outside-plan default, open-heavy Reviewer grading, separate points currency, FSRS-due-only as the only mode, social streaks.
+Explore as the *default* queue (opt-in only), open-heavy Reviewer grading, separate points currency, FSRS-due-only as the only mode, social streaks.
 
 ## Consequences
 
