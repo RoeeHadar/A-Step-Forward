@@ -5,6 +5,16 @@
 
 export type BusyInterval = { start: string; end: string }; // ISO UTC
 
+/** Pure helper for Google Calendar push webhook auth (unit-tested). */
+export function googleWebhookTokenAllowed(
+  expected: string | undefined | null,
+  channelToken: string,
+): boolean {
+  const exp = expected?.trim();
+  if (!exp) return true;
+  return Boolean(channelToken) && channelToken === exp;
+}
+
 export function intervalsOverlap(
   aStartMs: number,
   aEndMs: number,

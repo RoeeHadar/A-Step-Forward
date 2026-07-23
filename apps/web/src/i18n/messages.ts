@@ -384,6 +384,8 @@ const messages = {
         not_found: 'This booking link was not found.',
         insert_failed: 'Could not save the request. Please try again.',
         slot_busy: 'That time overlaps a confirmed booking. Please choose another slot.',
+        calendar_unavailable:
+          'Calendar sync is temporarily unavailable. Please try again in a few minutes.',
       },
     },
   },
@@ -763,6 +765,7 @@ const messages = {
         not_found: 'קישור הבקשה לא נמצא.',
         insert_failed: 'לא הצלחנו לשמור את הבקשה. נסו שוב.',
         slot_busy: 'הזמן חופף לשיעור מאושר. בחרו מועד אחר.',
+        calendar_unavailable: 'סנכרון היומן אינו זמין כרגע. נסו שוב בעוד כמה דקות.',
       },
     },
   },

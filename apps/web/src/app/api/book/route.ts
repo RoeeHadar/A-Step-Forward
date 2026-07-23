@@ -74,8 +74,11 @@ export async function POST(req: Request) {
     normalized.value.preferredStart,
     normalized.value.preferredEnd,
   );
-  if (!slot.free && slot.reason === 'busy') {
-    return Response.json({ error: 'slot_busy' }, { status: 409 });
+  if (!slot.free) {
+    if (slot.reason === 'busy') {
+      return Response.json({ error: 'slot_busy' }, { status: 409 });
+    }
+    return Response.json({ error: 'calendar_unavailable' }, { status: 503 });
   }
 
   try {

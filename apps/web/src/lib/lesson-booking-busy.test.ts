@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   busyInRange,
+  googleWebhookTokenAllowed,
   intervalsOverlap,
   mergeBusyIntervals,
   overlapsAnyBusy,
@@ -63,5 +64,18 @@ describe('busyInRange', () => {
       new Date('2026-07-25T23:59:59.000Z'),
     );
     expect(out).toHaveLength(1);
+  });
+});
+
+describe('googleWebhookTokenAllowed', () => {
+  it('allows all requests when no expected token is configured', () => {
+    expect(googleWebhookTokenAllowed(undefined, '')).toBe(true);
+    expect(googleWebhookTokenAllowed('', 'anything')).toBe(true);
+  });
+
+  it('requires a matching token when configured', () => {
+    expect(googleWebhookTokenAllowed('secret', '')).toBe(false);
+    expect(googleWebhookTokenAllowed('secret', 'wrong')).toBe(false);
+    expect(googleWebhookTokenAllowed('secret', 'secret')).toBe(true);
   });
 });

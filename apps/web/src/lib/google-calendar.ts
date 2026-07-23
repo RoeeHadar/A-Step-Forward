@@ -5,7 +5,9 @@
 import 'server-only';
 import { randomUUID } from 'node:crypto';
 import { logger } from '@/lib/logger';
+import { LESSON_MAX_AHEAD_MS } from '@/lib/lesson-booking';
 import {
+  busyInRange,
   mergeBusyIntervals,
   overlapsAnyBusy,
   type BusyInterval,
@@ -169,22 +171,29 @@ export async function fetchGoogleFreeBusy(input: {
 /**
  * Near–real-time busy windows: use DB cache if fresh, else FreeBusy + cache.
  * Webhook invalidation clears freshness so the next read hits Google.
+ *
+ * Only persists cache when the requested window is the full booking horizon
+ * (or `persistCache: true` with a wide span) so narrow slot checks cannot
+ * shrink the public 8-week busy cache.
  */
 export async function getBusyIntervals(input: {
   timeMin: Date;
   timeMax: Date;
   forceRefresh?: boolean;
+  /** When false, never write the FreeBusy result to the DB cache. */
+  persistCache?: boolean;
 }): Promise<{ busy: BusyInterval[]; source: 'cache' | 'google' | 'empty'; syncedAt: string | null }> {
   const settings = await getLessonBookingSettings();
   const now = Date.now();
   const cacheAge = settings?.busyCacheUpdatedAt
     ? now - Date.parse(settings.busyCacheUpdatedAt)
     : Number.POSITIVE_INFINITY;
-  const cacheCovers =
+  const cacheCovers = Boolean(
     settings?.busyCacheFrom &&
-    settings?.busyCacheTo &&
-    Date.parse(settings.busyCacheFrom) <= input.timeMin.getTime() &&
-    Date.parse(settings.busyCacheTo) >= input.timeMax.getTime();
+      settings?.busyCacheTo &&
+      Date.parse(settings.busyCacheFrom) <= input.timeMin.getTime() &&
+      Date.parse(settings.busyCacheTo) >= input.timeMax.getTime(),
+  );
 
   if (
     !input.forceRefresh &&
@@ -193,7 +202,7 @@ export async function getBusyIntervals(input: {
     settings?.busyCache
   ) {
     return {
-      busy: settings.busyCache,
+      busy: busyInRange(settings.busyCache, input.timeMin, input.timeMax),
       source: 'cache',
       syncedAt: settings.busyCacheUpdatedAt,
     };
@@ -204,10 +213,10 @@ export async function getBusyIntervals(input: {
     timeMax: input.timeMax,
   });
   if (fromGoogle == null) {
-    // Degraded: serve stale cache if any
-    if (settings?.busyCache?.length) {
+    // Degraded: only reuse stale cache when it covers the requested window.
+    if (cacheCovers && settings?.busyCache) {
       return {
-        busy: settings.busyCache,
+        busy: busyInRange(settings.busyCache, input.timeMin, input.timeMax),
         source: 'cache',
         syncedAt: settings.busyCacheUpdatedAt,
       };
@@ -215,11 +224,17 @@ export async function getBusyIntervals(input: {
     return { busy: [], source: 'empty', syncedAt: null };
   }
 
-  await saveBusyCache({
-    busy: fromGoogle,
-    from: input.timeMin,
-    to: input.timeMax,
-  });
+  const spanMs = input.timeMax.getTime() - input.timeMin.getTime();
+  const wideEnoughToPersist = spanMs >= LESSON_MAX_AHEAD_MS * 0.9;
+  const shouldPersist = input.persistCache !== false && wideEnoughToPersist;
+  if (shouldPersist) {
+    await saveBusyCache({
+      busy: fromGoogle,
+      from: input.timeMin,
+      to: input.timeMax,
+    });
+  }
+
   return {
     busy: fromGoogle,
     source: 'google',
@@ -227,21 +242,31 @@ export async function getBusyIntervals(input: {
   };
 }
 
+/**
+ * Hard conflict check against Google busy.
+ * Always refreshes the full 8-week horizon (and persists it) so we never
+ * replace the public cache with a few-hour slice.
+ */
 export async function assertSlotFreeOnGoogle(
   start: Date,
   end: Date,
 ): Promise<{ free: true } | { free: false; reason: 'busy' | 'calendar_unavailable' }> {
-  const padMin = new Date(start.getTime() - 60_000);
-  const padMax = new Date(end.getTime() + 60_000);
-  const { busy, source } = await getBusyIntervals({
-    timeMin: padMin,
-    timeMax: padMax,
-    forceRefresh: true,
-  });
-  if (source === 'empty' && !(await getGoogleRefreshToken())) {
-    // No calendar connected — do not block booking requests in PR2 UI path;
-    // hard-block on *accept* (PR3) should require calendar.
+  const hasToken = Boolean(await getGoogleRefreshToken());
+  if (!hasToken) {
+    // No calendar connected — allow requests; hard-block on accept (PR3) when writing events.
     return { free: true };
+  }
+
+  const now = Date.now();
+  const { busy, source } = await getBusyIntervals({
+    timeMin: new Date(now),
+    timeMax: new Date(now + LESSON_MAX_AHEAD_MS),
+    forceRefresh: true,
+    persistCache: true,
+  });
+
+  if (source === 'empty') {
+    return { free: false, reason: 'calendar_unavailable' };
   }
   if (overlapsAnyBusy(start, end, busy)) {
     return { free: false, reason: 'busy' };
