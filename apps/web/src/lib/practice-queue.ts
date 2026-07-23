@@ -95,6 +95,7 @@ function authoredToSealed(
           acceptable_answers: (payload as { acceptable_answers?: string[] })
             .acceptable_answers,
           case_sensitive: (payload as { case_sensitive?: boolean }).case_sensitive,
+          value: (payload as { value?: number | string }).value,
         }
       : null,
     explanation_en: q.explanation_en || '',

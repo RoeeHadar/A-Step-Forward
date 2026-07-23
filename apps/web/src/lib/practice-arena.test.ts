@@ -62,6 +62,31 @@ describe('practice-arena (ADR-0013)', () => {
     expect(gradePracticeItem(sample, 1).correct).toBe(false);
   });
 
+  it('grades numeric range answers including worked text and LaTeX', () => {
+    const numeric: PracticeItemSealed = {
+      ...sample,
+      id: 'range-1',
+      kind: 'numeric',
+      correct_index: null,
+      options_en: null,
+      options_he: null,
+      correct_answer: '13',
+      answer_payload: { value: 13 },
+      stem_en: 'Find the range of $4, 9, 2, 15, 6$.',
+      stem_he: 'מצאו את הטווח של $4, 9, 2, 15, 6$.',
+    };
+    expect(gradePracticeItem(numeric, '13').correct).toBe(true);
+    expect(gradePracticeItem(numeric, '$13$').correct).toBe(true);
+    expect(gradePracticeItem(numeric, 'טווח = מקסימום − מינימום. $15-2$.\n\n**תשובה:** $13$.').correct).toBe(
+      true,
+    );
+    expect(gradePracticeItem(numeric, '15-2=13').correct).toBe(true);
+    expect(gradePracticeItem(numeric, '12').correct).toBe(false);
+    // key only in payload.value
+    const payloadOnly = { ...numeric, correct_answer: null };
+    expect(gradePracticeItem(payloadOnly, '13').correct).toBe(true);
+  });
+
   it('hint ladder never uses explanation text that contains the answer', () => {
     const leaky = buildHintLadder({
       conceptLabelEn: 'Integrals',
@@ -139,6 +164,7 @@ describe('practice-arena (ADR-0013)', () => {
     expect(block).toContain('PRACTICE ARENA');
     expect(block).toContain('graded=false');
     expect(block).toContain('NEVER reveal');
+    expect(block).toContain('הצעד הבא המומלץ');
     expect(block).not.toContain('correct_index');
     expect(parsePracticeChatContext({ session_id: 'x' })).toBeNull();
   });
