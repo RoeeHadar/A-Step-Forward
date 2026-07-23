@@ -457,7 +457,8 @@ export function stemLooksVagueOrMeta(stem: string): boolean {
   const lower = s.toLowerCase();
   const patterns: RegExp[] = [
     /if (given|provided|shown) in (the )?lesson/i,
-    /from the (graph|formula|lesson)/i,
+    /from the (graph|formula) if /i,
+    /from the lesson/i,
     /או מנוסחה מפורשת אם ניתנה/,
     /אם ניתנ[הה] בשיעור/,
     /מהגרף של\s*\$?y\s*=\s*f\s*\(\s*x\s*\)/i,
@@ -466,6 +467,64 @@ export function stemLooksVagueOrMeta(stem: string): boolean {
     /כשהישר האופקי .{0,40}זז/,
     /how many solutions can .{0,80}have/i,
     /כמה פתרונות יכולה להיות/,
+    // Lesson "facet / faces" pedagogy prompts — not exam items
+    /יישמו את פני השיעור/,
+    /apply the lesson facets?/i,
+    /תרגול פנים/,
+    /בדיקה מספרית-תחילה/,
+    /numeric-first check/i,
+    /give a short worked example/i,
+    /תנו דוגמה פתורה קצרה/,
+    /core skill from/i,
+    /מיומנות (השיעור|המרכזית של השיעור)/,
+    /ראו את סעיף הפנים/,
+    /see the facets? section/i,
   ];
   return patterns.some((re) => re.test(s) || re.test(lower));
+}
+
+/** Auto-authored filler ids from lesson expansion (not bagrut/uni exam items). */
+export function practiceQuestionIdLooksBoilerplate(questionId: string | null | undefined): boolean {
+  if (!questionId) return false;
+  return /-(facet-auto|facet|algebra-depth|depth-auto|numeric-first)(-|$)/i.test(questionId);
+}
+
+/**
+ * True when stem (+ optional explanation / id) is suitable for the practice arena:
+ * concrete exam-style prompt, not lesson-meta pedagogy.
+ */
+export function isPracticeExamWorthyItem(opts: {
+  stemEn: string;
+  stemHe: string;
+  explanationEn?: string | null;
+  explanationHe?: string | null;
+  questionId?: string | null;
+}): boolean {
+  if (practiceQuestionIdLooksBoilerplate(opts.questionId)) return false;
+  const stemEn = opts.stemEn.trim();
+  const stemHe = opts.stemHe.trim();
+  if (stemEn.length < 16 || stemHe.length < 16) return false;
+  if (stemLooksLanguageMixed(stemEn) || stemLooksLanguageMixed(stemHe)) return false;
+  if (stemLooksVagueOrMeta(stemEn) || stemLooksVagueOrMeta(stemHe)) return false;
+  const explEn = (opts.explanationEn ?? '').trim();
+  const explHe = (opts.explanationHe ?? '').trim();
+  if (explEn && stemLooksVagueOrMeta(explEn)) return false;
+  if (explHe && stemLooksVagueOrMeta(explHe)) return false;
+  // Prefer concrete data: math delimiters or a clearly numeric task of reasonable length
+  const heHasMath = /\$/.test(stemHe);
+  const enHasMath = /\$/.test(stemEn);
+  if (!heHasMath && !enHasMath && stemHe.length < 70 && stemEn.length < 70) return false;
+  return true;
+}
+
+/** Rank authored candidates — higher = more exam-like. */
+export function practiceExamWorthinessScore(stem: string, kind: string): number {
+  let score = 0;
+  if (/\$/.test(stem)) score += 4;
+  if (stem.length >= 80) score += 2;
+  if (stem.length >= 140) score += 1;
+  if (kind === 'open' || kind === 'derivation') score += 2;
+  if (kind === 'numeric' || kind === 'short_answer') score += 1;
+  if (/\(א\)|\(ב\)|\(a\)|\(b\)/i.test(stem)) score += 1;
+  return score;
 }

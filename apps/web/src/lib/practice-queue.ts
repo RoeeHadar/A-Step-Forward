@@ -5,8 +5,10 @@ import 'server-only';
 import {
   buildHintLadder,
   isPracticeArenaKind,
+  isPracticeExamWorthyItem,
   isPracticeOpenKind,
   nextDifficulty,
+  practiceExamWorthinessScore,
   practiceItemFingerprint,
   PRACTICE_MAX_GENERATED_PER_SESSION,
   stemLooksVagueOrMeta,
@@ -26,6 +28,7 @@ import {
   isPracticeFingerprintSeen,
   listPracticeFingerprintsSeen,
 } from '@/lib/practice-session';
+import { listRecentTestSourceQuestionIds } from '@/lib/practice-test-overlap';
 import kg from '@/lib/kg-data.json';
 
 type KgConcept = {
@@ -155,15 +158,28 @@ async function pickAuthoredItem(opts: {
   seenIds: string[];
   seenFingerprints: Set<string>;
   difficulty: PracticeDifficulty;
+  recentTestQuestionIds: Set<string>;
 }): Promise<PracticeItemSealed | null> {
   const lesson = await fetchLessonByConceptId(opts.conceptId).catch(() => null);
   if (!lesson?.questions?.length) return null;
 
-  const closed = lesson.questions.filter((q) => {
+  const candidates = lesson.questions.filter((q) => {
     if (!isPracticeArenaKind(q.kind)) return false;
     if (q.kind === 'mcq' || q.kind === 'true_false') return false;
     if (opts.seenIds.includes(q.id)) return false;
+    if (opts.recentTestQuestionIds.has(q.id)) return false;
     if (!q.stem_en || !q.stem_he) return false;
+    if (
+      !isPracticeExamWorthyItem({
+        stemEn: q.stem_en,
+        stemHe: q.stem_he,
+        explanationEn: q.explanation_en,
+        explanationHe: q.explanation_he,
+        questionId: q.id,
+      })
+    ) {
+      return false;
+    }
     if (stemLooksVagueOrMeta(q.stem_en) || stemLooksVagueOrMeta(q.stem_he)) return false;
     const fp = practiceItemFingerprint({
       conceptId: opts.conceptId,
@@ -174,15 +190,23 @@ async function pickAuthoredItem(opts: {
     if (opts.seenFingerprints.has(fp)) return false;
     return true;
   });
-  if (!closed.length) return null;
+  if (!candidates.length) return null;
 
-  const preferOpen = closed.filter((q) => q.kind === 'open');
-  const preferDiff = (preferOpen.length ? preferOpen : closed).filter(
-    (q) => q.difficulty === opts.difficulty,
-  );
-  const pool = preferDiff.length ? preferDiff : preferOpen.length ? preferOpen : closed;
-  const q = pool[Math.floor(Math.random() * pool.length)]!;
-  return authoredToSealed(q, opts.conceptId, lesson.lesson.id);
+  const scored = candidates
+    .map((q) => ({
+      q,
+      score:
+        practiceExamWorthinessScore(q.stem_he || q.stem_en, q.kind) +
+        (q.difficulty === opts.difficulty ? 2 : 0),
+    }))
+    .sort((a, b) => b.score - a.score);
+
+  const topScore = scored[0]!.score;
+  const elite = scored.filter((s) => s.score >= topScore - 2);
+  const preferOpen = elite.filter((s) => s.q.kind === 'open' || s.q.kind === 'derivation');
+  const pool = preferOpen.length ? preferOpen : elite;
+  const pick = pool[Math.floor(Math.random() * pool.length)]!.q;
+  return authoredToSealed(pick, opts.conceptId, lesson.lesson.id);
 }
 
 async function pickGeneratedItem(opts: {
@@ -224,6 +248,7 @@ export async function advancePracticeItem(opts: {
   | null
 > {
   const seenFingerprints = await listPracticeFingerprintsSeen(opts.learnerId);
+  const recentTestQuestionIds = await listRecentTestSourceQuestionIds(opts.learnerId);
   const focusConceptId = await pickPracticeFocusConcept({
     learnerId: opts.learnerId,
     conceptFilter: opts.conceptFilter,
@@ -250,6 +275,7 @@ export async function advancePracticeItem(opts: {
       seenIds: opts.seenIds,
       seenFingerprints,
       difficulty,
+      recentTestQuestionIds,
     });
     if (authored) return { item: authored, focusConceptId: conceptId };
 

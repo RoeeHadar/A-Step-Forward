@@ -485,6 +485,11 @@ export function PracticeArenaClient({
               : 'Soft goal: ~10 items · up to 12 topics · finish anytime'}
           </p>
           <p className="text-xs text-muted-foreground">
+            {he
+              ? 'השאלות לקוחות מבנק בסגנון בגרות/אוניברסיטה (אותו אקוסיסטם כמו מבחנים). אין כפילויות מדויקות מול תרגולים קודמים ומול מבחנים שכבר עשיתם — חפיפה קלה בנושא (עם מספרים אחרים) אפשרית.'
+              : 'Items come from the bagrut/uni-style bank (same ecosystem as tests). Exact duplicates vs prior practice and recent tests are avoided; light topical overlap with different numbers is OK.'}
+          </p>
+          <p className="text-xs text-muted-foreground">
             <Link href="/app/practice/history" className="underline-offset-2 hover:underline">
               {he ? 'היסטוריית תרגולים' : 'Practice history'}
             </Link>

@@ -17,7 +17,7 @@ Learners need a **continuous practice arena** distinct from lessons and timed mo
 2. **Topic multi-select** from a curated bilingual full-catalog topic list (not limited to the active plan). Remember last selection. Topics locked for the session.
 3. **Open-first** (≥~90%): `open` / constructed response; rare closed only when exam-faithful. Typed answers + side KaTeX cheat sheet. Bilingual stems by UI locale; no language mix; math integrity gates.
 4. **Exam register** from learner goal (bagrut/uni); difficulty adapts from recent process success (≥~0.6) and light mastery.
-5. **No recycle** permanently per learner (authored `question_id` + generated stem fingerprint). Authored-first + gated LLM fill + promote path; honest thin-topic UI — never recycle, never junk MCQ filler.
+5. **No recycle** permanently per learner (authored `question_id` + generated stem fingerprint). Authored-first from the **exam-worthy** lesson/test bank (skip pedagogical “lesson facets” fillers) + gated LLM fill; soft skip of `source_question_id`s seen in recent `test_attempts`. Honest thin-topic UI — never recycle, never junk MCQ filler. Practice and timed tests share the same corpus ecosystem; exact duplicates across them are avoided, with a small allowed thematic overlap (different numbers).
 6. **Hints + Coach**: 3-step ladder + in-panel Coach no-answer until graded.
 7. **Grading**: process/rubric for open (partial credit); mastery + XP on success.
 8. **Review**: finished sessions persisted; learner history + linked teacher (test-attempts RBAC pattern).
