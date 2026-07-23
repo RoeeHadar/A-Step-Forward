@@ -4,6 +4,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   buildBilingualProgressBriefing,
+  buildLearnerFacingStatusPack,
+  formatLearnerFacingStatusHe,
   formatProgressBriefingEn,
   formatProgressBriefingHe,
 } from './learner-progress-briefing';
@@ -29,6 +31,9 @@ const SAMPLE = {
   paceStatus: 'on_track' as const,
   recentGateSummaryHe: 'שער שבוע 1 עבר (~94%)',
   recentGateSummaryEn: 'Week 1 gate passed (~94%)',
+  nextStepHe: 'מבוא לאינטגרציה',
+  nextStepEn: 'Integration intro',
+  nextStepConceptId: 'integration_intro',
 };
 
 describe('learner-progress-briefing', () => {
@@ -55,5 +60,21 @@ describe('learner-progress-briefing', () => {
     expect(en).toContain('building');
     expect(en).toContain('level 10');
     expect(en).toContain('Week 1 gate passed');
+  });
+
+  it('ADR-0012 learner-facing pack is prose, not a field dump', () => {
+    const pack = buildLearnerFacingStatusPack({
+      ...SAMPLE,
+      paceStatus: 'at_risk',
+    });
+    expect(pack).toContain('AUTHORITATIVE learner-facing status pack');
+    expect(pack).toContain('מבוא לאינטגרציה');
+    expect(pack).toContain('Integration intro');
+    expect(pack).toContain('concept:integration_intro');
+    expect(pack).toMatch(/מסלול|5 יח|track/i);
+    expect(pack).not.toContain('bagrut_math_5');
+    expect(pack).not.toContain('עדיין לא סומנו');
+    expect(pack).toContain('סיכון לפיגור');
+    expect(formatLearnerFacingStatusHe(SAMPLE)).toContain('אל תגיד שאינך יודע');
   });
 });
