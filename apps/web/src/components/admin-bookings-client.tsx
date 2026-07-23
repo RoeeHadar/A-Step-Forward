@@ -7,9 +7,27 @@ import { Input } from '@asf/ui/input';
 import { Label } from '@asf/ui/label';
 import { Textarea } from '@asf/ui/textarea';
 
+type AdminBooking = {
+  token: string;
+  status: string;
+  learnerName: string;
+  requesterName: string;
+  requesterEmail: string;
+  requesterPhone: string;
+  modality: string;
+  durationH: number;
+  priceIls: number;
+  preferredStart: string;
+  preferredEnd: string;
+  goalText: string;
+  createdAt: string;
+};
+
 type SettingsPayload = {
   oauthConfigured: boolean;
   secretsKeyConfigured: boolean;
+  resendConfigured?: boolean;
+  notifyEmail?: string;
   connectUrl: string;
   settings: {
     calendarId: string;
@@ -22,6 +40,7 @@ type SettingsPayload = {
     busyCacheUpdatedAt: string | null;
   } | null;
   busyPreview: { count: number; syncedAt: string | null; source: string } | null;
+  bookings?: AdminBooking[];
 };
 
 export function AdminBookingsClient({ gcalQuery }: { gcalQuery: string | null }) {
@@ -141,6 +160,56 @@ export function AdminBookingsClient({ gcalQuery }: { gcalQuery: string | null })
           {error}
         </p>
       ) : null}
+
+      <section className="space-y-3 rounded-2xl border border-border bg-surface-1 p-6">
+        <h2 className="font-display text-lg font-semibold">Incoming requests</h2>
+        <p className="text-sm text-muted-foreground">
+          Email notify:{' '}
+          {data?.resendConfigured
+            ? `Resend configured → ${data.notifyEmail ?? '—'}`
+            : 'RESEND_API_KEY missing — emails will not send until you add it in Vercel'}
+        </p>
+        {!data?.bookings?.length ? (
+          <p className="text-sm text-muted-foreground">No booking requests yet.</p>
+        ) : (
+          <ul className="space-y-3">
+            {data.bookings.map((b) => (
+              <li
+                key={b.token}
+                className="rounded-xl border border-border bg-surface-2 px-4 py-3 text-sm"
+              >
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <span className="font-medium">
+                    {b.learnerName} · {b.status}
+                  </span>
+                  <span className="text-muted-foreground">
+                    {new Date(b.createdAt).toLocaleString('he-IL', { timeZone: 'Asia/Jerusalem' })}
+                  </span>
+                </div>
+                <p className="mt-1 text-muted-foreground">
+                  {b.requesterName} &lt;{b.requesterEmail}&gt; · {b.requesterPhone}
+                </p>
+                <p className="mt-1">
+                  {b.modality === 'haifa' ? 'Haifa' : 'Online'} · {b.durationH}h · ₪{b.priceIls}
+                </p>
+                <p className="mt-1 text-muted-foreground">
+                  Preferred:{' '}
+                  {new Date(b.preferredStart).toLocaleString('he-IL', {
+                    timeZone: 'Asia/Jerusalem',
+                  })}
+                </p>
+                {b.goalText ? <p className="mt-1">Goal: {b.goalText}</p> : null}
+                <Link
+                  href={`/book/r/${b.token}`}
+                  className="mt-2 inline-flex text-primary underline-offset-4 hover:underline"
+                >
+                  Open status page
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       <section className="space-y-3 rounded-2xl border border-border bg-surface-1 p-6">
         <h2 className="font-display text-lg font-semibold">Google Calendar</h2>

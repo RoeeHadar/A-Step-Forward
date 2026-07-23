@@ -164,7 +164,7 @@ export function normalizeCreateLessonBooking(
   if (requesterName.length < 2) return { ok: false, error: 'name_required' };
   if (!EMAIL_RE.test(requesterEmail)) return { ok: false, error: 'email_invalid' };
   if (requesterPhone.length < 7) return { ok: false, error: 'phone_required' };
-  if (goalText.length < 3) return { ok: false, error: 'goal_required' };
+  // goalText is optional
 
   if (!LESSON_MODALITIES.includes(raw.modality)) return { ok: false, error: 'modality_invalid' };
   if (!isLessonDuration(raw.durationH)) return { ok: false, error: 'duration_invalid' };
