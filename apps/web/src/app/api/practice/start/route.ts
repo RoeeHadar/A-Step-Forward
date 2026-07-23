@@ -31,12 +31,14 @@ export async function POST(req: Request) {
     typeof body.goal_items === 'number' ? body.goal_items : undefined;
   const goalMinutes =
     typeof body.goal_minutes === 'number' ? body.goal_minutes : undefined;
+  const queueMode = body.mode === 'due' ? 'due' : 'default';
 
   const session = await createPracticeSession({
     learnerId: userId,
     conceptFilter,
     goalItems,
     goalMinutes,
+    queueMode,
   });
   if (!session) {
     return Response.json({ error: 'session_create_failed' }, { status: 503 });
@@ -45,6 +47,7 @@ export async function POST(req: Request) {
   const advanced = await advancePracticeItem({
     learnerId: userId,
     conceptFilter: session.concept_filter,
+    queueMode: session.queue_mode,
     seenIds: session.seen_ids,
     recentCorrect: session.recent_correct,
     generatedCount: session.generated_count,

@@ -25,8 +25,10 @@ interface FeedbackPayload {
 
 export function PracticeArenaClient({
   initialConceptId = null,
+  initialMode = 'default',
 }: {
   initialConceptId?: string | null;
+  initialMode?: 'default' | 'due';
 }) {
   const [lang] = useLanguagePreference();
   const he = lang === 'he';
@@ -61,6 +63,7 @@ export function PracticeArenaClient({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           concept_id: initialConceptId || undefined,
+          mode: initialMode === 'due' ? 'due' : undefined,
           goal_items: 10,
           goal_minutes: 15,
         }),
@@ -87,7 +90,7 @@ export function PracticeArenaClient({
     } finally {
       setBusy(false);
     }
-  }, [he, initialConceptId]);
+  }, [he, initialConceptId, initialMode]);
 
   const requestHint = useCallback(async () => {
     if (!session || busy) return;
@@ -203,6 +206,11 @@ export function PracticeArenaClient({
           {he
             ? 'שאלה אחת בכל פעם, לפי מה שאתה צריך. רמזים בלי לחשוף את התשובה.'
             : 'One question at a time, matched to what you need. Hints never reveal the answer.'}
+          {initialMode === 'due'
+            ? he
+              ? ' מצב חזרה: עדיפות לפריטים שמגיע זמנם.'
+              : ' Due mode: prioritizing items that are due for review.'
+            : null}
         </p>
       </header>
 

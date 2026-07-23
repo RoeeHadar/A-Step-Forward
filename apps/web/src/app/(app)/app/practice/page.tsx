@@ -10,13 +10,14 @@ export const dynamic = 'force-dynamic';
 export default async function PracticePage({
   searchParams,
 }: {
-  searchParams: Promise<{ concept?: string }>;
+  searchParams: Promise<{ concept?: string; mode?: string }>;
 }) {
   const ctx = await getAuthContext();
   if (!ctx) redirect('/sign-in');
   const sp = await searchParams;
   const concept =
     typeof sp.concept === 'string' && sp.concept.trim() ? sp.concept.trim() : null;
+  const mode = sp.mode === 'due' ? 'due' : 'default';
 
-  return <PracticeArenaClient initialConceptId={concept} />;
+  return <PracticeArenaClient initialConceptId={concept} initialMode={mode} />;
 }
