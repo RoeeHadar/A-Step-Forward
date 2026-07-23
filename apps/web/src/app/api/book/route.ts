@@ -10,6 +10,7 @@ import {
   toPublicBookingView,
 } from '@/lib/lesson-bookings-db';
 import { assertSlotFreeOnGoogle } from '@/lib/google-calendar';
+import { sendBookingRequestNotifyEmail } from '@/lib/booking-email';
 import { checkSocialRateLimit } from '@/lib/social-rate-limit';
 import { logger } from '@/lib/logger';
 
@@ -89,10 +90,18 @@ export async function POST(req: Request) {
     if (!row) {
       return Response.json({ error: 'insert_failed' }, { status: 500 });
     }
+
+    // Notify Roee (best-effort — never fail the learner response if email is down).
+    const notify = await sendBookingRequestNotifyEmail(row);
+    if (!notify.ok) {
+      logger.warn('[api/book] admin notify skipped/failed', { error: notify.error });
+    }
+
     return Response.json({
       ok: true,
       booking: toPublicBookingView(row),
       statusUrl: `/book/r/${row.public_token}`,
+      notified: notify.ok,
     });
   } catch (err) {
     logger.error('[api/book] POST failed', { err: String(err) });

@@ -255,3 +255,23 @@ export async function listLessonBookingsForUser(
     return [];
   }
 }
+
+/** Admin queue: newest first. */
+export async function listLessonBookingsAdmin(limit = 50): Promise<LessonBookingRow[]> {
+  if (!sql) return [];
+  const ok = await ensureLessonBookingsTable();
+  if (!ok) return [];
+  const capped = Math.min(Math.max(limit, 1), 100);
+  try {
+    const rows = await sql`
+      SELECT * FROM lesson_bookings
+      ORDER BY created_at DESC
+      LIMIT ${capped}
+    `;
+    if (!Array.isArray(rows)) return [];
+    return rows.map((r) => mapRow(r as Record<string, unknown>));
+  } catch (err) {
+    logger.error('[lesson-bookings-db] listAdmin failed', { err: String(err) });
+    return [];
+  }
+}

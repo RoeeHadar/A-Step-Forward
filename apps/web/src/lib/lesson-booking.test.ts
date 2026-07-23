@@ -68,6 +68,13 @@ describe('normalizeCreateLessonBooking', () => {
     preferredTime: '17:00',
   };
 
+  it('allows empty goal text', () => {
+    const r = normalizeCreateLessonBooking({ ...base, goalText: '' }, now);
+    expect(r.ok).toBe(true);
+    if (!r.ok) return;
+    expect(r.value.goalText).toBe('');
+  });
+
   it('requires university fields when level is university', () => {
     const r = normalizeCreateLessonBooking({ ...base, level: 'university' }, now);
     expect(r.ok).toBe(false);

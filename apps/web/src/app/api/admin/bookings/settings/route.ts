@@ -12,7 +12,9 @@ import {
   getLessonBookingSettings,
   updateBookingContactSecrets,
 } from '@/lib/lesson-booking-settings-db';
+import { listLessonBookingsAdmin, toPublicBookingView } from '@/lib/lesson-bookings-db';
 import { bookingSecretsConfigured } from '@/lib/booking-secrets-crypto';
+import { bookingNotifyEmail, resendConfigured } from '@/lib/booking-email';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -43,9 +45,13 @@ export async function GET() {
     busyPreview = { count: r.busy.length, syncedAt: r.syncedAt, source: r.source };
   }
 
+  const bookings = await listLessonBookingsAdmin(40);
+
   return Response.json({
     oauthConfigured: googleCalendarOAuthConfigured(),
     secretsKeyConfigured: bookingSecretsConfigured(),
+    resendConfigured: resendConfigured(),
+    notifyEmail: bookingNotifyEmail(),
     settings: settings
       ? {
           calendarId: settings.calendarId,
@@ -59,6 +65,13 @@ export async function GET() {
         }
       : null,
     busyPreview,
+    bookings: bookings.map((b) => ({
+      ...toPublicBookingView(b),
+      requesterEmail: b.requester_email,
+      requesterPhone: b.requester_phone,
+      goalText: b.goal_text,
+      notes: b.notes,
+    })),
     connectUrl: '/api/book/gcal/oauth/start',
   });
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@clerk/nextjs';
 import { Button } from '@asf/ui/button';
@@ -79,8 +79,14 @@ export function BookLessonClient() {
   const [statusUrl, setStatusUrl] = useState<string | null>(null);
   const [busy, setBusy] = useState<BusyInterval[]>([]);
   const [busySyncedAt, setBusySyncedAt] = useState<string | null>(null);
+  const successRef = useRef<HTMLDivElement | null>(null);
 
   const totalIls = useMemo(() => priceIlsForDuration(form.durationH), [form.durationH]);
+
+  useEffect(() => {
+    if (!statusUrl) return;
+    successRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, [statusUrl]);
 
   useEffect(() => {
     let cancelled = false;
@@ -219,17 +225,36 @@ export function BookLessonClient() {
 
       {statusUrl ? (
         <div
-          className="rounded-2xl border border-primary/30 bg-primary/10 p-6 text-sm"
+          ref={successRef}
+          id="book-request-success"
+          className="rounded-2xl border border-primary/40 bg-primary/15 p-6 text-sm shadow-sm"
           role="status"
+          aria-live="polite"
         >
-          <p className="font-medium text-foreground">{t.successTitle}</p>
+          <p className="font-display text-lg font-semibold text-foreground">{t.successTitle}</p>
           <p className="mt-2 text-muted-foreground">{t.successBody}</p>
-          <Link href={statusUrl} className="mt-4 inline-flex text-primary underline-offset-4 hover:underline">
-            {t.viewStatus}
-          </Link>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link
+              href={statusUrl}
+              className="inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+            >
+              {t.viewStatus}
+            </Link>
+            <button
+              type="button"
+              className="text-sm text-primary underline-offset-4 hover:underline"
+              onClick={() => {
+                setStatusUrl(null);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            >
+              {t.sendAnother}
+            </button>
+          </div>
         </div>
       ) : null}
 
+      {!statusUrl ? (
       <form onSubmit={onSubmit} className="space-y-8 rounded-2xl border border-border bg-surface-1 p-6 md:p-8">
         <h2 className="font-display text-xl font-semibold">{t.formTitle}</h2>
         <p className="text-sm text-muted-foreground">{t.calendarNote}</p>
@@ -379,10 +404,9 @@ export function BookLessonClient() {
           </div>
         ) : null}
 
-        <Field label={t.goal} htmlFor="book-goal">
+        <Field label={t.goalOptional} htmlFor="book-goal">
           <Textarea
             id="book-goal"
-            required
             rows={3}
             value={form.goalText}
             onChange={(e) => setForm((f) => ({ ...f, goalText: e.target.value }))}
@@ -483,10 +507,14 @@ export function BookLessonClient() {
           </p>
         ) : null}
 
-        <Button type="submit" disabled={submitting || slotConflict} className="w-full sm:w-auto">
-          {submitting ? t.submitting : t.submit}
-        </Button>
+        <div className="space-y-3 border-t border-border pt-6">
+          <Button type="submit" disabled={submitting || slotConflict} className="w-full sm:w-auto">
+            {submitting ? t.submitting : t.submit}
+          </Button>
+          <p className="text-xs text-muted-foreground">{t.submitHint}</p>
+        </div>
       </form>
+      ) : null}
 
       {isSignedIn ? <MyBookings /> : null}
     </div>
