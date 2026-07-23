@@ -14,7 +14,7 @@ import {
 } from '@/lib/lesson-booking-settings-db';
 import { listLessonBookingsAdmin, toPublicBookingView } from '@/lib/lesson-bookings-db';
 import { bookingSecretsConfigured } from '@/lib/booking-secrets-crypto';
-import { bookingNotifyEmail, resendConfigured } from '@/lib/booking-email';
+import { bookingNotifyEmail, bookingFromAddress, resendConfigured, sendBookingTestEmail, usesResendTestFrom } from '@/lib/booking-email';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -52,6 +52,8 @@ export async function GET() {
     secretsKeyConfigured: bookingSecretsConfigured(),
     resendConfigured: resendConfigured(),
     notifyEmail: bookingNotifyEmail(),
+    fromAddress: bookingFromAddress(),
+    usesTestFrom: usesResendTestFrom(),
     settings: settings
       ? {
           calendarId: settings.calendarId,
@@ -85,6 +87,30 @@ export async function PUT(req: Request) {
     body = (await req.json()) as Record<string, unknown>;
   } catch {
     return Response.json({ error: 'invalid_json' }, { status: 400 });
+  }
+
+  if (body.action === 'test_email') {
+    const result = await sendBookingTestEmail();
+    if (!result.ok) {
+      return Response.json(
+        {
+          ok: false,
+          error: result.error,
+          detail: result.detail ?? null,
+          status: result.status ?? null,
+          notifyEmail: bookingNotifyEmail(),
+          fromAddress: bookingFromAddress(),
+          usesTestFrom: usesResendTestFrom(),
+        },
+        { status: 502 },
+      );
+    }
+    return Response.json({
+      ok: true,
+      id: result.id ?? null,
+      notifyEmail: bookingNotifyEmail(),
+      fromAddress: bookingFromAddress(),
+    });
   }
 
   if (body.action === 'renew_watch') {

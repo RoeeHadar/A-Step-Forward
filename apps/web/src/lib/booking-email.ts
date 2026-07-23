@@ -13,8 +13,16 @@ export function bookingNotifyEmail(): string {
   );
 }
 
+export function bookingFromAddress(): string {
+  return process.env.RESEND_FROM?.trim() || 'A Step Forward <onboarding@resend.dev>';
+}
+
 export function resendConfigured(): boolean {
   return Boolean(process.env.RESEND_API_KEY?.trim());
+}
+
+export function usesResendTestFrom(): boolean {
+  return /@resend\.dev>?$/i.test(bookingFromAddress()) || /onboarding@resend\.dev/i.test(bookingFromAddress());
 }
 
 function appOrigin(): string {
@@ -36,17 +44,75 @@ function formatJerusalem(iso: string): string {
   }
 }
 
-export async function sendBookingRequestNotifyEmail(
-  row: LessonBookingRow,
-): Promise<{ ok: true } | { ok: false; error: string }> {
+export type BookingEmailResult =
+  | { ok: true; id?: string }
+  | { ok: false; error: string; detail?: string; status?: number };
+
+async function sendResendEmail(input: {
+  to: string;
+  subject: string;
+  html: string;
+}): Promise<BookingEmailResult> {
   const apiKey = process.env.RESEND_API_KEY?.trim();
   if (!apiKey) {
     logger.warn('[booking-email] RESEND_API_KEY missing — skipping notify');
     return { ok: false, error: 'resend_not_configured' };
   }
 
-  const from =
-    process.env.RESEND_FROM?.trim() || 'A Step Forward <onboarding@resend.dev>';
+  const from = bookingFromAddress();
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from,
+        to: [input.to],
+        subject: input.subject,
+        html: input.html,
+      }),
+    });
+    const text = await res.text().catch(() => '');
+    let parsed: { id?: string; message?: string; name?: string } = {};
+    try {
+      parsed = text ? (JSON.parse(text) as typeof parsed) : {};
+    } catch {
+      parsed = {};
+    }
+
+    if (!res.ok) {
+      const detail =
+        parsed.message ||
+        parsed.name ||
+        text.slice(0, 500) ||
+        `HTTP ${res.status}`;
+      logger.error('[booking-email] Resend failed', {
+        status: res.status,
+        detail,
+        from,
+        to: input.to,
+        testFrom: usesResendTestFrom(),
+      });
+      return {
+        ok: false,
+        error: 'send_failed',
+        detail,
+        status: res.status,
+      };
+    }
+
+    return { ok: true, id: parsed.id };
+  } catch (err) {
+    logger.error('[booking-email] send threw', { err: String(err) });
+    return { ok: false, error: 'send_failed', detail: String(err) };
+  }
+}
+
+export async function sendBookingRequestNotifyEmail(
+  row: LessonBookingRow,
+): Promise<BookingEmailResult> {
   const to = bookingNotifyEmail();
   const origin = appOrigin();
   const adminUrl = `${origin}/admin/bookings`;
@@ -81,33 +147,35 @@ export async function sendBookingRequestNotifyEmail(
     </div>
   `.trim();
 
-  try {
-    const res = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from,
-        to: [to],
-        subject,
-        html,
-      }),
-    });
-    if (!res.ok) {
-      const text = await res.text().catch(() => '');
-      logger.error('[booking-email] Resend failed', {
-        status: res.status,
-        text: text.slice(0, 400),
-      });
-      return { ok: false, error: 'send_failed' };
-    }
-    return { ok: true };
-  } catch (err) {
-    logger.error('[booking-email] send threw', { err: String(err) });
-    return { ok: false, error: 'send_failed' };
-  }
+  return sendResendEmail({ to, subject, html });
+}
+
+/** Admin sanity-check: send a short test message to BOOKING_NOTIFY_EMAIL. */
+export async function sendBookingTestEmail(): Promise<BookingEmailResult> {
+  const to = bookingNotifyEmail();
+  const from = bookingFromAddress();
+  const html = `
+    <div style="font-family:system-ui,sans-serif;line-height:1.5">
+      <p>Book-a-Lesson email test from A Step Forward.</p>
+      <p><strong>From:</strong> ${escapeHtml(from)}</p>
+      <p><strong>To:</strong> ${escapeHtml(to)}</p>
+      <p><strong>Time:</strong> ${escapeHtml(new Date().toISOString())}</p>
+      ${
+        usesResendTestFrom()
+          ? `<p style="color:#a30">Note: you are still using Resend's test sender (<code>onboarding@resend.dev</code>).
+             It can only deliver to the email address on your Resend account.
+             To notify ${escapeHtml(to)} reliably, verify your own domain in Resend and set
+             <code>RESEND_FROM</code> to an address on that domain.</p>`
+          : ''
+      }
+    </div>
+  `.trim();
+
+  return sendResendEmail({
+    to,
+    subject: 'A Step Forward — booking email test',
+    html,
+  });
 }
 
 function escapeHtml(s: string): string {

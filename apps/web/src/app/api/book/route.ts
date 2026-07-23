@@ -94,7 +94,11 @@ export async function POST(req: Request) {
     // Notify Roee (best-effort — never fail the learner response if email is down).
     const notify = await sendBookingRequestNotifyEmail(row);
     if (!notify.ok) {
-      logger.warn('[api/book] admin notify skipped/failed', { error: notify.error });
+      logger.warn('[api/book] admin notify skipped/failed', {
+        error: notify.error,
+        detail: notify.detail,
+        status: notify.status,
+      });
     }
 
     return Response.json({
@@ -102,6 +106,7 @@ export async function POST(req: Request) {
       booking: toPublicBookingView(row),
       statusUrl: `/book/r/${row.public_token}`,
       notified: notify.ok,
+      notifyError: notify.ok ? null : notify.detail || notify.error,
     });
   } catch (err) {
     logger.error('[api/book] POST failed', { err: String(err) });

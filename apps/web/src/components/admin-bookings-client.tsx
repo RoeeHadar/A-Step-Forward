@@ -28,6 +28,8 @@ type SettingsPayload = {
   secretsKeyConfigured: boolean;
   resendConfigured?: boolean;
   notifyEmail?: string;
+  fromAddress?: string;
+  usesTestFrom?: boolean;
   connectUrl: string;
   settings: {
     calendarId: string;
@@ -123,7 +125,7 @@ export function AdminBookingsClient({ gcalQuery }: { gcalQuery: string | null })
     }
   }
 
-  async function action(actionName: 'renew_watch' | 'refresh_busy') {
+  async function action(actionName: 'renew_watch' | 'refresh_busy' | 'test_email') {
     setSaving(true);
     setMessage(null);
     try {
@@ -132,16 +134,37 @@ export function AdminBookingsClient({ gcalQuery }: { gcalQuery: string | null })
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: actionName }),
       });
-      const json = (await res.json()) as { error?: string; busyCount?: number };
+      const json = (await res.json()) as {
+        error?: string;
+        detail?: string | null;
+        busyCount?: number;
+        notifyEmail?: string;
+        fromAddress?: string;
+        usesTestFrom?: boolean;
+        id?: string | null;
+      };
       if (!res.ok) {
-        setMessage(json.error ?? 'Action failed');
+        setMessage(
+          [
+            json.error ?? 'Action failed',
+            json.detail ? `— ${json.detail}` : '',
+            json.fromAddress ? `(from ${json.fromAddress}` : '',
+            json.notifyEmail ? ` → ${json.notifyEmail})` : json.fromAddress ? ')' : '',
+          ]
+            .filter(Boolean)
+            .join(' '),
+        );
         return;
       }
-      setMessage(
-        actionName === 'refresh_busy'
-          ? `Busy refreshed (${json.busyCount ?? 0} blocks).`
-          : 'Watch channel renewed.',
-      );
+      if (actionName === 'refresh_busy') {
+        setMessage(`Busy refreshed (${json.busyCount ?? 0} blocks).`);
+      } else if (actionName === 'test_email') {
+        setMessage(
+          `Test email sent to ${json.notifyEmail ?? 'notify address'} (Resend id: ${json.id ?? 'ok'}). Check inbox + spam.`,
+        );
+      } else {
+        setMessage('Watch channel renewed.');
+      }
       await load();
     } finally {
       setSaving(false);
@@ -166,9 +189,27 @@ export function AdminBookingsClient({ gcalQuery }: { gcalQuery: string | null })
         <p className="text-sm text-muted-foreground">
           Email notify:{' '}
           {data?.resendConfigured
-            ? `Resend configured → ${data.notifyEmail ?? '—'}`
-            : 'RESEND_API_KEY missing — emails will not send until you add it in Vercel'}
+            ? `Resend key present · from ${data.fromAddress ?? '—'} → ${data.notifyEmail ?? '—'}`
+            : 'RESEND_API_KEY missing — emails will not send until you add it in Vercel (Production)'}
         </p>
+        {data?.usesTestFrom ? (
+          <p className="rounded-lg border border-accent-magenta/40 bg-accent-magenta/10 px-3 py-2 text-sm">
+            You are using Resend&apos;s <strong>test</strong> sender (<code>onboarding@resend.dev</code>).
+            It can only deliver to the email address on your Resend account — not arbitrary Gmail
+            addresses. Fix: verify a domain in Resend → Domains, then set{' '}
+            <code>RESEND_FROM</code> to e.g. <code>A Step Forward &lt;bookings@yourdomain.com&gt;</code>{' '}
+            and redeploy. Or set <code>BOOKING_NOTIFY_EMAIL</code> to the exact email you used to sign
+            up for Resend (for testing only).
+          </p>
+        ) : null}
+        <Button
+          type="button"
+          variant="secondary"
+          disabled={saving || !data?.resendConfigured}
+          onClick={() => void action('test_email')}
+        >
+          Send test email now
+        </Button>
         {!data?.bookings?.length ? (
           <p className="text-sm text-muted-foreground">No booking requests yet.</p>
         ) : (
