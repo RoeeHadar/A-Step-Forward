@@ -96,6 +96,7 @@ import { normalizePlanChangeMessage, isPlanChangeTemplate } from '@/lib/plan-cha
 import { resolveWebChatAgent } from '@/lib/web-agents';
 import { daysUntilExam, ANXIETY_THRESHOLD } from '@/lib/wellbeing-plan-bias';
 import { resolveConceptTitles } from '@/lib/concept-display-names';
+import { buildPlanLiveSnapshot } from '@/lib/plan-live-snapshot';
 import { masterySignalInScope } from '@/lib/concept-scope';
 import { formatDiagnosticSummaryForAgents } from '@/lib/diagnostic-service';
 import type { DiagnosticSummary } from '@/lib/diagnostic-plan';
@@ -1225,6 +1226,28 @@ async function buildContextPrompt(
     });
     const activeWeek =
       currentPlan?.weeks.find((w) => w.status === 'active') ?? currentPlan?.weeks[0];
+    const weakConceptLabels = weakConcepts.map((id) => {
+      const titles = resolveConceptTitles(id);
+      return titles.title_he || titles.title_en || id;
+    });
+    const activeLessonLabels = (activeWeek?.concepts ?? [])
+      .filter((c) => c.kind !== 'rest' && c.kind !== 'train')
+      .map((c) => c.name_he || c.name);
+    const activeTrainLabels = (activeWeek?.concepts ?? [])
+      .filter((c) => c.kind === 'train')
+      .map((c) => c.name_he || c.name);
+    const liveSnap = buildPlanLiveSnapshot({
+      goal: profile.goal,
+      goalKey,
+      nextTestDate: profile.next_test_date,
+      finalGoalDate: profile.final_goal_date,
+      planStartIso: currentPlan?.start_date ?? null,
+      readiness: currentPlan?.pacing?.readiness ?? null,
+      weakConceptLabels,
+      activeLessonLabels,
+      activeTrainLabels,
+    });
+    context += `\n\n${locale === 'en' ? liveSnap.contextBlockEn : liveSnap.contextBlockHe}`;
     const nameOf = (id: string) => {
       const kgInfo = kgByName[id];
       return kgInfo?.name_he || kgInfo?.name || id;

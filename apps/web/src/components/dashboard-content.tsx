@@ -17,6 +17,7 @@ import { ExamPrepQuizBanner } from '@/components/exam-prep-quiz-banner';
 import { learnConceptHrefFromProfile } from '@/lib/learn-routes';
 import { getSubjectLabel, subjectIcon } from '@/lib/subject-labels';
 import { pickConceptTitle, resolveConceptTitles } from '@/lib/concept-display-names';
+import { goalCountdownLabel, isBagrutTrack } from '@/lib/goal-track';
 import type { LearnerStreak } from '@/lib/neon-db';
 import { agentAccentVars } from '@/lib/design-tokens';
 import lessonsIndex from '@/lib/lessons-index.generated.json';
@@ -42,6 +43,9 @@ const STR = {
     viewFullPlan: 'צפה בתוכנית המלאה →',
     streak: (n: number) => `🔥 ${n} ימים רצף`,
     estGrade: (g: number) => `ציון משוער: ~${g}`,
+    readinessPct: (p: number) => `מוכנות ליעד: ~${p}%`,
+    kindTrain: 'אימון',
+    kindRest: 'מנוחה',
     planTitle: 'התוכנית שלי לשבוע זה',
     noPlanTitle: 'נראה שאין לך תוכנית עדיין — בוא נתחיל!',
     noPlanBlurb: 'השלם/י את שאלון ההיכרות כדי לקבל תכנית שבועית — או צור/י תוכנית מהמטרות שכבר מילאת.',
@@ -68,6 +72,9 @@ const STR = {
     viewFullPlan: 'View full projected plan →',
     streak: (n: number) => `🔥 ${n}-day streak`,
     estGrade: (g: number) => `Est. grade: ~${g}`,
+    readinessPct: (p: number) => `Goal readiness: ~${p}%`,
+    kindTrain: 'Practice',
+    kindRest: 'Rest',
     planTitle: 'My Plan for This Week',
     noPlanTitle: "Looks like you don't have a plan yet — let's get started!",
     noPlanBlurb: 'Complete onboarding to get a weekly plan — or create one from the goals you already shared.',
@@ -176,7 +183,7 @@ function resolvePlanSubject(
 }
 
 function EstimatedGradePill({ isHe, onGradient = false }: { isHe: boolean; onGradient?: boolean }) {
-  const [grade, setGrade] = useState<number | null>(null);
+  const [label, setLabel] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -185,18 +192,26 @@ function EstimatedGradePill({ isHe, onGradient = false }: { isHe: boolean; onGra
       .then((data) => {
         if (cancelled || !data) return;
         const avg = Number(data.masteryAvg ?? 0);
+        const metric = typeof data.metric === 'string' ? data.metric : 'estimated_grade';
         const est = data.estimatedGrade;
-        if (typeof est === 'number' && avg >= 0.3) setGrade(est);
+        if (typeof est !== 'number') return;
+        const t = STR[isHe ? 'he' : 'en'];
+        if (metric === 'goal_readiness') {
+          const pct =
+            typeof data.readinessPct === 'number' ? data.readinessPct : Math.round(est);
+          setLabel(t.readinessPct(pct));
+          return;
+        }
+        if (avg >= 0.3) setLabel(t.estGrade(est));
       })
       .catch(() => {});
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [isHe]);
 
-  if (grade == null) return null;
+  if (label == null) return null;
 
-  const t = STR[isHe ? 'he' : 'en'];
   return (
     <span
       className={cn(
@@ -207,7 +222,7 @@ function EstimatedGradePill({ isHe, onGradient = false }: { isHe: boolean; onGra
       )}
     >
       <span aria-hidden>📈</span>
-      {t.estGrade(grade)}
+      {label}
     </span>
   );
 }
@@ -227,12 +242,18 @@ function PlanItemRow({
 }) {
   const locale = isHe ? 'he' : 'en';
   const t = STR[locale];
-  const href = learnConceptHrefFromProfile(
-    concept.concept_id,
-    concept.subject,
-    pointsGroup,
-    subjects,
-  );
+  const kind = concept.kind ?? 'lesson';
+  const href =
+    kind === 'train'
+      ? `/app/practice?concept=${encodeURIComponent(concept.concept_id)}`
+      : kind === 'rest'
+        ? '/app/plan'
+        : learnConceptHrefFromProfile(
+            concept.concept_id,
+            concept.subject,
+            pointsGroup,
+            subjects,
+          );
   const estMinutes = lessonsById.get(concept.concept_id)?.est_minutes;
   const status = masteryStatus(concept.mastery, locale);
   const emoji = subjectIcon(concept.subject);
@@ -257,7 +278,17 @@ function PlanItemRow({
         </p>
         <div className="mt-1 flex flex-wrap items-center gap-2">
           <span className="text-xs text-muted-foreground">{subjectName}</span>
-          {estMinutes != null ? (
+          {kind === 'train' ? (
+            <Badge variant="outline" className="text-xs">
+              {t.kindTrain}
+            </Badge>
+          ) : null}
+          {kind === 'rest' ? (
+            <Badge variant="secondary" className="text-xs">
+              {t.kindRest}
+            </Badge>
+          ) : null}
+          {estMinutes != null && kind === 'lesson' ? (
             <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
               <Clock className="h-3 w-3" aria-hidden />
               {t.minutes(estMinutes)}
@@ -326,6 +357,7 @@ export function DashboardContent({
   pointsGroup,
   subjects,
   goal,
+  goalKey,
   teacher,
 }: {
   displayName: string;
@@ -336,6 +368,7 @@ export function DashboardContent({
   pointsGroup?: string | null;
   subjects?: string[] | null;
   goal?: string | null;
+  goalKey?: string | null;
   teacher?: { real_name: string; username: string } | null;
 }) {
   const { locale } = useI18n();
@@ -356,18 +389,12 @@ export function DashboardContent({
     }
     const target = new Date(countdownDate);
     const daysLeft = Math.ceil((target.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-    const isGoalCountdown = countdownDate === finalGoalDate;
-    if (daysLeft <= 0) {
-      return {
-        subtitle: isGoalCountdown ? t.goalToday : t.examToday,
-        isExamCountdown: true,
-      };
-    }
+    const bagrut = isBagrutTrack({ goalKey, goal });
     return {
-      subtitle: isGoalCountdown ? t.daysUntilGoal(daysLeft) : t.daysUntilExam(daysLeft),
+      subtitle: goalCountdownLabel(isHe ? 'he' : 'en', daysLeft, { isBagrut: bagrut }),
       isExamCountdown: true,
     };
-  }, [nextTestDate, finalGoalDate, goal, t]);
+  }, [nextTestDate, finalGoalDate, goal, goalKey, isHe, t]);
 
   const week = plan ? currentActiveWeek(plan) : undefined;
   const planItems = (week?.concepts ?? []).slice(0, MAX_PLAN_ITEMS);

@@ -33,6 +33,18 @@ export const READINESS_CEILING = 0.95;
  */
 export const MOCK_GATED_CEILING = 0.7;
 
+/**
+ * Without ANY recorded practice attempts, readiness cannot exceed this — coverage
+ * derived purely from self-report / lesson completion is not proof of retained skill.
+ */
+export const NO_PRACTICE_CEILING = 0.5;
+
+/** Below this many practiced skill atoms, readiness is still capped (partial signal). */
+export const LOW_PRACTICE_COUNT = 3;
+
+/** Cap applied when practice signal is present but below `LOW_PRACTICE_COUNT`. */
+export const LOW_PRACTICE_CEILING = 0.65;
+
 /** Exam-ready requires ~90% of critical concepts (decay-applied) AND a passed mock. */
 export const EXAM_READY_CRITICAL_COVERAGE = 0.9;
 
@@ -80,6 +92,8 @@ export interface ReadinessInput {
   daysToExam?: number | null;
   /** Override the decay half-life (tests / calibration). */
   halfLifeDays?: number;
+  /** Count of skill_practice atoms with ≥1 attempt — caps readiness when low/absent. */
+  skillsPracticedCount?: number | null;
 }
 
 export interface ReadinessResult {
@@ -143,6 +157,15 @@ export function computeReadiness(input: ReadinessInput): ReadinessResult | null 
 
   let readiness = concaveReadiness(critical_coverage);
   if (!mockPassed) readiness = Math.min(readiness, MOCK_GATED_CEILING);
+  const skillsPracticedCount =
+    typeof input.skillsPracticedCount === 'number' ? input.skillsPracticedCount : null;
+  if (skillsPracticedCount != null) {
+    if (skillsPracticedCount <= 0) {
+      readiness = Math.min(readiness, NO_PRACTICE_CEILING);
+    } else if (skillsPracticedCount < LOW_PRACTICE_COUNT) {
+      readiness = Math.min(readiness, LOW_PRACTICE_CEILING);
+    }
+  }
   readiness = Math.min(readiness, READINESS_CEILING);
 
   const exam_ready = critical_coverage >= EXAM_READY_CRITICAL_COVERAGE && mockPassed;
