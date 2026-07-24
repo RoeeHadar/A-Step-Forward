@@ -20,6 +20,8 @@ import { MarkdownReader } from '@/components/markdown-reader';
 import { pickConceptTitle, resolveConceptTitles } from '@/lib/concept-display-names';
 import { localizePersonaMarkdown } from '@/lib/localize-persona';
 import { goalKeyLabel } from '@/lib/plan-catalog';
+import { liveSnapshotTitle } from '@/lib/plan-live-snapshot';
+import type { PlanStudyMode } from '@/lib/plan-mode';
 import { subjectLabel } from '@/lib/subject-labels';
 import type { LearnerMemorySnapshot, LearnerMemoryNote } from '@/lib/neon-db';
 import { useI18n } from '@/providers/i18n-provider';
@@ -100,6 +102,17 @@ function SectionCard({
   );
 }
 
+function planModeLabel(mode: PlanStudyMode, locale: 'he' | 'en'): string {
+  if (locale === 'he') {
+    if (mode === 'rest_day') return 'יום מנוחה / רפלקציה';
+    if (mode === 'train_dominant') return 'אימון-דומיננטי';
+    return 'שיעורים + אימון';
+  }
+  if (mode === 'rest_day') return 'rest / reflect';
+  if (mode === 'train_dominant') return 'train-dominant';
+  return 'lessons + train';
+}
+
 function ProfileField({ label, value }: { label: string; value: string | null | undefined }) {
   if (!value?.trim()) return null;
   return (
@@ -169,13 +182,20 @@ export function MemoryOverview({ snapshot }: { snapshot: LearnerMemorySnapshot }
   const hasPersona = Boolean(snapshot.persona.text?.trim());
   const hasPlanFocus =
     Boolean(snapshot.activePlanGoal) || snapshot.activeWeekConceptIds.length > 0;
+  const hasLivePlan = Boolean(snapshot.livePlan);
   const hasSignals =
     snapshot.weakConcepts.length > 0 || snapshot.strongConcepts.length > 0;
   const hasNotes = snapshot.totalNoteCount > 0;
   const hasChat = snapshot.recentChatTurns.length > 0;
 
   const showAnything =
-    hasProfileContent || hasPersona || hasPlanFocus || hasSignals || hasNotes || hasChat;
+    hasProfileContent ||
+    hasPersona ||
+    hasPlanFocus ||
+    hasLivePlan ||
+    hasSignals ||
+    hasNotes ||
+    hasChat;
 
   const filteredNotesByAgent: Record<string, LearnerMemoryNote[]> = {};
   for (const agent of AGENT_ORDER) {
@@ -208,6 +228,15 @@ export function MemoryOverview({ snapshot }: { snapshot: LearnerMemorySnapshot }
         matchesSearch(pickConceptTitle(resolveConceptTitles(id), lang)),
       ));
 
+  const livePlanVisible =
+    hasLivePlan &&
+    snapshot.livePlan &&
+    (!q ||
+      matchesSearch(snapshot.livePlan.goalLabel) ||
+      snapshot.livePlan.activeLessons.some((l) => matchesSearch(l)) ||
+      snapshot.livePlan.activeTrains.some((l) => matchesSearch(l)) ||
+      snapshot.livePlan.weakConcepts.some((l) => matchesSearch(l)));
+
   const signalsVisible =
     hasSignals &&
     (!q ||
@@ -226,6 +255,7 @@ export function MemoryOverview({ snapshot }: { snapshot: LearnerMemorySnapshot }
     q &&
     !profileVisible &&
     !personaVisible &&
+    !livePlanVisible &&
     !planVisible &&
     !signalsVisible &&
     !anyAgentNotesVisible;
@@ -349,6 +379,74 @@ export function MemoryOverview({ snapshot }: { snapshot: LearnerMemorySnapshot }
                   </div>
                 ) : null}
               </dl>
+            </SectionCard>
+          ) : null}
+
+          {livePlanVisible && snapshot.livePlan ? (
+            <SectionCard
+              icon={Target}
+              title={liveSnapshotTitle(lang, snapshot.livePlan.isBagrut)}
+              description={
+                isHe
+                  ? 'מצב התוכנית הפעיל — מצב, ימים ליעד, מוכנות ופריטי שיעור/אימון'
+                  : 'Active plan state — mode, days to goal, readiness, and lesson/train items'
+              }
+            >
+              <dl className="grid gap-3 sm:grid-cols-2">
+                <ProfileField
+                  label={isHe ? 'מצב' : 'Mode'}
+                  value={planModeLabel(snapshot.livePlan.mode, lang)}
+                />
+                <ProfileField
+                  label={isHe ? 'ימים ליעד' : 'Days to goal'}
+                  value={
+                    snapshot.livePlan.daysToGoal != null
+                      ? String(snapshot.livePlan.daysToGoal)
+                      : null
+                  }
+                />
+                <ProfileField
+                  label={liveSnapshotTitle(lang, snapshot.livePlan.isBagrut)}
+                  value={
+                    snapshot.livePlan.readinessPct != null
+                      ? `${snapshot.livePlan.readinessPct}%`
+                      : null
+                  }
+                />
+              </dl>
+              {snapshot.livePlan.activeLessons.length > 0 ? (
+                <div className="mt-4">
+                  <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    {isHe ? 'שיעורים השבוע' : 'Lessons this week'}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {snapshot.livePlan.activeLessons.map((label) => (
+                      <Badge key={label} variant="outline">
+                        {label}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+              {snapshot.livePlan.activeTrains.length > 0 ? (
+                <div className="mt-4">
+                  <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    {isHe ? 'אימונים השבוע' : 'Practice trains this week'}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {snapshot.livePlan.activeTrains.map((label) => (
+                      <Badge key={label} variant="secondary">
+                        {label}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+              <p className="mt-4 text-xs text-muted-foreground">
+                {lang === 'he'
+                  ? snapshot.livePlan.contextBlockHe.split('\n').slice(1).join('\n')
+                  : snapshot.livePlan.contextBlockEn.split('\n').slice(1).join('\n')}
+              </p>
             </SectionCard>
           ) : null}
 

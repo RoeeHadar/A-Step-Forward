@@ -93,6 +93,9 @@ export default async function DashboardPage() {
         pointsGroup={profile?.points_group ?? null}
         subjects={profile?.subjects ?? null}
         goal={profile?.goal ?? null}
+        goalKey={
+          (profile?.personality_profile as { goal_key?: string } | null)?.goal_key ?? null
+        }
         teacher={
           teacher
             ? { real_name: teacher.real_name, username: teacher.username }

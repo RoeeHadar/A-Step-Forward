@@ -25,6 +25,9 @@ export const planConceptSchema = z.object({
   mastery: z.number().nullable().optional(),
   suggested_sections: z.array(contentSectionRefSchema).default([]),
   recommended_bagrut: z.array(bagrutRefSchema).default([]),
+  // Plan-train alignment (work-item tokens): lesson (default) | train | rest.
+  kind: z.enum(['lesson', 'train', 'rest']).optional(),
+  target_count: z.number().nullable().optional(),
 });
 
 export const planWeekSchema = z.object({
@@ -72,7 +75,14 @@ export const learningPlanSchema = z.object({
   status: z.string(),
   weeks: z.array(planWeekSchema).default([]),
   plan_adjustment_kind: z
-    .enum(['wellbeing', 'learner_template', 'mastery', 'exam_window'])
+    .enum([
+      'wellbeing',
+      'learner_template',
+      'mastery',
+      'exam_window',
+      'horizon_repair',
+      'train_adapt',
+    ])
     .nullable()
     .optional(),
   plan_last_adjusted_at: z.string().nullable().optional(),

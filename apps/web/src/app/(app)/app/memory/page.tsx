@@ -29,6 +29,7 @@ export default async function MemoryPage() {
           lastUpdated: null,
           diagnosticBriefHe: null,
           diagnosticBriefEn: null,
+          livePlan: null,
         }
       }
     />
