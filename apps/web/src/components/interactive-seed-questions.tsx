@@ -81,7 +81,7 @@ function McqQuestion({
                 setSelected(opt.id);
                 setSubmitted(true);
               }}
-              className={`flex w-full items-start gap-3 rounded-lg border px-3 py-2.5 text-left text-sm transition-colors ${cls}`}
+              className={`flex w-full items-start gap-3 rounded-lg border px-3 py-2.5 text-start text-sm transition-colors ${cls}`}
             >
               <span className="shrink-0 font-mono text-xs uppercase text-muted-foreground" dir="ltr">
                 {opt.id}.

@@ -3,6 +3,7 @@ import { getAuthContext } from '@/lib/auth';
 import { ensureIdentityComplete, ensureLearnerNotTeacher } from '@/lib/identity-gate';
 import { ensureOnboarded } from '@/lib/onboarding-gate';
 import { AppSidebar } from '@/components/app-sidebar';
+import { AppMobileNav } from '@/components/app-mobile-nav';
 import { SiteHeader } from '@/components/site-header';
 import { AmbientBackground } from '@/components/ambient-background';
 
@@ -24,11 +25,12 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <SiteHeader />
       <div className="flex flex-1">
         <AppSidebar />
-        <main className="relative isolate flex-1 overflow-x-hidden">
+        <main className="relative isolate flex-1 overflow-x-hidden pb-[calc(4.5rem+env(safe-area-inset-bottom))] md:pb-0">
           <AmbientBackground />
           <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:py-10">{children}</div>
         </main>
       </div>
+      <AppMobileNav />
     </div>
   );
 }

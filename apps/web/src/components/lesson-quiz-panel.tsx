@@ -77,8 +77,56 @@ const KIND_LABEL: Record<LessonQuestionKind, { en: string; he: string }> = {
   numeric: { en: 'Numeric', he: 'מספרי' },
   match: { en: 'Match the pairs', he: 'התאימו זוגות' },
   ordering: { en: 'Order the steps', he: 'סדרו את השלבים' },
-  derivation: { en: 'Derivation', he: 'גזירה' },
+  derivation: { en: 'Derivation', he: 'פיתוח והוכחה' },
 };
+
+function pickPayloadStringArray(
+  lang: Lang,
+  en: string[] | undefined | null,
+  he: string[] | undefined | null,
+): string[] {
+  const heList = he?.length ? he : [];
+  const enList = en?.length ? en : [];
+  if (lang === 'he') return heList.length > 0 ? heList : enList;
+  return enList.length > 0 ? enList : heList;
+}
+
+function hasPayloadStrings(arr: string[] | undefined | null): boolean {
+  return (arr?.length ?? 0) > 0;
+}
+
+function isMatchQuestionAvailable(
+  payload: LessonQuestionRow['answer_payload'],
+): boolean {
+  if (!payload) return false;
+  const hasLeft =
+    hasPayloadStrings(payload.left_en) || hasPayloadStrings(payload.left_he);
+  const hasRight =
+    hasPayloadStrings(payload.right_en) || hasPayloadStrings(payload.right_he);
+  return hasLeft && hasRight;
+}
+
+function isOrderingQuestionAvailable(
+  payload: LessonQuestionRow['answer_payload'],
+): boolean {
+  if (!payload) return false;
+  return hasPayloadStrings(payload.steps_en) || hasPayloadStrings(payload.steps_he);
+}
+
+function isQuestionScorable(question: LessonQuestionRow): boolean {
+  if (question.kind === 'match') return isMatchQuestionAvailable(question.answer_payload);
+  if (question.kind === 'ordering') {
+    return isOrderingQuestionAvailable(question.answer_payload);
+  }
+  return true;
+}
+
+function shuffleOrderingIndices(n: number): number[] {
+  const shuffled: number[] = [];
+  for (let i = 0; i < n; i += 2) shuffled.push(i);
+  for (let i = 1; i < n; i += 2) shuffled.push(i);
+  return shuffled.reverse();
+}
 
 function MarkdownInline({ content }: { content: string }) {
   return <MarkdownMath>{content}</MarkdownMath>;
@@ -131,16 +179,10 @@ function QuestionCard({
   const [matchSelections, setMatchSelections] = useState<Record<number, number | null>>({});
   const [ordering, setOrdering] = useState<number[]>(() => {
     const payload = question.answer_payload;
-    if (question.kind === 'ordering' && payload?.steps_en) {
-      // Present the steps shuffled deterministically so the page is stable
-      // across server/client renders (we identity-shuffle index list 0..n-1).
-      const n = payload.steps_en.length;
-      const shuffled: number[] = [];
-      for (let i = 0; i < n; i += 2) shuffled.push(i);
-      for (let i = 1; i < n; i += 2) shuffled.push(i);
-      return shuffled.reverse();
-    }
-    return [];
+    if (question.kind !== 'ordering' || !payload) return [];
+    const n = Math.max(payload.steps_en?.length ?? 0, payload.steps_he?.length ?? 0);
+    if (n === 0) return [];
+    return shuffleOrderingIndices(n);
   });
   const [busy, setBusy] = useState(false);
 
@@ -154,6 +196,21 @@ function QuestionCard({
       : (question.options_en?.length ? question.options_en : question.options_he ?? []);
   const kindLabel = KIND_LABEL[question.kind][lang];
   const payload = question.answer_payload;
+  const matchLeft =
+    question.kind === 'match' && payload
+      ? pickPayloadStringArray(lang, payload.left_en, payload.left_he)
+      : [];
+  const matchRight =
+    question.kind === 'match' && payload
+      ? pickPayloadStringArray(lang, payload.right_en, payload.right_he)
+      : [];
+  const orderingSteps =
+    question.kind === 'ordering' && payload
+      ? pickPayloadStringArray(lang, payload.steps_en, payload.steps_he)
+      : [];
+  const questionUnavailable =
+    (question.kind === 'match' && !isMatchQuestionAvailable(payload)) ||
+    (question.kind === 'ordering' && !isOrderingQuestionAvailable(payload));
 
   async function reportAnswer(correct: boolean, userAnswer: unknown) {
     if (busy) return;
@@ -315,6 +372,16 @@ function QuestionCard({
         <MarkdownInline content={stem} />
       </div>
 
+      {questionUnavailable ? (
+        <p className="rounded-lg border border-border/60 bg-surface-1/40 px-3 py-2.5 text-sm text-muted-foreground">
+          {lang === 'he'
+            ? 'שאלה זו אינה זמינה כרגע — חסר תוכן בשפה שלכם.'
+            : 'This question is unavailable — content is missing for your language.'}
+        </p>
+      ) : null}
+
+      {!questionUnavailable ? (
+        <>
       {/* mcq (single-correct) */}
       {question.kind === 'mcq' && options ? (
         <div className="space-y-2">
@@ -333,7 +400,7 @@ function QuestionCard({
                 type="button"
                 disabled={state.submitted || busy}
                 onClick={() => handleMcq(i)}
-                className={`flex w-full items-start gap-3 rounded-lg border px-3 py-2.5 text-left text-sm transition-colors ${cls}`}
+                className={`flex w-full items-start gap-3 rounded-lg border px-3 py-2.5 text-start text-sm transition-colors ${cls}`}
               >
                 <span className="shrink-0 font-mono text-xs text-muted-foreground" dir="ltr">
                   {`${String.fromCharCode(65 + i)}. `}
@@ -381,7 +448,7 @@ function QuestionCard({
                     return next;
                   });
                 }}
-                className={`flex w-full items-start gap-3 rounded-lg border px-3 py-2.5 text-left text-sm transition-colors ${cls}`}
+                className={`flex w-full items-start gap-3 rounded-lg border px-3 py-2.5 text-start text-sm transition-colors ${cls}`}
               >
                 <span
                   className={`mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded border ${
@@ -496,12 +563,12 @@ function QuestionCard({
       ) : null}
 
       {/* match — left list with a dropdown picking the corresponding right item */}
-      {question.kind === 'match' && payload?.left_en && payload?.right_en ? (
+      {question.kind === 'match' && matchLeft.length > 0 && matchRight.length > 0 ? (
         <div className="space-y-2">
-          {(lang === 'he' ? payload.left_he ?? [] : payload.left_en).map((left, i) => {
-            const rightOptions = lang === 'he' ? payload.right_he ?? [] : payload.right_en ?? [];
+          {matchLeft.map((left, i) => {
+            const rightOptions = matchRight;
             const userChoice = matchSelections[i] ?? null;
-            const correctIdx = (payload.correct_pairs ?? [])[i] ?? -1;
+            const correctIdx = (payload?.correct_pairs ?? [])[i] ?? -1;
             const correctRight = correctIdx >= 0 ? rightOptions[correctIdx] ?? '' : '';
             let cls = 'border-border';
             if (state.submitted) {
@@ -552,12 +619,11 @@ function QuestionCard({
       ) : null}
 
       {/* ordering — list with up/down chevrons to reorder */}
-      {question.kind === 'ordering' && payload?.steps_en ? (
+      {question.kind === 'ordering' && orderingSteps.length > 0 ? (
         <div className="space-y-2">
           {ordering.map((stepIdx, displayIdx) => {
-            const steps = lang === 'he' ? payload.steps_he ?? [] : payload.steps_en ?? [];
-            const stepText = steps[stepIdx] ?? '';
-            const correctPos = (payload.correct_order ?? []).indexOf(stepIdx);
+            const stepText = orderingSteps[stepIdx] ?? '';
+            const correctPos = (payload?.correct_order ?? []).indexOf(stepIdx);
             let cls = 'border-border';
             if (state.submitted) {
               cls = displayIdx === correctPos ? 'border-emerald-500/60 bg-emerald-500/10' : 'border-destructive/60 bg-destructive/10';
@@ -624,7 +690,7 @@ function QuestionCard({
             placeholder={
               lang === 'he'
                 ? question.kind === 'derivation'
-                  ? 'כתבו את הגזירה צעד-אחר-צעד…'
+                  ? 'כתבו את הפיתוח וההוכחה צעד-אחר-צעד…'
                   : 'כתבו את הפתרון המלא שלכם כאן — הציגו כל שלב…'
                 : question.kind === 'derivation'
                   ? 'Write the derivation step by step…'
@@ -633,10 +699,41 @@ function QuestionCard({
             className="w-full rounded-lg border border-amber-500/20 bg-background/80 px-3 py-2.5 text-sm leading-relaxed focus:border-amber-500/50 focus:outline-none"
             dir={dir}
           />
+          {openText.trim() ? (
+            <div className="flex flex-wrap items-center gap-2 rounded-lg border border-border/40 bg-background/50 p-3">
+              <span className="text-[11px] text-muted-foreground">
+                {lang === 'he' ? 'איך הייתם מדרגים את עצמכם?' : 'How would you grade yourself?'}
+              </span>
+              <button
+                type="button"
+                disabled={busy}
+                onClick={() => handleSelfAssess('correct')}
+                className="min-h-11 rounded-full bg-emerald-500/10 px-3 py-1.5 text-xs font-medium text-emerald-400 hover:bg-emerald-500/20"
+              >
+                {lang === 'he' ? 'נכון' : 'Correct'}
+              </button>
+              <button
+                type="button"
+                disabled={busy}
+                onClick={() => handleSelfAssess('partial')}
+                className="min-h-11 rounded-full bg-accent-amber/10 px-3 py-1.5 text-xs font-medium text-accent-amber hover:bg-accent-amber/20"
+              >
+                {lang === 'he' ? 'חלקי' : 'Partial'}
+              </button>
+              <button
+                type="button"
+                disabled={busy}
+                onClick={() => handleSelfAssess('wrong')}
+                className="min-h-11 rounded-full bg-destructive/10 px-3 py-1.5 text-xs font-medium text-destructive hover:bg-destructive/20"
+              >
+                {lang === 'he' ? 'לא נכון' : 'Wrong'}
+              </button>
+            </div>
+          ) : null}
           <button
             type="button"
             onClick={() => setRevealed((v) => !v)}
-            className="inline-flex items-center gap-2 rounded-lg border border-border bg-background/60 px-3 py-2 text-xs font-semibold hover:border-amber-500/40"
+            className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-border bg-background/60 px-3 py-2 text-xs font-semibold hover:border-amber-500/40"
           >
             {revealed ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
             {revealed
@@ -650,11 +747,12 @@ function QuestionCard({
           {revealed ? (
             <div className="space-y-4 rounded-lg border border-border/60 bg-background/50 p-4 text-sm">
               {(() => {
-                const steps =
-                  lang === 'he'
-                    ? payload?.steps_he ?? payload?.steps_en
-                    : payload?.steps_en;
-                if (steps && steps.length > 0) {
+                const steps = pickPayloadStringArray(
+                  lang,
+                  payload?.steps_en,
+                  payload?.steps_he,
+                );
+                if (steps.length > 0) {
                   return (
                     <div>
                       <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
@@ -688,35 +786,12 @@ function QuestionCard({
                   <MarkdownInline content={rubric} />
                 </div>
               ) : null}
-              <div className="flex flex-wrap items-center gap-2 border-t border-border/40 pt-3">
-                <span className="text-[11px] text-muted-foreground">
-                  {lang === 'he' ? 'איך הייתם מדרגים את עצמכם?' : 'How would you grade yourself?'}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => handleSelfAssess('correct')}
-                  className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400 hover:bg-emerald-500/20"
-                >
-                  {lang === 'he' ? 'נכון' : 'Correct'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleSelfAssess('partial')}
-                  className="rounded-full bg-accent-amber/10 px-3 py-1 text-xs font-medium text-accent-amber hover:bg-accent-amber/20"
-                >
-                  {lang === 'he' ? 'חלקי' : 'Partial'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleSelfAssess('wrong')}
-                  className="rounded-full bg-destructive/10 px-3 py-1 text-xs font-medium text-destructive hover:bg-destructive/20"
-                >
-                  {lang === 'he' ? 'לא נכון' : 'Wrong'}
-                </button>
-              </div>
             </div>
           ) : null}
         </div>
+      ) : null}
+
+        </>
       ) : null}
 
       {state.submitted ? (
@@ -788,7 +863,19 @@ export function LessonQuizPanel({
   learnerLevel?: LessonPointsLevel | null;
 }) {
   const { lesson, questions: allQuestions } = data;
-  const [score, setScore] = useState({ answered: 0, correct: 0 });
+  const [answerScores, setAnswerScores] = useState<Record<string, boolean>>({});
+
+  const recordAnswer = (q: LessonQuestionRow, correct: boolean) => {
+    setAnswerScores((prev) => ({ ...prev, [q.id]: correct }));
+  };
+
+  const score = useMemo(() => {
+    const values = Object.values(answerScores);
+    return {
+      answered: values.length,
+      correct: values.filter(Boolean).length,
+    };
+  }, [answerScores]);
 
   // Filter questions to those appropriate for the learner's level
   const questions = useMemo(() => {
@@ -801,15 +888,15 @@ export function LessonQuizPanel({
   }, [allQuestions, learnerLevel]);
 
   const totalEasy = useMemo(
-    () => questions.filter((q) => q.difficulty === 'easy').length,
+    () => questions.filter((q) => q.difficulty === 'easy' && isQuestionScorable(q)).length,
     [questions],
   );
   const totalMedium = useMemo(
-    () => questions.filter((q) => q.difficulty === 'medium').length,
+    () => questions.filter((q) => q.difficulty === 'medium' && isQuestionScorable(q)).length,
     [questions],
   );
   const totalHard = useMemo(
-    () => questions.filter((q) => q.difficulty === 'hard').length,
+    () => questions.filter((q) => q.difficulty === 'hard' && isQuestionScorable(q)).length,
     [questions],
   );
 
@@ -848,9 +935,7 @@ export function LessonQuizPanel({
           lessonId={lesson.id}
           conceptId={conceptId}
           learnerLevel={learnerLevel}
-          onAnswered={(_, correct) =>
-            setScore((s) => ({ answered: s.answered + 1, correct: s.correct + (correct ? 1 : 0) }))
-          }
+          onAnswered={recordAnswer}
         />
       ))}
 
@@ -901,7 +986,19 @@ function SkillAtomDrillSection({
   conceptId: string;
 }) {
   const [selectedAtom, setSelectedAtom] = useState<string | null>(null);
-  const [score, setScore] = useState({ answered: 0, correct: 0 });
+  const [answerScores, setAnswerScores] = useState<Record<string, boolean>>({});
+
+  const recordAnswer = (q: LessonQuestionRow, correct: boolean) => {
+    setAnswerScores((prev) => ({ ...prev, [q.id]: correct }));
+  };
+
+  const score = useMemo(() => {
+    const values = Object.values(answerScores);
+    return {
+      answered: values.length,
+      correct: values.filter(Boolean).length,
+    };
+  }, [answerScores]);
 
   const atoms = Object.keys(bank);
 
@@ -950,7 +1047,7 @@ function SkillAtomDrillSection({
             type="button"
             onClick={() => {
               setSelectedAtom((a) => (a === atom ? null : atom));
-              setScore({ answered: 0, correct: 0 });
+              setAnswerScores({});
             }}
             className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
               selectedAtom === atom
@@ -981,12 +1078,7 @@ function SkillAtomDrillSection({
               lessonId={lessonId}
               conceptId={conceptId}
               learnerLevel={learnerLevel}
-              onAnswered={(_, correct) =>
-                setScore((s) => ({
-                  answered: s.answered + 1,
-                  correct: s.correct + (correct ? 1 : 0),
-                }))
-              }
+              onAnswered={recordAnswer}
             />
           ))}
         </div>

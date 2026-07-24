@@ -1,41 +1,11 @@
 'use client';
 
-import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import {
-  LayoutDashboard,
-  MessageSquare,
-  BookOpen,
-  Brain,
-  TrendingUp,
-  ClipboardCheck,
-  FileClock,
-  Bell,
-  Users,
-  Dumbbell,
-} from 'lucide-react';
 import { cn } from '@asf/ui';
 import { useI18n } from '@/providers/i18n-provider';
 import { agentAccentVars } from '@/lib/design-tokens';
-
-const items = [
-  { href: '/app', icon: LayoutDashboard, labelKey: 'dashboard' as const },
-  { href: '/learn', icon: BookOpen, labelKey: 'learn' as const, match: '/learn' },
-  { href: '/app/practice', icon: Dumbbell, labelKey: 'practice' as const, match: '/app/practice' },
-  { href: '/app/chat/tutor', icon: MessageSquare, labelKey: 'chat' as const, match: '/app/chat' },
-  { href: '/app/quiz', icon: ClipboardCheck, labelKey: 'quiz' as const, match: '/app/quiz' },
-  { href: '/app/tests', icon: FileClock, labelKey: 'tests' as const, match: '/app/tests' },
-  { href: '/app/memory', icon: Brain, labelKey: 'memory' as const },
-  { href: '/app/progress', icon: TrendingUp, labelKey: 'progress' as const },
-  { href: '/app/friends', icon: Users, labelKey: 'friends' as const, match: '/app/friends' },
-  {
-    href: '/app/notifications',
-    icon: Bell,
-    labelKey: 'notifications' as const,
-    match: '/app/notifications',
-  },
-];
+import { APP_NAV_ITEMS, isAppNavItemActive } from '@/lib/app-nav-items';
 
 export function AppSidebar() {
   const pathname = usePathname();
@@ -48,9 +18,8 @@ export function AppSidebar() {
   return (
     <aside className="hidden w-56 shrink-0 border-e border-border bg-surface-1/40 backdrop-blur-md md:block">
       <nav className="flex flex-col gap-1 p-4" aria-label={messages.common.appNavigation}>
-        {items.map((item) => {
-          const matchPath = item.match ?? item.href;
-          const active = pathname === item.href || pathname.startsWith(matchPath);
+        {APP_NAV_ITEMS.map((item) => {
+          const active = isAppNavItemActive(pathname, item);
           const Icon = item.icon;
           const isChat = item.labelKey === 'chat';
           const accentStyle =
