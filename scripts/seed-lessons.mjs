@@ -3,6 +3,12 @@
  * Seed `lessons` + `lesson_questions` from JSON files written to
  * `scripts/seed_data/lessons/*.json` by the authoring process.
  *
+ * Source of truth: git-reviewed lesson JSON + `apps/web/src/lib/kg-cross-edges.json`.
+ * Neon tables are seeded projections for optional Python services and legacy tooling.
+ * The Vercel web runtime reads bundled `lessons-bundle.generated.json` and
+ * `kg-cross-edges.json` directly; Neon `kg_edges` is NOT queried by learning-plan
+ * or chat agents on the free-tier path.
+ *
  * Strategy: per-lesson idempotent. For each input file we DELETE the existing
  * row in `lessons` (cascade drops questions), then INSERT the new lesson and
  * its questions in a single transaction.

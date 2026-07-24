@@ -4,7 +4,53 @@
  */
 import bundle from './lessons-bundle.generated.json';
 import { CONCEPT_ID_ALIASES, resolveConceptAlias } from './concept-aliases';
-import type { LessonSection, LessonWithQuestions } from './neon-db';
+import type { LessonAgentHints, LessonSection, LessonWithQuestions } from './neon-db';
+
+export type BundledAgentHintsRow = {
+  concept_id: string;
+  title_en: string;
+  title_he: string;
+  agent_hints: LessonAgentHints;
+};
+
+/** True when agent_hints carries at least one field tutors/coaches consume. */
+export function hasMeaningfulAgentHints(hints: LessonAgentHints | null | undefined): boolean {
+  if (!hints) return false;
+  if ((hints.key_insights?.length ?? 0) > 0) return true;
+  if ((hints.common_misconceptions?.length ?? 0) > 0) return true;
+  if ((hints.skill_atoms_unlocked?.length ?? 0) > 0) return true;
+  if ((hints.prerequisites_to_check_before_teaching?.length ?? 0) > 0) return true;
+  if ((hints.coach_drill_skills?.length ?? 0) > 0) return true;
+  if ((hints.next_recommended?.length ?? 0) > 0) return true;
+  if (hints.tutor_pacing_hint?.trim()) return true;
+  if (hints.diagnostic_signals && Object.keys(hints.diagnostic_signals).length > 0) return true;
+  return false;
+}
+
+/**
+ * Prefer Neon row when it has usable hints; otherwise fall back to the static bundle
+ * (same source as mergeLessonWithBundle). Returns null when neither source has hints.
+ */
+export function resolveAgentHintsRow(
+  conceptId: string,
+  fromDb: BundledAgentHintsRow | null | undefined,
+): BundledAgentHintsRow | null {
+  if (fromDb && hasMeaningfulAgentHints(fromDb.agent_hints)) {
+    return fromDb;
+  }
+
+  const bundled = getBundledLesson(conceptId);
+  if (!bundled || !hasMeaningfulAgentHints(bundled.lesson.agent_hints)) {
+    return null;
+  }
+
+  return {
+    concept_id: fromDb?.concept_id ?? bundled.lesson.concept_id ?? conceptId,
+    title_en: fromDb?.title_en ?? bundled.lesson.title_en,
+    title_he: fromDb?.title_he ?? bundled.lesson.title_he,
+    agent_hints: bundled.lesson.agent_hints,
+  };
+}
 
 type BundleEntry = LessonWithQuestions;
 

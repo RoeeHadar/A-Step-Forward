@@ -87,6 +87,16 @@ export const learningPlanSchema = z.object({
     .optional(),
   plan_last_adjusted_at: z.string().nullable().optional(),
   pacing: planPacingSchema.nullable().optional(),
+  /**
+   * R3 Plan v2: Concept IDs that didn't fit within horizon × capacity.
+   * UI renders a bilingual overflow notice (R4) when non-empty.
+   */
+  overflow_concepts: z.array(z.string()).nullable().optional(),
+  /**
+   * R5 Plan v2: Computed at load time (today > end_date). Dashboard shows
+   * a bilingual re-plan CTA when true; advanceRollingPlanWindow refuses to advance.
+   */
+  needs_replan: z.boolean().optional(),
 });
 
 export const quizOptionSchema = z.object({

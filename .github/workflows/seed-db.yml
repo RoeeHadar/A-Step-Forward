@@ -130,6 +130,14 @@ jobs:
           ls -lah scripts/seed_data/lessons | head -40
           node scripts/seed-lessons.mjs
 
+      - name: Verify seed drift (lessons vs Neon)
+        if: ${{ inputs.target == 'lessons-from-json' }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          npm install --no-save --no-package-lock @neondatabase/serverless
+          node scripts/verify-seed-drift.mjs
+
       - name: Backfill Hebrew columns on existing diagnostic_items
         if: ${{ inputs.target == 'diagnostic-he-backfill' }}
         env:

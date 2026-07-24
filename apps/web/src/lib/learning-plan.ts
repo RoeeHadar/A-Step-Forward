@@ -2,12 +2,13 @@
  * Learning-plan path planner.
  *
  * Walks the combined knowledge graph (per-concept `prerequisites` from
- * `kg-data.json` plus directed cross-subject edges from `kg_edges`) backwards
- * from a learner's goal concept, weighing each prerequisite by:
+ * `kg-data.json` plus directed cross-subject edges from bundled
+ * `kg-cross-edges.json`) backwards from a learner's goal concept, weighing
+ * each prerequisite by:
  *
  *   - whether the learner has an authored lesson for it (`hasLesson`),
  *   - the learner's per-skill-atom mastery from `skill_practice`, and
- *   - the edge weight from `kg_edges` (cross-subject links can be soft).
+ *   - the edge weight from `kg-cross-edges.json` (cross-subject links can be soft).
  *
  * Returns a sequenced path so the Curriculum Designer and Coach can present
  * "your next concrete step" — and so the Progress Analyzer can do root-cause
@@ -189,7 +190,7 @@ async function fetchConceptAtoms(conceptIds: string[]): Promise<Map<string, stri
  *
  * Algorithm (intentionally simple, intentionally explainable):
  *
- *  1. BFS backwards from the goal across (within-subject prereqs ∪ kg_edges).
+ *  1. BFS backwards from the goal across (within-subject prereqs ∪ kg-cross-edges.json).
  *     Each visited concept gets the strongest edge_weight encountered, the
  *     shortest path-distance, and the union of "why" notes.
  *  2. For each visited concept, score urgency = 1 - mean_mastery_of_taught_atoms.
@@ -353,7 +354,13 @@ export async function buildLearningPlan(args: {
     if (a.relation === 'self' && b.relation !== 'self') return 1;
     if (b.relation === 'self' && a.relation !== 'self') return -1;
     // Most urgent first within the same effective distance band.
-    return b.urgency - a.urgency || b.edge_weight - a.edge_weight;
+    const urgencyDiff = b.urgency - a.urgency;
+    if (Math.abs(urgencyDiff) > 0.001) return urgencyDiff;
+    const weightDiff = b.edge_weight - a.edge_weight;
+    if (Math.abs(weightDiff) > 0.001) return weightDiff;
+    // R6 — Prefer concepts with authored lessons as a final tie-break.
+    // Never violates prerequisite order; applies only when urgency+weight are equal.
+    return (b.hasLesson ? 1 : 0) - (a.hasLesson ? 1 : 0);
   });
 
   const path = nodes.slice(0, MAX_NODES);

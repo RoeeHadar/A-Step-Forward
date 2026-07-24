@@ -48,6 +48,11 @@ import {
 } from './plan-worklist';
 import { daysUntilIso, resolveGoalDeadlineIso } from './goal-track';
 import {
+  conceptsPerWeekFromHours,
+  isPlanExpired,
+  planHorizon,
+} from './plan-capacity';
+import {
   computePlanMode,
   fractionTimeUsed,
   phaseFromFraction,
@@ -460,12 +465,32 @@ export async function hasActiveLearningPlan(learnerId: string): Promise<boolean>
   return rows.length > 0;
 }
 
+// ---------------------------------------------------------------------------
+// R3/R5: Plan v2 columns — idempotent DDL migration (one round-trip per cold start)
+// ---------------------------------------------------------------------------
+
+let _planV2ColumnsEnsured = false;
+
+async function ensurePlanV2Columns(s: ReturnType<typeof requireSql>): Promise<void> {
+  if (_planV2ColumnsEnsured) return;
+  try {
+    // overflow_concepts (R3): concept IDs that didn't fit the goal horizon.
+    await s`ALTER TABLE learning_plans ADD COLUMN IF NOT EXISTS overflow_concepts jsonb`;
+    _planV2ColumnsEnsured = true;
+  } catch {
+    // Column already exists or DB rejects idempotent DDL — non-fatal.
+    _planV2ColumnsEnsured = true;
+  }
+}
+
 /** Lightweight plan read for onboarding — no textbook/Bagrut hydration. */
 async function loadActivePlanStub(learnerId: string): Promise<LearningPlan | null> {
   const s = requireSql();
+  await ensurePlanV2Columns(s);
   const planRows = (await s`
     SELECT id::text, learner_id, goal, start_date::text, end_date::text, status,
-           plan_adjustment_kind, plan_last_adjusted_at::text
+           plan_adjustment_kind, plan_last_adjusted_at::text,
+           overflow_concepts
     FROM learning_plans
     WHERE learner_id = ${learnerId} AND status = 'active'
     LIMIT 1
@@ -478,6 +503,7 @@ async function loadActivePlanStub(learnerId: string): Promise<LearningPlan | nul
     status: string;
     plan_adjustment_kind: string | null;
     plan_last_adjusted_at: string | null;
+    overflow_concepts: string[] | null;
   }>;
   const plan = planRows[0];
   if (!plan) return null;
@@ -499,10 +525,15 @@ async function loadActivePlanStub(learnerId: string): Promise<LearningPlan | nul
   const mastery = await getConceptMastery(learnerId);
   const subjects = profile?.subjects ?? [];
 
+  // R5: Compute needs_replan at load time — never store it.
+  const needs_replan = isPlanExpired(plan.end_date);
+
   return {
     ...plan,
     plan_adjustment_kind: plan.plan_adjustment_kind as LearningPlan['plan_adjustment_kind'],
     plan_last_adjusted_at: plan.plan_last_adjusted_at,
+    overflow_concepts: plan.overflow_concepts ?? null,
+    needs_replan,
     weeks: weekRows.map((w) => ({
       id: w.id,
       plan_id: plan.id,
@@ -1137,6 +1168,18 @@ export interface LearningPlan {
   plan_last_adjusted_at?: string | null;
   /** Goal-pacing overlay (ADR-0009). Present when the goal has a frontier. */
   pacing?: PlanPacing | null;
+  /**
+   * R3: Concept IDs that were scored and ordered by the BFS engine but
+   * didn't fit within horizon × capacity. Stored as JSON in learning_plans.
+   * UI (R4) renders a bilingual overflow notice when this is non-empty.
+   */
+  overflow_concepts?: string[] | null;
+  /**
+   * R5: Computed at load time (today > end_date). When true,
+   * advanceRollingPlanWindow refuses to advance and the dashboard shows
+   * a bilingual re-plan CTA routing to /plan-setup.
+   */
+  needs_replan?: boolean;
 }
 
 export interface GeneratePlanOptions {
@@ -1317,31 +1360,10 @@ export async function generateLearningPlan(
 
   const goalText = options.goalOverride?.trim() || profile.goal;
 
-  // Horizon = aspirational length from exam/goal dates (for end_date UX only).
-  // Materialized weeks = rolling window (2) unless explicitly overridden for mid-journey regen.
-  let horizonWeeks = 4;
-  const nextTestDate = profile.next_test_date ? new Date(profile.next_test_date) : null;
-  const finalGoalDate = profile.final_goal_date ? new Date(profile.final_goal_date) : null;
-  const useFinalGoal =
-    finalGoalDate &&
-    (!nextTestDate || finalGoalDate.getTime() > nextTestDate.getTime());
-
-  if (useFinalGoal && finalGoalDate) {
-    const days = Math.ceil(
-      (finalGoalDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24),
-    );
-    horizonWeeks = Math.max(2, Math.min(24, Math.ceil(days / 7)));
-  } else if (nextTestDate) {
-    const days = Math.ceil(
-      (nextTestDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24),
-    );
-    horizonWeeks = Math.max(1, Math.min(12, Math.ceil(days / 7)));
-  } else if (finalGoalDate) {
-    const days = Math.ceil(
-      (finalGoalDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24),
-    );
-    horizonWeeks = Math.max(2, Math.min(24, Math.ceil(days / 7)));
-  }
+  // R1 — Horizon derivation (single source of truth).
+  // planHorizon() unifies next_test_date / final_goal_date → study weeks from today.
+  // Falls back to 4 weeks when no goal date is set (same previous default).
+  let horizonWeeks = planHorizon(profile) ?? 4;
 
   const useFastPath =
     options.fastPath === true ||
@@ -1359,6 +1381,10 @@ export async function generateLearningPlan(
   } else {
     numWeeks = horizonWeeks;
   }
+
+  // R2 — Capacity-aware week sizing.
+  // conceptsPerWeekFromHours maps hours_per_week to [1, 5] concepts/week.
+  const perWeek = conceptsPerWeekFromHours(profile.hours_per_week);
 
   // Plan-train alignment: never plan past the learner's own goal deadline.
   const goalDeadlineIsoForClip = resolveGoalDeadlineIso(
@@ -1394,8 +1420,18 @@ export async function generateLearningPlan(
     throw new Error('Could not derive any concepts for your learning plan');
   }
 
-  // Keep the DB write tiny — only what the student can see in the rolling window.
-  sorted = sorted.slice(0, numWeeks * CONCEPTS_PER_ROLLING_WEEK);
+  // R3 — Graph-driven compression to the plan horizon.
+  // Total slots the learner can fill before their goal: horizonWeeks × perWeek.
+  // Concepts beyond this cannot realistically be taught — they go to overflowConcepts
+  // so the UI (R4) can explain what was cut and why.
+  // Prerequisite order is preserved because the BFS ordering from buildLearningPlan /
+  // buildFastPlanConceptOrder already emits prerequisites before dependents.
+  const totalHorizonSlots = horizonWeeks * perWeek;
+  const keptConcepts = sorted.slice(0, totalHorizonSlots);
+  const overflowConcepts = sorted.slice(totalHorizonSlots);
+
+  // Keep the DB write tiny — materialize only the rolling window (numWeeks × perWeek).
+  sorted = keptConcepts.slice(0, numWeeks * perWeek);
 
   const now = new Date();
   let wellbeingBias = wellbeingPlanBiasFromProfile(
@@ -1441,8 +1477,8 @@ export async function generateLearningPlan(
       };
     }
 
-    // Chunk into weeks (sequential — week 1 first concepts)
-    const weekGroups = chunkConceptsIntoWeeks(sorted, numWeeks);
+    // Chunk into weeks (sequential — week 1 first concepts); use capacity-aware perWeek (R2).
+    const weekGroups = chunkConceptsIntoWeeks(sorted, numWeeks, perWeek);
 
     if (wellbeingBias.active && persistWellbeing && wellbeingBias.morale_concepts.length > 0) {
       const ratio = wellbeingBias.goal_critical_ratio;
@@ -1476,11 +1512,13 @@ export async function generateLearningPlan(
       profile,
       mastery,
       horizonWeeks,
+      overflowConcepts,
     });
   }
 
   // Fast onboarding path — skip wellbeing overlay; persist immediately.
-  const weekGroups = chunkConceptsIntoWeeks(sorted, numWeeks);
+  // Use capacity-aware perWeek (R2).
+  const weekGroups = chunkConceptsIntoWeeks(sorted, numWeeks, perWeek);
 
   const plan = await persistLearningPlanTransaction({
     learnerId,
@@ -1494,6 +1532,7 @@ export async function generateLearningPlan(
     mastery,
     skipWellbeingSave: true,
     horizonWeeks,
+    overflowConcepts,
   });
 
   void saveWellbeingPlanBias(learnerId, wellbeingBias).catch((err) => {
@@ -1573,8 +1612,14 @@ async function persistLearningPlanTransaction(args: {
   skipWellbeingSave?: boolean;
   /** Aspirational calendar length (exam horizon); defaults to materialized weeks. */
   horizonWeeks?: number;
+  /**
+   * R3: Concepts that fit in the BFS path but not within horizon × capacity.
+   * Stored as jsonb in learning_plans so the UI can show overflow honesty (R4).
+   */
+  overflowConcepts?: string[];
 }): Promise<LearningPlan> {
   const s = requireSql();
+  await ensurePlanV2Columns(s);
   const {
     learnerId,
     goalText,
@@ -1587,12 +1632,14 @@ async function persistLearningPlanTransaction(args: {
     mastery,
     skipWellbeingSave = false,
     horizonWeeks,
+    overflowConcepts = [],
   } = args;
 
   const planId = randomUUID();
   const startDate = new Date();
   const endDate = new Date(startDate);
-  endDate.setDate(endDate.getDate() + 7 * Math.max(numWeeks, horizonWeeks ?? numWeeks));
+  // R1: end_date reflects the TRUE goal horizon (horizonWeeks) so isPlanExpired() (R5) works.
+  endDate.setDate(endDate.getDate() + 7 * (horizonWeeks ?? numWeeks));
   const startStr = startDate.toISOString().slice(0, 10);
   let endStr = endDate.toISOString().slice(0, 10);
 
@@ -1648,11 +1695,13 @@ async function persistLearningPlanTransaction(args: {
       INSERT INTO learning_plans (
         id, learner_id, goal, start_date, end_date, status,
         plan_schema_version, plan_adjustment_kind, plan_last_adjusted_at,
+        overflow_concepts,
         created_at, updated_at
       )
       VALUES (
         ${planId}, ${learnerId}, ${goalText}, ${startStr}, ${endStr}, 'active',
         ${PLAN_SCHEMA_VERSION}, ${effectivePlanAdjustmentKind}, ${planLastAdjustedAt},
+        ${overflowConcepts.length > 0 ? JSON.stringify(overflowConcepts) : null}::jsonb,
         NOW(), NOW()
       )
     `,
@@ -1820,6 +1869,12 @@ export async function advanceRollingPlanWindow(
 ): Promise<{ advanced: boolean; plan: LearningPlan | null }> {
   const stub = await loadActivePlanStub(learnerId);
   if (!stub?.weeks?.length) return { advanced: false, plan: stub };
+
+  // R5 — Post-goal re-plan state: do NOT silently advance past the plan's end_date.
+  // When expired, surface needs_replan = true so the dashboard can show a CTA.
+  if (stub.needs_replan) {
+    return { advanced: false, plan: stub };
+  }
 
   const now = Date.now();
   const active = stub.weeks.find((w) => w.status === 'active') ?? stub.weeks[0];
@@ -3143,25 +3198,45 @@ export async function fetchLessonAgentHintsByConceptIds(
 ): Promise<
   Array<{ concept_id: string; title_en: string; title_he: string; agent_hints: LessonAgentHints }>
 > {
-  if (!sql || conceptIds.length === 0) return [];
-  try {
-    const rows = (await sql`
-      SELECT concept_id, title_en, title_he, agent_hints
-      FROM lessons
-      WHERE concept_id = ANY(${conceptIds}::text[])
-    `) as Array<{
-      concept_id: string;
-      title_en: string;
-      title_he: string;
-      agent_hints: LessonAgentHints;
-    }>;
-    return rows;
-  } catch (err) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.warn('fetchLessonAgentHintsByConceptIds failed:', err);
+  if (conceptIds.length === 0) return [];
+
+  const { resolveAgentHintsRow } = await import('./lesson-bundle');
+  const byConceptId = new Map<
+    string,
+    { concept_id: string; title_en: string; title_he: string; agent_hints: LessonAgentHints }
+  >();
+
+  if (sql) {
+    try {
+      const rows = (await sql`
+        SELECT concept_id, title_en, title_he, agent_hints
+        FROM lessons
+        WHERE concept_id = ANY(${conceptIds}::text[])
+      `) as Array<{
+        concept_id: string;
+        title_en: string;
+        title_he: string;
+        agent_hints: LessonAgentHints;
+      }>;
+      for (const row of rows) byConceptId.set(row.concept_id, row);
+    } catch (err) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn('fetchLessonAgentHintsByConceptIds failed:', err);
+      }
     }
-    return [];
   }
+
+  const resolved: Array<{
+    concept_id: string;
+    title_en: string;
+    title_he: string;
+    agent_hints: LessonAgentHints;
+  }> = [];
+  for (const conceptId of conceptIds) {
+    const row = resolveAgentHintsRow(conceptId, byConceptId.get(conceptId) ?? null);
+    if (row) resolved.push(row);
+  }
+  return resolved;
 }
 
 /**
@@ -5414,5 +5489,97 @@ async function resetLearnerDataLegacy(
           total_xp = 0
       WHERE learner_id = ${learnerId}
     `);
+  }
+}
+
+// ── Week-scoped training spec queries (append-only) ─────────────────────────
+
+/** One row of skill-atom mastery + FSRS-due status for the active week. */
+export interface WeekAtomRow {
+  atom: string;
+  mastery: number;
+  is_due: boolean;
+  concept_id: string;
+  concept_name: string;
+  concept_name_he: string | null;
+}
+
+/**
+ * Query 1/2 for buildWeekTrainingSpec.
+ * Fetches mastery + FSRS-due flag for the subset of skill atoms that belong to
+ * the active week's concepts. Bounded to ≤~50 atoms; indexed on
+ * (learner_id, skill_atom) so this is cheap (≈5–15 ms on warm Neon).
+ * Gracefully returns [] when the DB is unconfigured or the table is missing.
+ */
+export async function getWeekAtomMastery(
+  learnerId: string,
+  atomIds: string[],
+): Promise<WeekAtomRow[]> {
+  if (!sql || atomIds.length === 0) return [];
+  try {
+    const rows = (await sql`
+      SELECT skill_atom,
+             COALESCE(
+               last_score::float,
+               CASE WHEN attempts > 0 THEN successes::float / attempts ELSE 0 END
+             ) AS mastery,
+             (
+               (next_review_date IS NOT NULL AND next_review_date <= NOW())
+               OR (
+                 next_review_date IS NULL
+                 AND last_practiced IS NOT NULL
+                 AND last_practiced < NOW() - INTERVAL '1 day'
+               )
+             ) AS is_due
+      FROM skill_practice
+      WHERE learner_id = ${learnerId}
+        AND skill_atom = ANY(${atomIds}::text[])
+    `) as Array<{ skill_atom: string; mastery: number; is_due: boolean }>;
+
+    return rows.map((r) => {
+      const meta = atomConceptMap.get(r.skill_atom);
+      return {
+        atom: r.skill_atom,
+        mastery: Number(r.mastery ?? 0),
+        is_due: Boolean(r.is_due),
+        concept_id: meta?.concept_id ?? r.skill_atom,
+        concept_name: meta?.concept_name ?? r.skill_atom.replace(/_/g, ' '),
+        concept_name_he: meta?.concept_name_he ?? null,
+      };
+    });
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[neon-db] getWeekAtomMastery failed', err);
+    }
+    return [];
+  }
+}
+
+/**
+ * Query 2/2 for buildWeekTrainingSpec.
+ * Returns true when the learner has at least one passing weekly-gate attempt
+ * for the given (planId, weekNum). Gracefully returns false on any error
+ * (missing test_attempts table, DB down, etc.).
+ */
+export async function getGatePassed(
+  learnerId: string,
+  planId: string,
+  weekNum: number,
+): Promise<boolean> {
+  if (!sql) return false;
+  try {
+    const rows = (await sql`
+      SELECT 1 AS ok
+      FROM test_attempts
+      WHERE learner_id = ${learnerId}
+        AND plan_id = ${planId}
+        AND week_num = ${weekNum}
+        AND kind = 'weekly_gate'
+        AND passed = true
+      LIMIT 1
+    `) as Array<{ ok: number }>;
+    return rows.length > 0;
+  } catch {
+    return false;
   }
 }
