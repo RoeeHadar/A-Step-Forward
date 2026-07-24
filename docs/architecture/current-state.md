@@ -1,7 +1,7 @@
 # Architecture — As-Built Snapshot
 
 > **Maintained by:** Architecture Steward reviews (`.cursor/skills/architecture-review/`).
-> **Last updated:** 2026-07-05
+> **Last updated:** 2026-07-24
 >
 > This document describes **what runs today**, which may differ from the target
 > topology in `PLAN.md` / `ARCHITECTURE.md`. Update after major deploys or ADRs.
@@ -17,7 +17,7 @@
 | Primary DB | Neon Postgres | Profiles, mastery, plans, chat, notes | Neon |
 | LLM | Groq (via `apps/web/src/lib/llm-provider.ts`) | Chat, quiz gen, consolidation | SaaS |
 | Optional API | `apps/api` (FastAPI) on Render | Legacy/accelerator routes | Render |
-| KG (runtime) | `kg-data.json`, `kg-cross-edges.json`, lessons index | Bundled on Vercel; no Neo4j on hot path | Repo |
+| KG (runtime) | 156 concepts (`kg-data.json`), 93 cross-subject edges (`kg-cross-edges.json`), 306 authored lessons | Bundled on Vercel; planner reads JSON not Postgres `kg_edges`; no Neo4j on hot path | Repo |
 | Workers | Cron routes + GitHub Actions | Memory consolidate (both fire Sun 03:00 UTC) | Vercel + GHA |
 
 **Critical path principle:** onboarding, diagnostic, plans, chat memory, `/learn`, progress, and most dashboards read/write **Neon directly** from Vercel (`apps/web/src/lib/neon-db.ts`). Render absence must not break signup → study flows (`.cursor/skills/neon-direct-route/SKILL.md`).
@@ -34,9 +34,10 @@ Browser → POST /api/chat (Vercel)
   → Neon: chat_turns, learner_agent_notes, persona reads
   → Context: kg JSON, getCurrentPlan (DB weeks) + buildLearningPlan snapshot (KG path)
   → Mastery (concept-scope filtered)
+  → No MCP tool calls on the Vercel path
 ```
 
-No Render dependency on the happy path (`apps/web/src/app/api/chat/route.ts`).
+No Render dependency on the happy path (`apps/web/src/app/api/chat/route.ts`). Agent prompts in `agent-baseline.ts` / `agent-prompts.ts` were truth-aligned 2026-07-24 to describe pre-injected context (not MCP tools).
 
 ### Learner UI pages (Neon-direct SSR)
 

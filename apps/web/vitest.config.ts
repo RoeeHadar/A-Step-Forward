@@ -38,13 +38,7 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
       'server-only': path.resolve(__dirname, './src/test-utils/server-only-stub.ts'),
-      '@asf/schemas': path.resolve(__dirname, '../../packages/schemas/ts/index.ts'),
-      '@asf/schemas/agents': path.resolve(__dirname, '../../packages/schemas/ts/agents.ts'),
-      '@asf/schemas/memory': path.resolve(__dirname, '../../packages/schemas/ts/memory.ts'),
-      '@asf/schemas/learning_path': path.resolve(
-        __dirname,
-        '../../packages/schemas/ts/learning_path.ts',
-      ),
+      '@asf/schemas': path.resolve(__dirname, '../../packages/schemas/ts'),
       '@asf/ui': path.resolve(__dirname, '../../packages/ui/src/index.ts'),
     },
   },

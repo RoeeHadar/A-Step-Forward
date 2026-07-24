@@ -29,7 +29,7 @@ buildAgentBaseline()           # apps/web/src/lib/agent-baseline.ts
 + [mastery | relevant curriculum | lesson agent_hints | learning-plan snapshot]
 ```
 
-The **baseline** tells every agent: the corpus stats (117 KG concepts, 93 cross-subject edges, ~74 authored lessons, ~500 skill atoms), the full agent network roster, and the universal rules (bilingual HE-default, math always LTR in `$...$` / `$$...$$`, no external links, brand-new-learner protocol). This means **a brand-new learner with zero history gets a fully-grounded agent on turn one** — the entire knowledge base is the baseline.
+The **baseline** tells every agent: the corpus stats (156 KG concepts, 93 cross-subject edges, 306 authored lessons, ~649 seeded skill atoms), the full agent network roster, and the universal rules (bilingual HE-default, math always LTR in `$...$` / `$$...$$`, no external links, brand-new-learner protocol). This means **a brand-new learner with zero history gets a fully-grounded agent on turn one** — the entire knowledge base is the baseline.
 
 ### Per-learner memory layers (storage: Neon, keyed by Clerk `userId`)
 

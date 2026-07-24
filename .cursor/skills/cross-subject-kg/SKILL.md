@@ -34,10 +34,14 @@ these are ALL within the same subject by convention.
 ```
 apps/web/src/lib/kg-cross-edges.json          # source of truth (hand-curated)
         │
-        │  scripts/seed-lessons.mjs (during seed) upserts into Postgres
-        ▼
-Neon `kg_edges` table                         # what the runtime planner queries
+        ├─ bundled into apps/web (Vercel) ──► learning-plan.ts, chat agents
+        │
+        └─ scripts/seed-lessons.mjs upserts ──► Neon `kg_edges` (optional Python stack only)
 ```
+
+**Runtime reads the bundled JSON**, not Neon `kg_edges`. The Postgres table is a
+seeded projection for the optional FastAPI / GraphRAG services; do not treat it as
+authoritative for web path planning.
 
 Edit the JSON, run the seed workflow. Each edge has:
 
@@ -125,7 +129,7 @@ How atoms get into the database:
 | Layer                                            | Files / tables                                                            |
 | ------------------------------------------------ | ------------------------------------------------------------------------- |
 | Within-subject prereqs (source of truth: YAML)   | `content/knowledge-graph/*.yaml` → `apps/web/src/lib/kg-data.json`        |
-| Cross-subject edges (source of truth: JSON)      | `apps/web/src/lib/kg-cross-edges.json` → Postgres `kg_edges`              |
+| Cross-subject edges (source of truth: JSON)      | `apps/web/src/lib/kg-cross-edges.json` → bundled web runtime + Postgres `kg_edges` (projection) |
 | Skill atoms (source of truth: lesson JSONs)      | `scripts/seed_data/lessons/*.json` → Postgres `skill_atoms`, `lesson_skill_atoms` |
 | Per-learner mastery                              | Postgres `skill_practice` (written by `/api/lesson/answer`)               |
 | Path planning                                    | `apps/web/src/lib/learning-plan.ts` (reads kg JSON + skill_practice)     |
