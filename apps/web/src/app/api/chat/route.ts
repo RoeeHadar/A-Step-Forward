@@ -160,7 +160,7 @@ function applyPostStreamSolverHygiene(
   assistantVisible: string,
   locale: 'he' | 'en',
 ): { text: string; repairNotice: string | null } {
-  let text = stripCiteMachineTags(assistantVisible);
+  const text = stripCiteMachineTags(assistantVisible);
   if (agent !== 'tutor' && agent !== 'coach') return { text, repairNotice: null };
 
   const solve = trySolveAuthoritative(userMessage);
