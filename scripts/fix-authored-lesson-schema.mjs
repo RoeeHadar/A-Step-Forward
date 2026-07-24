@@ -9,6 +9,8 @@
  *   node scripts/fix-authored-lesson-schema.mjs --watch   # fix until stable
  */
 import { readFileSync, writeFileSync } from 'fs';
+import { argv } from 'process';
+import { fileURLToPath } from 'url';
 import { DIFFICULTIES, validateLessonStrict } from './lib/normalize-lesson.mjs';
 
 export const LESSON_IDS = [
@@ -229,4 +231,4 @@ async function main() {
   process.exitCode = dirty.length === 0 ? 0 : 1;
 }
 
-await main();
+if (argv[1] && fileURLToPath(import.meta.url) === argv[1]) await main();
