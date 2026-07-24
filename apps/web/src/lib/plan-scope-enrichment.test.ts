@@ -50,6 +50,14 @@ describe('plan-scope-enrichment', () => {
     );
   });
 
+  it('overrides stale bagrut goal_key when new goal is חדו״א 1', () => {
+    const enriched = enrichPlanPayloadFromLearnerContext(
+      { confirmed: true, reason: 'x', goal: 'מבחן בחדו״א 1' },
+      { subjects: ['math'], goal_key: 'bagrut_math_5', goal: 'בגרות מתמטיקה 5' },
+    );
+    expect(enriched.goal_key).toBe('calculus1');
+  });
+
   it('broad physics template + profile passes clarification (user session case)', () => {
     const template = buildPlanChangeRequest(
       { goal: 'מבחן בפיזיקה', date: 'עוד שבוע' },

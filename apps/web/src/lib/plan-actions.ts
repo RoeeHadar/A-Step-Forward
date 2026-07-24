@@ -11,10 +11,13 @@ import {
   planChangeTextForParsing,
 } from '@/lib/plan-change-template';
 import {
+  inferGoalKeyFromGoalText,
+  looksLikeCalculus1Goal,
   sanitizeConceptIds,
   sanitizePlanUpdatePayload,
   type PlanUpdatePayload,
 } from '@/lib/plan-catalog';
+import { CALC1_GOAL_RE } from '@/lib/goal-track';
 
 export type { PlanUpdatePayload };
 
@@ -94,7 +97,7 @@ export const PHYSICS_RADIATION_MATTER_EXAM_CONCEPTS = [
 
 const TOPIC_KEYWORD_RULES: Array<{ pattern: RegExp; concepts: string[] }> = [
   {
-    pattern: /חדו[\"']?א\s*1|חדוא\s*1|calculus\s*1\b|\bcalc1\b/i,
+    pattern: CALC1_GOAL_RE,
     concepts: [...CALC1_EXAM_CONCEPTS],
   },
   {
@@ -266,7 +269,7 @@ export function inferGoalMetaFromText(...texts: string[]): InferredGoalMeta {
     out.goal = /[\u0590-\u05FF]/.test(blob)
       ? 'מבחן במתמטיקה בדידה'
       : 'Discrete mathematics exam';
-  } else if (/חדו[\"']?א\s*1|חדוא\s*1|calculus\s*1\b|\bcalc1\b/i.test(blob)) {
+  } else if (looksLikeCalculus1Goal(blob)) {
     out.goal = /[\u0590-\u05FF]/.test(blob) ? 'מבחן בחדו״א 1' : 'Calculus 1 exam';
     out.goal_key = 'calculus1';
   }
@@ -283,8 +286,14 @@ export function inferGoalMetaFromText(...texts: string[]): InferredGoalMeta {
     out.goal_key = out.goal_key ?? 'bagrut_physics';
   }
 
-  if (/חדו[\"']?א\s*1|חדוא\s*1|calculus\s*1\b|\bcalc1\b/i.test(blob)) {
+  if (looksLikeCalculus1Goal(blob) || looksLikeCalculus1Goal(out.goal)) {
     out.goal_key = 'calculus1';
+  }
+
+  // Template "מטרה או מבחן: …" can set goal text without a goal_key — infer it.
+  if (!out.goal_key) {
+    const inferred = inferGoalKeyFromGoalText(out.goal) ?? inferGoalKeyFromGoalText(blob);
+    if (inferred) out.goal_key = inferred;
   }
 
   if (/לא עושה בגרות|לא בגרות|not doing bagrut|no longer.*bagrut|ביטול.*בגרות/i.test(blob)) {

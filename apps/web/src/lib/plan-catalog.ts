@@ -6,7 +6,13 @@ import lessonsIndex from './lessons-index.generated.json';
 import { isConceptInBundle } from './lesson-bundle';
 import { resolveConceptAlias } from './concept-aliases';
 import kg from './kg-data.json';
+import {
+  CALC1_GOAL_RE,
+  looksLikeCalculus1Goal,
+  isClearlyNonBagrutGoalText,
+} from './goal-track';
 
+export { CALC1_GOAL_RE, looksLikeCalculus1Goal, isClearlyNonBagrutGoalText };
 export interface PlanUpdatePayload {
   confirmed: boolean;
   reason: string;
@@ -103,6 +109,24 @@ export function sanitizeConceptIds(ids: string[] | undefined, max = 12): string[
 
 export function isValidGoalKey(key: string | undefined | null): key is OnboardingGoalKey {
   return Boolean(key && GOAL_KEY_SET.has(key));
+}
+
+/**
+ * Infer an onboarding goal_key from goal / exam free text.
+ * Used when a plan-update template sets the label but omits goal_key, so we do
+ * not keep a stale bagrut_* key on personality_profile.
+ */
+export function inferGoalKeyFromGoalText(
+  text: string | null | undefined,
+): OnboardingGoalKey | undefined {
+  if (!text?.trim()) return undefined;
+  if (/מתמטיקה בדיד|discrete math|\bבדיד\b/i.test(text)) return 'university_prep';
+  if (looksLikeCalculus1Goal(text)) return 'calculus1';
+  if (/אלגברה לינאר|linear algebra/i.test(text)) return 'linear_algebra';
+  if (/מכינה|makhina|university prep|הכנה לאוניברסיט/i.test(text)) {
+    return 'university_prep';
+  }
+  return undefined;
 }
 
 export function goalKeyToPointsGroup(key: string | undefined | null): string | null {

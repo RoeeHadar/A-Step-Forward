@@ -11,6 +11,29 @@ const BAGRUT_GOAL_KEYS = new Set([
   'bagrut_math',
 ]);
 
+/**
+ * Optional quotes between חדו and א — ASCII, curly, and Hebrew geresh/gershayim
+ * (U+05F3 ׳ / U+05F4 ״). Templates often write "חדו״א 1"; detectors that only
+ * accept ASCII quotes leave personality_profile.goal_key stuck on bagrut_*.
+ */
+export const CALC1_GOAL_RE =
+  /חדו["'\u05F3\u05F4\u2018\u2019\u201C\u201D׳״]?א\s*1|חדוא\s*1|calculus\s*1\b|\bcalc1\b/i;
+
+export function looksLikeCalculus1Goal(text: string | null | undefined): boolean {
+  return Boolean(text && CALC1_GOAL_RE.test(text));
+}
+
+/** Non-bagrut tracks that must override a stale bagrut_* goal_key in UI framing. */
+export function isClearlyNonBagrutGoalText(text: string | null | undefined): boolean {
+  if (!text?.trim()) return false;
+  if (/בגרות|bagrut|יח["׳״'"]?\s*[345]/i.test(text)) return false;
+  if (looksLikeCalculus1Goal(text)) return true;
+  if (/מתמטיקה בדיד|discrete math|\bבדיד\b/i.test(text)) return true;
+  if (/אלגברה לינאר|linear algebra/i.test(text)) return true;
+  if (/מכינה|makhina|university prep|הכנה לאוניברסיט/i.test(text)) return true;
+  return false;
+}
+
 export function isBagrutGoalKey(goalKey: string | null | undefined): boolean {
   if (!goalKey) return false;
   return BAGRUT_GOAL_KEYS.has(goalKey) || goalKey.startsWith('bagrut_');
@@ -26,27 +49,49 @@ export function isBagrutTrack(opts: {
   goalKey?: string | null;
   goal?: string | null;
 }): boolean {
+  // Live goal text wins over a stale bagrut_* key (e.g. calc1 template that
+  // updated `goal` but failed to rewrite personality_profile.goal_key).
+  if (isClearlyNonBagrutGoalText(opts.goal)) return false;
   if (isBagrutGoalKey(opts.goalKey)) return true;
   if (opts.goalKey) return false;
   return isBagrutGoalText(opts.goal);
 }
 
 export function resolveGoalDeadlineIso(
-  nextTestDate: string | null | undefined,
-  finalGoalDate: string | null | undefined,
+  nextTestDate: string | Date | null | undefined,
+  finalGoalDate: string | Date | null | undefined,
 ): string | null {
-  const next = nextTestDate?.slice(0, 10) || null;
-  const final = finalGoalDate?.slice(0, 10) || null;
+  const next = toIsoDateOnly(nextTestDate);
+  const final = toIsoDateOnly(finalGoalDate);
   if (final && next) return final >= next ? final : next;
   return final ?? next;
 }
 
+/** Normalize Neon date / ISO string / Date into YYYY-MM-DD. */
+export function toIsoDateOnly(
+  value: string | Date | null | undefined,
+): string | null {
+  if (value == null) return null;
+  if (value instanceof Date) {
+    if (Number.isNaN(value.getTime())) return null;
+    return value.toISOString().slice(0, 10);
+  }
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    if (!trimmed) return null;
+    return trimmed.slice(0, 10);
+  }
+  const asString = String(value);
+  return /^\d{4}-\d{2}-\d{2}/.test(asString) ? asString.slice(0, 10) : null;
+}
+
 export function daysUntilIso(
-  isoDate: string | null | undefined,
+  isoDate: string | Date | null | undefined,
   now: Date = new Date(),
 ): number | null {
-  if (!isoDate) return null;
-  const target = new Date(isoDate.slice(0, 10) + 'T12:00:00');
+  const day = toIsoDateOnly(isoDate);
+  if (!day) return null;
+  const target = new Date(day + 'T12:00:00');
   if (Number.isNaN(target.getTime())) return null;
   const start = new Date(now);
   start.setHours(12, 0, 0, 0);

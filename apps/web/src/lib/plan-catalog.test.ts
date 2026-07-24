@@ -168,6 +168,17 @@ describe('plan-actions', () => {
     expect(meta.next_test_date).toBeTruthy();
   });
 
+  it('infers calculus1 goal_key when template uses Hebrew gershayim (חדו״א)', () => {
+    const userMsg = buildPlanChangeRequest(
+      { goal: 'מבחן בחדו״א 1', date: 'עוד שבוע' },
+      'he',
+    );
+    const meta = inferGoalMetaFromText(userMsg);
+    expect(meta.goal).toContain('חדו');
+    expect(meta.goal_key).toBe('calculus1');
+    expect(meta.final_goal_date).toBeTruthy();
+  });
+
   it('builds one-week exam cram options for calc1 test in seven days', () => {
     const d = new Date();
     d.setDate(d.getDate() + 7);

@@ -3,6 +3,7 @@
  * like "מבחן בפיזיקה" resolve without forcing learners to know exam codes.
  */
 import type { PlanUpdatePayload } from '@/lib/plan-catalog';
+import { inferGoalKeyFromGoalText, looksLikeCalculus1Goal } from '@/lib/plan-catalog';
 import {
   inferConceptIdsFromText,
   PHYSICS_ELECTRICITY_EXAM_CONCEPTS,
@@ -40,7 +41,7 @@ function defaultPhysicsConcepts(ctx: LearnerPlanContext): string[] {
 }
 
 function defaultMathConcepts(ctx: LearnerPlanContext): string[] {
-  if (ctx.goal_key === 'calculus1' || /חדו|חדוא|calculus\s*1/i.test(ctx.goal ?? '')) {
+  if (ctx.goal_key === 'calculus1' || looksLikeCalculus1Goal(ctx.goal)) {
     return inferConceptIdsFromText('חדו״א 1 calculus 1');
   }
   if (/בדיד|discrete/i.test(ctx.goal ?? '')) {
@@ -91,7 +92,15 @@ export function enrichPlanPayloadFromLearnerContext(
   const hasPrepend = (out.prepend_concepts?.length ?? 0) > 0;
   const hasPriority = (out.priority_concepts?.length ?? 0) > 0;
 
-  if (!out.goal_key && ctx.goal_key) {
+  // Prefer keys inferred from the NEW goal text over a stale profile goal_key
+  // (bagrut_* left behind after a calc1 / discrete template update).
+  const inferredKey =
+    inferGoalKeyFromGoalText(out.goal) ??
+    inferGoalKeyFromGoalText(text) ??
+    inferGoalKeyFromGoalText(ctx.goal);
+  if (inferredKey) {
+    out.goal_key = inferredKey;
+  } else if (!out.goal_key && ctx.goal_key) {
     out.goal_key = ctx.goal_key;
   }
 

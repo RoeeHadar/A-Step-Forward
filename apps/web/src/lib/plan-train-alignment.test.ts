@@ -39,6 +39,23 @@ describe('goal-track', () => {
     expect(isBagrutTrack({ goal: 'בגרות מתמטיקה' })).toBe(true);
   });
 
+  it('does not frame calc1 as bagrut when goal_key is stale', () => {
+    expect(
+      isBagrutTrack({ goalKey: 'bagrut_math_5', goal: 'מבחן בחדו״א 1' }),
+    ).toBe(false);
+    expect(
+      isBagrutTrack({ goalKey: 'bagrut_math_5', goal: 'מבחן בחדוא 1' }),
+    ).toBe(false);
+    expect(
+      goalCountdownLabel('he', 6, {
+        isBagrut: isBagrutTrack({
+          goalKey: 'bagrut_math_5',
+          goal: 'מבחן בחדו״א 1',
+        }),
+      }),
+    ).not.toContain('בגרות');
+  });
+
   it('countdown labels avoid bagrut for uni goals', () => {
     expect(goalCountdownLabel('he', 6, { isBagrut: false })).toContain('יעד');
     expect(goalCountdownLabel('he', 6, { isBagrut: false })).not.toContain('בגרות');

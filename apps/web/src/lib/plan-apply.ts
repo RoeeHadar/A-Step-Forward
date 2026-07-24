@@ -32,6 +32,7 @@ import {
 } from '@/lib/plan-scope-enrichment';
 import { getLearnerProfile, getCurrentPlan } from '@/lib/neon-db';
 import {
+  looksLikeCalculus1Goal,
   sanitizePlanUpdatePayload,
   type PlanUpdatePayload,
 } from '@/lib/plan-catalog';
@@ -324,7 +325,8 @@ function mergeProposal(
   const isCalc1 =
     !isDiscrete &&
     (goalMeta.goal_key === 'calculus1' ||
-      /חדו[\"']?א|חדוא|calculus\s*1|\bcalc1\b/i.test(blob));
+      looksLikeCalculus1Goal(blob) ||
+      looksLikeCalculus1Goal(goalMeta.goal));
 
   const reason =
     fromTag?.reason?.trim() ||
