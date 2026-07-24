@@ -42,14 +42,16 @@ Quit Cursor (File → Exit), reopen the repo folder:
 |-------|-------|
 | Name | `asf-obsidian` |
 | Type | `stdio` |
-| Command | `cmd` |
-| Args | `/c` then the full path to `scripts\mcp-obsidian-vault.cmd` |
+| Command | `node` |
+| Args | full path to `scripts\mcp-obsidian-vault.mjs` (one arg; do **not** wrap in `cmd /c`) |
 
-Full cmd path:
+Example arg (adjust if your clone path differs):
 
 ```
-C:\Users\roeeh\OneDrive\Desktop\Desktop\A Step Forward - AI Teaching Website\scripts\mcp-obsidian-vault.cmd
+C:\Users\roeeh\OneDrive\Desktop\Desktop\Cursor\A Step Forward - AI Teaching Website\scripts\mcp-obsidian-vault.mjs
 ```
+
+**Why not `cmd /c`?** Paths with spaces (`A Step Forward`) get split by `cmd` unless carefully quoted — Cursor then tries to run `...\Desktop\A` and fails. Separate `node` + argv is space-safe.
 
 4. Save → Enable → restart Cursor
 
@@ -59,7 +61,7 @@ From repo root in PowerShell:
 
 ```powershell
 pnpm install
-.\scripts\mcp-obsidian-vault.cmd
+node .\scripts\mcp-obsidian-vault.mjs
 ```
 
 You should see no error (process waits for MCP input). Press `Ctrl+C` to stop.

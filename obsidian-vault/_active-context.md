@@ -1,6 +1,6 @@
 ---
 type: active-context
-updated: 2026-07-19
+updated: 2026-07-24
 coordinator_status: .cursor/coordinator/STATUS.md
 production_web: f2a8d4a7
 ---
@@ -55,6 +55,7 @@ production_web: f2a8d4a7
 - **Status**: First-plan create **shipped** on `main` (`1d44e8cc`)
 - **Policy**: Obsidian vault documents architecture; repo code implements it
 - **Must-read before touching plan/onboarding**: `.cursor/skills/diagnostic-plan-golden-path/SKILL.md`
+- [x] **MCP vault connection verified (2026-07-24)** — global `asf-obsidian` + project `obsidian` both live via `scripts/mcp-obsidian-vault.mjs` → MCPVault over `obsidian-vault/` (183 notes). Space-safe `node`+argv launcher (no `cmd /c`).
 
 ## Prior (2026-07-11)
 

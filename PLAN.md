@@ -348,14 +348,14 @@ Edges (examples):
 | MCP                   | Why                                                             |
 | --------------------- | --------------------------------------------------------------- |
 | **filesystem**        | Project file access.                                            |
-| **github**            | Issues, PRs, CI.                                                |
+| **github**            | Issues, PRs, CI (needs `GITHUB_TOKEN`).                         |
 | **context7**          | Up-to-date library docs while coding.                           |
-| **shadcn**            | Add UI components directly.                                     |
+| **shadcn**            | Browse/install registry components (`npx shadcn@latest mcp`).   |
 | **playwright**        | Agent-driven E2E test creation.                                 |
-| **postgres**          | Inspect local DB during dev.                                    |
 | **sequential-thinking** | Helps Composer plan multi-step changes.                       |
-| **fetch**             | Light HTTP fetch.                                               |
-| **memory** (project)  | Same memory MCP the app uses, for dev/QA introspection.         |
+| **obsidian**          | Vault read/write/search (`scripts/mcp-obsidian-vault.mjs`). Prefer global `asf-obsidian` on Windows. |
+
+Not registered in Cursor by default (opt-in when developing those packages via `uv run` in `mcp-servers/<name>`): **memory-project**, **graphrag-project**, **curriculum-project**, **progress-project**. Runtime agents still use those servers in-product. **postgres** / **fetch** omitted — official postgres npm package is deprecated; fetch is Python/`uvx` and duplicates Cursor `WebFetch`.
 
 ### 7.2 Runtime MCPs (used by agents at inference)
 

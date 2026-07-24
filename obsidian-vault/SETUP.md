@@ -38,13 +38,15 @@ Prepared: 2026-07-02. This document records evaluated tools and how to activate 
 
 | Server | Role |
 |--------|------|
-| `obsidian` | **NEW** — vault read/write/search via `scripts/mcp-obsidian-vault.mjs` |
+| `obsidian` | Vault read/write/search via `scripts/mcp-obsidian-vault.mjs` (prefer global `asf-obsidian` on Windows) |
 | `filesystem` | Whole repo file access |
-| `memory-project` | Dev/QA introspection of learner memory |
-| `graphrag-project` | KG hybrid search during dev |
-| `curriculum-project` | Lesson/path tools against Neon |
-| `progress-project` | Mastery/planner introspection |
-| `github`, `postgres`, `context7`, `shadcn`, `playwright`, `fetch`, `sequential-thinking` | Existing dev tooling |
+| `github` | Issues / PRs / CI (`GITHUB_TOKEN`) |
+| `context7` | Live library docs |
+| `shadcn` | Registry browse/install (`npx shadcn@latest mcp`) |
+| `playwright` | Agent-driven E2E |
+| `sequential-thinking` | Multi-step planning aid |
+
+**Not in Cursor mcp.json** (code lives under `mcp-servers/`; enable with `uv run` only when developing those packages): `memory-project`, `graphrag-project`, `curriculum-project`, `progress-project`. Removed broken stubs: `postgres` (deprecated npm + empty URL), `fetch` (wrong npm package; use Cursor WebFetch).
 
 ### Runtime (in-product)
 

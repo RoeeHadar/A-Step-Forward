@@ -15,64 +15,19 @@
     },
     "shadcn": {
       "command": "cmd",
-      "args": ["/c", "npx.cmd", "-y", "@shadcn/ui-mcp"]
+      "args": ["/c", "npx.cmd", "-y", "shadcn@latest", "mcp"]
     },
     "playwright": {
       "command": "cmd",
       "args": ["/c", "npx.cmd", "-y", "@playwright/mcp"]
     },
-    "postgres": {
-      "command": "cmd",
-      "args": ["/c", "npx.cmd", "-y", "@modelcontextprotocol/server-postgres", "${env:DATABASE_URL_SYNC}"]
-    },
     "sequential-thinking": {
       "command": "cmd",
       "args": ["/c", "npx.cmd", "-y", "@modelcontextprotocol/server-sequential-thinking"]
     },
-    "fetch": {
-      "command": "cmd",
-      "args": ["/c", "npx.cmd", "-y", "@modelcontextprotocol/server-fetch"]
-    },
-    "memory-project": {
-      "command": "python",
-      "args": ["-m", "memory_mcp.server"],
-      "cwd": "${workspaceFolder}/mcp-servers/memory",
-      "env": {
-        "DATABASE_URL": "${env:DATABASE_URL}",
-        "REDIS_URL": "${env:REDIS_URL}"
-      }
-    },
-    "graphrag-project": {
-      "command": "python",
-      "args": ["-m", "graphrag_mcp.server"],
-      "cwd": "${workspaceFolder}/mcp-servers/graphrag",
-      "env": {
-        "NEO4J_URI": "${env:NEO4J_URI}",
-        "NEO4J_USER": "${env:NEO4J_USER}",
-        "NEO4J_PASSWORD": "${env:NEO4J_PASSWORD}",
-        "DATABASE_URL": "${env:DATABASE_URL}"
-      }
-    },
-    "curriculum-project": {
-      "command": "python",
-      "args": ["-m", "curriculum_mcp.server"],
-      "cwd": "${workspaceFolder}/mcp-servers/curriculum",
-      "env": {
-        "DATABASE_URL": "${env:DATABASE_URL}"
-      }
-    },
-    "progress-project": {
-      "command": "python",
-      "args": ["-m", "progress_mcp.server"],
-      "cwd": "${workspaceFolder}/mcp-servers/progress",
-      "env": {
-        "DATABASE_URL": "${env:DATABASE_URL}",
-        "REDIS_URL": "${env:REDIS_URL}"
-      }
-    },
     "obsidian": {
-      "command": "cmd",
-      "args": ["/c", "\"${workspaceFolder}\\scripts\\mcp-obsidian-vault.cmd\""]
+      "command": "node",
+      "args": ["${workspaceFolder}/scripts/mcp-obsidian-vault.mjs"]
     }
   }
 }
