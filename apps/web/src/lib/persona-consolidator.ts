@@ -31,6 +31,7 @@ import { neon, neonConfig } from '@neondatabase/serverless';
 import {
   getLearnerPersona,
   persistConsolidationResult,
+  ensureMemoryClaimColumns,
   type LearnerPersona,
   type LearnerAgentNote,
 } from '@/lib/neon-db';
@@ -171,10 +172,12 @@ async function callLLMForConsolidation(
  * shared persona. Returns a summary of what was done. Safe to call when
  * `LLM_API_KEY` is missing (returns `{ ran: false, reason: 'no_llm' }`).
  *
- * Claim semantics: the call immediately claims the learnerId in
- * `consolidatingNow` and releases it in a `finally` block. Any concurrent
- * call for the same learnerId within the same instance returns early with
- * `ran: false, reason: 'consolidation_in_progress'` before reaching the LLM.
+ * Concurrency guards (layered):
+ * 1. Same-instance: `consolidatingNow` Set — fast path, no DB round-trip.
+ * 2. Cross-instance: `UPDATE learner_profiles SET consolidation_started_at = NOW()
+ *    WHERE … RETURNING learner_id` — atomic conditional claim; 0 rows means
+ *    another Vercel instance is already consolidating this learner. The claim
+ *    is released (set to NULL) in the `finally` block.
  */
 export async function consolidateLearnerMemory(
   learnerId: string,
@@ -191,8 +194,10 @@ export async function consolidateLearnerMemory(
     };
   }
 
-  // Claim before LLM call — prevents concurrent invocations from both paying
-  // the LLM cost and later writing conflicting personas.
+  // Ensure cross-instance claim columns exist (once per cold start, non-fatal).
+  await ensureMemoryClaimColumns();
+
+  // Layer 1 — same-instance guard (fast path, no DB round-trip).
   if (consolidatingNow.has(learnerId)) {
     return {
       ran: false,
@@ -205,10 +210,44 @@ export async function consolidateLearnerMemory(
   }
   consolidatingNow.add(learnerId);
 
+  // Layer 2 — cross-instance DB claim.
+  let dbClaimed = false;
+  try {
+    const claimed = (await sql`
+      UPDATE learner_profiles
+      SET consolidation_started_at = NOW()
+      WHERE learner_id = ${learnerId}
+        AND (consolidation_started_at IS NULL OR consolidation_started_at < NOW() - INTERVAL '10 minutes')
+      RETURNING learner_id
+    `) as Array<{ learner_id: string }>;
+    if (claimed.length === 0) {
+      // Another instance claimed this learner — release in-memory guard and skip.
+      consolidatingNow.delete(learnerId);
+      return {
+        ran: false,
+        reason: 'consolidation_in_progress',
+        persona_chars_before: 0,
+        persona_chars_after: 0,
+        notes_considered: 0,
+        notes_archived: 0,
+      };
+    }
+    dbClaimed = true;
+  } catch {
+    // Column may not exist yet (race on first cold start) — fall through and
+    // rely on the same-instance guard and the write-side advisory lock only.
+  }
+
   try {
     return await _consolidateLearnerMemoryInner(learnerId, opts);
   } finally {
     consolidatingNow.delete(learnerId);
+    // Release the DB claim so the next run can pick this learner up again.
+    if (dbClaimed) {
+      await (sql`
+        UPDATE learner_profiles SET consolidation_started_at = NULL WHERE learner_id = ${learnerId}
+      ` as Promise<unknown>).catch(() => {});
+    }
   }
 }
 
@@ -273,6 +312,9 @@ async function _consolidateLearnerMemoryInner(
 /**
  * Returns the set of learner ids that have at least `minNotes` live notes
  * across all their agents — i.e. the cron sweep work-list.
+ * Ordered by `MIN(created_at) ASC` so learners with the oldest unprocessed
+ * notes are processed first, guaranteeing fair FIFO convergence over
+ * successive cron runs (no learner is perpetually skipped).
  * `limit` is pushed to the DB so we never materialise an unbounded result set.
  */
 export async function listLearnersWithLiveNotes(
@@ -286,6 +328,7 @@ export async function listLearnersWithLiveNotes(
     WHERE archived_at IS NULL AND superseded_by IS NULL
     GROUP BY learner_id
     HAVING COUNT(*) >= ${minNotes}
+    ORDER BY MIN(created_at) ASC
     LIMIT ${limit}
   `) as Array<{ learner_id: string }>;
   return rows.map((r) => r.learner_id);

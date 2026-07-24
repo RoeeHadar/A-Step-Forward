@@ -35,7 +35,7 @@ import {
   ensureTestAttemptsTable,
   getLatestGateWeakConcepts,
 } from './test-attempts';
-import { goalKeyToPointsGroup, sanitizeConceptIds } from './plan-catalog';
+import { goalKeyToPointsGroup, inferGoalKeyFromGoalText, sanitizeConceptIds } from './plan-catalog';
 import {
   buildFastPlanConceptOrder,
   bootstrapConceptsForProfile,
@@ -480,6 +480,38 @@ async function ensurePlanV2Columns(s: ReturnType<typeof requireSql>): Promise<vo
   } catch {
     // Column already exists or DB rejects idempotent DDL — non-fatal.
     _planV2ColumnsEnsured = true;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Memory claim columns — idempotent DDL migration (one round-trip per cold start)
+// ---------------------------------------------------------------------------
+
+let _memoryClaimColumnsEnsured = false;
+
+/**
+ * Ensures the cross-instance claim columns exist on `learner_profiles`.
+ * Idempotent — runs at most once per cold start. Non-fatal on error.
+ *
+ * - `last_dreamed_at`          — held while a dream pass is in-flight.
+ * - `consolidation_started_at` — held while a consolidation pass is in-flight.
+ *
+ * A conditional `UPDATE … WHERE … RETURNING` against these columns is the
+ * atomic cross-instance claim — no advisory locks (they hang on Neon HTTP).
+ */
+export async function ensureMemoryClaimColumns(): Promise<void> {
+  if (_memoryClaimColumnsEnsured) return;
+  if (!sql) {
+    _memoryClaimColumnsEnsured = true;
+    return;
+  }
+  try {
+    await sql`ALTER TABLE learner_profiles ADD COLUMN IF NOT EXISTS last_dreamed_at TIMESTAMPTZ`;
+    await sql`ALTER TABLE learner_profiles ADD COLUMN IF NOT EXISTS consolidation_started_at TIMESTAMPTZ`;
+    _memoryClaimColumnsEnsured = true;
+  } catch {
+    // Column already exists or DB rejects idempotent DDL — non-fatal.
+    _memoryClaimColumnsEnsured = true;
   }
 }
 
@@ -2090,12 +2122,17 @@ export async function applyPlanProfileUpdates(
   const profile = await getLearnerProfile(learnerId);
   if (!profile) return;
   const personality = { ...(profile.personality_profile ?? {}) };
-  const pointsGroup = goalKeyToPointsGroup(updates.goal_key);
-  if (updates.goal_key) personality.goal_key = updates.goal_key;
+  const resolvedGoalKey =
+    updates.goal_key ||
+    inferGoalKeyFromGoalText(updates.goal) ||
+    inferGoalKeyFromGoalText(updates.next_test_name) ||
+    undefined;
+  const pointsGroup = goalKeyToPointsGroup(resolvedGoalKey);
+  if (resolvedGoalKey) personality.goal_key = resolvedGoalKey;
   const subjectsOverride =
-    updates.goal_key === 'bagrut_physics'
+    resolvedGoalKey === 'bagrut_physics'
       ? ['physics']
-      : updates.goal_key === 'calculus1' || updates.goal_key === 'linear_algebra'
+      : resolvedGoalKey === 'calculus1' || resolvedGoalKey === 'linear_algebra'
         ? ['math']
         : null;
 

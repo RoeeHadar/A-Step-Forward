@@ -7,7 +7,7 @@
 import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import { agentNameSchema, type AgentName } from '@asf/schemas/agents';
-import { supersedeAgentNote, dbConfigured } from '@/lib/neon-db';
+import { supersedeAgentNote, dbConfigured, ensureMemoryClaimColumns } from '@/lib/neon-db';
 import { WEB_LIVE_AGENTS } from '@/lib/web-agents';
 
 neonConfig.fetchConnectionCache = true;
@@ -129,8 +129,13 @@ async function dreamOneAgent(learnerId: string, agent: string): Promise<DreamPas
  * When `agents` is omitted, processes every agent that has live notes.
  * When `scope` is `live`, only the four website agents are processed.
  *
- * Includes a single-instance cooldown guard (DREAM_COOLDOWN_MS) to prevent
- * double-processing from concurrent calls within the same Vercel instance.
+ * Concurrency guards (layered):
+ * 1. Same-instance: `dreamLastStarted` map — fast path, no DB round-trip.
+ * 2. Cross-instance: `UPDATE learner_profiles SET last_dreamed_at = NOW()
+ *    WHERE … RETURNING learner_id` — atomic conditional claim; 0 rows means
+ *    another Vercel instance already claimed this learner. The claim is
+ *    released (set to NULL) in the `finally` block.
+ *
  * Fetches at most DREAM_NOTES_FETCH_LIMIT notes per (learner, agent) so a
  * single invocation is bounded even for very large note sets; convergence
  * happens over successive cron runs.
@@ -143,51 +148,92 @@ export async function dreamLearnerMemory(
     return { archived: 0, superseded: 0, agents_processed: 0 };
   }
 
-  // Single-instance concurrency guard: skip if a pass ran recently.
+  // Layer 1 — same-instance cooldown guard (fast path, no DB round-trip).
   const lastStarted = dreamLastStarted.get(learnerId) ?? 0;
   if (Date.now() - lastStarted < DREAM_COOLDOWN_MS) {
     return { archived: 0, superseded: 0, agents_processed: 0 };
   }
   dreamLastStarted.set(learnerId, Date.now());
 
-  let agents: string[];
-  if (opts.agents?.length) {
-    agents = opts.agents;
-  } else if (opts.scope === 'live') {
-    const withNotes = await listAgentsWithNotes(learnerId);
-    agents = withNotes.filter((a) => (WEB_LIVE_AGENTS as readonly string[]).includes(a));
-  } else {
-    agents = await listAgentsWithNotes(learnerId);
-  }
+  // Ensure cross-instance claim columns exist (once per cold start, non-fatal).
+  await ensureMemoryClaimColumns();
 
-  let archived = 0;
-  let superseded = 0;
-  let agentsProcessed = 0;
-
-  for (const agent of agents) {
-    if (opts.scope === 'live' && !(WEB_LIVE_AGENTS as readonly string[]).includes(agent)) {
-      continue;
+  // Layer 2 — cross-instance DB claim.
+  // Skip if `sql` is null (no DATABASE_URL) or if the claim query errors.
+  let dbClaimed = false;
+  if (sql) {
+    try {
+      const claimed = (await sql`
+        UPDATE learner_profiles
+        SET last_dreamed_at = NOW()
+        WHERE learner_id = ${learnerId}
+          AND (last_dreamed_at IS NULL OR last_dreamed_at < NOW() - INTERVAL '5 minutes')
+        RETURNING learner_id
+      `) as Array<{ learner_id: string }>;
+      if (claimed.length === 0) {
+        // Another instance claimed this learner — skip.
+        return { archived: 0, superseded: 0, agents_processed: 0 };
+      }
+      dbClaimed = true;
+    } catch {
+      // Column may not exist yet (race on first cold start) — fall through
+      // and rely on the same-instance guard only.
     }
-    const parsed = agentNameSchema.safeParse(agent);
-    if (!parsed.success) continue;
-    const r = await dreamOneAgent(learnerId, parsed.data as AgentName);
-    if (r.agents_processed > 0) agentsProcessed += 1;
-    archived += r.archived;
-    superseded += r.superseded;
   }
 
-  return { archived, superseded, agents_processed: agentsProcessed };
+  try {
+    let agents: string[];
+    if (opts.agents?.length) {
+      agents = opts.agents;
+    } else if (opts.scope === 'live') {
+      const withNotes = await listAgentsWithNotes(learnerId);
+      agents = withNotes.filter((a) => (WEB_LIVE_AGENTS as readonly string[]).includes(a));
+    } else {
+      agents = await listAgentsWithNotes(learnerId);
+    }
+
+    let archived = 0;
+    let superseded = 0;
+    let agentsProcessed = 0;
+
+    for (const agent of agents) {
+      if (opts.scope === 'live' && !(WEB_LIVE_AGENTS as readonly string[]).includes(agent)) {
+        continue;
+      }
+      const parsed = agentNameSchema.safeParse(agent);
+      if (!parsed.success) continue;
+      const r = await dreamOneAgent(learnerId, parsed.data as AgentName);
+      if (r.agents_processed > 0) agentsProcessed += 1;
+      archived += r.archived;
+      superseded += r.superseded;
+    }
+
+    return { archived, superseded, agents_processed: agentsProcessed };
+  } finally {
+    // Release the DB claim so the next cron run can pick this learner up again.
+    if (dbClaimed && sql) {
+      await (sql`
+        UPDATE learner_profiles SET last_dreamed_at = NULL WHERE learner_id = ${learnerId}
+      ` as Promise<unknown>).catch(() => {});
+    }
+  }
 }
 
-/** Learners with at least one live agent note — cron work-list for dreaming.
- *  `limit` is applied at the DB level to avoid fetching an unbounded result set.
+/**
+ * Learners with at least one live agent note — cron work-list for dreaming.
+ * Ordered by `MIN(created_at) ASC` so learners with the oldest unprocessed
+ * notes are processed first, guaranteeing fair FIFO convergence over
+ * successive cron runs (no learner is perpetually skipped).
+ * `limit` is applied at the DB level to avoid fetching an unbounded result set.
  */
 export async function listLearnersWithAnyLiveNotes(limit = 200): Promise<string[]> {
   if (!sql) return [];
   const rows = (await sql`
-    SELECT DISTINCT learner_id
+    SELECT learner_id
     FROM learner_agent_notes
     WHERE archived_at IS NULL AND superseded_by IS NULL
+    GROUP BY learner_id
+    ORDER BY MIN(created_at) ASC
     LIMIT ${limit}
   `) as Array<{ learner_id: string }>;
   return rows.map((r) => r.learner_id);
