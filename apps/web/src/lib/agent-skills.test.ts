@@ -15,6 +15,10 @@ describe('agent-skills ADR-0011 / ADR-0012', () => {
     expect(shared).toContain('never deny it');
     expect(shared).toContain('4-beat');
     expect(shared).toContain('חשוך');
+    expect(shared).toContain('Arithmetic self-check');
+    expect(shared).toContain('target_mean * n');
+    expect(shared).toContain('PRACTICE ARENA');
+    expect(shared).toContain('Isosceles trapezoid');
   });
 
   it('tutor includes recovery and plan-anchored extra material', () => {

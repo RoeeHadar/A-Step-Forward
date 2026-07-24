@@ -81,6 +81,18 @@ describe('classifyTutorChatIntent — user session regression', () => {
     expect(classifyTutorChatIntent('explain Newton\'s second law')).toBe('learn');
   });
 
+  it('classifies learner math corrections (practice arena regression)', () => {
+    const correction =
+      'זה מראה שטעית: שלב 1 — סכום נדרש. ממוצע 85 על 4 ציונים ⇒ סכום = 340. שלב 2 — סכום ידוע. 240. שלב 3 — פתרון. x = 100. תשובה: x = 100. טיפ לבחינה. בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל.';
+    expect(classifyTutorChatIntent(correction)).toBe('agent_correction');
+    expect(
+      classifyTutorChatIntent('you were wrong — the answer is x = 100'),
+    ).toBe('agent_correction');
+    expect(classifyTutorChatIntent('איזה משולש שווה שוקיים יש בטרפז?')).toBe(
+      'agent_correction',
+    );
+  });
+
   it('prioritizes conversation_advance over exam_readiness on continue', () => {
     const recent = [{ role: 'user', content: SESSION.readiness }];
     expect(
@@ -124,6 +136,13 @@ describe('buildTutorInteractionContract — mode contracts', () => {
     const c = buildTutorInteractionContract('study_hours_increase', 'he');
     expect(c.turnInstruction).toContain('Never tell them to ask parents');
     expect(c.allowSocraticOpening).toBe(false);
+  });
+
+  it('agent_correction forbids status-pack closers', () => {
+    const c = buildTutorInteractionContract('agent_correction', 'he');
+    expect(c.allowSocraticOpening).toBe(false);
+    expect(c.turnInstruction).toContain('LEARNER CORRECTION');
+    expect(c.turnInstruction).toContain('הצעד הבא המומלץ');
   });
 
   it('learn respects socratic preference', () => {

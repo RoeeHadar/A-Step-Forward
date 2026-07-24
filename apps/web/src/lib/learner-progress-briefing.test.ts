@@ -68,6 +68,7 @@ describe('learner-progress-briefing', () => {
       paceStatus: 'at_risk',
     });
     expect(pack).toContain('AUTHORITATIVE learner-facing status pack');
+    expect(pack).toContain('ignore');
     expect(pack).toContain('מבוא לאינטגרציה');
     expect(pack).toContain('Integration intro');
     expect(pack).toContain('concept:integration_intro');

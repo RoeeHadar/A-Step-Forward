@@ -22,6 +22,7 @@ ADRs in PRs.
 | [0011](0011-agent-communication-quality.md) | Agent communication quality (grounded, anti-filler) | Accepted |
 | [0012](0012-agent-context-under-pressure.md) | Authoritative context under conversational pressure | Accepted |
 | [0013](0013-intensive-practice-arena.md) | Intensive practice arena (`/app/practice`) | Accepted |
+| [0014](0014-coach-hybrid-tools-solver.md) | Coach hybrid tools + shared Tutor/Coach solver | Accepted |
 
 ## Authoring a new ADR
 

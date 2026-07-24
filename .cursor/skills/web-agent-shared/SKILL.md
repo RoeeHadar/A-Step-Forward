@@ -60,6 +60,14 @@ Heavy pass: promotes durable notes into shared persona (min 6 notes).
 - **Recovery:** when too hard / simplify — drop failed path, honest plan-scope, simplest *correct* method.
 - Live contract: `apps/web/src/lib/agent-skills.ts` + `learner-progress-briefing.ts` + `pressure-next-step.ts` + intents in `learner-chat-intent.ts`.
 
+## Hybrid tools + memory digests (ADR-0014)
+
+- Uniqueness = tool/data allowlists + memory policy (not costume prompts alone).
+- Chat path stays text-only LLM; **server tool packs** + `[[ASF_*]]` markers are the hybrid surface.
+- Cross-agent memory via **handoff digests** + on-demand `memory.expand` — not raw peer note dumps.
+- Persona writes are **role-gated**; Steward consolidate remains the backstop.
+- Soft citation: `[[ASF_CITE:{"tools":[…],"concept_id":"…"}]]` (stripped; shadow-logged).
+
 ## Plan changes
 
 Learning plans update **only** via the official template from Tutor chat sidebar.
