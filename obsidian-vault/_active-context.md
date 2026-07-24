@@ -1,14 +1,20 @@
 ---
 type: active-context
-updated: 2026-07-24
+updated: 2026-07-25
 coordinator_status: .cursor/coordinator/STATUS.md
-production_web: "f2a8d4a7\r"
+production_web: "78e786da"
 ---
 
 # Active Context
 
 > Update this note at the start/end of each focused work session.
 > Machine-readable session trail: `docs/reviews/LAST_DONE.md` + `MEMORY_SNAPSHOT.md` (`<!-- LAST_SESSION -->`).
+
+## Last done (2026-07-25)
+
+- [x] **Next-cycle backlog closed** — cross-instance memory claims + FIFO crons; chat plan-context dedupe; week-2 mirror removed; **21 Bagrut gap lessons** authored + schema/facet/KaTeX CI green. Tip `78e786da`.
+- [x] **Lesson corpus** — 327 lesson JSON files; **45 KG concepts still without lessons** (≈33 `uni_*`, rest physics-track).
+- Details: `docs/reviews/LAST_DONE.md` § 2026-07-25.
 
 ## Last done (2026-07-19)
 
@@ -90,11 +96,11 @@ production_web: "f2a8d4a7\r"
 
 ## Next (priority order)
 
-1. **Neon migrations** — 0015 `plan_schema_version`, 0016 wellbeing columns, 0017 merge heads
-2. **Pilot smoke** — onboarding anxiety ≥7 → plan notice → Tutor anxiety phrase → snapshot (not improvised gaps)
-3. **Time-to-goal depth** — exam ≤7 days BFS cap (Phase 2)
-4. **Golden path per `goal_key`** — curated defaults in vault + code
-5. Push branch + open PR when ready
+1. **Author remaining 45 lesson gaps** — `uni_*` + physics, ordered by plan demand (see `docs/reviews/LAST_DONE.md` § Next cycle)
+2. **Seed prod Neon** for the 21 new Bagrut lessons if drift check fails; keep files as SoT
+3. **Pilot smoke** — onboarding → Active week agents → week training card → gate on a real account
+4. **Deepen facet questions** on the new Bagrut lessons (replace tag-only coverage where Bagrut method marks matter)
+5. **Neon migrations backlog** — 0015 `plan_schema_version`, 0016 wellbeing columns, 0017 merge heads (if still open)
 
 ## KG pipeline
 

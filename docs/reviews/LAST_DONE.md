@@ -3,6 +3,29 @@
 > Short, retrievable log of completed Coordinator / reviewer work.
 > Agents and humans: read this (and `MEMORY_SNAPSHOT.md` `<!-- LAST_SESSION -->`) before re-deriving status.
 
+## 2026-07-25 — Next-cycle backlog shipped (memory claims, UX polish, 21 lessons)
+
+**Goal:** Close the five deferred items from the 2026-07-24 product-completeness release, then leave `main` green.
+
+| Checkpoint | Done? | Evidence |
+|------------|:-----:|----------|
+| Cross-instance dream/consolidation DB claims | [x] | `last_dreamed_at` / `consolidation_started_at` via `ensureMemoryClaimColumns` + `UPDATE…RETURNING` |
+| Cron FIFO by oldest live notes | [x] | `GROUP BY learner_id ORDER BY MIN(created_at)` |
+| Chat plan-context dedupe (Active week + one-liner) | [x] | `buildPlanHeaderLine` + route wiring |
+| Remove deceptive week-2 concept mirror | [x] | bootstrap + dashboard "unlocks after Week 1" nudge |
+| Author 21 priority Bagrut math gap lessons | [x] | `scripts/seed_data/lessons/*` — pass `validateLessonStrict` + facet audit |
+| Facet checklist + KaTeX Hebrew CI recovery | [x] | tip `78e786da`; Lint & Test success |
+
+**Tip:** `78e786da` — production smoke `/`, `/sign-in`, `/learn` → 200.
+
+### Next cycle (priority)
+
+1. **Curriculum — remaining 45 KG concepts without lessons** — almost all `uni_*` + physics-track. Prioritize by live plan demand / onboarding subject mix, not alphabetical. Keep facet pilot families green when adding.
+2. **Seed Neon from the 21 new JSON lessons** — if production Neon counts lag files, run seed + `scripts/verify-seed-drift.mjs` (files remain SoT).
+3. **Facet pedagogy depth** — several new lessons satisfy the facet gate via tags; upgrade tagged stubs into genuine graphical / rule-selection / table / identity items where method marks matter for Bagrut.
+4. **Pilot golden-path smoke on a real account** — onboarding → plan → Active-week chat anchoring → week training card → gate. Document any residual UX gaps.
+5. **Optional:** merge residual Tutor/Mentor plan-header redundancy further only if prompt budgets regress under load.
+
 ## 2026-07-07 — Code-review fixes + CI noise
 
 **Goal:** Land remaining review findings and stop scheduled red X’s on `main`.
