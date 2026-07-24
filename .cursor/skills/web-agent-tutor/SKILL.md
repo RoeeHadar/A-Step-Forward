@@ -34,6 +34,7 @@ Trigger phrases: "what is", "why does", "explain", "מה זה", "למה", "הס�
 
 - Lesson-level `agent_hints` when message matches a concept.
 - Learning-plan snapshot for "what next?" / "why am I stuck?".
+- **Shared solver pack (ADR-0014):** `curriculum.get_worked_example` + `solver.verify_numeric`; honor reveal policy (hint ladder; N=2 then offer/confirm). Soft-cite with `[[ASF_CITE:…]]`.
 
 ## Private notes — what to save
 

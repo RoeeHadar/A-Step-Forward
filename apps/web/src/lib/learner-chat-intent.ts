@@ -12,6 +12,7 @@ import { learnerPlanChangeIntentHeuristic } from '@/lib/plan-actions';
 export type TutorChatIntent =
   | 'plan_template'
   | 'conversation_advance'
+  | 'agent_correction'
   | 'context_challenge'
   | 'plan_ownership'
   | 'casual_plan_change'
@@ -86,6 +87,10 @@ const WORKED_SOLUTION_RE =
 const CONVERSATION_ADVANCE_RE =
   /(?:כתבת את זה כבר|אמרת את זה|חזרת על|תמשיך|המשך|די עם|stop repeating|you already (?:said|wrote|asked)|move on|continue\b|נעצרה באמצע|cut off|was cut)/i;
 
+/** Learner correcting the agent's math / solution (not a status/exam ask). */
+const AGENT_CORRECTION_RE =
+  /(?:שטעית|טעית|טעות שלך|זה מראה שטעית|זה לא נכון|לא נכון[,.]|תיקנ(?:תי|ת)|התשובה (?:הנכונה )?היא|you (?:were |are )?wrong|you made a mistake|that'?s (?:not |in)?correct|actually[,:]?\s+(?:it'?s|the answer|x\s*=)|correction:)/i;
+
 const READINESS_AFFIRM_RE =
   /^(?:כן(?:\s|,|$)|נכון|בטח|ברור|יודע|אני יודע|כן,? אני יודע|yes\b|i know|i do\b)/i;
 
@@ -133,6 +138,10 @@ export function wantsWorkedSolution(message: string): boolean {
 
 export function wantsConversationAdvance(message: string): boolean {
   return CONVERSATION_ADVANCE_RE.test(message.trim());
+}
+
+export function wantsAgentCorrection(message: string): boolean {
+  return AGENT_CORRECTION_RE.test(message.trim());
 }
 
 /** Higher maxTokens budget for continue / step-by-step asks (ADR-0011). */
@@ -194,6 +203,7 @@ export function classifyTutorChatIntent(
 
   if (isPlanChangeTemplate(normalized)) return 'plan_template';
   if (wantsConversationAdvance(message)) return 'conversation_advance';
+  if (wantsAgentCorrection(message)) return 'agent_correction';
   if (wantsContextChallenge(message)) return 'context_challenge';
   if (wantsPlanOwnership(message)) return 'plan_ownership';
   if (learnerPlanChangeIntentHeuristic(message) && !isPlanChangeTemplate(normalized)) {
@@ -227,6 +237,14 @@ Learner asked you to stop repeating or to resume after a cut-off.
 - If the prior assistant turn was cut mid-solution: resume from the unfinished step only.
 - Do NOT say you need to "explain differently" unless you actually change method.
 Acknowledge briefly, then advance.`;
+
+const AGENT_CORRECTION_INSTRUCTION = `## Interaction mode: LEARNER CORRECTION (mandatory)
+The learner says you were wrong and/or supplies a corrected solution.
+- Re-check the arithmetic carefully (especially mean × count).
+- If they are right: admit it in one clear sentence, restate the correct result with a brief check, thank them.
+- If they are wrong: disagree politely and show the correct steps.
+- Write complete grammatical sentences in their language. Never paste status-pack labels ("הצעה להמשך", "הצעד הבא המומלץ עכשיו", "Recommended next step").
+- Do NOT switch into exam-anxiety / readiness / next-topic mode on this turn.`;
 
 const EXAM_ANXIETY_INSTRUCTION = `## Interaction mode: EXAM ANXIETY (ADR-0012, mandatory)
 Follow the pressure-family 4-beat contract.
@@ -399,6 +417,17 @@ export function buildTutorInteractionContract(
         turnInstruction: CONVERSATION_ADVANCE_INSTRUCTION,
         learnerPreferenceOverride:
           'LEARNER PREFERENCE OVERRIDE: Direct mode — advance the conversation, no repeated questions.',
+      };
+
+    case 'agent_correction':
+      return {
+        ...base,
+        teachingStyle: 'direct',
+        allowSocraticOpening: false,
+        allowTopicChecklist: false,
+        turnInstruction: AGENT_CORRECTION_INSTRUCTION,
+        learnerPreferenceOverride:
+          'LEARNER PREFERENCE OVERRIDE: Direct — verify the correction; coherent prose only; no status-pack closer.',
       };
 
     case 'context_challenge':

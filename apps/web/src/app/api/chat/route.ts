@@ -9,6 +9,7 @@ import {
   getLearnerProfile,
   getConceptMastery,
   fetchLessonAgentHintsByConceptIds,
+  fetchLessonByConceptId,
   getLearnerPersona,
   fetchAgentNotes,
   getDueReviews,
@@ -65,6 +66,7 @@ import {
 import {
   buildBilingualProgressBriefing,
   buildLearnerFacingStatusPack,
+  AGENT_CORRECTION_TURN_INSTRUCTION,
   CONTEXT_CHALLENGE_TURN_INSTRUCTION,
   PLAN_OWNERSHIP_TURN_INSTRUCTION,
   PRESSURE_FAMILY_TURN_INSTRUCTION,
@@ -113,6 +115,29 @@ import {
   persistThrottledChatObservation,
   stripMemoryMachineTags,
 } from '@/lib/chat-memory-persist';
+import {
+  logShadowCitations,
+  parseCiteTags,
+  stripCiteMachineTags,
+} from '@/lib/chat-cite-tags';
+import {
+  buildHandoffDigest,
+  wantsMemoryExpand,
+  type LiveAgentId,
+} from '@/lib/agent-handoff-digest';
+import {
+  buildCoachHybridToolPack,
+  buildTutorSolverToolPack,
+  type WeakAtomPathNode,
+} from '@/lib/agent-hybrid-tools';
+import {
+  buildSolverRevealInstruction,
+  countSolverHintCycles,
+  learnerConfirmedReveal,
+  softRepairNumericReply,
+  trySolveMissingMean,
+  wantsFullSolutionNow,
+} from '@/lib/agent-solver-verify';
 import { isWithinExamPrepWindow } from '@/lib/exam-prep';
 import {
   refusalFor,
@@ -128,6 +153,30 @@ export const maxDuration = 60;
 // Keep upstream LLM timeout under Vercel maxDuration (60s on Pro).
 const CHAT_LLM_TIMEOUT_MS = 45_000;
 
+function applyPostStreamSolverHygiene(
+  agent: string,
+  userMessage: string,
+  assistantVisible: string,
+  locale: 'he' | 'en',
+): string {
+  let text = stripCiteMachineTags(assistantVisible);
+  if (agent !== 'tutor' && agent !== 'coach') return text;
+
+  const solve = trySolveMissingMean(userMessage);
+  if (!solve) return text;
+
+  const repaired = softRepairNumericReply(text, solve.expected, locale);
+  if (repaired.repaired) {
+    logger.info('chat: solver soft repair', {
+      agent,
+      expected: solve.expected,
+      found: repaired.found,
+    });
+    text = repaired.text;
+  }
+  return text;
+}
+
 async function saveAssistantTurn(
   userId: string,
   agent: string,
@@ -135,8 +184,18 @@ async function saveAssistantTurn(
   sessionId: string | undefined,
   locale: 'he' | 'en',
   childMode: boolean,
+  userMessageForVerify?: string,
 ): Promise<void> {
-  const cleaned = stripMemoryMachineTags(content);
+  const citations = parseCiteTags(content);
+  logShadowCitations({
+    agent,
+    learnerId: userId,
+    citations,
+  });
+  const withoutMemory = stripMemoryMachineTags(content);
+  const cleaned = userMessageForVerify
+    ? applyPostStreamSolverHygiene(agent, userMessageForVerify, withoutMemory, locale)
+    : stripCiteMachineTags(withoutMemory);
   const postHit = ruleClassify(cleaned, { childMode });
   const toStore = postHit ? refusalFor(postHit) : cleaned;
   if (!postHit) {
@@ -317,7 +376,15 @@ export async function POST(req: Request) {
     if (planResult) appendPlanResult(controller, planResult);
     const visible = stripPlanMachineTags(assistantBuffer).trim();
     if (visible) {
-      await saveAssistantTurn(userId, agent, visible, sessionId, locale, childMode);
+      await saveAssistantTurn(
+        userId,
+        agent,
+        visible,
+        sessionId,
+        locale,
+        childMode,
+        lastMessage,
+      );
       void maybeDreamLearnerNotes(userId, agent);
     }
     controller.enqueue(encodeFinish());
@@ -490,7 +557,15 @@ async function finalizeAssistantTurn(
   const isPlanAgent = agent === 'tutor';
 
   if (!isPlanAgent) {
-    await saveAssistantTurn(userId, agent, visible, sessionId, locale, childMode);
+    await saveAssistantTurn(
+      userId,
+      agent,
+      visible,
+      sessionId,
+      locale,
+      childMode,
+      userMessage,
+    );
     return null;
   }
 
@@ -513,7 +588,15 @@ async function finalizeAssistantTurn(
         userMessage: userMessage.slice(0, 80),
       });
       const failureNotice = buildPlanApplyFailureNotice(locale, 'missing_payload');
-      await saveAssistantTurn(userId, agent, `${visible}\n\n${failureNotice}`, sessionId, locale, childMode);
+      await saveAssistantTurn(
+        userId,
+        agent,
+        `${visible}\n\n${failureNotice}`,
+        sessionId,
+        locale,
+        childMode,
+        userMessage,
+      );
       return { applied: false, error: 'missing_payload', failureNotice };
     }
 
@@ -526,7 +609,15 @@ async function finalizeAssistantTurn(
         const notice =
           locale === 'en' ? result.noticeEn ?? '' : result.noticeHe ?? '';
         const full = notice ? `${visible}\n\n${notice}` : visible;
-        await saveAssistantTurn(userId, agent, full, sessionId, locale, childMode);
+        await saveAssistantTurn(
+          userId,
+          agent,
+          full,
+          sessionId,
+          locale,
+          childMode,
+          userMessage,
+        );
         logger.info('chat: plan updated', {
           agent,
           reason: payload.reason,
@@ -547,12 +638,20 @@ async function finalizeAssistantTurn(
       const saved = planEagerAttempted
         ? visible
         : `${visible}\n\n${failureNotice}`;
-      await saveAssistantTurn(userId, agent, saved, sessionId, locale, childMode);
+      await saveAssistantTurn(userId, agent, saved, sessionId, locale, childMode, userMessage);
       return { ...result, failureNotice };
     } catch (err) {
       logger.warn('chat: plan update threw', { err: String(err) });
       const failureNotice = buildPlanApplyFailureNotice(locale, String(err));
-      await saveAssistantTurn(userId, agent, `${visible}\n\n${failureNotice}`, sessionId, locale, childMode);
+      await saveAssistantTurn(
+        userId,
+        agent,
+        `${visible}\n\n${failureNotice}`,
+        sessionId,
+        locale,
+        childMode,
+        userMessage,
+      );
       return { applied: false, error: String(err), failureNotice };
     }
   }
@@ -562,7 +661,7 @@ async function finalizeAssistantTurn(
     logger.warn('chat: ASF_PLAN_UPDATE ignored — learner did not confirm in this turn');
   }
 
-  await saveAssistantTurn(userId, agent, visible, sessionId, locale, childMode);
+  await saveAssistantTurn(userId, agent, visible, sessionId, locale, childMode, userMessage);
   return null;
 }
 
@@ -1096,6 +1195,11 @@ async function buildContextPrompt(
     Boolean(topic) ||
     agent === 'coach' ||
     agent === 'progress_analyzer';
+
+  let hybridPathNodes: WeakAtomPathNode[] = [];
+  let hybridBlockingAtoms: Array<{ atom: string }> = [];
+  let coachDueForPack: Awaited<ReturnType<typeof getDueReviews>> = [];
+
   if (
     needsPlanner &&
     (agent === 'tutor' ||
@@ -1148,6 +1252,16 @@ async function buildContextPrompt(
         maxNodes: 4,
       }).catch(() => null);
       if (plan && plan.path.length > 0) {
+        hybridPathNodes = plan.path.map((node) => ({
+          concept_id: node.concept_id,
+          name: node.name,
+          name_he: node.name_he,
+          weak_atoms: node.weak_atoms.map((a) => ({
+            atom: a.atom,
+            mastery: a.mastery,
+          })),
+        }));
+        hybridBlockingAtoms = plan.blocking_atoms.map((a) => ({ atom: a.atom }));
         context += `\n\n## Learning-plan snapshot (goal: ${plan.goal.name})`;
         for (const node of plan.path.slice(0, 4)) {
           const pct = Math.round((1 - node.urgency) * 100);
@@ -1186,6 +1300,7 @@ async function buildContextPrompt(
       subjects: profileSubjects,
       planConceptIds: planConceptIds.size > 0 ? planConceptIds : undefined,
     });
+    coachDueForPack = due;
     context += buildCoachFsrsInstruction({
       due,
       strongConcepts,
@@ -1199,6 +1314,78 @@ async function buildContextPrompt(
     if (difficultyInstruction) {
       context += difficultyInstruction;
     }
+  }
+
+  // ADR-0014: handoff digests + hybrid tool packs + solver reveal policy (Coach + Tutor)
+  if (!minimal && (agent === 'coach' || agent === 'tutor')) {
+    const conceptId = related[0]?.id ?? topic ?? null;
+    const expand = wantsMemoryExpand(message) || Boolean(conceptId && agentNotes.length < 2);
+
+    const peerIds = (['tutor', 'mentor', 'coach', 'reviewer'] as LiveAgentId[]).filter(
+      (a) => a !== agent,
+    );
+    const peerNoteLists = await Promise.all(
+      peerIds.map((a) =>
+        fetchAgentNotes(userId, a, 4).catch(() => [] as Awaited<ReturnType<typeof fetchAgentNotes>>),
+      ),
+    );
+    const digestNotes = peerNoteLists.flatMap((notes, i) =>
+      notes.map((n) => ({
+        agent: peerIds[i]!,
+        kind: n.kind,
+        content: n.content,
+        importance: n.importance,
+        related_concept_id: n.related_concept_id,
+        created_at: n.created_at,
+      })),
+    );
+    const digest = buildHandoffDigest({
+      readingAgent: agent as LiveAgentId,
+      notes: digestNotes,
+      conceptFilter: expand ? conceptId : null,
+    });
+    if (digest) context += `\n\n${digest}`;
+
+    const lesson = conceptId
+      ? await fetchLessonByConceptId(conceptId).catch(() => null)
+      : null;
+    const expandNotes = expand
+      ? await fetchAgentNotes(userId, agent, 12).catch(() => agentNotes)
+      : agentNotes;
+
+    if (agent === 'coach') {
+      const pack = buildCoachHybridToolPack({
+        due: coachDueForPack,
+        pathNodes: hybridPathNodes,
+        blockingAtoms: hybridBlockingAtoms,
+        lesson,
+        expandNotes,
+        expand,
+        userMessage: message,
+        locale,
+        conceptId,
+      });
+      context += `\n\n${pack.block}`;
+    } else {
+      const pack = buildTutorSolverToolPack({
+        lesson,
+        expandNotes,
+        expand,
+        userMessage: message,
+        locale,
+        conceptId,
+      });
+      context += `\n\n${pack.block}`;
+    }
+
+    const cycles = countSolverHintCycles(recentForIntent);
+    context += `\n\n${buildSolverRevealInstruction({
+      cycles,
+      wantsFull: wantsFullSolutionNow(message) || tutorIntent === 'worked_solution',
+      confirmed: learnerConfirmedReveal(message),
+      inPracticeArena: Boolean(practiceContext),
+      practiceGraded: practiceContext?.item_graded === true,
+    })}`;
   }
 
   // ADR-0011/0012: bilingual briefing + authoritative learner-facing pack + turn blocks
@@ -1268,9 +1455,16 @@ async function buildContextPrompt(
       nextStepConceptId: nextStep?.conceptId ?? null,
     };
     context += `\n\n${buildBilingualProgressBriefing(briefingInput)}`;
-    context += `\n\n${buildLearnerFacingStatusPack(briefingInput)}`;
 
-    if (tutorIntent && isPressureFamilyIntent(tutorIntent)) {
+    const skipStatusPack =
+      Boolean(practiceContext) || tutorIntent === 'agent_correction';
+    if (!skipStatusPack) {
+      context += `\n\n${buildLearnerFacingStatusPack(briefingInput)}`;
+    }
+
+    if (tutorIntent === 'agent_correction') {
+      context += `\n\n${AGENT_CORRECTION_TURN_INSTRUCTION}`;
+    } else if (tutorIntent && isPressureFamilyIntent(tutorIntent) && !practiceContext) {
       context += `\n\n${PRESSURE_FAMILY_TURN_INSTRUCTION}`;
       if (tutorIntent === 'context_challenge') {
         context += `\n\n${CONTEXT_CHALLENGE_TURN_INSTRUCTION}`;

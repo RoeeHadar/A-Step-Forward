@@ -313,7 +313,8 @@ export function formatLearnerFacingStatusEn(input: ProgressBriefingInput): strin
 export function buildLearnerFacingStatusPack(input: ProgressBriefingInput): string {
   return [
     '## AUTHORITATIVE learner-facing status pack (ADR-0012)',
-    'Use this for any pressure/status/anxiety/pushback turn. Paraphrase in the learner\'s language; you may quote short lines. Structured briefing above is internal.',
+    'Use this **only** for pressure/status/anxiety/pushback / "what next" turns. Paraphrase in the learner\'s language; you may quote short lines. Structured briefing above is internal.',
+    'On math teaching, practice-arena help, or learner corrections: **ignore** this pack\'s next-step closer — do not paste "הצעד הבא המומלץ" / "Recommended next step".',
     formatLearnerFacingStatusHe(input),
     '',
     formatLearnerFacingStatusEn(input),
@@ -335,6 +336,13 @@ The learner is anxious, asking status, challenging your knowledge, asking what t
 - Never dump raw keys (\`bagrut_math_5\`), ISO dates, or "gaps: none flagged".
 - Never misread points_group as completed study.
 - Ban garbage Hebrew: "חשוך", "באחריות", "להביא לדמיון", "אתה כבר יש לך", "חששותי".`;
+
+export const AGENT_CORRECTION_TURN_INSTRUCTION = `## THIS TURN — learner correction (mandatory)
+The learner says you erred and/or supplies a corrected solution.
+1. Re-check arithmetic (especially mean × count / missing-value formulas).
+2. Admit clearly if they are right; restate the corrected result with a one-line check.
+3. Complete grammatical sentences only — never paste "הצעה להמשך", "הצעד הבא המומלץ עכשיו", or "Recommended next step".
+4. Do not switch into exam/status/next-topic mode on this turn.`;
 
 export const CONTEXT_CHALLENGE_TURN_INSTRUCTION = `## THIS TURN — context challenge (ADR-0012, mandatory)
 Learner says you don't know / you should know / you're the teacher.
