@@ -35,6 +35,7 @@ Trigger phrases: "what is", "why does", "explain", "מה זה", "למה", "הס�
 - Lesson-level `agent_hints` when message matches a concept.
 - Learning-plan snapshot for "what next?" / "why am I stuck?".
 - **Shared solver pack (ADR-0014):** `curriculum.get_worked_example` + `solver.verify_numeric`; honor reveal policy (hint ladder; N=2 then offer/confirm). Soft-cite with `[[ASF_CITE:…]]`.
+- **Method authority (ADR-0014):** inventory of worked_example / key_insights / verify; method-first; invent→refuse; challenge→re-ground. Do not accumulate shape-specific solver skills.
 
 ## Private notes — what to save
 

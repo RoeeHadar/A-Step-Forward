@@ -85,6 +85,7 @@ import {
   buildTutorInteractionContract,
   classifyTutorChatIntent,
   isPressureFamilyIntent,
+  wantsAgentCorrection,
   wantsExpandedOutputBudget,
   type TutorIntentContext,
 } from '@/lib/learner-chat-intent';
@@ -139,6 +140,15 @@ import {
   trySolveAuthoritative,
   wantsFullSolutionNow,
 } from '@/lib/agent-solver-verify';
+import {
+  buildMethodAuthorityBlock,
+  buildMethodSourceInventory,
+  isMathTeachingTurn,
+  lacksMethodCitation,
+  looksLikeSocraticStall,
+  METHOD_GROUNDING_TURN_INSTRUCTION,
+  softRepairSocraticStall,
+} from '@/lib/agent-method-grounding';
 import { isWithinExamPrepWindow } from '@/lib/exam-prep';
 import {
   refusalFor,
@@ -164,22 +174,48 @@ function applyPostStreamSolverHygiene(
   if (agent !== 'tutor' && agent !== 'coach') return { text, repairNotice: null };
 
   const solve = trySolveAuthoritative(userMessage);
-  if (!solve) return { text, repairNotice: null };
+  const correctionStall =
+    wantsAgentCorrection(userMessage) && looksLikeSocraticStall(text);
 
-  const repaired = softRepairNumericReply(text, solve, locale);
-  if (repaired.repaired) {
-    logger.info('chat: solver soft repair', {
+  // Stall first: replace empty Socratic loops (learner-facing), then layer verify if any.
+  if (correctionStall) {
+    const stallFixed = softRepairSocraticStall(text, locale);
+    let out = stallFixed.text;
+    if (solve) {
+      const repaired = softRepairNumericReply(out, solve, locale);
+      if (repaired.repaired) out = repaired.text;
+    }
+    logger.info('chat: method-grounding stall soft repair', {
       agent,
-      kind: solve.kind,
-      expected: solve.expected,
-      found: repaired.found,
+      withVerify: Boolean(solve),
     });
-    const notice =
-      repaired.text.startsWith(text.trimEnd())
-        ? repaired.text.slice(text.trimEnd().length)
-        : repaired.text;
-    return { text: repaired.text, repairNotice: notice.trim() ? notice : null };
+    return { text: out, repairNotice: out };
   }
+
+  if (solve) {
+    const repaired = softRepairNumericReply(text, solve, locale);
+    if (repaired.repaired) {
+      logger.info('chat: solver soft repair', {
+        agent,
+        kind: solve.kind,
+        expected: solve.expected,
+        found: repaired.found,
+      });
+      const notice =
+        repaired.text.startsWith(text.trimEnd())
+          ? repaired.text.slice(text.trimEnd().length)
+          : repaired.text;
+      return { text: repaired.text, repairNotice: notice.trim() ? notice : null };
+    }
+  }
+
+  if (isMathTeachingTurn(userMessage) && lacksMethodCitation(text)) {
+    logger.info('chat: method-grounding uncited math (shadow)', {
+      agent,
+      chars: text.length,
+    });
+  }
+
   return { text, repairNotice: null };
 }
 
@@ -1429,6 +1465,17 @@ async function buildContextPrompt(
       practiceGraded: practiceContext?.item_graded === true,
       hasAuthoritativeSolve: Boolean(authoritativeSolve),
     })}`;
+
+    // ADR-0014 method grounding: inventory + protocol (shape-agnostic disease fix)
+    const methodInventory = buildMethodSourceInventory({
+      conceptId,
+      lesson,
+      verify: authoritativeSolve,
+    });
+    context += `\n\n${buildMethodAuthorityBlock(methodInventory, locale)}`;
+    if (isMathTeachingTurn(message) || tutorIntent === 'agent_correction') {
+      context += `\n\n${METHOD_GROUNDING_TURN_INSTRUCTION}`;
+    }
   }
 
   // ADR-0011/0012: bilingual briefing + authoritative learner-facing pack + turn blocks

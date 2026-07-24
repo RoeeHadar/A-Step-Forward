@@ -26,14 +26,25 @@ Live web agents (Tutor, Mentor, Coach, Reviewer) were differentiated mainly by p
 
 Full MCP tool sprawl; inventing alternate methods beyond authored corpus; all-four digests as the primary ship (Coach/Tutor digests first); model-callable `mark_atom_practiced`; hard reply-blocking verify day one.
 
+## Amendment (2026-07-24) — method grounding (disease, not symptoms)
+
+Production failure mode was **Tutor inventing ungrounded constructions** (e.g. false “upper isosceles triangle”), then stalling with empty Socratic questions when challenged. Shape-specific verify solvers are **optional safety nets**, not the product strategy.
+
+**Additional decision:**
+
+11. **Method authority pack** each Tutor/Coach math turn: inventory of `worked_example` / `key_insights` / verify match; protocol = method-first, invent→refuse, challenge→re-ground, soft-cite.
+12. **No per-shape skill sprawl.** Shared skills encode the general contract; deterministic solvers remain narrow and optional.
+13. **Evals** target invented-method + Socratic-stall regressions (offline heuristics + promptfoo stubs).
+
 ## Consequences
 
-**Positive:** Replies can cite real pack IDs; arithmetic mistakes get a visible recheck; Coach drills stay grounded in due/weak-atom data.
+**Positive:** Replies can cite real pack IDs; arithmetic mistakes get a visible recheck; Coach drills stay grounded in due/weak-atom data; math teaching refuses freestyle invention when sources are thin.
 
-**Risks:** Pack latency/token cost — keep packs small; soft repair only covers patterns we can parse deterministically.
+**Risks:** Pack latency/token cost — keep packs small; soft repair only covers patterns we can parse deterministically; thin-corpus lessons may refuse more often until authored methods catch up.
 
 ## Alternatives considered
 
 - Full LLM tool-calling loop — rejected (provider/fallback stack is text-only today).
 - Coach-only solver — rejected (Tutor shares the same arithmetic wound).
 - Hard-block verify day one — deferred until evals prove repair quality.
+- Growing catalog of shape-specific solvers as the primary fix — rejected (treats symptoms; disease is ungrounded derivation).

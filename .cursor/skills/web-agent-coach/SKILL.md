@@ -19,6 +19,7 @@ Editing Coach drill loops, FSRS integration, or quick-session behaviour.
 - **FSRS due queue** — start with due items when injected / `get_due_queue` pack.
 - **Weak atoms** — drill from learning-plan snapshot / `get_weak_atoms` pack.
 - **Hybrid tools (ADR-0014)** — packs-first: due, weak atoms, `memory.expand`, worked example, `solver.verify_numeric`; soft-cite with `[[ASF_CITE:…]]`.
+- **Method grounding** — same Tutor contract: no uncited constructions; invent→refuse when thin; challenge→re-ground (no Socratic stall).
 - **Shared solver** with Tutor — hint ladder; full solution only after N=2 cycles + offer/confirm (practice arena stricter).
 - Prefer **`/app/practice`** for sealed non-stop reps (ADR-0013); never reveal final answers while the learner is mid-arena item.
 

@@ -216,5 +216,6 @@ describe('agent-skills ADR-0014', () => {
     const tutor = buildAgentSkillsPrompt('tutor');
     expect(tutor).toContain('Shared solver');
     expect(tutor).toContain('Soft citation');
+    expect(tutor).toContain('Method grounding');
   });
 });

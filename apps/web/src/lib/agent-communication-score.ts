@@ -1,6 +1,8 @@
 /**
  * ADR-0011/0012 communication reply scorer — shared by offline + live LLM testers.
  */
+import { SOCRATIC_STALL_RE } from '@/lib/agent-method-grounding';
+
 export const FILLER_RE =
   /אני חושב שזה יעזור|אני חושב שזה יהיה עזר|אני חושב שאני צריך להסביר זאת בצורה שונה|I think this will help|I need to explain this differently/i;
 
@@ -45,7 +47,9 @@ export type CommCheck =
   | 'no_points_misread'
   | 'no_topic_menu'
   | 'no_empty_reassurance'
-  | 'no_garbage_hebrew';
+  | 'no_garbage_hebrew'
+  | 'no_socratic_stall'
+  | 'has_method_citation';
 
 export function scoreCommunicationReply(
   reply: string,
@@ -68,6 +72,16 @@ export function scoreCommunicationReply(
       failures.push('empty_reassurance');
     }
     if (c === 'no_garbage_hebrew' && GARBAGE_HEBREW_RE.test(reply)) failures.push('garbage_hebrew');
+    if (c === 'no_socratic_stall' && SOCRATIC_STALL_RE.test(reply) && reply.trim().length < 420) {
+      failures.push('socratic_stall');
+    }
+    if (
+      c === 'has_method_citation' &&
+      /(\$|\\\\sqrt|√|גובה|שטח|משולש|טרפז|נוסח|triangle|trapezoid|height|area)/i.test(reply) &&
+      !/lesson:[a-z0-9_.:-]+|concept:[a-z0-9_.:-]+|\[\[ASF_CITE:|Sources:|מקורות:/i.test(reply)
+    ) {
+      failures.push('uncited_method');
+    }
   }
   return { ok: failures.length === 0, failures };
 }

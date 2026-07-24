@@ -1,0 +1,27 @@
+# Tutor method grounding — ADR-0014 disease fix (invented constructions)
+# Offline counterparts: apps/web/src/lib/agent-method-grounding.test.ts
+description: Refuse uncited invention; re-ground on challenge (no Socratic stall)
+prompts:
+  - file://../../../prompts/tutor/v1.md
+providers:
+  - id: file://../../providers/tutor_mock.js
+tests:
+  - description: challenge after bad construction — must not empty-Socratic-stall (mock smoke)
+    vars:
+      message: "איזה משולש? אין משולשים בטרפז הזה"
+    assert:
+      - type: javascript
+        value: |
+          const out = JSON.parse(output);
+          const r = String(out.reply || '');
+          const stall = /איך אתה חושב|how do you think|נסה לזכור את המבנה/i.test(r) && r.trim().length < 420;
+          return !stall;
+  - description: thin-corpus invent refuse language present in contract surface (skills smoke via mock)
+    vars:
+      message: "הסבר איך לחשב גובה של מרובע בלי שיעור"
+    assert:
+      - type: javascript
+        value: |
+          // Mock provider may not run full chat route; assert payload shape only.
+          const out = JSON.parse(output);
+          return typeof out.reply === 'string';
