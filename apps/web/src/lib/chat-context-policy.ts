@@ -90,9 +90,54 @@ export function compactStoredTurnContent(
   return truncateChatText(content, CHAT_CONTEXT.maxStoredTurnChars);
 }
 
-export function fitSystemPrompt(system: string): string {
-  if (system.length <= CHAT_CONTEXT.maxSystemChars) return system;
-  return `${system.slice(0, CHAT_CONTEXT.maxSystemChars)}\n\n[Some background context was trimmed to fit model limits. Use learner profile and weekly plan above.]`;
+/**
+ * Minimum chars to protect at the head (compact baseline + longest persona ≈ 10.5 k).
+ * The head contains universal rules and the agent's identity — never trim it.
+ */
+export const HEAD_GUARD_CHARS = 11_000;
+
+/**
+ * Priority-aware system-prompt trimmer.
+ *
+ * Layers (highest → lowest priority):
+ *   1. `tail`   — THIS TURN overrides + brevity rule (always at end, never trimmed).
+ *   2. head     — compact baseline + agent persona (first HEAD_GUARD_CHARS of `system`).
+ *   3. middle   — profile, notes, concepts, learning plan (trimmed first when over budget).
+ *
+ * Calling with no `tail` (default `''`) is fully backward-compatible: the whole
+ * prompt is treated as body and head+middle trimming applies if needed.
+ */
+const MIDDLE_TRIM_NOTICE =
+  '\n\n[Some background context was trimmed to fit model limits. Use learner profile and weekly plan above.]';
+
+export function fitSystemPrompt(system: string, tail = ''): string {
+  const total = system.length + tail.length;
+  if (total <= CHAT_CONTEXT.maxSystemChars) {
+    return tail ? `${system}${tail}` : system;
+  }
+
+  const available = CHAT_CONTEXT.maxSystemChars - tail.length;
+  if (available <= 0) {
+    // Tail alone exceeds budget — pathological, keep as much tail as possible.
+    return tail.slice(0, CHAT_CONTEXT.maxSystemChars);
+  }
+
+  if (available <= HEAD_GUARD_CHARS) {
+    // Middle entirely dropped — truncate head to whatever space the tail leaves.
+    return `${system.slice(0, available)}${tail}`;
+  }
+
+  // Middle trim: keep full head + as much middle as fits + full tail.
+  const head = system.slice(0, HEAD_GUARD_CHARS);
+  const middle = system.slice(HEAD_GUARD_CHARS);
+  const middleAvailable = available - HEAD_GUARD_CHARS;
+
+  const trimmedMiddle =
+    middle.length > middleAvailable
+      ? `${middle.slice(0, Math.max(0, middleAvailable - MIDDLE_TRIM_NOTICE.length))}${MIDDLE_TRIM_NOTICE}`
+      : middle;
+
+  return `${head}${trimmedMiddle}${tail}`;
 }
 
 export function compactMemoryTurns(

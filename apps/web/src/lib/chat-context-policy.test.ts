@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   CHAT_CONTEXT,
+  HEAD_GUARD_CHARS,
+  fitSystemPrompt,
   compactMemoryTurns,
   compactStoredTurnContent,
   formatPlanWeeksCompact,
@@ -91,5 +93,51 @@ describe('chat-context-policy', () => {
     ).toBe(CHAT_CONTEXT.maxOutputTokensWorked);
     expect(truncationContinueNotice('he')).toContain('המשך');
     expect(truncationContinueNotice('en')).toContain('continue');
+  });
+});
+
+describe('fitSystemPrompt — priority-aware trimming (Bug 1)', () => {
+  const MAX = CHAT_CONTEXT.maxSystemChars; // 18 000
+
+  it('returns prompt unchanged when within budget', () => {
+    const s = 'a'.repeat(1000);
+    expect(fitSystemPrompt(s)).toBe(s);
+  });
+
+  it('returns prompt + tail unchanged when both fit', () => {
+    const s = 'a'.repeat(1000);
+    const tail = '\n\nTAIL';
+    expect(fitSystemPrompt(s, tail)).toBe(`${s}${tail}`);
+  });
+
+  it('trims middle not tail on overflow — head and tail markers both survive', () => {
+    const HEAD_MARKER = 'HEAD_MARKER';
+    const TAIL_MARKER = 'TAIL_MARKER';
+    // Build a prompt that exceeds 18 k: head (11 k) + big middle + tail
+    const head = `${HEAD_MARKER}${'h'.repeat(HEAD_GUARD_CHARS - HEAD_MARKER.length)}`;
+    const bigMiddle = 'm'.repeat(MAX); // large middle
+    const tail = `\n\n${TAIL_MARKER}`;
+    const result = fitSystemPrompt(`${head}${bigMiddle}`, tail);
+
+    expect(result.length).toBeLessThanOrEqual(MAX);
+    expect(result.startsWith(HEAD_MARKER)).toBe(true);
+    expect(result.endsWith(TAIL_MARKER)).toBe(true);
+  });
+
+  it('tail survives even when middle is entirely dropped', () => {
+    const TAIL_MARKER = '## Response style (mandatory)\n- Be concise.';
+    const head = 'H'.repeat(HEAD_GUARD_CHARS);
+    const bigBody = head + 'm'.repeat(MAX); // way over budget
+    const tail = `\n\n${TAIL_MARKER}`;
+    const result = fitSystemPrompt(bigBody, tail);
+
+    expect(result.length).toBeLessThanOrEqual(MAX);
+    expect(result.endsWith(TAIL_MARKER)).toBe(true);
+  });
+
+  it('falls back gracefully without a tail arg (backward-compat)', () => {
+    const over = 'x'.repeat(MAX + 500);
+    const result = fitSystemPrompt(over);
+    expect(result.length).toBeLessThanOrEqual(MAX + 200); // within trimming marker overhead
   });
 });

@@ -9,8 +9,9 @@ import { ChatHistoryPanel } from '@/components/chat-history-panel';
 import { extractPlanUpdate, stripPlanMachineTags, shouldApplyPlanImmediately } from '@/lib/plan-actions';
 import { normalizePlanChangeMessage } from '@/lib/plan-change-template';
 import { PlanChangeTemplatePanel } from '@/components/plan-change-template-panel';
+import { stripAllMachineTags } from '@/lib/chat-cite-tags';
 import { useRouter } from 'next/navigation';
-import { Send, Loader2, X } from 'lucide-react';
+import { Send, Loader2, X, RefreshCw, ChevronDown, ChevronUp, FileText } from 'lucide-react';
 import { Button } from '@asf/ui/button';
 import { Textarea } from '@asf/ui/textarea';
 import { cn } from '@asf/ui';
@@ -44,7 +45,10 @@ function chatSessionKey(agent: AgentName, practiceItemId?: string | null): strin
 }
 
 function stripPlanTag(content: string): string {
-  return stripPlanMachineTags(extractPlanUpdate(content).visible);
+  // Strip plan tags first (extractPlanUpdate needs them present), then strip
+  // any remaining [[ASF_*]] families (MEMORY_NOTE, CITE, etc.) as a second
+  // line of defence in case the streaming path missed a partial tag.
+  return stripAllMachineTags(stripPlanMachineTags(extractPlanUpdate(content).visible));
 }
 
 export function AgentChat({
@@ -90,6 +94,7 @@ export function AgentChat({
   const [planApplyState, setPlanApplyState] = useState<
     'idle' | 'applying' | 'success' | 'failed'
   >('idle');
+  const [planTemplateMobileOpen, setPlanTemplateMobileOpen] = useState(false);
 
   const showPlanTemplate = agentName === 'tutor' && !compact;
 
@@ -440,6 +445,7 @@ export function AgentChat({
             messages.map((m) => (
               <div
                 key={m.id}
+                dir={isHe ? 'rtl' : 'ltr'}
                 className={
                   m.role === 'user'
                     ? 'ms-auto max-w-[85%] rounded-2xl rounded-ee-sm bg-primary/90 px-4 py-2 text-primary-foreground'
@@ -488,8 +494,8 @@ export function AgentChat({
               role="alert"
             >
               {isHe
-                ? '⚠️ לא הצלחנו לעדכן את התוכנית. השתמש בתבנית "עדכון תוכנית הלימוד" מהצד, מלא את השדות ושלח שוב.'
-                : '⚠️ We could not update your plan. Use the plan-update template in the sidebar, fill in the fields, and send again.'}
+                ? '⚠️ לא הצלחנו לעדכן את התוכנית. השתמש בתבנית עדכון תוכנית הלימוד, מלא את השדות ושלח שוב.'
+                : '⚠️ We could not update your plan. Use the plan-update template, fill in the fields, and send again.'}
             </div>
           ) : null}
           {isLoading ? (
@@ -502,9 +508,24 @@ export function AgentChat({
         </div>
 
         {error ? (
-          <p className="border-t border-border px-4 py-2 text-sm text-destructive" role="alert">
-            {friendlyChatError(error, i18nMessages.chat)}
-          </p>
+          <div
+            className="flex items-center justify-between gap-3 border-t border-border px-4 py-2"
+            role="alert"
+            dir={isHe ? 'rtl' : 'ltr'}
+          >
+            <p className="text-sm text-destructive">{friendlyChatError(error, i18nMessages.chat)}</p>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={() => reload()}
+              className="shrink-0 border-destructive/40 text-destructive hover:bg-destructive/10"
+              aria-label={isHe ? 'נסה שוב' : 'Retry'}
+            >
+              <RefreshCw className="h-3.5 w-3.5 me-1.5" aria-hidden />
+              {isHe ? 'נסה שוב' : 'Retry'}
+            </Button>
+          </div>
         ) : null}
 
         <form
@@ -541,6 +562,39 @@ export function AgentChat({
         </form>
       </div>
       </div>
+
+      {/* Mobile plan template — visible below lg where the sidebar is hidden */}
+      {showPlanTemplate ? (
+        <div className="lg:hidden mt-3 px-2 pb-2">
+          <button
+            type="button"
+            onClick={() => setPlanTemplateMobileOpen((v) => !v)}
+            className="flex w-full items-center gap-2 rounded-xl border border-primary/30 bg-primary/5 px-4 py-2.5 text-sm font-medium text-primary hover:bg-primary/10"
+            dir={isHe ? 'rtl' : 'ltr'}
+          >
+            <FileText className="h-4 w-4 shrink-0" aria-hidden />
+            {isHe ? 'תבנית עדכון תוכנית לימודים' : 'Study Plan Update Template'}
+            {planTemplateMobileOpen ? (
+              <ChevronUp className="ms-auto h-4 w-4" aria-hidden />
+            ) : (
+              <ChevronDown className="ms-auto h-4 w-4" aria-hidden />
+            )}
+          </button>
+          {planTemplateMobileOpen ? (
+            <div className="mt-2">
+              <PlanChangeTemplatePanel
+                locale={isHe ? 'he' : 'en'}
+                copy={i18nMessages.chat.planChangeTemplate}
+                onUseTemplate={(text) => {
+                  setInput(text);
+                  setPlanTemplateMobileOpen(false);
+                }}
+                variant="inline"
+              />
+            </div>
+          ) : null}
+        </div>
+      ) : null}
 
       {showPlanTemplate ? (
         <PlanChangeTemplatePanel
