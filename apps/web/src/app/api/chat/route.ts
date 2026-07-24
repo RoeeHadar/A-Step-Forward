@@ -147,6 +147,7 @@ import {
   lacksMethodCitation,
   looksLikeSocraticStall,
   METHOD_GROUNDING_TURN_INSTRUCTION,
+  softRepairSocraticStall,
 } from '@/lib/agent-method-grounding';
 import { isWithinExamPrepWindow } from '@/lib/exam-prep';
 import {
@@ -173,6 +174,24 @@ function applyPostStreamSolverHygiene(
   if (agent !== 'tutor' && agent !== 'coach') return { text, repairNotice: null };
 
   const solve = trySolveAuthoritative(userMessage);
+  const correctionStall =
+    wantsAgentCorrection(userMessage) && looksLikeSocraticStall(text);
+
+  // Stall first: replace empty Socratic loops (learner-facing), then layer verify if any.
+  if (correctionStall) {
+    const stallFixed = softRepairSocraticStall(text, locale);
+    let out = stallFixed.text;
+    if (solve) {
+      const repaired = softRepairNumericReply(out, solve, locale);
+      if (repaired.repaired) out = repaired.text;
+    }
+    logger.info('chat: method-grounding stall soft repair', {
+      agent,
+      withVerify: Boolean(solve),
+    });
+    return { text: out, repairNotice: out };
+  }
+
   if (solve) {
     const repaired = softRepairNumericReply(text, solve, locale);
     if (repaired.repaired) {
@@ -188,16 +207,6 @@ function applyPostStreamSolverHygiene(
           : repaired.text;
       return { text: repaired.text, repairNotice: notice.trim() ? notice : null };
     }
-  }
-
-  // Disease fix: empty Socratic stall after a learner challenge — soft notice even without a verify match.
-  if (wantsAgentCorrection(userMessage) && looksLikeSocraticStall(text)) {
-    const notice =
-      locale === 'en'
-        ? '\n\n_(Rechecked — drop the empty Socratic stall. Re-teach from Method authority sources with 2–3 concrete steps.)_'
-        : '\n\n_(תיקון — נזנח את השאלה הריקה. חזרו למקורות ב־Method authority ולמדו ב־2–3 צעדים קונקרטיים.)_';
-    logger.info('chat: method-grounding stall soft repair', { agent });
-    return { text: `${text.trimEnd()}${notice}`, repairNotice: notice };
   }
 
   if (isMathTeachingTurn(userMessage) && lacksMethodCitation(text)) {

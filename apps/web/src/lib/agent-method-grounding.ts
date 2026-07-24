@@ -135,3 +135,19 @@ export const SOCRATIC_STALL_RE =
 export function looksLikeSocraticStall(reply: string): boolean {
   return SOCRATIC_STALL_RE.test(reply) && reply.trim().length < 420;
 }
+
+/**
+ * Learner-visible recovery when the model stalled with an empty Socratic question.
+ * Replaces the stall (does not append meta-prompt jargon).
+ */
+export function softRepairSocraticStall(
+  reply: string,
+  locale: 'he' | 'en' = 'he',
+): { text: string; repaired: boolean } {
+  if (!looksLikeSocraticStall(reply)) return { text: reply, repaired: false };
+  const text =
+    locale === 'en'
+      ? 'You are right to push back — I will drop the previous approach and re-teach from the lesson sources in 2–3 concrete steps. Say "continue" and I will restart from the authorized method.'
+      : 'צדקתם — נזנח את הגישה הקודמת. אחזור לשיטה מהשיעור ואסביר ב־2–3 צעדים קונקרטיים. אמרו "המשך" ואמשיך מהשיטה המאושרת.';
+  return { text, repaired: true };
+}

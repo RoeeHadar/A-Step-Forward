@@ -8,6 +8,7 @@ import {
   isMathTeachingTurn,
   lacksMethodCitation,
   looksLikeSocraticStall,
+  softRepairSocraticStall,
 } from './agent-method-grounding';
 import { buildAgentSkillsPrompt } from './agent-skills';
 
@@ -72,6 +73,14 @@ describe('citation / stall heuristics', () => {
     expect(
       looksLikeSocraticStall('איך אתה חושב שאתה יכול למצוא את הגובה?'),
     ).toBe(true);
+  });
+
+  it('replaces stall with learner-facing recovery (no Method authority jargon)', () => {
+    const fixed = softRepairSocraticStall('איך אתה חושב שאתה יכול למצוא את הגובה?', 'he');
+    expect(fixed.repaired).toBe(true);
+    expect(fixed.text).toContain('צדקתם');
+    expect(fixed.text).not.toContain('Method authority');
+    expect(fixed.text).not.toContain('Socratic');
   });
 });
 
