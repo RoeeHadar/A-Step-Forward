@@ -282,7 +282,7 @@ export function ProgressDashboard({
         {showReadinessBlock ? (
           <div className="mt-3 space-y-1">
             <p className="text-sm font-semibold text-foreground">
-              {isHe ? 'מוכנות לבגרות' : 'Bagrut Readiness'}
+              {isHe ? 'מוכנות ליעד' : 'Goal readiness'}
             </p>
             {readinessRows.map((estimate) => {
               const isPhysics = estimate.subject === 'hs_physics';

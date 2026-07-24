@@ -42,6 +42,8 @@ const STR = {
     browse_subject: (s: string, lang: Lang) => `עיין בתכני ${getSubjectLabel(s, lang)}`,
     not_assessed: 'טרם הוערך',
     mastery_pct: (p: number) => `${p}% שליטה`,
+    kindTrain: 'אימון',
+    kindRest: 'מנוחה',
     target_date: (d: string) => `יעד: ${d}`,
     plan_horizon: (start: string, end: string) => `תקופת התוכנית: ${start} – ${end}`,
     week_until: (d: string) => `עד ${d}`,
@@ -75,6 +77,8 @@ const STR = {
     browse_subject: (s: string, lang: Lang) => `Browse ${getSubjectLabel(s, lang)} content`,
     not_assessed: 'Not assessed',
     mastery_pct: (p: number) => `${p}% mastery`,
+    kindTrain: 'Practice',
+    kindRest: 'Rest',
     target_date: (d: string) => `Target: ${d}`,
     plan_horizon: (start: string, end: string) => `Plan period: ${start} – ${end}`,
     week_until: (d: string) => `Through ${d}`,
@@ -134,15 +138,21 @@ function displayName(concept: PlanConcept, lang: Lang): string {
 function ConceptCard({ concept, lang }: { concept: PlanConcept; lang: Lang }) {
   const t = STR[lang];
   const isHe = lang === 'he';
+  const kind = concept.kind ?? 'lesson';
   const mastery = concept.mastery ?? 0;
   const progressPct = Math.round(mastery * 100);
   const name = displayName(concept, lang);
-  const lessonHref = learnConceptHrefFromProfile(concept.concept_id, concept.subject);
+  const href =
+    kind === 'train'
+      ? `/app/practice?concept=${encodeURIComponent(concept.concept_id)}`
+      : kind === 'rest'
+        ? '/app/plan'
+        : learnConceptHrefFromProfile(concept.concept_id, concept.subject);
   const emoji = subjectIcon(concept.subject);
   const subjectName = getSubjectLabel(concept.subject, lang);
 
   return (
-    <Link href={lessonHref} className="block transition-opacity hover:opacity-90">
+    <Link href={href} className="block transition-opacity hover:opacity-90">
     <Card className="glass-surface border-border/60" dir={isHe ? 'rtl' : 'ltr'}>
       <CardHeader className="pb-2">
         <div className="flex flex-wrap items-start justify-between gap-2">
@@ -152,15 +162,30 @@ function ConceptCard({ concept, lang }: { concept: PlanConcept; lang: Lang }) {
               <CardTitle className="text-base" dir="auto">
                 {name}
               </CardTitle>
-              <p className="mt-0.5 text-xs text-muted-foreground">{subjectName}</p>
+              <div className="mt-0.5 flex flex-wrap items-center gap-2">
+                <p className="text-xs text-muted-foreground">{subjectName}</p>
+                {kind === 'train' ? (
+                  <Badge variant="outline" className="text-xs">
+                    {t.kindTrain}
+                  </Badge>
+                ) : null}
+                {kind === 'rest' ? (
+                  <Badge variant="secondary" className="text-xs">
+                    {t.kindRest}
+                  </Badge>
+                ) : null}
+              </div>
             </div>
           </div>
-          <Badge variant={masteryBadgeVariant(concept.mastery)}>
-            {masteryLabel(concept.mastery, lang)}
-          </Badge>
+          {kind === 'lesson' ? (
+            <Badge variant={masteryBadgeVariant(concept.mastery)}>
+              {masteryLabel(concept.mastery, lang)}
+            </Badge>
+          ) : null}
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
+        {kind === 'lesson' ? (
         <div>
           <div className="mb-1 flex justify-between text-xs text-muted-foreground">
             <span>{t.progress}</span>
@@ -178,8 +203,9 @@ function ConceptCard({ concept, lang }: { concept: PlanConcept; lang: Lang }) {
             />
           </div>
         </div>
+        ) : null}
 
-        {concept.suggested_sections.length > 0 ? (
+        {kind === 'lesson' && concept.suggested_sections.length > 0 ? (
           <div>
             <p className="mb-1 text-xs font-medium text-muted-foreground">
               {t.sections_label}

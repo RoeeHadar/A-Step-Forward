@@ -46,6 +46,30 @@ import {
   resolveGoalConceptId,
   ROLLING_VISIBLE_WEEKS,
 } from './plan-worklist';
+import { daysUntilIso, resolveGoalDeadlineIso } from './goal-track';
+import {
+  computePlanMode,
+  fractionTimeUsed,
+  phaseFromFraction,
+  trainTargetCount,
+  type PlanStudyMode,
+  type PlanTimePhase,
+} from './plan-mode';
+import {
+  applyTrainDominantOverlay,
+  buildWeekWorkItems,
+  encodeWeekWorkItems,
+  parseWorkItemToken,
+  type PlanWorkItem,
+} from './plan-work-items';
+import {
+  clipHorizonWeeks,
+  clipMaterializedWeeks,
+  filterWeekGroupsBeforeGoal,
+  weekStartsAfterGoal,
+} from './plan-horizon';
+import { countStrongPracticeSignals } from './plan-train-signals';
+import { buildPlanLiveSnapshot, type PlanLiveSnapshot } from './plan-live-snapshot';
 import {
   applyWellbeingOverlay,
   canPersistWellbeingRewrite,
@@ -483,8 +507,8 @@ async function loadActivePlanStub(learnerId: string): Promise<LearningPlan | nul
       id: w.id,
       plan_id: plan.id,
       week_number: w.week_number,
-      concepts: w.concepts.map((cid) =>
-        litePlanConcept(cid, subjects, mastery, profile?.points_group),
+      concepts: w.concepts.map((token) =>
+        litePlanConceptFromToken(token, subjects, mastery, profile?.points_group),
       ),
       quiz_due_at: w.quiz_due_at,
       status: w.status,
@@ -1058,6 +1082,10 @@ export interface PlanConcept {
   mastery: number | null;
   suggested_sections: Array<{ id: string; title: string; chunk_index: number | null; page_start: number | null }>;
   recommended_bagrut: Array<{ display_name: string; file_url: string; year: number | null; exam_type: string | null }>;
+  /** Plan-train alignment work-item kind decoded from the persisted token. Absent → 'lesson'. */
+  kind?: 'lesson' | 'train' | 'rest';
+  /** For `kind: 'train'` — target closed-practice-item count for this session. */
+  target_count?: number | null;
 }
 
 /**
@@ -1077,6 +1105,17 @@ export interface PlanPacing {
   frontier_size: number;
   required_velocity: number;
   capacity: number;
+  // Humble readiness overlay (ADR-0010 Stream E). Optional/back-compat: absent when
+  // the goal has no frontier. `readiness` is the concave, mock-gated, sub-1.0 number
+  // the UI (and plan-train alignment) should read instead of raw `goal_readiness`.
+  readiness?: number;
+  critical_coverage?: number;
+  exam_ready?: boolean;
+  mock_passed?: boolean;
+  readiness_band?: 'foundational' | 'building' | 'approaching' | 'exam_ready';
+  readiness_phase?: 'building' | 'final_phase' | 'day_before';
+  days_to_exam?: number | null;
+  readiness_message_key?: string;
 }
 
 export interface LearningPlan {
@@ -1087,7 +1126,14 @@ export interface LearningPlan {
   end_date: string | null;
   status: string;
   weeks: PlanWeek[];
-  plan_adjustment_kind?: 'wellbeing' | 'learner_template' | 'mastery' | 'exam_window' | null;
+  plan_adjustment_kind?:
+    | 'wellbeing'
+    | 'learner_template'
+    | 'mastery'
+    | 'exam_window'
+    | 'horizon_repair'
+    | 'train_adapt'
+    | null;
   plan_last_adjusted_at?: string | null;
   /** Goal-pacing overlay (ADR-0009). Present when the goal has a frontier. */
   pacing?: PlanPacing | null;
@@ -1187,6 +1233,54 @@ async function hydratePlanConcept(
   };
 }
 
+/** Sentinel PlanConcept rendered for a `rest` work-item token — no concept behind it. */
+function restPlanConcept(): PlanConcept {
+  return {
+    concept_id: 'rest',
+    name: 'Rest day',
+    name_he: 'יום מנוחה',
+    subject: 'general',
+    mastery: null,
+    suggested_sections: [],
+    recommended_bagrut: [],
+    kind: 'rest',
+    target_count: null,
+  };
+}
+
+/** Extract the `goal_key` set during onboarding from a profile row's personality JSON. */
+function goalKeyFromProfileRow(profile: LearnerProfileRow | null | undefined): string | null {
+  const key = (profile?.personality_profile as { goal_key?: unknown } | null)?.goal_key;
+  return typeof key === 'string' && key.trim() ? key.trim() : null;
+}
+
+/** Token-aware `litePlanConcept` — decodes `lesson`/`train:<id>:<n>`/`rest` tokens (plan-train alignment). */
+function litePlanConceptFromToken(
+  token: string,
+  learnerSubjects: string[],
+  mastery: Record<string, number>,
+  pointsGroup?: string | null,
+): PlanConcept {
+  const item = parseWorkItemToken(token);
+  if (item.kind === 'rest' || !item.concept_id) return restPlanConcept();
+  const base = litePlanConcept(item.concept_id, learnerSubjects, mastery, pointsGroup);
+  return { ...base, kind: item.kind, target_count: item.target_count ?? null };
+}
+
+/** Token-aware `hydratePlanConcept` — decodes `lesson`/`train:<id>:<n>`/`rest` tokens (plan-train alignment). */
+async function hydratePlanConceptFromToken(
+  token: string,
+  learnerSubjects: string[],
+  mastery: Record<string, number>,
+  cache: SubjectContentCache,
+  pointsGroup?: string | null,
+): Promise<PlanConcept> {
+  const item = parseWorkItemToken(token);
+  if (item.kind === 'rest' || !item.concept_id) return restPlanConcept();
+  const base = await hydratePlanConcept(item.concept_id, learnerSubjects, mastery, cache, pointsGroup);
+  return { ...base, kind: item.kind, target_count: item.target_count ?? null };
+}
+
 export async function generateLearningPlan(
   learnerId: string,
   options: GeneratePlanOptions = {},
@@ -1265,6 +1359,15 @@ export async function generateLearningPlan(
   } else {
     numWeeks = horizonWeeks;
   }
+
+  // Plan-train alignment: never plan past the learner's own goal deadline.
+  const goalDeadlineIsoForClip = resolveGoalDeadlineIso(
+    profile.next_test_date,
+    profile.final_goal_date,
+  );
+  const daysToGoalForClip = daysUntilIso(goalDeadlineIsoForClip);
+  horizonWeeks = clipHorizonWeeks({ daysToGoal: daysToGoalForClip, horizonWeeks });
+  numWeeks = clipMaterializedWeeks({ daysToGoal: daysToGoalForClip, requestedWeeks: numWeeks });
 
   const worklistOptions = {
     priorityConcepts,
@@ -1400,6 +1503,63 @@ export async function generateLearningPlan(
   return plan;
 }
 
+/**
+ * Plan-train alignment: decide the study mode/phase for "today" (plan start → goal
+ * deadline, current mastery + behavior signals) and re-encode raw concept-id week
+ * groups into work-item tokens (`lesson` / `train:<id>:<n>` / `rest`).
+ */
+async function materializeWeekGroupsAsTokens(args: {
+  learnerId: string;
+  profile: LearnerProfileRow;
+  mastery: Record<string, number>;
+  weekGroups: string[][];
+  planStartIso: string;
+}): Promise<{
+  tokenWeekGroups: string[][];
+  mode: PlanStudyMode;
+  phase: PlanTimePhase;
+  goalDeadlineIso: string | null;
+}> {
+  const { learnerId, profile, mastery, weekGroups, planStartIso } = args;
+  const goalDeadlineIso = resolveGoalDeadlineIso(profile.next_test_date, profile.final_goal_date);
+  const daysToGoal = daysUntilIso(goalDeadlineIso);
+  const fraction = goalDeadlineIso
+    ? fractionTimeUsed({ planStartIso, goalDeadlineIso })
+    : 0;
+  const phase = phaseFromFraction(fraction, daysToGoal);
+
+  const goalKey = goalKeyFromProfileRow(profile);
+  const [practiceByConcept, skillsPracticedCount] = await Promise.all([
+    getPracticeStatsByConcept(learnerId),
+    getSkillsPracticedCount(learnerId),
+  ]);
+  const strongPracticeSignals = countStrongPracticeSignals(weekGroups.flat(), practiceByConcept);
+  const readiness = goalKey
+    ? computeReadiness({
+        goalKey,
+        masteryScores: mastery,
+        daysToExam: daysToGoal,
+        skillsPracticedCount,
+      })
+    : null;
+  const mode = computePlanMode({
+    daysToGoal,
+    readiness: readiness?.readiness ?? null,
+    strongPracticeSignals,
+    phase,
+  });
+
+  const tokenWeekGroups = weekGroups.map((ids) => {
+    const items: PlanWorkItem[] =
+      mode === 'train_dominant'
+        ? applyTrainDominantOverlay(ids, trainTargetCount(mode, phase))
+        : buildWeekWorkItems(ids, mode, phase);
+    return encodeWeekWorkItems(items);
+  });
+
+  return { tokenWeekGroups, mode, phase, goalDeadlineIso };
+}
+
 async function persistLearningPlanTransaction(args: {
   learnerId: string;
   goalText: string;
@@ -1434,7 +1594,24 @@ async function persistLearningPlanTransaction(args: {
   const endDate = new Date(startDate);
   endDate.setDate(endDate.getDate() + 7 * Math.max(numWeeks, horizonWeeks ?? numWeeks));
   const startStr = startDate.toISOString().slice(0, 10);
-  const endStr = endDate.toISOString().slice(0, 10);
+  let endStr = endDate.toISOString().slice(0, 10);
+
+  const { tokenWeekGroups, mode, goalDeadlineIso } = await materializeWeekGroupsAsTokens({
+    learnerId,
+    profile,
+    mastery,
+    weekGroups,
+    planStartIso: startStr,
+  });
+  const filteredTokenWeekGroups = filterWeekGroupsBeforeGoal(
+    tokenWeekGroups,
+    startStr,
+    goalDeadlineIso,
+  );
+  if (goalDeadlineIso && endStr > goalDeadlineIso) endStr = goalDeadlineIso;
+
+  const effectivePlanAdjustmentKind =
+    planAdjustmentKind ?? (mode === 'train_dominant' ? 'train_adapt' : null);
 
   const weeks: PlanWeek[] = [];
   const persistWeeks: Array<{
@@ -1445,8 +1622,8 @@ async function persistLearningPlanTransaction(args: {
     status: string;
   }> = [];
 
-  for (let i = 0; i < weekGroups.length; i++) {
-    const concepts = weekGroups[i]!;
+  for (let i = 0; i < filteredTokenWeekGroups.length; i++) {
+    const concepts = filteredTokenWeekGroups[i]!;
     const weekId = randomUUID();
     const quizDue = new Date(startDate);
     quizDue.setDate(quizDue.getDate() + 7 * (i + 1));
@@ -1475,7 +1652,7 @@ async function persistLearningPlanTransaction(args: {
       )
       VALUES (
         ${planId}, ${learnerId}, ${goalText}, ${startStr}, ${endStr}, 'active',
-        ${PLAN_SCHEMA_VERSION}, ${planAdjustmentKind}, ${planLastAdjustedAt},
+        ${PLAN_SCHEMA_VERSION}, ${effectivePlanAdjustmentKind}, ${planLastAdjustedAt},
         NOW(), NOW()
       )
     `,
@@ -1506,8 +1683,8 @@ async function persistLearningPlanTransaction(args: {
       id: w.weekId,
       plan_id: planId,
       week_number: w.weekNumber,
-      concepts: w.concepts.map((cid) =>
-        litePlanConcept(cid, profile.subjects, mastery, profile.points_group),
+      concepts: w.concepts.map((token) =>
+        litePlanConceptFromToken(token, profile.subjects, mastery, profile.points_group),
       ),
       quiz_due_at: w.quizDue,
       status: w.status,
@@ -1684,7 +1861,10 @@ export async function advanceRollingPlanWindow(
 
   const usedConcepts = new Set<string>();
   for (const w of stub.weeks) {
-    for (const c of w.concepts) usedConcepts.add(c.concept_id);
+    for (const c of w.concepts) {
+      if (c.kind === 'rest') continue;
+      usedConcepts.add(c.concept_id);
+    }
   }
 
   // Measured throughput from completed weeks → feeds the pacing 'ahead' signal so
@@ -1748,11 +1928,20 @@ export async function advanceRollingPlanWindow(
 
   const s = requireSql();
   const upcoming = stub.weeks.find((w) => w.status === 'upcoming');
-  const appendWeek = nextConcepts.length > 0;
+  const nextWeekNumber = Math.max(...stub.weeks.map((w) => w.week_number)) + 1;
 
-  // Goal reached (frontier + stretch exhausted) with no upcoming week to promote:
-  // wind the plan down at 100% readiness — complete the active week, add no new one.
-  // We only reach here while advancing (gate-completed or soft override).
+  // Plan-train alignment: never append a week that starts after the learner's
+  // own goal deadline — wind the plan down instead (goal-reached branch below).
+  const goalDeadlineIso = resolveGoalDeadlineIso(profile.next_test_date, profile.final_goal_date);
+  const nextWeekPastGoal =
+    goalDeadlineIso != null &&
+    weekStartsAfterGoal(nextWeekNumber - 1, stub.start_date, goalDeadlineIso);
+  const appendWeek = nextConcepts.length > 0 && !nextWeekPastGoal;
+
+  // Goal reached (frontier + stretch exhausted, or the next slot is past the goal
+  // date) with no upcoming week to promote: wind the plan down at 100% readiness —
+  // complete the active week, add no new one. We only reach here while advancing
+  // (gate-completed or soft override).
   if (!appendWeek && !upcoming) {
     try {
       await s.transaction([
@@ -1766,11 +1955,22 @@ export async function advanceRollingPlanWindow(
     return { advanced: true, plan: await loadActivePlanStub(learnerId) };
   }
 
-  const nextWeekNumber = Math.max(...stub.weeks.map((w) => w.week_number)) + 1;
   const weekId = randomUUID();
   const quizDue = new Date();
   quizDue.setDate(quizDue.getDate() + 7);
   const quizDueIso = quizDue.toISOString();
+
+  let nextTokens: string[] = [];
+  if (appendWeek) {
+    const materialized = await materializeWeekGroupsAsTokens({
+      learnerId,
+      profile,
+      mastery,
+      weekGroups: [nextConcepts],
+      planStartIso: stub.start_date,
+    });
+    nextTokens = materialized.tokenWeekGroups[0] ?? [];
+  }
 
   const queries = [
     // We only reach here while advancing (gate-completed or soft override), so the
@@ -1794,7 +1994,7 @@ export async function advanceRollingPlanWindow(
           s`
             INSERT INTO plan_weeks (id, plan_id, week_number, concepts, quiz_due_at, status)
             VALUES (
-              ${weekId}, ${stub.id}::uuid, ${nextWeekNumber}, ${nextConcepts},
+              ${weekId}, ${stub.id}::uuid, ${nextWeekNumber}, ${nextTokens},
               ${quizDueIso}, 'upcoming'
             )
           `,
@@ -2041,8 +2241,115 @@ export async function getLatestPlanChange(
   return history[history.length - 1] as PlanChangeHistoryEntry;
 }
 
+/**
+ * Plan-train alignment horizon repair: idempotent maintenance run at the top of
+ * every `getCurrentPlan` read. Drops any materialized week that starts after the
+ * learner's own goal deadline, re-encodes the active week's work-item tokens
+ * against current mode/phase/mastery, and clips `end_date` to the deadline.
+ * No-ops (no writes) when there is nothing to drop and the active week's tokens
+ * already match what would be re-derived — cheap on the hot read path.
+ */
+export async function repairPlanHorizon(learnerId: string): Promise<void> {
+  if (!sql) return;
+  const s = requireSql();
+
+  const planRows = (await s`
+    SELECT id::text, start_date::text, end_date::text, plan_adjustment_kind
+    FROM learning_plans WHERE learner_id = ${learnerId} AND status = 'active' LIMIT 1
+  `) as Array<{
+    id: string;
+    start_date: string;
+    end_date: string | null;
+    plan_adjustment_kind: string | null;
+  }>;
+  const plan = planRows[0];
+  if (!plan) return;
+
+  const profile = await getLearnerProfile(learnerId);
+  if (!profile) return;
+  const goalDeadlineIso = resolveGoalDeadlineIso(profile.next_test_date, profile.final_goal_date);
+  if (!goalDeadlineIso) return;
+
+  const weekRows = (await s`
+    SELECT id::text, week_number, concepts, status
+    FROM plan_weeks WHERE plan_id = ${plan.id}::uuid ORDER BY week_number
+  `) as Array<{ id: string; week_number: number; concepts: string[]; status: string }>;
+  if (weekRows.length === 0) return;
+
+  const toDrop = weekRows.filter((w) =>
+    weekStartsAfterGoal(w.week_number - 1, plan.start_date, goalDeadlineIso),
+  );
+  const kept = weekRows.filter((w) => !toDrop.includes(w));
+  const activeWeek = kept.find((w) => w.status === 'active') ?? kept[0];
+  if (!activeWeek) return;
+
+  const mastery = await getConceptMastery(learnerId);
+  const daysToGoal = daysUntilIso(goalDeadlineIso);
+  const fraction = fractionTimeUsed({ planStartIso: plan.start_date, goalDeadlineIso });
+  const phase = phaseFromFraction(fraction, daysToGoal);
+  const goalKey = goalKeyFromProfileRow(profile);
+  const [practiceByConcept, skillsPracticedCount] = await Promise.all([
+    getPracticeStatsByConcept(learnerId),
+    getSkillsPracticedCount(learnerId),
+  ]);
+  const activeConceptIds = activeWeek.concepts
+    .map((t) => parseWorkItemToken(t).concept_id)
+    .filter((id): id is string => Boolean(id));
+  const strongPracticeSignals = countStrongPracticeSignals(activeConceptIds, practiceByConcept);
+  const readiness = goalKey
+    ? computeReadiness({
+        goalKey,
+        masteryScores: mastery,
+        daysToExam: daysToGoal,
+        skillsPracticedCount,
+      })
+    : null;
+  const mode = computePlanMode({
+    daysToGoal,
+    readiness: readiness?.readiness ?? null,
+    strongPracticeSignals,
+    phase,
+  });
+  const items: PlanWorkItem[] =
+    mode === 'train_dominant'
+      ? applyTrainDominantOverlay(activeConceptIds, trainTargetCount(mode, phase))
+      : buildWeekWorkItems(activeConceptIds, mode, phase);
+  const newTokens = encodeWeekWorkItems(items);
+
+  const tokensMatch =
+    newTokens.length === activeWeek.concepts.length &&
+    newTokens.every((t, i) => t === activeWeek.concepts[i]);
+  const adjustmentKind = mode === 'train_dominant' ? 'train_adapt' : 'horizon_repair';
+  const alreadyRepaired = plan.plan_adjustment_kind === adjustmentKind;
+
+  if (toDrop.length === 0 && tokensMatch && alreadyRepaired) return;
+
+  const newEndStr =
+    plan.end_date && goalDeadlineIso < plan.end_date ? goalDeadlineIso : plan.end_date;
+
+  try {
+    await s.transaction([
+      ...toDrop.map((w) => s`DELETE FROM plan_weeks WHERE id = ${w.id}::uuid`),
+      s`UPDATE plan_weeks SET concepts = ${newTokens} WHERE id = ${activeWeek.id}::uuid`,
+      s`
+        UPDATE learning_plans
+        SET end_date = ${newEndStr},
+            plan_adjustment_kind = ${adjustmentKind},
+            plan_last_adjusted_at = NOW(),
+            updated_at = NOW()
+        WHERE id = ${plan.id}::uuid
+      `,
+    ]);
+  } catch (err) {
+    console.warn('[repairPlanHorizon]', err);
+  }
+}
+
 export async function getCurrentPlan(learnerId: string): Promise<LearningPlan | null> {
   const s = requireSql();
+  await repairPlanHorizon(learnerId).catch((err) => {
+    console.warn('[getCurrentPlan] repairPlanHorizon failed', err);
+  });
   const planRows = (await s`
     SELECT id::text, learner_id, goal, start_date::text, end_date::text, status,
            plan_adjustment_kind, plan_last_adjusted_at::text
@@ -2079,9 +2386,9 @@ export async function getCurrentPlan(learnerId: string): Promise<LearningPlan | 
   const weeks: PlanWeek[] = [];
   for (const w of weekRows) {
     const hydrated: PlanConcept[] = [];
-    for (const cid of w.concepts) {
+    for (const token of w.concepts) {
       hydrated.push(
-        await hydratePlanConcept(cid, subjects, mastery, contentCache, profile?.points_group),
+        await hydratePlanConceptFromToken(token, subjects, mastery, contentCache, profile?.points_group),
       );
     }
     weeks.push({
@@ -2094,9 +2401,10 @@ export async function getCurrentPlan(learnerId: string): Promise<LearningPlan | 
     });
   }
 
-  const [activityDays, mockPassed] = await Promise.all([
+  const [activityDays, mockPassed, skillsPracticedCount] = await Promise.all([
     getConceptActivityDays(learnerId),
     getMockPassed(learnerId),
+    getSkillsPracticedCount(learnerId),
   ]);
 
   return {
@@ -2104,7 +2412,7 @@ export async function getCurrentPlan(learnerId: string): Promise<LearningPlan | 
     plan_adjustment_kind: plan.plan_adjustment_kind as LearningPlan['plan_adjustment_kind'],
     plan_last_adjusted_at: plan.plan_last_adjusted_at,
     weeks,
-    pacing: computePlanPacing(profile, mastery, { activityDays, mockPassed }),
+    pacing: computePlanPacing(profile, mastery, { activityDays, mockPassed, skillsPracticedCount }),
   };
 }
 
@@ -2213,6 +2521,52 @@ export async function getMockPassed(learnerId: string): Promise<boolean> {
   }
 }
 
+/**
+ * Count of distinct skill atoms this learner has ever attempted (`attempts > 0`).
+ * Plan-train alignment + readiness use this as a floor signal: coverage claims
+ * without ANY practice attempts are capped (see `readiness.ts` NO_PRACTICE_CEILING).
+ */
+export async function getSkillsPracticedCount(learnerId: string): Promise<number> {
+  if (!sql) return 0;
+  try {
+    const rows = (await sql`
+      SELECT COUNT(*)::int AS n FROM skill_practice
+      WHERE learner_id = ${learnerId} AND attempts > 0
+    `) as Array<{ n: number }>;
+    return rows[0]?.n ?? 0;
+  } catch {
+    return 0;
+  }
+}
+
+/**
+ * Aggregate `skill_practice` attempts/successes by KG concept id (via the
+ * atom→concept map) — feeds `countStrongPracticeSignals` for train-dominant
+ * mode decisions (plan-train alignment).
+ */
+export async function getPracticeStatsByConcept(
+  learnerId: string,
+): Promise<Record<string, { successes: number; attempts: number }>> {
+  if (!sql) return {};
+  try {
+    const rows = (await sql`
+      SELECT skill_atom, attempts, successes FROM skill_practice
+      WHERE learner_id = ${learnerId}
+    `) as Array<{ skill_atom: string; attempts: number; successes: number }>;
+    const out: Record<string, { successes: number; attempts: number }> = {};
+    for (const r of rows) {
+      const conceptId = atomConceptMap.get(r.skill_atom)?.concept_id ?? r.skill_atom;
+      const bucket = out[conceptId] ?? { successes: 0, attempts: 0 };
+      bucket.successes += Number(r.successes ?? 0);
+      bucket.attempts += Number(r.attempts ?? 0);
+      out[conceptId] = bucket;
+    }
+    return out;
+  } catch {
+    return {};
+  }
+}
+
 /** Whole days until the learner's dated deadline, or null when none is set. */
 function daysToDeadline(profile: LearnerProfileRow | null, now: Date = new Date()): number | null {
   const iso = profile?.next_test_date ?? profile?.final_goal_date ?? null;
@@ -2235,6 +2589,8 @@ export function computePlanPacing(
     activityDays?: Record<string, number> | null;
     mockPassed?: boolean;
     now?: Date;
+    /** Count of practiced skill atoms — caps readiness when low/absent (plan-train alignment). */
+    skillsPracticedCount?: number | null;
   },
 ): PlanPacing | null {
   const p = computeFullPacing(profile, mastery);
@@ -2246,6 +2602,7 @@ export function computePlanPacing(
     activityDays: opts?.activityDays ?? null,
     mockPassed: opts?.mockPassed ?? false,
     daysToExam: daysToDeadline(profile, opts?.now),
+    skillsPracticedCount: opts?.skillsPracticedCount ?? null,
   });
 
   return {
@@ -4194,6 +4551,8 @@ export interface LearnerMemorySnapshot {
   /** Latest diagnostic briefs (from mental_state) for locale-aware About-me display. */
   diagnosticBriefHe: string | null;
   diagnosticBriefEn: string | null;
+  /** Plan-train alignment live snapshot (mode/phase/labels) for agent prompt context. */
+  livePlan: PlanLiveSnapshot | null;
 }
 
 const MEMORY_TAB_AGENTS = ['tutor', 'mentor', 'coach', 'reviewer'] as const;
@@ -4229,6 +4588,7 @@ function emptyMemorySnapshot(): LearnerMemorySnapshot {
     lastUpdated: null,
     diagnosticBriefHe: null,
     diagnosticBriefEn: null,
+    livePlan: null,
   };
 }
 
@@ -4295,6 +4655,29 @@ export async function getLearnerMemorySnapshot(
       plan?.weeks.find((w) => w.status === 'active') ?? plan?.weeks[0];
     const activeWeekConceptIds =
       activeWeek?.concepts.map((c) => c.concept_id) ?? [];
+
+    const activeLessonLabels = (activeWeek?.concepts ?? [])
+      .filter((c) => c.kind !== 'rest' && c.kind !== 'train')
+      .map((c) => c.name);
+    const activeTrainLabels = (activeWeek?.concepts ?? [])
+      .filter((c) => c.kind === 'train')
+      .map((c) => c.name);
+    const weakConceptLabels = weakConcepts.map(
+      (c) => resolveConceptTitles(c.concept_id, null, profile?.points_group).title_en,
+    );
+    const livePlan = profile
+      ? buildPlanLiveSnapshot({
+          goal: profile.goal,
+          goalKey: goalKeyFromProfileRow(profile),
+          nextTestDate: profile.next_test_date,
+          finalGoalDate: profile.final_goal_date,
+          planStartIso: plan?.start_date ?? null,
+          readiness: plan?.pacing?.readiness ?? null,
+          weakConceptLabels,
+          activeLessonLabels,
+          activeTrainLabels,
+        })
+      : null;
 
     const chatTurns = chatTurnRows as LearnerMemoryChatTurn[];
     const lastUpdated = latestTimestamp([
@@ -4369,6 +4752,7 @@ export async function getLearnerMemorySnapshot(
       lastUpdated: lastUpdatedWithPlan,
       diagnosticBriefHe,
       diagnosticBriefEn,
+      livePlan,
     };
   } catch (err) {
     if (process.env.NODE_ENV !== 'production') {

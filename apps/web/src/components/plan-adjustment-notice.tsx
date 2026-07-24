@@ -9,7 +9,13 @@ import { useLanguagePreference } from '@/hooks/use-language-preference';
 
 const RECENT_MS = 7 * 24 * 60 * 60 * 1000;
 
-const SERVER_DRIVEN_KINDS = new Set(['wellbeing', 'mastery', 'exam_window']);
+const SERVER_DRIVEN_KINDS = new Set([
+  'wellbeing',
+  'mastery',
+  'exam_window',
+  'horizon_repair',
+  'train_adapt',
+]);
 
 function dismissedStorageKey(learnerId: string, adjustedAt: string): string {
   return `asf-plan-adjustment-dismissed-${learnerId}-${adjustedAt}`;
@@ -18,13 +24,30 @@ function dismissedStorageKey(learnerId: string, adjustedAt: string): string {
 const STR = {
   he: {
     message: 'התוכנית עודכנה לפי ההתקדמות שלך',
+    horizon_repair:
+      'קיצרנו את התוכנית כדי שתגיע/י ליעד בזמן — השבועות הבאים עודכנו.',
+    train_adapt:
+      'הוספנו יותר אימון השבוע כי את/ה קרוב/ה ליעד או מתרגל/ה בצורה חזקה.',
     close: 'סגור הודעה',
   },
   en: {
     message: 'Your plan was updated based on your progress.',
+    horizon_repair:
+      'We shortened the plan so you can reach your goal on time — upcoming weeks were adjusted.',
+    train_adapt:
+      'We added more practice this week because you are close to your goal or training strongly.',
     close: 'Dismiss notice',
   },
 } as const;
+
+function messageForKind(
+  kind: string,
+  t: (typeof STR)['he'] | (typeof STR)['en'],
+): string {
+  if (kind === 'horizon_repair') return t.horizon_repair;
+  if (kind === 'train_adapt') return t.train_adapt;
+  return t.message;
+}
 
 export function PlanAdjustmentNotice({
   plan,
@@ -65,7 +88,7 @@ export function PlanAdjustmentNotice({
     setVisible(false);
   }
 
-  if (!visible) return null;
+  if (!visible || !kind) return null;
 
   return (
     <Card
@@ -85,7 +108,7 @@ export function PlanAdjustmentNotice({
       </Button>
       <CardContent className="flex gap-3 p-4 pe-12">
         <Info className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
-        <p className="text-sm font-medium text-foreground">{t.message}</p>
+        <p className="text-sm font-medium text-foreground">{messageForKind(kind, t)}</p>
       </CardContent>
     </Card>
   );
