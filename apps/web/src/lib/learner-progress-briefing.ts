@@ -339,11 +339,12 @@ The learner is anxious, asking status, challenging your knowledge, asking what t
 
 export const AGENT_CORRECTION_TURN_INSTRUCTION = `## THIS TURN — learner correction (mandatory)
 The learner says you erred, challenges your construction, and/or supplies a corrected solution.
-1. Re-check carefully (mean × count; isosceles-trapezoid overhang method when relevant).
+1. Re-check against \`## Method authority\` / hybrid packs / arithmetic (mean × count). Drop any invented construction not in sources.
 2. If \`solver.verify_numeric\` has AUTHORITATIVE numbers: teach that method now — do not keep asking "how do you think…?".
-3. Admit clearly if they are right; restate the corrected result with a one-line check.
-4. Complete grammatical sentences only — never paste "הצעה להמשך", "הצעד הבא המומלץ עכשיו", or "Recommended next step".
-5. Do not switch into exam/status/next-topic mode on this turn.`;
+3. Otherwise: re-ground from worked_example / key_insights only; if sources are THIN, refuse freestyle invention and ask for the concept.
+4. Admit clearly if they are right; restate the corrected result with a one-line check.
+5. Complete grammatical sentences only — never paste "הצעה להמשך", "הצעד הבא המומלץ עכשיו", or "Recommended next step".
+6. Do not switch into exam/status/next-topic mode on this turn.`;
 
 export const CONTEXT_CHALLENGE_TURN_INSTRUCTION = `## THIS TURN — context challenge (ADR-0012, mandatory)
 Learner says you don't know / you should know / you're the teacher.
@@ -366,7 +367,7 @@ export const RECOVERY_TURN_INSTRUCTION = `## THIS TURN — recovery / simplify (
 The learner is confused, overloaded, or asked for a simpler path.
 1. Drop any failed explanation path from prior turns — do not dig deeper into it.
 2. Say honestly whether the topic is required for their current plan / bagrut track, or optional enrichment.
-3. Teach the simplest CORRECT method from injected lesson/concept context (or say the corpus does not cover it).
+3. Teach the simplest CORRECT method from \`## Method authority\` / injected lesson/concept context (or say the corpus does not cover it — do not invent a simpler false method).
 4. Never trade correctness for simplicity. One short worked example, then check understanding.
 5. If the question is a definite integral (limits given, e.g. 0 to 1), finish with the numeric value (for ∫₀¹ x² dx state **1/3** explicitly after the antiderivative).
 6. Optional: emit one [[ASF_MEMORY_NOTE:...]] with kind misconception or strategy (≤600 chars).`;

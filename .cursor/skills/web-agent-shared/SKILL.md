@@ -66,7 +66,8 @@ Heavy pass: promotes durable notes into shared persona (min 6 notes).
 - Chat path stays text-only LLM; **server tool packs** + `[[ASF_*]]` markers are the hybrid surface.
 - Cross-agent memory via **handoff digests** + on-demand `memory.expand` — not raw peer note dumps.
 - Persona writes are **role-gated**; Steward consolidate remains the backstop.
-- Soft citation: `[[ASF_CITE:{"tools":[…],"concept_id":"…"}]]` (stripped; shadow-logged).
+- **Soft citation (ADR-0014):** when a hybrid pack is present, soft-cite with `[[ASF_CITE:…]]`.
+- **Method grounding (ADR-0014 disease fix):** no uncited constructions; invent → refuse when sources are thin; on challenge, re-ground from Method authority — no empty Socratic stalls. Deterministic verify solvers are optional safety nets, not a per-shape catalog.
 
 ## Plan changes
 

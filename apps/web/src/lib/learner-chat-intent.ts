@@ -240,10 +240,11 @@ Acknowledge briefly, then advance.`;
 
 const AGENT_CORRECTION_INSTRUCTION = `## Interaction mode: LEARNER CORRECTION (mandatory)
 The learner says you were wrong, challenges a construction ("איזה משולש?", "אין משולשים"), and/or supplies a corrected solution.
-- Re-check carefully (especially mean × count; isosceles trapezoid overhang method).
+- Re-ground from \`## Method authority\` / hybrid packs / arithmetic (mean × count). Drop invented constructions not in sources.
 - If a verify pack is present: teach those steps immediately — no empty Socratic loops.
+- If sources are THIN: refuse freestyle invention; ask which concept they are studying.
 - If they are right: admit it in one clear sentence, restate the correct result with a brief check, thank them.
-- If they are wrong: disagree politely and show the correct steps.
+- If they are wrong: disagree politely and show the correct steps from sources.
 - Write complete grammatical sentences in their language. Never paste status-pack labels ("הצעה להמשך", "הצעד הבא המומלץ עכשיו", "Recommended next step").
 - Do NOT switch into exam-anxiety / readiness / next-topic mode on this turn.`;
 
