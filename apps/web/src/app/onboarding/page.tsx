@@ -928,9 +928,9 @@ export default function OnboardingPage() {
         });
       } catch (err) {
         clearTimeout(timeout);
-        // Client abort / network — profile may already be saved; finish plan on plan-setup.
+        // Client abort / network — profile may not have been saved yet.
+        // Keep the draft so plan-setup can redirect back to onboarding if needed.
         if (err instanceof Error && err.name === 'AbortError') {
-          clearOnboardingDraft();
           router.push('/plan-setup');
           return;
         }

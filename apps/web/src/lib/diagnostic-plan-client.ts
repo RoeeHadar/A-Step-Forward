@@ -43,9 +43,18 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+export class PlanAvailabilityUnknownError extends Error {
+  constructor() {
+    super('Plan availability temporarily unavailable');
+    this.name = 'PlanAvailabilityUnknownError';
+  }
+}
+
 export async function learnerHasActivePlan(): Promise<boolean> {
   const res = await fetch('/api/plans/current?exists=1', { cache: 'no-store' });
-  if (!res.ok) return false;
+  if (!res.ok) {
+    throw new PlanAvailabilityUnknownError();
+  }
   const data = (await res.json()) as { has_plan?: boolean };
   return Boolean(data.has_plan);
 }
@@ -69,6 +78,11 @@ type GenerateAttemptResult =
   | { kind: 'timeout' }
   | { kind: 'error'; status: number; message: string; retryAfterSec?: number };
 
+/**
+ * @deprecated No longer called from any active page. The /diagnostic page now
+ * redirects to /plan-setup which uses the thin bootstrap (/api/plans/bootstrap).
+ * Kept for the test suite (isRateLimitResponse, isRetryablePlanError, etc.).
+ */
 async function postPlanGenerate(): Promise<GenerateAttemptResult> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), PLAN_GENERATE_TIMEOUT_MS);
@@ -110,6 +124,8 @@ async function postPlanGenerate(): Promise<GenerateAttemptResult> {
 }
 
 /**
+ * @deprecated No active callers — the diagnostic flow now redirects to /plan-setup
+ * which uses the thin bootstrap. Kept in case external integrations reference it.
  * Kick off plan generation and poll `exists=1` in parallel until the plan row
  * is visible or we hit the wait budget.
  */
@@ -117,9 +133,18 @@ export async function generatePlanWithRetry(options: {
   onPhase: (phase: DiagnosticFlowPhase, detail?: string) => void;
   maxAttempts?: number;
 }): Promise<void> {
-  if (await learnerHasActivePlan()) {
-    options.onPhase('redirecting');
-    return;
+  try {
+    if (await learnerHasActivePlan()) {
+      options.onPhase('redirecting');
+      return;
+    }
+  } catch (err) {
+    if (err instanceof PlanAvailabilityUnknownError) {
+      throw new Error(
+        'Plan status is temporarily unavailable. Please refresh the page and try again.',
+      );
+    }
+    throw err;
   }
 
   const maxAttempts = options.maxAttempts ?? 2;

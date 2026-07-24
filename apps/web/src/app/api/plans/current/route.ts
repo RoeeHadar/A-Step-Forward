@@ -33,9 +33,6 @@ export async function GET(req: Request) {
     return Response.json({ plan });
   } catch (err) {
     console.error('[plans/current]', err);
-    return Response.json(
-      { plan: null, error: err instanceof Error ? err.message : String(err) },
-      { status: 200 },
-    );
+    return Response.json({ plan: null, error: 'db_unavailable' }, { status: 503 });
   }
 }

@@ -6,7 +6,6 @@ import {
   getDiagnosticItemById,
   updateDiagnosticSessionResults,
   persistDiagnosticSummary,
-  kickoffOnboardingPlan,
   itemToQuestion,
   dbConfigured,
 } from '@/lib/neon-db';
@@ -141,7 +140,11 @@ export async function POST(
 
   if (advanced.complete && advanced.summary) {
     await persistDiagnosticSummary(userId, advanced.summary);
-    kickoffOnboardingPlan(userId);
+    // Plan creation is handled by /plan-setup (thin bootstrap) — do NOT call
+    // kickoffOnboardingPlan here. That function imports the neon-db monolith's
+    // generateLearningPlan which caused FUNCTION_INVOCATION_TIMEOUT. Mastery
+    // updates from completeDiagnostic below feed directly into the rolling-window
+    // planner on the next /api/learning-plan/next call.
     const mastery = await completeDiagnostic(
       sessionId,
       userId,

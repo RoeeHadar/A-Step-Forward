@@ -480,16 +480,11 @@ export function proposalToUpdatePayload(
 }
 
 export function planPayloadToOptions(payload: PlanUpdatePayload): GeneratePlanOptions {
-  let numWeeksOverride: number | undefined;
-  const targetDate = payload.next_test_date ?? payload.final_goal_date;
-  if (targetDate) {
-    const days = Math.ceil(
-      (new Date(targetDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24),
-    );
-    if (days > 0) {
-      numWeeksOverride = Math.max(1, Math.min(24, Math.ceil(days / 7)));
-    }
-  }
+  // Do NOT derive numWeeksOverride from the exam date here. Materialising up to 24 weeks
+  // caused FUNCTION_INVOCATION_TIMEOUT on the chat/template apply path (historical P0).
+  // The exam horizon (next_test_date / final_goal_date) is already persisted on the
+  // learner profile via applyPlanProfileUpdates and is used as end_date metadata only.
+  // The rolling window (2 visible weeks) is enforced unconditionally by generateLearningPlan.
 
   const prepend = payload.prepend_concepts ?? [];
   const isExamFocus = prepend.length > 0 || (payload.priority_concepts?.length ?? 0) > 0;
@@ -500,7 +495,6 @@ export function planPayloadToOptions(payload: PlanUpdatePayload): GeneratePlanOp
     prependConcepts: payload.prepend_concepts,
     excludeConcepts: payload.exclude_concepts,
     planChangeReason: payload.reason,
-    numWeeksOverride,
     focusConceptsOnly: isExamFocus,
   };
 }

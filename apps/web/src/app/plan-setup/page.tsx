@@ -13,6 +13,8 @@ const STR = {
     error: 'We could not create your plan.',
     retry: 'Try again',
     redirecting: 'Plan ready — opening your dashboard…',
+    needsOnboarding: 'Your profile is not complete yet. Returning to the questionnaire…',
+    goOnboarding: 'Complete questionnaire →',
   },
   he: {
     title: 'יוצרים את תוכנית הלמידה שלך',
@@ -21,17 +23,23 @@ const STR = {
     error: 'לא הצלחנו ליצור את התוכנית.',
     retry: 'נסה שוב',
     redirecting: 'התוכנית מוכנה — פותחים את לוח הבקרה…',
+    needsOnboarding: 'הפרופיל שלך עדיין לא הושלם. חוזרים לשאלון…',
+    goOnboarding: 'לחזרה לשאלון →',
   },
 } as const;
 
-async function hasPlan(): Promise<boolean> {
+type PlanExistsCheck = 'yes' | 'no' | 'unknown';
+
+async function checkPlanExists(): Promise<PlanExistsCheck> {
   const res = await fetch('/api/plans/current?exists=1', { cache: 'no-store' });
-  if (!res.ok) return false;
+  if (!res.ok) return 'unknown';
   const data = (await res.json()) as { has_plan?: boolean };
-  return Boolean(data.has_plan);
+  return data.has_plan ? 'yes' : 'no';
 }
 
-async function bootstrapPlan(): Promise<{ ok: boolean; error?: string }> {
+type BootstrapResult = { ok: boolean; status?: number; error?: string };
+
+async function bootstrapPlan(replan: boolean): Promise<BootstrapResult> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 25_000);
   try {
@@ -49,11 +57,16 @@ async function bootstrapPlan(): Promise<{ ok: boolean; error?: string }> {
     } catch {
       /* plain */
     }
-    return { ok: false, error: message };
+    return { ok: false, status: res.status, error: message };
   } catch (err) {
     if (err instanceof Error && err.name === 'AbortError') {
-      // Server may still have finished — check exists.
-      if (await hasPlan()) return { ok: true };
+      // Server may still have finished — check exists. On a re-plan an existing
+      // plan proves nothing (the old plan also "exists"), so skip the shortcut.
+      const check = replan ? 'no' : await checkPlanExists();
+      if (check === 'yes') return { ok: true };
+      if (check === 'unknown') {
+        return { ok: false, error: 'Could not verify plan status. Please try again.' };
+      }
       return { ok: false, error: 'Plan creation timed out. Please try again.' };
     }
     return {
@@ -71,7 +84,9 @@ export default function PlanSetupPage() {
   const lang = locale === 'he' ? 'he' : 'en';
   const t = STR[lang];
   const dir = lang === 'he' ? 'rtl' : 'ltr';
-  const [phase, setPhase] = useState<'loading' | 'error' | 'redirecting'>('loading');
+  const [phase, setPhase] = useState<'loading' | 'error' | 'redirecting' | 'needs_onboarding'>(
+    'loading',
+  );
   const [detail, setDetail] = useState('0');
   const [error, setError] = useState('');
   const started = useRef(false);
@@ -84,19 +99,49 @@ export default function PlanSetupPage() {
       setDetail(String(Math.floor((Date.now() - t0) / 1000)));
     }, 1000);
 
+    // ?replan=1 (dashboard "Re-plan" CTA after the plan's end_date passed):
+    // the old plan still has status='active', so the exists-check shortcuts
+    // would bounce the learner straight back to /app. Force a fresh bootstrap.
+    const replan =
+      typeof window !== 'undefined' &&
+      new URLSearchParams(window.location.search).get('replan') === '1';
+
     try {
-      if (await hasPlan()) {
+      const initialCheck = replan ? 'no' : await checkPlanExists();
+      if (initialCheck === 'unknown') {
+        throw new Error(
+          lang === 'he'
+            ? 'לא הצלחנו לבדוק את סטטוס התוכנית. נסה שוב בעוד רגע.'
+            : 'Could not verify plan status. Please try again in a moment.',
+        );
+      }
+      if (initialCheck === 'yes') {
         setPhase('redirecting');
         router.replace('/app');
         return;
       }
-      const result = await bootstrapPlan();
+      const result = await bootstrapPlan(replan);
       if (!result.ok) {
+        // 400 = no profile in DB (onboarding may have aborted before profile commit).
+        // Restore draft-based recovery: send learner back to onboarding.
+        if (result.status === 400) {
+          setPhase('needs_onboarding');
+          setTimeout(() => router.replace('/onboarding'), 1500);
+          return;
+        }
         // One more exists check in case POST timed out after commit
-        if (await hasPlan()) {
+        const retryCheck = replan ? 'no' : await checkPlanExists();
+        if (retryCheck === 'yes') {
           setPhase('redirecting');
           router.replace('/app');
           return;
+        }
+        if (retryCheck === 'unknown') {
+          throw new Error(
+            lang === 'he'
+              ? 'לא הצלחנו לבדוק את סטטוס התוכנית. נסה שוב בעוד רגע.'
+              : 'Could not verify plan status. Please try again in a moment.',
+          );
         }
         throw new Error(result.error ?? t.error);
       }
@@ -128,6 +173,18 @@ export default function PlanSetupPage() {
         )}
         {phase === 'redirecting' && (
           <p className="mt-8 text-base text-accent-cyan">{t.redirecting}</p>
+        )}
+        {phase === 'needs_onboarding' && (
+          <div className="mt-8 space-y-4">
+            <p className="text-sm text-muted-foreground">{t.needsOnboarding}</p>
+            <button
+              type="button"
+              onClick={() => router.replace('/onboarding')}
+              className="rounded-xl bg-accent-cyan px-6 py-3 text-sm font-semibold text-neutral-950"
+            >
+              {t.goOnboarding}
+            </button>
+          </div>
         )}
         {phase === 'error' && (
           <div className="mt-8 space-y-4">

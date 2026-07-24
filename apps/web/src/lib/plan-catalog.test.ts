@@ -182,7 +182,10 @@ describe('plan-actions', () => {
       prepend_concepts: [...CALC1_EXAM_CONCEPTS],
       priority_concepts: [],
     });
-    expect(opts.numWeeksOverride).toBe(1);
+    // numWeeksOverride intentionally removed (Bug 4 fix): materialising up to 24 weeks
+    // caused FUNCTION_INVOCATION_TIMEOUT. Rolling window (2 weeks) is enforced by
+    // generateLearningPlan; the exam horizon is stored on the profile as end_date only.
+    expect(opts.numWeeksOverride).toBeUndefined();
     expect(opts.focusConceptsOnly).toBe(true);
     expect(opts.prependConcepts).toEqual(expect.arrayContaining(['limits', 'integrals_intro']));
   });
@@ -222,7 +225,8 @@ describe('plan-actions', () => {
       next_test_date: meta.next_test_date,
       prepend_concepts: [...DISCRETE_EXAM_CONCEPTS],
     });
-    expect(opts.numWeeksOverride).toBe(2);
+    // numWeeksOverride intentionally undefined (Bug 4 fix) — rolling window enforced by planner.
+    expect(opts.numWeeksOverride).toBeUndefined();
     expect(opts.prependConcepts).toEqual(expect.arrayContaining(['combinatorics']));
   });
 

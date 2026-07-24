@@ -13,6 +13,10 @@ import { deriveOnboardingSeedScores } from '@/lib/onboarding-self-score';
 // plan-pacing imports ONLY the generated frontier manifest (no kg-data / neon-db /
 // buildLearningPlan), so it is safe on the onboarding critical path.
 import { hasFrontier, selectNextConcepts } from '@/lib/plan-pacing';
+// plan-capacity is pure (no kg-data / neon-db), safe on the onboarding critical path.
+// R1: planHorizon — single source of truth for goal horizon weeks.
+// R2: conceptsPerWeekFromHours — capacity mapping from hours_per_week.
+import { planHorizon, conceptsPerWeekFromHours } from '@/lib/plan-capacity';
 
 neonConfig.fetchConnectionCache = true;
 
@@ -38,7 +42,9 @@ export interface OnboardingBootstrapPayload {
 }
 
 const ROLLING_WEEKS = 2;
-const CONCEPTS_PER_WEEK = 4;
+// CONCEPTS_PER_WEEK_CAP: hard cap for bootstrap to stay under Vercel timeout.
+// Actual per-week capacity is dynamic (conceptsPerWeekFromHours) up to this cap.
+const CONCEPTS_PER_WEEK_CAP = 4;
 const PLAN_SCHEMA_VERSION = 2;
 
 function requireSql() {
@@ -49,17 +55,17 @@ function requireSql() {
   return neon(url);
 }
 
-function chunkWeeks(concepts: string[]): string[][] {
-  const limited = concepts.slice(0, ROLLING_WEEKS * CONCEPTS_PER_WEEK);
-  const weeks: string[][] = [[], []];
+function chunkWeeks(concepts: string[], numWeeks: number, perWeek: number): string[][] {
+  const weeks: string[][] = Array.from({ length: numWeeks }, () => []);
+  const limited = concepts.slice(0, numWeeks * perWeek);
   for (let i = 0; i < limited.length; i += 1) {
-    const idx = Math.min(ROLLING_WEEKS - 1, Math.floor(i / CONCEPTS_PER_WEEK));
+    const idx = Math.min(numWeeks - 1, Math.floor(i / perWeek));
     weeks[idx]!.push(limited[i]!);
   }
   if (weeks[0]!.length === 0 && limited[0]) weeks[0]!.push(limited[0]);
-  // Mirror week-1 concepts into week-2 if we only have a handful — student always sees 2 weeks.
-  if (weeks[1]!.length === 0 && weeks[0]!.length > 0) {
-    weeks[1] = weeks[0]!.slice(0, CONCEPTS_PER_WEEK);
+  // Mirror week-1 concepts into week-2 when only one week materialized — student always sees context.
+  if (numWeeks > 1 && weeks[1]!.length === 0 && weeks[0]!.length > 0) {
+    weeks[1] = weeks[0]!.slice(0, perWeek);
   }
   return weeks;
 }
@@ -109,13 +115,13 @@ function pickConceptIds(payload: OnboardingBootstrapPayload): string[] {
       masteryScores,
       engagedConceptIds: Object.keys(scores),
       weakConceptIds: weak,
-      limit: ROLLING_WEEKS * CONCEPTS_PER_WEEK,
+      limit: ROLLING_WEEKS * CONCEPTS_PER_WEEK_CAP,
     });
     if (picked.length > 0) return picked;
   }
 
   const ids = Object.keys(scores);
-  if (ids.length > 0) return ids.slice(0, ROLLING_WEEKS * CONCEPTS_PER_WEEK);
+  if (ids.length > 0) return ids.slice(0, ROLLING_WEEKS * CONCEPTS_PER_WEEK_CAP);
   // Absolute last resort — never return empty.
   if (payload.subjects.includes('physics')) {
     return ['units_measurement', 'kinematics_1d', 'newton_laws', 'work_energy', 'electrostatics', 'waves_basics', 'optics_geometric', 'electric_circuits'];
@@ -156,11 +162,43 @@ export async function bootstrapOnboardingPlan(
   };
 
   const conceptIds = pickConceptIds(enriched);
-  const weekGroups = chunkWeeks(conceptIds);
+
+  // R1: Derive horizon from goal dates; cap at ROLLING_WEEKS for the initial bootstrap
+  // to stay under Vercel timeout (per golden-path constraint: ≤2 weeks on first create).
+  const horizonFromProfile = planHorizon(enriched);
+  const numWeeks = Math.min(horizonFromProfile ?? ROLLING_WEEKS, ROLLING_WEEKS);
+  // R2: Capacity from hours_per_week; hard-capped at CONCEPTS_PER_WEEK_CAP=4 for bootstrap speed.
+  const perWeek = Math.min(conceptsPerWeekFromHours(enriched.hours_per_week), CONCEPTS_PER_WEEK_CAP);
+  const weekGroups = chunkWeeks(conceptIds, numWeeks, perWeek);
+
+  // Guard against concurrent bootstraps (Bug 2): if an active plan was created
+  // in the last 60 seconds and already has weeks, return it without re-creating.
+  const recentRows = (await s`
+    SELECT lp.id AS plan_id, COUNT(pw.id)::int AS week_count
+    FROM learning_plans lp
+    LEFT JOIN plan_weeks pw ON pw.plan_id = lp.id
+    WHERE lp.learner_id = ${learnerId}
+      AND lp.status = 'active'
+      AND lp.created_at > NOW() - INTERVAL '60 seconds'
+    GROUP BY lp.id
+    HAVING COUNT(pw.id) >= 1
+    LIMIT 1
+  `) as Array<{ plan_id: string; week_count: number }>;
+  if (recentRows[0]) {
+    return {
+      plan_id: recentRows[0].plan_id,
+      concept_count: conceptIds.length,
+      week_count: recentRows[0].week_count,
+    };
+  }
+
   const planId = randomUUID();
   const startDate = new Date();
   const endDate = new Date(startDate);
-  endDate.setDate(endDate.getDate() + 7 * ROLLING_WEEKS);
+  // R1: end_date reflects the TRUE goal horizon (not just the rolling window) so the
+  // dashboard shows the correct plan expiry. Capped at ROLLING_WEEKS when no goal date.
+  const endHorizonWeeks = horizonFromProfile ?? ROLLING_WEEKS;
+  endDate.setDate(endDate.getDate() + 7 * endHorizonWeeks);
   const startStr = startDate.toISOString().slice(0, 10);
   const endStr = endDate.toISOString().slice(0, 10);
 
@@ -213,35 +251,40 @@ export async function bootstrapOnboardingPlan(
     `;
   }
 
-  // 3) Replace any prior plan — no advisory lock (lock + 1/0 caused hangs on Neon HTTP)
-  await s`DELETE FROM plan_weeks WHERE plan_id IN (SELECT id FROM learning_plans WHERE learner_id = ${learnerId})`;
-  await s`DELETE FROM learning_plans WHERE learner_id = ${learnerId}`;
-
-  await s`
-    INSERT INTO learning_plans (
-      id, learner_id, goal, start_date, end_date, status,
-      plan_schema_version, plan_adjustment_kind, plan_last_adjusted_at,
-      created_at, updated_at
-    )
-    VALUES (
-      ${planId}, ${learnerId}, ${enriched.goal}, ${startStr}, ${endStr}, 'active',
-      ${PLAN_SCHEMA_VERSION}, NULL, NULL,
-      NOW(), NOW()
-    )
-  `;
-
-  for (let i = 0; i < weekGroups.length; i += 1) {
-    const concepts = weekGroups[i]!;
-    if (concepts.length === 0) continue;
+  // 3) Atomic replace: delete old plans + insert new plan + weeks in one HTTP transaction
+  // (Bug 1 fix: no advisory lock — avoids the 1/0 hang; single round-trip prevents
+  //  mid-flight abort from leaving the learner planless).
+  const weekInserts = weekGroups.flatMap((concepts, i) => {
+    if (concepts.length === 0) return [];
     const weekId = randomUUID();
     const quizDue = new Date(startDate);
     quizDue.setDate(quizDue.getDate() + 7 * (i + 1));
     const status = i === 0 ? 'active' : 'upcoming';
-    await s`
-      INSERT INTO plan_weeks (id, plan_id, week_number, concepts, quiz_due_at, status)
-      VALUES (${weekId}, ${planId}, ${i + 1}, ${concepts}, ${quizDue.toISOString()}, ${status})
-    `;
-  }
+    return [
+      s`
+        INSERT INTO plan_weeks (id, plan_id, week_number, concepts, quiz_due_at, status)
+        VALUES (${weekId}, ${planId}, ${i + 1}, ${concepts}, ${quizDue.toISOString()}, ${status})
+      `,
+    ];
+  });
+
+  await s.transaction([
+    s`DELETE FROM plan_weeks WHERE plan_id IN (SELECT id FROM learning_plans WHERE learner_id = ${learnerId})`,
+    s`DELETE FROM learning_plans WHERE learner_id = ${learnerId}`,
+    s`
+      INSERT INTO learning_plans (
+        id, learner_id, goal, start_date, end_date, status,
+        plan_schema_version, plan_adjustment_kind, plan_last_adjusted_at,
+        created_at, updated_at
+      )
+      VALUES (
+        ${planId}, ${learnerId}, ${enriched.goal}, ${startStr}, ${endStr}, 'active',
+        ${PLAN_SCHEMA_VERSION}, NULL, NULL,
+        NOW(), NOW()
+      )
+    `,
+    ...weekInserts,
+  ]);
 
   // 4) Verify
   const rows = (await s`
