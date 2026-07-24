@@ -63,10 +63,6 @@ function chunkWeeks(concepts: string[], numWeeks: number, perWeek: number): stri
     weeks[idx]!.push(limited[i]!);
   }
   if (weeks[0]!.length === 0 && limited[0]) weeks[0]!.push(limited[0]);
-  // Mirror week-1 concepts into week-2 when only one week materialized — student always sees context.
-  if (numWeeks > 1 && weeks[1]!.length === 0 && weeks[0]!.length > 0) {
-    weeks[1] = weeks[0]!.slice(0, perWeek);
-  }
   return weeks;
 }
 

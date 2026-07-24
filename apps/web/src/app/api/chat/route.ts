@@ -57,6 +57,7 @@ import {
   compactMemoryTurns,
   compactStoredTurnContent,
   fitSystemPrompt,
+  buildPlanHeaderLine,
   formatPlanWeeksCompact,
   resolveChatMaxTokens,
   trimPersonaForChat,
@@ -1192,9 +1193,15 @@ async function buildContextPrompt(
       shouldApplyPlanImmediately(message);
 
     if (plan?.weeks?.length) {
-      context += `\n\n## Current weekly learning plan`;
-      context += `\nGoal: ${plan.goal} · ${plan.start_date} → ${plan.end_date ?? 'open'}`;
-      context += `\n${formatPlanWeeksCompact(plan.weeks, minimal ? 'minimal' : 'full')}`;
+      if (weekSpec) {
+        // Active week block already injected above — append a compact one-liner
+        // to avoid duplicating ~900 chars of plan detail for tutor/mentor.
+        context += `\n\n${buildPlanHeaderLine(plan)}`;
+      } else {
+        context += `\n\n## Current weekly learning plan`;
+        context += `\nGoal: ${plan.goal} · ${plan.start_date} → ${plan.end_date ?? 'open'}`;
+        context += `\n${formatPlanWeeksCompact(plan.weeks, minimal ? 'minimal' : 'full')}`;
+      }
     } else if (!minimal) {
       context += `\n\n## Current weekly learning plan`;
       context += `\nNo active plan yet — invite onboarding at /onboarding if the learner asks.`;

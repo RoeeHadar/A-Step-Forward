@@ -155,6 +155,27 @@ export function compactMemoryTurns(
   return out;
 }
 
+/**
+ * One-line summary of a learning plan for the agent system prompt.
+ * Used by Tutor/Mentor agents when the Active week block is already present,
+ * to avoid duplicating full plan detail (~1 800 → ≤1 000 chars combined).
+ *
+ * Format: "Plan: <goal> · <start> → <end> · N week(s) · M concepts"
+ */
+export function buildPlanHeaderLine(plan: {
+  goal: string;
+  start_date: string;
+  end_date: string | null;
+  weeks: Array<{ concepts: Array<unknown> }>;
+}): string {
+  const totalConcepts = plan.weeks.reduce((s, w) => s + w.concepts.length, 0);
+  const n = plan.weeks.length;
+  return (
+    `Plan: ${plan.goal} · ${plan.start_date} → ${plan.end_date ?? 'open'}` +
+    ` · ${n} week${n !== 1 ? 's' : ''} · ${totalConcepts} concept${totalConcepts !== 1 ? 's' : ''}`
+  );
+}
+
 export function formatPlanWeeksCompact(
   weeks: Array<{
     week_number: number;

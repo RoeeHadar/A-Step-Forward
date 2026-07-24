@@ -70,6 +70,7 @@ const STR = {
     replanTitle: 'התוכנית הסתיימה',
     replanBody: 'התוכנית שלך הגיעה לסיומה. זה הזמן ליצור תוכנית חדשה בהתאם להתקדמות שלך.',
     replanCta: 'תכנן מחדש',
+    nextWeekLocked: 'שבוע 2 ייפתח לאחר השלמת שבוע 1',
   },
   en: {
     welcome: (name: string) => `Welcome back, ${name}!`,
@@ -108,6 +109,7 @@ const STR = {
     replanTitle: 'Plan ended',
     replanBody: "Your plan has reached its end date. It's time to create a new plan based on your progress.",
     replanCta: 'Re-plan',
+    nextWeekLocked: 'Week 2 unlocks after you complete Week 1',
   },
 } as const;
 
@@ -493,6 +495,11 @@ export function DashboardContent({
 
   const week = plan ? currentActiveWeek(plan) : undefined;
   const planItems = (week?.concepts ?? []).slice(0, MAX_PLAN_ITEMS);
+  const nextWeekEmpty =
+    !!week &&
+    !(plan?.weeks ?? []).find(
+      (w) => w.week_number === week.week_number + 1 && w.concepts.length > 0,
+    );
   const examPrep = useMemo(
     () => examPrepContext(plan, nextTestDate, finalGoalDate),
     [plan, nextTestDate, finalGoalDate],
@@ -590,6 +597,11 @@ export function DashboardContent({
             >
               {t.viewFullPlan}
             </Link>
+            {nextWeekEmpty ? (
+              <p className="text-xs text-muted-foreground" dir="auto">
+                {t.nextWeekLocked}
+              </p>
+            ) : null}
           </div>
         ) : (
           <div className="rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 to-accent-magenta/5 p-6 text-center">

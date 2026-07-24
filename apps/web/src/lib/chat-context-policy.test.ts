@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   CHAT_CONTEXT,
   HEAD_GUARD_CHARS,
+  buildPlanHeaderLine,
   fitSystemPrompt,
   compactMemoryTurns,
   compactStoredTurnContent,
@@ -56,6 +57,36 @@ describe('chat-context-policy', () => {
     );
     expect(text).toContain('Week 2');
     expect(text).not.toContain('Week 3');
+  });
+
+  it('buildPlanHeaderLine formats one-liner with goal, dates, weeks, concepts', () => {
+    const line = buildPlanHeaderLine({
+      goal: 'מתמטיקה לבגרות',
+      start_date: '2026-07-01',
+      end_date: '2026-09-01',
+      weeks: [
+        { concepts: [{ id: 'a' }, { id: 'b' }] },
+        { concepts: [{ id: 'c' }] },
+      ],
+    });
+    expect(line).toMatch(/^Plan: מתמטיקה לבגרות/);
+    expect(line).toContain('2026-07-01 → 2026-09-01');
+    expect(line).toContain('2 weeks');
+    expect(line).toContain('3 concepts');
+  });
+
+  it('buildPlanHeaderLine handles null end_date and singular counts', () => {
+    const line = buildPlanHeaderLine({
+      goal: 'פיזיקה',
+      start_date: '2026-08-01',
+      end_date: null,
+      weeks: [{ concepts: [{ id: 'x' }] }],
+    });
+    expect(line).toContain('→ open');
+    expect(line).toContain('1 week ·');
+    expect(line).toContain('1 concept');
+    expect(line).not.toContain('weeks ');
+    expect(line).not.toContain('concepts ');
   });
 
   it('detects study-next questions', () => {

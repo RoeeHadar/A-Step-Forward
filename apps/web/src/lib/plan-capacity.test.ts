@@ -213,12 +213,12 @@ describe('isPlanExpired (R5)', () => {
   });
 
   it('returns false on the end date itself (end of day)', () => {
-    const today = new Date().toISOString().slice(0, 10);
+    // Use a fixed reference so this never flakes at local-midnight / UTC boundary.
+    const fixedNow = new Date('2026-08-15T10:00:00Z');
+    const today = '2026-08-15';
     // isPlanExpired checks "now > end_date at 23:59:59"
-    // Since now < end-of-today, this should return false.
-    const now = new Date();
-    now.setHours(0, 0, 0, 0); // start of today
-    expect(isPlanExpired(today, now)).toBe(false);
+    // 10:00 UTC on the 15th is NOT > 23:59:59 on the 15th → false.
+    expect(isPlanExpired(today, fixedNow)).toBe(false);
   });
 
   it('returns true when end date was yesterday', () => {
