@@ -1,0 +1,305 @@
+{
+  "concept_id": "hypothesis_testing_intro",
+  "title_en": "Hypothesis Testing — Introduction",
+  "title_he": "מבחן השערות — מבוא",
+  "summary_en": "Null and alternative hypotheses, test statistic, p-value, significance level, Type I and Type II errors. Bagrut 3pt statistics module focus.",
+  "summary_he": "השערת האפס והשערה חלופית, סטטיסטיקת מבחן, p-ערך, רמת מובהקות, שגיאות מסוג I ו-II. מודול הסטטיסטיקה של בגרות 3 יח׳.",
+  "estimated_minutes": 30,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "The Logic of Hypothesis Testing",
+      "title_he": "הלוגיקה של מבחן השערות",
+      "body_en_md": "Hypothesis testing is the framework for making decisions about a population based on sample data. The core idea: **assume the null hypothesis is true, then see if the data is surprising enough to reject it.**\n\nAnalogy: A courtroom trial. The defendant is assumed innocent ($H_0$) until the evidence is strong enough to convict ($H_1$). We never 'prove' innocence — we only fail to find enough evidence of guilt.\n\n**Why does it matter?** In medicine, education research, quality control, and social science, decisions must be based on data — not gut feelings. Hypothesis testing provides a rigorous, reproducible framework.",
+      "body_he_md": "מבחן השערות הוא מסגרת לקבלת החלטות על אוכלוסייה בהתבסס על נתוני מדגם. הרעיון המרכזי: **נניח שהשערת האפס נכונה, ואז נבדוק האם הנתונים מפתיעים מספיק כדי לדחות אותה.**\n\nאנלוגיה: משפט פלילי. הנאשם נחשב חף מפשע ($H_0$) עד שהראיות מספיק חזקות להרשיע ($H_1$). לעולם לא 'מוכיחים' חפות — רק לא מוצאים ראיות מספיקות לאשמה.\n\n**מדוע זה חשוב?** ברפואה, מחקר חינוכי, בקרת איכות ומדעי החברה, החלטות חייבות להתבסס על נתונים — לא על אינטואיציה."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Key Concepts and Procedure",
+      "title_he": "מושגים מרכזיים ותהליך",
+      "body_en_md": "### Hypotheses\n- **Null hypothesis** $H_0$: the 'no effect' or 'no difference' claim (e.g., $\\mu = 50$ or $p = 0.5$).\n- **Alternative hypothesis** $H_1$ (or $H_a$): what we want to test/support (e.g., $\\mu > 50$ or $p \\ne 0.5$).\n\n$H_1$ can be:\n- Two-sided: $\\mu \\ne \\mu_0$ (most common in Bagrut)\n- One-sided: $\\mu > \\mu_0$ or $\\mu < \\mu_0$\n\n### Significance Level $\\alpha$\n$\\alpha$ = the probability of rejecting $H_0$ when it is true (Type I error). Common choices: $\\alpha = 0.05$ or $\\alpha = 0.01$.\n\n### Test Statistic\nFor a population mean with known $\\sigma$ (Bagrut 3pt):\n$$z = \\frac{\\bar{x} - \\mu_0}{\\sigma/\\sqrt{n}}$$\n\nFor a proportion:\n$$z = \\frac{\\hat{p} - p_0}{\\sqrt{p_0(1-p_0)/n}}$$\n\n### Decision Rule\n- Compute $z$ (or $t$) from the data.\n- Compare to the **critical value** at significance level $\\alpha$:\n  - Two-sided $\\alpha=0.05$: reject if $|z| > 1.96$.\n  - One-sided $\\alpha=0.05$: reject if $z > 1.645$ (or $z < -1.645$).\n- Equivalently: compute **p-value** = probability of observing a result as extreme or more, assuming $H_0$ true. Reject $H_0$ if p-value $< \\alpha$.\n\n### Type I and Type II Errors\n| Decision | $H_0$ true | $H_0$ false |\n|----------|-----------|------------|\n| Reject $H_0$ | **Type I error** ($\\alpha$) | Correct (Power) |\n| Fail to reject | Correct | **Type II error** ($\\beta$) |\n\n- **Type I error (false positive):** convicting an innocent person.\n- **Type II error (false negative):** acquitting a guilty person.",
+      "body_he_md": "### השערות\n- **השערת האפס** $H_0$: טענת 'אין השפעה' (למשל $\\mu=50$ או $p=0.5$).\n- **השערה חלופית** $H_1$: מה שרוצים לבדוק/לתמוך בו.\n\n$H_1$ יכולה להיות:\n- דו-צדדית: $\\mu \\ne \\mu_0$\n- חד-צדדית: $\\mu > \\mu_0$ או $\\mu < \\mu_0$\n\n### רמת מובהקות $\\alpha$\n$\\alpha$ = ההסתברות לדחות $H_0$ כשהיא נכונה (שגיאה מסוג I). בדרך כלל $\\alpha=0.05$ או $\\alpha=0.01$.\n\n### סטטיסטיקת מבחן\nלממוצע אוכלוסייה עם $\\sigma$ ידוע:\n$$z = \\frac{\\bar{x} - \\mu_0}{\\sigma/\\sqrt{n}}$$\n\nלשיעור:\n$$z = \\frac{\\hat{p} - p_0}{\\sqrt{p_0(1-p_0)/n}}$$\n\n### כלל ההחלטה\n- חשב $z$ מהנתונים.\n- השווה ל**ערך קריטי** ברמת $\\alpha$:\n  - דו-צדדי $\\alpha=0.05$: דחה אם $|z| > 1.96$.\n  - חד-צדדי $\\alpha=0.05$: דחה אם $z > 1.645$.\n- לחלופין: חשב **p-ערך** = ההסתברות לקבל תוצאה קיצונית כזו או יותר בהינתן $H_0$. דחה אם p-ערך $< \\alpha$.\n\n### שגיאות מסוג I ו-II\n- **שגיאה מסוג I:** דחיית $H_0$ כשהיא נכונה (הרשעת חף מפשע).\n- **שגיאה מסוג II:** אי-דחיית $H_0$ כשהיא שקרית (זיכוי אשם)."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Worked Example — Testing a Population Mean",
+      "title_he": "דוגמה פתורה — מבחן לממוצע אוכלוסייה",
+      "body_en_md": "**Problem:** A machine is supposed to fill bottles with $\\mu_0 = 500$ ml. The population standard deviation is known to be $\\sigma = 10$ ml. A sample of $n=25$ bottles gives $\\bar{x} = 503.5$ ml. At $\\alpha=0.05$ (two-sided), test whether the machine is calibrated correctly.\n\n**Step 1 — Hypotheses:**\n$$H_0: \\mu = 500 \\qquad H_1: \\mu \\ne 500$$\n\n**Step 2 — Test statistic:**\n$$z = \\frac{503.5 - 500}{10/\\sqrt{25}} = \\frac{3.5}{2} = 1.75$$\n\n**Step 3 — Critical value:** Two-sided, $\\alpha=0.05$ → $z_{crit}=1.96$.\n\n**Step 4 — Decision:** $|z|=1.75 < 1.96$ → **Fail to reject $H_0$**.\n\n**Step 5 — Conclusion:** At $\\alpha=0.05$, there is insufficient evidence that the machine is miscalibrated. The result is not statistically significant.",
+      "body_he_md": "**בעיה:** מכונה אמורה למלא בקבוקים ב-$\\mu_0=500$ מ״ל. $\\sigma=10$ מ״ל ידוע. מדגם $n=25$, $\\bar{x}=503.5$. ב-$\\alpha=0.05$ (דו-צדדי), בדוק כיול.\n\n**שלב 1 — השערות:** $H_0: \\mu=500$, $H_1: \\mu\\ne500$.\n\n**שלב 2 — סטטיסטיקת מבחן:** $z=(503.5-500)/(10/5)=1.75$.\n\n**שלב 3 — ערך קריטי:** $z_{crit}=1.96$.\n\n**שלב 4 — החלטה:** $|z|=1.75 < 1.96$ → **לא דוחים $H_0$**.\n\n**מסקנה:** אין ראיות מספיקות לכיול שגוי ברמת מובהקות $5\\%$."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Worked Example — Testing a Proportion",
+      "title_he": "דוגמה פתורה — מבחן לשיעור",
+      "body_en_md": "**Problem:** A coin is flipped 100 times and lands heads 60 times. Is the coin fair? Test at $\\alpha=0.05$ (two-sided).\n\n**Hypotheses:** $H_0: p=0.5$, $H_1: p\\ne0.5$.\n\n**Test statistic:** $\\hat{p}=60/100=0.6$.\n$$z = \\frac{0.6-0.5}{\\sqrt{0.5\\cdot0.5/100}} = \\frac{0.1}{0.05} = 2$$\n\n**Decision:** $|z|=2 > 1.96$ → **Reject $H_0$**.\n\n**Conclusion:** At $\\alpha=0.05$, there is statistically significant evidence that the coin is unfair.",
+      "body_he_md": "**בעיה:** מטבע הוטל 100 פעמים, 60 פעמים עץ. האם המטבע הוגן? בדוק ב-$\\alpha=0.05$.\n\n**השערות:** $H_0: p=0.5$, $H_1: p\\ne0.5$.\n\n**סטטיסטיקה:** $z=(0.6-0.5)/0.05=2$.\n\n**החלטה:** $|z|=2>1.96$ → **דחה $H_0$**.\n\n**מסקנה:** ראיות מובהקות סטטיסטית שהמטבע לא הוגן."
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "- **'Accepting' $H_0$** — we never accept $H_0$; we only fail to reject it. Absence of evidence is not evidence of absence.\n- **p-value misconception** — $p=0.03$ does NOT mean there is a $3\\%$ chance $H_0$ is true. It means: if $H_0$ were true, there's a $3\\%$ chance of observing data this extreme.\n- **Significance ≠ practical importance** — a statistically significant result may have no real-world practical importance (especially with large $n$).\n- **Confusing one-sided and two-sided tests** — choosing the wrong directionality affects the critical value.",
+      "body_he_md": "- **'קבלת' $H_0$** — לעולם לא 'מקבלים' $H_0$; רק 'לא דוחים' אותה. היעדר ראיות אינו ראיה להיעדר.\n- **אי-הבנת p-ערך** — $p=0.03$ לא אומר שיש $3\\%$ סיכוי ש-$H_0$ נכונה. זה אומר: אם $H_0$ הייתה נכונה, יש $3\\%$ סיכוי לקבל נתונים קיצוניים כאלה.\n- **מובהקות $\\ne$ חשיבות מעשית** — תוצאה מובהקת סטטיסטית עשויה להיות חסרת חשיבות מעשית.\n- **בלבול בין מבחן חד-צדדי לדו-צדדי** — בחירה שגויה משפיעה על הערך הקריטי."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "kind": "mcq",
+      "difficulty": "easy",
+      "skill_atoms": [
+        "hypothesis_testing_setup_hypotheses"
+      ],
+      "stem_en": "A researcher claims the average height of Israeli 12th-graders is $\\mu=170$ cm and wants to test if it has changed. What is the correct alternative hypothesis?",
+      "stem_he": "חוקר טוען שגובה ממוצע של תלמידי כיתה י״ב הוא $\\mu=170$ ס״מ ורוצה לבדוק אם השתנה. מה ההשערה החלופית הנכונה?",
+      "answer_payload": {
+        "options_en": [
+          "$H_1: \\mu \\ne 170$",
+          "$H_1: \\mu = 170$",
+          "$H_1: \\mu > 170$",
+          "$H_1: \\mu < 170$"
+        ],
+        "options_he": [
+          "$H_1: \\mu \\ne 170$",
+          "$H_1: \\mu = 170$",
+          "$H_1: \\mu > 170$",
+          "$H_1: \\mu < 170$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "'Has changed' = two-sided test: $H_1: \\mu \\ne 170$. ✓",
+      "explanation_he": "'השתנה' = מבחן דו-צדדי: $H_1: \\mu \\ne 170$. ✓"
+    },
+    {
+      "id": "q2",
+      "kind": "true_false",
+      "difficulty": "easy",
+      "skill_atoms": [
+        "hypothesis_testing_decision_rule"
+      ],
+      "stem_en": "If we fail to reject $H_0$, we have proved $H_0$ is true.",
+      "stem_he": "אם לא דוחים $H_0$, הוכחנו ש-$H_0$ נכונה.",
+      "answer_payload": {
+        "correct": false
+      },
+      "explanation_en": "False. Failing to reject $H_0$ means the data is not strong enough evidence against it — not that it is proven true.",
+      "explanation_he": "שקר. אי-דחייה אומרת שאין ראיות מספיקות נגד $H_0$ — לא שהיא הוכחה."
+    },
+    {
+      "id": "q3",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "hypothesis_testing_compute_z"
+      ],
+      "stem_en": "A sample of $n=36$ gives $\\bar{x}=102$, $\\sigma=12$, $\\mu_0=100$. Compute the test statistic $z$.",
+      "stem_he": "מדגם $n=36$ נותן $\\bar{x}=102$, $\\sigma=12$, $\\mu_0=100$. חשב את סטטיסטיקת המבחן $z$.",
+      "answer_payload": {
+        "options_en": [
+          "$1$",
+          "$2$",
+          "$0.5$",
+          "$6$"
+        ],
+        "options_he": [
+          "$1$",
+          "$2$",
+          "$0.5$",
+          "$6$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "$z=\\frac{102-100}{12/\\sqrt{36}}=\\frac{2}{12/6}=\\frac{2}{2}=1$.",
+      "explanation_he": "$z=(102-100)/(12/6)=2/2=1$."
+    },
+    {
+      "id": "q4",
+      "kind": "numeric",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "hypothesis_testing_compute_z"
+      ],
+      "stem_en": "A coin is flipped 400 times, landing heads 220 times. Compute the z-statistic for testing $H_0: p=0.5$ vs. $H_1: p\\ne0.5$.",
+      "stem_he": "מטבע הוטל 400 פעמים, עץ 220 פעמים. חשב את $z$ למבחן $H_0: p=0.5$.",
+      "answer_payload": {
+        "value": 2,
+        "tolerance": 0.05
+      },
+      "explanation_en": "$\\hat{p}=220/400=0.55$. $z=(0.55-0.5)/\\sqrt{0.5\\cdot0.5/400}=(0.05)/0.025=2$.",
+      "explanation_he": "$\\hat{p}=0.55$. $z=0.05/0.025=2$."
+    },
+    {
+      "id": "q5",
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "hypothesis_testing_decision_rule"
+      ],
+      "stem_en": "For a two-sided test at $\\alpha=0.05$, we reject $H_0$ if $|z| >$ ____.",
+      "stem_he": "למבחן דו-צדדי ב-$\\alpha=0.05$, דוחים $H_0$ אם $|z| >$ ____.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "1.96"
+        ]
+      },
+      "explanation_en": "Critical value for two-sided $\\alpha=0.05$ is $z_{crit}=1.96$ (from the standard normal table).",
+      "explanation_he": "ערך קריטי לדו-צדדי $\\alpha=0.05$ הוא $1.96$."
+    },
+    {
+      "id": "q6",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "hypothesis_testing_type_errors"
+      ],
+      "stem_en": "A Type I error occurs when:",
+      "stem_he": "שגיאה מסוג I מתרחשת כאשר:",
+      "answer_payload": {
+        "options_en": [
+          "We reject $H_0$ when it is true",
+          "We fail to reject $H_0$ when it is false",
+          "We set $\\alpha$ too small",
+          "Our sample size is too large"
+        ],
+        "options_he": [
+          "דוחים $H_0$ כשהיא נכונה",
+          "לא דוחים $H_0$ כשהיא שקרית",
+          "מגדירים $\\alpha$ קטן מדי",
+          "גודל המדגם גדול מדי"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "Type I error = false positive = rejecting a true null hypothesis. Its probability is $\\alpha$.",
+      "explanation_he": "שגיאה מסוג I = חיובי שקרי = דחיית השערת אפס נכונה. הסתברותה $\\alpha$."
+    },
+    {
+      "id": "q7",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "hypothesis_testing_pvalue"
+      ],
+      "stem_en": "A p-value of $0.03$ means there is a $3\\%$ probability that the null hypothesis is true.",
+      "stem_he": "p-ערך של $0.03$ פירושו שיש $3\\%$ הסתברות ש-$H_0$ נכונה.",
+      "answer_payload": {
+        "correct": false
+      },
+      "explanation_en": "False. A p-value of $0.03$ means: IF $H_0$ is true, there is a $3\\%$ chance of observing data as extreme as (or more than) what we observed.",
+      "explanation_he": "שקר. p-ערך של $0.03$ פירושו: אם $H_0$ נכונה, יש $3\\%$ סיכוי לקבל נתונים קיצוניים כאלה."
+    },
+    {
+      "id": "q8",
+      "kind": "derivation",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "hypothesis_testing_compute_z",
+        "hypothesis_testing_decision_rule",
+        "hypothesis_testing_setup_hypotheses"
+      ],
+      "stem_en": "A factory claims its bolts have mean diameter $\\mu=10$ mm with $\\sigma=0.5$ mm. A quality control inspector measures 64 bolts and finds $\\bar{x}=10.12$ mm. Test at $\\alpha=0.05$ (two-sided) whether the mean diameter has changed. Show all steps.",
+      "stem_he": "מפעל טוען שקוטר ממוצע של ברגים $\\mu=10$ מ״מ עם $\\sigma=0.5$ מ״מ. מפקח איכות מודד 64 ברגים ומוצא $\\bar{x}=10.12$. בדוק ב-$\\alpha=0.05$ (דו-צדדי) האם הממוצע השתנה. הצג את כל השלבים.",
+      "answer_payload": {
+        "steps_en": [
+          "$H_0: \\mu=10$, $H_1: \\mu\\ne10$.",
+          "$z=\\frac{10.12-10}{0.5/\\sqrt{64}}=\\frac{0.12}{0.0625}=1.92$.",
+          "Critical value (two-sided, $\\alpha=0.05$): $z_{crit}=1.96$.",
+          "$|z|=1.92 < 1.96$ → Fail to reject $H_0$.",
+          "Conclusion: At $\\alpha=0.05$, insufficient evidence that the mean diameter has changed."
+        ],
+        "steps_he": [
+          "$H_0: \\mu=10$, $H_1: \\mu\\ne10$.",
+          "$z=(10.12-10)/(0.5/8)=0.12/0.0625=1.92$.",
+          "ערך קריטי: $1.96$.",
+          "$|z|=1.92 < 1.96$ → לא דוחים $H_0$.",
+          "מסקנה: אין ראיות מספיקות שהממוצע השתנה."
+        ]
+      },
+      "explanation_en": "Close case: $z=1.92$ is just below the critical value. The result is 'marginally' non-significant.",
+      "explanation_he": "מקרה גבולי: $z=1.92$ ממש מתחת לערך הקריטי — תוצאה 'שולית' שאינה מובהקת."
+    },
+    {
+      "id": "q9",
+      "kind": "ordering",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "hypothesis_testing_setup_hypotheses"
+      ],
+      "stem_en": "Order the steps of a hypothesis test:",
+      "stem_he": "סדר את שלבי מבחן ההשערות:",
+      "answer_payload": {
+        "steps_en": [
+          "State $H_0$ and $H_1$",
+          "Choose significance level $\\alpha$",
+          "Collect data and compute the test statistic",
+          "Determine the critical value or p-value",
+          "Make a decision and state a conclusion"
+        ],
+        "steps_he": [
+          "ציון $H_0$ ו-$H_1$",
+          "בחירת רמת מובהקות $\\alpha$",
+          "איסוף נתונים וחישוב סטטיסטיקת המבחן",
+          "קביעת ערך קריטי או p-ערך",
+          "קבלת החלטה וניסוח מסקנה"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "explanation_en": "The hypotheses and significance level are set BEFORE looking at the data — this prevents bias.",
+      "explanation_he": "ההשערות ורמת המובהקות נקבעות לפני ראיית הנתונים — זה מונע הטיה."
+    },
+    {
+      "id": "q10",
+      "kind": "open",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "hypothesis_testing_type_errors",
+        "hypothesis_testing_pvalue"
+      ],
+      "stem_en": "A new drug is tested. $H_0$: drug has no effect. $H_1$: drug is effective. (a) Describe a Type I error in this context and explain its real-world consequence. (b) Describe a Type II error. (c) If you decrease $\\alpha$ from 0.05 to 0.01, how does this affect the probability of a Type II error? Explain.",
+      "stem_he": "תרופה חדשה נבדקת. $H_0$: לתרופה אין השפעה. $H_1$: התרופה יעילה. (א) תאר שגיאה מסוג I בהקשר זה והסבר השלכותיה. (ב) תאר שגיאה מסוג II. (ג) אם $\\alpha$ יורד מ-0.05 ל-0.01, כיצד זה משפיע על הסתברות שגיאה מסוג II? הסבר.",
+      "answer_payload": {
+        "rubric_en": "(a) Type I: Concluding the drug works when it doesn't — approving an ineffective (possibly harmful) drug. (b) Type II: Concluding the drug doesn't work when it does — missing a beneficial treatment. (c) Decreasing $\\alpha$ makes it harder to reject $H_0$, so Type II error probability ($\\beta$) increases (trade-off between Type I and II errors).",
+        "rubric_he": "(א) שגיאה מסוג I: הסקה שהתרופה יעילה כשלא — אישור תרופה לא יעילה. (ב) שגיאה מסוג II: הסקה שהתרופה לא יעילה כשכן — פספוס טיפול מועיל. (ג) הורדת $\\alpha$ מקשה על דחיית $H_0$, ולכן הסתברות שגיאה מסוג II ($\\beta$) עולה — סחר-חליפין."
+      },
+      "explanation_en": "The fundamental tradeoff: reducing $\\alpha$ (Type I rate) at fixed $n$ necessarily increases $\\beta$ (Type II rate). The only way to reduce both is to increase sample size $n$.",
+      "explanation_he": "הסחר-חליפין הבסיסי: הקטנת $\\alpha$ עם $n$ קבוע מגדילה את $\\beta$. הדרך היחידה להקטין שניהם היא להגדיל $n$."
+    }
+  ],
+  "skill_atoms_unlocked": [
+    "hypothesis_testing_setup_hypotheses",
+    "hypothesis_testing_compute_z",
+    "hypothesis_testing_decision_rule",
+    "hypothesis_testing_pvalue",
+    "hypothesis_testing_type_errors"
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Always set up hypotheses BEFORE looking at data — 'HARKing' (hypothesizing after results are known) is a serious error.",
+      "The p-value interpretation is one of the most commonly misunderstood concepts in statistics — address it explicitly.",
+      "Type I vs. Type II errors: connect to real-world consequences (medicine, law). $\\alpha$ controls Type I.",
+      "The five-step procedure (hypotheses → $\\alpha$ → compute $z$ → compare to critical value → conclude) should become automatic."
+    ],
+    "common_misconceptions": [
+      "Thinking 'fail to reject $H_0$' means '$H_0$ is proven true'.",
+      "Interpreting p-value as the probability $H_0$ is true.",
+      "Forgetting to divide by $\\sqrt{n}$ in the standard error."
+    ],
+    "tutor_pacing_hint": "Use the coin-flip example first (intuitive, computational). Then the factory/medical context. Always walk through all 5 steps explicitly to build the habit.",
+    "diagnostic_signals": [
+      "If the learner says 'we accept $H_0$', correct immediately — only 'fail to reject'.",
+      "If they compute $z$ but forget to divide by $\\sqrt{n}$ in the denominator, drill the standard error formula."
+    ],
+    "skill_atoms_unlocked": [
+      "hypothesis_testing_setup_hypotheses",
+      "hypothesis_testing_compute_z",
+      "hypothesis_testing_decision_rule",
+      "hypothesis_testing_pvalue",
+      "hypothesis_testing_type_errors"
+    ]
+  }
+}

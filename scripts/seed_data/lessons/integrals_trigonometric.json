@@ -1,0 +1,346 @@
+{
+  "concept_id": "integrals_trigonometric",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": [
+    "calculus1"
+  ],
+  "title_en": "Integrals of Trigonometric Functions",
+  "title_he": "אינטגרלים של פונקציות טריגונומטריות",
+  "summary_en": "Integrating sin x, cos x, and their composites. Includes basic definite integrals over standard intervals. Core Bagrut integral skill.",
+  "summary_he": "אינטגרציה של sin x, cos x ומורכבותיהן. כולל אינטגרלים מסוימים על קטעים סטנדרטיים. מיומנות אינטגרל יסוד בבגרות.",
+  "estimated_minutes": 25,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "Reversing Trig Derivatives",
+      "title_he": "הפיכת נגזרות טריגו",
+      "body_en_md": "Since $\\dfrac{d}{dx}[\\sin x] = \\cos x$, we have $\\int \\cos x\\,dx = \\sin x + C$. Since $\\dfrac{d}{dx}[\\cos x] = -\\sin x$, we get $\\int \\sin x\\,dx = -\\cos x + C$. Every integral rule is just a derivative rule read backwards.\n\nWith the chain rule reversed (substitution), we can integrate composites like $\\int \\sin(3x)\\,dx$ — the inner derivative factor must appear or be introduced.",
+      "body_he_md": "מאחר ש-$\\dfrac{d}{dx}[\\sin x] = \\cos x$, נקבל $\\int \\cos x\\,dx = \\sin x + C$. מאחר ש-$\\dfrac{d}{dx}[\\cos x] = -\\sin x$, נקבל $\\int \\sin x\\,dx = -\\cos x + C$. כל כלל אינטגרציה הוא פשוט כלל נגזרת שנקרא הפוך.\n\nעם כלל השרשרת הפוך (הצבה), ניתן לאנטגרל מורכבות כמו $\\int \\sin(3x)\\,dx$ — הגורם הפנימי חייב להופיע או להיכנס."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Trig Integral Table and Composite Integrals",
+      "title_he": "טבלת אינטגרלים טריגו ואינטגרלים מורכבים",
+      "body_en_md": "**Fundamental trig integrals:**\n\n| $f(x)$ | $\\int f(x)\\,dx$ |\n|---|---|\n| $\\cos x$ | $\\sin x + C$ |\n| $\\sin x$ | $-\\cos x + C$ |\n| $\\dfrac{1}{\\cos^2 x}$ | $\\tan x + C$ |\n\n**Composite trig integrals** (via reverse chain rule):\n$$\\int \\cos(ax+b)\\,dx = \\frac{1}{a}\\sin(ax+b) + C$$\n$$\\int \\sin(ax+b)\\,dx = -\\frac{1}{a}\\cos(ax+b) + C$$\n\nWhy $1/a$? Because when you differentiate $\\sin(ax+b)$, the chain rule produces an extra factor $a$. To compensate, divide by $a$ when integrating.\n\n**Useful identities** (for reducing powers):\n- $\\sin^2 x = \\dfrac{1-\\cos(2x)}{2}$\n- $\\cos^2 x = \\dfrac{1+\\cos(2x)}{2}$",
+      "body_he_md": "**אינטגרלים טריגונומטריים בסיסיים:**\n\n| $f(x)$ | $\\int f(x)\\,dx$ |\n|---|---|\n| $\\cos x$ | $\\sin x + C$ |\n| $\\sin x$ | $-\\cos x + C$ |\n| $\\dfrac{1}{\\cos^2 x}$ | $\\tan x + C$ |\n\n**אינטגרלים טריגו מורכבים** (כלל שרשרת הפוך):\n$$\\int \\cos(ax+b)\\,dx = \\frac{1}{a}\\sin(ax+b) + C$$\n$$\\int \\sin(ax+b)\\,dx = -\\frac{1}{a}\\cos(ax+b) + C$$\n\nמדוע $1/a$? כי בגזירת $\\sin(ax+b)$, כלל שרשרת מייצר גורם $a$ נוסף. כדי לפצות, חלקו ב-$a$ בעת אינטגרציה.\n\n**זהויות שימושיות** (להורדת חזקות):\n- $\\sin^2 x = \\dfrac{1-\\cos(2x)}{2}$\n- $\\cos^2 x = \\dfrac{1+\\cos(2x)}{2}$"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Definite Trig Integral",
+      "title_he": "דוגמה פתורה 1 — אינטגרל טריגו מסוים",
+      "body_en_md": "**Find:** $\\int_0^{\\pi/2} \\cos x\\,dx$\n\n$F(x) = \\sin x$. Apply FTC:\n$$[\\sin x]_0^{\\pi/2} = \\sin\\frac{\\pi}{2} - \\sin 0 = 1 - 0 = 1.$$\n\n**Geometric interpretation:** $\\cos x \\geq 0$ on $[0,\\pi/2]$, so the integral equals the area under the curve — which is $1$.",
+      "body_he_md": "**מצא:** $\\int_0^{\\pi/2} \\cos x\\,dx$\n\n$F(x) = \\sin x$. FTC:\n$$[\\sin x]_0^{\\pi/2} = 1 - 0 = 1.$$\n\n**פרשנות גיאומטרית:** $\\cos x \\geq 0$ על $[0,\\pi/2]$, לכן האינטגרל שווה לשטח — שהוא $1$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Composite Sine",
+      "title_he": "דוגמה פתורה 2 — סינוס מורכב",
+      "body_en_md": "**Find:** $\\int \\sin(3x)\\,dx$\n\nReverse chain rule: outer antiderivative of $\\sin(u)$ is $-\\cos(u)$; divide by inner derivative $3$:\n$$\\int \\sin(3x)\\,dx = -\\frac{1}{3}\\cos(3x) + C.$$\n\n**Verify:** $\\dfrac{d}{dx}\\left[-\\dfrac{1}{3}\\cos(3x)\\right] = -\\dfrac{1}{3} \\cdot (-\\sin(3x)) \\cdot 3 = \\sin(3x)$. ✓",
+      "body_he_md": "**מצא:** $\\int \\sin(3x)\\,dx$\n\nכלל שרשרת הפוך: אנטי-נגזרת חיצונית של $\\sin(u)$ היא $-\\cos(u)$; חלק בנגזרת פנימית $3$:\n$$\\int \\sin(3x)\\,dx = -\\frac{1}{3}\\cos(3x) + C.$$\n\n**אימות:** $\\dfrac{d}{dx}\\left[-\\dfrac{1}{3}\\cos(3x)\\right] = \\sin(3x)$. ✓"
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Mistakes",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "1. **Wrong sign for sine:** $\\int \\sin x\\,dx = -\\cos x + C$ (negative!), not $+\\cos x + C$.\n\n2. **Forgetting the $1/a$ factor:** $\\int \\cos(2x)\\,dx = \\dfrac{1}{2}\\sin(2x)+C$, not $\\sin(2x)+C$.\n\n3. **Confusing trig integral and trig derivative:** $\\dfrac{d}{dx}[\\cos x] = -\\sin x$ (derivative) vs $\\int \\sin x\\,dx = -\\cos x+C$ (integral). The minus sign appears in both but for different reasons.",
+      "body_he_md": "1. **סימן שגוי לסינוס:** $\\int \\sin x\\,dx = -\\cos x + C$ (שלילי!), לא $+\\cos x + C$.\n\n2. **שכחת גורם $1/a$:** $\\int \\cos(2x)\\,dx = \\dfrac{1}{2}\\sin(2x)+C$, לא $\\sin(2x)+C$.\n\n3. **בלבול נגזרת/אינטגרל טריגו:** $\\dfrac{d}{dx}[\\cos x] = -\\sin x$ לעומת $\\int \\sin x\\,dx = -\\cos x+C$. הסימן השלילי מופיע בשניהם אך מסיבות שונות."
+    },
+    {
+      "kind": "why_matters",
+      "title_en": "Why Trig Integrals Matter",
+      "title_he": "למה אינטגרלים טריגו חשובים",
+      "body_en_md": "- **Area under trig curves** (concept:areas_between_curves): computing the area of one arch of $\\sin x$.\n- **Physics**: average value of AC current, displacement of oscillators.\n- **Fourier series** (advanced): $\\int_{-\\pi}^{\\pi} \\sin(nx)\\cos(mx)\\,dx$ form the orthogonality relations.\n- Trig integrals also provide the most common exercises in integration by parts and substitution.",
+      "body_he_md": "- **שטח מתחת לעקומות טריגו** (concept:areas_between_curves): שטח קשת אחת של $\\sin x$.\n- **פיזיקה**: ערך ממוצע של זרם חילופין, הזזת מתנדים.\n- **סדרות פורייה** (מתקדם): $\\int_{-\\pi}^{\\pi} \\sin(nx)\\cos(mx)\\,dx$ יוצרות יחסי אורתוגונליות.\n- אינטגרלים טריגו מספקים גם את התרגילים הנפוצים ביותר לאינטגרציה בחלקים ובהצבה."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "kind": "mcq",
+      "difficulty": "easy",
+      "skill_atoms": [
+        "integrals_trig_basic_table"
+      ],
+      "stem_en": "What is $\\int \\cos x\\,dx$?",
+      "stem_he": "מה הוא $\\int \\cos x\\,dx$?",
+      "answer_payload": {
+        "options_en": [
+          "$-\\sin x + C$",
+          "$\\sin x + C$",
+          "$\\cos x + C$",
+          "$-\\cos x + C$"
+        ],
+        "options_he": [
+          "$-\\sin x + C$",
+          "$\\sin x + C$",
+          "$\\cos x + C$",
+          "$-\\cos x + C$"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "Since $(\\sin x)' = \\cos x$, we have $\\int \\cos x\\,dx = \\sin x + C$.",
+      "explanation_he": "מאחר ש-$(\\sin x)' = \\cos x$, מתקיים $\\int \\cos x\\,dx = \\sin x + C$."
+    },
+    {
+      "id": "q2",
+      "kind": "mcq",
+      "difficulty": "easy",
+      "skill_atoms": [
+        "integrals_trig_basic_table"
+      ],
+      "stem_en": "What is $\\int \\sin x\\,dx$?",
+      "stem_he": "מה הוא $\\int \\sin x\\,dx$?",
+      "answer_payload": {
+        "options_en": [
+          "$\\cos x + C$",
+          "$-\\cos x + C$",
+          "$\\sin x + C$",
+          "$-\\sin x + C$"
+        ],
+        "options_he": [
+          "$\\cos x + C$",
+          "$-\\cos x + C$",
+          "$\\sin x + C$",
+          "$-\\sin x + C$"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "Since $(-\\cos x)' = \\sin x$, we have $\\int \\sin x\\,dx = -\\cos x + C$.",
+      "explanation_he": "מאחר ש-$(-\\cos x)' = \\sin x$, מתקיים $\\int \\sin x\\,dx = -\\cos x + C$."
+    },
+    {
+      "id": "q3",
+      "kind": "numeric",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "integrals_trig_definite"
+      ],
+      "stem_en": "Compute $\\int_0^{\\pi} \\sin x\\,dx$.",
+      "stem_he": "חשב את $\\int_0^{\\pi} \\sin x\\,dx$.",
+      "answer_payload": {
+        "value": 2,
+        "tolerance": 0.01
+      },
+      "explanation_en": "$[-\\cos x]_0^\\pi = -\\cos\\pi - (-\\cos 0) = -(-1) - (-1) = 1+1 = 2$.",
+      "explanation_he": "$[-\\cos x]_0^\\pi = -\\cos\\pi + \\cos 0 = 1 + 1 = 2$."
+    },
+    {
+      "id": "q4",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "integrals_trig_basic_table"
+      ],
+      "stem_en": "$\\int \\sin x\\,dx = \\cos x + C$",
+      "stem_he": "$\\int \\sin x\\,dx = \\cos x + C$",
+      "answer_payload": {
+        "correct": false
+      },
+      "explanation_en": "False. The correct antiderivative is $-\\cos x + C$ (note the negative sign).",
+      "explanation_he": "שגוי. האנטי-נגזרת הנכונה היא $-\\cos x + C$ (שימו לב לסימן השלילי)."
+    },
+    {
+      "id": "q5",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "integrals_trig_composite"
+      ],
+      "stem_en": "Find $\\int \\cos(2x)\\,dx$.",
+      "stem_he": "מצא $\\int \\cos(2x)\\,dx$.",
+      "answer_payload": {
+        "options_en": [
+          "$\\sin(2x) + C$",
+          "$\\dfrac{1}{2}\\sin(2x) + C$",
+          "$2\\sin(2x) + C$",
+          "$-\\sin(2x) + C$"
+        ],
+        "options_he": [
+          "$\\sin(2x) + C$",
+          "$\\dfrac{1}{2}\\sin(2x) + C$",
+          "$2\\sin(2x) + C$",
+          "$-\\sin(2x) + C$"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "Reverse chain rule: antiderivative of $\\cos(u)$ is $\\sin(u)$; divide by inner derivative $2$. Result: $\\dfrac{1}{2}\\sin(2x)+C$.",
+      "explanation_he": "כלל שרשרת הפוך: חלק ב-$2$. תוצאה: $\\dfrac{1}{2}\\sin(2x)+C$."
+    },
+    {
+      "id": "q6",
+      "kind": "derivation",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "integrals_trig_definite",
+        "integrals_trig_basic_table"
+      ],
+      "stem_en": "Compute $\\int_0^{\\pi/2} (\\sin x + \\cos x)\\,dx$ step by step.",
+      "stem_he": "חשב שלב אחר שלב את $\\int_0^{\\pi/2} (\\sin x + \\cos x)\\,dx$.",
+      "answer_payload": {
+        "steps_en": [
+          "Antiderivative: $F(x) = -\\cos x + \\sin x$.",
+          "$F(\\pi/2) = -\\cos(\\pi/2) + \\sin(\\pi/2) = 0 + 1 = 1$.",
+          "$F(0) = -\\cos 0 + \\sin 0 = -1 + 0 = -1$.",
+          "$F(\\pi/2) - F(0) = 1-(-1) = 2$."
+        ],
+        "steps_he": [
+          "אנטי-נגזרת: $F(x) = -\\cos x + \\sin x$.",
+          "$F(\\pi/2) = 0 + 1 = 1$.",
+          "$F(0) = -1 + 0 = -1$.",
+          "תשובה: $1-(-1) = 2$."
+        ]
+      },
+      "explanation_en": "$\\int_0^{\\pi/2}(\\sin x+\\cos x)\\,dx = [-\\cos x+\\sin x]_0^{\\pi/2} = 1-(-1) = 2$.",
+      "explanation_he": "$\\int_0^{\\pi/2}(\\sin x+\\cos x)\\,dx = 2$."
+    },
+    {
+      "id": "q7",
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "integrals_trig_composite"
+      ],
+      "stem_en": "Complete: $\\int \\sin(5x)\\,dx = $ ____.",
+      "stem_he": "השלם: $\\int \\sin(5x)\\,dx = $ ____.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "-cos(5x)/5 + C",
+          "-1/5 cos(5x) + C",
+          "-(1/5)cos(5x)+C",
+          "-קוסינוס(5x)/5 + C"
+        ]
+      },
+      "explanation_en": "Reverse chain rule: $-\\cos(5x)$ divided by inner derivative $5$: $-\\dfrac{1}{5}\\cos(5x)+C$.",
+      "explanation_he": "כלל שרשרת הפוך: $-\\cos(5x)$ מחולק ב-$5$: $-\\dfrac{1}{5}\\cos(5x)+C$."
+    },
+    {
+      "id": "q8",
+      "kind": "match",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "integrals_trig_basic_table"
+      ],
+      "stem_en": "Match each integral to its result:",
+      "stem_he": "התאם כל אינטגרל לתוצאתו:",
+      "answer_payload": {
+        "left_en": [
+          "$\\int \\sin x\\,dx$",
+          "$\\int \\cos x\\,dx$",
+          "$\\int \\dfrac{1}{\\cos^2 x}\\,dx$"
+        ],
+        "left_he": [
+          "$\\int \\sin x\\,dx$",
+          "$\\int \\cos x\\,dx$",
+          "$\\int \\dfrac{1}{\\cos^2 x}\\,dx$"
+        ],
+        "right_en": [
+          "$-\\cos x + C$",
+          "$\\sin x + C$",
+          "$\\tan x + C$"
+        ],
+        "right_he": [
+          "$-\\cos x + C$",
+          "$\\sin x + C$",
+          "$\\tan x + C$"
+        ],
+        "pairs": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ]
+        ]
+      },
+      "explanation_en": "Each pair is just a derivative formula read backwards: cos→sin, -sin→cos, sec²→tan (using 1/cos²=sec²).",
+      "explanation_he": "כל זוג הוא נוסחת נגזרת שנקראת הפוך."
+    },
+    {
+      "id": "q9",
+      "kind": "mcq",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "integrals_trig_definite"
+      ],
+      "stem_en": "What is $\\int_0^\\pi \\cos x\\,dx$?",
+      "stem_he": "מה הוא $\\int_0^\\pi \\cos x\\,dx$?",
+      "answer_payload": {
+        "options_en": [
+          "$2$",
+          "$0$",
+          "$1$",
+          "$-2$"
+        ],
+        "options_he": [
+          "$2$",
+          "$0$",
+          "$1$",
+          "$-2$"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "$[\\sin x]_0^\\pi = \\sin\\pi - \\sin 0 = 0 - 0 = 0$. The positive area on $[0,\\pi/2]$ equals the negative area on $[\\pi/2,\\pi]$, cancelling to zero.",
+      "explanation_he": "$[\\sin x]_0^\\pi = \\sin\\pi - \\sin 0 = 0$. השטח החיובי על $[0,\\pi/2]$ שווה לשטח השלילי על $[\\pi/2,\\pi]$ — מתבטלים."
+    },
+    {
+      "id": "q10",
+      "kind": "open",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "integrals_trig_definite",
+        "integrals_trig_composite"
+      ],
+      "stem_en": "Find the area under $f(x) = \\sin x$ on the full period $[0, 2\\pi]$. Explain why the answer is not $0$, and find the total area (not net signed area).",
+      "stem_he": "מצא את השטח מתחת ל-$f(x) = \\sin x$ בתקופה מלאה $[0, 2\\pi]$. הסבר מדוע התשובה אינה $0$, ומצא את השטח הכולל (לא שטח מסומן נטו).",
+      "answer_payload": {
+        "rubric_en": "The net signed integral ∫₀^{2π} sin x dx = 0 (symmetric above/below). For total area, split: ∫₀^π sin x dx + |∫_π^{2π} sin x dx| = 2 + 2 = 4. Explains that signed area cancels but geometric area adds.",
+        "rubric_he": "האינטגרל המסומן $\\int_0^{2\\pi}\\sin x\\,dx = 0$ (סימטריה מעל/מתחת). לשטח כולל: $\\int_0^\\pi \\sin x\\,dx + |\\int_\\pi^{2\\pi} \\sin x\\,dx| = 2+2=4$."
+      },
+      "explanation_en": "Net: $\\int_0^{2\\pi}\\sin x\\,dx = [-\\cos x]_0^{2\\pi} = -1-(-1)=0$. Total geometric area: $\\int_0^\\pi \\sin x\\,dx = 2$ (above axis) plus $|\\int_\\pi^{2\\pi}\\sin x\\,dx| = 2$ (below axis) = $4$.",
+      "explanation_he": "נטו: $0$. שטח גיאומטרי: $2+2=4$ (חלק מעל ציר + חלק מתחת לציר)."
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "∫cos x dx = sin x+C and ∫sin x dx = -cos x+C — memorize these as mirror images of the derivative table.",
+      "For ∫cos(ax)dx and ∫sin(ax)dx, divide by the inner coefficient a. This compensates for the chain rule factor.",
+      "A definite integral can be zero even when the function is non-zero — positive and negative areas cancel.",
+      "Always verify an indefinite trig integral by differentiating the result."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "∫sin x dx = cos x + C (forgot the negative)",
+        "correction": "Since d/dx[-cos x] = sin x, the antiderivative is -cos x+C. The minus sign is essential.",
+        "detect_phrase_en": "antiderivative of sine is cosine",
+        "detect_phrase_he": "האנטי-נגזרת של סינוס היא קוסינוס"
+      },
+      {
+        "wrong": "∫cos(2x) dx = sin(2x)+C (forgot 1/2 factor)",
+        "correction": "Must divide by inner derivative 2: (1/2)sin(2x)+C. Verify by differentiating.",
+        "detect_phrase_en": "forgot to divide by the coefficient",
+        "detect_phrase_he": "שכחתי לחלק במקדם"
+      }
+    ],
+    "tutor_pacing_hint": "Drill the two basic cases (sin→-cos, cos→sin) until automatic. Then introduce the 1/a factor for composites. For definite integrals, emphasize that zero net area ≠ zero geometric area.",
+    "diagnostic_signals": {
+      "writes ∫sin x dx = cos x+C": "Ask: differentiate cos x — what do you get? Now, what should you integrate to get sin x?",
+      "omits 1/a for composite trig integral": "Verify by differentiating their answer: if the factor a appears unexpectedly, they forgot 1/a."
+    },
+    "skill_atoms_unlocked": [
+      "integrals_trig_basic_table",
+      "integrals_trig_composite",
+      "integrals_trig_definite"
+    ]
+  }
+}

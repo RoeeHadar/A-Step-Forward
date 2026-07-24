@@ -1,0 +1,330 @@
+{
+  "concept_id": "volumes_of_revolution",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": [
+    "calculus1"
+  ],
+  "title_en": "Volumes of Revolution — Shell Method",
+  "title_he": "נפחי גוף סיבוב — שיטת המעטפת",
+  "summary_en": "Computing volumes using the cylindrical shell method — an alternative to disk/washer when integrating parallel to the axis is easier. Bagrut 5pt advanced topic.",
+  "summary_he": "חישוב נפחים בשיטת הגליל (מעטפת) — חלופה לדיסק/טבעת כאשר האינטגרציה במקביל לציר קלה יותר. נושא מתקדם בבגרות 5 יח׳.",
+  "estimated_minutes": 30,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "A Different Way to Slice",
+      "title_he": "דרך שונה לחתוך",
+      "body_en_md": "The disk and washer methods slice the solid **perpendicular** to the axis of rotation. The **shell method** slices it **parallel** to the axis — each slice is a thin cylindrical shell (like a hollow toilet-paper tube).\n\nThe volume of a thin shell with radius $r$, height $h$, and thickness $\\Delta x$ is approximately $2\\pi r \\cdot h \\cdot \\Delta x$. Summing these and taking the limit gives the shell integral.\n\n**When to use shells vs disks:** Use shells when the disk/washer method would require integrating with respect to the variable that is more complex. For example, rotating a region around the $y$-axis using shells with $x$-integration is often simpler than using disks with $y$-integration.",
+      "body_he_md": "שיטות הדיסק והטבעת חותכות את הגוף **ניצב** לציר הסיבוב. **שיטת המעטפת** חותכת **מקביל** לציר — כל פרוסה היא גליל דק חלול (כמו גליל נייר טואלט).\n\nנפח מעטפת דקה עם רדיוס $r$, גובה $h$ ועובי $\\Delta x$ הוא בקירוב $2\\pi r \\cdot h \\cdot \\Delta x$. סיכום וגבול נותן את אינטגרל המעטפת.\n\n**מתי להשתמש במעטפות לעומת דיסקים:** השתמש במעטפות כאשר שיטת הדיסק/טבעת תדרוש אינטגרציה במשתנה המורכב יותר. לדוגמה, סיבוב אזור סביב ציר $y$ בשיטת מעטפות עם אינטגרציה ב-$x$ לרוב פשוטה יותר."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Shell Method Formula",
+      "title_he": "נוסחת שיטת המעטפת",
+      "body_en_md": "**Shell Method — Rotation around the $y$-axis:**\nFor a region bounded by $y = f(x)$ (above) and $y = 0$ (or $y=g(x)$) from $x=a$ to $x=b$ (with $0 \\leq a < b$):\n$$V = 2\\pi \\int_a^b x \\cdot f(x)\\,dx.$$\n\nHere $x$ is the radius of each shell, $f(x)$ is the height.\n\n**General form with two curves:**\n$$V = 2\\pi \\int_a^b x [f(x) - g(x)]\\,dx.$$\n\n**Shell Method — Rotation around the $x$-axis** (integrate with respect to $y$):\n$$V = 2\\pi \\int_c^d y \\cdot h(y)\\,dy,$$\nwhere $h(y)$ is the width of the region at height $y$.\n\n**Why $2\\pi r h$?** The surface area of a cylinder with radius $r$ and height $h$ is $2\\pi r h$. A thin shell of thickness $dr$ has volume $\\approx 2\\pi r h \\cdot dr$.\n\n**Comparison:**\n\n| Rotation axis | Disk/Washer integrates w.r.t. | Shell integrates w.r.t. |\n|---|---|---|\n| $x$-axis | $x$ | $y$ |\n| $y$-axis | $y$ | $x$ |",
+      "body_he_md": "**שיטת מעטפת — סיבוב סביב ציר $y$:**\nלאזור חסום על ידי $y = f(x)$ (מעל) מ-$x=a$ עד $x=b$ ($0 \\leq a < b$):\n$$V = 2\\pi \\int_a^b x \\cdot f(x)\\,dx.$$\n\nכאן $x$ הוא רדיוס כל מעטפת, ו-$f(x)$ הוא הגובה.\n\n**צורה כללית עם שתי עקומות:**\n$$V = 2\\pi \\int_a^b x [f(x) - g(x)]\\,dx.$$\n\n**סיבוב סביב ציר $x$** (אינטגרציה ב-$y$):\n$$V = 2\\pi \\int_c^d y \\cdot h(y)\\,dy.$$\n\n**מדוע $2\\pi r h$?** שטח גלילי עם רדיוס $r$ וגובה $h$ הוא $2\\pi r h$. מעטפת דקה בעובי $dr$ מכילה נפח $\\approx 2\\pi r h \\cdot dr$.\n\n**השוואה:**\n\n| ציר סיבוב | דיסק/טבעת מאנטגרל ב- | מעטפת מאנטגרלת ב- |\n|---|---|---|\n| ציר $x$ | $x$ | $y$ |\n| ציר $y$ | $y$ | $x$ |"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Shell Method for Rotation around y-axis",
+      "title_he": "דוגמה פתורה 1 — שיטת מעטפת לסיבוב סביב ציר y",
+      "body_en_md": "**Find the volume** formed by rotating the region bounded by $y = x^2$, $x=0$, and $x=2$ around the $y$-axis.\n\n$$V = 2\\pi \\int_0^2 x \\cdot x^2\\,dx = 2\\pi \\int_0^2 x^3\\,dx = 2\\pi \\left[\\frac{x^4}{4}\\right]_0^2 = 2\\pi \\cdot 4 = 8\\pi.$$",
+      "body_he_md": "**מצא את הנפח** שנוצר מסיבוב האזור החסום על ידי $y = x^2$, $x=0$, $x=2$ סביב ציר $y$.\n\n$$V = 2\\pi \\int_0^2 x \\cdot x^2\\,dx = 2\\pi\\int_0^2 x^3\\,dx = 2\\pi\\cdot 4 = 8\\pi.$$"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Comparing Shell and Disk Methods",
+      "title_he": "דוגמה פתורה 2 — השוואת שיטת מעטפת ודיסק",
+      "body_en_md": "**Region:** bounded by $y = \\sqrt{x}$, $x=4$, and $y=0$. **Rotate** around the $y$-axis.\n\n**Shell method** (integrate w.r.t. $x$):\n$$V = 2\\pi\\int_0^4 x\\sqrt{x}\\,dx = 2\\pi\\int_0^4 x^{3/2}\\,dx = 2\\pi\\left[\\frac{2x^{5/2}}{5}\\right]_0^4 = 2\\pi \\cdot \\frac{2 \\cdot 32}{5} = \\frac{128\\pi}{5}.$$\n\n**Disk method check** (would require $x = y^2$, integrate w.r.t. $y$ from $0$ to $2$):\n$$V = \\pi\\int_0^2 (4^2 - (y^2)^2)\\,dy = \\pi\\int_0^2(16 - y^4)\\,dy = \\pi[16y - y^5/5]_0^2 = \\pi(32 - 32/5) = 128\\pi/5.$$\n\nBoth give $128\\pi/5$ — shell was simpler!",
+      "body_he_md": "**אזור:** חסום על ידי $y = \\sqrt{x}$, $x=4$, $y=0$. **סובב** סביב ציר $y$.\n\n**שיטת מעטפת** (אינטגרציה ב-$x$):\n$$V = 2\\pi\\int_0^4 x\\sqrt{x}\\,dx = 2\\pi\\int_0^4 x^{3/2}\\,dx = \\frac{128\\pi}{5}.$$\n\n**בדיקה בשיטת דיסק** (דורשת $x = y^2$, אינטגרציה ב-$y$): גם כן $= 128\\pi/5$.\n\nשתי השיטות נותנות $128\\pi/5$ — המעטפת פשוטה יותר!"
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Mistakes",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "1. **Forgetting $2\\pi$:** Shell formula is $2\\pi\\int x f(x)\\,dx$. Missing $2\\pi$ is the most common error.\n\n2. **Using wrong variable as radius:** For rotation around $y$-axis, the radius of each shell is $x$ (distance from $y$-axis). Don't use $y$.\n\n3. **Shell height vs radius confusion:** Radius = distance from axis; height = length of the cylindrical shell (= $f(x)$ for rotation around $y$-axis).\n\n4. **Wrong method for the given axis:** Shell method around $y$-axis → integrate with respect to $x$. Shell around $x$-axis → integrate with respect to $y$.",
+      "body_he_md": "1. **שכחת $2\\pi$:** נוסחת מעטפת: $2\\pi\\int x f(x)\\,dx$. חסרון $2\\pi$ הוא השגיאה הנפוצה ביותר.\n\n2. **שימוש במשתנה שגוי כרדיוס:** לסיבוב סביב ציר $y$, רדיוס כל מעטפת הוא $x$ (מרחק מציר $y$). אל תשתמש ב-$y$.\n\n3. **בלבול גובה/רדיוס מעטפת:** רדיוס = מרחק מהציר; גובה = אורך הגליל החלול (= $f(x)$ לסיבוב סביב ציר $y$).\n\n4. **שיטה שגויה לציר הנתון:** מעטפת סביב ציר $y$ → אינטגרציה ב-$x$. מעטפת סביב ציר $x$ → אינטגרציה ב-$y$."
+    },
+    {
+      "kind": "why_matters",
+      "title_en": "When to Choose Shells vs Disks",
+      "title_he": "מתי לבחור מעטפות לעומת דיסקים",
+      "body_en_md": "- **Shell = preferred** when the boundary curve can't be easily inverted (i.e., solving for $x$ in terms of $y$ is messy).\n- **Disk/washer = preferred** when rotating around the same axis you're integrating along (x-axis rotation → x-integral).\n- For Bagrut 5pt: both methods may appear; knowing which is simpler for a given problem saves time.\n- Some problems can only be solved easily with shells (e.g., rotating $y = \\sin(x^2)$ around the $y$-axis — the disk method would require inverting $\\sin(x^2)$).",
+      "body_he_md": "- **מעטפת = עדיפה** כאשר עקומת הגבול לא ניתנת להיפוך קל (כלומר, ביטוי $x$ כפונקציה של $y$ מסובך).\n- **דיסק/טבעת = עדיף** כאשר מסתובבים סביב אותו ציר שמאנטגרלים לאורכו.\n- לבגרות 5 יח׳: שתי השיטות עשויות להופיע; ידיעת מה פשוטה יותר חוסכת זמן.\n- חלק מהבעיות ניתנות לפתרון קל רק עם מעטפות (למשל, סיבוב $y = \\sin(x^2)$ סביב ציר $y$)."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "volumes_revolution_shell_setup"
+      ],
+      "stem_en": "The shell method formula for rotating $y=f(x)$ around the $y$-axis from $x=a$ to $x=b$ is:",
+      "stem_he": "נוסחת שיטת המעטפת לסיבוב $y=f(x)$ סביב ציר $y$ מ-$x=a$ עד $x=b$ היא:",
+      "answer_payload": {
+        "options_en": [
+          "$\\pi\\int_a^b [f(x)]^2\\,dx$",
+          "$2\\pi\\int_a^b x\\cdot f(x)\\,dx$",
+          "$2\\pi\\int_a^b f(x)\\,dx$",
+          "$\\pi\\int_a^b x\\cdot f(x)\\,dx$"
+        ],
+        "options_he": [
+          "$\\pi\\int_a^b [f(x)]^2\\,dx$",
+          "$2\\pi\\int_a^b x\\cdot f(x)\\,dx$",
+          "$2\\pi\\int_a^b f(x)\\,dx$",
+          "$\\pi\\int_a^b x\\cdot f(x)\\,dx$"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "Shell method: $V = 2\\pi\\int_a^b (\\text{radius})(\\text{height})\\,dx = 2\\pi\\int_a^b x f(x)\\,dx$.",
+      "explanation_he": "שיטת מעטפת: $V = 2\\pi\\int_a^b x f(x)\\,dx$."
+    },
+    {
+      "id": "q2",
+      "kind": "numeric",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "volumes_revolution_shell_compute"
+      ],
+      "stem_en": "Find the volume formed by rotating $y = x$ from $x=0$ to $x=3$ around the $y$-axis using the shell method.",
+      "stem_he": "מצא את הנפח שנוצר מסיבוב $y = x$ מ-$x=0$ עד $x=3$ סביב ציר $y$ בשיטת המעטפת.",
+      "answer_payload": {
+        "value": 56.55,
+        "tolerance": 0.1
+      },
+      "explanation_en": "$V = 2\\pi\\int_0^3 x \\cdot x\\,dx = 2\\pi\\int_0^3 x^2\\,dx = 2\\pi[x^3/3]_0^3 = 2\\pi\\cdot 9 = 18\\pi \\approx 56.55$.",
+      "explanation_he": "$V = 2\\pi\\int_0^3 x^2\\,dx = 18\\pi \\approx 56.55$."
+    },
+    {
+      "id": "q3",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "volumes_revolution_shell_setup"
+      ],
+      "stem_en": "When using the shell method to rotate a region around the $y$-axis, you integrate with respect to $x$.",
+      "stem_he": "כאשר משתמשים בשיטת המעטפת לסיבוב אזור סביב ציר $y$, מאנטגרלים לפי $x$.",
+      "answer_payload": {
+        "correct": true
+      },
+      "explanation_en": "True. Shell method around $y$-axis integrates with respect to $x$ (each shell has radius $x$). ✓",
+      "explanation_he": "נכון. שיטת מעטפת סביב ציר $y$ מאנטגרלת לפי $x$. ✓"
+    },
+    {
+      "id": "q4",
+      "kind": "mcq",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "volumes_revolution_shell_compute"
+      ],
+      "stem_en": "Find the volume when $y = e^x$ from $x=0$ to $x=1$ is rotated around the $y$-axis using shells.",
+      "stem_he": "מצא את הנפח כאשר $y=e^x$ מ-$x=0$ עד $x=1$ מסתובב סביב ציר $y$ בשיטת מעטפות.",
+      "answer_payload": {
+        "options_en": [
+          "$2\\pi$",
+          "$2\\pi(e-1)$",
+          "$\\pi(e^2-1)/2$",
+          "$\\pi e$"
+        ],
+        "options_he": [
+          "$2\\pi$",
+          "$2\\pi(e-1)$",
+          "$\\pi(e^2-1)/2$",
+          "$\\pi e$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "$V = 2\\pi\\int_0^1 xe^x\\,dx$. IBP ($u=x$, $dv=e^x dx$): $[xe^x-e^x]_0^1 = (e-e)-(0-1) = 1$. So $V = 2\\pi$.",
+      "explanation_he": "$V = 2\\pi\\int_0^1 xe^x\\,dx$. אינטגרציה בחלקים: $[xe^x-e^x]_0^1 = 1$. לכן $V = 2\\pi$."
+    },
+    {
+      "id": "q5",
+      "kind": "derivation",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "volumes_revolution_shell_compute",
+        "volumes_revolution_shell_setup"
+      ],
+      "stem_en": "Find the volume formed by rotating the region between $y = x$ and $y = x^2$ on $[0,1]$ around the $y$-axis using the shell method.",
+      "stem_he": "מצא את הנפח שנוצר מסיבוב האזור בין $y = x$ ל-$y = x^2$ על $[0,1]$ סביב ציר $y$ בשיטת המעטפת.",
+      "answer_payload": {
+        "steps_en": [
+          "On $[0,1]$: $x \\geq x^2$ (height of shell = $x - x^2$).",
+          "Shell radius = $x$.",
+          "$V = 2\\pi\\int_0^1 x(x - x^2)\\,dx = 2\\pi\\int_0^1(x^2 - x^3)\\,dx$.",
+          "$= 2\\pi\\left[\\frac{x^3}{3} - \\frac{x^4}{4}\\right]_0^1 = 2\\pi\\left(\\frac{1}{3} - \\frac{1}{4}\\right) = 2\\pi \\cdot \\frac{1}{12} = \\frac{\\pi}{6}$."
+        ],
+        "steps_he": [
+          "על $[0,1]$: $x \\geq x^2$ (גובה מעטפת = $x - x^2$).",
+          "רדיוס מעטפת = $x$.",
+          "$V = 2\\pi\\int_0^1 x(x-x^2)\\,dx = 2\\pi\\int_0^1(x^2-x^3)\\,dx$.",
+          "$= 2\\pi(1/3 - 1/4) = 2\\pi/12 = \\pi/6$."
+        ]
+      },
+      "explanation_en": "Shell: radius $=x$, height $=x-x^2$. $V = 2\\pi\\int_0^1(x^2-x^3)\\,dx = \\pi/6$.",
+      "explanation_he": "מעטפת: רדיוס $=x$, גובה $=x-x^2$. $V = \\pi/6$."
+    },
+    {
+      "id": "q6",
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "volumes_revolution_shell_setup"
+      ],
+      "stem_en": "For the shell method rotating $y = \\ln x$ around the $y$-axis from $x=1$ to $x=e$, the integrand is $x \\cdot$ ____.",
+      "stem_he": "לשיטת המעטפת המסובבת $y = \\ln x$ סביב ציר $y$ מ-$x=1$ עד $x=e$, האינטגרנד הוא $x \\cdot$ ____.",
+      "answer_payload": {
+        "value": "ln x",
+        "acceptable_answers": [
+          "ln x",
+          "ln(x)",
+          "\\ln x"
+        ]
+      },
+      "explanation_en": "Shell method: $V = 2\\pi\\int_1^e x\\cdot(\\text{height})\\,dx = 2\\pi\\int_1^e x\\ln x\\,dx$. The height of each shell is $f(x) = \\ln x$.",
+      "explanation_he": "שיטת מעטפת: $V = 2\\pi\\int_1^e x\\ln x\\,dx$. גובה כל מעטפת הוא $\\ln x$."
+    },
+    {
+      "id": "q7",
+      "kind": "mcq",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "volumes_revolution_shell_method_choice"
+      ],
+      "stem_en": "Which method is typically EASIER for rotating $y = \\sin(x^2)$ around the $y$-axis from $x=0$ to $x=\\sqrt{\\pi}$?",
+      "stem_he": "איזו שיטה בדרך כלל **קלה יותר** לסיבוב $y = \\sin(x^2)$ סביב ציר $y$ מ-$x=0$ עד $x=\\sqrt{\\pi}$?",
+      "answer_payload": {
+        "options_en": [
+          "Disk/Washer (integrate in y)",
+          "Shell method (integrate in x)",
+          "Both are equally easy",
+          "Neither works"
+        ],
+        "options_he": [
+          "דיסק/טבעת (אינטגרציה ב-y)",
+          "שיטת מעטפות (אינטגרציה ב-x)",
+          "שתיהן קלות שווה בשווה",
+          "אף אחת לא עובדת"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "To use disks, we'd need to invert $y=\\sin(x^2)$ — very hard. Shell method: $V = 2\\pi\\int_0^{\\sqrt{\\pi}}x\\sin(x^2)\\,dx$ — this can be done with $u=x^2$ substitution!",
+      "explanation_he": "לדיסקים נצטרך להפוך $y=\\sin(x^2)$ — קשה מאוד. שיטת מעטפות: $V = 2\\pi\\int_0^{\\sqrt{\\pi}}x\\sin(x^2)\\,dx$ — ניתן לפתרון בהצבת $u=x^2$!"
+    },
+    {
+      "id": "q8",
+      "kind": "ordering",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "volumes_revolution_shell_setup"
+      ],
+      "stem_en": "Put the shell method steps in order for rotating $y=x^2$ around the $y$-axis from $x=0$ to $x=2$:",
+      "stem_he": "סדר את שלבי שיטת המעטפת לסיבוב $y=x^2$ סביב ציר $y$ מ-$x=0$ עד $x=2$:",
+      "answer_payload": {
+        "steps_en": [
+          "Identify radius = x, height = x²",
+          "Write $V = 2\\pi\\int_0^2 x \\cdot x^2\\,dx$",
+          "Simplify integrand: $2\\pi\\int_0^2 x^3\\,dx$",
+          "Evaluate: $2\\pi[x^4/4]_0^2 = 2\\pi \\cdot 4 = 8\\pi$"
+        ],
+        "steps_he": [
+          "זיהוי רדיוס = x, גובה = x²",
+          "כתוב $V = 2\\pi\\int_0^2 x \\cdot x^2\\,dx$",
+          "פישוט אינטגרנד: $2\\pi\\int_0^2 x^3\\,dx$",
+          "חישוב: $2\\pi\\cdot 4 = 8\\pi$"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "explanation_en": "Shell: identify radius and height, write integral, simplify, evaluate.",
+      "explanation_he": "מעטפת: זיהוי רדיוס וגובה, כתיבת אינטגרל, פישוט, חישוב."
+    },
+    {
+      "id": "q9",
+      "kind": "mcq",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "volumes_revolution_shell_compute"
+      ],
+      "stem_en": "Using shells, find the volume when $y = \\sqrt{x}$, $y=0$, $x=9$ is rotated around the $y$-axis.",
+      "stem_he": "בשיטת מעטפות, מצא את הנפח כאשר $y = \\sqrt{x}$, $y=0$, $x=9$ מסתובבים סביב ציר $y$.",
+      "answer_payload": {
+        "options_en": [
+          "$\\dfrac{972\\pi}{5}$",
+          "$\\dfrac{648\\pi}{5}$",
+          "$108\\pi$",
+          "$54\\pi$"
+        ],
+        "options_he": [
+          "$\\dfrac{972\\pi}{5}$",
+          "$\\dfrac{648\\pi}{5}$",
+          "$108\\pi$",
+          "$54\\pi$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "$V = 2\\pi\\int_0^9 x^{3/2}\\,dx = 2\\pi\\left[\\dfrac{2x^{5/2}}{5}\\right]_0^9 = 2\\pi\\cdot\\dfrac{2\\cdot 243}{5} = \\dfrac{972\\pi}{5}$. ($9^{5/2}=3^5=243$.)",
+      "explanation_he": "$V = 2\\pi\\int_0^9 x^{3/2}\\,dx = 2\\pi\\cdot\\dfrac{2\\cdot 243}{5} = \\dfrac{972\\pi}{5}$. ($9^{5/2}=3^5=243$.)"
+    },
+    {
+      "id": "q10",
+      "kind": "open",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "volumes_revolution_shell_compute",
+        "volumes_revolution_shell_method_choice"
+      ],
+      "stem_en": "Explain why the shell method is preferred when rotating $y = f(x)$ around the $y$-axis when $f$ is not easily invertible. Give a concrete example and compute the volume.",
+      "stem_he": "הסבר מדוע שיטת המעטפת עדיפה בסיבוב $y = f(x)$ סביב ציר $y$ כאשר $f$ אינה ניתנת להיפוך קל. תן דוגמה קונקרטית וחשב את הנפח.",
+      "answer_payload": {
+        "rubric_en": "Explains: disk/washer around y-axis needs x=h(y) (inverse), which may be complex. Shell integrates directly in x. Example: y=x², shell gives V=2π∫x·x²dx=2π∫x³dx = 8π/2=π[x⁴/2]=8π. States when shell simplifies computation.",
+        "rubric_he": "מסביר: דיסק/טבעת סביב ציר $y$ דורש $x=h(y)$ (הפוך), שעלול להיות מורכב. מעטפת מאנטגרלת ישירות ב-$x$. דוגמה עם חישוב נכון."
+      },
+      "explanation_en": "Disk method around y-axis requires inverting $y=f(x)$ to get $x=h(y)$ — often algebraically hard. Shell integrates $2\\pi x f(x)$ with respect to $x$ directly. Example: rotating $y=x^2$ from $x=0$ to $x=2$: $V=2\\pi\\int_0^2 x^3\\,dx = 8\\pi$.",
+      "explanation_he": "שיטת דיסק סביב ציר $y$ דורשת הפיכת $f$ — לרוב קשה. מעטפת מאנטגרלת $2\\pi xf(x)$ ב-$x$ ישירות. $V=8\\pi$ לדוגמה."
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Shell method formula: V = 2π∫(radius)(height)dx. The factor 2π comes from the circumference, not the area.",
+      "For rotation around y-axis: radius = x, height = f(x). For x-axis: radius = y, height = h(y).",
+      "Use shells when inverting the function (to get x in terms of y for disk method) would be messy.",
+      "Always verify with a sanity check: shells and disks applied to the same solid must give the same volume."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Shell formula uses π instead of 2π",
+        "correction": "Shell uses 2π (circumference of a cylinder), not π (area of a circle). Disk uses π.",
+        "detect_phrase_en": "pi times radius times height",
+        "detect_phrase_he": "פאי כפול רדיוס כפול גובה"
+      },
+      {
+        "wrong": "Using y as the radius when rotating around y-axis",
+        "correction": "Radius = distance from axis. For y-axis rotation, radius = x (horizontal distance from y-axis).",
+        "detect_phrase_en": "radius is y",
+        "detect_phrase_he": "הרדיוס הוא y"
+      }
+    ],
+    "tutor_pacing_hint": "Start by building physical intuition: peel an onion — each layer is a cylindrical shell. Then derive the formula from the thin shell approximation 2πrh·Δr. Compare with disk method on the same problem.",
+    "diagnostic_signals": {
+      "uses π instead of 2π": "Ask: what is the formula for the lateral surface area of a cylinder? That's where 2πrh comes from.",
+      "confuses radius with height": "Draw a vertical shell and label: radius = horizontal distance from axis; height = f(x) - g(x) (or 0)."
+    },
+    "skill_atoms_unlocked": [
+      "volumes_revolution_shell_setup",
+      "volumes_revolution_shell_compute",
+      "volumes_revolution_shell_method_choice"
+    ]
+  }
+}

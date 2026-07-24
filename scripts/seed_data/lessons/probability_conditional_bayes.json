@@ -1,0 +1,296 @@
+{
+  "concept_id": "probability_conditional_bayes",
+  "title_en": "Conditional Probability & Bayes' Theorem",
+  "title_he": "הסתברות מותנית ומשפט בייס",
+  "summary_en": "Conditional probability $P(A|B)$, the multiplication rule, the law of total probability, and Bayes' theorem with tree diagrams. Israeli Bagrut style.",
+  "summary_he": "הסתברות מותנית $P(A|B)$, כלל הכפל, חוק ההסתברות הכוללת ומשפט בייס עם עצי הסתברות. סגנון בגרות ישראלית.",
+  "estimated_minutes": 35,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "When Does Information Change Probability?",
+      "title_he": "מתי מידע משנה הסתברות?",
+      "body_en_md": "**Conditional probability** answers: 'What is the probability of $A$ given that $B$ has already occurred?'\n\n$$P(A|B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) > 0$$\n\nThis 'updates' our probability based on new information. For example, if you know a randomly chosen student passed the final exam, how does that change the probability they also passed the midterm?\n\nConditional probability is the foundation of Bayes' theorem, which is central to medicine (test accuracy), legal reasoning, and machine learning.",
+      "body_he_md": "**הסתברות מותנית** עונה על: 'מה ההסתברות של $A$ בהינתן שכבר ידוע ש-$B$ התרחש?'\n\n$$P(A|B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) > 0$$\n\nזה 'מעדכן' את ההסתברות שלנו בהתבסס על מידע חדש. לדוגמה, אם ידוע שתלמיד עבר את הבחינה הסופית, כיצד זה משנה את ההסתברות שהוא גם עבר את הבחינה האמצע?\n\nהסתברות מותנית היא הבסיס למשפט בייס, המרכזי ברפואה, משפט ולמידת מכונה."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Key Formulas and Bayes' Theorem",
+      "title_he": "נוסחאות מרכזיות ומשפט בייס",
+      "body_en_md": "### Conditional probability\n$$P(A|B) = \\frac{P(A \\cap B)}{P(B)}$$\n\n### Multiplication rule\n$$P(A \\cap B) = P(A|B)\\cdot P(B) = P(B|A)\\cdot P(A)$$\n\n### Independence check\nEvents $A$ and $B$ are **independent** if and only if $P(A|B) = P(A)$, equivalently $P(A\\cap B)=P(A)P(B)$.\n\n### Law of Total Probability\nIf $B_1, B_2, \\ldots, B_n$ are mutually exclusive and exhaustive (partition of $S$):\n$$P(A) = \\sum_{i=1}^n P(A|B_i)\\cdot P(B_i)$$\n\nMost commonly used with two events $B$ and $B^c$:\n$$P(A) = P(A|B)\\cdot P(B) + P(A|B^c)\\cdot P(B^c)$$\n\n### Bayes' Theorem\n$$P(B|A) = \\frac{P(A|B)\\cdot P(B)}{P(A)}$$\n\nUsing the law of total probability for the denominator:\n$$P(B|A) = \\frac{P(A|B)\\cdot P(B)}{P(A|B)\\cdot P(B) + P(A|B^c)\\cdot P(B^c)}$$\n\n### Probability tree diagrams\nTree diagrams are the clearest way to organize conditional probability calculations. Each branch is labeled with a conditional probability; multiply along branches for joint probabilities, then add across branches for totals.",
+      "body_he_md": "### הסתברות מותנית\n$$P(A|B) = \\frac{P(A \\cap B)}{P(B)}$$\n\n### כלל הכפל\n$$P(A \\cap B) = P(A|B)\\cdot P(B) = P(B|A)\\cdot P(A)$$\n\n### בדיקת עצמאות\nאירועים $A$ ו-$B$ **עצמאיים** אם ורק אם $P(A|B) = P(A)$.\n\n### חוק ההסתברות הכוללת\nאם $B_1, \\ldots, B_n$ זרים ומכסים את $S$:\n$$P(A) = \\sum_{i=1}^n P(A|B_i)\\cdot P(B_i)$$\n\nבשני אירועים:\n$$P(A) = P(A|B)\\cdot P(B) + P(A|B^c)\\cdot P(B^c)$$\n\n### משפט בייס\n$$P(B|A) = \\frac{P(A|B)\\cdot P(B)}{P(A|B)\\cdot P(B) + P(A|B^c)\\cdot P(B^c)}$$\n\n### עצי הסתברות\nעצי הסתברות הם הדרך הברורה ביותר לארגן חישובי הסתברות מותנית. כפל על אורך הענף, חיבור בין ענפים."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Worked Example 1 — Medical Test",
+      "title_he": "דוגמה פתורה 1 — בדיקה רפואית",
+      "body_en_md": "**Problem:** A disease affects $1\\%$ of the population. A test for the disease has:\n- Sensitivity (true positive rate): $P(+|\\text{disease}) = 0.95$\n- Specificity (true negative rate): $P(-|\\text{no disease}) = 0.90$\n\nGiven a positive test result, what is the probability the person has the disease?\n\n**Setup:** Let $D$ = has disease, $+$ = positive test.\n- $P(D) = 0.01$, $P(D^c)=0.99$\n- $P(+|D)=0.95$, $P(+|D^c)=0.10$\n\n**Law of Total Probability:**\n$$P(+) = 0.95\\cdot0.01 + 0.10\\cdot0.99 = 0.0095+0.099 = 0.1085$$\n\n**Bayes' Theorem:**\n$$P(D|+) = \\frac{0.95\\cdot0.01}{0.1085} = \\frac{0.0095}{0.1085} \\approx 0.0876 \\approx 8.8\\%$$\n\n**Insight:** Even with a positive test, there's only ~8.8% chance of having the disease! This is the **base rate fallacy** — the disease is so rare that false positives dominate.",
+      "body_he_md": "**בעיה:** מחלה פוגעת ב-$1\\%$ מהאוכלוסייה. בדיקה קיימת:\n- רגישות: $P(+|\\text{מחלה}) = 0.95$\n- סגוליות: $P(-|\\text{ללא מחלה}) = 0.90$\n\nנתון תוצאת בדיקה חיובית, מה ההסתברות שלאדם יש המחלה?\n\n**הגדרה:** $D$ = יש מחלה.\n- $P(D)=0.01$, $P(+|D)=0.95$, $P(+|D^c)=0.10$\n\n**חוק ההסתברות הכוללת:**\n$$P(+) = 0.95\\cdot0.01 + 0.10\\cdot0.99 = 0.1085$$\n\n**משפט בייס:**\n$$P(D|+) = 0.0095/0.1085 \\approx 8.8\\%$$\n\n**תובנה:** אפילו עם בדיקה חיובית, רק כ-8.8% סיכוי למחלה! זוהי **טעות שיעור הבסיס**."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Worked Example 2 — Balls and Urns",
+      "title_he": "דוגמה פתורה 2 — כדורים וכדים",
+      "body_en_md": "**Problem:** Urn A has 3 red and 2 blue balls; Urn B has 1 red and 4 blue balls. A fair coin is flipped: heads → pick from A; tails → pick from B. A red ball is drawn. What is the probability it came from urn A?\n\n**Tree diagram:**\n- $P(A)=0.5$, $P(B)=0.5$\n- $P(\\text{red}|A)=3/5$, $P(\\text{red}|B)=1/5$\n\n**Total probability of red:**\n$$P(\\text{red}) = (3/5)(0.5)+(1/5)(0.5) = 3/10+1/10 = 4/10 = 2/5$$\n\n**Bayes:**\n$$P(A|\\text{red}) = \\frac{(3/5)(1/2)}{2/5} = \\frac{3/10}{2/5} = \\frac{3}{10}\\cdot\\frac{5}{2} = \\frac{3}{4}$$",
+      "body_he_md": "**בעיה:** כד א׳ מכיל 3 כדורים אדומים ו-2 כחולים; כד ב׳ מכיל 1 אדום ו-4 כחולים. מטביעים מטבע: עץ → שולים מא׳; פלי → שולים מב׳. שולה כדור אדום. מה ההסתברות שבא מכד א׳?\n\n**עץ:**\n- $P(\\text{אדום}|א)=3/5$, $P(\\text{אדום}|ב)=1/5$\n\n**סה״כ אדום:** $P(\\text{אדום})=3/10+1/10=2/5$\n\n**בייס:** $P(א|\\text{אדום})=(3/10)/(2/5)=3/4$"
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "- **Confusing $P(A|B)$ with $P(B|A)$** — the medical test fallacy: $P(+|D)\\ne P(D|+)$.\n- **Forgetting to normalize** — in Bayes' theorem, divide by the total probability of the evidence.\n- **Ignoring base rates** — a highly sensitive test on a rare disease still gives mostly false positives.\n- **Not drawing a tree** — probability trees prevent calculation errors in multi-stage problems.",
+      "body_he_md": "- **בלבול בין $P(A|B)$ ל-$P(B|A)$** — טעות הבדיקה הרפואית: $P(+|D)\\ne P(D|+)$.\n- **שכחת הנרמול** — במשפט בייס, חלק בהסתברות הכוללת של הראיה.\n- **התעלמות משיעורי בסיס** — בדיקה רגישה על מחלה נדירה נותנת בעיקר חיובים כוזבים.\n- **אי-ציור עץ** — עצי הסתברות מונעים שגיאות חישוב בבעיות רב-שלביות."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "kind": "mcq",
+      "difficulty": "easy",
+      "skill_atoms": [
+        "probability_conditional_bayes_compute_conditional"
+      ],
+      "stem_en": "$P(A)=0.6$, $P(B)=0.5$, $P(A\\cap B)=0.3$. Find $P(A|B)$.",
+      "stem_he": "$P(A)=0.6$, $P(B)=0.5$, $P(A\\cap B)=0.3$. מצא $P(A|B)$.",
+      "answer_payload": {
+        "options_en": [
+          "$0.6$",
+          "$0.5$",
+          "$0.3$",
+          "$0.18$"
+        ],
+        "options_he": [
+          "$0.6$",
+          "$0.5$",
+          "$0.3$",
+          "$0.18$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "$P(A|B)=P(A\\cap B)/P(B)=0.3/0.5=0.6$.",
+      "explanation_he": "$P(A|B)=0.3/0.5=0.6$."
+    },
+    {
+      "id": "q2",
+      "kind": "true_false",
+      "difficulty": "easy",
+      "skill_atoms": [
+        "probability_conditional_bayes_independence_check"
+      ],
+      "stem_en": "If $P(A|B)=P(A)$, then $A$ and $B$ are independent.",
+      "stem_he": "אם $P(A|B)=P(A)$, אז $A$ ו-$B$ עצמאיים.",
+      "answer_payload": {
+        "correct": true
+      },
+      "explanation_en": "True. $P(A|B)=P(A)$ is the definition of independence (knowing $B$ doesn't change $P(A)$). ✓",
+      "explanation_he": "נכון. $P(A|B)=P(A)$ היא ההגדרה של עצמאות. ✓"
+    },
+    {
+      "id": "q3",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "probability_conditional_bayes_multiplication_rule"
+      ],
+      "stem_en": "A box has 5 red and 3 blue balls. Two balls are drawn without replacement. What is the probability both are red?",
+      "stem_he": "קופסה מכילה 5 כדורים אדומים ו-3 כחולים. שולים שני כדורים ללא החזרה. מה ההסתברות ששניהם אדומים?",
+      "answer_payload": {
+        "options_en": [
+          "$\\dfrac{5}{14}$",
+          "$\\dfrac{25}{64}$",
+          "$\\dfrac{1}{2}$",
+          "$\\dfrac{2}{7}$"
+        ],
+        "options_he": [
+          "$\\dfrac{5}{14}$",
+          "$\\dfrac{25}{64}$",
+          "$\\dfrac{1}{2}$",
+          "$\\dfrac{2}{7}$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "$P(\\text{1st red})=5/8$. $P(\\text{2nd red}|\\text{1st red})=4/7$. $P(\\text{both red})=5/8\\cdot4/7=20/56=5/14$.",
+      "explanation_he": "$P(\\text{שניהם אדומים})=5/8\\cdot4/7=5/14$."
+    },
+    {
+      "id": "q4",
+      "kind": "numeric",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "probability_conditional_bayes_total_probability"
+      ],
+      "stem_en": "Machine A produces $60\\%$ of items; Machine B produces $40\\%$. Defect rate: A has $3\\%$, B has $5\\%$. What is the overall defect rate (in percent)?",
+      "stem_he": "מכונה A מייצרת $60\\%$ מהפריטים; מכונה B מייצרת $40\\%$. שיעור פגמים: A — $3\\%$, B — $5\\%$. מה שיעור הפגמים הכולל (באחוזים)?",
+      "answer_payload": {
+        "value": 3.8,
+        "tolerance": 0.1
+      },
+      "explanation_en": "$P(\\text{defect})=0.03\\cdot0.6+0.05\\cdot0.4=0.018+0.02=0.038=3.8\\%$.",
+      "explanation_he": "$P(\\text{פגם})=0.03\\cdot0.6+0.05\\cdot0.4=0.038=3.8\\%$."
+    },
+    {
+      "id": "q5",
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "probability_conditional_bayes_compute_conditional"
+      ],
+      "stem_en": "In a class, $40\\%$ study math and $30\\%$ study both math and physics. Given a student studies math, the probability they also study physics is $P(\\text{physics}|\\text{math}) =$ ____.",
+      "stem_he": "בכיתה, $40\\%$ לומדים מתמטיקה ו-$30\\%$ לומדים גם מתמטיקה וגם פיזיקה. בהינתן שהתלמיד לומד מתמטיקה, ההסתברות שגם לומד פיזיקה היא ____.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "0.75",
+          "3/4",
+          "75%"
+        ]
+      },
+      "explanation_en": "$P(\\text{physics}|\\text{math})=P(\\text{both})/P(\\text{math})=0.30/0.40=0.75$.",
+      "explanation_he": "$P=0.30/0.40=0.75$."
+    },
+    {
+      "id": "q6",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "probability_conditional_bayes_compute_conditional"
+      ],
+      "stem_en": "In general, $P(A|B) = P(B|A)$.",
+      "stem_he": "באופן כללי, $P(A|B) = P(B|A)$.",
+      "answer_payload": {
+        "correct": false
+      },
+      "explanation_en": "False. $P(A|B)=P(A\\cap B)/P(B)$ and $P(B|A)=P(A\\cap B)/P(A)$. They are equal only if $P(A)=P(B)$.",
+      "explanation_he": "שקר. שניהם שווים רק אם $P(A)=P(B)$. בדרך כלל $P(B)\\ne P(A)$."
+    },
+    {
+      "id": "q7",
+      "kind": "derivation",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "probability_conditional_bayes_bayes_theorem",
+        "probability_conditional_bayes_total_probability"
+      ],
+      "stem_en": "A factory has two machines. Machine I produces 70% of items with a 4% defect rate; Machine II produces 30% with a 9% defect rate. A randomly chosen item is found defective. What is the probability it came from Machine I? Show all steps.",
+      "stem_he": "במפעל שתי מכונות. מכונה I מייצרת 70% מהפריטים עם 4% פגמים; מכונה II מייצרת 30% עם 9% פגמים. פריט שנמצא פגום נבחר אקראית. מה ההסתברות שבא ממכונה I? הצג את כל השלבים.",
+      "answer_payload": {
+        "steps_en": [
+          "$P(I)=0.7$, $P(II)=0.3$, $P(D|I)=0.04$, $P(D|II)=0.09$.",
+          "$P(D)=P(D|I)P(I)+P(D|II)P(II)=0.04\\cdot0.7+0.09\\cdot0.3=0.028+0.027=0.055$.",
+          "$P(I|D)=P(D|I)P(I)/P(D)=0.028/0.055=28/55\\approx0.509$."
+        ],
+        "steps_he": [
+          "$P(I)=0.7$, $P(D|I)=0.04$, $P(D|II)=0.09$.",
+          "$P(D)=0.028+0.027=0.055$.",
+          "$P(I|D)=0.028/0.055\\approx0.509$."
+        ]
+      },
+      "explanation_en": "Even though Machine I has a lower defect rate, it produces more items, so roughly half the defectives come from it.",
+      "explanation_he": "למרות שמכונה I פחות פגומה, היא מייצרת יותר פריטים, לכן כחצי מהפגמים מגיעים ממנה."
+    },
+    {
+      "id": "q8",
+      "kind": "mcq",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "probability_conditional_bayes_bayes_theorem"
+      ],
+      "stem_en": "A disease affects 2% of people. A test is 90% accurate (sensitivity = specificity = 90%). Given a positive test, what is the probability of having the disease?",
+      "stem_he": "מחלה פוגעת ב-2% מהאנשים. בדיקה מדויקת ב-90% (רגישות = סגוליות = 90%). נתון בדיקה חיובית, מה ההסתברות למחלה?",
+      "answer_payload": {
+        "options_en": [
+          "$\\approx 15.5\\%$",
+          "$\\approx 90\\%$",
+          "$\\approx 2\\%$",
+          "$\\approx 50\\%$"
+        ],
+        "options_he": [
+          "$\\approx 15.5\\%$",
+          "$\\approx 90\\%$",
+          "$\\approx 2\\%$",
+          "$\\approx 50\\%$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "$P(D)=0.02$. $P(+|D)=0.9$. $P(+|D^c)=0.1$. $P(+)=0.9(0.02)+0.1(0.98)=0.018+0.098=0.116$. $P(D|+)=0.018/0.116\\approx0.155\\approx15.5\\%$.",
+      "explanation_he": "$P(D|+)=0.018/0.116\\approx15.5\\%$."
+    },
+    {
+      "id": "q9",
+      "kind": "ordering",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "probability_conditional_bayes_bayes_theorem"
+      ],
+      "stem_en": "Order the steps to apply Bayes' theorem $P(B|A)$:",
+      "stem_he": "סדר את השלבים ליישום משפט בייס $P(B|A)$:",
+      "answer_payload": {
+        "steps_en": [
+          "Identify prior $P(B)$, complement $P(B^c)$, and likelihoods $P(A|B)$, $P(A|B^c)$",
+          "Apply law of total probability: $P(A)=P(A|B)P(B)+P(A|B^c)P(B^c)$",
+          "Compute $P(B|A)=P(A|B)\\cdot P(B)/P(A)$"
+        ],
+        "steps_he": [
+          "זיהוי הסתברות מוקדמת $P(B)$ ורמות $P(A|B)$, $P(A|B^c)$",
+          "חוק ההסתברות הכוללת: $P(A)=P(A|B)P(B)+P(A|B^c)P(B^c)$",
+          "חישוב $P(B|A)=P(A|B)P(B)/P(A)$"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2
+        ]
+      },
+      "explanation_en": "Always identify the pieces (prior, likelihoods) before computing the normalization constant $P(A)$.",
+      "explanation_he": "תמיד זהה את החלקים (מוקדמת, רמות) לפני חישוב קבוע הנרמול $P(A)$."
+    },
+    {
+      "id": "q10",
+      "kind": "open",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "probability_conditional_bayes_bayes_theorem",
+        "probability_conditional_bayes_total_probability"
+      ],
+      "stem_en": "Three factories produce light bulbs in the ratio 5:3:2. Defect rates are 1%, 2%, and 3% respectively. A randomly selected bulb is defective. (a) Find the probability it came from factory 2. (b) If you find a defective bulb, is it more likely to come from factory 1 or factory 2? Explain.",
+      "stem_he": "שלושה מפעלים מייצרים נורות ביחס 5:3:2. שיעורי פגמים: 1%, 2%, 3% בהתאמה. נורה שנמצאת פגומה נבחרה אקראית. (א) מצא את ההסתברות שבאה ממפעל 2. (ב) האם סביר יותר שנורה פגומה תגיע ממפעל 1 או ממפעל 2? הסבר.",
+      "answer_payload": {
+        "rubric_en": "Proportions: $P(F_1)=0.5$, $P(F_2)=0.3$, $P(F_3)=0.2$. $P(D)=0.01\\cdot0.5+0.02\\cdot0.3+0.03\\cdot0.2=0.005+0.006+0.006=0.017$. $P(F_2|D)=0.006/0.017\\approx35.3\\%$. $P(F_1|D)=0.005/0.017\\approx29.4\\%$. So factory 2 is more likely (higher defect rate outweighs smaller production share).",
+        "rubric_he": "$P(D)=0.017$. $P(F_2|D)=0.006/0.017\\approx35.3\\%$. $P(F_1|D)=0.005/0.017\\approx29.4\\%$. מפעל 2 סביר יותר."
+      },
+      "explanation_en": "Factory 1 produces more but has lower defect rate; factory 2 strikes a balance that makes it slightly more likely for a defective bulb. Bayes inverts the intuition.",
+      "explanation_he": "מפעל 1 מייצר יותר אך עם שיעור פגמים נמוך; מפעל 2 מגיע לאיזון שהופך אותו לסביר יותר למקור נורה פגומה."
+    }
+  ],
+  "skill_atoms_unlocked": [
+    "probability_conditional_bayes_compute_conditional",
+    "probability_conditional_bayes_multiplication_rule",
+    "probability_conditional_bayes_total_probability",
+    "probability_conditional_bayes_bayes_theorem",
+    "probability_conditional_bayes_independence_check"
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Bayes' theorem 'flips' the conditioning — $P(D|+)$ vs $P(+|D)$ — a common source of real-world error.",
+      "Always draw a probability tree for multi-stage problems; it prevents forgetting branches.",
+      "Low base-rate diseases give surprising Bayes results — even highly accurate tests have high false positive rates.",
+      "Independence check: $P(A|B)=P(A)$ iff $P(A\\cap B)=P(A)P(B)$. Use either formulation."
+    ],
+    "common_misconceptions": [
+      "Treating $P(A|B)$ as equal to $P(B|A)$ — the 'prosecutor's fallacy'.",
+      "Forgetting to multiply by the prior in Bayes (ignoring base rates).",
+      "Adding conditional probabilities across all branches without weighting by branch probabilities."
+    ],
+    "tutor_pacing_hint": "Start with the urn/ball problem (concrete, no base-rate paradox), then introduce the medical test. After the paradox surprises the learner, go back and explain why the base rate is crucial.",
+    "diagnostic_signals": [
+      "If learner confuses $P(A|B)$ with $P(B|A)$, use the rain/wet ground example: rain→wet is not the same as wet→rain.",
+      "If they skip the law of total probability, they won't have the denominator for Bayes."
+    ],
+    "skill_atoms_unlocked": [
+      "probability_conditional_bayes_compute_conditional",
+      "probability_conditional_bayes_multiplication_rule",
+      "probability_conditional_bayes_total_probability",
+      "probability_conditional_bayes_bayes_theorem",
+      "probability_conditional_bayes_independence_check"
+    ]
+  }
+}

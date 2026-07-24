@@ -1,0 +1,333 @@
+{
+  "concept_id": "integrals_substitution_basic",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": [
+    "calculus1"
+  ],
+  "title_en": "Integration by u-Substitution (Basic)",
+  "title_he": "אינטגרציה בהצבת u (בסיסי)",
+  "summary_en": "Reversing the chain rule using u-substitution for composite integrals. Core Bagrut technique for evaluating non-trivial integrals.",
+  "summary_he": "היפוך כלל השרשרת בהצבת u לאינטגרלים מורכבים. טכניקה מרכזית בבגרות להשיב אינטגרלים לא-טריוויאליים.",
+  "estimated_minutes": 30,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "When Simple Integration Doesn't Work",
+      "title_he": "כאשר אינטגרציה פשוטה לא עובדת",
+      "body_en_md": "The power rule handles $\\int x^n\\,dx$, but what about $\\int x(x^2+1)^5\\,dx$? Expanding $(x^2+1)^5$ would take 20 minutes and produce a degree-11 polynomial. A smarter approach: **$u$-substitution** (also called the substitution method or change of variables).\n\nThe idea: if you recognize $f(g(x)) \\cdot g'(x)$ inside an integral, let $u = g(x)$, so $du = g'(x)\\,dx$, and the integral becomes $\\int f(u)\\,du$ — often much simpler.\n\nThis is the reverse chain rule, and it handles the vast majority of non-elementary integrals on the Bagrut.",
+      "body_he_md": "כלל החזקה מטפל ב-$\\int x^n\\,dx$, אך מה עם $\\int x(x^2+1)^5\\,dx$? פיתוח $(x^2+1)^5$ ייקח 20 דקות ויצור פולינום ממעלה 11. גישה חכמה יותר: **הצבת $u$** (שיטת ההצבה, שינוי משתנה).\n\nהרעיון: אם מזהים $f(g(x)) \\cdot g'(x)$ בתוך אינטגרל, נגדיר $u = g(x)$, ולכן $du = g'(x)\\,dx$, והאינטגרל הופך ל-$\\int f(u)\\,du$ — לרוב הרבה פשוט יותר.\n\nזהו כלל השרשרת הפוך, והוא מטפל ברוב האינטגרלים הלא-אלמנטריים בבגרות."
+    },
+    {
+      "kind": "definition",
+      "title_en": "u-Substitution — The Procedure",
+      "title_he": "הצבת u — הפרוצדורה",
+      "body_en_md": "**u-Substitution Procedure:**\n1. **Choose $u = g(x)$** — the inner function (usually what's inside a power, root, exponential, or trig function).\n2. **Compute $du = g'(x)\\,dx$** — differentiate $u$ with respect to $x$.\n3. **Substitute** to express the entire integral in terms of $u$ and $du$.\n4. **Integrate** in $u$.\n5. **Back-substitute** $u = g(x)$ to return to $x$.\n\n**For definite integrals:** Either back-substitute and use original limits, OR change the limits to $u$-values ($u(a)$ and $u(b)$) and avoid back-substitution.\n\n**Spotting the pattern:** In $\\int f(g(x)) \\cdot g'(x)\\,dx$, the factor $g'(x)$ must be present (possibly up to a constant). If you set $u = g(x)$, the $g'(x)\\,dx$ becomes $du$.\n\n**Examples of recognizable patterns:**\n- $\\int 2x(x^2+1)^5\\,dx$ → $u = x^2+1$, $du = 2x\\,dx$\n- $\\int \\cos x \\cdot e^{\\sin x}\\,dx$ → $u = \\sin x$, $du = \\cos x\\,dx$\n- $\\int \\dfrac{2x}{x^2+3}\\,dx$ → $u = x^2+3$, $du = 2x\\,dx$",
+      "body_he_md": "**פרוצדורת הצבת $u$:**\n1. **בחר $u = g(x)$** — הפונקציה הפנימית (בדרך כלל מה שבתוך חזקה, שורש, אקספוננט או טריגו).\n2. **חשב $du = g'(x)\\,dx$** — גזור $u$ לפי $x$.\n3. **הצב** לביטוי האינטגרל כולו במונחי $u$ ו-$du$.\n4. **בצע אינטגרציה** ב-$u$.\n5. **הצב חזרה** $u = g(x)$ לחזור ל-$x$.\n\n**לאינטגרלים מסוימים:** הצב חזרה ועבוד עם גבולות מקוריים, או שנה גבולות לערכי $u$.\n\n**זיהוי הדפוס:** ב-$\\int f(g(x)) \\cdot g'(x)\\,dx$, הגורם $g'(x)$ חייב להיות נוכח (אולי עד קבוע). אם $u = g(x)$, הרי $g'(x)\\,dx$ הופך ל-$du$.\n\n**דוגמאות לדפוסים מזוהים:**\n- $\\int 2x(x^2+1)^5\\,dx$ → $u = x^2+1$\n- $\\int \\cos x \\cdot e^{\\sin x}\\,dx$ → $u = \\sin x$\n- $\\int \\dfrac{2x}{x^2+3}\\,dx$ → $u = x^2+3$"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Power of a Composite",
+      "title_he": "דוגמה פתורה 1 — חזקה של מורכבת",
+      "body_en_md": "**Find:** $\\int 2x(x^2+1)^4\\,dx$\n\n### Step 1: Choose $u$.\n$u = x^2+1$ (inside the power).\n\n### Step 2: Compute $du$.\n$du = 2x\\,dx$. Great — $2x\\,dx$ already appears in the integral!\n\n### Step 3: Substitute.\n$$\\int 2x(x^2+1)^4\\,dx = \\int u^4\\,du.$$\n\n### Step 4: Integrate.\n$$\\int u^4\\,du = \\frac{u^5}{5} + C.$$\n\n### Step 5: Back-substitute $u = x^2+1$.\n$$= \\frac{(x^2+1)^5}{5} + C.$$\n\n**Verify:** $\\dfrac{d}{dx}\\left[\\dfrac{(x^2+1)^5}{5}\\right] = \\dfrac{5(x^2+1)^4 \\cdot 2x}{5} = 2x(x^2+1)^4$. ✓",
+      "body_he_md": "**מצא:** $\\int 2x(x^2+1)^4\\,dx$\n\n### שלב 1: בחר $u$.\n$u = x^2+1$.\n\n### שלב 2: חשב $du$.\n$du = 2x\\,dx$ — מופיע כבר באינטגרל!\n\n### שלב 3: הצב.\n$$\\int 2x(x^2+1)^4\\,dx = \\int u^4\\,du.$$\n\n### שלב 4: בצע אינטגרציה.\n$$\\int u^4\\,du = \\frac{u^5}{5} + C.$$\n\n### שלב 5: הצב חזרה $u = x^2+1$.\n$$= \\frac{(x^2+1)^5}{5} + C.$$\n\n**אימות:** $\\dfrac{d}{dx}\\left[\\dfrac{(x^2+1)^5}{5}\\right] = 2x(x^2+1)^4$. ✓"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Rational Integral",
+      "title_he": "דוגמה פתורה 2 — אינטגרל רציונלי",
+      "body_en_md": "**Find:** $\\int \\dfrac{x}{x^2+3}\\,dx$\n\n### Step 1: $u = x^2+3$, $du = 2x\\,dx$.\nNote: the integral has $x\\,dx$, not $2x\\,dx$. Solve: $x\\,dx = \\dfrac{du}{2}$.\n\n### Step 2: Substitute.\n$$\\int \\frac{x}{x^2+3}\\,dx = \\int \\frac{1}{u} \\cdot \\frac{du}{2} = \\frac{1}{2}\\int \\frac{du}{u}.$$\n\n### Step 3: Integrate.\n$$= \\frac{1}{2}\\ln|u| + C.$$\n\n### Step 4: Back-substitute.\n$$= \\frac{1}{2}\\ln(x^2+3) + C. \\quad (x^2+3 > 0, \\text{ so } |\\cdot| \\text{ is optional here.})$$",
+      "body_he_md": "**מצא:** $\\int \\dfrac{x}{x^2+3}\\,dx$\n\n### שלב 1: $u = x^2+3$, $du = 2x\\,dx$.\nשימו לב: האינטגרל מכיל $x\\,dx$, לא $2x\\,dx$. פתרון: $x\\,dx = du/2$.\n\n### שלב 2: הצב.\n$$\\int \\frac{x}{x^2+3}\\,dx = \\frac{1}{2}\\int \\frac{du}{u}.$$\n\n### שלב 3: אינטגרציה.\n$$= \\frac{1}{2}\\ln|u| + C.$$\n\n### שלב 4: הצב חזרה.\n$$= \\frac{1}{2}\\ln(x^2+3) + C.$$"
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Mistakes",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "1. **Incomplete substitution:** After choosing $u$, you must replace ALL $x$ expressions including $dx$. If any $x$ remains in the integrand, the substitution is incomplete.\n\n2. **Missing constant adjustment:** If $du = 2x\\,dx$ but the integrand only has $x\\,dx$, write $x\\,dx = du/2$ and include the factor $1/2$ in the integral.\n\n3. **Forgetting to back-substitute:** A final answer in terms of $u$ is only valid if $u$ is clearly labeled; express the answer in the original variable $x$.\n\n4. **Limits not updated for definite integrals:** If you don't back-substitute, update the limits: $x=a$ becomes $u=g(a)$.",
+      "body_he_md": "1. **הצבה חלקית:** לאחר בחירת $u$, יש להחליף את **כל** ביטויי $x$ כולל $dx$. אם $x$ נשאר באינטגרל — ההצבה לא הושלמה.\n\n2. **היחסרות תיקון קבוע:** אם $du = 2x\\,dx$ אך האינטגרל מכיל רק $x\\,dx$, כתוב $x\\,dx = du/2$ וכלול גורם $1/2$.\n\n3. **שכחת הצבה חזרה:** תשובה סופית במונחי $u$ תקפה רק אם $u$ מתויג בבירור; בטא ב-$x$.\n\n4. **גבולות לא מעודכנים לאינטגרל מסוים:** אם לא מציבים חזרה, יש לעדכן גבולות: $x=a$ הופך ל-$u=g(a)$."
+    },
+    {
+      "kind": "why_matters",
+      "title_en": "Why u-Substitution Matters",
+      "title_he": "למה הצבת u חשובה",
+      "body_en_md": "- $u$-substitution is the most powerful basic integration technique — it handles all integrals of the form $\\int f(g(x))g'(x)\\,dx$.\n- It is the prerequisite for integration by parts (advanced).\n- In **areas between curves** (concept:areas_between_curves) and **volumes** (concept:volumes_of_revolution_basic), the integrands are often composites requiring substitution.\n- Recognizing the pattern $f(g(x))\\cdot g'(x)$ becomes automatic with practice and is a key signal on the Bagrut exam.",
+      "body_he_md": "- הצבת $u$ היא הטכניקה הבסיסית החזקה ביותר — מטפלת בכל אינטגרלים מסוג $\\int f(g(x))g'(x)\\,dx$.\n- היא דרישת קדם לאינטגרציה בחלקים (מתקדם).\n- ב**שטחים בין עקומות** (concept:areas_between_curves) וב**נפחים** (concept:volumes_of_revolution_basic), האינטגרנדים הם לרוב מורכבים הדורשים הצבה.\n- זיהוי הדפוס $f(g(x))\\cdot g'(x)$ הופך אוטומטי עם תרגול."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "integrals_substitution_identify_u"
+      ],
+      "stem_en": "For $\\int 3x^2(x^3+1)^4\\,dx$, the best choice of $u$ is:",
+      "stem_he": "עבור $\\int 3x^2(x^3+1)^4\\,dx$, הבחירה הטובה של $u$ היא:",
+      "answer_payload": {
+        "options_en": [
+          "$u = x^3$",
+          "$u = x^3+1$",
+          "$u = (x^3+1)^4$",
+          "$u = 3x^2$"
+        ],
+        "options_he": [
+          "$u = x^3$",
+          "$u = x^3+1$",
+          "$u = (x^3+1)^4$",
+          "$u = 3x^2$"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "Choose $u = x^3+1$ (inner function). Then $du = 3x^2\\,dx$, which exactly matches the $3x^2\\,dx$ in the integrand.",
+      "explanation_he": "בחר $u = x^3+1$ (פנימית). אז $du = 3x^2\\,dx$, שתואם בדיוק את $3x^2\\,dx$ באינטגרל."
+    },
+    {
+      "id": "q2",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "integrals_substitution_execute"
+      ],
+      "stem_en": "Evaluate $\\int 3x^2(x^3+1)^4\\,dx$ using $u = x^3+1$.",
+      "stem_he": "חשב $\\int 3x^2(x^3+1)^4\\,dx$ בהצבת $u = x^3+1$.",
+      "answer_payload": {
+        "options_en": [
+          "$\\dfrac{(x^3+1)^5}{5} + C$",
+          "$\\dfrac{(x^3+1)^5}{3} + C$",
+          "$3(x^3+1)^5 + C$",
+          "$\\dfrac{x^3(x^3+1)^4}{4} + C$"
+        ],
+        "options_he": [
+          "$\\dfrac{(x^3+1)^5}{5} + C$",
+          "$\\dfrac{(x^3+1)^5}{3} + C$",
+          "$3(x^3+1)^5 + C$",
+          "$\\dfrac{x^3(x^3+1)^4}{4} + C$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "$u=x^3+1$, $du=3x^2 dx$. Integral becomes $\\int u^4\\,du = u^5/5+C = (x^3+1)^5/5+C$.",
+      "explanation_he": "$u=x^3+1$, $du=3x^2 dx$. האינטגרל הופך ל-$\\int u^4\\,du = u^5/5+C = (x^3+1)^5/5+C$."
+    },
+    {
+      "id": "q3",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "integrals_substitution_identify_u"
+      ],
+      "stem_en": "For $\\int xe^{x^2}\\,dx$, setting $u = x^2$ gives $du = 2x\\,dx$, so $x\\,dx = du/2$.",
+      "stem_he": "עבור $\\int xe^{x^2}\\,dx$, הצבת $u = x^2$ נותנת $du = 2x\\,dx$, ולכן $x\\,dx = du/2$.",
+      "answer_payload": {
+        "correct": true
+      },
+      "explanation_en": "Correct. $u=x^2$, $du=2x\\,dx$, so $x\\,dx = du/2$. The integral becomes $\\int e^u \\cdot du/2 = (1/2)e^u+C = (1/2)e^{x^2}+C$. ✓",
+      "explanation_he": "נכון. $u=x^2$, $x\\,dx = du/2$. האינטגרל הופך ל-$(1/2)e^{x^2}+C$. ✓"
+    },
+    {
+      "id": "q4",
+      "kind": "numeric",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "integrals_substitution_definite"
+      ],
+      "stem_en": "Compute $\\int_0^1 2x(x^2+1)^3\\,dx$.",
+      "stem_he": "חשב את $\\int_0^1 2x(x^2+1)^3\\,dx$.",
+      "answer_payload": {
+        "value": 3.75,
+        "tolerance": 0.01
+      },
+      "explanation_en": "$u=x^2+1$, $du=2x\\,dx$. Limits: $x=0\\Rightarrow u=1$, $x=1\\Rightarrow u=2$. $\\int_1^2 u^3\\,du = [u^4/4]_1^2 = 16/4 - 1/4 = 15/4 = 3.75$.",
+      "explanation_he": "$u=x^2+1$. גבולות: $u(0)=1$, $u(1)=2$. $\\int_1^2 u^3\\,du = 15/4 = 3.75$."
+    },
+    {
+      "id": "q5",
+      "kind": "mcq",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "integrals_substitution_execute"
+      ],
+      "stem_en": "Find $\\int \\dfrac{2x}{(x^2-5)^3}\\,dx$.",
+      "stem_he": "מצא $\\int \\dfrac{2x}{(x^2-5)^3}\\,dx$.",
+      "answer_payload": {
+        "options_en": [
+          "$-\\dfrac{1}{(x^2-5)^2} + C$",
+          "$\\dfrac{1}{2(x^2-5)^2} + C$",
+          "$-\\dfrac{1}{2(x^2-5)^2} + C$",
+          "$\\ln|x^2-5| + C$"
+        ],
+        "options_he": [
+          "$-\\dfrac{1}{(x^2-5)^2} + C$",
+          "$\\dfrac{1}{2(x^2-5)^2} + C$",
+          "$-\\dfrac{1}{2(x^2-5)^2} + C$",
+          "$\\ln|x^2-5| + C$"
+        ],
+        "correct_index": 2
+      },
+      "explanation_en": "$u=x^2-5$, $du=2x\\,dx$. $\\int u^{-3}\\,du = u^{-2}/(-2)+C = -1/(2u^2)+C = -1/(2(x^2-5)^2)+C$.",
+      "explanation_he": "$u=x^2-5$, $du=2x\\,dx$. $\\int u^{-3}\\,du = -1/(2u^2)+C = -1/(2(x^2-5)^2)+C$."
+    },
+    {
+      "id": "q6",
+      "kind": "derivation",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "integrals_substitution_execute",
+        "integrals_substitution_identify_u"
+      ],
+      "stem_en": "Find $\\int \\cos x \\cdot e^{\\sin x}\\,dx$ using substitution. Show all steps.",
+      "stem_he": "מצא $\\int \\cos x \\cdot e^{\\sin x}\\,dx$ בהצבה. הצג את כל השלבים.",
+      "answer_payload": {
+        "steps_en": [
+          "Choose $u = \\sin x$ (inside the exponential).",
+          "$du = \\cos x\\,dx$ — the factor $\\cos x\\,dx$ already appears.",
+          "Substitute: $\\int e^u\\,du$.",
+          "Integrate: $e^u + C$.",
+          "Back-substitute: $e^{\\sin x} + C$."
+        ],
+        "steps_he": [
+          "בחר $u = \\sin x$ (בתוך האקספוננט).",
+          "$du = \\cos x\\,dx$ — הגורם $\\cos x\\,dx$ כבר קיים.",
+          "הצב: $\\int e^u\\,du$.",
+          "אינטגרציה: $e^u + C$.",
+          "הצב חזרה: $e^{\\sin x} + C$."
+        ]
+      },
+      "explanation_en": "$u=\\sin x$, $du=\\cos x\\,dx$. $\\int e^u\\,du = e^u+C = e^{\\sin x}+C$.",
+      "explanation_he": "$u=\\sin x$. $\\int e^u\\,du = e^{\\sin x}+C$."
+    },
+    {
+      "id": "q7",
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "integrals_substitution_identify_u"
+      ],
+      "stem_en": "For $\\int e^{3x}\\,dx$, let $u = 3x$. Then $du = $ ____ and the integral $= \\dfrac{1}{3}e^{3x}+C$.",
+      "stem_he": "עבור $\\int e^{3x}\\,dx$, נגדיר $u = 3x$. אז $du = $ ____ והאינטגרל $= \\dfrac{1}{3}e^{3x}+C$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "3 dx",
+          "3dx"
+        ]
+      },
+      "explanation_en": "$u=3x$, $du = 3\\,dx$, so $dx = du/3$. $\\int e^u \\cdot du/3 = (1/3)e^u+C = (1/3)e^{3x}+C$.",
+      "explanation_he": "$u=3x$, $du = 3\\,dx$. $\\int e^u \\cdot du/3 = (1/3)e^{3x}+C$."
+    },
+    {
+      "id": "q8",
+      "kind": "mcq",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "integrals_substitution_execute"
+      ],
+      "stem_en": "Evaluate $\\int \\dfrac{\\ln x}{x}\\,dx$.",
+      "stem_he": "חשב את $\\int \\dfrac{\\ln x}{x}\\,dx$.",
+      "answer_payload": {
+        "options_en": [
+          "$\\dfrac{(\\ln x)^2}{2} + C$",
+          "$\\ln(\\ln x) + C$",
+          "$\\dfrac{1}{x^2} + C$",
+          "$\\ln x + C$"
+        ],
+        "options_he": [
+          "$\\dfrac{(\\ln x)^2}{2} + C$",
+          "$\\ln(\\ln x) + C$",
+          "$\\dfrac{1}{x^2} + C$",
+          "$\\ln x + C$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "$u = \\ln x$, $du = dx/x$. $\\int u\\,du = u^2/2+C = (\\ln x)^2/2+C$.",
+      "explanation_he": "$u = \\ln x$, $du = dx/x$. $\\int u\\,du = (\\ln x)^2/2+C$."
+    },
+    {
+      "id": "q9",
+      "kind": "ordering",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "integrals_substitution_execute"
+      ],
+      "stem_en": "Put the u-substitution steps for $\\int 2x\\sqrt{x^2+4}\\,dx$ in order:",
+      "stem_he": "סדר את שלבי הצבת u עבור $\\int 2x\\sqrt{x^2+4}\\,dx$:",
+      "answer_payload": {
+        "steps_en": [
+          "Let $u = x^2+4$",
+          "Compute $du = 2x\\,dx$",
+          "Substitute: $\\int \\sqrt{u}\\,du = \\int u^{1/2}\\,du$",
+          "Integrate: $\\dfrac{u^{3/2}}{3/2} = \\dfrac{2u^{3/2}}{3}$",
+          "Back-substitute: $\\dfrac{2(x^2+4)^{3/2}}{3} + C$"
+        ],
+        "steps_he": [
+          "נגדיר $u = x^2+4$",
+          "חשב $du = 2x\\,dx$",
+          "הצב: $\\int \\sqrt{u}\\,du$",
+          "אינטגרציה: $\\dfrac{2u^{3/2}}{3}$",
+          "הצב חזרה: $\\dfrac{2(x^2+4)^{3/2}}{3} + C$"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "explanation_en": "Standard substitution sequence: choose u, compute du, substitute, integrate, back-substitute.",
+      "explanation_he": "רצף הצבה סטנדרטי: בחר u, חשב du, הצב, אינטגרציה, הצב חזרה."
+    },
+    {
+      "id": "q10",
+      "kind": "open",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "integrals_substitution_definite",
+        "integrals_substitution_execute"
+      ],
+      "stem_en": "Compute $\\int_0^{\\pi/2} \\sin x \\cos x\\,dx$ using two different methods: (1) $u$-substitution with $u=\\sin x$, and (2) the identity $\\sin x \\cos x = \\tfrac{1}{2}\\sin(2x)$. Show both yield the same answer.",
+      "stem_he": "חשב $\\int_0^{\\pi/2} \\sin x \\cos x\\,dx$ בשתי דרכים: (1) הצבת $u=\\sin x$, ו-(2) הזהות $\\sin x \\cos x = \\tfrac{1}{2}\\sin(2x)$. הראה ששתי הדרכים נותנות אותה תשובה.",
+      "answer_payload": {
+        "rubric_en": "Method 1: u=sin x, du=cos x dx; integral = ∫₀^{π/2} u du with limits u(0)=0, u(π/2)=1; [u²/2]₀¹ = 1/2. Method 2: (1/2)∫₀^{π/2} sin(2x) dx = (1/2)[-cos(2x)/2]₀^{π/2} = (1/4)[-cos π + cos 0] = (1/4)(1+1) = 1/2. Both give 1/2.",
+        "rubric_he": "שיטה 1: u=sin x, גבולות u: 0 ל-1; $[u^2/2]_0^1=1/2$. שיטה 2: $(1/4)[-\\cos(2x)]_0^{\\pi/2} = 1/2$."
+      },
+      "explanation_en": "Both methods yield $1/2$, confirming equivalence. Method 1 uses substitution; Method 2 uses a trig identity followed by direct integration.",
+      "explanation_he": "שתי השיטות נותנות $1/2$, מאשרת שקילות. שיטה 1 — הצבה; שיטה 2 — זהות טריגו ואינטגרציה ישירה."
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "u-substitution works when the integrand contains f(g(x))·g'(x) — the inner function's derivative must appear as a factor.",
+      "After substituting, no x should remain in the integrand. If x persists, the substitution is incomplete or the wrong u was chosen.",
+      "For definite integrals, update limits to u-values immediately after substitution — avoids the back-substitution step.",
+      "Always verify by differentiating the result. If d/dx[answer] ≠ integrand, the substitution was incorrect."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Choosing u = the entire expression, not the inner function",
+        "correction": "u should be the inner function g(x) in f(g(x)). The key signal is that g'(x) appears as a factor nearby.",
+        "detect_phrase_en": "let u equal the whole thing",
+        "detect_phrase_he": "נגדיר u שווה לכל הביטוי"
+      },
+      {
+        "wrong": "Forgetting to change limits for definite integrals",
+        "correction": "If working in u, limits must be u(a) and u(b), not a and b.",
+        "detect_phrase_en": "same limits after substitution",
+        "detect_phrase_he": "אותם גבולות אחרי הצבה"
+      }
+    ],
+    "tutor_pacing_hint": "Start with cases where du matches exactly (no constant adjustment). Then handle cases needing a 1/a factor. Only then introduce definite integrals with limit changes.",
+    "diagnostic_signals": {
+      "x remains in the integral after substitution": "Ask: did you express ALL of x, including dx, in terms of u?",
+      "applies power rule without substitution to composite": "Show that d/dx[(x²+1)^5/5] = (x²+1)^4·2x ≠ (x²+1)^4 — the inner factor was missing."
+    },
+    "skill_atoms_unlocked": [
+      "integrals_substitution_identify_u",
+      "integrals_substitution_execute",
+      "integrals_substitution_definite"
+    ]
+  }
+}

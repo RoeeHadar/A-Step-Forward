@@ -1,0 +1,297 @@
+{
+  "concept_id": "basic_probability",
+  "title_en": "Basic Probability (Classical)",
+  "title_he": "הסתברות קלאסית — מבוא",
+  "summary_en": "Sample space, events, classical probability formula, complementary events, union and intersection, mutually exclusive events. Israeli Bagrut style.",
+  "summary_he": "מרחב מדגם, אירועים, נוסחת ההסתברות הקלאסית, אירוע משלים, איחוד וחיתוך, אירועים זרים. בסגנון בגרות ישראלית.",
+  "estimated_minutes": 30,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "What Is Probability?",
+      "title_he": "מהי הסתברות?",
+      "body_en_md": "**Probability** is the mathematical measure of how likely an event is to occur, expressed as a number between $0$ (impossible) and $1$ (certain).\n\n**Classical probability** applies when all outcomes are equally likely:\n$$P(A) = \\frac{|A|}{|S|}$$\nwhere $|A|$ = number of favorable outcomes, $|S|$ = total number of outcomes in the sample space $S$.\n\n**Key vocabulary:**\n- **Sample space** $S$: set of all possible outcomes.\n- **Event** $A$: any subset of $S$.\n- **Complementary event** $A^c$ (or $\\bar{A}$): everything in $S$ not in $A$.\n\nIn the Israeli Bagrut, probability problems include: dice, coins, cards, balls in urns, and combinatorics (with counting formulas).",
+      "body_he_md": "**הסתברות** היא מדד מתמטי של הסבירות שאירוע יתרחש, מבוטא כמספר בין $0$ (בלתי אפשרי) ל-$1$ (ודאי).\n\n**הסתברות קלאסית** חלה כאשר כל תוצאה שווה-סבירה:\n$$P(A) = \\frac{|A|}{|S|}$$\nכאשר $|A|$ = מספר תוצאות רצויות, $|S|$ = מספר כל התוצאות במרחב המדגם $S$.\n\n**מונחים מרכזיים:**\n- **מרחב מדגם** $S$: קבוצת כל התוצאות האפשריות.\n- **אירוע** $A$: תת-קבוצה כלשהי של $S$.\n- **אירוע משלים** $A^c$ (או $\\bar{A}$): כל מה שב-$S$ אך לא ב-$A$.\n\nבבגרות הישראלית: קוביות, מטבעות, קלפים, כדורים בכד, ולעיתים קבינטוריקה."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Probability Rules",
+      "title_he": "כללי הסתברות",
+      "body_en_md": "### Basic rules\n- $0 \\leq P(A) \\leq 1$\n- $P(S) = 1$ (something must happen)\n- $P(\\emptyset) = 0$ (impossible event)\n\n### Complementary rule\n$$P(A^c) = 1 - P(A)$$\n\n### Addition rule (union)\n$$P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$$\n\n**Mutually exclusive** (disjoint) events: $P(A \\cap B) = 0$, so:\n$$P(A \\cup B) = P(A) + P(B)$$\n\n### Independent events\nEvents $A$ and $B$ are **independent** if knowing $A$ happened tells us nothing about $B$:\n$$P(A \\cap B) = P(A) \\cdot P(B)$$\n\n### Conditional probability preview\n$$P(A|B) = \\frac{P(A \\cap B)}{P(B)} \\quad (P(B)>0)$$\n\n### Counting for probability\nFor equally likely outcomes, use **combinations**:\n$$\\binom{n}{k} = \\frac{n!}{k!(n-k)!}$$\n\nExample: probability of choosing 2 red balls from 5 red, 3 blue (total 8):\n$$P = \\frac{\\binom{5}{2}}{\\binom{8}{2}} = \\frac{10}{28} = \\frac{5}{14}$$",
+      "body_he_md": "### כללים בסיסיים\n- $0 \\leq P(A) \\leq 1$\n- $P(S) = 1$\n- $P(\\emptyset) = 0$\n\n### כלל המשלים\n$$P(A^c) = 1 - P(A)$$\n\n### כלל החיבור (איחוד)\n$$P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$$\n\n**אירועים זרים:** $P(A \\cap B) = 0$, לכן:\n$$P(A \\cup B) = P(A) + P(B)$$\n\n### עצמאות\nאירועים $A$ ו-$B$ הם **עצמאיים** אם:\n$$P(A \\cap B) = P(A) \\cdot P(B)$$\n\n### הסתברות מותנית (הצצה)\n$$P(A|B) = \\frac{P(A \\cap B)}{P(B)}$$\n\n### ספירה להסתברות\nלתוצאות שוות-סבירה, השתמש ב**צירופים**:\n$$\\binom{n}{k} = \\frac{n!}{k!(n-k)!}$$"
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Worked Example 1 — Dice and Complementary Events",
+      "title_he": "דוגמה פתורה 1 — קוביות ואירוע משלים",
+      "body_en_md": "**Problem:** Two fair dice are rolled. Find the probability that the sum is at least $10$.\n\n**Sample space:** $|S|=36$ equally likely outcomes.\n\n**Favorable outcomes (sum $\\geq 10$):**\n- Sum $= 10$: $(4,6),(5,5),(6,4)$ — 3 outcomes\n- Sum $= 11$: $(5,6),(6,5)$ — 2 outcomes\n- Sum $= 12$: $(6,6)$ — 1 outcome\n- Total: $6$ outcomes\n\n**Probability:**\n$$P(\\text{sum}\\geq 10) = \\frac{6}{36} = \\frac{1}{6}$$\n\n**Alternative (complement):** $P(\\text{sum}\\geq10)=1-P(\\text{sum}\\leq 9)=1-30/36=6/36=1/6$.",
+      "body_he_md": "**בעיה:** שתי קוביות הוגנות מושלכות. מצא את ההסתברות שהסכום הוא לפחות $10$.\n\n**מרחב מדגם:** $|S|=36$.\n\n**תוצאות רצויות (סכום $\\geq 10$):** 6 תוצאות.\n\n**הסתברות:**\n$$P = 6/36 = 1/6$$\n\n**חלופה (משלים):** $P=1-30/36=1/6$."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Worked Example 2 — Cards and Combinations",
+      "title_he": "דוגמה פתורה 2 — קלפים וצירופים",
+      "body_en_md": "**Problem:** From a standard deck of 52 cards, 5 are chosen at random. What is the probability that exactly 2 are aces?\n\n**Count favorable:** Choose 2 aces from 4: $\\binom{4}{2}=6$. Choose 3 non-aces from 48: $\\binom{48}{3}=17296$.\n\n**Favorable:** $6 \\times 17296 = 103776$.\n\n**Total:** $\\binom{52}{5} = 2598960$.\n\n**Probability:**\n$$P = \\frac{103776}{2598960} \\approx 0.0399 \\approx 4\\%$$",
+      "body_he_md": "**בעיה:** מחפיסת 52 קלפים נבחרים 5 קלפים. מה ההסתברות שבדיוק 2 הם אסים?\n\n**ספירה:** $\\binom{4}{2}\\cdot\\binom{48}{3} = 6\\cdot17296 = 103776$.\n\n**סה״כ:** $\\binom{52}{5} = 2598960$.\n\n**הסתברות:**\n$$P \\approx 103776/2598960 \\approx 4\\%$$"
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "- **Adding probabilities of non-disjoint events without subtracting the intersection** — always use the full addition rule.\n- **Confusing AND ($\\cap$) with OR ($\\cup$)** — AND requires both; OR requires at least one.\n- **Forgetting the complement rule** — sometimes $P(A^c)$ is easier to compute than $P(A)$ directly.\n- **Assuming independence without justification** — check whether events actually meet the independence definition.",
+      "body_he_md": "- **חיבור הסתברויות של אירועים שאינם זרים מבלי להחסיר את החיתוך** — תמיד השתמש בכלל החיבור המלא.\n- **בלבול בין AND ($\\cap$) לבין OR ($\\cup$)** — AND מצריך שניהם; OR מצריך לפחות אחד.\n- **שכחת כלל המשלים** — לפעמים קל יותר לחשב $P(A^c)$.\n- **הנחת עצמאות ללא הצדקה** — בדוק שהאירועים אכן עצמאיים לפי ההגדרה."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "kind": "mcq",
+      "difficulty": "easy",
+      "skill_atoms": [
+        "basic_probability_compute_classical"
+      ],
+      "stem_en": "A bag contains 3 red and 5 blue balls. What is the probability of drawing a red ball?",
+      "stem_he": "שק מכיל 3 כדורים אדומים ו-5 כחולים. מה ההסתברות לשליית כדור אדום?",
+      "answer_payload": {
+        "options_en": [
+          "$\\dfrac{3}{8}$",
+          "$\\dfrac{5}{8}$",
+          "$\\dfrac{3}{5}$",
+          "$\\dfrac{1}{3}$"
+        ],
+        "options_he": [
+          "$\\dfrac{3}{8}$",
+          "$\\dfrac{5}{8}$",
+          "$\\dfrac{3}{5}$",
+          "$\\dfrac{1}{3}$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "$P(\\text{red})=3/(3+5)=3/8$. ✓",
+      "explanation_he": "$P(\\text{אדום})=3/8$. ✓"
+    },
+    {
+      "id": "q2",
+      "kind": "true_false",
+      "difficulty": "easy",
+      "skill_atoms": [
+        "basic_probability_complement_rule"
+      ],
+      "stem_en": "If $P(A)=0.3$, then $P(A^c)=0.7$.",
+      "stem_he": "אם $P(A)=0.3$, אז $P(A^c)=0.7$.",
+      "answer_payload": {
+        "correct": true
+      },
+      "explanation_en": "Complementary rule: $P(A^c)=1-P(A)=1-0.3=0.7$. ✓",
+      "explanation_he": "כלל המשלים: $P(A^c)=1-0.3=0.7$. ✓"
+    },
+    {
+      "id": "q3",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "basic_probability_addition_rule"
+      ],
+      "stem_en": "Events $A$ and $B$ satisfy $P(A)=0.5$, $P(B)=0.4$, $P(A\\cap B)=0.2$. Find $P(A\\cup B)$.",
+      "stem_he": "אירועים $A$ ו-$B$ מקיימים $P(A)=0.5$, $P(B)=0.4$, $P(A\\cap B)=0.2$. מצא $P(A\\cup B)$.",
+      "answer_payload": {
+        "options_en": [
+          "$0.7$",
+          "$0.9$",
+          "$0.3$",
+          "$0.6$"
+        ],
+        "options_he": [
+          "$0.7$",
+          "$0.9$",
+          "$0.3$",
+          "$0.6$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "$P(A\\cup B)=P(A)+P(B)-P(A\\cap B)=0.5+0.4-0.2=0.7$.",
+      "explanation_he": "$P(A\\cup B)=0.5+0.4-0.2=0.7$."
+    },
+    {
+      "id": "q4",
+      "kind": "numeric",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "basic_probability_compute_classical"
+      ],
+      "stem_en": "Two fair dice are rolled. What is the probability (as a fraction numerator over 36) that the sum equals $7$?",
+      "stem_he": "שתי קוביות הוגנות מושלכות. כמה תוצאות נותנות סכום $7$ (מתוך 36)?",
+      "answer_payload": {
+        "value": 6,
+        "tolerance": 0
+      },
+      "explanation_en": "$(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)$ — 6 outcomes. $P=6/36=1/6$.",
+      "explanation_he": "$(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)$ — 6 תוצאות. $P=1/6$."
+    },
+    {
+      "id": "q5",
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "basic_probability_independence"
+      ],
+      "stem_en": "If $A$ and $B$ are independent with $P(A)=0.4$ and $P(B)=0.5$, then $P(A\\cap B) =$ ____.",
+      "stem_he": "אם $A$ ו-$B$ עצמאיים עם $P(A)=0.4$ ו-$P(B)=0.5$, אז $P(A\\cap B) =$ ____.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "0.2",
+          "1/5"
+        ]
+      },
+      "explanation_en": "Independence: $P(A\\cap B)=P(A)\\cdot P(B)=0.4\\cdot0.5=0.2$.",
+      "explanation_he": "עצמאות: $P(A\\cap B)=0.4\\cdot0.5=0.2$."
+    },
+    {
+      "id": "q6",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "basic_probability_mutually_exclusive"
+      ],
+      "stem_en": "Two mutually exclusive events can also be independent (assuming both have positive probability).",
+      "stem_he": "שני אירועים זרים יכולים גם להיות עצמאיים (בהנחה שלשניהם הסתברות חיובית).",
+      "answer_payload": {
+        "correct": false
+      },
+      "explanation_en": "False. If $A$ and $B$ are mutually exclusive and $P(A),P(B)>0$, then $P(A\\cap B)=0\\ne P(A)P(B)>0$, so they cannot be independent.",
+      "explanation_he": "שקר. אם זרים, $P(A\\cap B)=0$, אך $P(A)P(B)>0$. לכן לא עצמאיים."
+    },
+    {
+      "id": "q7",
+      "kind": "mcq",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "basic_probability_compute_classical"
+      ],
+      "stem_en": "A committee of 3 is chosen from 6 men and 4 women. What is the probability that the committee has exactly 2 women?",
+      "stem_he": "ועדה של 3 נבחרת מ-6 גברים ו-4 נשים. מה ההסתברות שיש בוועדה בדיוק 2 נשים?",
+      "answer_payload": {
+        "options_en": [
+          "$\\dfrac{3}{10}$",
+          "$\\dfrac{2}{5}$",
+          "$\\dfrac{1}{3}$",
+          "$\\dfrac{12}{35}$"
+        ],
+        "options_he": [
+          "$\\dfrac{3}{10}$",
+          "$\\dfrac{2}{5}$",
+          "$\\dfrac{1}{3}$",
+          "$\\dfrac{12}{35}$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "$\\binom{4}{2}\\cdot\\binom{6}{1}/\\binom{10}{3}=6\\cdot6/120=36/120=3/10$.",
+      "explanation_he": "$\\binom{4}{2}\\cdot\\binom{6}{1}/\\binom{10}{3}=36/120=3/10$."
+    },
+    {
+      "id": "q8",
+      "kind": "derivation",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "basic_probability_addition_rule",
+        "basic_probability_complement_rule"
+      ],
+      "stem_en": "A card is drawn from a standard 52-card deck. Let $A$ = {heart}, $B$ = {face card (J/Q/K)}. Find $P(A\\cup B)$. Show all steps.",
+      "stem_he": "קלף נשלף מחפיסה רגילה של 52 קלפים. יהי $A$ = {לב}, $B$ = {קלף צורה (J/Q/K)}. מצא $P(A\\cup B)$. הצג את כל השלבים.",
+      "answer_payload": {
+        "steps_en": [
+          "$P(A)=13/52=1/4$ (13 hearts out of 52).",
+          "$P(B)=12/52=3/13$ (12 face cards: J,Q,K of each of 4 suits).",
+          "$P(A\\cap B)=3/52$ (3 face cards that are hearts: J♥, Q♥, K♥).",
+          "$P(A\\cup B)=13/52+12/52-3/52=22/52=11/26$."
+        ],
+        "steps_he": [
+          "$P(A)=13/52=1/4$.",
+          "$P(B)=12/52=3/13$.",
+          "$P(A\\cap B)=3/52$ (J♥, Q♥, K♥).",
+          "$P(A\\cup B)=22/52=11/26$."
+        ]
+      },
+      "explanation_en": "Addition rule with subtraction of intersection: $P(A\\cup B)=11/26\\approx0.423$.",
+      "explanation_he": "כלל החיבור עם הפחתת חיתוך: $11/26\\approx0.423$."
+    },
+    {
+      "id": "q9",
+      "kind": "ordering",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "basic_probability_compute_classical"
+      ],
+      "stem_en": "Order these steps to compute $P(\\text{exactly 2 heads in 3 coin flips})$:",
+      "stem_he": "סדר שלבים לחישוב $P(\\text{בדיוק 2 ראשים ב-3 הטלות מטבע})$:",
+      "answer_payload": {
+        "steps_en": [
+          "List sample space: HHH, HHT, HTH, THH, HTT, THT, TTH, TTT (8 outcomes)",
+          "Count favorable: HHT, HTH, THH — 3 outcomes",
+          "Apply formula: $P = 3/8$"
+        ],
+        "steps_he": [
+          "רשום מרחב מדגם: HHH, HHT, HTH, THH, HTT, THT, TTH, TTT (8 תוצאות)",
+          "ספור רצויות: HHT, HTH, THH — 3 תוצאות",
+          "חשב: $P = 3/8$"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2
+        ]
+      },
+      "explanation_en": "Alternatively: $\\binom{3}{2}/2^3=3/8$.",
+      "explanation_he": "חלופה: $\\binom{3}{2}/2^3=3/8$."
+    },
+    {
+      "id": "q10",
+      "kind": "open",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "basic_probability_independence",
+        "basic_probability_addition_rule"
+      ],
+      "stem_en": "A factory produces light bulbs. Bulb A has a $0.05$ defect rate; bulb B has a $0.08$ defect rate. They are tested independently. (a) What is the probability both are defective? (b) What is the probability at least one is defective?",
+      "stem_he": "מפעל מייצר נורות חשמל. נורה A פגומה בהסתברות $0.05$; נורה B פגומה בהסתברות $0.08$. הן נבדקות באופן עצמאי. (א) מה ההסתברות ששתיהן פגומות? (ב) מה ההסתברות שלפחות אחת פגומה?",
+      "answer_payload": {
+        "rubric_en": "(a) Independence: $P(A\\cap B)=0.05\\times0.08=0.004$. (b) $P(A\\cup B)=0.05+0.08-0.004=0.126$. Or: $P(\\text{at least one})=1-P(\\text{none})=1-0.95\\times0.92=1-0.874=0.126$.",
+        "rubric_he": "(א) עצמאות: $P(A\\cap B)=0.05\\times0.08=0.004$. (ב) $P(A\\cup B)=0.126$. או: $1-0.95\\times0.92=0.126$."
+      },
+      "explanation_en": "Both methods for (b) should be demonstrated. Complement method: $1-P(\\text{both good})=1-0.95\\cdot0.92=0.126$.",
+      "explanation_he": "שתי שיטות ל-(ב): כלל החיבור וכלל המשלים. שתיהן נותנות $0.126$."
+    }
+  ],
+  "skill_atoms_unlocked": [
+    "basic_probability_compute_classical",
+    "basic_probability_complement_rule",
+    "basic_probability_addition_rule",
+    "basic_probability_mutually_exclusive",
+    "basic_probability_independence"
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Classical probability: always count outcomes carefully — list the sample space explicitly for small problems.",
+      "The complement rule ($P(A^c)=1-P(A)$) often simplifies 'at least one' problems dramatically.",
+      "Mutually exclusive and independent are NOT the same: disjoint events with positive probability cannot be independent.",
+      "For combinatorics-based probability, the key formula is $P = \\binom{\\text{favorable}}{k}/\\binom{\\text{total}}{k}$."
+    ],
+    "common_misconceptions": [
+      "Adding probabilities for union without subtracting the intersection.",
+      "Thinking 'at least one' is easy to compute directly — use the complement instead.",
+      "Confusing $P(A|B)$ with $P(A\\cap B)$."
+    ],
+    "tutor_pacing_hint": "Start with single-event problems (one die, one coin), then two-event word problems, then combinatorics. Always draw the sample space for two-event problems.",
+    "diagnostic_signals": [
+      "If learner says $P(A\\cup B)=P(A)+P(B)$ for non-disjoint events, they need the addition rule.",
+      "If they compute $P(\\text{at least one})$ directly by listing, suggest the complement as a shortcut."
+    ],
+    "skill_atoms_unlocked": [
+      "basic_probability_compute_classical",
+      "basic_probability_complement_rule",
+      "basic_probability_addition_rule",
+      "basic_probability_mutually_exclusive",
+      "basic_probability_independence"
+    ]
+  }
+}

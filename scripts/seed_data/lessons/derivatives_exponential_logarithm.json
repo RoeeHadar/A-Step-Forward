@@ -1,0 +1,333 @@
+{
+  "concept_id": "derivatives_exponential_logarithm",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": [
+    "calculus1"
+  ],
+  "title_en": "Derivatives of Exponential and Logarithmic Functions",
+  "title_he": "נגזרות של פונקציות אקספוננציאליות ולוגריתמיות",
+  "summary_en": "Differentiating e^x, a^x, ln x, and log_a x, plus their composites via chain rule. Core Bagrut calculus topic.",
+  "summary_he": "גזירת e^x, a^x, ln x ו-log_a x, בתוספת מורכבותיהן בכלל שרשרת. נושא יסוד בחדו״א בגרות.",
+  "estimated_minutes": 28,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "The Special Nature of e",
+      "title_he": "הטבע המיוחד של e",
+      "body_en_md": "The number $e \\approx 2.718$ is defined precisely as the base for which $\\dfrac{d}{dx}[e^x] = e^x$ — the exponential function equals its own derivative. No other base has this magical property. This self-referential derivative makes $e^x$ the natural choice for modeling continuous growth: populations, radioactive decay, compound interest.\n\nFor Bagrut calculus, you need:\n1. $\\dfrac{d}{dx}[e^x] = e^x$ and with chain rule: $\\dfrac{d}{dx}[e^{g(x)}] = e^{g(x)} \\cdot g'(x)$.\n2. $\\dfrac{d}{dx}[\\ln x] = \\dfrac{1}{x}$ and with chain rule: $\\dfrac{d}{dx}[\\ln(g(x))] = \\dfrac{g'(x)}{g(x)}$.\n3. For other bases: $\\dfrac{d}{dx}[a^x] = a^x \\ln a$.",
+      "body_he_md": "המספר $e \\approx 2.718$ מוגדר בדיוק כבסיס שעבורו $\\dfrac{d}{dx}[e^x] = e^x$ — הפונקציה האקספוננציאלית שווה לנגזרתה. לאף בסיס אחר אין התכונה הקסומה הזו. הנגזרת ה\"עצמאית\" הזאת הופכת את $e^x$ לבחירה הטבעית למודל גדילה רציפה: אוכלוסיות, ריקבון רדיואקטיבי, ריבית דריבית.\n\nלבגרות בחדו״א נדרשים:\n1. $\\dfrac{d}{dx}[e^x] = e^x$ ועם כלל שרשרת: $\\dfrac{d}{dx}[e^{g(x)}] = e^{g(x)} \\cdot g'(x)$.\n2. $\\dfrac{d}{dx}[\\ln x] = \\dfrac{1}{x}$ ועם כלל שרשרת: $\\dfrac{d}{dx}[\\ln(g(x))] = \\dfrac{g'(x)}{g(x)}$.\n3. לבסיסים אחרים: $\\dfrac{d}{dx}[a^x] = a^x \\ln a$."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Derivative Table — Exponential and Logarithmic",
+      "title_he": "טבלת נגזרות — אקספוננציאלי ולוגריתמי",
+      "body_en_md": "**Fundamental rules:**\n\n| $f(x)$ | $f'(x)$ |\n|---|---|\n| $e^x$ | $e^x$ |\n| $e^{g(x)}$ | $e^{g(x)} \\cdot g'(x)$ |\n| $a^x$ ($a>0, a\\neq 1$) | $a^x \\ln a$ |\n| $\\ln x$ ($x>0$) | $\\dfrac{1}{x}$ |\n| $\\ln(g(x))$ | $\\dfrac{g'(x)}{g(x)}$ |\n| $\\log_a x$ | $\\dfrac{1}{x \\ln a}$ |\n\n**Logarithmic differentiation technique:** For complicated products/quotients or expressions like $y = x^x$, take $\\ln$ of both sides first:\n$$\\ln y = x \\ln x \\implies \\frac{y'}{y} = \\ln x + 1 \\implies y' = x^x(\\ln x + 1).$$\n\n**Chain rule pattern for $\\ln$:** The derivative of $\\ln(\\text{anything})$ is $\\dfrac{(\\text{anything})'}{\\text{anything}}$. This is one of the most-used derivatives in calculus.",
+      "body_he_md": "**כללי יסוד:**\n\n| $f(x)$ | $f'(x)$ |\n|---|---|\n| $e^x$ | $e^x$ |\n| $e^{g(x)}$ | $e^{g(x)} \\cdot g'(x)$ |\n| $a^x$ ($a>0, a\\neq 1$) | $a^x \\ln a$ |\n| $\\ln x$ ($x>0$) | $\\dfrac{1}{x}$ |\n| $\\ln(g(x))$ | $\\dfrac{g'(x)}{g(x)}$ |\n| $\\log_a x$ | $\\dfrac{1}{x \\ln a}$ |\n\n**טכניקת גזירה לוגריתמית:** למכפלות/מנות מורכבות או ביטויים כמו $y = x^x$, קחו $\\ln$ בשני הצדדים תחילה:\n$$\\ln y = x \\ln x \\implies \\frac{y'}{y} = \\ln x + 1 \\implies y' = x^x(\\ln x + 1).$$\n\n**דפוס כלל שרשרת ל-$\\ln$:** הנגזרת של $\\ln(\\text{משהו})$ היא $\\dfrac{(\\text{משהו})'}{\\text{משהו}}$. זו אחת הנגזרות הנפוצות ביותר בחדו״א."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Composite Exponential",
+      "title_he": "דוגמה פתורה 1 — אקספוננט מורכב",
+      "body_en_md": "**Find:** $\\dfrac{d}{dx}[e^{3x^2-1}]$\n\nOuter: $e^u \\to e^u$. Inner: $(3x^2-1) \\to 6x$.\n$$\\frac{d}{dx}[e^{3x^2-1}] = e^{3x^2-1} \\cdot 6x = 6xe^{3x^2-1}.$$",
+      "body_he_md": "**מצא:** $\\dfrac{d}{dx}[e^{3x^2-1}]$\n\nחיצונית: $e^u \\to e^u$. פנימית: $(3x^2-1) \\to 6x$.\n$$\\frac{d}{dx}[e^{3x^2-1}] = e^{3x^2-1} \\cdot 6x = 6xe^{3x^2-1}.$$"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Logarithm with Chain Rule",
+      "title_he": "דוגמה פתורה 2 — לוגריתם עם כלל שרשרת",
+      "body_en_md": "**Find:** $\\dfrac{d}{dx}[\\ln(x^2+5)]$\n\nUsing $\\dfrac{d}{dx}[\\ln(g)] = \\dfrac{g'}{g}$:\n$$\\frac{d}{dx}[\\ln(x^2+5)] = \\frac{(x^2+5)'}{x^2+5} = \\frac{2x}{x^2+5}.$$\n\n**Key pattern:** The numerator is always the derivative of the argument of $\\ln$.",
+      "body_he_md": "**מצא:** $\\dfrac{d}{dx}[\\ln(x^2+5)]$\n\nבאמצעות $\\dfrac{d}{dx}[\\ln(g)] = \\dfrac{g'}{g}$:\n$$\\frac{d}{dx}[\\ln(x^2+5)] = \\frac{(x^2+5)'}{x^2+5} = \\frac{2x}{x^2+5}.$$\n\n**דפוס מרכזי:** המונה הוא תמיד הנגזרת של הארגומנט של $\\ln$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Product: Polynomial × Exponential",
+      "title_he": "דוגמה פתורה 3 — מכפלה: פולינום × אקספוננט",
+      "body_en_md": "**Find:** $\\dfrac{d}{dx}[x^2 e^x]$\n\nProduct rule with $f = x^2$ and $g = e^x$:\n$$\\frac{d}{dx}[x^2 e^x] = 2x \\cdot e^x + x^2 \\cdot e^x = e^x(2x + x^2) = x(x+2)e^x.$$\n\n**Exam tip:** Factor out $e^x$ at the end — examiners reward clean factored form.",
+      "body_he_md": "**מצא:** $\\dfrac{d}{dx}[x^2 e^x]$\n\nכלל מכפלה עם $f = x^2$ ו-$g = e^x$:\n$$\\frac{d}{dx}[x^2 e^x] = 2x \\cdot e^x + x^2 \\cdot e^x = e^x(2x + x^2) = x(x+2)e^x.$$\n\n**עצה לבחינה:** הוציאו $e^x$ כגורם בסוף — בוחנים מעריכים צורה מפוצלת נקייה."
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Mistakes",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "1. **$e^x$ treated like a power:** $(e^x)' \\neq xe^{x-1}$. The exponential rule $(e^u)' = e^u$ is different from the power rule.\n\n2. **Forgetting $\\ln a$ for other bases:** $(2^x)' = 2^x$? No — $(2^x)' = 2^x \\ln 2$. The natural log factor is essential.\n\n3. **Wrong chain rule on $\\ln$:** $\\dfrac{d}{dx}[\\ln(3x+1)] = \\dfrac{1}{3x+1}$? No — the numerator should be $(3x+1)' = 3$: answer is $\\dfrac{3}{3x+1}$.\n\n4. **Domain of $\\ln$:** $\\ln(g(x))$ requires $g(x) > 0$. State the domain restriction when relevant.",
+      "body_he_md": "1. **$e^x$ כחזקה:** $(e^x)' \\neq xe^{x-1}$. כלל האקספוננט $(e^u)' = e^u$ שונה מכלל החזקה.\n\n2. **שכחת $\\ln a$ לבסיסים אחרים:** $(2^x)' = 2^x$? לא — $(2^x)' = 2^x \\ln 2$. גורם הלוגריתם הטבעי חיוני.\n\n3. **כלל שרשרת שגוי על $\\ln$:** $\\dfrac{d}{dx}[\\ln(3x+1)] = \\dfrac{1}{3x+1}$? לא — המונה הוא $(3x+1)' = 3$: התשובה היא $\\dfrac{3}{3x+1}$.\n\n4. **תחום של $\\ln$:** $\\ln(g(x))$ דורש $g(x) > 0$. ציינו את הגבלת התחום כשרלוונטי."
+    },
+    {
+      "kind": "why_matters",
+      "title_en": "Why Exponential and Log Derivatives Matter",
+      "title_he": "למה נגזרות אקספוננציאל ולוגריתם חשובות",
+      "body_en_md": "- **Growth models**: $N(t) = N_0 e^{kt}$; $N'(t) = kN_0 e^{kt} = kN(t)$ — the rate is proportional to the quantity.\n- **Function analysis** (concept:function_analysis_extrema): many Bagrut functions mix polynomials with $e^x$ or $\\ln x$; finding extrema requires these derivatives.\n- **Integration** (concept:integrals_polynomial_rational): $\\int e^x\\,dx = e^x+C$ and $\\int \\dfrac{1}{x}\\,dx = \\ln|x|+C$ — just reversals.\n- **Logarithmic differentiation**: needed for products of many terms and variable-exponent expressions.",
+      "body_he_md": "- **מודלי גדילה**: $N(t) = N_0 e^{kt}$; $N'(t) = kN(t)$ — הקצב פרופורציונלי לגודל.\n- **ניתוח פונקציות** (concept:function_analysis_extrema): פונקציות בגרות רבות מערבות פולינומים עם $e^x$ או $\\ln x$; מציאת קיצון דורשת נגזרות אלו.\n- **אינטגרציה** (concept:integrals_polynomial_rational): $\\int e^x\\,dx = e^x+C$ ו-$\\int \\dfrac{1}{x}\\,dx = \\ln|x|+C$ — הפוכות בלבד.\n- **גזירה לוגריתמית**: דרושה למכפלות ולביטויים עם מעריכים משתנים."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "kind": "mcq",
+      "difficulty": "easy",
+      "skill_atoms": [
+        "derivatives_exp_log_basic_e"
+      ],
+      "stem_en": "What is $\\dfrac{d}{dx}[e^x]$?",
+      "stem_he": "מה היא $\\dfrac{d}{dx}[e^x]$?",
+      "answer_payload": {
+        "options_en": [
+          "$xe^{x-1}$",
+          "$e^x$",
+          "$e^{x+1}$",
+          "$1$"
+        ],
+        "options_he": [
+          "$xe^{x-1}$",
+          "$e^x$",
+          "$e^{x+1}$",
+          "$1$"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "$e^x$ is the unique function equal to its own derivative. $(e^x)' = e^x$.",
+      "explanation_he": "$e^x$ היא הפונקציה הייחודית שנגזרתה היא היא עצמה. $(e^x)' = e^x$."
+    },
+    {
+      "id": "q2",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "derivatives_exp_log_chain_rule"
+      ],
+      "stem_en": "Find $\\dfrac{d}{dx}[e^{2x+3}]$.",
+      "stem_he": "מצא $\\dfrac{d}{dx}[e^{2x+3}]$.",
+      "answer_payload": {
+        "options_en": [
+          "$e^{2x+3}$",
+          "$2e^{2x+3}$",
+          "$2e^{2x+2}$",
+          "$e^{2}$"
+        ],
+        "options_he": [
+          "$e^{2x+3}$",
+          "$2e^{2x+3}$",
+          "$2e^{2x+2}$",
+          "$e^{2}$"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "Chain rule: outer $(e^u)' = e^u$, inner $(2x+3)' = 2$. Result: $e^{2x+3} \\cdot 2 = 2e^{2x+3}$.",
+      "explanation_he": "כלל שרשרת: חיצונית $(e^u)' = e^u$, פנימית $(2x+3)' = 2$. תוצאה: $2e^{2x+3}$."
+    },
+    {
+      "id": "q3",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "derivatives_exp_log_ln"
+      ],
+      "stem_en": "What is $\\dfrac{d}{dx}[\\ln(4x)]$?",
+      "stem_he": "מה היא $\\dfrac{d}{dx}[\\ln(4x)]$?",
+      "answer_payload": {
+        "options_en": [
+          "$\\dfrac{4}{4x}=\\dfrac{1}{x}$",
+          "$\\dfrac{1}{4x}$",
+          "$4\\ln(4x)$",
+          "$4x$"
+        ],
+        "options_he": [
+          "$\\dfrac{4}{4x}=\\dfrac{1}{x}$",
+          "$\\dfrac{1}{4x}$",
+          "$4\\ln(4x)$",
+          "$4x$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "Chain rule on $\\ln$: $\\dfrac{(4x)'}{4x} = \\dfrac{4}{4x} = \\dfrac{1}{x}$. Note: $\\ln(4x) = \\ln 4 + \\ln x$, so derivative is $0 + 1/x = 1/x$ — same answer.",
+      "explanation_he": "כלל שרשרת על $\\ln$: $\\dfrac{(4x)'}{4x} = \\dfrac{4}{4x} = \\dfrac{1}{x}$. שימו לב: $\\ln(4x) = \\ln 4 + \\ln x$, ולכן הנגזרת $= 1/x$."
+    },
+    {
+      "id": "q4",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "derivatives_exp_log_other_bases"
+      ],
+      "stem_en": "The derivative of $3^x$ is $3^x \\ln 3$.",
+      "stem_he": "הנגזרת של $3^x$ היא $3^x \\ln 3$.",
+      "answer_payload": {
+        "correct": true
+      },
+      "explanation_en": "For $a^x$ with $a>0$, $a\\neq 1$: $(a^x)' = a^x \\ln a$. Here $a=3$, so $(3^x)' = 3^x \\ln 3$. ✓",
+      "explanation_he": "עבור $a^x$ עם $a>0$, $a\\neq 1$: $(a^x)' = a^x \\ln a$. כאן $a=3$, ולכן $(3^x)' = 3^x \\ln 3$. ✓"
+    },
+    {
+      "id": "q5",
+      "kind": "numeric",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "derivatives_exp_log_evaluate_at_point"
+      ],
+      "stem_en": "If $f(x) = e^x + \\ln x$, find $f'(1)$.",
+      "stem_he": "אם $f(x) = e^x + \\ln x$, מצא את $f'(1)$.",
+      "answer_payload": {
+        "value": 3.718,
+        "tolerance": 0.01
+      },
+      "explanation_en": "$f'(x) = e^x + 1/x$. At $x=1$: $f'(1) = e^1 + 1/1 = e + 1 \\approx 3.718$.",
+      "explanation_he": "$f'(x) = e^x + 1/x$. ב-$x=1$: $f'(1) = e + 1 \\approx 3.718$."
+    },
+    {
+      "id": "q6",
+      "kind": "derivation",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "derivatives_exp_log_product_rule",
+        "derivatives_exp_log_chain_rule"
+      ],
+      "stem_en": "Derive $\\dfrac{d}{dx}[x \\cdot e^x]$ step by step using the product rule.",
+      "stem_he": "גזור שלב אחר שלב את $\\dfrac{d}{dx}[x \\cdot e^x]$ בכלל המכפלה.",
+      "answer_payload": {
+        "steps_en": [
+          "Let $f = x$ and $g = e^x$.",
+          "$f' = 1$ and $g' = e^x$.",
+          "Product rule: $f'g + fg' = 1 \\cdot e^x + x \\cdot e^x$.",
+          "Factor: $e^x(1 + x)$."
+        ],
+        "steps_he": [
+          "נגדיר $f = x$ ו-$g = e^x$.",
+          "$f' = 1$ ו-$g' = e^x$.",
+          "כלל מכפלה: $f'g + fg' = e^x + xe^x$.",
+          "פיצול: $e^x(1 + x)$."
+        ]
+      },
+      "explanation_en": "Product rule on $x \\cdot e^x$: $(1)(e^x) + (x)(e^x) = e^x(1+x)$.",
+      "explanation_he": "כלל מכפלה על $x \\cdot e^x$: $e^x + xe^x = e^x(1+x)$."
+    },
+    {
+      "id": "q7",
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "derivatives_exp_log_ln"
+      ],
+      "stem_en": "Complete: $\\dfrac{d}{dx}[\\ln(x^3+1)] = \\dfrac{\\square}{x^3+1}$.",
+      "stem_he": "השלם: $\\dfrac{d}{dx}[\\ln(x^3+1)] = \\dfrac{\\square}{x^3+1}$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "3x^2",
+          "3x²"
+        ]
+      },
+      "explanation_en": "Chain rule: numerator = $(x^3+1)' = 3x^2$. So $\\dfrac{d}{dx}[\\ln(x^3+1)] = \\dfrac{3x^2}{x^3+1}$.",
+      "explanation_he": "כלל שרשרת: מונה = $(x^3+1)' = 3x^2$. ולכן $\\dfrac{d}{dx}[\\ln(x^3+1)] = \\dfrac{3x^2}{x^3+1}$."
+    },
+    {
+      "id": "q8",
+      "kind": "mcq",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "derivatives_exp_log_chain_rule"
+      ],
+      "stem_en": "Find $\\dfrac{d}{dx}[\\ln(\\sin x)]$.",
+      "stem_he": "מצא $\\dfrac{d}{dx}[\\ln(\\sin x)]$.",
+      "answer_payload": {
+        "options_en": [
+          "$\\dfrac{1}{\\sin x}$",
+          "$\\dfrac{\\cos x}{\\sin x}$",
+          "$\\ln(\\cos x)$",
+          "$-\\dfrac{\\cos x}{\\sin x}$"
+        ],
+        "options_he": [
+          "$\\dfrac{1}{\\sin x}$",
+          "$\\dfrac{\\cos x}{\\sin x}$",
+          "$\\ln(\\cos x)$",
+          "$-\\dfrac{\\cos x}{\\sin x}$"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "$\\dfrac{d}{dx}[\\ln(g)] = g'/g$. Here $g = \\sin x$, $g' = \\cos x$. Result: $\\cos x / \\sin x = \\cot x$.",
+      "explanation_he": "$\\dfrac{d}{dx}[\\ln(g)] = g'/g$. כאן $g = \\sin x$, $g' = \\cos x$. תוצאה: $\\cos x / \\sin x = \\cot x$."
+    },
+    {
+      "id": "q9",
+      "kind": "mcq",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "derivatives_exp_log_critical_points"
+      ],
+      "stem_en": "Find the critical point of $f(x) = xe^{-x}$ (where $f'(x)=0$).",
+      "stem_he": "מצא את נקודת הקיצון של $f(x) = xe^{-x}$ (כאשר $f'(x)=0$).",
+      "answer_payload": {
+        "options_en": [
+          "$x = 0$",
+          "$x = 1$",
+          "$x = -1$",
+          "$x = e$"
+        ],
+        "options_he": [
+          "$x = 0$",
+          "$x = 1$",
+          "$x = -1$",
+          "$x = e$"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "Product rule: $f'(x) = e^{-x} + x(-e^{-x}) = e^{-x}(1-x)$. Setting $f'(x)=0$: $e^{-x} > 0$ always, so $1-x=0 \\Rightarrow x=1$.",
+      "explanation_he": "כלל מכפלה: $f'(x) = e^{-x}(1-x)$. השוואה לאפס: $e^{-x} > 0$ תמיד, ולכן $1-x=0 \\Rightarrow x=1$."
+    },
+    {
+      "id": "q10",
+      "kind": "open",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "derivatives_exp_log_logarithmic_differentiation"
+      ],
+      "stem_en": "Use logarithmic differentiation to find the derivative of $y = x^x$ (for $x > 0$). Explain each step.",
+      "stem_he": "השתמש בגזירה לוגריתמית למציאת נגזרת $y = x^x$ (עבור $x > 0$). הסבר כל שלב.",
+      "answer_payload": {
+        "rubric_en": "Takes ln of both sides: ln y = x ln x. Differentiates implicitly: y'/y = ln x + 1. Multiplies by y = x^x: y' = x^x(ln x + 1). Identifies that x^x cannot be treated as a power (variable base) or exponential (variable exponent) separately — logarithmic differentiation handles both.",
+        "rubric_he": "לוקח $\\ln$ משני הצדדים: $\\ln y = x \\ln x$. גוזר סמוית: $y'/y = \\ln x + 1$. כופל ב-$y = x^x$: $y' = x^x(\\ln x + 1)$. מסביר שאי-אפשר לטפל ב-$x^x$ כחזקה או כאקספוננט בנפרד."
+      },
+      "explanation_en": "$\\ln y = x \\ln x$. Differentiate: $y'/y = \\ln x + x \\cdot (1/x) = \\ln x + 1$. So $y' = x^x(\\ln x + 1)$.",
+      "explanation_he": "$\\ln y = x \\ln x$. גזירה: $y'/y = \\ln x + 1$. ולכן $y' = x^x(\\ln x + 1)$."
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "e^x is the unique function that equals its own derivative — this is the definition of e.",
+      "Chain rule on ln: d/dx[ln(g)] = g'/g. The numerator is always the derivative of the argument.",
+      "For other bases a^x: multiply by ln(a). Forgetting this factor is a common Bagrut error.",
+      "Logarithmic differentiation handles y = x^x and products of many terms — take ln, differentiate, multiply by y."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "d/dx[e^x] = x·e^(x-1) (treating like power rule)",
+        "correction": "e^x is NOT a power. The rule is (e^x)' = e^x. Power rule applies only when the BASE is x, not e.",
+        "detect_phrase_en": "bring down the exponent",
+        "detect_phrase_he": "מוריד את המעריך"
+      },
+      {
+        "wrong": "d/dx[ln(3x+1)] = 1/(3x+1) (forgot inner derivative)",
+        "correction": "Chain rule: numerator = (3x+1)' = 3. Answer: 3/(3x+1).",
+        "detect_phrase_en": "forgot the numerator",
+        "detect_phrase_he": "שכחתי את המונה"
+      }
+    ],
+    "tutor_pacing_hint": "Establish (e^x)' = e^x and (ln x)' = 1/x as the two anchor rules. Then introduce chain rule composites. Logarithmic differentiation comes last and only when needed.",
+    "diagnostic_signals": {
+      "applies power rule to e^x": "Ask: is the base a variable or a constant? Power rule is for variable base; exp rule is for e.",
+      "omits ln(a) factor for a^x": "Ask learner to differentiate 2^x from scratch using e^(x ln 2) = e^(g(x))."
+    },
+    "skill_atoms_unlocked": [
+      "derivatives_exp_log_basic_e",
+      "derivatives_exp_log_ln",
+      "derivatives_exp_log_chain_rule",
+      "derivatives_exp_log_other_bases",
+      "derivatives_exp_log_logarithmic_differentiation"
+    ]
+  }
+}

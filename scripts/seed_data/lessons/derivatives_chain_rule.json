@@ -1,0 +1,340 @@
+{
+  "concept_id": "derivatives_chain_rule",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": [
+    "calculus1"
+  ],
+  "title_en": "The Chain Rule",
+  "title_he": "כלל השרשרת",
+  "summary_en": "Differentiating composite functions f(g(x)) using the chain rule. Core technique for Bagrut calculus — appears in almost every derivative question.",
+  "summary_he": "גזירת פונקציות מורכבות f(g(x)) באמצעות כלל השרשרת. טכניקת יסוד בבגרות — מופיעה בכמעט כל שאלת נגזרת.",
+  "estimated_minutes": 30,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "Composites Are Everywhere",
+      "title_he": "פונקציות מורכבות — בכל מקום",
+      "body_en_md": "Most functions on the Bagrut exam are **composites**: one function sitting inside another. When you see $\\sin(x^2)$, you are looking at $\\sin(\\cdot)$ applied to the output of $x^2$. When you see $(3x+1)^5$, the power function is applied to a linear expression. Differentiating these requires the **chain rule** — the single most-used differentiation technique on the Israeli Bagrut.\n\nThe key intuition: if the inner function changes at rate $g'(x)$ and the outer function amplifies changes by $f'(g(x))$, then the composite changes at rate $f'(g(x))\\cdot g'(x)$. Rates multiply — that is the chain rule.",
+      "body_he_md": "רוב הפונקציות בבגרות הן **פונקציות מורכבות**: פונקציה אחת מוכנסת לתוך אחרת. כאשר רואים $\\sin(x^2)$ — $\\sin(\\cdot)$ פועלת על פלט של $x^2$. כאשר רואים $(3x+1)^5$ — פונקציית החזקה פועלת על ביטוי לינארי. גזירת פונקציות אלה דורשת את **כלל השרשרת** — טכניקת הגזירה הנפוצה ביותר בבגרות בישראל.\n\nהאינטואיציה המרכזית: אם הפונקציה הפנימית משתנה בקצב $g'(x)$ והחיצונית מגבירה שינויים פי $f'(g(x))$, אז המורכבת משתנה בקצב $f'(g(x))\\cdot g'(x)$. קצבים מתכפלים — זה כלל השרשרת."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Chain Rule — Definition and Notation",
+      "title_he": "כלל השרשרת — הגדרה וסימון",
+      "body_en_md": "**The Chain Rule:** If $y = f(g(x))$ where $f$ and $g$ are differentiable, then\n$$\\frac{dy}{dx} = f'(g(x)) \\cdot g'(x).$$\n\nIn Leibniz notation with $u = g(x)$:\n$$\\frac{dy}{dx} = \\frac{dy}{du} \\cdot \\frac{du}{dx}.$$\n\n**Identifying the layers:**\n- **Outer function** $f$: what you apply last.\n- **Inner function** $g$: what you apply first (the argument of $f$).\n\n**Common outer functions and their derivatives:**\n\n| Outer $f(u)$ | $f'(u)$ |\n|---|---|\n| $u^n$ | $nu^{n-1}$ |\n| $\\sqrt{u}$ | $\\dfrac{1}{2\\sqrt{u}}$ |\n| $e^u$ | $e^u$ |\n| $\\ln u$ | $\\dfrac{1}{u}$ |\n| $\\sin u$ | $\\cos u$ |\n| $\\cos u$ | $-\\sin u$ |\n\nThe chain rule says: **differentiate the outer function (evaluated at the inner), then multiply by the derivative of the inner function.**",
+      "body_he_md": "**כלל השרשרת:** אם $y = f(g(x))$ ו-$f$, $g$ גזירות, אז\n$$\\frac{dy}{dx} = f'(g(x)) \\cdot g'(x).$$\n\nבסימון לייבניץ עם $u = g(x)$:\n$$\\frac{dy}{dx} = \\frac{dy}{du} \\cdot \\frac{du}{dx}.$$\n\n**זיהוי השכבות:**\n- **פונקציה חיצונית** $f$: מה שמפעילים אחרון.\n- **פונקציה פנימית** $g$: מה שמפעילים ראשון (הארגומנט של $f$).\n\n**פונקציות חיצוניות נפוצות ונגזרותיהן:**\n\n| חיצונית $f(u)$ | $f'(u)$ |\n|---|---|\n| $u^n$ | $nu^{n-1}$ |\n| $\\sqrt{u}$ | $\\dfrac{1}{2\\sqrt{u}}$ |\n| $e^u$ | $e^u$ |\n| $\\ln u$ | $\\dfrac{1}{u}$ |\n| $\\sin u$ | $\\cos u$ |\n| $\\cos u$ | $-\\sin u$ |\n\nכלל השרשרת אומר: **גזור את הפונקציה החיצונית (מוצבת בפנימית), ואז כפול בנגזרת הפונקציה הפנימית.**"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Power of a Linear Function",
+      "title_he": "דוגמה פתורה 1 — חזקה של פונקציה לינארית",
+      "body_en_md": "**Find:** $\\dfrac{d}{dx}[(3x+1)^5]$\n\n### Move 1: Identify the layers.\n- Outer function: $f(u) = u^5$, so $f'(u) = 5u^4$.\n- Inner function: $g(x) = 3x+1$, so $g'(x) = 3$.\n\n### Move 2: Apply the chain rule.\n$$\\frac{d}{dx}[(3x+1)^5] = 5(3x+1)^4 \\cdot 3 = 15(3x+1)^4.$$\n\n**Exam tip:** Write the outer derivative with the inner plugged in, then multiply by inner derivative. Never forget that last multiplication — it is the most common chain-rule mistake.",
+      "body_he_md": "**מצא:** $\\dfrac{d}{dx}[(3x+1)^5]$\n\n### צעד 1: זיהוי השכבות.\n- פונקציה חיצונית: $f(u) = u^5$, ולכן $f'(u) = 5u^4$.\n- פונקציה פנימית: $g(x) = 3x+1$, ולכן $g'(x) = 3$.\n\n### צעד 2: יישום כלל השרשרת.\n$$\\frac{d}{dx}[(3x+1)^5] = 5(3x+1)^4 \\cdot 3 = 15(3x+1)^4.$$\n\n**עצה לבחינה:** כתבו את נגזרת החיצונית עם הפנימית מוצבת בה, ואז כפלו בנגזרת הפנימית. לעולם אל תשכחו את הכפל האחרון — זו טעות הכלל השרשרת הנפוצה ביותר."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Chain Rule with Exponential",
+      "title_he": "דוגמה פתורה 2 — כלל שרשרת עם אקספוננט",
+      "body_en_md": "**Find:** $\\dfrac{d}{dx}[e^{x^2+1}]$\n\n### Move 1: Identify the layers.\n- Outer: $f(u) = e^u$, $f'(u) = e^u$.\n- Inner: $g(x) = x^2+1$, $g'(x) = 2x$.\n\n### Move 2: Apply chain rule.\n$$\\frac{d}{dx}[e^{x^2+1}] = e^{x^2+1} \\cdot 2x = 2xe^{x^2+1}.$$\n\n**Key observation:** $e^u$ differentiates to itself — the exponential is its own outer derivative. The chain rule supplies the inner factor $2x$.",
+      "body_he_md": "**מצא:** $\\dfrac{d}{dx}[e^{x^2+1}]$\n\n### צעד 1: זיהוי השכבות.\n- חיצונית: $f(u) = e^u$, $f'(u) = e^u$.\n- פנימית: $g(x) = x^2+1$, $g'(x) = 2x$.\n\n### צעד 2: יישום כלל שרשרת.\n$$\\frac{d}{dx}[e^{x^2+1}] = e^{x^2+1} \\cdot 2x = 2xe^{x^2+1}.$$\n\n**תצפית מרכזית:** $e^u$ נגזר לעצמו — האקספוננט הוא הנגזרת החיצונית של עצמו. כלל השרשרת מספק את הגורם הפנימי $2x$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Chain Rule with Trigonometric",
+      "title_he": "דוגמה פתורה 3 — כלל שרשרת עם טריגונומטריה",
+      "body_en_md": "**Find:** $\\dfrac{d}{dx}[\\sin(3x^2)]$\n\n### Move 1: Layers.\n- Outer: $f(u) = \\sin u$, $f'(u) = \\cos u$.\n- Inner: $g(x) = 3x^2$, $g'(x) = 6x$.\n\n### Move 2: Chain rule.\n$$\\frac{d}{dx}[\\sin(3x^2)] = \\cos(3x^2) \\cdot 6x = 6x\\cos(3x^2).$$\n\n**Typical Bagrut phrasing:** \"נגזור את הפונקציה\" — identify composite structure first, then apply the rule.",
+      "body_he_md": "**מצא:** $\\dfrac{d}{dx}[\\sin(3x^2)]$\n\n### צעד 1: שכבות.\n- חיצונית: $f(u) = \\sin u$, $f'(u) = \\cos u$.\n- פנימית: $g(x) = 3x^2$, $g'(x) = 6x$.\n\n### צעד 2: כלל שרשרת.\n$$\\frac{d}{dx}[\\sin(3x^2)] = \\cos(3x^2) \\cdot 6x = 6x\\cos(3x^2).$$\n\n**ניסוח בגרות טיפוסי:** \"נגזור את הפונקציה\" — זהו את המבנה המורכב תחילה, ואז יישמו את הכלל."
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Mistakes",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "1. **Forgetting the inner derivative:** $\\dfrac{d}{dx}[(2x+1)^3] \\neq 3(2x+1)^2$. The correct answer is $3(2x+1)^2 \\cdot 2 = 6(2x+1)^2$. Always multiply by $g'(x)$.\n\n2. **Differentiating the inner function incorrectly:** Identify $g(x)$ carefully before differentiating it. For $g(x) = x^2 - 5x + 3$, we get $g'(x) = 2x - 5$, not just $2x$.\n\n3. **Confusing multiple layers:** For $\\sin^2(3x)$, there are THREE layers: power 2, sine, linear. Work outward: $(\\sin(3x))^2 \\to 2\\sin(3x) \\cdot \\cos(3x) \\cdot 3 = 6\\sin(3x)\\cos(3x)$.\n\n4. **Forgetting to substitute the inner function:** Write $f'(g(x))$, not $f'(x)$. The outer derivative is evaluated AT the inner function.",
+      "body_he_md": "1. **שכחת הנגזרת הפנימית:** $\\dfrac{d}{dx}[(2x+1)^3] \\neq 3(2x+1)^2$. התשובה הנכונה היא $3(2x+1)^2 \\cdot 2 = 6(2x+1)^2$. תמיד כפלו ב-$g'(x)$.\n\n2. **גזירה שגויה של הפנימית:** זהו את $g(x)$ בזהירות לפני גזירתה. עבור $g(x) = x^2 - 5x + 3$, מקבלים $g'(x) = 2x - 5$, לא רק $2x$.\n\n3. **בלבול עם שכבות מרובות:** ל-$\\sin^2(3x)$ יש שלוש שכבות: חזקה 2, סינוס, לינארי. עבדו מבחוץ פנימה: $(\\sin(3x))^2 \\to 2\\sin(3x)\\cdot\\cos(3x)\\cdot 3 = 6\\sin(3x)\\cos(3x)$.\n\n4. **שכחת להציב את הפנימית:** כתבו $f'(g(x))$, לא $f'(x)$. הנגזרת החיצונית מוצבת בפנימית."
+    },
+    {
+      "kind": "why_matters",
+      "title_en": "Why the Chain Rule Matters",
+      "title_he": "למה כלל השרשרת חשוב",
+      "body_en_md": "The chain rule connects to virtually every advanced calculus topic:\n- **Implicit differentiation** (concept:derivatives_implicit): every $y$-term differentiated w.r.t. $x$ uses the chain rule.\n- **Related rates**: differentiating position-time equations chains time through spatial variables.\n- **Integration by substitution** (concept:integrals_substitution_basic): $u$-substitution reverses the chain rule.\n- **Exponential growth models**: $\\dfrac{d}{dt}[e^{kt}] = ke^{kt}$ — the chain rule gives the rate constant.\n\nOn the Bagrut, roughly **70% of derivative questions** require the chain rule at some step.",
+      "body_he_md": "כלל השרשרת מתחבר לכמעט כל נושא בחדו״א:\n- **גזירה סמויה** (concept:derivatives_implicit): כל איבר $y$ המגוזר לפי $x$ משתמש בכלל שרשרת.\n- **קצבים קשורים**: גזירת משוואות מיקום-זמן משרשרת את הזמן דרך משתנים מרחביים.\n- **אינטגרציה בהצבה** (concept:integrals_substitution_basic): הצבת $u$ הופכת את כלל השרשרת.\n- **מודלי גדילה אקספוננציאלית**: $\\dfrac{d}{dt}[e^{kt}] = ke^{kt}$ — כלל השרשרת נותן את קבוע הקצב.\n\nבבגרות, כ-**70% משאלות הנגזרת** דורשות את כלל השרשרת בשלב כלשהו."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "derivatives_chain_rule_apply_power_composite",
+        "derivatives_chain_rule_apply_composite"
+      ],
+      "stem_en": "What is $\\dfrac{d}{dx}[(2x-3)^4]$?",
+      "stem_he": "מה היא $\\dfrac{d}{dx}[(2x-3)^4]$?",
+      "answer_payload": {
+        "options_en": [
+          "$4(2x-3)^3$",
+          "$8(2x-3)^3$",
+          "$4(2x-3)^3 \\cdot 2x$",
+          "$8(2x-3)^4$"
+        ],
+        "options_he": [
+          "$4(2x-3)^3$",
+          "$8(2x-3)^3$",
+          "$4(2x-3)^3 \\cdot 2x$",
+          "$8(2x-3)^4$"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "Outer derivative: $4(2x-3)^3$. Inner derivative: $2$. Product: $4(2x-3)^3 \\cdot 2 = 8(2x-3)^3$.",
+      "explanation_he": "נגזרת חיצונית: $4(2x-3)^3$. נגזרת פנימית: $2$. מכפלה: $4(2x-3)^3 \\cdot 2 = 8(2x-3)^3$."
+    },
+    {
+      "id": "q2",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "derivatives_chain_rule_apply_exponential_composite",
+        "derivatives_chain_rule_apply_composite"
+      ],
+      "stem_en": "What is $\\dfrac{d}{dx}[e^{3x}]$?",
+      "stem_he": "מה היא $\\dfrac{d}{dx}[e^{3x}]$?",
+      "answer_payload": {
+        "options_en": [
+          "$e^{3x}$",
+          "$3e^{3x}$",
+          "$3xe^{3x-1}$",
+          "$e^3$"
+        ],
+        "options_he": [
+          "$e^{3x}$",
+          "$3e^{3x}$",
+          "$3xe^{3x-1}$",
+          "$e^3$"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "Outer: $(e^u)' = e^u$. Inner: $(3x)' = 3$. Result: $e^{3x} \\cdot 3 = 3e^{3x}$.",
+      "explanation_he": "חיצונית: $(e^u)' = e^u$. פנימית: $(3x)' = 3$. תוצאה: $e^{3x} \\cdot 3 = 3e^{3x}$."
+    },
+    {
+      "id": "q3",
+      "kind": "mcq",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "derivatives_chain_rule_apply_trig_composite",
+        "derivatives_chain_rule_apply_composite"
+      ],
+      "stem_en": "What is $\\dfrac{d}{dx}[\\cos(x^2+1)]$?",
+      "stem_he": "מה היא $\\dfrac{d}{dx}[\\cos(x^2+1)]$?",
+      "answer_payload": {
+        "options_en": [
+          "$-\\sin(x^2+1)$",
+          "$-2x\\sin(x^2+1)$",
+          "$2x\\cos(x^2+1)$",
+          "$-2x\\cos(x^2+1)$"
+        ],
+        "options_he": [
+          "$-\\sin(x^2+1)$",
+          "$-2x\\sin(x^2+1)$",
+          "$2x\\cos(x^2+1)$",
+          "$-2x\\cos(x^2+1)$"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "Outer: $(\\cos u)' = -\\sin u$. Inner: $(x^2+1)' = 2x$. Result: $-\\sin(x^2+1)\\cdot 2x$.",
+      "explanation_he": "חיצונית: $(\\cos u)' = -\\sin u$. פנימית: $(x^2+1)' = 2x$. תוצאה: $-\\sin(x^2+1)\\cdot 2x$."
+    },
+    {
+      "id": "q4",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "derivatives_chain_rule_identify_inner_outer"
+      ],
+      "stem_en": "The derivative of $\\sqrt{5x+2}$ is $\\dfrac{5}{2\\sqrt{5x+2}}$.",
+      "stem_he": "הנגזרת של $\\sqrt{5x+2}$ היא $\\dfrac{5}{2\\sqrt{5x+2}}$.",
+      "answer_payload": {
+        "correct": true
+      },
+      "explanation_en": "Outer: $(\\sqrt{u})' = \\tfrac{1}{2\\sqrt{u}}$. Inner: $(5x+2)' = 5$. Product: $\\tfrac{1}{2\\sqrt{5x+2}} \\cdot 5 = \\tfrac{5}{2\\sqrt{5x+2}}$. ✓",
+      "explanation_he": "חיצונית: $(\\sqrt{u})' = \\tfrac{1}{2\\sqrt{u}}$. פנימית: $(5x+2)' = 5$. מכפלה: $\\tfrac{1}{2\\sqrt{5x+2}} \\cdot 5 = \\tfrac{5}{2\\sqrt{5x+2}}$. ✓"
+    },
+    {
+      "id": "q5",
+      "kind": "numeric",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "derivatives_chain_rule_evaluate_at_point"
+      ],
+      "stem_en": "If $f(x) = (x^2+3)^3$, find $f'(1)$.",
+      "stem_he": "אם $f(x) = (x^2+3)^3$, חשב את $f'(1)$.",
+      "answer_payload": {
+        "value": 96,
+        "tolerance": 0.1
+      },
+      "explanation_en": "$f'(x) = 3(x^2+3)^2 \\cdot 2x$. At $x=1$: $3(1+3)^2 \\cdot 2 = 3 \\cdot 16 \\cdot 2 = 96$.",
+      "explanation_he": "$f'(x) = 3(x^2+3)^2 \\cdot 2x$. ב-$x=1$: $3(1+3)^2 \\cdot 2 \\cdot 1 = 3 \\cdot 16 \\cdot 2 = 96$."
+    },
+    {
+      "id": "q6",
+      "kind": "derivation",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "derivatives_chain_rule_apply_ln_composite"
+      ],
+      "stem_en": "Derive $\\dfrac{d}{dx}[\\ln(x^2+4)]$ step by step.",
+      "stem_he": "גזור שלב אחר שלב את $\\dfrac{d}{dx}[\\ln(x^2+4)]$.",
+      "answer_payload": {
+        "steps_en": [
+          "Identify outer function: $f(u) = \\ln u$, so $f'(u) = \\dfrac{1}{u}$.",
+          "Identify inner function: $g(x) = x^2+4$, so $g'(x) = 2x$.",
+          "Apply chain rule: $f'(g(x)) \\cdot g'(x) = \\dfrac{1}{x^2+4} \\cdot 2x$.",
+          "Simplify: $\\dfrac{2x}{x^2+4}$."
+        ],
+        "steps_he": [
+          "זיהוי פונקציה חיצונית: $f(u) = \\ln u$, ולכן $f'(u) = \\dfrac{1}{u}$.",
+          "זיהוי פונקציה פנימית: $g(x) = x^2+4$, ולכן $g'(x) = 2x$.",
+          "יישום כלל שרשרת: $f'(g(x)) \\cdot g'(x) = \\dfrac{1}{x^2+4} \\cdot 2x$.",
+          "פישוט: $\\dfrac{2x}{x^2+4}$."
+        ]
+      },
+      "explanation_en": "Using chain rule on $\\ln(\\cdot)$: outer derivative $1/u$ evaluated at inner gives $1/(x^2+4)$; multiply by inner derivative $2x$.",
+      "explanation_he": "שימוש בכלל שרשרת על $\\ln(\\cdot)$: נגזרת חיצונית $1/u$ מוצבת בפנימית נותנת $1/(x^2+4)$; כפל בנגזרת פנימית $2x$."
+    },
+    {
+      "id": "q7",
+      "kind": "fill_blank",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "derivatives_chain_rule_apply_power_composite"
+      ],
+      "stem_en": "Complete: $\\dfrac{d}{dx}[(x^3-1)^7] = 7(x^3-1)^6 \\cdot$ ____.",
+      "stem_he": "השלם: $\\dfrac{d}{dx}[(x^3-1)^7] = 7(x^3-1)^6 \\cdot$ ____.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "3x^2",
+          "3x²"
+        ]
+      },
+      "explanation_en": "The inner function $g(x) = x^3-1$ has derivative $g'(x) = 3x^2$. The chain rule requires multiplying by this inner derivative.",
+      "explanation_he": "הפונקציה הפנימית $g(x) = x^3-1$ נגזרתה $g'(x) = 3x^2$. כלל השרשרת דורש כפל בנגזרת הפנימית."
+    },
+    {
+      "id": "q8",
+      "kind": "ordering",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "derivatives_chain_rule_identify_inner_outer"
+      ],
+      "stem_en": "Put the chain rule steps in order for $\\dfrac{d}{dx}[\\sin(4x)]$:",
+      "stem_he": "סדר את שלבי כלל השרשרת עבור $\\dfrac{d}{dx}[\\sin(4x)]$:",
+      "answer_payload": {
+        "steps_en": [
+          "Identify outer: $f(u)=\\sin u$, inner: $g(x)=4x$",
+          "Differentiate outer: $f'(u)=\\cos u$",
+          "Differentiate inner: $g'(x)=4$",
+          "Combine: $\\cos(4x) \\cdot 4 = 4\\cos(4x)$"
+        ],
+        "steps_he": [
+          "זיהוי: חיצונית $f(u)=\\sin u$, פנימית $g(x)=4x$",
+          "גזירת החיצונית: $f'(u)=\\cos u$",
+          "גזירת הפנימית: $g'(x)=4$",
+          "שילוב: $\\cos(4x) \\cdot 4 = 4\\cos(4x)$"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "explanation_en": "The standard chain rule sequence: identify layers, differentiate each, multiply them together.",
+      "explanation_he": "רצף כלל השרשרת הסטנדרטי: זיהוי שכבות, גזירת כל אחת, כפל."
+    },
+    {
+      "id": "q9",
+      "kind": "mcq",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "derivatives_chain_rule_nested_composite"
+      ],
+      "stem_en": "What is $\\dfrac{d}{dx}[e^{\\sin x}]$?",
+      "stem_he": "מה היא $\\dfrac{d}{dx}[e^{\\sin x}]$?",
+      "answer_payload": {
+        "options_en": [
+          "$e^{\\sin x}$",
+          "$\\cos x \\cdot e^{\\sin x}$",
+          "$\\sin x \\cdot e^{\\cos x}$",
+          "$e^{\\cos x}$"
+        ],
+        "options_he": [
+          "$e^{\\sin x}$",
+          "$\\cos x \\cdot e^{\\sin x}$",
+          "$\\sin x \\cdot e^{\\cos x}$",
+          "$e^{\\cos x}$"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "Outer: $e^u$ with $u=\\sin x$, derivative $e^{\\sin x}$. Inner: $(\\sin x)' = \\cos x$. Product: $e^{\\sin x} \\cos x$.",
+      "explanation_he": "חיצונית: $e^u$ עם $u=\\sin x$, נגזרת $e^{\\sin x}$. פנימית: $(\\sin x)' = \\cos x$. מכפלה: $e^{\\sin x} \\cos x$."
+    },
+    {
+      "id": "q10",
+      "kind": "open",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "derivatives_chain_rule_nested_composite",
+        "derivatives_chain_rule_apply_power_composite"
+      ],
+      "stem_en": "Find the derivative of $f(x) = \\left(\\sin(x^2)\\right)^3$ and explain each application of the chain rule.",
+      "stem_he": "מצא את נגזרת $f(x) = \\left(\\sin(x^2)\\right)^3$ והסבר כל יישום של כלל השרשרת.",
+      "answer_payload": {
+        "rubric_en": "Identifies three layers (power, sine, quadratic). Applies chain rule twice correctly. States $f'(x) = 3\\sin^2(x^2) \\cdot \\cos(x^2) \\cdot 2x = 6x\\sin^2(x^2)\\cos(x^2)$.",
+        "rubric_he": "מזהה שלוש שכבות (חזקה, סינוס, ריבועי). מיישם כלל שרשרת פעמיים נכון. מציין $f'(x) = 3\\sin^2(x^2) \\cdot \\cos(x^2) \\cdot 2x = 6x\\sin^2(x^2)\\cos(x^2)$."
+      },
+      "explanation_en": "Layer 1 (outermost): $u^3$ with $u=\\sin(x^2)$, gives $3u^2 = 3\\sin^2(x^2)$. Layer 2: $\\sin(v)$ with $v=x^2$, gives $\\cos(x^2)$. Layer 3: $x^2$ gives $2x$. Chain rule: $3\\sin^2(x^2) \\cdot \\cos(x^2) \\cdot 2x$.",
+      "explanation_he": "שכבה 1 (חיצונית): $u^3$ עם $u=\\sin(x^2)$, נותנת $3\\sin^2(x^2)$. שכבה 2: $\\sin(v)$ עם $v=x^2$, נותנת $\\cos(x^2)$. שכבה 3: $x^2$ נותנת $2x$. כלל שרשרת: $3\\sin^2(x^2) \\cdot \\cos(x^2) \\cdot 2x$."
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "The chain rule applies whenever you see a function inside another function — identify the outer and inner layers before differentiating.",
+      "The most common mistake is forgetting to multiply by the inner derivative (g'(x)). Every composite function requires this factor.",
+      "Leibniz notation (dy/dx = dy/du · du/dx) can help learners who lose track of which is inner vs outer.",
+      "For multiple layers (e.g. sin²(3x)), apply the chain rule from the outermost layer inward, one layer at a time."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "The derivative of (2x+1)³ is 3(2x+1)²",
+        "correction": "Must multiply by the inner derivative: 3(2x+1)² · 2 = 6(2x+1)²",
+        "detect_phrase_en": "forgot to multiply",
+        "detect_phrase_he": "שכחתי לכפול"
+      },
+      {
+        "wrong": "The derivative of e^(x²) is e^(x²)",
+        "correction": "Chain rule gives e^(x²) · 2x — the exponential is its own outer derivative, but the inner factor 2x is still required",
+        "detect_phrase_en": "exponential stays the same",
+        "detect_phrase_he": "אקספוננט נשאר אותו דבר"
+      }
+    ],
+    "tutor_pacing_hint": "Start with power composites (2x+1)^n before moving to exp and trig. Once learners can identify the two layers fluently, nested composites (sin²(3x)) follow naturally.",
+    "diagnostic_signals": {
+      "writes outer derivative without inner factor": "Prompt: what is g(x) in this composite? What is g'(x)? Now multiply.",
+      "confuses f'(g(x)) with f'(x)": "Remind that the outer derivative is evaluated AT g(x), not at x."
+    },
+    "skill_atoms_unlocked": [
+      "derivatives_chain_rule_apply_composite",
+      "derivatives_chain_rule_identify_inner_outer",
+      "derivatives_chain_rule_evaluate_at_point",
+      "derivatives_chain_rule_nested_composite"
+    ]
+  }
+}

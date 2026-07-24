@@ -1,0 +1,330 @@
+{
+  "concept_id": "areas_between_curves",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": [
+    "calculus1"
+  ],
+  "title_en": "Area Between Curves",
+  "title_he": "שטח בין עקומות",
+  "summary_en": "Computing the area enclosed between two curves using definite integrals. Core Bagrut integral application question.",
+  "summary_he": "חישוב השטח הכלוא בין שתי עקומות באמצעות אינטגרלים מסוימים. שאלת יישום אינטגרל מרכזית בבגרות.",
+  "estimated_minutes": 30,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "Area Between Two Curves",
+      "title_he": "שטח בין שתי עקומות",
+      "body_en_md": "The definite integral $\\int_a^b f(x)\\,dx$ gives the **signed** area between $f$ and the $x$-axis. When we want the area between two curves $f(x)$ and $g(x)$, we integrate the **difference** of the two functions over the relevant interval:\n$$A = \\int_a^b |f(x) - g(x)|\\,dx.$$\n\nIf $f(x) \\geq g(x)$ throughout $[a,b]$, this simplifies to $\\int_a^b [f(x)-g(x)]\\,dx$. The key steps are:\n1. Find the intersection points (limits of integration).\n2. Determine which curve is on top.\n3. Integrate the difference.\n\nThis is one of the most-tested Bagrut integral application questions.",
+      "body_he_md": "האינטגרל המסוים $\\int_a^b f(x)\\,dx$ נותן את השטח ה**מסומן** בין $f$ וציר ה-$x$. כאשר רוצים את השטח בין שתי עקומות $f(x)$ ו-$g(x)$, אנחנו מאנטגרלים את **ההפרש** של שתי הפונקציות על הקטע הרלוונטי:\n$$A = \\int_a^b |f(x) - g(x)|\\,dx.$$\n\nאם $f(x) \\geq g(x)$ לאורך $[a,b]$, הביטוי מפשיט ל-$\\int_a^b [f(x)-g(x)]\\,dx$. השלבים המרכזיים:\n1. מציאת נקודות החיתוך (גבולות האינטגרציה).\n2. קביעת מי העקומה שמעל.\n3. אינטגרציה של ההפרש.\n\nזו אחת מהשאלות הנבחנות ביותר ביישום אינטגרלים בבגרות."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Area Formula and Procedure",
+      "title_he": "נוסחת השטח והפרוצדורה",
+      "body_en_md": "**Area between curves:**\n$$A = \\int_a^b [f(x) - g(x)]\\,dx, \\quad \\text{when } f(x) \\geq g(x) \\text{ on } [a,b].$$\n\n**When curves cross:** If $f$ and $g$ intersect at some point $c$ in $(a,b)$, split the integral:\n$$A = \\int_a^c [f(x)-g(x)]\\,dx + \\int_c^b [g(x)-f(x)]\\,dx.$$\n(Put the larger function on top in each piece.)\n\n**Procedure:**\n1. Solve $f(x) = g(x)$ to find intersection points $a$ and $b$.\n2. Check which function is larger on $(a,b)$ (test one point).\n3. Compute $\\int_a^b [\\text{top} - \\text{bottom}]\\,dx$.\n\n**Area between curve and $x$-axis:** If $f(x) \\geq 0$: $A = \\int_a^b f(x)\\,dx$. If $f$ changes sign, integrate $|f(x)|$ (split into positive/negative parts).\n\n**Horizontal integration (integrating with respect to $y$):** For regions where one boundary is given as $x = h(y)$, it may be easier to integrate with respect to $y$:\n$$A = \\int_c^d [x_{\\text{right}} - x_{\\text{left}}]\\,dy.$$",
+      "body_he_md": "**שטח בין עקומות:**\n$$A = \\int_a^b [f(x) - g(x)]\\,dx, \\quad \\text{כאשר } f(x) \\geq g(x) \\text{ על } [a,b].$$\n\n**כאשר עקומות מצטלבות:** אם $f$ ו-$g$ נחתכות בנקודה $c$ ב-$(a,b)$, פצל את האינטגרל:\n$$A = \\int_a^c [f-g]\\,dx + \\int_c^b [g-f]\\,dx.$$\n\n**פרוצדורה:**\n1. פתור $f(x) = g(x)$ למציאת נקודות חיתוך $a$ ו-$b$.\n2. בדוק מי גדולה יותר על $(a,b)$ (בדוק נקודה אחת).\n3. חשב $\\int_a^b [\\text{עליונה} - \\text{תחתונה}]\\,dx$.\n\n**שטח בין עקומה וציר $x$:** אם $f(x) \\geq 0$: $A = \\int_a^b f(x)\\,dx$. אם $f$ מחליפה סימן, אנטגרל $|f(x)|$.\n\n**אינטגרציה לפי $y$:** לאזורים שגבולם מסוג $x = h(y)$, לפעמים קל יותר לאנטגרל לפי $y$:\n$$A = \\int_c^d [x_{\\text{ימין}} - x_{\\text{שמאל}}]\\,dy.$$"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Area Between a Parabola and a Line",
+      "title_he": "דוגמה פתורה 1 — שטח בין פרבולה לישר",
+      "body_en_md": "**Find the area** enclosed by $f(x) = x^2$ and $g(x) = x+2$.\n\n### Step 1: Find intersections.\n$x^2 = x+2 \\Rightarrow x^2 - x - 2 = 0 \\Rightarrow (x-2)(x+1) = 0 \\Rightarrow x = -1$ or $x = 2$.\n\n### Step 2: Determine which is on top.\nAt $x = 0$: $g(0) = 2$ and $f(0) = 0$. So $g(x) \\geq f(x)$ on $[-1, 2]$.\n\n### Step 3: Integrate.\n$$A = \\int_{-1}^{2} [(x+2) - x^2]\\,dx = \\left[\\frac{x^2}{2} + 2x - \\frac{x^3}{3}\\right]_{-1}^{2}.$$\n\n$$F(2) = 2 + 4 - 8/3 = 6 - 8/3 = 10/3.$$\n$$F(-1) = 1/2 - 2 + 1/3 = -7/6.$$\n$$A = 10/3 - (-7/6) = 20/6 + 7/6 = 27/6 = \\frac{9}{2}.$$",
+      "body_he_md": "**מצא את השטח** הכלוא על ידי $f(x) = x^2$ ו-$g(x) = x+2$.\n\n### שלב 1: מצא נקודות חיתוך.\n$x^2 = x+2 \\Rightarrow (x-2)(x+1) = 0 \\Rightarrow x = -1$ או $x = 2$.\n\n### שלב 2: קבע מי למעלה.\nב-$x=0$: $g(0)=2>f(0)=0$. לכן $g(x) \\geq f(x)$ על $[-1,2]$.\n\n### שלב 3: אינטגרציה.\n$$A = \\int_{-1}^{2} [(x+2) - x^2]\\,dx = \\left[\\frac{x^2}{2} + 2x - \\frac{x^3}{3}\\right]_{-1}^{2} = \\frac{10}{3} + \\frac{7}{6} = \\frac{9}{2}.$$"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Area Between Curve and x-axis",
+      "title_he": "דוגמה פתורה 2 — שטח בין עקומה לציר x",
+      "body_en_md": "**Find the area** enclosed by $f(x) = \\sin x$ and the $x$-axis on $[0, \\pi]$.\n\nSince $\\sin x \\geq 0$ on $[0,\\pi]$:\n$$A = \\int_0^\\pi \\sin x\\,dx = [-\\cos x]_0^\\pi = -\\cos\\pi + \\cos 0 = 1+1 = 2.$$\n\n**Note:** The area of one full arch of $\\sin x$ is $2$. This is a classic Bagrut result to know.",
+      "body_he_md": "**מצא את השטח** הכלוא על ידי $f(x) = \\sin x$ וציר ה-$x$ על $[0, \\pi]$.\n\nמכיוון ש-$\\sin x \\geq 0$ על $[0,\\pi]$:\n$$A = \\int_0^\\pi \\sin x\\,dx = [-\\cos x]_0^\\pi = 1+1 = 2.$$\n\n**הערה:** שטח קשת אחת שלמה של $\\sin x$ הוא $2$. תוצאת בגרות קלאסית לדעת."
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Mistakes",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "1. **Integrating without finding intersections:** The integration limits must come from solving $f(x) = g(x)$, not from reading the graph.\n\n2. **Wrong order (bottom − top instead of top − bottom):** If $f \\geq g$, integrate $f - g$, not $g - f$. A negative result signals wrong order.\n\n3. **Not splitting when curves cross:** If $f$ and $g$ switch which is larger partway through, a single integral will undercount (positive and negative areas cancel). Split at each crossing point.\n\n4. **Confusing signed area with geometric area:** $\\int_a^b f\\,dx$ can be zero or negative; area is always non-negative.",
+      "body_he_md": "1. **אינטגרציה ללא מציאת נקודות חיתוך:** גבולות האינטגרציה חייבים לבוא מפתרון $f(x) = g(x)$.\n\n2. **סדר שגוי (תחתון פחות עליון):** אם $f \\geq g$, אנטגרל $f - g$, לא $g - f$. תוצאה שלילית מעידה על סדר שגוי.\n\n3. **אי-פיצול כאשר עקומות מצטלבות:** אם $f$ ו-$g$ מחליפות מי גדולה יותר, אינטגרל אחד יחסיר (שטחים חיוביים ושליליים יתבטלו). פצל בכל נקודת חיתוך.\n\n4. **בלבול שטח מסומן עם שטח גיאומטרי:** $\\int_a^b f\\,dx$ יכול להיות אפס או שלילי; שטח הוא תמיד אי-שלילי."
+    },
+    {
+      "kind": "why_matters",
+      "title_en": "Why Area Between Curves Matters",
+      "title_he": "למה שטח בין עקומות חשוב",
+      "body_en_md": "- **Direct Bagrut application:** Area between curves questions appear on virtually every Bagrut exam.\n- **Economics**: consumer surplus and producer surplus are areas between demand/supply curves.\n- **Physics**: work is area under a force-displacement curve; area between position curves gives relative displacement.\n- **Probability**: probability density functions — probability of an event is the area under the pdf curve.\n- Connects directly to **volumes of revolution** (concept:volumes_of_revolution_basic): revolving the area between curves gives a solid.",
+      "body_he_md": "- **יישום ישיר בבגרות:** שאלות שטח בין עקומות מופיעות כמעט בכל בגרות.\n- **כלכלה**: עודף צרכן ויצרן הם שטחים בין עקומות ביקוש/היצע.\n- **פיזיקה**: עבודה = שטח מתחת לעקומת כוח-העתקה.\n- **הסתברות**: לפונקציות צפיפות הסתברות — הסתברות של אירוע היא שטח מתחת לעקומה.\n- מתחבר ישירות ל**נפחי סיבוב** (concept:volumes_of_revolution_basic): סיבוב השטח בין עקומות יוצר גוף תלת-ממדי."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "areas_between_curves_find_intersections"
+      ],
+      "stem_en": "The curves $y = x^2$ and $y = 4$ intersect at $x = $ ____.",
+      "stem_he": "העקומות $y = x^2$ ו-$y = 4$ נחתכות ב-$x = $ ____.",
+      "answer_payload": {
+        "options_en": [
+          "$x = 2$ only",
+          "$x = \\pm 2$",
+          "$x = 4$",
+          "$x = \\pm 4$"
+        ],
+        "options_he": [
+          "$x = 2$ בלבד",
+          "$x = \\pm 2$",
+          "$x = 4$",
+          "$x = \\pm 4$"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "$x^2 = 4 \\Rightarrow x = \\pm 2$. Both intersection points.",
+      "explanation_he": "$x^2 = 4 \\Rightarrow x = \\pm 2$. שתי נקודות החיתוך."
+    },
+    {
+      "id": "q2",
+      "kind": "numeric",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "areas_between_curves_compute"
+      ],
+      "stem_en": "Find the area enclosed between $y = x^2$ and $y = 4$.",
+      "stem_he": "מצא את השטח הכלוא בין $y = x^2$ ו-$y = 4$.",
+      "answer_payload": {
+        "value": 10.667,
+        "tolerance": 0.01
+      },
+      "explanation_en": "Top: $y=4$, bottom: $y=x^2$, limits $[-2,2]$. $A = \\int_{-2}^{2}(4-x^2)\\,dx = [4x - x^3/3]_{-2}^{2} = (8-8/3) - (-8+8/3) = 16 - 16/3 = 32/3 \\approx 10.667$.",
+      "explanation_he": "עליונה: $y=4$, תחתונה: $y=x^2$. $A = \\int_{-2}^{2}(4-x^2)\\,dx = 32/3 \\approx 10.667$."
+    },
+    {
+      "id": "q3",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "areas_between_curves_setup"
+      ],
+      "stem_en": "The area between $f(x) = x^2+1$ and $g(x) = x$ from $x=0$ to $x=2$ is $\\int_0^2 (x^2+1-x)\\,dx$.",
+      "stem_he": "השטח בין $f(x) = x^2+1$ ל-$g(x) = x$ מ-$x=0$ עד $x=2$ הוא $\\int_0^2 (x^2+1-x)\\,dx$.",
+      "answer_payload": {
+        "correct": true
+      },
+      "explanation_en": "At $x=0$: $f(0)=1 > g(0)=0$. At $x=1$: $f(1)=2>g(1)=1$. $f \\geq g$ on $[0,2]$, so area $= \\int_0^2(f-g)\\,dx$. ✓",
+      "explanation_he": "ב-$x=0$: $f(0)=1>g(0)=0$. $f \\geq g$ על $[0,2]$, לכן שטח $= \\int_0^2(f-g)\\,dx$. ✓"
+    },
+    {
+      "id": "q4",
+      "kind": "mcq",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "areas_between_curves_compute"
+      ],
+      "stem_en": "The area between $y=x$ and $y=x^2$ on $[0,1]$ is:",
+      "stem_he": "השטח בין $y=x$ ל-$y=x^2$ על $[0,1]$ הוא:",
+      "answer_payload": {
+        "options_en": [
+          "$\\dfrac{1}{6}$",
+          "$\\dfrac{1}{3}$",
+          "$\\dfrac{1}{2}$",
+          "$1$"
+        ],
+        "options_he": [
+          "$\\dfrac{1}{6}$",
+          "$\\dfrac{1}{3}$",
+          "$\\dfrac{1}{2}$",
+          "$1$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "On $[0,1]$: $x \\geq x^2$. $\\int_0^1(x-x^2)\\,dx = [x^2/2 - x^3/3]_0^1 = 1/2 - 1/3 = 1/6$.",
+      "explanation_he": "על $[0,1]$: $x \\geq x^2$. $\\int_0^1(x-x^2)\\,dx = 1/2 - 1/3 = 1/6$."
+    },
+    {
+      "id": "q5",
+      "kind": "derivation",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "areas_between_curves_find_intersections",
+        "areas_between_curves_compute"
+      ],
+      "stem_en": "Find the area enclosed between $f(x) = 3x - x^2$ and $g(x) = x$.",
+      "stem_he": "מצא את השטח הכלוא בין $f(x) = 3x - x^2$ ל-$g(x) = x$.",
+      "answer_payload": {
+        "steps_en": [
+          "Find intersections: $3x-x^2 = x \\Rightarrow 2x-x^2=0 \\Rightarrow x(2-x)=0 \\Rightarrow x=0$ or $x=2$.",
+          "Check which is on top: at $x=1$, $f(1)=2$, $g(1)=1$. $f \\geq g$ on $[0,2]$.",
+          "$A = \\int_0^2 [(3x-x^2)-x]\\,dx = \\int_0^2 [2x-x^2]\\,dx$.",
+          "$= [x^2 - x^3/3]_0^2 = (4-8/3) - 0 = 4/3$."
+        ],
+        "steps_he": [
+          "נקודות חיתוך: $3x-x^2 = x \\Rightarrow x=0$ או $x=2$.",
+          "בדיקת עליונה: ב-$x=1$, $f(1)=2>g(1)=1$. $f\\geq g$ על $[0,2]$.",
+          "$A = \\int_0^2 [2x-x^2]\\,dx$.",
+          "$= [x^2 - x^3/3]_0^2 = 4-8/3 = 4/3$."
+        ]
+      },
+      "explanation_en": "Intersection points $x=0,2$. Area $= \\int_0^2(2x-x^2)\\,dx = 4/3$.",
+      "explanation_he": "נקודות חיתוך $x=0,2$. שטח $= 4/3$."
+    },
+    {
+      "id": "q6",
+      "kind": "ordering",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "areas_between_curves_setup"
+      ],
+      "stem_en": "Put the steps for finding area between two curves in order:",
+      "stem_he": "סדר את שלבי מציאת השטח בין שתי עקומות:",
+      "answer_payload": {
+        "steps_en": [
+          "Solve f(x)=g(x) to find intersection points",
+          "Test which function is larger on the interval",
+          "Set up the integral: ∫[top - bottom] dx",
+          "Evaluate the definite integral"
+        ],
+        "steps_he": [
+          "פתור f(x)=g(x) למציאת נקודות חיתוך",
+          "בדוק מי פונקציה גדולה יותר בקטע",
+          "הכן את האינטגרל: ∫[עליונה - תחתונה] dx",
+          "חשב את האינטגרל המסוים"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "explanation_en": "The standard procedure: intersect → compare → set up → evaluate.",
+      "explanation_he": "הפרוצדורה הסטנדרטית: חתוך → השווה → הכן → חשב."
+    },
+    {
+      "id": "q7",
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "areas_between_curves_setup"
+      ],
+      "stem_en": "The area between $y=4$ and $y=x^2$ on $[-2,2]$ is $\\int_{-2}^{2}$ ( ____ ) $dx$.",
+      "stem_he": "השטח בין $y=4$ ל-$y=x^2$ על $[-2,2]$ הוא $\\int_{-2}^{2}$ ( ____ ) $dx$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "4 - x^2",
+          "4-x^2",
+          "(4 - x^2)"
+        ]
+      },
+      "explanation_en": "$y=4$ is above $y=x^2$ on $[-2,2]$ (check at $x=0$: $4>0$). Integrand = top $-$ bottom $= 4-x^2$.",
+      "explanation_he": "$y=4$ מעל $y=x^2$ על $[-2,2]$. אינטגרנד $= 4-x^2$."
+    },
+    {
+      "id": "q8",
+      "kind": "mcq",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "areas_between_curves_split_at_crossing"
+      ],
+      "stem_en": "To find the area between $f(x) = \\sin x$ and $g(x) = \\cos x$ on $[0, \\pi]$, you need to split the integral at $x = $ ____.",
+      "stem_he": "למציאת השטח בין $f(x) = \\sin x$ ל-$g(x) = \\cos x$ על $[0, \\pi]$, יש לפצל ב-$x = $ ____.",
+      "answer_payload": {
+        "options_en": [
+          "$x = \\pi/4$",
+          "$x = \\pi/3$",
+          "$x = \\pi/2$",
+          "$x = 3\\pi/4$"
+        ],
+        "options_he": [
+          "$x = \\pi/4$",
+          "$x = \\pi/3$",
+          "$x = \\pi/2$",
+          "$x = 3\\pi/4$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "$\\sin x = \\cos x \\Rightarrow \\tan x = 1 \\Rightarrow x = \\pi/4$ on $[0,\\pi]$. For $x < \\pi/4$: $\\cos > \\sin$; for $x > \\pi/4$: $\\sin > \\cos$. Split at $\\pi/4$.",
+      "explanation_he": "$\\sin x = \\cos x \\Rightarrow x = \\pi/4$ על $[0,\\pi]$. לפני $\\pi/4$: $\\cos > \\sin$; אחרי $\\pi/4$: $\\sin > \\cos$. פצל ב-$\\pi/4$."
+    },
+    {
+      "id": "q9",
+      "kind": "mcq",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "areas_between_curves_compute"
+      ],
+      "stem_en": "Find the area between $y = e^x$ and $y = 1$ on $[0, 1]$.",
+      "stem_he": "מצא את השטח בין $y = e^x$ ל-$y = 1$ על $[0, 1]$.",
+      "answer_payload": {
+        "options_en": [
+          "$e - 2$",
+          "$e - 1$",
+          "$e$",
+          "$e + 1$"
+        ],
+        "options_he": [
+          "$e - 2$",
+          "$e - 1$",
+          "$e$",
+          "$e + 1$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "$e^x \\geq 1$ on $[0,1]$. $\\int_0^1(e^x-1)\\,dx = [e^x - x]_0^1 = (e-1)-(1-0) = e-2$.",
+      "explanation_he": "$e^x \\geq 1$ על $[0,1]$. $\\int_0^1(e^x-1)\\,dx = (e-1)-1 = e-2$."
+    },
+    {
+      "id": "q10",
+      "kind": "open",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "areas_between_curves_find_intersections",
+        "areas_between_curves_compute"
+      ],
+      "stem_en": "The parabola $y = x^2 - 4$ and the line $y = x + 2$ enclose a region. Find the area of this region. Show all steps.",
+      "stem_he": "הפרבולה $y = x^2 - 4$ והישר $y = x + 2$ מגדירים אזור סגור. מצא את שטח האזור. הצג את כל השלבים.",
+      "answer_payload": {
+        "rubric_en": "Intersections: x²-4=x+2 → x²-x-6=0 → (x-3)(x+2)=0 → x=-2, x=3. Top: y=x+2 (check x=0: 2>-4). Area = ∫_{-2}^{3}[(x+2)-(x²-4)]dx = ∫_{-2}^{3}[x+6-x²]dx = [x²/2+6x-x³/3]_{-2}^{3} = (9/2+18-9)-(2-12+8/3) = (9/2+9)-(-2-8/3)=(9/2+9+2+8/3) = 125/6.",
+        "rubric_he": "חיתוכים: $x=-2$, $x=3$. שטח $= \\int_{-2}^{3}[(x+2)-(x^2-4)]\\,dx = 125/6$."
+      },
+      "explanation_en": "Intersections at $x=-2$ and $x=3$. Line above parabola. Area $= \\int_{-2}^{3}(x+6-x^2)\\,dx = 125/6$.",
+      "explanation_he": "חיתוכים ב-$x=-2$ ו-$x=3$. הישר מעל הפרבולה. שטח $= 125/6$."
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Always find intersection points first — they determine the limits of integration.",
+      "Test which function is larger by plugging in one interior point. Never assume from the graph alone.",
+      "If curves cross within the interval, split the integral at each crossing and keep the larger function on top in each piece.",
+      "A negative result means the integral was set up with top and bottom switched — take the absolute value and check the order."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Using the x-intercepts of one function as the integration limits instead of the intersection points of both",
+        "correction": "Limits come from where the TWO curves meet: solve f(x)=g(x), not f(x)=0.",
+        "detect_phrase_en": "where does the function cross zero",
+        "detect_phrase_he": "היכן הפונקציה חוצה את האפס"
+      },
+      {
+        "wrong": "Getting a negative area",
+        "correction": "Area is always positive. If the result is negative, the order of subtraction was wrong (subtracted top from bottom). Reverse the order.",
+        "detect_phrase_en": "negative area",
+        "detect_phrase_he": "שטח שלילי"
+      }
+    ],
+    "tutor_pacing_hint": "Start with area between a curve and x-axis (single function), then advance to area between two curves. Use sketches to show which function is on top before setting up the integral.",
+    "diagnostic_signals": {
+      "uses wrong limits": "Ask: where do the two functions MEET? Set f(x)=g(x) and solve.",
+      "result is negative": "Ask: which function is bigger on this interval? Reverse the subtraction order."
+    },
+    "skill_atoms_unlocked": [
+      "areas_between_curves_find_intersections",
+      "areas_between_curves_setup",
+      "areas_between_curves_compute",
+      "areas_between_curves_split_at_crossing"
+    ]
+  }
+}

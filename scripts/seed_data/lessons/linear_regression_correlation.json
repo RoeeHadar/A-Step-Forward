@@ -1,0 +1,322 @@
+{
+  "concept_id": "linear_regression_correlation",
+  "title_en": "Linear Regression & Correlation",
+  "title_he": "רגרסיה לינארית ומתאם",
+  "summary_en": "Pearson correlation coefficient $r$, least-squares regression line $\\hat{y}=a+bx$, interpretation of $r^2$, and prediction. Israeli Bagrut 3pt statistics.",
+  "summary_he": "מקדם המתאם של פירסון $r$, קו הרגרסיה $\\hat{y}=a+bx$, פרשנות $r^2$ וחיזוי. סטטיסטיקה בגרות 3 יח׳.",
+  "estimated_minutes": 30,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "What Is Correlation?",
+      "title_he": "מהו מתאם?",
+      "body_en_md": "When we have two numerical variables $X$ and $Y$ measured on the same individuals, we ask: **Is there a linear relationship between them?** If so, how strong is it, and how can we use it to predict $Y$ from $X$?\n\n**Correlation** measures the strength and direction of a linear association. **Regression** finds the best-fit line for prediction.\n\nIn the Israeli Bagrut 3pt statistics module, learners must:\n1. Compute or interpret the **Pearson correlation coefficient** $r$.\n2. Write and use the **regression line** equation.\n3. Interpret $r^2$ (the coefficient of determination).\n4. Make predictions within the data range (interpolation).",
+      "body_he_md": "כאשר יש לנו שני משתנים מספריים $X$ ו-$Y$ הנמדדים על אותם פרטים, שואלים: **האם קיים קשר לינארי ביניהם?** אם כן, כמה חזק הוא, וכיצד נוכל להשתמש בו לחיזוי $Y$ מתוך $X$?\n\n**מתאם** מודד את עוצמת הכיוון של קשר לינארי. **רגרסיה** מוצאת את קו ההתאמה הטובה ביותר לחיזוי.\n\nבמודול הסטטיסטיקה של בגרות 3 יח׳ ישראלית, תלמידים חייבים:\n1. לחשב או לפרש את **מקדם המתאם של פירסון** $r$.\n2. לכתוב ולהשתמש בקו הרגרסיה.\n3. לפרש $r^2$.\n4. לחזות בתוך טווח הנתונים."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Pearson $r$ and the Regression Line",
+      "title_he": "מתאם פירסון $r$ וקו הרגרסיה",
+      "body_en_md": "### Pearson Correlation Coefficient\n$$r = \\frac{\\sum(x_i-\\bar{x})(y_i-\\bar{y})}{\\sqrt{\\sum(x_i-\\bar{x})^2 \\cdot \\sum(y_i-\\bar{y})^2}}$$\n\n- $r \\in [-1, 1]$.\n- $r = 1$: perfect positive linear correlation.\n- $r = -1$: perfect negative linear correlation.\n- $r = 0$: no linear correlation (may still have non-linear relationship).\n- $|r| > 0.7$: strong; $0.3 < |r| \\leq 0.7$: moderate; $|r| \\leq 0.3$: weak.\n\n### Regression Line (Least-Squares)\nThe regression line for predicting $y$ from $x$:\n$$\\hat{y} = a + bx$$\n\n**Slope:**\n$$b = r \\cdot \\frac{s_y}{s_x}$$\n\n**Intercept:**\n$$a = \\bar{y} - b\\bar{x}$$\n\nThe line always passes through the point $(\\bar{x}, \\bar{y})$.\n\n### Coefficient of Determination $r^2$\n$r^2$ = proportion of variance in $y$ explained by the linear regression on $x$.\n- $r^2 = 0.81$: 81% of the variation in $y$ is explained by $x$.\n\n### Important notes\n- **Correlation $\\ne$ causation** — a high $r$ does not mean $x$ causes $y$.\n- **Only interpolate** — predictions made outside the data range (extrapolation) are unreliable.\n- **Outliers can distort $r$** significantly.",
+      "body_he_md": "### מקדם המתאם של פירסון\n$$r = \\frac{\\sum(x_i-\\bar{x})(y_i-\\bar{y})}{\\sqrt{\\sum(x_i-\\bar{x})^2 \\cdot \\sum(y_i-\\bar{y})^2}}$$\n\n- $r \\in [-1, 1]$.\n- $r = 1$: מתאם חיובי מושלם.\n- $r = -1$: מתאם שלילי מושלם.\n- $r = 0$: אין מתאם לינארי.\n- $|r| > 0.7$: חזק; $0.3 < |r| \\leq 0.7$: בינוני; $|r| \\leq 0.3$: חלש.\n\n### קו הרגרסיה (שיטת הריבועים הפחותים)\n$$\\hat{y} = a + bx$$\n\n**שיפוע:** $b = r \\cdot \\dfrac{s_y}{s_x}$\n\n**חותך:** $a = \\bar{y} - b\\bar{x}$\n\nהקו תמיד עובר דרך $( \\bar{x}, \\bar{y})$.\n\n### מקדם ההכרעה $r^2$\n$r^2$ = שיעור השונות ב-$y$ המוסבר על ידי הרגרסיה הלינארית על $x$.\n\n### הערות חשובות\n- **מתאם $\\ne$ סיבתיות** — $r$ גבוה לא אומר ש-$x$ גורם ל-$y$.\n- **אינטרפולציה בלבד** — חיזוי מחוץ לטווח הנתונים אינו מהימן.\n- **חריגים עלולים לעוות $r$** משמעותית."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Worked Example — Computing $r$ and the Regression Line",
+      "title_he": "דוגמה פתורה — חישוב $r$ וקו הרגרסיה",
+      "body_en_md": "**Data:** Study hours ($x$) and exam score ($y$) for 5 students:\n\n| $x$ | 2 | 4 | 6 | 8 | 10 |\n|-----|---|---|---|---|----|\n| $y$ | 55 | 65 | 70 | 80 | 90 |\n\n**Step 1 — Means:** $\\bar{x}=6$, $\\bar{y}=72$.\n\n**Step 2 — Compute deviations and products:**\n\n| $x_i-\\bar{x}$ | $y_i-\\bar{y}$ | product | $(x_i-\\bar{x})^2$ | $(y_i-\\bar{y})^2$ |\n|---|---|---|---|---|\n| -4 | -17 | 68 | 16 | 289 |\n| -2 | -7 | 14 | 4 | 49 |\n| 0 | -2 | 0 | 0 | 4 |\n| 2 | 8 | 16 | 4 | 64 |\n| 4 | 18 | 72 | 16 | 324 |\n| **Sum** | | **170** | **40** | **730** |\n\n**Step 3 — Pearson $r$:**\n$$r = \\frac{170}{\\sqrt{40\\cdot730}} = \\frac{170}{\\sqrt{29200}} = \\frac{170}{170.88} \\approx 0.995$$\n\nVery strong positive correlation.\n\n**Step 4 — Slope:** $b = r \\cdot s_y/s_x$. Or directly: $b = 170/40 = 4.25$.\n\n**Step 5 — Intercept:** $a = 72 - 4.25\\cdot6 = 72-25.5 = 46.5$.\n\n**Regression line:** $\\hat{y} = 46.5 + 4.25x$.\n\n**Prediction:** For $x=7$: $\\hat{y}=46.5+4.25\\cdot7=46.5+29.75=76.25$.",
+      "body_he_md": "**נתונים:** שעות לימוד ($x$) וציון ($y$) של 5 תלמידים:\n\n| $x$ | 2 | 4 | 6 | 8 | 10 |\n|-----|---|---|---|---|----|\n| $y$ | 55 | 65 | 70 | 80 | 90 |\n\n**ממוצעים:** $\\bar{x}=6$, $\\bar{y}=72$.\n\n**סכומים:** $\\sum(x_i-\\bar{x})(y_i-\\bar{y})=170$, $\\sum(x_i-\\bar{x})^2=40$, $\\sum(y_i-\\bar{y})^2=730$.\n\n**מתאם:** $r \\approx 0.995$ — מתאם חיובי חזק מאוד.\n\n**שיפוע:** $b=170/40=4.25$.\n\n**חותך:** $a=72-4.25\\cdot6=46.5$.\n\n**קו רגרסיה:** $\\hat{y}=46.5+4.25x$.\n\n**חיזוי עבור $x=7$:** $\\hat{y}=76.25$."
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "- **Extrapolating beyond the data range** — predictions outside the range of $x$ values used to build the model are unreliable.\n- **Confusing correlation with causation** — $r=-0.9$ for 'ice cream sales vs. drowning deaths' doesn't mean ice cream causes drowning (hidden variable: temperature).\n- **Misreading $r^2$** — $r^2=0.64$ means 64% of variance in $y$ is explained, NOT that $64\\%$ of predictions are correct.\n- **Not checking the scatterplot** — two datasets can have the same $r$ but very different shapes (Anscombe's quartet).",
+      "body_he_md": "- **אקסטרפולציה מחוץ לטווח** — חיזויים מחוץ לטווח $x$ שנבנה עליו המודל אינם מהימנים.\n- **בלבול מתאם עם סיבתיות** — $r=-0.9$ אינו מוכיח שגלידה גורמת לטביעות.\n- **קריאה שגויה של $r^2$** — $r^2=0.64$ אינו אומר ש-$64\\%$ מהחיזויים נכונים.\n- **אי-בדיקת תרשים פיזור** — שני מערכי נתונים יכולים לקבל אותו $r$ אך צורות שונות מאוד."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "kind": "mcq",
+      "difficulty": "easy",
+      "skill_atoms": [
+        "linear_regression_interpret_r"
+      ],
+      "stem_en": "The correlation coefficient $r = -0.85$ indicates:",
+      "stem_he": "מקדם המתאם $r = -0.85$ מעיד על:",
+      "answer_payload": {
+        "options_en": [
+          "Strong negative linear correlation",
+          "Weak positive linear correlation",
+          "No linear correlation",
+          "Perfect negative correlation"
+        ],
+        "options_he": [
+          "מתאם לינארי שלילי חזק",
+          "מתאם לינארי חיובי חלש",
+          "אין מתאם לינארי",
+          "מתאם שלילי מושלם"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "$r=-0.85$: negative (inverse relationship), $|r|=0.85>0.7$ → strong. ✓",
+      "explanation_he": "$r=-0.85$: שלילי (קשר הפוך), $|r|=0.85>0.7$ → חזק. ✓"
+    },
+    {
+      "id": "q2",
+      "kind": "true_false",
+      "difficulty": "easy",
+      "skill_atoms": [
+        "linear_regression_interpret_r"
+      ],
+      "stem_en": "A high correlation coefficient (close to 1 or -1) proves a causal relationship between the two variables.",
+      "stem_he": "מקדם מתאם גבוה (קרוב ל-1 או -1) מוכיח קשר סיבתי בין שני המשתנים.",
+      "answer_payload": {
+        "correct": false
+      },
+      "explanation_en": "False. Correlation describes association, not causation. A hidden confounding variable may explain both. ✓",
+      "explanation_he": "שקר. מתאם מתאר קשר, לא סיבתיות. משתנה מבלבל נסתר עשוי להסביר את שניהם. ✓"
+    },
+    {
+      "id": "q3",
+      "kind": "numeric",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "linear_regression_compute_line"
+      ],
+      "stem_en": "Given $\\bar{x}=5$, $\\bar{y}=20$, and slope $b=3$, find the $y$-intercept $a$ of the regression line.",
+      "stem_he": "נתון $\\bar{x}=5$, $\\bar{y}=20$, ושיפוע $b=3$. מצא את החותך $a$ של קו הרגרסיה.",
+      "answer_payload": {
+        "value": 5,
+        "tolerance": 0.01
+      },
+      "explanation_en": "$a=\\bar{y}-b\\bar{x}=20-3\\cdot5=20-15=5$.",
+      "explanation_he": "$a=\\bar{y}-b\\bar{x}=20-15=5$."
+    },
+    {
+      "id": "q4",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "linear_regression_interpret_r_squared"
+      ],
+      "stem_en": "The coefficient of determination is $r^2=0.81$. Which statement is correct?",
+      "stem_he": "מקדם ההכרעה הוא $r^2=0.81$. איזה משפט נכון?",
+      "answer_payload": {
+        "options_en": [
+          "81% of the variation in $y$ is explained by the linear model",
+          "81% of predictions are exact",
+          "$r=0.81$",
+          "The slope of the line is $0.81$"
+        ],
+        "options_he": [
+          "81% מהשונות ב-$y$ מוסברת על ידי המודל הלינארי",
+          "81% מהחיזויים מדויקים",
+          "$r=0.81$",
+          "השיפוע של הקו הוא $0.81$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "$r^2=0.81$ means the regression line explains 81% of the variability in $y$.",
+      "explanation_he": "$r^2=0.81$ פירושו שקו הרגרסיה מסביר 81% מהשונות ב-$y$."
+    },
+    {
+      "id": "q5",
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "linear_regression_compute_line"
+      ],
+      "stem_en": "The regression line for predicting $y$ from $x$ always passes through the point $( $____ , $\\bar{y})$.",
+      "stem_he": "קו הרגרסיה לחיזוי $y$ מתוך $x$ תמיד עובר דרך הנקודה $($ ____ $,\\bar{y})$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "x-bar",
+          "\\bar{x}",
+          "mean of x",
+          "ממוצע x"
+        ]
+      },
+      "explanation_en": "The regression line passes through $(\\bar{x}, \\bar{y})$. This is because $a=\\bar{y}-b\\bar{x}$, so substituting $x=\\bar{x}$ gives $\\hat{y}=\\bar{y}$.",
+      "explanation_he": "קו הרגרסיה עובר דרך $(\\bar{x},\\bar{y})$ — מכיוון ש-$a=\\bar{y}-b\\bar{x}$."
+    },
+    {
+      "id": "q6",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "linear_regression_interpret_r"
+      ],
+      "stem_en": "$r=0$ implies there is no relationship between $x$ and $y$.",
+      "stem_he": "$r=0$ פירושו שאין כל קשר בין $x$ ל-$y$.",
+      "answer_payload": {
+        "correct": false
+      },
+      "explanation_en": "False. $r=0$ means no *linear* relationship. A perfect curved relationship (e.g. $y=x^2$ centered at 0) can have $r=0$.",
+      "explanation_he": "שקר. $r=0$ אומר שאין קשר *לינארי*. קשר עקום מושלם (למשל $y=x^2$) יכול לקבל $r=0$."
+    },
+    {
+      "id": "q7",
+      "kind": "mcq",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "linear_regression_compute_line",
+        "linear_regression_predict"
+      ],
+      "stem_en": "The regression line for weight ($y$, kg) on height ($x$, cm) is $\\hat{y}=-100+0.8x$. Predict the weight of a person 175 cm tall.",
+      "stem_he": "קו הרגרסיה לחיזוי משקל ($y$, ק״ג) מגובה ($x$, ס״מ) הוא $\\hat{y}=-100+0.8x$. חזה את משקלו של אדם בגובה 175 ס״מ.",
+      "answer_payload": {
+        "options_en": [
+          "$40$ kg",
+          "$140$ kg",
+          "$75$ kg",
+          "$80$ kg"
+        ],
+        "options_he": [
+          "$40$ ק״ג",
+          "$140$ ק״ג",
+          "$75$ ק״ג",
+          "$80$ ק״ג"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "$\\hat{y}=-100+0.8\\cdot175=-100+140=40$ kg.",
+      "explanation_he": "$\\hat{y}=-100+0.8\\cdot175=40$ ק״ג."
+    },
+    {
+      "id": "q8",
+      "kind": "derivation",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "linear_regression_compute_line",
+        "linear_regression_interpret_r"
+      ],
+      "stem_en": "Given the 4 data points $(1,2),(2,4),(3,5),(4,7)$: (a) Compute $r$ (show sums). (b) Find the regression line. (c) Predict $y$ when $x=5$.",
+      "stem_he": "נתונות 4 נקודות $(1,2),(2,4),(3,5),(4,7)$: (א) חשב $r$ (הצג סכומים). (ב) מצא קו רגרסיה. (ג) חזה $y$ עבור $x=5$.",
+      "answer_payload": {
+        "steps_en": [
+          "$\\bar{x}=2.5$, $\\bar{y}=4.5$.",
+          "Deviations: $(x-\\bar{x})$: $-1.5,-0.5,0.5,1.5$. $(y-\\bar{y})$: $-2.5,-0.5,0.5,2.5$.",
+          "$\\sum(x-\\bar{x})(y-\\bar{y})=(-1.5)(-2.5)+(-0.5)(-0.5)+(0.5)(0.5)+(1.5)(2.5)=3.75+0.25+0.25+3.75=8$.",
+          "$\\sum(x-\\bar{x})^2=1+\\ldots=5$. $\\sum(y-\\bar{y})^2=6.25+0.25+0.25+6.25=13$.",
+          "$r=8/\\sqrt{5\\cdot13}=8/\\sqrt{65}\\approx0.992$ — very strong.",
+          "$b=8/5=1.6$. $a=4.5-1.6\\cdot2.5=4.5-4=0.5$. Line: $\\hat{y}=0.5+1.6x$.",
+          "Prediction: $\\hat{y}(5)=0.5+1.6\\cdot5=0.5+8=8.5$."
+        ],
+        "steps_he": [
+          "$\\bar{x}=2.5$, $\\bar{y}=4.5$.",
+          "$\\sum(x-\\bar{x})(y-\\bar{y})=8$, $\\sum(x-\\bar{x})^2=5$, $\\sum(y-\\bar{y})^2=13$.",
+          "$r=8/\\sqrt{65}\\approx0.992$.",
+          "$b=1.6$, $a=0.5$. קו: $\\hat{y}=0.5+1.6x$.",
+          "חיזוי $x=5$: $\\hat{y}=8.5$."
+        ]
+      },
+      "explanation_en": "The strong correlation ($r\\approx0.99$) means the line fits the data well. Prediction at $x=5$ is interpolation-adjacent (extrapolation by one unit — acceptable here).",
+      "explanation_he": "מתאם חזק ($r\\approx0.99$) = קו מתאים היטב לנתונים."
+    },
+    {
+      "id": "q9",
+      "kind": "match",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "linear_regression_interpret_r"
+      ],
+      "stem_en": "Match each $r$ value with its description:",
+      "stem_he": "התאם כל ערך $r$ לתיאורו:",
+      "answer_payload": {
+        "left_en": [
+          "$r=1$",
+          "$r=-0.9$",
+          "$r=0$",
+          "$r=0.4$"
+        ],
+        "left_he": [
+          "$r=1$",
+          "$r=-0.9$",
+          "$r=0$",
+          "$r=0.4$"
+        ],
+        "right_en": [
+          "Perfect positive linear correlation",
+          "Strong negative linear correlation",
+          "No linear correlation",
+          "Moderate positive linear correlation"
+        ],
+        "right_he": [
+          "מתאם לינארי חיובי מושלם",
+          "מתאם לינארי שלילי חזק",
+          "אין מתאם לינארי",
+          "מתאם לינארי חיובי בינוני"
+        ],
+        "correct_pairs": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ]
+        ]
+      },
+      "explanation_en": "Standard interpretation thresholds: $|r|>0.7$ strong, $0.3<|r|\\leq0.7$ moderate, $|r|\\leq0.3$ weak.",
+      "explanation_he": "סף פרשנות סטנדרטי: $|r|>0.7$ חזק, $0.3<|r|\\leq0.7$ בינוני, $|r|\\leq0.3$ חלש."
+    },
+    {
+      "id": "q10",
+      "kind": "open",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "linear_regression_compute_line",
+        "linear_regression_interpret_r_squared"
+      ],
+      "stem_en": "A researcher finds $r=0.7$ between hours of sleep and exam performance. Explain: (a) What does $r=0.7$ mean? (b) What does $r^2$ tell us? (c) Can we conclude that more sleep causes better performance? Why or why not?",
+      "stem_he": "חוקר מוצא $r=0.7$ בין שעות שינה וביצועים בבחינות. הסבר: (א) מה $r=0.7$ אומר? (ב) מה $r^2$ מגלה? (ג) האם ניתן להסיק ששינה רבה יותר גורמת לביצועים טובים יותר? מדוע?",
+      "answer_payload": {
+        "rubric_en": "(a) Moderate-to-strong positive linear association: as sleep increases, exam scores tend to increase linearly. (b) $r^2=0.49$: 49% of variance in exam scores is explained by sleep. (c) No — correlation ≠ causation. A third variable (e.g., stress, health) might drive both sleep and performance. An experiment would be needed.",
+        "rubric_he": "(א) מתאם לינארי חיובי בינוני-חזק: עם עלייה בשינה, ציונים נוטים לעלות. (ב) $r^2=0.49$: 49% מהשונות בציונים מוסברת על ידי שינה. (ג) לא — מתאם אינו סיבתיות. משתנה שלישי עשוי להסביר את שניהם."
+      },
+      "explanation_en": "Key points: direction, strength, explained variance, and the causation warning. All four needed for full marks.",
+      "explanation_he": "נקודות מפתח: כיוון, עוצמה, שונות מוסברת, ואזהרת הסיבתיות. ארבעתן נדרשות לניקוד מלא."
+    }
+  ],
+  "skill_atoms_unlocked": [
+    "linear_regression_interpret_r",
+    "linear_regression_compute_line",
+    "linear_regression_interpret_r_squared",
+    "linear_regression_predict"
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Emphasize that $r^2$, not $r$, tells us the proportion of variance explained — a very common source of confusion.",
+      "The line $\\hat{y}=a+bx$ always passes through $(\\bar{x},\\bar{y})$ — this is a useful check.",
+      "Correlation vs. causation is the most important conceptual point in statistics for Bagrut 3pt.",
+      "On the Bagrut, learners may be given the line and asked to predict or interpret; practice both directions."
+    ],
+    "common_misconceptions": [
+      "Thinking $r=0.81$ means the same as $r^2=0.81$.",
+      "Extrapolating far beyond the data range and treating the prediction as reliable.",
+      "Interpreting a strong correlation as proof of causation."
+    ],
+    "tutor_pacing_hint": "Start by showing a scatterplot and having the learner guess $r$ visually. Then compute $r$ for the same data and compare. Finally, draw the regression line and make a prediction.",
+    "diagnostic_signals": [
+      "If the learner confuses $r$ with $r^2$, drill the distinction with concrete examples.",
+      "If they cannot compute the regression line from $\\bar{x},\\bar{y}$ and $b$, practice the intercept formula $a=\\bar{y}-b\\bar{x}$."
+    ],
+    "skill_atoms_unlocked": [
+      "linear_regression_interpret_r",
+      "linear_regression_compute_line",
+      "linear_regression_interpret_r_squared",
+      "linear_regression_predict"
+    ]
+  }
+}

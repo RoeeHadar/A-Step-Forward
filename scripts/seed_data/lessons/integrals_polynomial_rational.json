@@ -1,0 +1,330 @@
+{
+  "concept_id": "integrals_polynomial_rational",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": [
+    "calculus1"
+  ],
+  "title_en": "Integrals of Polynomial and Rational Functions",
+  "title_he": "אינטגרלים של פולינומים ופונקציות רציונליות",
+  "summary_en": "Indefinite and definite integrals of polynomials and simple rational functions using the power rule and 1/x. Core Bagrut integral skill.",
+  "summary_he": "אינטגרלים לא מסוימים ומסוימים של פולינומים ופונקציות רציונליות פשוטות בכלל החזקה ו-1/x. מיומנות אינטגרל יסוד בבגרות.",
+  "estimated_minutes": 30,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "Integration — The Reverse of Differentiation",
+      "title_he": "אינטגרציה — ההפך של גזירה",
+      "body_en_md": "Integration is the process of finding a function whose derivative equals a given function. The **indefinite integral** $\\int f(x)\\,dx$ finds all antiderivatives (adding the constant of integration $+C$). The **definite integral** $\\int_a^b f(x)\\,dx$ computes the signed area under the curve between $a$ and $b$.\n\nFor polynomials, integration reverses the power rule: instead of multiplying by the exponent and subtracting 1, we add 1 to the exponent and divide by it. For $1/x$, the integral is $\\ln|x|$ — a special case that completes the family.\n\nThe **Fundamental Theorem of Calculus (FTC)** connects the two: $\\int_a^b f(x)\\,dx = F(b) - F(a)$ where $F$ is any antiderivative of $f$.",
+      "body_he_md": "אינטגרציה היא תהליך מציאת פונקציה שנגזרתה שווה לפונקציה הנתונה. **האינטגרל הלא-מסוים** $\\int f(x)\\,dx$ מוצא את כל האנטי-נגזרות (בתוספת קבוע האינטגרציה $+C$). **האינטגרל המסוים** $\\int_a^b f(x)\\,dx$ מחשב את השטח המסומן מתחת לעקומה בין $a$ ל-$b$.\n\nלפולינומים, אינטגרציה מהפכת את כלל החזקה: במקום לכפול במעריך ולחסר 1, מוסיפים 1 למעריך ומחלקים בו. עבור $1/x$, האינטגרל הוא $\\ln|x|$ — מקרה מיוחד שמשלים את המשפחה.\n\n**המשפט הבסיסי של חדו״א (FTC)** מחבר בין השניים: $\\int_a^b f(x)\\,dx = F(b) - F(a)$ כאשר $F$ היא כלשהי מהאנטי-נגזרות של $f$."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Power Rule for Integration and Key Formulas",
+      "title_he": "כלל החזקה לאינטגרציה ונוסחאות מפתח",
+      "body_en_md": "**Power Rule for Integration:** For $n \\neq -1$,\n$$\\int x^n\\,dx = \\frac{x^{n+1}}{n+1} + C.$$\n\n**Special case $n=-1$:**\n$$\\int \\frac{1}{x}\\,dx = \\ln|x| + C.$$\n\n**Linearity:** For constants $a$, $b$:\n$$\\int [af(x) + bg(x)]\\,dx = a\\int f(x)\\,dx + b\\int g(x)\\,dx.$$\n\n**Key integral table:**\n\n| $f(x)$ | $\\int f(x)\\,dx$ |\n|---|---|\n| $x^n$ $(n\\neq -1)$ | $\\dfrac{x^{n+1}}{n+1}+C$ |\n| $1/x$ | $\\ln|x|+C$ |\n| $e^x$ | $e^x+C$ |\n| $\\sin x$ | $-\\cos x+C$ |\n| $\\cos x$ | $\\sin x+C$ |\n\n**Fundamental Theorem of Calculus:**\n$$\\int_a^b f(x)\\,dx = F(b) - F(a),$$\nwhere $F'(x) = f(x)$. In Israel this is often written using the notation $[F(x)]_a^b = F(b)-F(a)$.",
+      "body_he_md": "**כלל החזקה לאינטגרציה:** עבור $n \\neq -1$,\n$$\\int x^n\\,dx = \\frac{x^{n+1}}{n+1} + C.$$\n\n**מקרה מיוחד $n=-1$:**\n$$\\int \\frac{1}{x}\\,dx = \\ln|x| + C.$$\n\n**לינאריות:**\n$$\\int [af(x) + bg(x)]\\,dx = a\\int f(x)\\,dx + b\\int g(x)\\,dx.$$\n\n**טבלת אינטגרלים מרכזית:**\n\n| $f(x)$ | $\\int f(x)\\,dx$ |\n|---|---|\n| $x^n$ $(n\\neq -1)$ | $\\dfrac{x^{n+1}}{n+1}+C$ |\n| $1/x$ | $\\ln|x|+C$ |\n| $e^x$ | $e^x+C$ |\n| $\\sin x$ | $-\\cos x+C$ |\n| $\\cos x$ | $\\sin x+C$ |\n\n**המשפט הבסיסי של חדו״א:**\n$$\\int_a^b f(x)\\,dx = F(b) - F(a),$$\nכאשר $F'(x) = f(x)$. בישראל מסומן לעיתים כ-$[F(x)]_a^b = F(b)-F(a)$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Integrating a Polynomial",
+      "title_he": "דוגמה פתורה 1 — אינטגרציה של פולינום",
+      "body_en_md": "**Find:** $\\int (3x^2 - 4x + 5)\\,dx$\n\n### Apply power rule term by term:\n$$\\int 3x^2\\,dx = 3 \\cdot \\frac{x^3}{3} = x^3$$\n$$\\int -4x\\,dx = -4 \\cdot \\frac{x^2}{2} = -2x^2$$\n$$\\int 5\\,dx = 5x$$\n\n### Combine:\n$$\\int (3x^2 - 4x + 5)\\,dx = x^3 - 2x^2 + 5x + C.$$\n\n**Check by differentiating:** $(x^3-2x^2+5x)' = 3x^2-4x+5$. ✓",
+      "body_he_md": "**מצא:** $\\int (3x^2 - 4x + 5)\\,dx$\n\n### יישום כלל חזקה איבר-איבר:\n$$\\int 3x^2\\,dx = x^3, \\quad \\int -4x\\,dx = -2x^2, \\quad \\int 5\\,dx = 5x.$$\n\n### שילוב:\n$$\\int (3x^2 - 4x + 5)\\,dx = x^3 - 2x^2 + 5x + C.$$\n\n**בדיקה בגזירה:** $(x^3-2x^2+5x)' = 3x^2-4x+5$. ✓"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Definite Integral by FTC",
+      "title_he": "דוגמה פתורה 2 — אינטגרל מסוים לפי FTC",
+      "body_en_md": "**Find:** $\\int_1^3 (x^2+1)\\,dx$\n\n### Step 1: Find antiderivative.\n$$F(x) = \\frac{x^3}{3} + x.$$\n\n### Step 2: Apply FTC.\n$$\\int_1^3 (x^2+1)\\,dx = F(3) - F(1) = \\left(\\frac{27}{3}+3\\right) - \\left(\\frac{1}{3}+1\\right) = 12 - \\frac{4}{3} = \\frac{32}{3}.$$\n\n**Tip:** Always compute $F(b) - F(a)$ in order: upper bound first.",
+      "body_he_md": "**מצא:** $\\int_1^3 (x^2+1)\\,dx$\n\n### שלב 1: מצא אנטי-נגזרת.\n$$F(x) = \\frac{x^3}{3} + x.$$\n\n### שלב 2: יישם FTC.\n$$F(3) - F(1) = \\left(9+3\\right) - \\left(\\frac{1}{3}+1\\right) = 12 - \\frac{4}{3} = \\frac{32}{3}.$$\n\n**עצה:** תמיד חשב $F(b) - F(a)$: גבול עליון מינוס תחתון."
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Mistakes",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "1. **Forgetting $+C$:** Every indefinite integral must include $+C$. Points are deducted on Bagrut for omitting it.\n\n2. **Wrong power rule:** $\\int x^3\\,dx = x^4/4 + C$, not $x^4$ or $3x^2$. Add 1 to exponent AND divide by new exponent.\n\n3. **$n = -1$ exception:** $\\int x^{-1}\\,dx = \\ln|x| + C$, NOT $x^0/0$ (undefined). Memorize this special case.\n\n4. **Wrong direction of FTC:** $\\int_a^b f\\,dx = F(b) - F(a)$, not $F(a) - F(b)$. Upper limit minus lower.",
+      "body_he_md": "1. **שכחת $+C$:** כל אינטגרל לא-מסוים חייב לכלול $+C$. מורידים נקודות בבגרות על השמטה.\n\n2. **כלל חזקה שגוי:** $\\int x^3\\,dx = x^4/4 + C$, לא $x^4$ או $3x^2$. הוסף 1 למעריך **וחלק** במעריך החדש.\n\n3. **חריג $n = -1$:** $\\int x^{-1}\\,dx = \\ln|x| + C$, לא $x^0/0$. שינן מקרה מיוחד זה.\n\n4. **כיוון FTC שגוי:** $\\int_a^b f\\,dx = F(b) - F(a)$, לא $F(a) - F(b)$. גבול עליון פחות תחתון."
+    },
+    {
+      "kind": "why_matters",
+      "title_en": "Why Polynomial Integration Matters",
+      "title_he": "למה אינטגרציה של פולינומים חשובה",
+      "body_en_md": "- **Area under curves** (concept:areas_between_curves): definite integrals compute areas.\n- **Volumes of revolution** (concept:volumes_of_revolution_basic): integrate cross-sectional areas.\n- **Physics**: position from velocity ($\\int v(t)\\,dt = x(t) + C$); work from force.\n- **Average value**: $\\bar{f} = \\dfrac{1}{b-a}\\int_a^b f(x)\\,dx$.\n- Every definite integral on the Bagrut requires mastery of this foundational table.",
+      "body_he_md": "- **שטח מתחת לעקומות** (concept:areas_between_curves): אינטגרלים מסוימים מחשבים שטחים.\n- **נפחי סיבוב** (concept:volumes_of_revolution_basic): אינטגרציה של שטחי חתך.\n- **פיזיקה**: מיקום ממהירות ($\\int v(t)\\,dt = x(t) + C$); עבודה מכוח.\n- **ערך ממוצע**: $\\bar{f} = \\dfrac{1}{b-a}\\int_a^b f(x)\\,dx$.\n- כל אינטגרל מסוים בבגרות דורש שליטה בטבלה בסיסית זו."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "kind": "mcq",
+      "difficulty": "easy",
+      "skill_atoms": [
+        "integrals_polynomial_power_rule"
+      ],
+      "stem_en": "What is $\\int x^4\\,dx$?",
+      "stem_he": "מה הוא $\\int x^4\\,dx$?",
+      "answer_payload": {
+        "options_en": [
+          "$4x^3 + C$",
+          "$\\dfrac{x^5}{5} + C$",
+          "$x^5 + C$",
+          "$\\dfrac{x^4}{4} + C$"
+        ],
+        "options_he": [
+          "$4x^3 + C$",
+          "$\\dfrac{x^5}{5} + C$",
+          "$x^5 + C$",
+          "$\\dfrac{x^4}{4} + C$"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "Power rule: $\\int x^n\\,dx = x^{n+1}/(n+1)+C$. For $n=4$: $x^5/5+C$.",
+      "explanation_he": "כלל חזקה: $\\int x^n\\,dx = x^{n+1}/(n+1)+C$. עבור $n=4$: $x^5/5+C$."
+    },
+    {
+      "id": "q2",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "integrals_polynomial_power_rule",
+        "integrals_polynomial_linearity"
+      ],
+      "stem_en": "Find $\\int (2x^3 - 6x + 1)\\,dx$.",
+      "stem_he": "מצא $\\int (2x^3 - 6x + 1)\\,dx$.",
+      "answer_payload": {
+        "options_en": [
+          "$\\dfrac{x^4}{2} - 3x^2 + x + C$",
+          "$2x^4 - 6x^2 + C$",
+          "$6x^2 - 6 + C$",
+          "$\\dfrac{x^4}{2} - 3x^2 + C$"
+        ],
+        "options_he": [
+          "$\\dfrac{x^4}{2} - 3x^2 + x + C$",
+          "$2x^4 - 6x^2 + C$",
+          "$6x^2 - 6 + C$",
+          "$\\dfrac{x^4}{2} - 3x^2 + C$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "$\\int 2x^3 = 2x^4/4 = x^4/2$; $\\int -6x = -3x^2$; $\\int 1 = x$. Total: $x^4/2 - 3x^2 + x + C$.",
+      "explanation_he": "$\\int 2x^3 = x^4/2$; $\\int -6x = -3x^2$; $\\int 1 = x$. סה״כ: $x^4/2 - 3x^2 + x + C$."
+    },
+    {
+      "id": "q3",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "integrals_polynomial_special_cases"
+      ],
+      "stem_en": "$\\int \\dfrac{1}{x}\\,dx = \\ln|x| + C$",
+      "stem_he": "$\\int \\dfrac{1}{x}\\,dx = \\ln|x| + C$",
+      "answer_payload": {
+        "correct": true
+      },
+      "explanation_en": "True. The power rule fails for $n=-1$ (gives division by zero). The special case: $\\int x^{-1}\\,dx = \\ln|x|+C$. ✓",
+      "explanation_he": "נכון. כלל החזקה נכשל ל-$n=-1$. המקרה המיוחד: $\\int x^{-1}\\,dx = \\ln|x|+C$. ✓"
+    },
+    {
+      "id": "q4",
+      "kind": "numeric",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "integrals_polynomial_definite_ftc"
+      ],
+      "stem_en": "Compute $\\int_0^2 x^2\\,dx$.",
+      "stem_he": "חשב את $\\int_0^2 x^2\\,dx$.",
+      "answer_payload": {
+        "value": 2.667,
+        "tolerance": 0.01
+      },
+      "explanation_en": "$F(x) = x^3/3$. $F(2) - F(0) = 8/3 - 0 = 8/3 \\approx 2.667$.",
+      "explanation_he": "$F(x) = x^3/3$. $F(2) - F(0) = 8/3 \\approx 2.667$."
+    },
+    {
+      "id": "q5",
+      "kind": "mcq",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "integrals_polynomial_special_cases",
+        "integrals_polynomial_linearity"
+      ],
+      "stem_en": "Find $\\int \\left(x^2 + \\dfrac{1}{x}\\right)\\,dx$.",
+      "stem_he": "מצא $\\int \\left(x^2 + \\dfrac{1}{x}\\right)\\,dx$.",
+      "answer_payload": {
+        "options_en": [
+          "$\\dfrac{x^3}{3} + \\ln|x| + C$",
+          "$\\dfrac{x^3}{3} + \\dfrac{1}{x^2} + C$",
+          "$2x + \\ln x + C$",
+          "$\\dfrac{x^3}{3} - \\dfrac{1}{x^2} + C$"
+        ],
+        "options_he": [
+          "$\\dfrac{x^3}{3} + \\ln|x| + C$",
+          "$\\dfrac{x^3}{3} + \\dfrac{1}{x^2} + C$",
+          "$2x + \\ln x + C$",
+          "$\\dfrac{x^3}{3} - \\dfrac{1}{x^2} + C$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "$\\int x^2\\,dx = x^3/3$ and $\\int (1/x)\\,dx = \\ln|x|$. Sum: $x^3/3 + \\ln|x| + C$.",
+      "explanation_he": "$\\int x^2\\,dx = x^3/3$ ו-$\\int (1/x)\\,dx = \\ln|x|$. סכום: $x^3/3 + \\ln|x| + C$."
+    },
+    {
+      "id": "q6",
+      "kind": "derivation",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "integrals_polynomial_definite_ftc",
+        "integrals_polynomial_linearity"
+      ],
+      "stem_en": "Compute $\\int_1^4 (\\sqrt{x} - 1)\\,dx$ step by step.",
+      "stem_he": "חשב את $\\int_1^4 (\\sqrt{x} - 1)\\,dx$ שלב אחר שלב.",
+      "answer_payload": {
+        "steps_en": [
+          "Rewrite $\\sqrt{x} = x^{1/2}$.",
+          "Antiderivative: $\\int x^{1/2}\\,dx = \\dfrac{x^{3/2}}{3/2} = \\dfrac{2x^{3/2}}{3}$; $\\int 1\\,dx = x$.",
+          "So $F(x) = \\dfrac{2x^{3/2}}{3} - x$.",
+          "$F(4) = \\dfrac{2 \\cdot 8}{3} - 4 = \\dfrac{16}{3} - 4 = \\dfrac{4}{3}$.",
+          "$F(1) = \\dfrac{2}{3} - 1 = -\\dfrac{1}{3}$.",
+          "$F(4) - F(1) = \\dfrac{4}{3} - (-\\dfrac{1}{3}) = \\dfrac{5}{3}$."
+        ],
+        "steps_he": [
+          "כתוב מחדש $\\sqrt{x} = x^{1/2}$.",
+          "אנטי-נגזרת: $\\dfrac{2x^{3/2}}{3} - x$.",
+          "$F(4) = \\dfrac{16}{3} - 4 = \\dfrac{4}{3}$.",
+          "$F(1) = \\dfrac{2}{3} - 1 = -\\dfrac{1}{3}$.",
+          "תשובה: $\\dfrac{4}{3} - (-\\dfrac{1}{3}) = \\dfrac{5}{3}$."
+        ]
+      },
+      "explanation_en": "$\\int_1^4 (\\sqrt{x}-1)\\,dx = \\left[\\dfrac{2x^{3/2}}{3}-x\\right]_1^4 = \\dfrac{4}{3}+\\dfrac{1}{3} = \\dfrac{5}{3}$.",
+      "explanation_he": "$\\int_1^4 (\\sqrt{x}-1)\\,dx = \\dfrac{5}{3}$."
+    },
+    {
+      "id": "q7",
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "integrals_polynomial_power_rule"
+      ],
+      "stem_en": "Complete: $\\int 6x^2\\,dx = $ ____.",
+      "stem_he": "השלם: $\\int 6x^2\\,dx = $ ____.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "2x^3 + C",
+          "2x³+C"
+        ]
+      },
+      "explanation_en": "$6 \\cdot x^{2+1}/(2+1) = 6x^3/3 = 2x^3$. Add $+C$: $2x^3+C$.",
+      "explanation_he": "$6 \\cdot x^3/3 = 2x^3$. בתוספת $+C$: $2x^3+C$."
+    },
+    {
+      "id": "q8",
+      "kind": "mcq",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "integrals_polynomial_definite_ftc"
+      ],
+      "stem_en": "What is $\\int_{-1}^{1} x^3\\,dx$?",
+      "stem_he": "מה הוא $\\int_{-1}^{1} x^3\\,dx$?",
+      "answer_payload": {
+        "options_en": [
+          "$0$",
+          "$1/2$",
+          "$-1/2$",
+          "$2$"
+        ],
+        "options_he": [
+          "$0$",
+          "$1/2$",
+          "$-1/2$",
+          "$2$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "$F(x) = x^4/4$. $F(1)-F(-1) = 1/4 - 1/4 = 0$. Also: $x^3$ is an odd function, and the interval $[-1,1]$ is symmetric → integral is $0$.",
+      "explanation_he": "$F(x) = x^4/4$. $F(1)-F(-1) = 0$. כמו כן: $x^3$ פונקציה אי-זוגית, קטע $[-1,1]$ סימטרי → אינטגרל $=0$."
+    },
+    {
+      "id": "q9",
+      "kind": "mcq",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "integrals_polynomial_power_rule",
+        "integrals_polynomial_special_cases"
+      ],
+      "stem_en": "Find $\\int \\dfrac{x^3+1}{x}\\,dx$.",
+      "stem_he": "מצא $\\int \\dfrac{x^3+1}{x}\\,dx$.",
+      "answer_payload": {
+        "options_en": [
+          "$\\dfrac{x^3}{3} + \\ln|x| + C$",
+          "$x^3 + \\ln|x| + C$",
+          "$\\dfrac{x^2}{2} + \\ln|x| + C$",
+          "$\\dfrac{x^3}{3} + x + C$"
+        ],
+        "options_he": [
+          "$\\dfrac{x^3}{3} + \\ln|x| + C$",
+          "$x^3 + \\ln|x| + C$",
+          "$\\dfrac{x^2}{2} + \\ln|x| + C$",
+          "$\\dfrac{x^3}{3} + x + C$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "Split: $\\dfrac{x^3+1}{x} = x^2 + \\dfrac{1}{x}$. Integrate term by term: $\\int x^2\\,dx = x^3/3$ and $\\int \\dfrac{1}{x}\\,dx = \\ln|x|$. Answer: $\\dfrac{x^3}{3} + \\ln|x| + C$.",
+      "explanation_he": "פירוק: $\\dfrac{x^3+1}{x} = x^2 + \\dfrac{1}{x}$. אינטגרציה: $\\dfrac{x^3}{3} + \\ln|x| + C$."
+    },
+    {
+      "id": "q10",
+      "kind": "open",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "integrals_polynomial_definite_ftc",
+        "integrals_polynomial_power_rule"
+      ],
+      "stem_en": "A particle moves with velocity $v(t) = 3t^2 - 4t$ for $t \\in [0, 3]$. Find the total displacement from $t=0$ to $t=3$.",
+      "stem_he": "חלקיק נע במהירות $v(t) = 3t^2 - 4t$ עבור $t \\in [0, 3]$. מצא את ההזזה הכוללת מ-$t=0$ עד $t=3$.",
+      "answer_payload": {
+        "rubric_en": "Displacement = ∫₀³ v(t) dt = ∫₀³ (3t²-4t) dt = [t³-2t²]₀³ = (27-18)-(0) = 9. States displacement is 9 units.",
+        "rubric_he": "הזזה = $\\int_0^3 v(t)\\,dt = [t^3-2t^2]_0^3 = (27-18)-0 = 9$. ההזזה הכוללת היא 9 יחידות."
+      },
+      "explanation_en": "$\\int_0^3 (3t^2-4t)\\,dt = [t^3-2t^2]_0^3 = (27-18)-(0) = 9$.",
+      "explanation_he": "$\\int_0^3 (3t^2-4t)\\,dt = [t^3-2t^2]_0^3 = 9$."
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Integration is the reverse of differentiation. Always verify an indefinite integral by differentiating the result.",
+      "Never forget +C for indefinite integrals. On Bagrut, omitting C costs points.",
+      "The n=-1 exception: ∫x⁻¹dx = ln|x|+C. The power rule would give 0 in the denominator — use ln instead.",
+      "For definite integrals: FTC says ∫ₐᵇ f dx = F(b)-F(a). Compute upper bound first."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "∫x^n dx = x^n/(n) (forgot to add 1 to exponent first)",
+        "correction": "Add 1 to exponent THEN divide: x^(n+1)/(n+1)+C.",
+        "detect_phrase_en": "divided by n",
+        "detect_phrase_he": "חילקתי ב-n"
+      },
+      {
+        "wrong": "Omitting +C from indefinite integral",
+        "correction": "Every indefinite integral needs +C — it represents the family of all antiderivatives.",
+        "detect_phrase_en": "forgot C",
+        "detect_phrase_he": "שכחתי C"
+      }
+    ],
+    "tutor_pacing_hint": "Start with indefinite integrals of pure power terms (x^2, x^5) before mixing. Introduce the n=-1 special case explicitly as an exception. Only then move to definite integrals with FTC.",
+    "diagnostic_signals": {
+      "writes ∫x^n = x^n/n": "Ask: what does the power rule for DERIVATIVES say? Now reverse that: add 1, then divide.",
+      "computes F(a)-F(b) instead of F(b)-F(a)": "Emphasize: upper bound minus lower bound. Draw an arrow showing the direction."
+    },
+    "skill_atoms_unlocked": [
+      "integrals_polynomial_power_rule",
+      "integrals_polynomial_special_cases",
+      "integrals_polynomial_definite_ftc",
+      "integrals_polynomial_linearity"
+    ]
+  }
+}
