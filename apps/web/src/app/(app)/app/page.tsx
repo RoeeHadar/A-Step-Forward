@@ -18,6 +18,7 @@ import { PlanChangeBanner } from '@/components/plan-change-banner';
 import { PlanAdjustmentNotice } from '@/components/plan-adjustment-notice';
 import { getAcceptedTeacherForStudent, maybeNotifyWeeklyGateDue } from '@/lib/social-db';
 import { currentActiveWeek } from '@/lib/learning-path-types';
+import { buildWeekTrainingSpec } from '@/lib/week-training-spec';
 
 export const dynamic = 'force-dynamic';
 
@@ -73,6 +74,12 @@ export default async function DashboardPage() {
     }).catch(() => undefined);
   }
 
+  // Derive training spec for active week (≤2 cheap Neon queries in parallel).
+  const weekSpec =
+    dbConfigured && activeWeek && plan
+      ? await buildWeekTrainingSpec(auth.learnerId, activeWeek, plan.id).catch(() => null)
+      : null;
+
   return (
     <>
       {goalStatus ? <GoalCompletionBanner status={goalStatus} /> : null}
@@ -101,6 +108,7 @@ export default async function DashboardPage() {
             ? { real_name: teacher.real_name, username: teacher.username }
             : null
         }
+        weekSpec={weekSpec}
       />
     </>
   );

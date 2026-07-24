@@ -20,6 +20,7 @@ import { pickConceptTitle, resolveConceptTitles } from '@/lib/concept-display-na
 import { goalCountdownLabel, isBagrutTrack } from '@/lib/goal-track';
 import type { LearnerStreak } from '@/lib/neon-db';
 import { agentAccentVars } from '@/lib/design-tokens';
+import { WeekTrainingCard, type ClientWeekTrainingSpec } from '@/components/week-training-card';
 import lessonsIndex from '@/lib/lessons-index.generated.json';
 
 interface LessonIndexEntry {
@@ -60,6 +61,15 @@ const STR = {
     actionStart: 'התחל',
     actionContinue: 'המשך',
     minutes: (n: number) => `${n} דק׳`,
+    // R4 — Overflow honesty notice
+    overflowTitle: 'לא ייכנס עד היעד',
+    overflowBody: (names: string) =>
+      `${names} — הרחיבו את היעד או הוסיפו שעות לימוד`,
+    overflowCta: 'ערוך יעד',
+    // R5 — Post-goal re-plan CTA
+    replanTitle: 'התוכנית הסתיימה',
+    replanBody: 'התוכנית שלך הגיעה לסיומה. זה הזמן ליצור תוכנית חדשה בהתאם להתקדמות שלך.',
+    replanCta: 'תכנן מחדש',
   },
   en: {
     welcome: (name: string) => `Welcome back, ${name}!`,
@@ -89,6 +99,15 @@ const STR = {
     actionStart: 'Start',
     actionContinue: 'Continue',
     minutes: (n: number) => `${n} min`,
+    // R4 — Overflow honesty notice
+    overflowTitle: "Won't fit before your goal",
+    overflowBody: (names: string) =>
+      `${names} — extend your goal date or add more study hours`,
+    overflowCta: 'Edit goal',
+    // R5 — Post-goal re-plan CTA
+    replanTitle: 'Plan ended',
+    replanBody: "Your plan has reached its end date. It's time to create a new plan based on your progress.",
+    replanCta: 'Re-plan',
   },
 } as const;
 
@@ -348,6 +367,80 @@ function isMakhinaFocus(
   );
 }
 
+/**
+ * R4: Bilingual overflow-honesty notice.
+ * Shown below the plan section when the BFS engine cut concepts that didn't
+ * fit the learner's horizon × capacity. Purely informational — one restrained
+ * card, no alarmist language, with a CTA to /plan-setup to update the goal.
+ */
+function OverflowNotice({
+  overflowConceptIds,
+  isHe,
+}: {
+  overflowConceptIds: string[];
+  isHe: boolean;
+}) {
+  const t = STR[isHe ? 'he' : 'en'];
+  const locale = isHe ? 'he' : 'en';
+  if (overflowConceptIds.length === 0) return null;
+
+  const names = overflowConceptIds
+    .slice(0, 5)
+    .map((id) => {
+      const titles = resolveConceptTitles(id, null);
+      return pickConceptTitle(titles, locale);
+    })
+    .join(', ');
+  const moreCount = overflowConceptIds.length - 5;
+  const displayNames = moreCount > 0 ? `${names} +${moreCount}` : names;
+
+  return (
+    <div
+      dir={isHe ? 'rtl' : 'ltr'}
+      className="rounded-xl border border-amber-300/60 bg-amber-50/60 px-4 py-3 text-sm dark:border-amber-500/30 dark:bg-amber-900/10"
+      role="note"
+      aria-label={t.overflowTitle}
+    >
+      <span className="font-semibold text-amber-700 dark:text-amber-400">
+        {t.overflowTitle}:{' '}
+      </span>
+      <span className="text-muted-foreground">{t.overflowBody(displayNames)}</span>
+      {/* Goal editing happens via the plan-update template in the Tutor chat —
+          /plan-setup has no goal UI and would bounce back to the dashboard. */}
+      <Link
+        href="/app/chat/tutor"
+        className="ms-2 font-medium text-primary hover:underline"
+      >
+        {t.overflowCta} →
+      </Link>
+    </div>
+  );
+}
+
+/**
+ * R5: Bilingual post-goal re-plan CTA.
+ * Shown when plan.needs_replan === true (today > plan.end_date).
+ * Routes to /plan-setup — does NOT auto-regenerate.
+ */
+function ReplanBanner({ isHe }: { isHe: boolean }) {
+  const t = STR[isHe ? 'he' : 'en'];
+  return (
+    <div
+      dir={isHe ? 'rtl' : 'ltr'}
+      className="rounded-xl border border-primary/30 bg-gradient-to-br from-primary/5 to-accent-magenta/5 p-5 shadow-sm"
+      role="alert"
+    >
+      <p className="font-display font-semibold text-foreground">{t.replanTitle}</p>
+      <p className="mt-1 text-sm text-muted-foreground">{t.replanBody}</p>
+      {/* ?replan=1 makes /plan-setup skip its plan-exists shortcut (the expired
+          plan is still status='active') and force a fresh bootstrap. */}
+      <Button asChild size="sm" className="mt-3">
+        <Link href="/plan-setup?replan=1">{t.replanCta}</Link>
+      </Button>
+    </div>
+  );
+}
+
 export function DashboardContent({
   displayName,
   plan,
@@ -359,6 +452,7 @@ export function DashboardContent({
   goal,
   goalKey,
   teacher,
+  weekSpec,
 }: {
   displayName: string;
   plan: LearningPlan | null;
@@ -370,6 +464,7 @@ export function DashboardContent({
   goal?: string | null;
   goalKey?: string | null;
   teacher?: { real_name: string; username: string } | null;
+  weekSpec?: ClientWeekTrainingSpec | null;
 }) {
   const { locale } = useI18n();
   const isHe = locale === 'he';
@@ -459,6 +554,9 @@ export function DashboardContent({
 
       {examPrep ? <ExamPrepQuizBanner ctx={examPrep} /> : null}
 
+      {/* R5 — Post-goal re-plan CTA (shown when plan has expired) */}
+      {plan?.needs_replan ? <ReplanBanner isHe={isHe} /> : null}
+
       {/* Section 2 — Learning Plan */}
       <section className="rounded-2xl border border-border bg-card p-5 shadow-sm md:p-6">
         <SectionHeading accent="cyan">{t.planTitle}</SectionHeading>
@@ -479,6 +577,13 @@ export function DashboardContent({
                 isFirst={idx === 0}
               />
             ))}
+            {/* R4 — Overflow honesty: show concepts that didn't fit the horizon */}
+            {(plan?.overflow_concepts?.length ?? 0) > 0 ? (
+              <OverflowNotice
+                overflowConceptIds={plan!.overflow_concepts!}
+                isHe={isHe}
+              />
+            ) : null}
             <Link
               href="/app/plan"
               className="inline-block text-sm font-medium text-primary hover:underline"
@@ -505,10 +610,13 @@ export function DashboardContent({
         )}
       </section>
 
-      {/* Section 3 — Due Reviews (conditional) */}
+      {/* Section 3 — This week's training (derived spec — routes into existing surfaces) */}
+      {weekSpec ? <WeekTrainingCard spec={weekSpec} /> : null}
+
+      {/* Section 4 — Due Reviews (conditional) */}
       <DueReviewsWidget sectionTitle={t.dueReviews} hideTitle />
 
-      {/* Section 4 — Compact Agents */}
+      {/* Section 5 — Compact Agents */}
       <section className="rounded-2xl border border-border bg-card p-5 shadow-sm md:p-6">
         <SectionHeading>{t.agents}</SectionHeading>
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
