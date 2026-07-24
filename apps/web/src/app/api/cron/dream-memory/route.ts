@@ -42,7 +42,7 @@ async function handle(req: Request) {
     Math.min(MAX_LIMIT, Number(url.searchParams.get('limit') ?? DEFAULT_LIMIT)),
   );
 
-  const learners = (await listLearnersWithAnyLiveNotes()).slice(0, limit);
+  const learners = await listLearnersWithAnyLiveNotes(limit);
   const results: Array<{
     learner_id: string;
     archived: number;
@@ -73,11 +73,21 @@ async function handle(req: Request) {
         superseded: 0,
         agents_processed: 0,
       });
-      if (process.env.NODE_ENV !== 'production') {
-        console.warn('[cron/dream-memory] failure for', learnerId, err);
-      }
+      console.error(
+        JSON.stringify({ tag: '[ASF_CRON_DREAM_FAIL]', learner_id: learnerId, err: String(err) }),
+      );
     }
   }
+
+  console.log(
+    JSON.stringify({
+      tag: '[ASF_CRON_DREAM]',
+      candidates: learners.length,
+      notes_archived: totalArchived,
+      notes_superseded: totalSuperseded,
+      agents_processed: totalAgents,
+    }),
+  );
 
   return Response.json({
     candidates: learners.length,

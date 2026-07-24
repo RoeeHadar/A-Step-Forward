@@ -1,5 +1,8 @@
 name: Cron — Weekly gate due notifications (manual backstop)
 
+# Manual backstop only — production schedule lives in apps/web/vercel.json.
+# Run workflow_dispatch after verifying CRON_SECRET + WEB_BASE_URL secrets.
+
 on:
   workflow_dispatch:
     inputs:
@@ -8,8 +11,6 @@ on:
         required: false
         default: "150"
         type: string
-  schedule:
-    - cron: "0 8 * * *"
 
 permissions:
   contents: read

@@ -16,6 +16,19 @@ const sql = process.env.DATABASE_URL ? neon(process.env.DATABASE_URL) : null;
 export const MAX_LIVE_NOTES_PER_AGENT = 30;
 export const DUP_JACCARD = 0.6;
 
+/** Max notes fetched per (learner, agent) per dream pass — bounds per-invocation work. */
+const DREAM_NOTES_FETCH_LIMIT = 100;
+/** Minimum ms between dream passes for the same learnerId (single-instance guard). */
+const DREAM_COOLDOWN_MS = 5 * 60 * 1000;
+
+/**
+ * Per-learnerId timestamp of the last dream pass start. Prevents double-processing
+ * within a single Vercel instance. For distributed concurrency the LIMIT already
+ * bounds per-invocation cost; a DB-level `last_dreamed_at` conditional UPDATE would
+ * be the ideal cross-instance guard (requires a migration to add the column).
+ */
+const dreamLastStarted = new Map<string, number>();
+
 export interface DreamPassResult {
   archived: number;
   superseded: number;
@@ -55,7 +68,8 @@ async function liveNotes(learnerId: string, agent: string): Promise<NoteRow[]> {
     FROM learner_agent_notes
     WHERE learner_id = ${learnerId} AND agent = ${agent}
       AND archived_at IS NULL AND superseded_by IS NULL
-    ORDER BY created_at DESC
+    ORDER BY importance DESC, created_at DESC
+    LIMIT ${DREAM_NOTES_FETCH_LIMIT}
   `) as NoteRow[];
   return rows;
 }
@@ -114,6 +128,12 @@ async function dreamOneAgent(learnerId: string, agent: string): Promise<DreamPas
  * Run the lightweight dream pass for one learner.
  * When `agents` is omitted, processes every agent that has live notes.
  * When `scope` is `live`, only the four website agents are processed.
+ *
+ * Includes a single-instance cooldown guard (DREAM_COOLDOWN_MS) to prevent
+ * double-processing from concurrent calls within the same Vercel instance.
+ * Fetches at most DREAM_NOTES_FETCH_LIMIT notes per (learner, agent) so a
+ * single invocation is bounded even for very large note sets; convergence
+ * happens over successive cron runs.
  */
 export async function dreamLearnerMemory(
   learnerId: string,
@@ -122,6 +142,13 @@ export async function dreamLearnerMemory(
   if (!dbConfigured) {
     return { archived: 0, superseded: 0, agents_processed: 0 };
   }
+
+  // Single-instance concurrency guard: skip if a pass ran recently.
+  const lastStarted = dreamLastStarted.get(learnerId) ?? 0;
+  if (Date.now() - lastStarted < DREAM_COOLDOWN_MS) {
+    return { archived: 0, superseded: 0, agents_processed: 0 };
+  }
+  dreamLastStarted.set(learnerId, Date.now());
 
   let agents: string[];
   if (opts.agents?.length) {
@@ -152,13 +179,16 @@ export async function dreamLearnerMemory(
   return { archived, superseded, agents_processed: agentsProcessed };
 }
 
-/** Learners with at least one live agent note — cron work-list for dreaming. */
-export async function listLearnersWithAnyLiveNotes(): Promise<string[]> {
+/** Learners with at least one live agent note — cron work-list for dreaming.
+ *  `limit` is applied at the DB level to avoid fetching an unbounded result set.
+ */
+export async function listLearnersWithAnyLiveNotes(limit = 200): Promise<string[]> {
   if (!sql) return [];
   const rows = (await sql`
     SELECT DISTINCT learner_id
     FROM learner_agent_notes
     WHERE archived_at IS NULL AND superseded_by IS NULL
+    LIMIT ${limit}
   `) as Array<{ learner_id: string }>;
   return rows.map((r) => r.learner_id);
 }

@@ -44,6 +44,18 @@ const PERSONA_CHAR_CAP = 4000;
 const MIN_NOTES_TO_CONSOLIDATE = 6;
 const MAX_NOTES_PER_RUN = 80;
 
+/**
+ * Single-instance concurrency guard: tracks which learner IDs are currently
+ * being consolidated within this Vercel function instance. Prevents two
+ * concurrent requests (e.g. user "Rebuild" button + cron overlap) from both
+ * paying the LLM cost and writing conflicting personas.
+ *
+ * For distributed concurrency across multiple Vercel instances the write-side
+ * advisory lock inside `persistConsolidationResult` (neon-db.ts) acts as the
+ * backstop — only one writer wins; the other gets `consolidation_in_progress`.
+ */
+const consolidatingNow = new Set<string>();
+
 export interface ConsolidationResult {
   ran: boolean;
   reason?: string;
@@ -158,6 +170,11 @@ async function callLLMForConsolidation(
  * Consolidate the live per-(learner, agent) notes for one learner into the
  * shared persona. Returns a summary of what was done. Safe to call when
  * `LLM_API_KEY` is missing (returns `{ ran: false, reason: 'no_llm' }`).
+ *
+ * Claim semantics: the call immediately claims the learnerId in
+ * `consolidatingNow` and releases it in a `finally` block. Any concurrent
+ * call for the same learnerId within the same instance returns early with
+ * `ran: false, reason: 'consolidation_in_progress'` before reaching the LLM.
  */
 export async function consolidateLearnerMemory(
   learnerId: string,
@@ -173,6 +190,32 @@ export async function consolidateLearnerMemory(
       notes_archived: 0,
     };
   }
+
+  // Claim before LLM call — prevents concurrent invocations from both paying
+  // the LLM cost and later writing conflicting personas.
+  if (consolidatingNow.has(learnerId)) {
+    return {
+      ran: false,
+      reason: 'consolidation_in_progress',
+      persona_chars_before: 0,
+      persona_chars_after: 0,
+      notes_considered: 0,
+      notes_archived: 0,
+    };
+  }
+  consolidatingNow.add(learnerId);
+
+  try {
+    return await _consolidateLearnerMemoryInner(learnerId, opts);
+  } finally {
+    consolidatingNow.delete(learnerId);
+  }
+}
+
+async function _consolidateLearnerMemoryInner(
+  learnerId: string,
+  opts: { force?: boolean } = {},
+): Promise<ConsolidationResult> {
   const [persona, notes]: [LearnerPersona | null, LiveNote[]] = await Promise.all([
     getLearnerPersona(learnerId),
     fetchAllLiveNotes(learnerId),
@@ -230,9 +273,11 @@ export async function consolidateLearnerMemory(
 /**
  * Returns the set of learner ids that have at least `minNotes` live notes
  * across all their agents — i.e. the cron sweep work-list.
+ * `limit` is pushed to the DB so we never materialise an unbounded result set.
  */
 export async function listLearnersWithLiveNotes(
   minNotes = MIN_NOTES_TO_CONSOLIDATE,
+  limit = 100,
 ): Promise<string[]> {
   if (!sql) return [];
   const rows = (await sql`
@@ -241,6 +286,7 @@ export async function listLearnersWithLiveNotes(
     WHERE archived_at IS NULL AND superseded_by IS NULL
     GROUP BY learner_id
     HAVING COUNT(*) >= ${minNotes}
+    LIMIT ${limit}
   `) as Array<{ learner_id: string }>;
   return rows.map((r) => r.learner_id);
 }

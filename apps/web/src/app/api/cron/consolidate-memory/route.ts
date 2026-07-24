@@ -49,7 +49,7 @@ async function handle(req: Request) {
     1,
     Math.min(MAX_LIMIT, Number(url.searchParams.get('limit') ?? DEFAULT_LIMIT)),
   );
-  const learners = (await listLearnersWithLiveNotes()).slice(0, limit);
+  const learners = await listLearnersWithLiveNotes(undefined, limit);
   const results = [] as Array<{ learner_id: string; ran: boolean; archived: number }>;
   let totalArchived = 0;
   let totalRan = 0;
@@ -65,11 +65,19 @@ async function handle(req: Request) {
         ran: false,
         archived: 0,
       });
-      if (process.env.NODE_ENV !== 'production') {
-        console.warn('[cron/consolidate-memory] failure for', learnerId, err);
-      }
+      console.error(
+        JSON.stringify({ tag: '[ASF_CRON_CONSOLIDATE_FAIL]', learner_id: learnerId, err: String(err) }),
+      );
     }
   }
+  console.log(
+    JSON.stringify({
+      tag: '[ASF_CRON_CONSOLIDATE]',
+      candidates: learners.length,
+      runs_completed: totalRan,
+      notes_archived: totalArchived,
+    }),
+  );
   return Response.json({
     candidates: learners.length,
     runs_completed: totalRan,
