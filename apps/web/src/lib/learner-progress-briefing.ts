@@ -338,11 +338,12 @@ The learner is anxious, asking status, challenging your knowledge, asking what t
 - Ban garbage Hebrew: "חשוך", "באחריות", "להביא לדמיון", "אתה כבר יש לך", "חששותי".`;
 
 export const AGENT_CORRECTION_TURN_INSTRUCTION = `## THIS TURN — learner correction (mandatory)
-The learner says you erred and/or supplies a corrected solution.
-1. Re-check arithmetic (especially mean × count / missing-value formulas).
-2. Admit clearly if they are right; restate the corrected result with a one-line check.
-3. Complete grammatical sentences only — never paste "הצעה להמשך", "הצעד הבא המומלץ עכשיו", or "Recommended next step".
-4. Do not switch into exam/status/next-topic mode on this turn.`;
+The learner says you erred, challenges your construction, and/or supplies a corrected solution.
+1. Re-check carefully (mean × count; isosceles-trapezoid overhang method when relevant).
+2. If \`solver.verify_numeric\` has AUTHORITATIVE numbers: teach that method now — do not keep asking "how do you think…?".
+3. Admit clearly if they are right; restate the corrected result with a one-line check.
+4. Complete grammatical sentences only — never paste "הצעה להמשך", "הצעד הבא המומלץ עכשיו", or "Recommended next step".
+5. Do not switch into exam/status/next-topic mode on this turn.`;
 
 export const CONTEXT_CHALLENGE_TURN_INSTRUCTION = `## THIS TURN — context challenge (ADR-0012, mandatory)
 Learner says you don't know / you should know / you're the teacher.

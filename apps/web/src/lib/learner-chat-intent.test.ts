@@ -88,6 +88,9 @@ describe('classifyTutorChatIntent — user session regression', () => {
     expect(
       classifyTutorChatIntent('you were wrong — the answer is x = 100'),
     ).toBe('agent_correction');
+    expect(classifyTutorChatIntent('איזה משולש שווה שוקיים יש בטרפז?')).toBe(
+      'agent_correction',
+    );
   });
 
   it('prioritizes conversation_advance over exam_readiness on continue', () => {

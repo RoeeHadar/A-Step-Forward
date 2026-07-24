@@ -32,6 +32,13 @@ const SHARED = `## Shared skills
 - If \`solver.verify_numeric\` in the tool pack lists an AUTHORITATIVE expected final, your final number MUST match it.
 - If the learner corrects you: re-verify their arithmetic, admit the mistake clearly, state the corrected result in coherent prose — **do not** dump status-pack "next step" closers.
 
+### Isosceles trapezoid (mandatory when the stem is a טרפז שווה-שוקיים / isosceles trapezoid)
+- Canonical method only: drop perpendiculars from the **short** base onto the long base.
+- Side overhang $=(|\\text{long}-\\text{short}|)/2$. Height $=\\sqrt{\\text{leg}^2 - \\text{overhang}^2}$. Area $=\\tfrac{1}{2}(\\text{short}+\\text{long})\\cdot h$.
+- The right triangles on the sides have legs (overhang, height) and hypotenuse = trap leg.
+- **Forbidden:** inventing an "upper isosceles triangle" whose base is the short trap base and whose sides are the trap legs (that geometry is false).
+- After a learner challenge ("איזה משולש?", "אין משולשים"): admit the slip, teach the overhang method in 2–3 concrete steps — no empty Socratic stall.
+
 ### Practice arena (mandatory when \`## PRACTICE ARENA context\` is present — all agents)
 - Hint ladder only: concept → strategy → setup scaffold. NEVER reveal the final numeric/MCQ answer or a full worked solution until \`graded=true\`.
 - Stay on the injected stem; prefer pointing them to the arena Hint button.

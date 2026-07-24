@@ -4,7 +4,11 @@
  */
 import type { DueReviewItem } from '@/lib/neon-db';
 import type { LessonSection, LessonWithQuestions, LearnerAgentNote } from '@/lib/neon-db';
-import { trySolveMissingMean, type MeanMissingSolve } from '@/lib/agent-solver-verify';
+import {
+  trySolveAuthoritative,
+  type AuthoritativeSolve,
+  type MeanMissingSolve,
+} from '@/lib/agent-solver-verify';
 
 export interface WeakAtomPathNode {
   concept_id: string;
@@ -25,7 +29,7 @@ export interface HybridToolPack {
   block: string;
   toolsUsed: HybridToolId[];
   /** Deterministic expected final when verify tool ran */
-  verifyExpected: MeanMissingSolve | null;
+  verifyExpected: AuthoritativeSolve | null;
 }
 
 function clip(s: string, max: number): string {
@@ -116,14 +120,27 @@ export function formatMemoryExpandToolResult(
     .join('\n');
 }
 
-export function formatVerifyNumericToolResult(solve: MeanMissingSolve | null): string {
+export function formatVerifyNumericToolResult(solve: AuthoritativeSolve | null): string {
   if (!solve) {
-    return `- (n/a) Stem did not match a deterministic missing-mean pattern. Rely on arithmetic self-check + worked example.`;
+    return `- (n/a) Stem did not match a deterministic verify pattern. Rely on arithmetic self-check + worked example.`;
   }
+  if (solve.kind === 'isosceles_trapezoid') {
+    return [
+      `- pattern: isosceles_trapezoid_height_area`,
+      `- bases=${solve.baseShort},${solve.baseLong}; leg=${solve.leg}`,
+      `- CANONICAL METHOD (mandatory): drop perpendiculars from the short base onto the long base.`,
+      `- Each side overhang = (|long−short|)/2 = ${solve.overhang}. Right triangles have legs (overhang, height) and hypotenuse = trap leg.`,
+      `- NEVER invent an "upper isosceles triangle" whose base is the short trap base and whose sides are the trap legs.`,
+      `- height = √(leg² − overhang²) = $${solve.height}$`,
+      `- area = ½(short+long)·height = $${solve.area}$`,
+      `- AUTHORITATIVE expected primary final: $${solve.expected}$`,
+    ].join('\n');
+  }
+  const mean = solve as MeanMissingSolve;
   return [
     `- pattern: missing_value_for_target_mean`,
-    `- n=${solve.n}, known=${solve.knownValues.join('+')}=${solve.knownSum}, target_mean=${solve.targetMean}`,
-    `- AUTHORITATIVE expected final: $${solve.expected}$`,
+    `- n=${mean.n}, known=${mean.knownValues.join('+')}=${mean.knownSum}, target_mean=${mean.targetMean}`,
+    `- AUTHORITATIVE expected final: $${mean.expected}$`,
     `- Formula: x = target_mean * n − known_sum (never n−1).`,
   ].join('\n');
 }
@@ -170,7 +187,7 @@ export function buildCoachHybridToolPack(params: {
     formatWorkedExampleToolResult(params.lesson, locale),
   );
 
-  const verify = trySolveMissingMean(params.userMessage);
+  const verify = trySolveAuthoritative(params.userMessage);
   toolsUsed.push('solver.verify_numeric');
   parts.push(``, `### solver.verify_numeric`, formatVerifyNumericToolResult(verify));
 
@@ -204,7 +221,7 @@ export function buildTutorSolverToolPack(params: {
     parts.push(``, `### memory.expand`, formatMemoryExpandToolResult(params.expandNotes, params.conceptId));
   }
 
-  const verify = trySolveMissingMean(params.userMessage);
+  const verify = trySolveAuthoritative(params.userMessage);
   parts.push(``, `### solver.verify_numeric`, formatVerifyNumericToolResult(verify));
 
   return { block: parts.join('\n'), toolsUsed, verifyExpected: verify };

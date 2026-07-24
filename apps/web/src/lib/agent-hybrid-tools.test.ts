@@ -11,7 +11,9 @@ import {
 import {
   buildSolverRevealInstruction,
   countSolverHintCycles,
+  learnerConfirmedReveal,
   softRepairNumericReply,
+  trySolveIsoscelesTrapezoid,
   trySolveMissingMean,
   wantsFullSolutionNow,
 } from './agent-solver-verify';
@@ -35,6 +37,32 @@ describe('trySolveMissingMean', () => {
     );
     expect(solve).not.toBeNull();
     expect(solve!.expected).toBe(13 * 4 - (10 + 12 + 14));
+  });
+});
+
+describe('trySolveIsoscelesTrapezoid', () => {
+  it('solves the bagrut bases+legs height/area case from the user transcript', () => {
+    const solve = trySolveIsoscelesTrapezoid(
+      'טרפז שווה-שוקיים עם בסיסים 8 ו- 14 ושוקיים 5. הסבירו מציאת גובה ואז חשבו שטח.',
+    );
+    expect(solve).not.toBeNull();
+    expect(solve!.overhang).toBe(3);
+    expect(solve!.height).toBe(4);
+    expect(solve!.area).toBe(44);
+    expect(solve!.expected).toBe(44); // area asked
+  });
+
+  it('soft-repairs invented upper-triangle method', () => {
+    const solve = trySolveIsoscelesTrapezoid(
+      'טרפז שווה-שוקיים עם בסיסים 8 ו-14 ושוקיים 5. שטח?',
+    )!;
+    const bad =
+      'חשב את המשולש העליון: בסיס 8 ושוקיים 5. g = sqrt(8^2 - 5^2) = sqrt(39).';
+    const r = softRepairNumericReply(bad, solve, 'he');
+    expect(r.repaired).toBe(true);
+    expect(r.text).toContain('4');
+    expect(r.text).toContain('44');
+    expect(r.text).toMatch(/בליטה|overhang|אנכים/i);
   });
 });
 
@@ -64,13 +92,31 @@ describe('solver reveal policy', () => {
 
   it('blocks full dump when asked early', () => {
     expect(wantsFullSolutionNow('תן לי את הפתרון המלא')).toBe(true);
+    expect(wantsFullSolutionNow('אוקיי, אז איך לפתור')).toBe(true);
     const block = buildSolverRevealInstruction({
       cycles: 0,
       wantsFull: true,
       confirmed: false,
       inPracticeArena: false,
     });
-    expect(block).toContain('Do NOT dump');
+    expect(block).toMatch(/concrete method step|Do NOT dump/i);
+  });
+
+  it('forces teaching when authoritative solve is present', () => {
+    const block = buildSolverRevealInstruction({
+      cycles: 1,
+      wantsFull: true,
+      confirmed: false,
+      inPracticeArena: false,
+      hasAuthoritativeSolve: true,
+    });
+    expect(block).toContain('AUTHORITATIVE SOLVE PRESENT');
+    expect(block).toContain('Do NOT invent');
+  });
+
+  it('does not treat bare כן as reveal confirm', () => {
+    expect(learnerConfirmedReveal('כן')).toBe(false);
+    expect(learnerConfirmedReveal('כן תן')).toBe(true);
   });
 
   it('keeps practice arena sealed', () => {

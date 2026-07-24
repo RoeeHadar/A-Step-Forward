@@ -89,7 +89,7 @@ const CONVERSATION_ADVANCE_RE =
 
 /** Learner correcting the agent's math / solution (not a status/exam ask). */
 const AGENT_CORRECTION_RE =
-  /(?:שטעית|טעית|טעות שלך|זה מראה שטעית|זה לא נכון|לא נכון[,.]|תיקנ(?:תי|ת)|התשובה (?:הנכונה )?היא|you (?:were |are )?wrong|you made a mistake|that'?s (?:not |in)?correct|actually[,:]?\s+(?:it'?s|the answer|x\s*=)|correction:)/i;
+  /(?:שטעית|טעית|טעות שלך|זה מראה שטעית|זה לא נכון|לא נכון[,.]|תיקנ(?:תי|ת)|you (?:were |are )?wrong|you made a mistake|that'?s not correct|that is not correct|actually[,:]?\s+(?:it'?s|the answer|x\s*=)|correction:|איזה משולש|אין משולש|איך משולשים)/i;
 
 const READINESS_AFFIRM_RE =
   /^(?:כן(?:\s|,|$)|נכון|בטח|ברור|יודע|אני יודע|כן,? אני יודע|yes\b|i know|i do\b)/i;
@@ -239,8 +239,9 @@ Learner asked you to stop repeating or to resume after a cut-off.
 Acknowledge briefly, then advance.`;
 
 const AGENT_CORRECTION_INSTRUCTION = `## Interaction mode: LEARNER CORRECTION (mandatory)
-The learner says you were wrong and/or supplies a corrected solution.
-- Re-check the arithmetic carefully (especially mean × count).
+The learner says you were wrong, challenges a construction ("איזה משולש?", "אין משולשים"), and/or supplies a corrected solution.
+- Re-check carefully (especially mean × count; isosceles trapezoid overhang method).
+- If a verify pack is present: teach those steps immediately — no empty Socratic loops.
 - If they are right: admit it in one clear sentence, restate the correct result with a brief check, thank them.
 - If they are wrong: disagree politely and show the correct steps.
 - Write complete grammatical sentences in their language. Never paste status-pack labels ("הצעה להמשך", "הצעד הבא המומלץ עכשיו", "Recommended next step").

@@ -136,7 +136,7 @@ import {
   countSolverHintCycles,
   learnerConfirmedReveal,
   softRepairNumericReply,
-  trySolveMissingMean,
+  trySolveAuthoritative,
   wantsFullSolutionNow,
 } from '@/lib/agent-solver-verify';
 import { isWithinExamPrepWindow } from '@/lib/exam-prep';
@@ -159,23 +159,28 @@ function applyPostStreamSolverHygiene(
   userMessage: string,
   assistantVisible: string,
   locale: 'he' | 'en',
-): string {
+): { text: string; repairNotice: string | null } {
   let text = stripCiteMachineTags(assistantVisible);
-  if (agent !== 'tutor' && agent !== 'coach') return text;
+  if (agent !== 'tutor' && agent !== 'coach') return { text, repairNotice: null };
 
-  const solve = trySolveMissingMean(userMessage);
-  if (!solve) return text;
+  const solve = trySolveAuthoritative(userMessage);
+  if (!solve) return { text, repairNotice: null };
 
-  const repaired = softRepairNumericReply(text, solve.expected, locale);
+  const repaired = softRepairNumericReply(text, solve, locale);
   if (repaired.repaired) {
     logger.info('chat: solver soft repair', {
       agent,
+      kind: solve.kind,
       expected: solve.expected,
       found: repaired.found,
     });
-    text = repaired.text;
+    const notice =
+      repaired.text.startsWith(text.trimEnd())
+        ? repaired.text.slice(text.trimEnd().length)
+        : repaired.text;
+    return { text: repaired.text, repairNotice: notice.trim() ? notice : null };
   }
-  return text;
+  return { text, repairNotice: null };
 }
 
 async function saveAssistantTurn(
@@ -195,7 +200,7 @@ async function saveAssistantTurn(
   });
   const withoutMemory = stripMemoryMachineTags(content);
   const cleaned = userMessageForVerify
-    ? applyPostStreamSolverHygiene(agent, userMessageForVerify, withoutMemory, locale)
+    ? applyPostStreamSolverHygiene(agent, userMessageForVerify, withoutMemory, locale).text
     : stripCiteMachineTags(withoutMemory);
   const postHit = ruleClassify(cleaned, { childMode });
   const toStore = postHit ? refusalFor(postHit) : cleaned;
@@ -364,12 +369,31 @@ export async function POST(req: Request) {
 
   const encoder = new TextEncoder();
   let assistantBuffer = '';
+  /** Incomplete [[ASF_CITE:…]] across SSE chunks. */
+  let citeCarry = '';
 
   const encodeToken = (text: string) => encoder.encode(`0:${JSON.stringify(text)}\n`);
   const encodeData = (data: unknown) => encoder.encode(`2:${JSON.stringify([data])}\n`);
   const encodeFinish = () =>
     encoder.encode(`d:${JSON.stringify({ finishReason: 'stop', usage: { promptTokens: 0, completionTokens: 0 } })}\n`);
 
+  const enqueueVisibleToken = (
+    controller: ReadableStreamDefaultController<Uint8Array>,
+    chunk: string,
+  ) => {
+    const merged = citeCarry + chunk;
+    // Hold an incomplete machine-tag prefix so learners never see [[ASF_CITE…
+    const open = merged.lastIndexOf('[[ASF_');
+    if (open >= 0 && merged.indexOf(']]', open) < 0) {
+      const safe = stripCiteMachineTags(merged.slice(0, open));
+      citeCarry = merged.slice(open);
+      if (safe) controller.enqueue(encodeToken(safe));
+      return;
+    }
+    citeCarry = '';
+    const safe = stripCiteMachineTags(merged);
+    if (safe) controller.enqueue(encodeToken(safe));
+  };
   const finishTemplatePlanTurn = async (
     controller: ReadableStreamDefaultController<Uint8Array>,
     planResult: PlanApplyResult | null,
@@ -479,12 +503,28 @@ export async function POST(req: Request) {
             if (!planEagerAttempted && finalizeResult) {
               appendPlanResult(controller, finalizeResult);
             }
+            if (citeCarry) {
+              const leftover = stripCiteMachineTags(citeCarry);
+              citeCarry = '';
+              if (leftover) controller.enqueue(encodeToken(leftover));
+            }
+            if (assistantBuffer) {
+              const hygiene = applyPostStreamSolverHygiene(
+                agent,
+                lastMessage,
+                stripPlanMachineTags(assistantBuffer),
+                locale,
+              );
+              if (hygiene.repairNotice) {
+                controller.enqueue(encodeToken(hygiene.repairNotice));
+              }
+            }
           }
           controller.enqueue(encodeFinish());
           controller.close();
         } else {
           assistantBuffer += value;
-          controller.enqueue(encodeToken(value));
+          enqueueVisibleToken(controller, value);
         }
       } catch (err) {
         logger.error('chat stream pull failed', { err: String(err) });
@@ -1380,12 +1420,14 @@ async function buildContextPrompt(
     }
 
     const cycles = countSolverHintCycles(recentForIntent);
+    const authoritativeSolve = trySolveAuthoritative(message);
     context += `\n\n${buildSolverRevealInstruction({
       cycles,
       wantsFull: wantsFullSolutionNow(message) || tutorIntent === 'worked_solution',
       confirmed: learnerConfirmedReveal(message),
       inPracticeArena: Boolean(practiceContext),
       practiceGraded: practiceContext?.item_graded === true,
+      hasAuthoritativeSolve: Boolean(authoritativeSolve),
     })}`;
   }
 
