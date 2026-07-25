@@ -67,13 +67,17 @@ export interface LLMCompletionResult {
 }
 
 const DEFAULT_GROQ_BASE = 'https://api.groq.com/openai/v1';
-/** Volume-first primary (14.4K RPD on Groq free tier). */
-const DEFAULT_PRIMARY = 'llama-3.1-8b-instant';
+/**
+ * Quality-first learner chat default (ADR-0015).
+ * Cheap 8B remains available for classifiers / background via `resolveModelChain('cheap')`.
+ */
+const DEFAULT_PRIMARY = 'llama-3.3-70b-versatile';
 const DEFAULT_CHEAP = 'llama-3.1-8b-instant';
-/** Quality uplift when primary struggles or for fallback chain. */
+/** Extra quality models when primary fails (auth/rate/empty). */
 const DEFAULT_EXTRA_PRIMARY = [
-  'meta-llama/llama-4-scout-17b-16e-instruct',
-  'llama-3.3-70b-versatile',
+  'openai/gpt-oss-120b',
+  'qwen/qwen3.6-27b',
+  'llama-3.1-8b-instant',
 ];
 
 function trimSlash(url: string): string {
@@ -163,11 +167,26 @@ export function resolveModelChain(tier: LLMModelTier = 'primary'): string[] {
   return [...cfg.primaryModels, ...cfg.cheapModels];
 }
 
-/** Volume-first single model for learner chat (latency + Groq quota). */
+/**
+ * Learner-facing chat model chain (ADR-0015).
+ *
+ * Default: quality primary + fallbacks (`resolveModelChain('primary')`).
+ * Escape hatch for free-tier emergencies:
+ *   `CHAT_MODEL_POLICY=cheap` → single cheap model only (legacy behavior).
+ */
 export function resolveChatModelChain(): string[] {
-  const cfg = getLLMConfig();
-  const model = cfg.cheapModels[0] ?? cfg.primaryModels[0] ?? DEFAULT_PRIMARY;
-  return [model];
+  const policy = (process.env.CHAT_MODEL_POLICY ?? 'quality').trim().toLowerCase();
+  if (policy === 'cheap' || policy === 'volume') {
+    const cfg = getLLMConfig();
+    const model = cfg.cheapModels[0] ?? cfg.primaryModels[0] ?? DEFAULT_CHEAP;
+    return [model];
+  }
+  return resolveModelChain('primary');
+}
+
+/** Classifier / background tasks — keep on the cheap tier. */
+export function resolveClassifierModelChain(): string[] {
+  return resolveModelChain('cheap');
 }
 
 const MAX_FETCH_RETRIES = 2;

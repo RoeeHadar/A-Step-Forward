@@ -1,7 +1,7 @@
 # Architecture — As-Built Snapshot
 
 > **Maintained by:** Architecture Steward reviews (`.cursor/skills/architecture-review/`).
-> **Last updated:** 2026-07-24
+> **Last updated:** 2026-07-25
 >
 > This document describes **what runs today**, which may differ from the target
 > topology in `PLAN.md` / `ARCHITECTURE.md`. Update after major deploys or ADRs.
@@ -30,14 +30,15 @@
 
 ```
 Browser → POST /api/chat (Vercel)
-  → Groq streaming (maxDuration 60s)
-  → Neon: chat_turns, learner_agent_notes, persona reads
-  → Context: kg JSON, getCurrentPlan (DB weeks) + buildLearningPlan snapshot (KG path)
-  → Mastery (concept-scope filtered)
+  → buildContextNeeds (relevance gates) + resolveResponseLanguage
+  → assembleChatSystemPrompt (whole-section budget via fitSystemSections)
+  → Groq quality-first chain (CHAT_MODEL_POLICY escape hatch; maxDuration 60s)
+  → buffer draft → scoreResponseQuality → optional one repair → chunk stream
+  → Neon: chat_turns, learner_agent_notes, persona reads (no post-display repair append)
   → No MCP tool calls on the Vercel path
 ```
 
-No Render dependency on the happy path (`apps/web/src/app/api/chat/route.ts`). Agent prompts in `agent-baseline.ts` / `agent-prompts.ts` were truth-aligned 2026-07-24 to describe pre-injected context (not MCP tools).
+No Render dependency on the happy path (`apps/web/src/app/api/chat/route.ts`). Agent contracts: hybrid knowledge + answer-first roles (ADR-0015); prompts in `agent-baseline.ts` / `agent-prompts.ts` / `agent-skills.ts`.
 
 ### Learner UI pages (Neon-direct SSR)
 

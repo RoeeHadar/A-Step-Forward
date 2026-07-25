@@ -245,4 +245,24 @@ describe.skipIf(!LIVE)('ADR-0011 live LLM communication quality', () => {
       reply,
     ).toEqual([]);
   }, 200_000);
+
+  it('ADR-0015 math stem: answer without status dump / invented Sources', async () => {
+    await sleep(20_000);
+    const reply = await ask('מה החסר אם הממוצע של 5 מספרים הוא 10 וארבעה הם 8,9,11,12?');
+    expect(reply.length).toBeGreaterThan(30);
+    expect(scoreCommunicationReply(reply, ['no_dump', 'no_filler', 'no_garbage_hebrew']).failures, reply).toEqual(
+      [],
+    );
+    expect(reply).not.toMatch(/Sources:/i);
+    expect(reply).not.toMatch(/AUTHORITATIVE|הצעה להמשך/);
+  }, 200_000);
+
+  it('ADR-0015 English ask stays English', async () => {
+    await sleep(20_000);
+    const reply = await ask('Answer in English: what is the derivative of x squared?');
+    expect(reply.length).toBeGreaterThan(20);
+    const hebrew = (reply.match(/[\u0590-\u05FF]/g) ?? []).length;
+    const latin = (reply.match(/[A-Za-z]/g) ?? []).length;
+    expect(latin).toBeGreaterThan(hebrew);
+  }, 200_000);
 });

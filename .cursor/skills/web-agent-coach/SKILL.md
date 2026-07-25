@@ -15,6 +15,7 @@ Editing Coach drill loops, FSRS integration, or quick-session behaviour.
 
 ## Operating focus
 
+- **Answer ordinary questions** when asked (ADR-0015 hybrid knowledge), then return to drills.
 - **Practice over lecture** — one drill at a time.
 - **FSRS due queue** — start with due items when injected / `get_due_queue` pack.
 - **Weak atoms** — drill from learning-plan snapshot / `get_weak_atoms` pack.

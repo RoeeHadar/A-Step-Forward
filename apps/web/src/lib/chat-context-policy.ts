@@ -91,10 +91,10 @@ export function compactStoredTurnContent(
 }
 
 /**
- * Minimum chars to protect at the head (compact baseline + longest persona ≈ 10.5 k).
- * The head contains universal rules and the agent's identity — never trim it.
+ * Minimum chars to protect at the head (compact baseline + slim persona/skills).
+ * ADR-0015 reduced the always-on skills block; keep identity + core rules intact.
  */
-export const HEAD_GUARD_CHARS = 11_000;
+export const HEAD_GUARD_CHARS = 6_500;
 
 /**
  * Priority-aware system-prompt trimmer.
@@ -104,11 +104,11 @@ export const HEAD_GUARD_CHARS = 11_000;
  *   2. head     — compact baseline + agent persona (first HEAD_GUARD_CHARS of `system`).
  *   3. middle   — profile, notes, concepts, learning plan (trimmed first when over budget).
  *
- * Calling with no `tail` (default `''`) is fully backward-compatible: the whole
- * prompt is treated as body and head+middle trimming applies if needed.
+ * Prefer `fitSystemSections` for new callers — it drops whole sections instead of
+ * mid-string chops.
  */
 const MIDDLE_TRIM_NOTICE =
-  '\n\n[Some background context was trimmed to fit model limits. Use learner profile and weekly plan above.]';
+  '\n\n[Some background context was trimmed to fit model limits. Answer the learner question with what remains.]';
 
 export function fitSystemPrompt(system: string, tail = ''): string {
   const total = system.length + tail.length;
@@ -118,16 +118,13 @@ export function fitSystemPrompt(system: string, tail = ''): string {
 
   const available = CHAT_CONTEXT.maxSystemChars - tail.length;
   if (available <= 0) {
-    // Tail alone exceeds budget — pathological, keep as much tail as possible.
     return tail.slice(0, CHAT_CONTEXT.maxSystemChars);
   }
 
   if (available <= HEAD_GUARD_CHARS) {
-    // Middle entirely dropped — truncate head to whatever space the tail leaves.
     return `${system.slice(0, available)}${tail}`;
   }
 
-  // Middle trim: keep full head + as much middle as fits + full tail.
   const head = system.slice(0, HEAD_GUARD_CHARS);
   const middle = system.slice(HEAD_GUARD_CHARS);
   const middleAvailable = available - HEAD_GUARD_CHARS;
@@ -138,6 +135,50 @@ export function fitSystemPrompt(system: string, tail = ''): string {
       : middle;
 
   return `${head}${trimmedMiddle}${tail}`;
+}
+
+/** Named prompt sections — higher `priority` is kept longer when over budget. */
+export interface PromptSection {
+  id: string;
+  content: string;
+  /** 100 = must keep; 10 = drop first. */
+  priority: number;
+}
+
+/**
+ * Whole-section budgeter (ADR-0015). Never cuts mid-section; never keeps a
+ * THIS TURN instruction that references a dropped pack when the caller puts
+ * pack-dependent instructions only in `tail` after verifying packs survived.
+ */
+export function fitSystemSections(sections: PromptSection[], tail = ''): {
+  system: string;
+  dropped: string[];
+} {
+  const nonempty = sections.filter((s) => s.content.trim().length > 0);
+  const dropped: string[] = [];
+  let body = nonempty.map((s) => s.content).join('\n\n');
+  if (body.length + tail.length <= CHAT_CONTEXT.maxSystemChars) {
+    return { system: tail ? `${body}${tail}` : body, dropped };
+  }
+
+  const ordered = [...nonempty].sort((a, b) => a.priority - b.priority);
+  const keep = new Map(nonempty.map((s) => [s.id, s]));
+  for (const s of ordered) {
+    if (body.length + tail.length <= CHAT_CONTEXT.maxSystemChars) break;
+    if (s.priority >= 90) continue; // never drop core identity
+    keep.delete(s.id);
+    dropped.push(s.id);
+    body = [...keep.values()]
+      .sort((a, b) => nonempty.indexOf(a) - nonempty.indexOf(b))
+      .map((x) => x.content)
+      .join('\n\n');
+  }
+
+  if (body.length + tail.length > CHAT_CONTEXT.maxSystemChars) {
+    // Last resort: legacy head/middle trim on remaining body.
+    return { system: fitSystemPrompt(body, tail), dropped };
+  }
+  return { system: tail ? `${body}${tail}` : body, dropped };
 }
 
 export function compactMemoryTurns(

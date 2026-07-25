@@ -367,12 +367,13 @@ export const RECOVERY_TURN_INSTRUCTION = `## THIS TURN — recovery / simplify (
 The learner is confused, overloaded, or asked for a simpler path.
 1. Drop any failed explanation path from prior turns — do not dig deeper into it.
 2. Say honestly whether the topic is required for their current plan / bagrut track, or optional enrichment.
-3. Teach the simplest CORRECT method from \`## Method authority\` / injected lesson/concept context (or say the corpus does not cover it — do not invent a simpler false method).
+3. Teach the simplest CORRECT method from \`## Method authority\` / injected lesson/concept context when present; otherwise use honest general knowledge and say you are not citing an ASF lesson (ADR-0015). Never invent a simpler false method.
 4. Never trade correctness for simplicity. One short worked example, then check understanding.
 5. If the question is a definite integral (limits given, e.g. 0 to 1), finish with the numeric value (for ∫₀¹ x² dx state **1/3** explicitly after the antiderivative).
 6. Optional: emit one [[ASF_MEMORY_NOTE:...]] with kind misconception or strategy (≤600 chars).`;
 
 export const WORKED_SOLUTION_TURN_INSTRUCTION = `## THIS TURN — worked solution / deepen (mandatory)
+- Prefer injected corpus/KG / hybrid packs when present; otherwise solve from general knowledge without inventing ASF citations (ADR-0015).
 - If the solution needs more than ~8 steps: give a short roadmap + first 2–3 steps, then ask whether to continue.
 - On "המשך / continue": resume from the last unfinished step — do NOT restate earlier steps or say you need to "explain differently".
 - Keep math in \`$...$\` / \`$$...$$\`. No filler closers.`;

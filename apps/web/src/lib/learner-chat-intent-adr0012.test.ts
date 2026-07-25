@@ -25,6 +25,12 @@ describe('ADR-0012 pressure-family intents', () => {
     expect(classifyTutorChatIntent('מה כדאי שאעבוד עליו עכשיו')).toBe('study_next');
   });
 
+  it('ADR-0015: math stems with חסר / לא מספיק are not exam_anxiety', () => {
+    expect(wantsExamAnxietySupport('מה החסר בממוצע של חמישה מספרים?')).toBe(false);
+    expect(classifyTutorChatIntent('מה החסר בממוצע של חמישה מספרים?')).not.toBe('exam_anxiety');
+    expect(classifyTutorChatIntent('פתור את המשוואה שלב אחר שלב')).toBe('worked_solution');
+  });
+
   it('detector helpers align', () => {
     expect(wantsExamAnxietySupport('אני לחוץ ממש')).toBe(true);
     expect(wantsContextChallenge('you should know my status')).toBe(true);

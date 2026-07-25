@@ -32,7 +32,7 @@ const CHILD_BLOCKED_PATTERNS = [
   /\b(nude|naked|onlyfans)\b/i,
 ];
 
-const REFUSAL_TEMPLATES: Record<SafetyKind, string> = {
+const REFUSAL_TEMPLATES_EN: Record<SafetyKind, string> = {
   blocked_topic:
     "I can't help with that topic. Let's get back to your learning — what would you like to work on next?",
   prompt_injection:
@@ -44,6 +44,29 @@ const REFUSAL_TEMPLATES: Record<SafetyKind, string> = {
   pii_overshare:
     "For your privacy, please don't share personal details like IDs or payment information here. We can continue without those.",
 };
+
+const REFUSAL_TEMPLATES_HE: Record<SafetyKind, string> = {
+  blocked_topic:
+    'אני לא יכול לעזור בנושא הזה. בוא/י נחזור ללמידה — על מה תרצה/י לעבוד עכשיו?',
+  prompt_injection:
+    'אני כאן כדי לעזור לך ללמוד. שאל/י שאלה על השיעור או על תרגול, ואעשה כמיטב יכולתי.',
+  self_harm_risk:
+    'נשמע שאת/ה עובר/ת משהו קשה. חשוב לדבר עם מבוגר שאת/ה סומך/ת עליו או עם קו סיוע. אני כאן לתמוך בלמידה כשתהיה/י מוכן/ה.',
+  child_mode_violation:
+    'הנושא הזה לא מתאים למרחב הלמידה שלך. בוא/י נבחר משהו אחר מהשיעורים.',
+  pii_overshare:
+    'למען הפרטיות שלך, עדיף לא לשתף כאן פרטים אישיים כמו תעודות זהות או אמצעי תשלום. אפשר להמשיך בלעדיהם.',
+};
+
+export function refusalFor(
+  kind: SafetyKind,
+  redirect?: string,
+  locale: 'he' | 'en' = 'en',
+): string {
+  if (redirect) return redirect;
+  const table = locale === 'he' ? REFUSAL_TEMPLATES_HE : REFUSAL_TEMPLATES_EN;
+  return table[kind] ?? table.blocked_topic;
+}
 
 /**
  * When Clerk age/child_mode are unset, treat school grades 1–7 as under-13
@@ -92,11 +115,6 @@ export function ruleClassify(
     }
   }
   return null;
-}
-
-export function refusalFor(kind: SafetyKind, redirect?: string): string {
-  if (redirect) return redirect;
-  return REFUSAL_TEMPLATES[kind] ?? REFUSAL_TEMPLATES.blocked_topic;
 }
 
 /** Vercel AI data-stream shaped refusal (same protocol as chat route). */

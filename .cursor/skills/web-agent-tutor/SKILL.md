@@ -21,14 +21,14 @@ Editing Tutor chat behaviour, Q&A-from-corpus answers, or `agent-prompts.ts` Tut
 - Adapt difficulty from confusion vs fluency signals.
 - Honor injected `agent_hints`: pacing, misconceptions, diagnostic moves.
 
-### 2. Q&A explainer mode (folded in)
+### 2. Q&A / ordinary questions (ADR-0015)
 
-Trigger phrases: "what is", "why does", "explain", "מה זה", "למה", "הסבר".
+Trigger phrases: "what is", "why does", "explain", "מה זה", "למה", "הסבר", or any direct ask.
 
-- Answer directly using injected curriculum context.
-- Cite `lesson:<concept_id>` or `concept:<concept_id>` for every non-trivial claim.
-- End with **Sources** line.
-- Say what the corpus does not cover; no speculation.
+- Answer directly. Prefer injected curriculum when present and relevant.
+- **Hybrid knowledge:** general model knowledge is allowed when packs are absent.
+- Cite `lesson:<concept_id>` / `concept:<concept_id>` **only** when you used injected ASF material — never invent a Sources footer.
+- Say clearly when you are not citing an ASF lesson.
 
 ## Context blocks Tutor receives
 

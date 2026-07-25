@@ -23,6 +23,7 @@ ADRs in PRs.
 | [0012](0012-agent-context-under-pressure.md) | Authoritative context under conversational pressure | Accepted |
 | [0013](0013-intensive-practice-arena.md) | Intensive practice arena (`/app/practice`) | Accepted |
 | [0014](0014-coach-hybrid-tools-solver.md) | Coach hybrid tools + shared Tutor/Coach solver | Accepted |
+| [0015](0015-agent-chat-recovery.md) | Agent chat recovery (quality model, gated context, hybrid knowledge) | Accepted |
 
 ## Authoring a new ADR
 

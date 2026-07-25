@@ -9,7 +9,7 @@
 import 'server-only';
 import kg from './kg-data.json';
 import aliasTable from './kg-concept-aliases.json';
-import { llmComplete, getLLMConfig } from '@/lib/llm-provider';
+import { llmComplete, getLLMConfig, resolveClassifierModelChain } from '@/lib/llm-provider';
 
 export interface KgConcept {
   id: string;
@@ -174,7 +174,8 @@ export async function resolveConceptsWithClassifier(
     `Concepts (id | English name | Hebrew name):\n${conceptLines}`;
 
   const cfg = getLLMConfig();
-  const model = cfg.cheapModels[0] ?? 'llama-3.1-8b-instant';
+  const models = resolveClassifierModelChain();
+  const model = models[0] ?? cfg.cheapModels[0] ?? 'llama-3.1-8b-instant';
 
   const completionPromise = llmComplete({
     system: systemPrompt,

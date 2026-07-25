@@ -21,11 +21,12 @@ describe('llm-provider config', () => {
     delete process.env.LLM_BASE_URL;
     delete process.env.LLM_PRIMARY_MODEL;
     delete process.env.LLM_FALLBACK_MODELS;
+    delete process.env.CHAT_MODEL_POLICY;
     resetLLMConfigCache();
     const cfg = getLLMConfig();
     expect(cfg.configured).toBe(true);
     expect(cfg.baseUrl).toContain('groq.com');
-    expect(cfg.primaryModels[0]).toBe('llama-3.1-8b-instant');
+    expect(cfg.primaryModels[0]).toBe('llama-3.3-70b-versatile');
     expect(llmConfigured()).toBe(true);
   });
 
@@ -59,10 +60,22 @@ describe('llm-provider config', () => {
     expect(cfg.baseUrl).toBe('https://api.together.xyz/v1');
   });
 
-  it('resolveChatModelChain returns a single volume-first model', () => {
+  it('resolveChatModelChain is quality-first by default', () => {
     process.env.LLM_API_KEY = 'k';
     process.env.LLM_CHEAP_MODEL = 'llama3.1:8b';
     process.env.LLM_PRIMARY_MODEL = 'qwen2.5:32b,llama3.3:70b';
+    delete process.env.CHAT_MODEL_POLICY;
+    resetLLMConfigCache();
+    const chain = resolveChatModelChain();
+    expect(chain[0]).toBe('qwen2.5:32b');
+    expect(chain.length).toBeGreaterThan(1);
+  });
+
+  it('CHAT_MODEL_POLICY=cheap restores single cheap model', () => {
+    process.env.LLM_API_KEY = 'k';
+    process.env.LLM_CHEAP_MODEL = 'llama3.1:8b';
+    process.env.LLM_PRIMARY_MODEL = 'qwen2.5:32b';
+    process.env.CHAT_MODEL_POLICY = 'cheap';
     resetLLMConfigCache();
     expect(resolveChatModelChain()).toEqual(['llama3.1:8b']);
   });

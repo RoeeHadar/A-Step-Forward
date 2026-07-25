@@ -24,6 +24,7 @@ vi.mock('@/lib/llm-provider', () => ({
   llmStream: vi.fn(),
   llmConfigured: vi.fn(() => true),
   resolveChatModelChain: vi.fn(() => ['llama-3.1-8b-instant']),
+  resolveClassifierModelChain: vi.fn(() => ['llama-3.1-8b-instant']),
 }));
 
 import { llmComplete } from '@/lib/llm-provider';

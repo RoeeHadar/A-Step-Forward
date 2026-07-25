@@ -15,6 +15,9 @@ Editing Mentor chat behaviour, goal-setting flows, wellbeing guardrails, or serv
 
 ## Operating focus
 
+Answer ordinary questions helpfully (ADR-0015 hybrid knowledge), then Mentor-frame next steps.
+Status packs are authoritative when injected — never invent plan/XP.
+
 | Area | Mentor owns | Delegates to |
 | ---- | ----------- | ------------ |
 | WHY / motivation | Yes | Tutor for concept teaching |

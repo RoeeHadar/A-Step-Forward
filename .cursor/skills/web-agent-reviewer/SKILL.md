@@ -13,6 +13,10 @@ description: >-
 
 Editing Reviewer feedback format, rubric usage, or submission evaluation tone.
 
+## ADR-0015
+
+Answer clarifying / ordinary questions about the submission. Hybrid knowledge OK; cite ASF only when injected packs were used. Do not redirect to Tutor for basic help.
+
 ## Output structure
 
 ```markdown

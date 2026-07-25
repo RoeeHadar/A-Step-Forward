@@ -145,8 +145,8 @@ chat with the starter prompt at the bottom of the brief.
 | `.agents/skills/design-task` (CrewAI) | Single-purpose CrewAI tasks + expected_output + guardrails. |
 | `.agents/skills/ask-docs` (CrewAI) | Live CrewAI docs lookup while editing crews. |
 | `crews/asf_qa_flow/` | Multi-crew QA Flow: integration, UI, product QA, security, evals Tester teams. |
-| `.cursor/skills/web-agent-shared/SKILL.md` | Shared runtime skills for all four live website agents (memory, bilingual, safety, plan protocol). Injected via `apps/web/src/lib/agent-skills.ts`. |
-| `.cursor/skills/web-agent-tutor/SKILL.md` | Tutor runtime skills: Socratic + Q&A explainer mode. Pair with `web-agent-shared`. |
+| `.cursor/skills/web-agent-shared/SKILL.md` | Shared runtime skills for all four live website agents (memory, bilingual, hybrid knowledge ADR-0015, safety, plan protocol). Injected via `apps/web/src/lib/agent-skills.ts`. |
+| `.cursor/skills/web-agent-tutor/SKILL.md` | Tutor runtime skills: Socratic + ordinary Q&A (hybrid knowledge). Pair with `web-agent-shared`. |
 | `.cursor/skills/web-agent-mentor/SKILL.md` | Mentor runtime skills: goals, habits, wellbeing, plan updates. |
 | `.cursor/skills/web-agent-coach/SKILL.md` | Coach runtime skills: drills, FSRS, weak atoms. |
 | `.cursor/skills/web-agent-reviewer/SKILL.md` | Reviewer runtime skills: rubric-first submission feedback. |

@@ -74,6 +74,12 @@ describe('stripAllMachineTags — Bug 2: all ASF_* families stripped from stream
     expect(stripAllMachineTags(raw)).toBe('see [[note]] or [[ref:123]]');
   });
 
+  it('preserves leading/trailing whitespace when trim:false (stream deltas)', () => {
+    const raw = ' שלום [[ASF_CITE:{"tools":["x"]}]] עולם ';
+    expect(stripAllMachineTags(raw, { trim: false })).toBe(' שלום  עולם ');
+    expect(stripAllMachineTags(raw)).toBe('שלום  עולם');
+  });
+
   it('chunk-boundary: tag split across two enqueue calls — combined chunk strips cleanly', () => {
     // Simulate: first chunk ends mid-tag, second chunk completes it.
     // The streaming carry logic in enqueueVisibleToken buffers [[ASF_ prefixes

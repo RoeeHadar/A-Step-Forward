@@ -94,8 +94,12 @@ const AGENT_CORRECTION_RE =
 const READINESS_AFFIRM_RE =
   /^(?:כן(?:\s|,|$)|נכון|בטח|ברור|יודע|אני יודע|כן,? אני יודע|yes\b|i know|i do\b)/i;
 
+/** Anxiety / readiness stress — avoid bare math stems like «מה החסר» / «לא מספיק נתונים». */
 const EXAM_ANXIETY_RE =
-  /(?:לא מוכן|לא אהיה מוכן|לא מספיק|עוד נושאים|נושאים נוספים|חסר|לא נגענו|missing topics|not ready|won't be ready|מרגיש שאני לא|לפי הלו.?ז|לפי הלוז|אני לחוץ|לחוץ ממש|stressed|overwhelmed)/i;
+  /(?:לא מוכן(?:\s+ל(?:מבחן|בגרות))?|לא אהיה מוכן|עוד נושאים (?:ש)?(?:לא|חסר)|נושאים נוספים|לא נגענו (?:ב|ל)|missing topics|not ready for (?:the )?(?:exam|test)|won't be ready|מרגיש שאני לא מוכן|לפי הלו.?ז|לפי הלוז|אני לחוץ(?:\s+מ(?:ה)?מבחן)?|לחוץ ממש (?:מהמבחן|מהבגרות)|(?:exam |test )?stress(?:ed)?|overwhelmed (?:by|about)|(?:זה |זהו )?לא מספיק(?:\s+(?:זמן|ללמוד|להספיק|למבחן|לבגרות)))/i;
+
+const MATH_STEM_RE =
+  /(?:מה החסר|חסר ב|ממוצע|פתור|חשב|אינטגרל|נגזר|משווא|\\int|\\frac|solve|calculate|derivative|integral|what(?:'s| is) (?:the )?missing)/i;
 
 const CONTEXT_CHALLENGE_RE =
   /(?:אתה לא יודע|אתה אמור|אתה המורה|תגיד לי מה (?:ה)?מצב|you (?:don'?t|do not) know|you should know|you'?re (?:my )?teacher|tell me (?:my )?status)/i;
@@ -154,7 +158,13 @@ export function wantsExpandedOutputBudget(message: string): boolean {
 }
 
 export function wantsExamAnxietySupport(message: string): boolean {
-  return EXAM_ANXIETY_RE.test(message.trim());
+  const t = message.trim();
+  if (!t) return false;
+  // Math / worked-solution stems must not trip anxiety (ADR-0015).
+  if (MATH_STEM_RE.test(t) && !/(?:מבחן|בגרות|exam|test|לחוץ|stressed|מוכן)/i.test(t)) {
+    return false;
+  }
+  return EXAM_ANXIETY_RE.test(t);
 }
 
 export function wantsContextChallenge(message: string): boolean {
@@ -204,6 +214,9 @@ export function classifyTutorChatIntent(
   if (isPlanChangeTemplate(normalized)) return 'plan_template';
   if (wantsConversationAdvance(message)) return 'conversation_advance';
   if (wantsAgentCorrection(message)) return 'agent_correction';
+  // Teach / solve intents beat anxiety false positives (ADR-0015).
+  if (wantsRecoverySimplify(message)) return 'recovery_simplify';
+  if (wantsWorkedSolution(message)) return 'worked_solution';
   if (wantsContextChallenge(message)) return 'context_challenge';
   if (wantsPlanOwnership(message)) return 'plan_ownership';
   if (learnerPlanChangeIntentHeuristic(message) && !isPlanChangeTemplate(normalized)) {
@@ -215,8 +228,6 @@ export function classifyTutorChatIntent(
     return 'exam_readiness';
   }
   if (wantsProgressStatus(message)) return 'progress_status';
-  if (wantsRecoverySimplify(message)) return 'recovery_simplify';
-  if (wantsWorkedSolution(message)) return 'worked_solution';
   if (wantsLearningPlanSnapshot(message)) return 'study_next';
   return 'learn';
 }
@@ -274,13 +285,13 @@ Answer from the AUTHORITATIVE learner-facing status pack (Mentor framing).
 
 const RECOVERY_SIMPLIFY_INSTRUCTION = `## Interaction mode: RECOVERY / SIMPLIFY (mandatory)
 1. Drop any failed explanation path from prior turns.
-2. Say whether the topic is required for the current plan / bagrut track, or optional.
-3. Teach the simplest CORRECT method from injected corpus context only.
+2. Say whether the topic is required for the current plan / bagrut track, or optional (only if plan/active-week context is injected).
+3. Teach the simplest CORRECT method — prefer injected corpus packs when present; otherwise use honest general knowledge and say you are not citing an ASF lesson.
 4. Never invent a wrong "simple" answer. One short example, then check understanding.
 5. Optional private note (misconception/strategy).`;
 
 const WORKED_SOLUTION_INSTRUCTION = `## Interaction mode: WORKED SOLUTION (mandatory)
-- Ground every step in corpus/KG; no invented bridges.
+- Prefer injected corpus/KG / hybrid packs when present; otherwise solve from general knowledge without inventing ASF citations.
 - If >~8 steps: roadmap + first 2–3 steps, then ask to continue.
 - Math in \`$...$\` / \`$$...$$\`. No filler closers.`;
 

@@ -64,6 +64,21 @@ import {
   truncateChatText,
   truncationContinueNotice,
 } from '@/lib/chat-context-policy';
+import { buildContextNeeds } from '@/lib/chat-context-needs';
+import {
+  assembleChatSystemPrompt,
+  filterNotesByRelevance,
+  partitionInjectedContext,
+} from '@/lib/chat-context-builder';
+import {
+  languageInstructionBlock,
+  resolveResponseLanguage,
+  type ChatResponseLocale,
+} from '@/lib/chat-response-language';
+import {
+  qualityRepairInstruction,
+  scoreResponseQuality,
+} from '@/lib/chat-response-quality';
 import {
   buildBilingualProgressBriefing,
   buildLearnerFacingStatusPack,
@@ -252,7 +267,7 @@ async function saveAssistantTurn(
     ? applyPostStreamSolverHygiene(agent, userMessageForVerify, withoutMemory, locale).text
     : stripCiteMachineTags(withoutMemory);
   const postHit = ruleClassify(cleaned, { childMode });
-  const toStore = postHit ? refusalFor(postHit) : cleaned;
+  const toStore = postHit ? refusalFor(postHit, undefined, locale) : cleaned;
   if (!postHit) {
     try {
       await applyMemoryTagsFromAssistant(userId, agent, content, { childMode });
@@ -363,7 +378,7 @@ export async function POST(req: Request) {
   const preHit = ruleClassify(lastMessage, { childMode });
   if (preHit) {
     logger.warn('chat: safety pre-filter', { kind: preHit as SafetyKind, agent });
-    return refusalStreamResponse(refusalFor(preHit));
+    return refusalStreamResponse(refusalFor(preHit, undefined, locale));
   }
 
   // Record user turn before streaming so memory is durable for retries.
@@ -454,7 +469,8 @@ export async function POST(req: Request) {
       return;
     }
     citeCarry = '';
-    const safe = stripAllMachineTags(merged);
+    // Never trim streaming deltas — BPE models emit leading spaces / newline-only tokens.
+    const safe = stripAllMachineTags(merged, { trim: false });
     if (safe) controller.enqueue(encodeToken(safe));
   };
   const finishTemplatePlanTurn = async (
@@ -573,17 +589,8 @@ export async function POST(req: Request) {
               citeCarry = '';
               if (leftover) controller.enqueue(encodeToken(leftover));
             }
-            if (assistantBuffer) {
-              const hygiene = applyPostStreamSolverHygiene(
-                agent,
-                lastMessage,
-                stripPlanMachineTags(assistantBuffer),
-                locale,
-              );
-              if (hygiene.repairNotice) {
-                controller.enqueue(encodeToken(hygiene.repairNotice));
-              }
-            }
+            // Hygiene already applied in streamFromLLM before tokens are shown (ADR-0015).
+            // Do not append a second repair notice after the learner saw the answer.
           }
           controller.enqueue(encodeFinish());
           controller.close();
@@ -879,7 +886,12 @@ async function buildContextPrompt(
     minimal?: boolean;
     practiceContext?: PracticeChatContext | null;
   } = {},
-): Promise<{ system: string; memory: Array<{ role: 'user' | 'assistant'; content: string }>; groundingIds: Set<string> }> {
+): Promise<{
+  system: string;
+  memory: Array<{ role: 'user' | 'assistant'; content: string }>;
+  groundingIds: Set<string>;
+  responseLocale: ChatResponseLocale;
+}> {
   const {
     quickMode = false,
     quickDuration = '15',
@@ -916,24 +928,47 @@ async function buildContextPrompt(
 
   const locale = resolveLocale(cookieStore.get(LOCALE_COOKIE)?.value);
 
-  // The route records the user turn BEFORE calling buildContextPrompt so the
-  // write is durable for retries.  fetchRecentChatTurns then returns that same
-  // turn, which would be appended a second time by streamFromLLM (line ~1723).
-  // Filter it out here — the message still reaches the model exactly once via
-  // the explicit `messages` array at the call site.
+  // The route records the user turn BEFORE calling buildContextPrompt.
+  // On reload/retry the same content may appear multiple times — drop all
+  // trailing consecutive duplicates of the just-recorded user message.
   const justRecordedContent = compactStoredTurnContent(message, 'user', locale);
-  const recentForLLM =
-    recent.length > 0 &&
-    recent[recent.length - 1]?.role === 'user' &&
-    recent[recent.length - 1]?.content === justRecordedContent
-      ? recent.slice(0, -1)
-      : recent;
+  let recentForLLM = recent;
+  while (
+    recentForLLM.length > 0 &&
+    recentForLLM[recentForLLM.length - 1]?.role === 'user' &&
+    recentForLLM[recentForLLM.length - 1]?.content === justRecordedContent
+  ) {
+    recentForLLM = recentForLLM.slice(0, -1);
+  }
 
   const recentForIntent = recent.map((t) => ({ role: t.role, content: t.content }));
+  const recentUserMsgs = recent
+    .filter((t) => t.role === 'user')
+    .map((t) => t.content)
+    .slice(-4);
 
   let tutorContract: ReturnType<typeof buildTutorInteractionContract> | null = null;
   let tutorIntent: ReturnType<typeof classifyTutorChatIntent> | null = null;
   const liveAgents = agent === 'tutor' || agent === 'mentor' || agent === 'coach' || agent === 'reviewer';
+
+  const responseLocale: ChatResponseLocale = resolveResponseLanguage({
+    message,
+    recentUserMessages: recentUserMsgs,
+    profileLang:
+      (profile?.personality_profile as { ui_lang?: string; preferred_lang?: string } | null)
+        ?.ui_lang ??
+      (profile?.personality_profile as { preferred_lang?: string } | null)?.preferred_lang ??
+      null,
+    uiLocale: locale,
+  });
+
+  let contextNeeds = buildContextNeeds({
+    agent,
+    message,
+    minimal,
+    hasTopic: Boolean(topic),
+    hasPractice: Boolean(practiceContext),
+  });
   if (liveAgents && !minimal) {
     const tutorMode =
       (profile?.personality_profile as { tutor_mode?: string } | null)?.tutor_mode ?? null;
@@ -959,8 +994,20 @@ async function buildContextPrompt(
         : null,
     };
     tutorIntent = classifyTutorChatIntent(message, intentCtx);
+    contextNeeds = buildContextNeeds({
+      agent,
+      message,
+      intentCtx,
+      minimal,
+      hasTopic: Boolean(topic),
+      hasPractice: Boolean(practiceContext),
+    });
+    // Prefer classifier intent when needs were built without full ctx earlier.
+    if (contextNeeds.intent !== tutorIntent) {
+      contextNeeds = { ...contextNeeds, intent: tutorIntent };
+    }
     if (agent === 'tutor') {
-      tutorContract = buildTutorInteractionContract(tutorIntent, locale, intentCtx);
+      tutorContract = buildTutorInteractionContract(tutorIntent, responseLocale, intentCtx);
     }
 
     if (tutorIntent === 'exam_anxiety') {
@@ -984,8 +1031,8 @@ async function buildContextPrompt(
     context = `${learnerPref}\n\n${context}`;
   }
 
-  context += `\n\n## Response language`;
-  context += `\n- Language preference: ${locale === 'en' ? 'English' : 'Hebrew'} — respond in this language by default`;
+  context += `\n\n${languageInstructionBlock(responseLocale)}`;
+  context += `\n- Trust hierarchy: current learner message > verified profile/plan/mastery > recent turns > inferred persona/notes. Do not let stale notes redirect the topic.`;
 
   if (profileDbUnavailable) {
     context += `\n\n## Learner context temporarily unavailable`;
@@ -1001,36 +1048,40 @@ async function buildContextPrompt(
   // CLAUDE.md-style learner persona — shared across every agent, written by
   // the Memory Steward (and any agent allowed to). Tells you HOW this
   // learner thinks/talks/learns, NOT what they know (that's mastery).
-  if (!minimal && persona?.text && persona.text.trim().length > 0) {
+  if (!minimal && contextNeeds.durableMemory && persona?.text && persona.text.trim().length > 0) {
     context += `\n\n## What I know about this learner (shared persona)`;
     context += `\n${trimPersonaForChat(persona.text)}`;
-    context += `\n- Persona hygiene: do not paste gate-score lines or observations verbatim; paraphrase into learner language.`;
+    context += `\n- Persona hygiene: paraphrase into learner language. Hints only — current message wins on conflicts.`;
   }
 
   let xpSnapForBriefing: {
     total_xp: number;
     level: number;
   } | null = null;
-  if (!minimal) {
+  if (!minimal && contextNeeds.xp) {
     try {
       const { ensureXpSnapshot, formatXpContextBlock } = await import('@/lib/learner-xp');
       const xpSnap = await ensureXpSnapshot(userId);
       xpSnapForBriefing = { total_xp: xpSnap.total_xp, level: xpSnap.level };
-      const xpLocale = locale === 'en' ? 'en' : 'he';
+      const xpLocale = responseLocale === 'en' ? 'en' : 'he';
       context += `\n\n${formatXpContextBlock(xpSnap, xpLocale)}`;
     } catch {
       // XP is optional context
     }
   }
 
-  if (!minimal && agentNotes.length > 0) {
-    context += `\n\n## My private notes on this learner (agent: ${agent})`;
-    for (const n of agentNotes) {
-      const tag = n.related_concept_id ? ` [${n.related_concept_id}]` : '';
-      context += `\n- (${n.kind})${tag} ${truncateChatText(n.content, CHAT_CONTEXT.maxAgentNoteChars)}`;
+  if (!minimal && contextNeeds.durableMemory && agentNotes.length > 0) {
+    const relevantNotes = filterNotesByRelevance(agentNotes, message);
+    if (relevantNotes.length > 0) {
+      context += `\n\n## My private notes on this learner (agent: ${agent})`;
+      context += `\n(These are hints — do not let them override the current question.)`;
+      for (const n of relevantNotes) {
+        const tag = n.related_concept_id ? ` [${n.related_concept_id}]` : '';
+        context += `\n- (${n.kind})${tag} ${truncateChatText(n.content, CHAT_CONTEXT.maxAgentNoteChars)}`;
+      }
     }
   }
-  if (profile) {
+  if (profile && contextNeeds.profile) {
     context += `\n\n## Learner profile (internal facts — paraphrase; never dump field-by-field)`;
     context += `\n- Goal: ${profile.goal}`;
     if (profile.grade_level) context += `\n- Grade level: ${profile.grade_level}`;
@@ -1152,7 +1203,7 @@ async function buildContextPrompt(
     .sort((a, b) => b[1] - a[1])
     .slice(0, CHAT_CONTEXT.maxWeakStrongConcepts)
     .map(([id]) => id);
-  if (weakConcepts.length || strongConcepts.length) {
+  if (contextNeeds.mastery && (weakConcepts.length || strongConcepts.length)) {
     context += `\n\n## Mastery so far`;
     if (weakConcepts.length) context += `\n- Weak areas: ${weakConcepts.join(', ')}`;
     if (strongConcepts.length) context += `\n- Strong areas: ${strongConcepts.join(', ')}`;
@@ -1160,7 +1211,7 @@ async function buildContextPrompt(
 
   // A1: Universal "Active week" block — injected for all four live agents when a plan exists.
   // Placed in the middle layer (trimmable under pressure) but early enough to survive typical trims.
-  if (!minimal && liveAgents && weekSpec && activeWeekForSpec) {
+  if (!minimal && liveAgents && weekSpec && activeWeekForSpec && contextNeeds.activeWeek) {
     const activeWeekBlock = buildActiveWeekBlock({
       weekNumber: activeWeekForSpec.week_number,
       concepts: activeWeekForSpec.concepts,
@@ -1176,11 +1227,8 @@ async function buildContextPrompt(
   const diagnosticSummary = (
     profile?.mental_state as { diagnostic_summary?: { agent_brief_en?: string; agent_brief_he?: string } } | null
   )?.diagnostic_summary;
-  if (profile && diagnosticSummary?.agent_brief_en) {
-    const lang =
-      (profile.personality_profile as { ui_lang?: string } | null)?.ui_lang === 'he'
-        ? 'he'
-        : 'en';
+  if (profile && diagnosticSummary?.agent_brief_en && (contextNeeds.planCatalog || contextNeeds.statusPack || contextNeeds.bilingualBriefing)) {
+    const lang = responseLocale;
     context += `\n\n${formatDiagnosticSummaryForAgents(diagnosticSummary as DiagnosticSummary, lang)}`;
   }
 
@@ -1188,6 +1236,7 @@ async function buildContextPrompt(
     const plan = currentPlan;
     const normalizedMsg = normalizePlanChangeMessage(message);
     const needsPlanCatalog =
+      contextNeeds.planCatalog ||
       tutorContract?.injectPlanCatalog ||
       isPlanChangeTemplate(normalizedMsg) ||
       shouldApplyPlanImmediately(message);
@@ -1250,9 +1299,19 @@ async function buildContextPrompt(
   }
 
   const searchMessage = topic && !message.trim() ? topic.replace(/_/g, ' ') : message;
-  const related = minimal
-    ? []
-    : (await resolveConceptsWithClassifier(searchMessage, profile?.subjects ?? [])).concepts;
+  const resolved =
+    minimal || !contextNeeds.curriculumHints
+      ? { concepts: [] as Awaited<ReturnType<typeof resolveConceptsWithClassifier>>['concepts'], tier: 'none' as const }
+      : await resolveConceptsWithClassifier(searchMessage, profile?.subjects ?? []);
+  // ADR-0015: attach curriculum only when needs say so and resolver found something.
+  // Classifier miss (tier none / empty) → ordinary general-knowledge answer, no fabricated ASF map.
+  const related = resolved.concepts;
+  if (resolved.tier !== 'none' || related.length > 0) {
+    logger.info('chat: concept resolver', {
+      tier: resolved.tier,
+      attached: related.length,
+    });
+  }
   for (const c of related) {
     addConceptGrounding(c.id);
   }
@@ -1266,7 +1325,7 @@ async function buildContextPrompt(
     // Inject agent_hints from the matching AI-authored lessons so the Tutor
     // can ground its reply in the canonical key insights, pacing hints, and
     // common-misconception triggers we authored per concept.
-    if (agent === 'tutor' || agent === 'coach') {
+    if ((agent === 'tutor' || agent === 'coach') && contextNeeds.curriculumHints) {
       const hintsRows = await fetchLessonAgentHintsByConceptIds(related.map((c) => c.id)).catch(
         () => [] as Awaited<ReturnType<typeof fetchLessonAgentHintsByConceptIds>>,
       );
@@ -1310,13 +1369,14 @@ async function buildContextPrompt(
   const injectWellbeingSnapshot =
     !minimal &&
     profile &&
+    contextNeeds.wellbeing &&
     (agent === 'tutor' || agent === 'mentor') &&
     (tutorIntent === 'exam_anxiety' ||
       (profileAnxiety != null && profileAnxiety >= ANXIETY_THRESHOLD));
 
   let wellbeingBiasForChat: Awaited<ReturnType<typeof evaluateWellbeingSignals>>['bias'] | null =
     null;
-  if (profile && (agent === 'tutor' || agent === 'mentor') && !minimal) {
+  if (profile && (agent === 'tutor' || agent === 'mentor') && !minimal && contextNeeds.wellbeing) {
     const wellbeingInput = {
       subjects: profile.subjects,
       mental_state: profile.mental_state,
@@ -1373,7 +1433,7 @@ async function buildContextPrompt(
   }
 
   const needsPlanner =
-    tutorContract?.injectLearningPlanSnapshot ||
+    contextNeeds.learningPlanSnapshot ||
     Boolean(topic) ||
     agent === 'coach' ||
     agent === 'progress_analyzer';
@@ -1502,10 +1562,11 @@ async function buildContextPrompt(
   }
 
   // ADR-0014: handoff digests + hybrid tool packs + solver reveal policy (Coach + Tutor)
-  if (!minimal && (agent === 'coach' || agent === 'tutor')) {
+  if (!minimal && (agent === 'coach' || agent === 'tutor') && (contextNeeds.hybridTools || contextNeeds.handoffDigest || contextNeeds.methodAuthority)) {
     const conceptId = related[0]?.id ?? topic ?? null;
     const expand = wantsMemoryExpand(message) || Boolean(conceptId && agentNotes.length < 2);
 
+    if (contextNeeds.handoffDigest) {
     const peerIds = (['tutor', 'mentor', 'coach', 'reviewer'] as LiveAgentId[]).filter(
       (a) => a !== agent,
     );
@@ -1530,7 +1591,9 @@ async function buildContextPrompt(
       conceptFilter: expand ? conceptId : null,
     });
     if (digest) context += `\n\n${digest}`;
+    }
 
+    if (contextNeeds.hybridTools || contextNeeds.methodAuthority) {
     const lesson = conceptId
       ? await fetchLessonByConceptId(conceptId).catch(() => null)
       : null;
@@ -1542,6 +1605,7 @@ async function buildContextPrompt(
       ? await fetchAgentNotes(userId, agent, 12).catch(() => agentNotes)
       : agentNotes;
 
+    if (contextNeeds.hybridTools) {
     if (agent === 'coach') {
       const pack = buildCoachHybridToolPack({
         due: coachDueForPack,
@@ -1551,7 +1615,7 @@ async function buildContextPrompt(
         expandNotes,
         expand,
         userMessage: message,
-        locale,
+        locale: responseLocale,
         conceptId,
       });
       context += `\n\n${pack.block}`;
@@ -1561,7 +1625,7 @@ async function buildContextPrompt(
         expandNotes,
         expand,
         userMessage: message,
-        locale,
+        locale: responseLocale,
         conceptId,
       });
       context += `\n\n${pack.block}`;
@@ -1577,21 +1641,25 @@ async function buildContextPrompt(
       practiceGraded: practiceContext?.item_graded === true,
       hasAuthoritativeSolve: Boolean(authoritativeSolve),
     })}`;
+    }
 
-    // ADR-0014 method grounding: inventory + protocol (shape-agnostic disease fix)
+    if (contextNeeds.methodAuthority) {
+    const authoritativeSolve = trySolveAuthoritative(message);
     const methodInventory = buildMethodSourceInventory({
       conceptId,
       lesson,
       verify: authoritativeSolve,
     });
-    context += `\n\n${buildMethodAuthorityBlock(methodInventory, locale)}`;
+    context += `\n\n${buildMethodAuthorityBlock(methodInventory, responseLocale)}`;
     if (isMathTeachingTurn(message) || tutorIntent === 'agent_correction') {
       context += `\n\n${METHOD_GROUNDING_TURN_INSTRUCTION}`;
+    }
+    }
     }
   }
 
   // ADR-0011/0012: bilingual briefing + authoritative learner-facing pack + turn blocks
-  if (!minimal && liveAgents && profile) {
+  if (!minimal && liveAgents && profile && (contextNeeds.bilingualBriefing || contextNeeds.statusPack)) {
     const goalKey =
       (profile.personality_profile as { goal_key?: string } | null)?.goal_key ?? null;
     const mental = profile.mental_state as Record<string, unknown> | null;
@@ -1635,7 +1703,7 @@ async function buildContextPrompt(
       activeLessonLabels,
       activeTrainLabels,
     });
-    context += `\n\n${locale === 'en' ? liveSnap.contextBlockEn : liveSnap.contextBlockHe}`;
+    context += `\n\n${responseLocale === 'en' ? liveSnap.contextBlockEn : liveSnap.contextBlockHe}`;
     const nameOf = (id: string) => {
       const kgInfo = kgByName[id];
       return kgInfo?.name_he || kgInfo?.name || id;
@@ -1678,26 +1746,26 @@ async function buildContextPrompt(
       nextStepEn: nextStep?.labelEn ?? null,
       nextStepConceptId: nextStep?.conceptId ?? null,
     };
-    context += `\n\n${buildBilingualProgressBriefing(briefingInput)}`;
+    if (contextNeeds.bilingualBriefing) {
+      context += `\n\n${buildBilingualProgressBriefing(briefingInput)}`;
+    }
 
     const skipStatusPack =
-      Boolean(practiceContext) || tutorIntent === 'agent_correction';
+      Boolean(practiceContext) ||
+      tutorIntent === 'agent_correction' ||
+      !contextNeeds.statusPack;
     if (!skipStatusPack) {
       context += `\n\n${buildLearnerFacingStatusPack(briefingInput)}`;
     }
-
-    // Collect THIS TURN override blocks into the protected tail so
-    // fitSystemPrompt trims middle context layers first and never drops
-    // turn-critical instructions.  Do NOT append to `context` here.
   }
 
-  // Build protected tail: THIS TURN overrides (if any) + mandatory brevity rule.
-  // fitSystemPrompt will trim the middle before touching head or tail.
+  // Build protected tail: THIS TURN overrides — Tutor only for tutor contracts;
+  // other agents get brevity only (ADR-0015: stop intent leakage).
   let promptTail = '';
-  if (liveAgents && !minimal && tutorIntent) {
+  if (agent === 'tutor' && liveAgents && !minimal && tutorIntent) {
     if (tutorIntent === 'agent_correction') {
       promptTail += `\n\n${AGENT_CORRECTION_TURN_INSTRUCTION}`;
-    } else if (isPressureFamilyIntent(tutorIntent) && !practiceContext) {
+    } else if (isPressureFamilyIntent(tutorIntent) && !practiceContext && contextNeeds.statusPack) {
       promptTail += `\n\n${PRESSURE_FAMILY_TURN_INSTRUCTION}`;
       if (tutorIntent === 'context_challenge') {
         promptTail += `\n\n${CONTEXT_CHALLENGE_TURN_INSTRUCTION}`;
@@ -1714,7 +1782,12 @@ async function buildContextPrompt(
     }
   }
   promptTail += `\n\n${CHAT_BREVITY_RULE}`;
-  const system = fitSystemPrompt(context, promptTail);
+  const { core, packs } = partitionInjectedContext(context);
+  const fitted = assembleChatSystemPrompt(core, packs, promptTail);
+  const system = fitted.system;
+  if (fitted.dropped.length) {
+    logger.info('chat: context sections dropped', { agent, dropped: fitted.dropped });
+  }
   if (system.length > 14_000) {
     logger.warn('chat: large system prompt', {
       chars: system.length,
@@ -1722,6 +1795,7 @@ async function buildContextPrompt(
       memoryTurns: recent.length,
       sessionId: sessionId ?? null,
       minimal,
+      responseLocale,
     });
   }
 
@@ -1734,6 +1808,7 @@ async function buildContextPrompt(
       })),
     ),
     groundingIds,
+    responseLocale,
   };
 }
 
@@ -1775,8 +1850,9 @@ async function* streamFromLLM(
     logger.warn('buildContextPrompt failed, using bare persona', { err: String(err) });
     const bareContext = {
       system: fitSystemPrompt(`${buildCompactAgentBaseline()}\n\n${getAgentPersona(agent)}`),
-      memory: [],
+      memory: [] as Array<{ role: 'user' | 'assistant'; content: string }>,
       groundingIds: new Set<string>(),
+      responseLocale: 'he' as ChatResponseLocale,
     };
     publishGrounding(bareContext);
     attempts.push({
@@ -1794,72 +1870,100 @@ async function* streamFromLLM(
     const { label, context } = attempts[i]!;
     const failureSink = { current: null as LLMFailureInfo | null };
     const finishSink = { current: null as string | null };
-    const llmOpts = {
-      system: context.system,
-      messages: [...context.memory, { role: 'user' as const, content: message }],
-      maxTokens,
-      temperature: 0.4,
-      timeoutMs: CHAT_LLM_TIMEOUT_MS,
-      models: resolveChatModelChain(),
-      failureSink,
-      finishSink,
+    const responseLocale = context.responseLocale ?? 'he';
+
+    const runOnce = async (system: string): Promise<string | null> => {
+      const llmOpts = {
+        system,
+        messages: [...context.memory, { role: 'user' as const, content: message }],
+        maxTokens,
+        temperature: 0.4,
+        timeoutMs: CHAT_LLM_TIMEOUT_MS,
+        models: resolveChatModelChain(),
+        failureSink,
+        finishSink,
+      };
+      // Buffer first (ADR-0015 quality gate) — do not stream a bad draft.
+      let buffer = '';
+      for await (const chunk of llmStream(llmOpts)) {
+        buffer += chunk;
+      }
+      if (!buffer.trim()) {
+        const backup = await llmComplete(llmOpts);
+        if (backup?.content) buffer = backup.content;
+      }
+      return buffer.trim() ? buffer : null;
     };
 
-    let emitted = false;
-    for await (const chunk of llmStream(llmOpts)) {
-      emitted = true;
-      yield chunk;
+    let draft = await runOnce(context.system);
+    if (!draft) {
+      const failure = failureSink.current;
+      const shouldRetryMinimal =
+        i === 0 &&
+        attempts.length === 1 &&
+        (failure?.kind === 'context_too_large' ||
+          (failure?.kind === 'provider_error' &&
+            context.system.length > CHAT_CONTEXT.maxSystemChars * 0.85) ||
+          (failure?.kind === 'unknown' &&
+            context.system.length > CHAT_CONTEXT.maxSystemChars * 0.9));
+      if (shouldRetryMinimal) {
+        logger.warn('chat: payload too large — retrying with minimal context', {
+          agent,
+          userId,
+          systemChars: context.system.length,
+          memoryTurns: context.memory.length,
+        });
+        try {
+          const minimalContext = await buildContextPrompt(userId, agent, message, {
+            ...opts,
+            minimal: true,
+          });
+          publishGrounding(minimalContext);
+          attempts.push({
+            label: 'minimal',
+            context: minimalContext,
+          });
+        } catch (err) {
+          logger.warn('chat: minimal context build failed', { err: String(err) });
+        }
+        continue;
+      }
+      return failure ?? { kind: 'empty_response', provider: cfg.providerLabel };
     }
 
-    if (!emitted) {
-      logger.warn('chat: stream empty — trying non-stream completion', { agent, userId, label });
-      const backup = await llmComplete(llmOpts);
-      if (backup?.content) {
-        logger.info('chat: non-stream backup succeeded', { model: backup.model, agent, label });
-        yield backup.content;
-        return undefined;
-      }
-    } else {
-      if (finishSink.current === 'length') {
-        // Signal truncation to the outer stream via a sentinel return kind.
-        return { kind: 'stream_interrupted', provider: cfg.providerLabel, model: 'length_cap' };
-      }
-      return undefined;
-    }
-
-    const failure = failureSink.current;
-    const shouldRetryMinimal =
-      i === 0 &&
-      attempts.length === 1 &&
-      (failure?.kind === 'context_too_large' ||
-        (failure?.kind === 'provider_error' &&
-          context.system.length > CHAT_CONTEXT.maxSystemChars * 0.85) ||
-        (failure?.kind === 'unknown' &&
-          context.system.length > CHAT_CONTEXT.maxSystemChars * 0.9));
-    if (shouldRetryMinimal) {
-      logger.warn('chat: payload too large — retrying with minimal context', {
+    const quality = scoreResponseQuality(draft, responseLocale);
+    if (!quality.ok) {
+      logger.info('chat: quality retry', {
         agent,
-        userId,
-        systemChars: context.system.length,
-        memoryTurns: context.memory.length,
+        failures: quality.failures,
+        responseLocale,
+        label,
       });
-      try {
-        const minimalContext = await buildContextPrompt(userId, agent, message, {
-          ...opts,
-          minimal: true,
-        });
-        publishGrounding(minimalContext);
-        attempts.push({
-          label: 'minimal',
-          context: minimalContext,
-        });
-      } catch (err) {
-        logger.warn('chat: minimal context build failed', { err: String(err) });
+      const repaired = await runOnce(
+        `${context.system}\n\n${qualityRepairInstruction(responseLocale, quality.failures)}`,
+      );
+      if (repaired) {
+        const q2 = scoreResponseQuality(repaired, responseLocale);
+        if (q2.ok || q2.failures.length <= quality.failures.length) {
+          draft = repaired;
+        }
       }
-      continue;
     }
 
-    return failure ?? { kind: 'unknown', provider: cfg.providerLabel };
+    // Solver / stall hygiene BEFORE the learner sees tokens (no append-after-display).
+    const hygiened = applyPostStreamSolverHygiene(agent, message, draft, responseLocale);
+    draft = hygiened.text;
+
+    // Emit in small chunks so the existing data-stream client still feels streaming.
+    const chunkSize = 48;
+    for (let c = 0; c < draft.length; c += chunkSize) {
+      yield draft.slice(c, c + chunkSize);
+    }
+
+    if (finishSink.current === 'length') {
+      return { kind: 'stream_interrupted', provider: cfg.providerLabel, model: 'length_cap' };
+    }
+    return undefined;
   }
 
   return { kind: 'unknown', provider: cfg.providerLabel };

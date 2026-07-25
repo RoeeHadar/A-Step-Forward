@@ -1,0 +1,37 @@
+# Tutor / all-agent chat recovery — ADR-0015
+# Deterministic + mock-provider smoke. Live quality matrix is documented in
+# docs/adr/0015-agent-chat-recovery.md; vitest fixtures under apps/web/src/lib/chat-*.test.ts
+# are the CI gate for language, needs, section budget, and quality heuristics.
+description: ADR-0015 recovery — relevance, language, hybrid, no status dump on math
+prompts:
+  - file://../../../prompts/tutor/v1.md
+providers:
+  - id: file://../../providers/tutor_mock.js
+tests:
+  - description: math stem must not look like anxiety/status (mock smoke)
+    vars:
+      message: "מה החסר אם הממוצע של 5 מספרים הוא 10?"
+    assert:
+      - type: javascript
+        value: |
+          const out = JSON.parse(output);
+          const r = String(out.reply || '');
+          return !/סה["״]כ XP/i.test(r) && !/AUTHORITATIVE/i.test(r) && !/GMT\+0000/.test(r);
+  - description: hybrid — no invented lesson citation required on general ask
+    vars:
+      message: "What is the derivative of x^2?"
+    assert:
+      - type: javascript
+        value: |
+          const out = JSON.parse(output);
+          const r = String(out.reply || '');
+          return !/Sources:/i.test(r) || /lesson:|concept:/.test(r);
+  - description: hebrew filler ban still holds
+    vars:
+      message: "תסביר לי את הממוצע בפשטות"
+    assert:
+      - type: javascript
+        value: |
+          const out = JSON.parse(output);
+          const r = String(out.reply || '');
+          return !r.includes('אני חושב שזה יעזור') && !r.includes('חשוך');

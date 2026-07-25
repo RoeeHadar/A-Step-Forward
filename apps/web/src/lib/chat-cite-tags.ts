@@ -97,9 +97,17 @@ export function stripCiteMachineTags(content: string): string {
  * Use this in the streaming path and the render layer so no tag family
  * (CITE, MEMORY_NOTE, PLAN_UPDATE, …) ever reaches the learner UI.
  * Safe for client components — no server-only imports.
+ *
+ * @param opts.trim — default true for final buffers. Pass `{ trim: false }` for
+ *   **streaming deltas** so leading spaces / newline-only tokens are not destroyed
+ *   (BPE models often emit `" world"` as a separate delta).
  */
-export function stripAllMachineTags(content: string): string {
-  return content.replace(ALL_ASF_TAGS_RE, '').replace(/\n{3,}/g, '\n\n').trim();
+export function stripAllMachineTags(
+  content: string,
+  opts: { trim?: boolean } = {},
+): string {
+  const stripped = content.replace(ALL_ASF_TAGS_RE, '').replace(/\n{3,}/g, '\n\n');
+  return opts.trim === false ? stripped : stripped.trim();
 }
 
 export function parseCiteTags(content: string): SoftCitationPayload[] {

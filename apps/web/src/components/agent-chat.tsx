@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { MarkdownMath } from '@/components/markdown-math';
 import { ChatHistoryPanel } from '@/components/chat-history-panel';
-import { extractPlanUpdate, stripPlanMachineTags, shouldApplyPlanImmediately } from '@/lib/plan-actions';
+import { stripPlanMachineTags, shouldApplyPlanImmediately } from '@/lib/plan-actions';
 import { normalizePlanChangeMessage } from '@/lib/plan-change-template';
 import { PlanChangeTemplatePanel } from '@/components/plan-change-template-panel';
 import { stripAllMachineTags } from '@/lib/chat-cite-tags';
@@ -48,7 +48,17 @@ function stripPlanTag(content: string): string {
   // Strip plan tags first (extractPlanUpdate needs them present), then strip
   // any remaining [[ASF_*]] families (MEMORY_NOTE, CITE, etc.) as a second
   // line of defence in case the streaming path missed a partial tag.
-  return stripAllMachineTags(stripPlanMachineTags(extractPlanUpdate(content).visible));
+  return stripAllMachineTags(stripPlanMachineTags(content));
+}
+
+/** Bubble direction from message content (ADR-0015), not UI locale alone. */
+function messageDir(content: string, uiHe: boolean): 'rtl' | 'ltr' {
+  const hebrew = (content.match(/[\u0590-\u05FF]/g) ?? []).length;
+  const latin = (content.match(/[A-Za-z]/g) ?? []).length;
+  if (hebrew === 0 && latin === 0) return uiHe ? 'rtl' : 'ltr';
+  if (hebrew >= latin * 0.4 && hebrew >= 2) return 'rtl';
+  if (latin > hebrew) return 'ltr';
+  return uiHe ? 'rtl' : 'ltr';
 }
 
 export function AgentChat({
@@ -75,6 +85,7 @@ export function AgentChat({
   const hasAutoRetriedRef = useRef(false);
   const hasReceivedTokensRef = useRef(false);
   const userMessageCountRef = useRef(0);
+  const messagesLenRef = useRef(0);
   const pendingPlanApplyRef = useRef(false);
   const [showConnecting, setShowConnecting] = useState(false);
   const [showWarmupBanner, setShowWarmupBanner] = useState(false);
@@ -254,10 +265,13 @@ export function AgentChat({
       });
       const res = await fetch(`/api/chat/history?${params}`);
       if (!res.ok || cancelled) return;
+      // Do not clobber an in-flight or just-started local turn (ADR-0015).
+      if (isLoading || messagesLenRef.current > 0 || userMessageCountRef.current > 0) return;
       const data = (await res.json()) as {
         messages: Array<{ id: string; role: string; content: string }>;
       };
       if (cancelled || !data.messages?.length) return;
+      if (isLoading || messagesLenRef.current > 0 || userMessageCountRef.current > 0) return;
       setMessages(
         data.messages.map((m) => ({
           id: m.id,
@@ -269,9 +283,10 @@ export function AgentChat({
     return () => {
       cancelled = true;
     };
-  }, [historyReady, sessionId, agentName, setMessages, chatKey]);
+  }, [historyReady, sessionId, agentName, setMessages, chatKey, isLoading]);
 
   useEffect(() => {
+    messagesLenRef.current = messages.length;
     userMessageCountRef.current = messages.filter((m) => m.role === 'user').length;
     const assistantContent = messages.find((m) => m.role === 'assistant')?.content;
     if (assistantContent) {
@@ -445,7 +460,7 @@ export function AgentChat({
             messages.map((m) => (
               <div
                 key={m.id}
-                dir={isHe ? 'rtl' : 'ltr'}
+                dir={messageDir(m.content, isHe)}
                 className={
                   m.role === 'user'
                     ? 'ms-auto max-w-[85%] rounded-2xl rounded-ee-sm bg-primary/90 px-4 py-2 text-primary-foreground'
