@@ -44,6 +44,7 @@ export interface LearningPlan {
   overflow_concepts?: string[] | null;
   pacing?: PlanPacing | null;
   plan_adjustment_kind?: string | null;
+  plan_last_adjusted_at?: string | null;
 }
 
 export interface PlanPacing {
@@ -80,7 +81,7 @@ export interface QuizQuestion {
   stem: string;
   topic: string;
   kind?: string;
-  options?: QuizOption[];
+  options: QuizOption[];
   parts?: QuizPart[];
   total_points?: number;
 }
@@ -100,14 +101,15 @@ export interface QuizItemFeedback {
   steps_present?: string;
   steps_skipped?: string;
   logic_feedback?: string;
+  logic?: string;
   material_feedback?: string;
+  material_anchoring?: string;
   next_fix?: string;
 }
 
 export interface QuizSubmitResponse {
   attempt_id?: string;
   score?: number | null;
-  passed?: boolean;
   grading_status?: 'pending' | 'processing' | 'complete' | 'failed' | string;
   open_total?: number;
   graded_open?: number;
@@ -116,8 +118,13 @@ export interface QuizSubmitResponse {
   per_topic: Record<string, number>;
   item_feedback?: Record<string, QuizItemFeedback>;
   plan_adapted?: boolean;
-  next_week_concepts?: string[];
-  weak_concepts: string[];
+  next_week_concepts?: string[] | null;
+  weak_concepts: string[] | null;
+  passed?: boolean | null;
+  pass_threshold?: number;
+  quiz_id?: string;
+  item_scores?: Record<string, unknown>;
+  open_pending?: string[] | null;
 }
 
 export const quizSubmitResponseSchema = z.object({}).passthrough() as unknown as z.ZodType<QuizSubmitResponse>;

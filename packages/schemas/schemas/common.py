@@ -6,6 +6,7 @@ from ._dynamic import FlexibleModel, flexible_model
 
 
 class Provenance(FlexibleModel):
+    kind: str | None = None
     source: str | None = None
     agent: str | None = None
     timestamp: str | None = None
