@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from enum import StrEnum
 from typing import Any
+from datetime import datetime, timezone
 
 from pydantic import Field
 
@@ -38,6 +39,11 @@ class MemoryRecord(FlexibleModel):
     decay_tau_days: float | None = None
     provenance: Provenance = Field(default_factory=Provenance)
     expires_at: str | None = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    last_accessed_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    archived_at: datetime | None = None
+    deleted_at: datetime | None = None
 
 
 class MemoryUpdateInput(FlexibleModel):

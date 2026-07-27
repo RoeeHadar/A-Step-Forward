@@ -8,6 +8,7 @@ export interface LearnerProgressConcept {
 }
 
 export interface LearnerProgress {
+  learner_id: string;
   concepts: LearnerProgressConcept[];
   streak_days: number;
   lessons_completed: number;

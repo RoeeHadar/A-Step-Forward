@@ -88,8 +88,12 @@ export interface QuizQuestion {
 
 export interface QuizStartResponse {
   quiz_id: string;
+  week_id?: string;
+  plan_id?: string;
+  week_number?: number;
   time_limit_s: number;
   questions: QuizQuestion[];
+  started_at?: string;
 }
 
 export interface QuizItemFeedback {
@@ -119,12 +123,12 @@ export interface QuizSubmitResponse {
   item_feedback?: Record<string, QuizItemFeedback>;
   plan_adapted?: boolean;
   next_week_concepts?: string[] | null;
-  weak_concepts: string[] | null;
+  weak_concepts: string[];
   passed?: boolean | null;
   pass_threshold?: number;
   quiz_id?: string;
   item_scores?: Record<string, unknown>;
-  open_pending?: string[] | null;
+  open_pending?: number;
 }
 
 export const quizSubmitResponseSchema = z.object({}).passthrough() as unknown as z.ZodType<QuizSubmitResponse>;
