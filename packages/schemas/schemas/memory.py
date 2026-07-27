@@ -37,6 +37,7 @@ class MemoryUpdateInput(FlexibleModel):
     learner_id: str = ""
     type: MemoryType = MemoryType.SEMANTIC
     content: str = ""
+    importance_hint: float | None = None
 
 
 class MemoryWriteInput(MemoryUpdateInput):
