@@ -1,12 +1,31 @@
 import { z } from 'zod';
 
-export const planConceptSchema = z.object({}).passthrough();
-export const planWeekSchema = z.object({}).passthrough();
-export const learningPlanSchema = z.object({}).passthrough();
+export interface PlanConcept {
+  [key: string]: unknown;
+  concept_id?: string;
+  mastery?: number | null;
+}
 
-export type PlanConcept = z.infer<typeof planConceptSchema>;
-export type PlanWeek = z.infer<typeof planWeekSchema>;
-export type LearningPlan = z.infer<typeof learningPlanSchema>;
+export interface PlanWeek {
+  [key: string]: unknown;
+  id?: string;
+  week_number?: number;
+  status?: string;
+  concepts?: PlanConcept[];
+  quiz_due_at?: string | null;
+}
+
+export interface LearningPlan {
+  [key: string]: unknown;
+  weeks: PlanWeek[];
+}
+
+export const planConceptSchema: z.ZodType<PlanConcept> = z.object({}).passthrough();
+export const planWeekSchema: z.ZodType<PlanWeek> = z.object({}).passthrough();
+export const learningPlanSchema: z.ZodType<LearningPlan> = z
+  .object({ weeks: z.array(planWeekSchema).default([]) })
+  .passthrough() as z.ZodType<LearningPlan>;
+
 export type QuizQuestion = Record<string, unknown>;
 export type QuizStartResponse = Record<string, unknown>;
 export type QuizSubmitResponse = Record<string, unknown>;
