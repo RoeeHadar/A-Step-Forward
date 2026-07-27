@@ -1,23 +1,45 @@
 import { z } from 'zod';
 
 export interface PlanConcept {
-  [key: string]: unknown;
-  concept_id?: string;
-  mastery?: number | null;
+  concept_id: string;
+  name: string;
+  name_he: string | null;
+  subject: string;
+  mastery: number | null;
+  suggested_sections: Array<{
+    id: string;
+    title: string;
+    chunk_index: number | null;
+    page_start: number | null;
+  }>;
+  recommended_bagrut: Array<{
+    display_name: string;
+    file_url: string;
+    year: number | null;
+    exam_type: string | null;
+  }>;
+  kind?: 'lesson' | 'train' | 'rest';
+  target_count?: number | null;
 }
 
 export interface PlanWeek {
-  [key: string]: unknown;
-  id?: string;
-  week_number?: number;
-  status?: string;
-  concepts?: PlanConcept[];
-  quiz_due_at?: string | null;
+  id: string;
+  plan_id: string;
+  week_number: number;
+  concepts: PlanConcept[];
+  quiz_due_at: string | null;
+  status: string;
 }
 
 export interface LearningPlan {
-  [key: string]: unknown;
+  id: string;
+  learner_id: string;
+  goal: string;
+  start_date: string;
+  end_date: string | null;
+  status: string;
   weeks: PlanWeek[];
+  plan_adjustment_kind?: string | null;
 }
 
 export const planConceptSchema: z.ZodType<PlanConcept> = z.object({}).passthrough();
