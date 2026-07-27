@@ -58,12 +58,66 @@ export interface PlanPacing {
   readiness_message_key?: string;
 }
 
-export const planConceptSchema: z.ZodType<PlanConcept> = z.object({}).passthrough();
-export const planWeekSchema: z.ZodType<PlanWeek> = z.object({}).passthrough();
+export const planConceptSchema = z.object({}).passthrough() as unknown as z.ZodType<PlanConcept>;
+export const planWeekSchema = z.object({}).passthrough() as unknown as z.ZodType<PlanWeek>;
 export const learningPlanSchema: z.ZodType<LearningPlan> = z
   .object({ weeks: z.array(planWeekSchema).default([]) })
-  .passthrough() as z.ZodType<LearningPlan>;
+  .passthrough() as unknown as z.ZodType<LearningPlan>;
 
-export type QuizQuestion = Record<string, unknown>;
-export type QuizStartResponse = Record<string, unknown>;
-export type QuizSubmitResponse = Record<string, unknown>;
+export interface QuizOption {
+  key: string;
+  text: string;
+}
+
+export interface QuizPart {
+  label: string;
+  body: string;
+  points?: number;
+}
+
+export interface QuizQuestion {
+  id: string;
+  stem: string;
+  topic: string;
+  kind?: string;
+  options?: QuizOption[];
+  parts?: QuizPart[];
+  total_points?: number;
+}
+
+export interface QuizStartResponse {
+  quiz_id: string;
+  time_limit_s: number;
+  questions: QuizQuestion[];
+}
+
+export interface QuizItemFeedback {
+  item_id: string;
+  status?: 'pending' | 'graded' | 'failed' | string;
+  points_earned?: number;
+  points_available?: number;
+  strengths?: string;
+  steps_present?: string;
+  steps_skipped?: string;
+  logic_feedback?: string;
+  material_feedback?: string;
+  next_fix?: string;
+}
+
+export interface QuizSubmitResponse {
+  attempt_id?: string;
+  score?: number | null;
+  passed?: boolean;
+  grading_status?: 'pending' | 'processing' | 'complete' | 'failed' | string;
+  open_total?: number;
+  graded_open?: number;
+  busy?: boolean;
+  message?: string;
+  per_topic: Record<string, number>;
+  item_feedback?: Record<string, QuizItemFeedback>;
+  plan_adapted?: boolean;
+  next_week_concepts?: string[];
+  weak_concepts: string[];
+}
+
+export const quizSubmitResponseSchema = z.object({}).passthrough() as unknown as z.ZodType<QuizSubmitResponse>;

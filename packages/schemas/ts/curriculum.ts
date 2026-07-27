@@ -25,7 +25,21 @@ export const lessonSchema: z.ZodType<Lesson> = z
       .array(z.object({ id: z.string().default(''), statement: z.string().default('') }))
       .default([]),
   })
-  .passthrough() as z.ZodType<Lesson>;
-export const learnerDashboardSchema = z.object({}).passthrough();
+  .passthrough() as unknown as z.ZodType<Lesson>;
 
-export type LearnerDashboard = z.infer<typeof learnerDashboardSchema>;
+export interface LearnerDashboard {
+  recent_lessons: Array<{
+    id: string;
+    title: string;
+    progress: number;
+    last_accessed_at: string | null;
+    est_minutes?: number;
+  }>;
+  mastery_summary: Array<{
+    concept_id: string;
+    concept_name: string;
+    score: number;
+  }>;
+}
+
+export const learnerDashboardSchema = z.object({}).passthrough() as unknown as z.ZodType<LearnerDashboard>;
