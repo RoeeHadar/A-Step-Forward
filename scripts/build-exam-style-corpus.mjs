@@ -36,18 +36,110 @@ const LEVEL_FROM_SUBJECT = {
   university_physics_1: 'uni_physics',
 };
 
+/**
+ * Naive char-slicing can cut a string in the middle of a `$...$`/`$$...$$`
+ * math span, leaving a dangling delimiter that KaTeX renders as broken raw
+ * text. Given a slice, walk it and — if it ends inside an unclosed math
+ * span — back up to just before that span opened, so every truncated
+ * preview string always has balanced math delimiters.
+ */
+function findUnclosedMathStart(s) {
+  let displayOpen = null;
+  let inlineOpen = null;
+  for (let i = 0; i < s.length; i++) {
+    if (s[i] === '\\') {
+      i += 1;
+      continue;
+    }
+    if (s[i] === '$' && s[i + 1] === '$') {
+      if (displayOpen === null && inlineOpen === null) displayOpen = i;
+      else if (displayOpen !== null) displayOpen = null;
+      i += 1;
+      continue;
+    }
+    if (s[i] === '$') {
+      if (displayOpen === null) {
+        inlineOpen = inlineOpen === null ? i : null;
+      }
+    }
+  }
+  return displayOpen ?? inlineOpen;
+}
+
+function truncateMathSafe(s, maxLen) {
+  if (s.length <= maxLen) return s;
+  const sliced = s.slice(0, maxLen);
+  const openAt = findUnclosedMathStart(sliced);
+  return (openAt === null ? sliced : sliced.slice(0, openAt)).trimEnd();
+}
+
+/**
+ * A naive "does `(a)`/`(א)` appear anywhere" scan also matches mid-sentence
+ * backreferences like "using part (a)(1)" or "...from (b)." — those aren't
+ * new part headers and splitting on them produces bogus trailing parts with
+ * garbage/duplicate content. A real header always starts fresh at the
+ * beginning of a line (optionally after a bold `**`/`Part `/`חלק ` prefix);
+ * require that so backreferences inside prose are never mistaken for one.
+ */
+function isHeaderStart(text, index) {
+  const before = text.slice(0, index);
+  const lineStart = before.lastIndexOf('\n') + 1;
+  const prefix = before.slice(lineStart).replace(/^\s*\*{0,2}\s*/, '');
+  return prefix === '' || /^(part|חלק)\s*$/i.test(prefix);
+}
+
+function extractParts(text, candidates) {
+  const validStarts = candidates
+    .filter((c) => isHeaderStart(text, c.index))
+    .sort((a, b) => a.index - b.index);
+  return validStarts.map((c, i) => {
+    const start = c.index + c.len;
+    const end = i + 1 < validStarts.length ? validStarts[i + 1].index : text.length;
+    return { letter: c.letter, text: text.slice(start, end).trim() };
+  });
+}
+
+function extractEnParts(en) {
+  const candidates = [...en.matchAll(/\(([a-d])\)/gi)].map((m) => ({
+    index: m.index,
+    len: m[0].length,
+    letter: m[1].toLowerCase(),
+  }));
+  return extractParts(en, candidates);
+}
+
+/**
+ * Authored Hebrew part-headers use several conventions across the corpus:
+ * "(א)" (parenthesized), "חלק א — ..." (word-prefixed), and "א. ..."
+ * (letter-dot). Match all three so a part's Hebrew text is never missing —
+ * the old parens-only regex silently fell back to the ENGLISH part text for
+ * every other convention, leaking English into body_he.
+ */
+function extractHeParts(he) {
+  const candidates = [
+    ...[...he.matchAll(/[\(（]([אבגד])[\)）]/g)].map((m) => ({ index: m.index, len: m[0].length, letter: m[1] })),
+    ...[...he.matchAll(/חלק\s+([אבגד])\s*[—\-:]?/g)].map((m) => ({ index: m.index, len: m[0].length, letter: m[1] })),
+    ...[...he.matchAll(/([אבגד])\.\s/g)].map((m) => ({ index: m.index, len: m[0].length, letter: m[1] })),
+  ];
+  return extractParts(he, candidates);
+}
+
 function parsePartsFromBody(bodyEn, bodyHe, totalPoints) {
   const en = String(bodyEn ?? '');
   const he = String(bodyHe ?? '');
-  const enParts = [...en.matchAll(/\(([a-d])\)\s*([\s\S]*?)(?=\([a-d]\)|$)/gi)];
-  const heParts = [...he.matchAll(/[\(（]([אבגד])[\)）]\s*([\s\S]*?)(?=[\(（][אבגד][\)）]|$)/g)];
+  const enParts = extractEnParts(en);
+  const heParts = extractHeParts(he);
   if (enParts.length >= 2) {
     const pts = Math.max(1, Math.floor(totalPoints / enParts.length));
     const labels = ['א', 'ב', 'ג', 'ד'];
+    // Fall back to the full Hebrew body (never the English text) when Hebrew
+    // parts can't be segmented at all, so a segmentation miss never leaks
+    // English into a body_he field.
+    const heFallback = he.trim();
     return enParts.map((m, i) => ({
       label: labels[i] ?? String.fromCharCode(97 + i),
-      body_en: m[2].trim(),
-      body_he: (heParts[i]?.[2] ?? m[2]).trim(),
+      body_en: m.text,
+      body_he: (heParts[i]?.text || heFallback || m.text).trim(),
       points: i === enParts.length - 1 ? totalPoints - pts * (enParts.length - 1) : pts,
     }));
   }
@@ -65,8 +157,8 @@ function stemFromBody(body, maxLen = 400) {
   const s = String(body ?? '').trim();
   // Prefer text before first (a)/(א) as shared stem.
   const cut = s.search(/\([aא]\)|（א）/);
-  if (cut > 20) return s.slice(0, cut).trim().slice(0, maxLen);
-  return s.slice(0, Math.min(maxLen, 220)).trim();
+  if (cut > 20) return truncateMathSafe(s.slice(0, cut).trim(), maxLen);
+  return truncateMathSafe(s, Math.min(maxLen, 220)).trim();
 }
 
 function loadAuthored() {
@@ -152,8 +244,8 @@ function loadFromQuestionStore() {
       paper_pattern: 'question_store_hard',
       difficulty: 'hard',
       total_points: parts.reduce((s, p) => s + p.points, 0),
-      stem_he: stemHe.slice(0, 400) || parts[0].body_he.slice(0, 200),
-      stem_en: stemEn.slice(0, 400) || parts[0].body_en.slice(0, 200),
+      stem_he: truncateMathSafe(stemHe, 400) || truncateMathSafe(parts[0].body_he, 200),
+      stem_en: truncateMathSafe(stemEn, 400) || truncateMathSafe(parts[0].body_en, 200),
       parts,
       sample_solution_he: (partStems[0]?.answer_payload?.steps_he || []).join('\n') || '',
       sample_solution_en: (partStems[0]?.answer_payload?.steps_en || []).join('\n') || '',
