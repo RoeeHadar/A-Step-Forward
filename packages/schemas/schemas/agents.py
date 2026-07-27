@@ -64,7 +64,7 @@ class ChatChunk(FlexibleModel):
 
 
 class RouteDecision(FlexibleModel):
-    agent: AgentName | str
+    selected_agents: list[AgentName] = Field(default_factory=lambda: [AgentName.TUTOR])
     rationale: str | None = None
 
 
