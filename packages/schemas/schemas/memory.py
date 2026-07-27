@@ -10,6 +10,7 @@ from .common import Provenance
 
 
 class MemoryType(StrEnum):
+    WORKING = "working"
     EPISODIC = "episodic"
     SEMANTIC = "semantic"
     PROCEDURAL = "procedural"
