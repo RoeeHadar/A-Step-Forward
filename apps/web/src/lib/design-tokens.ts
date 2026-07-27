@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+
 /** Design tokens — single source for spacing, radii, and motion. */
 export const tokens = {
   radius: {
@@ -19,7 +21,7 @@ export const tokens = {
 } as const;
 
 /** Inline style for agent-scoped surfaces (`--agent-accent` CSS variable). */
-export function agentAccentVars(agent: string): { '--agent-accent': string } {
+export function agentAccentVars(agent: string): CSSProperties & { '--agent-accent': string } {
   const fallback = agentColors.tutor as string;
   return { '--agent-accent': agentColors[agent] ?? fallback };
 }

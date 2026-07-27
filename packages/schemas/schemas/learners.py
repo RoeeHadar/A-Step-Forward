@@ -7,14 +7,16 @@ from ._dynamic import FlexibleModel, flexible_model
 
 
 class LearnerRole(StrEnum):
+    LEARNER = "learner"
     STUDENT = "student"
     EDUCATOR = "educator"
+    PARENT = "parent"
     ADMIN = "admin"
 
 
 class LearnerProfile(FlexibleModel):
     learner_id: str = ""
-    role: LearnerRole | str = LearnerRole.STUDENT
+    role: LearnerRole | str = LearnerRole.LEARNER
 
 
 def __getattr__(name: str) -> Any:
