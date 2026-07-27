@@ -11,6 +11,7 @@ export interface LearnerProgress {
   learner_id: string;
   concepts: LearnerProgressConcept[];
   streak_days: number;
+  total_minutes: number;
   lessons_completed: number;
 }
 
