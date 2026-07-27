@@ -41,7 +41,7 @@ export interface LearningPlan {
   weeks: PlanWeek[];
   goal_key?: string | null;
   needs_replan?: boolean;
-  overflow_concepts?: string[];
+  overflow_concepts?: string[] | null;
   pacing?: unknown;
   plan_adjustment_kind?: string | null;
 }

@@ -9,6 +9,9 @@ from pydantic import BaseModel, ConfigDict, Field
 class FlexibleModel(BaseModel):
     model_config = ConfigDict(extra="allow", arbitrary_types_allowed=True)
 
+    def __getattr__(self, item: str) -> Any:
+        return None
+
 
 class FlexibleError(Exception):
     def __init__(self, message: str = "", **kwargs: Any) -> None:
