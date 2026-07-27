@@ -42,8 +42,20 @@ export interface LearningPlan {
   goal_key?: string | null;
   needs_replan?: boolean;
   overflow_concepts?: string[] | null;
-  pacing?: unknown;
+  pacing?: PlanPacing | null;
   plan_adjustment_kind?: string | null;
+}
+
+export interface PlanPacing {
+  status: string;
+  goal_readiness: number;
+  weeks_left: number;
+  remaining_scope: number;
+  readiness?: number;
+  critical_coverage?: number;
+  exam_ready?: boolean;
+  mock_passed?: boolean;
+  readiness_message_key?: string;
 }
 
 export const planConceptSchema: z.ZodType<PlanConcept> = z.object({}).passthrough();

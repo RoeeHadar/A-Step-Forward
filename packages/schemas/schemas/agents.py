@@ -43,6 +43,7 @@ class Budget(FlexibleModel):
 
 class AgentManifest(FlexibleModel):
     name: AgentName | str
+    description: str = ""
     role: str = ""
     goal: str = ""
     tools: list[ToolRef] = Field(default_factory=list)
