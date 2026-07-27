@@ -15,14 +15,13 @@ describe('resolveLessonConceptId', () => {
   });
 
   it('falls back to alias target when no dedicated lesson exists', () => {
-    expect(resolveLessonConceptId('limits_intro')).toBe('limits');
     expect(resolveLessonConceptId('coulomb_law')).toBe('electrostatics');
   });
 });
 
 describe('aliasRedirectTarget', () => {
   it('redirects alias-only slugs to their authored lesson', () => {
-    expect(aliasRedirectTarget('limits_intro')).toBe('limits');
+    expect(aliasRedirectTarget('coulomb_law')).toBe('electrostatics');
   });
 
   it('does not redirect when the slug has its own lesson', () => {
@@ -99,8 +98,8 @@ describe('catalogDedupeKey', () => {
 });
 
 describe('dedupeConceptIdsForCatalog', () => {
-  it('removes alias slug when canonical id shares the same lesson', async () => {
-    const { dedupeConceptIdsForCatalog, resolveConceptAlias } = await import('./concept-aliases');
+  it('keeps distinct authored aliases when they have their own lessons', async () => {
+    const { dedupeConceptIdsForCatalog } = await import('./concept-aliases');
     const ids = [
       'descriptive_statistics',
       'statistics_descriptive',
@@ -108,10 +107,12 @@ describe('dedupeConceptIdsForCatalog', () => {
       'probability_basic',
     ];
     const out = dedupeConceptIdsForCatalog(ids);
-    expect(out).toEqual(['statistics_descriptive', 'probability_basic']);
-    expect(out.every((id) => resolveConceptAlias(id) === id || id === 'probability_basic')).toBe(
-      true,
-    );
+    expect(out).toEqual([
+      'descriptive_statistics',
+      'statistics_descriptive',
+      'basic_probability',
+      'probability_basic',
+    ]);
   });
 
   it('keeps distinct authored lessons that previously shared alias targets', async () => {

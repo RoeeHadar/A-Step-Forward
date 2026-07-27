@@ -131,4 +131,12 @@ export interface QuizSubmitResponse {
   open_pending?: number;
 }
 
-export const quizSubmitResponseSchema = z.object({}).passthrough() as unknown as z.ZodType<QuizSubmitResponse>;
+export const quizSubmitResponseSchema = z
+  .object({
+    quiz_id: z.string().optional(),
+    score: z.number().nullable().optional(),
+    per_topic: z.record(z.number()).default({}),
+    weak_concepts: z.array(z.string()).default([]),
+    plan_adapted: z.boolean().optional(),
+  })
+  .passthrough() as unknown as z.ZodType<QuizSubmitResponse>;
