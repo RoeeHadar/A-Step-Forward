@@ -41,7 +41,7 @@ export interface LearningPlan {
   weeks: PlanWeek[];
   goal_key?: string | null;
   needs_replan?: boolean;
-  pacing?: Record<string, unknown> | null;
+  pacing?: unknown;
   plan_adjustment_kind?: string | null;
 }
 

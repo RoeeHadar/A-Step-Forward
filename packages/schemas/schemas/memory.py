@@ -29,15 +29,26 @@ class MemoryRecord(FlexibleModel):
     learner_id: str = ""
     type: MemoryType = MemoryType.SEMANTIC
     content: str = ""
+    summary: str | None = None
     tags: list[str] = Field(default_factory=list)
+    valence: float = 0.0
+    salience: float | None = None
+    confidence: float | None = None
+    decay_tau_days: float | None = None
     provenance: Provenance = Field(default_factory=Provenance)
+    expires_at: str | None = None
 
 
 class MemoryUpdateInput(FlexibleModel):
     learner_id: str = ""
     type: MemoryType = MemoryType.SEMANTIC
     content: str = ""
+    summary: str | None = None
+    tags: list[str] = Field(default_factory=list)
+    valence: float | None = None
     importance_hint: float | None = None
+    provenance: Provenance = Field(default_factory=Provenance)
+    expires_at: str | None = None
 
 
 class MemoryWriteInput(MemoryUpdateInput):
