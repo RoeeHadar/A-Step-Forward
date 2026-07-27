@@ -52,7 +52,7 @@ class AgentManifest(FlexibleModel):
 class ChatRequest(FlexibleModel):
     learner_id: str | None = None
     session_id: str | None = None
-    locale: str | None = None
+    locale: str = "en"
     message: str | None = None
     requested_agent: AgentName | None = None
 
