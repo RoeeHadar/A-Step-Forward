@@ -25,7 +25,7 @@ export function MarkdownMath({ children, className, dir }: MarkdownMathProps) {
       )}
       dir={dir}
     >
-      <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
+      <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[[rehypeKatex, { strict: false, throwOnError: false }]]}>
         {content}
       </ReactMarkdown>
     </div>

@@ -34,6 +34,7 @@ enforced as a **blocking CI gate** (`.github/workflows/lint-test.yml` →
 | Unbalanced `$` | `half of $x is gone` | Balance the delimiters. |
 | `$$` fence metadata | `$$expr\n...more\n$$` | Put `$$` on its own line. |
 | Unparseable TeX | `\begin{pmatrix}a&b\c&d` | `\c` is not a command — the row break must be `\\` (see below). |
+| `\tag{}` in display math | `$$F=ma \tag{1}$$` | Use `$$F=ma \quad\text{(1)}$$` — `\tag` requires amsmath extension and may break with default rehype-katex config. |
 
 ## The matrix / cases row-break rule (most common historical bug)
 

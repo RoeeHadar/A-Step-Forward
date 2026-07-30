@@ -140,7 +140,19 @@ const LEAKY_MACROS = [
   'right', 'Rightarrow', 'Leftarrow', 'Leftrightarrow', 'boxed', 'mathbb',
   'mathbf', 'mathrm', 'operatorname', 'begin', 'end', 'alpha', 'beta', 'gamma',
   'delta', 'theta', 'lambda', 'sigma', 'omega', 'varphi', 'varepsilon',
+  'tag', // \tag requires amsmath; use \quad\text{(label)} instead
 ];
+
+/**
+ * LaTeX commands that, when used inside `$$...$$` display math, can cause
+ * rendering failures depending on the KaTeX configuration. Prefer the listed
+ * alternatives.
+ *
+ *   \tag{N}              → $$expr \quad\text{(N)}$$
+ *   \tag{label}          → $$expr \quad\text{(label)}$$
+ */
+const DISPLAY_MATH_WARN_RE = /\\tag\s*\{/;
+
 const LEAKY_MACRO_RE = new RegExp(`\\\\(?:${LEAKY_MACROS.join('|')})\\b`, 'g');
 // `^{...}` or `_{...}` (braced sup/sub) leaking outside math.
 const BRACED_SCRIPT_RE = /[\^_]\{[^}]+\}/g;
@@ -265,6 +277,11 @@ export function findMathErrors(rawText, label = '') {
   // them fine (in math mode) and inside \text{} they are legitimate text. The
   // real breakage is Hebrew/RTL glyphs (no math glyphs) and un-parseable TeX.
   for (const { tex, display } of extractMathSpans(text)) {
+    if (display && DISPLAY_MATH_WARN_RE.test(tex)) {
+      errors.push(
+        `${label}: \\tag{} in display math (requires amsmath; may break with default rehype-katex) — use \\quad\\text{(label)} instead`,
+      );
+    }
     const wrap = (t) => `${display ? '$$' : '$'}${t}${display ? '$$' : '$'}`;
     if (NON_MATH_SCRIPT.test(tex)) {
       errors.push(`${label}: Hebrew/RTL text inside math ${wrap(tex)} (KaTeX has no glyphs — move it outside $...$)`);
