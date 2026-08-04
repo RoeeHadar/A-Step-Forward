@@ -1,32 +1,52 @@
 name: RAG Ingest
 
-# Chunk + embed the authored bilingual corpus into kg_chunks on the target Neon
-# DB (the same DB migrate-neon.yml migrates and the web app reads). Manual only.
+# Chunk + embed the authored bilingual corpus into kg_chunks on a target Neon DB
+# (the same DB the web app reads) and verify retrieval. Manual dispatch only.
 #
-# Prereqs: `Migrate Neon` has applied 0024_kg_chunks_rag (kg_chunks @ vector(1024)
-# with RAG columns). Requires secrets DATABASE_URL + NVIDIA_API_KEY.
+# Self-sufficient: applies the RAG schema (scripts/apply-rag-schema.mjs, the
+# Neon-direct equivalent of Alembic 0024) before ingest, so it does NOT depend on
+# the `Migrate Neon` workflow (whose Alembic chain is currently broken).
+#
+# Requires secrets:
+#   - NVIDIA_API_KEY  (embeddings; nvidia/nv-embedqa-e5-v5)
+#   - the DB secret for the chosen target:
+#       production -> PRODUCTION_DATABASE_URL
+#       staging    -> STAGING_DATABASE_URL
+#       dev        -> DATABASE_URL
 
 on:
   workflow_dispatch:
     inputs:
+      db_target:
+        description: "Neon DB target"
+        type: choice
+        options:
+          - production
+          - staging
+          - dev
+        default: production
       fresh:
         description: "TRUNCATE kg_chunks before ingest (clean slate)"
         type: boolean
         default: false
+      recreate_schema:
+        description: "DROP+recreate kg_chunks at vector(1024) (safe: table is empty)"
+        type: boolean
+        default: true
       run_eval:
         description: "Run retrieval eval (recall@k) after ingest"
         type: boolean
         default: true
 
 concurrency:
-  group: rag-ingest
+  group: rag-ingest-${{ inputs.db_target }}
   cancel-in-progress: false
 
 jobs:
   ingest:
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_URL: ${{ inputs.db_target == 'production' && secrets.PRODUCTION_DATABASE_URL || inputs.db_target == 'staging' && secrets.STAGING_DATABASE_URL || secrets.DATABASE_URL }}
       NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
       NVIDIA_BASE_URL: ${{ vars.NVIDIA_BASE_URL || 'https://integrate.api.nvidia.com/v1' }}
     steps:
@@ -46,8 +66,12 @@ jobs:
 
       - name: Preflight (secrets present)
         run: |
-          if [ -z "$DATABASE_URL" ]; then echo "::error::DATABASE_URL secret not set"; exit 1; fi
+          if [ -z "$DATABASE_URL" ]; then echo "::error::DB secret for target '${{ inputs.db_target }}' not set"; exit 1; fi
           if [ -z "$NVIDIA_API_KEY" ]; then echo "::error::NVIDIA_API_KEY secret not set"; exit 1; fi
+
+      - name: Apply RAG schema (kg_chunks @ vector(1024))
+        run: |
+          node scripts/apply-rag-schema.mjs --force ${{ inputs.recreate_schema && '--recreate' || '' }}
 
       - name: Ingest corpus
         run: |
