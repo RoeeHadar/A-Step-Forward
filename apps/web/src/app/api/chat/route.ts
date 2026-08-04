@@ -111,6 +111,7 @@ import kg from '@/lib/kg-data.json';
 import { resolveConceptsWithClassifier } from '@/lib/concept-resolver';
 import { buildCompactAgentBaseline } from '@/lib/agent-baseline';
 import { getAgentPersona } from '@/lib/agent-prompts';
+import { resolveAgentSampling } from '@/lib/agent-sampling';
 import { LOCALE_COOKIE, resolveLocale } from '@/i18n/locale-storage';
 import { normalizePlanChangeMessage, isPlanChangeTemplate } from '@/lib/plan-change-template';
 import { resolveWebChatAgent } from '@/lib/web-agents';
@@ -1872,12 +1873,14 @@ async function* streamFromLLM(
     const finishSink = { current: null as string | null };
     const responseLocale = context.responseLocale ?? 'he';
 
+    const sampling = resolveAgentSampling(agent);
     const runOnce = async (system: string): Promise<string | null> => {
       const llmOpts = {
         system,
         messages: [...context.memory, { role: 'user' as const, content: message }],
         maxTokens,
-        temperature: 0.4,
+        temperature: sampling.temperature,
+        topP: sampling.topP,
         timeoutMs: CHAT_LLM_TIMEOUT_MS,
         models: resolveChatModelChain(),
         failureSink,

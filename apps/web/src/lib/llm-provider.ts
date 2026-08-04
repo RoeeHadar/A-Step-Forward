@@ -39,6 +39,19 @@ export interface LLMProviderConfig {
   providerLabel: string;
 }
 
+/**
+ * A concrete chat provider (base URL + key + the models it serves). The primary
+ * comes from LLM_/GROQ_ env; optional secondaries (e.g. NVIDIA NIM) are appended
+ * as quality fallbacks. The chat model chain spans providers; each model is
+ * routed to the provider that lists it.
+ */
+export interface ChatProvider {
+  label: string;
+  baseUrl: string;
+  apiKey: string;
+  models: string[];
+}
+
 export interface LLMChatMessage {
   role: 'system' | 'user' | 'assistant' | string;
   content: string;
@@ -50,6 +63,8 @@ export interface LLMCompletionOptions {
   messages: LLMChatMessage[];
   maxTokens?: number;
   temperature?: number;
+  /** Nucleus sampling. Omitted from the request body when undefined. */
+  topP?: number;
   jsonMode?: boolean;
   timeoutMs?: number;
   modelTier?: LLMModelTier;
@@ -118,6 +133,7 @@ function detectProviderLabel(baseUrl: string): string {
 
 /** Resolve runtime LLM configuration from env (cached per process). */
 let cachedConfig: LLMProviderConfig | null = null;
+let cachedProviders: ChatProvider[] | null = null;
 
 export function getLLMConfig(): LLMProviderConfig {
   if (cachedConfig) return cachedConfig;
@@ -154,10 +170,77 @@ export function getLLMConfig(): LLMProviderConfig {
 /** Clear config cache (tests). */
 export function resetLLMConfigCache(): void {
   cachedConfig = null;
+  cachedProviders = null;
 }
 
 export function llmConfigured(): boolean {
   return getLLMConfig().configured;
+}
+
+/**
+ * Ordered chat providers: primary (Groq / LLM_*) first, then optional
+ * secondaries (NVIDIA NIM) as quality fallbacks. Cached per process.
+ */
+export function getChatProviders(): ChatProvider[] {
+  if (cachedProviders) return cachedProviders;
+  const primary = getLLMConfig();
+  const providers: ChatProvider[] = [
+    {
+      label: primary.providerLabel,
+      baseUrl: primary.baseUrl,
+      apiKey: primary.apiKey,
+      models: [...new Set([...primary.primaryModels, ...primary.cheapModels])],
+    },
+  ];
+
+  const nvidiaKey = unquoteEnv(process.env.NVIDIA_API_KEY);
+  const nvidiaModels = parseModelList(process.env.NVIDIA_FALLBACK_MODELS, []);
+  if (nvidiaKey && nvidiaModels.length) {
+    providers.push({
+      label: 'nvidia',
+      baseUrl: trimSlash(
+        unquoteEnv(process.env.NVIDIA_BASE_URL) || 'https://integrate.api.nvidia.com/v1',
+      ),
+      apiKey: nvidiaKey,
+      models: nvidiaModels,
+    });
+  }
+
+  cachedProviders = providers;
+  return providers;
+}
+
+/** Resolve which provider serves a model; defaults to the primary provider. */
+export function resolveProviderForModel(model: string): ChatProvider {
+  const providers = getChatProviders();
+  for (const p of providers) {
+    if (p.models.includes(model)) return p;
+  }
+  return providers[0]!;
+}
+
+/**
+ * Reasoning models (DeepSeek-R1, QwQ, o1/o3, *-thinking) misbehave at low
+ * temperature (repetition/incoherence). Vendors recommend ~0.6 / top_p 0.95.
+ */
+export function isReasoningModel(model: string): boolean {
+  return /deepseek-?r1|deepseek.*reason|qwq|-thinking|(?:^|\/)o1|(?:^|\/)o3/i.test(model);
+}
+
+/**
+ * Per-model sampling body, applying the reasoning-model clamp. Exported for
+ * tests; callers should not need it directly.
+ */
+export function resolveSamplingBody(
+  model: string,
+  opts: LLMCompletionOptions,
+): Record<string, number> {
+  if (isReasoningModel(model)) {
+    return { temperature: 0.6, top_p: 0.95 };
+  }
+  const out: Record<string, number> = { temperature: opts.temperature ?? 0.4 };
+  if (opts.topP != null) out.top_p = opts.topP;
+  return out;
 }
 
 export function resolveModelChain(tier: LLMModelTier = 'primary'): string[] {
@@ -181,7 +264,11 @@ export function resolveChatModelChain(): string[] {
     const model = cfg.cheapModels[0] ?? cfg.primaryModels[0] ?? DEFAULT_CHEAP;
     return [model];
   }
-  return resolveModelChain('primary');
+  const primaryChain = resolveModelChain('primary');
+  const secondary = getChatProviders()
+    .slice(1)
+    .flatMap((p) => p.models);
+  return [...new Set([...primaryChain, ...secondary])];
 }
 
 /** Classifier / background tasks — keep on the cheap tier. */
@@ -207,6 +294,52 @@ const FAILURE_PRIORITY: Record<LLMFailureKind, number> = {
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+/**
+ * Per-process token bucket. Protects rate-limited providers (NVIDIA NIM free
+ * tier is ~40 RPM) from being overrun. Serverless instances are independent, so
+ * this is an in-instance throttle layered on top of 429 backoff — not a global
+ * quota. Per-user abuse limiting is enforced separately (Neon-backed).
+ */
+class TokenBucket {
+  private tokens: number;
+  private last: number;
+  constructor(
+    private readonly capacity: number,
+    private readonly refillPerSec: number,
+  ) {
+    this.tokens = capacity;
+    this.last = Date.now();
+  }
+
+  async acquire(maxWaitMs = 5_000): Promise<void> {
+    const deadline = Date.now() + maxWaitMs;
+    for (;;) {
+      const now = Date.now();
+      this.tokens = Math.min(
+        this.capacity,
+        this.tokens + ((now - this.last) / 1000) * this.refillPerSec,
+      );
+      this.last = now;
+      if (this.tokens >= 1) {
+        this.tokens -= 1;
+        return;
+      }
+      if (now >= deadline) return; // fail-open; 429 backoff is the backstop
+      const waitMs = Math.ceil(((1 - this.tokens) / this.refillPerSec) * 1000);
+      await sleep(Math.min(waitMs, deadline - now));
+    }
+  }
+}
+
+/**
+ * Small burst (5) + ~30 tokens/min refill keeps worst-case first-minute
+ * throughput (~35) safely under NVIDIA NIM's ~40 RPM free-tier ceiling, while
+ * still absorbing short bursts. 429 backoff is the backstop above this.
+ */
+const providerBuckets: Record<string, TokenBucket> = {
+  nvidia: new TokenBucket(5, 30 / 60),
+};
 
 export function classifyHttpStatus(status: number, provider?: string, model?: string): LLMFailureInfo {
   if (status === 401 || status === 403) {
@@ -246,20 +379,28 @@ function recordFailure(
   }
 }
 
+interface FetchProvider {
+  label: string;
+  baseUrl: string;
+  apiKey: string;
+}
+
 async function fetchCompletions(
-  cfg: LLMProviderConfig,
+  provider: FetchProvider,
   body: Record<string, unknown>,
   timeoutMs: number,
 ): Promise<Response> {
+  const bucket = providerBuckets[provider.label];
   let lastError: unknown;
   for (let attempt = 0; attempt <= MAX_FETCH_RETRIES; attempt++) {
+    if (bucket) await bucket.acquire();
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
     try {
-      const resp = await fetch(completionsUrl(cfg.baseUrl), {
+      const resp = await fetch(completionsUrl(provider.baseUrl), {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${cfg.apiKey}`,
+          Authorization: `Bearer ${provider.apiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
@@ -274,7 +415,7 @@ async function fetchCompletions(
           attempt: attempt + 1,
           waitMs,
           model: body.model,
-          provider: cfg.providerLabel,
+          provider: provider.label,
         });
         await sleep(waitMs);
         continue;
@@ -285,7 +426,7 @@ async function fetchCompletions(
         logger.warn('llm: request non-ok', {
           status: resp.status,
           model: body.model,
-          provider: cfg.providerLabel,
+          provider: provider.label,
           body: errBody.slice(0, 300),
         });
       }
@@ -322,10 +463,6 @@ function completionsUrl(baseUrl: string): string {
   return `${trimSlash(baseUrl)}/chat/completions`;
 }
 
-function isAuthFailure(status: number): boolean {
-  return status === 401 || status === 403;
-}
-
 /**
  * Non-streaming chat completion. Tries models in order; returns null if all fail.
  */
@@ -343,25 +480,27 @@ export async function llmComplete(
   const timeoutMs = opts.timeoutMs ?? 45_000;
 
   for (const model of models) {
+    const provider = resolveProviderForModel(model);
     try {
       const body: Record<string, unknown> = {
         model,
         messages,
         max_tokens: opts.maxTokens ?? 2048,
-        temperature: opts.temperature ?? 0.4,
+        ...resolveSamplingBody(model, opts),
       };
       if (opts.jsonMode) {
         body.response_format = { type: 'json_object' };
       }
 
-      const resp = await fetchCompletions(cfg, body, timeoutMs);
+      const resp = await fetchCompletions(provider, body, timeoutMs);
 
       if (!resp.ok) {
         recordFailure(
           opts.failureSink,
-          classifyHttpStatus(resp.status, cfg.providerLabel, model),
+          classifyHttpStatus(resp.status, provider.label, model),
         );
-        if (isAuthFailure(resp.status)) return null;
+        // Auth failure on one provider must not block a different provider's
+        // models later in the chain — skip to the next model instead of aborting.
         continue;
       }
 
@@ -374,13 +513,13 @@ export async function llmComplete(
       }
       recordFailure(opts.failureSink, {
         kind: 'empty_response',
-        provider: cfg.providerLabel,
+        provider: provider.label,
         model,
       });
     } catch (err) {
       recordFailure(
         opts.failureSink,
-        classifyFetchError(err, cfg.providerLabel, model),
+        classifyFetchError(err, provider.label, model),
       );
       logger.warn('llm: completion attempt failed', { model, err: String(err) });
     }
@@ -405,15 +544,16 @@ export async function* llmStream(
   const timeoutMs = opts.timeoutMs ?? 45_000;
 
   for (const model of models) {
+    const provider = resolveProviderForModel(model);
     let emitted = false;
     try {
       const resp = await fetchCompletions(
-        cfg,
+        provider,
         {
           model,
           messages,
           max_tokens: opts.maxTokens ?? 1024,
-          temperature: opts.temperature ?? 0.4,
+          ...resolveSamplingBody(model, opts),
           stream: true,
         },
         timeoutMs,
@@ -422,9 +562,10 @@ export async function* llmStream(
       if (!resp.ok || !resp.body) {
         recordFailure(
           opts.failureSink,
-          classifyHttpStatus(resp.status, cfg.providerLabel, model),
+          classifyHttpStatus(resp.status, provider.label, model),
         );
-        if (isAuthFailure(resp.status)) return;
+        // Skip to the next model/provider on failure (incl. auth) so a bad
+        // primary key still lets NVIDIA fallbacks run.
         continue;
       }
 
@@ -468,13 +609,13 @@ export async function* llmStream(
       if (emitted) return;
       recordFailure(opts.failureSink, {
         kind: 'empty_response',
-        provider: cfg.providerLabel,
+        provider: provider.label,
         model,
       });
     } catch (err) {
       recordFailure(
         opts.failureSink,
-        classifyFetchError(err, cfg.providerLabel, model),
+        classifyFetchError(err, provider.label, model),
       );
       logger.warn('llm: stream attempt failed', { model, err: String(err) });
     }
