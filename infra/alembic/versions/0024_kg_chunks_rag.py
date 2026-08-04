@@ -120,8 +120,12 @@ def upgrade() -> None:
         "CREATE INDEX IF NOT EXISTS kg_chunks_embedding_hnsw_idx ON kg_chunks USING hnsw (embedding vector_cosine_ops)"
     )
     op.execute("CREATE INDEX IF NOT EXISTS kg_chunks_tsv_idx ON kg_chunks USING gin (tsv)")
-    op.execute("CREATE INDEX IF NOT EXISTS kg_chunks_text_trgm_idx ON kg_chunks USING gin (text gin_trgm_ops)")
-    op.execute("CREATE INDEX IF NOT EXISTS kg_chunks_source_idx ON kg_chunks (source_type, source_doc_id)")
+    op.execute(
+        "CREATE INDEX IF NOT EXISTS kg_chunks_text_trgm_idx ON kg_chunks USING gin (text gin_trgm_ops)"
+    )
+    op.execute(
+        "CREATE INDEX IF NOT EXISTS kg_chunks_source_idx ON kg_chunks (source_type, source_doc_id)"
+    )
     op.execute("CREATE INDEX IF NOT EXISTS kg_chunks_concept_id_idx ON kg_chunks (concept_id)")
     op.execute("CREATE INDEX IF NOT EXISTS kg_chunks_lang_idx ON kg_chunks (lang)")
     op.execute("CREATE INDEX IF NOT EXISTS kg_chunks_content_hash_idx ON kg_chunks (content_hash)")
