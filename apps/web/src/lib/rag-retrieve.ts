@@ -74,10 +74,47 @@ function toChunk(r: Row, channel: RagChunk['channel']): RagChunk {
   };
 }
 
+/**
+ * Cheap, cached readiness probe. RAG ships flag-ON, but a target DB may not have
+ * the corpus ingested yet (e.g. prod before the ingest workflow runs). Without
+ * this, every eligible turn would pay an embedding API call + a failing hybrid
+ * query for nothing. We memoize a "does kg_chunks have any rows?" check per
+ * process: a positive result is sticky for the instance lifetime; a negative is
+ * re-probed on a short TTL, so retrieval stays a true no-op until ingestion
+ * lands and then auto-enables within one TTL — no redeploy needed.
+ */
+const READY_TTL_MS = 5 * 60 * 1000;
+let readyCache: boolean | null = null;
+let readyCheckedAt = 0;
+
+async function ragCorpusReady(): Promise<boolean> {
+  if (!sql) return false;
+  if (readyCache === true) return true;
+  const now = Date.now();
+  if (readyCache === false && now - readyCheckedAt < READY_TTL_MS) return false;
+  try {
+    const rows = (await sql`SELECT 1 AS ok FROM kg_chunks LIMIT 1`) as Array<{ ok: number }>;
+    readyCache = rows.length > 0;
+  } catch {
+    // Table missing / not migrated yet → treat as not ready (no log spam).
+    readyCache = false;
+  }
+  readyCheckedAt = now;
+  return readyCache;
+}
+
+/** Test-only: reset the memoized readiness probe. */
+export function resetRagReadyCache(): void {
+  readyCache = null;
+  readyCheckedAt = 0;
+}
+
 /** Retrieve the most relevant authored chunks for a query. Never throws. */
 export async function retrieveChunks(opts: RetrieveOptions): Promise<RagChunk[]> {
   const query = (opts.query ?? '').trim();
   if (!sql || !query) return [];
+  // Skip all work (incl. the embedding call) until the corpus is actually present.
+  if (!(await ragCorpusReady())) return [];
   const lang = opts.lang ?? detectLang(query);
   const topK = opts.topK ?? DEFAULT_TOP_K;
   const candK = opts.candidateK ?? DEFAULT_CANDIDATE_K;
