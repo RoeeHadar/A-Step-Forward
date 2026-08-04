@@ -1394,16 +1394,23 @@ async function buildContextPrompt(
       });
       if (chunks.length > 0) {
         for (const ch of chunks) addConceptGrounding(ch.conceptId);
-        context += `\n\n## Source passages (authored corpus — ground your answer in these; cite by [heading])`;
+        // Soft-cite convention (ADR-0015): if the model materially uses a passage
+        // it emits ONE [[ASF_CITE:…]] at the end. That tag is audit-only — it is
+        // stripped from the learner's view — so this is grounding, not a visible
+        // footnote. Never ask for visible "[heading]" text (breaks the invented-
+        // Sources eval and leaks internal ids to learners).
+        context += `\n\n## Source passages (authored corpus — ground your answer in these when relevant)`;
+        context += `\nIf you materially use one, soft-cite once at the very end (stripped from the learner's view): [[ASF_CITE:{"concept_id":"<id>"}]]. Never invent citations or print these ids/headings in your reply.`;
         chunks.forEach((c, i) => {
           const label = c.heading || c.title || c.sourceDocId;
+          const cid = c.conceptId ? ` · concept:${c.conceptId}` : '';
           // Strip markdown ATX headings so a chunk body can't create a spurious
           // "## " section split in partitionInjectedContext.
           const bodyText = truncateChatText(c.text, RAG_CHUNK_CHARS).replace(
             /(^|\n)#{1,6}[ \t]+/g,
             '$1',
           );
-          context += `\n\n[${i + 1}] (${label}) ${bodyText}`;
+          context += `\n\n[${i + 1}] (${label}${cid}) ${bodyText}`;
         });
         logger.info('chat: rag grounding injected', {
           agent,
