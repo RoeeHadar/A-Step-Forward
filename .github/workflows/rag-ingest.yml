@@ -1,0 +1,58 @@
+name: RAG Ingest
+
+# Chunk + embed the authored bilingual corpus into kg_chunks on the target Neon
+# DB (the same DB migrate-neon.yml migrates and the web app reads). Manual only.
+#
+# Prereqs: `Migrate Neon` has applied 0024_kg_chunks_rag (kg_chunks @ vector(1024)
+# with RAG columns). Requires secrets DATABASE_URL + NVIDIA_API_KEY.
+
+on:
+  workflow_dispatch:
+    inputs:
+      fresh:
+        description: "TRUNCATE kg_chunks before ingest (clean slate)"
+        type: boolean
+        default: false
+      run_eval:
+        description: "Run retrieval eval (recall@k) after ingest"
+        type: boolean
+        default: true
+
+concurrency:
+  group: rag-ingest
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+      NVIDIA_BASE_URL: ${{ vars.NVIDIA_BASE_URL || 'https://integrate.api.nvidia.com/v1' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 9.12.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile || pnpm install
+
+      - name: Preflight (secrets present)
+        run: |
+          if [ -z "$DATABASE_URL" ]; then echo "::error::DATABASE_URL secret not set"; exit 1; fi
+          if [ -z "$NVIDIA_API_KEY" ]; then echo "::error::NVIDIA_API_KEY secret not set"; exit 1; fi
+
+      - name: Ingest corpus
+        run: |
+          node scripts/rag-ingest.mjs --force ${{ inputs.fresh && '--fresh' || '' }}
+
+      - name: Retrieval eval (recall@k)
+        if: ${{ inputs.run_eval }}
+        run: node scripts/rag-eval.mjs --min 0.75

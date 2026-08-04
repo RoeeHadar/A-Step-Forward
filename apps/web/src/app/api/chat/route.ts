@@ -180,9 +180,19 @@ import {
 } from '@/lib/chat-safety';
 import { buildWeekTrainingSpec } from '@/lib/week-training-spec';
 import { buildActiveWeekBlock } from '@/lib/active-week-block';
+import { retrieveChunks } from '@/lib/rag-retrieve';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
+
+/**
+ * RAG grounding toggle. ON by default; set CHAT_RAG=off (or 0) to disable the
+ * authored-corpus retrieval injection without a redeploy.
+ */
+const RAG_ENABLED = process.env.CHAT_RAG !== 'off' && process.env.CHAT_RAG !== '0';
+/** Max retrieved passages injected, and per-passage char budget. */
+const RAG_TOP_K = 4;
+const RAG_CHUNK_CHARS = 520;
 
 // Keep upstream LLM timeout under Vercel maxDuration (60s on Pro).
 const CHAT_LLM_TIMEOUT_MS = 45_000;
@@ -1360,6 +1370,49 @@ async function buildContextPrompt(
           }
         }
       }
+    }
+  }
+
+  // RAG grounding (ADR-0015 hybrid knowledge): retrieve authored passages from
+  // the bilingual corpus so Tutor/Coach answers are grounded in — and can cite —
+  // our own content. Trimmable pack; degrades to lexical-only or nothing on
+  // failure. Flag-gated (CHAT_RAG) and skipped for plan-change/minimal turns.
+  const ragCandidateTurn =
+    RAG_ENABLED &&
+    !minimal &&
+    (agent === 'tutor' || agent === 'coach') &&
+    searchMessage.trim().length >= 10 &&
+    !isPlanChangeTemplate(normalizePlanChangeMessage(message)) &&
+    !shouldApplyPlanImmediately(message);
+  if (ragCandidateTurn) {
+    try {
+      // Language is auto-detected from the query inside retrieveChunks so a
+      // Hebrew question retrieves Hebrew passages regardless of response locale.
+      const chunks = await retrieveChunks({
+        query: searchMessage,
+        topK: RAG_TOP_K,
+      });
+      if (chunks.length > 0) {
+        for (const ch of chunks) addConceptGrounding(ch.conceptId);
+        context += `\n\n## Source passages (authored corpus — ground your answer in these; cite by [heading])`;
+        chunks.forEach((c, i) => {
+          const label = c.heading || c.title || c.sourceDocId;
+          // Strip markdown ATX headings so a chunk body can't create a spurious
+          // "## " section split in partitionInjectedContext.
+          const bodyText = truncateChatText(c.text, RAG_CHUNK_CHARS).replace(
+            /(^|\n)#{1,6}[ \t]+/g,
+            '$1',
+          );
+          context += `\n\n[${i + 1}] (${label}) ${bodyText}`;
+        });
+        logger.info('chat: rag grounding injected', {
+          agent,
+          chunks: chunks.length,
+          channel: chunks[0]?.channel,
+        });
+      }
+    } catch (err) {
+      logger.warn('chat: rag retrieve failed', { err: String(err) });
     }
   }
 
