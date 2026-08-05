@@ -245,6 +245,8 @@ const PLAN_FLOW_PLANNER_INSTRUCTION = [
   'Use `validate_goal_scope` only if unsure a goal is specific enough. You may',
   'also use the read-only knowledge tools if genuinely helpful. Never write the',
   'final answer here and never claim the plan is already updated.',
+  'Corpus constraint: A Step Forward only teaches math and physics — never offer',
+  'history, literature, or any other subject as a plan goal.',
 ].join(' ');
 
 /**
@@ -260,6 +262,8 @@ const PLAN_FLOW_AGENT_INSTRUCTIONS = [
   '- "ready_to_confirm": present the current→proposed diff it gives and ask the learner to confirm (yes/no). Do NOT claim the plan changed yet — the site applies it only after they confirm.',
   '- "escalate": offer the Mentor handoff or to pause and resume later; do not repeat the same question.',
   'Never tell the learner to open or paste a sidebar template — you are handling this conversationally. Never say the plan was updated unless the system confirms it in this turn.',
+  'Corpus constraint: this platform only teaches **math** and **physics**. When clarifying a goal (e.g. pre-academic / makhina), offer ONLY math vs physics (and catalog tracks like Calculus 1, Bagrut units, Mechanics/Electricity). Never invent subjects like history, literature, biology, or chemistry.',
+  'Do NOT ask why they want to change the plan — collect goal + target date via the tools, then show the diff.',
 ].join('\n');
 
 /** Steers the answer on a confirm turn so it acknowledges instead of re-asking. */
@@ -645,40 +649,69 @@ export async function POST(req: Request) {
             appendPlanResult(controller, planResult);
           }
 
+          // Plan applies / confirm gates must finish before we close the stream
+          // (they append notices). Ordinary turns persist in `after()` so a slow
+          // Neon write cannot leave the UI stuck on "thinking…" after the reply.
+          const mustFinalizeInline =
+            planEagerAttempted ||
+            shouldApplyPlanChange(lastMessage) ||
+            learnerAffirmedProposal(lastMessage);
+
           if (assistantBuffer) {
-            const finalizeResult = await finalizeAssistantTurn(
-              userId,
-              agent,
-              lastMessage,
-              assistantBuffer,
-              sessionId,
-              locale,
-              childMode,
-              (status) => {
-                if (status === 'applying') {
-                  const applying = buildPlanApplyingNotice(locale);
-                  assistantBuffer += applying;
-                  controller.enqueue(encodeToken(applying));
-                  controller.enqueue(encodeData({ type: 'plan_applying' }));
-                }
-              },
-              planAlreadyApplied,
-              planEagerAttempted,
-              turnGrounding.groundingIds,
-            );
-            if (!planEagerAttempted && finalizeResult) {
-              appendPlanResult(controller, finalizeResult);
+            if (mustFinalizeInline) {
+              const finalizeResult = await finalizeAssistantTurn(
+                userId,
+                agent,
+                lastMessage,
+                assistantBuffer,
+                sessionId,
+                locale,
+                childMode,
+                (status) => {
+                  if (status === 'applying') {
+                    const applying = buildPlanApplyingNotice(locale);
+                    assistantBuffer += applying;
+                    controller.enqueue(encodeToken(applying));
+                    controller.enqueue(encodeData({ type: 'plan_applying' }));
+                  }
+                },
+                planAlreadyApplied,
+                planEagerAttempted,
+                turnGrounding.groundingIds,
+              );
+              if (!planEagerAttempted && finalizeResult) {
+                appendPlanResult(controller, finalizeResult);
+              }
+            } else {
+              const buf = assistantBuffer;
+              const grounding = [...turnGrounding.groundingIds];
+              after(() => {
+                void finalizeAssistantTurn(
+                  userId,
+                  agent,
+                  lastMessage,
+                  buf,
+                  sessionId,
+                  locale,
+                  childMode,
+                  undefined,
+                  planAlreadyApplied,
+                  planEagerAttempted,
+                  grounding,
+                ).catch((err) =>
+                  logger.warn('chat: deferred finalize failed', { err: String(err) }),
+                );
+              });
             }
             if (citeCarry) {
               const leftover = stripAllMachineTags(citeCarry);
               citeCarry = '';
               if (leftover) controller.enqueue(encodeToken(leftover));
             }
-            // Hygiene already applied in streamFromLLM before tokens are shown (ADR-0015).
-            // Do not append a second repair notice after the learner saw the answer.
           }
           controller.enqueue(encodeFinish());
           controller.close();
+          streamDone = true;
         } else {
           assistantBuffer += value;
           enqueueVisibleToken(controller, value);
@@ -707,25 +740,54 @@ export async function POST(req: Request) {
           appendPlanResult(controller, planResult);
         }
         if (assistantBuffer) {
-          const finalizeResult = await finalizeAssistantTurn(
-            userId,
-            agent,
-            lastMessage,
-            assistantBuffer,
-            sessionId,
-            locale,
-            childMode,
-            undefined,
-            planAlreadyApplied,
-            planEagerAttempted,
-            turnGrounding.groundingIds,
-          );
-          if (!planEagerAttempted && finalizeResult) {
-            appendPlanResult(controller, finalizeResult);
+          const mustFinalizeInline =
+            planEagerAttempted ||
+            shouldApplyPlanChange(lastMessage) ||
+            learnerAffirmedProposal(lastMessage);
+          if (mustFinalizeInline) {
+            const finalizeResult = await finalizeAssistantTurn(
+              userId,
+              agent,
+              lastMessage,
+              assistantBuffer,
+              sessionId,
+              locale,
+              childMode,
+              undefined,
+              planAlreadyApplied,
+              planEagerAttempted,
+              turnGrounding.groundingIds,
+            );
+            if (!planEagerAttempted && finalizeResult) {
+              appendPlanResult(controller, finalizeResult);
+            }
+          } else {
+            const buf = assistantBuffer;
+            const grounding = [...turnGrounding.groundingIds];
+            after(() => {
+              void finalizeAssistantTurn(
+                userId,
+                agent,
+                lastMessage,
+                buf,
+                sessionId,
+                locale,
+                childMode,
+                undefined,
+                planAlreadyApplied,
+                planEagerAttempted,
+                grounding,
+              ).catch((err) =>
+                logger.warn('chat: deferred finalize (error path) failed', {
+                  err: String(err),
+                }),
+              );
+            });
           }
         }
         controller.enqueue(encodeFinish());
         controller.close();
+        streamDone = true;
       }
     },
   });
@@ -1018,6 +1080,7 @@ async function buildContextPrompt(
   memory: Array<{ role: 'user' | 'assistant'; content: string }>;
   groundingIds: Set<string>;
   responseLocale: ChatResponseLocale;
+  planChangeFlow: boolean;
 }> {
   const {
     quickMode = false,
@@ -2105,6 +2168,7 @@ async function buildContextPrompt(
     ),
     groundingIds,
     responseLocale,
+    planChangeFlow,
   };
 }
 
@@ -2149,6 +2213,7 @@ async function* streamFromLLM(
       memory: [] as Array<{ role: 'user' | 'assistant'; content: string }>,
       groundingIds: new Set<string>(),
       responseLocale: 'he' as ChatResponseLocale,
+      planChangeFlow: false,
     };
     publishGrounding(bareContext);
     attempts.push({
@@ -2230,7 +2295,10 @@ async function* streamFromLLM(
     }
 
     const quality = scoreResponseQuality(draft, responseLocale);
-    if (!quality.ok) {
+    // Guided plan-change turns are short slot questions — a quality "repair"
+    // rewrite burns another full LLM pass and can blow the Vercel budget so the
+    // stream never closes (UI stuck on "thinking…" after the reply appears).
+    if (!quality.ok && !context.planChangeFlow) {
       logger.info('chat: quality retry', {
         agent,
         failures: quality.failures,

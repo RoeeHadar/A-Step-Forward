@@ -123,6 +123,26 @@ export function goalScopeIssue(
   return planPayloadNeedsClarification({ reason: '', goal } as PlanUpdatePayload, learnerCtx);
 }
 
+/** Observation text when a goal is too broad for planning. Corpus-anchored only. */
+export function broadGoalObservation(
+  scope: PlanClarificationReason,
+  locale: 'he' | 'en' = 'en',
+): string {
+  if (scope === 'subject') {
+    return locale === 'he'
+      ? 'still_collecting: המטרה "קדם אקדמי/מכינה" רחבה מדי. באתר יש רק מתמטיקה ופיזיקה — שאל רק: מתמטיקה או פיזיקה? (אל תציע היסטוריה/ספרות/מקצועות אחרים.)'
+      : 'still_collecting: the goal "pre-academic/prep" is too broad. This site only teaches math and physics — ask ONLY: math or physics? (Never offer history/literature/other subjects.)';
+  }
+  if (scope === 'math') {
+    return locale === 'he'
+      ? 'still_collecting: המטרה "מתמטיקה" רחבה מדי. שאל איזה מסלול מהקטלוג: בגרות 3/4/5 יח״ל, חדו״א 1, מתמטיקה בדידה, אלגברה לינארית, או מכינה במתמטיקה.'
+      : 'still_collecting: the goal is too broad ("math"). Ask which catalog track: Bagrut 3/4/5, Calculus 1, Discrete math, Linear algebra, or math prep (makhina).';
+  }
+  return locale === 'he'
+    ? 'still_collecting: המטרה "פיזיקה" רחבה מדי. שאל איזה היקף מהקטלוג: מכניקה/036-361, חשמל/036-371, קרינה וחומר/036-282, או מכינה בפיזיקה.'
+    : 'still_collecting: the goal is too broad ("physics"). Ask for catalog scope: Mechanics/036-361, Electricity/036-371, Radiation & Matter/036-282, or physics prep (makhina).';
+}
+
 /** Build the proposal to persist + later apply once the learner confirms. */
 export function buildProposalFromSlots(
   slots: PlanChangeSessionSlots,
@@ -217,8 +237,8 @@ export function slotPrompt(slot: PlanSlotKey, locale: 'he' | 'en'): string {
   switch (slot) {
     case 'goal':
       return he
-        ? 'מה המטרה או המבחן שאליו אתה רוצה שנכוון את התוכנית? (למשל: מבחן בחדו״א 1, בגרות פיזיקה מכניקה)'
-        : 'What is the goal or exam you want the plan aimed at? (e.g. Calculus 1 exam, Bagrut physics mechanics)';
+        ? 'מה המטרה או המבחן שאליו אתה רוצה שנכוון את התוכנית? באתר יש רק מתמטיקה ופיזיקה (למשל: מכינה במתמטיקה, חדו״א 1, בגרות פיזיקה מכניקה).'
+        : 'What is the goal or exam you want the plan aimed at? This site only covers math and physics (e.g. math prep, Calculus 1, Bagrut physics mechanics).';
     case 'target_date':
       return he
         ? 'מתי מועד היעד? (תאריך או "בעוד שבועיים")'

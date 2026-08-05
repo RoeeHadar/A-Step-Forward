@@ -19,7 +19,9 @@ const CALC1_TEMPLATE = buildPlanChangeRequest(
 const CASUAL_REQUESTS = [
   'יש לי מבחן בחדוא 1 עוד שבוע שנה לי את התוכנית בהתאם',
   'אני רוצה שתשנה לי את תוכנית הלימוד',
+  'אני רוצה לשנות את התוכנית שלי',
   'please update my weekly plan for calculus 1',
+  "I'd like to change my plan",
 ];
 
 const NON_PLAN_CHAT = [

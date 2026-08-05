@@ -22,6 +22,7 @@ import {
 } from '@/lib/neon-db';
 import { buildLearningPlan } from '@/lib/learning-plan';
 import {
+  broadGoalObservation,
   buildProposalDiff,
   buildProposalFromSlots,
   bumpReask,
@@ -342,10 +343,10 @@ const validateGoalScopeTool: AgentTool = {
       const issue = goalScopeIssue(goal, learnerCtx);
       if (!issue) return { observation: 'ok: goal is specific enough.' };
       return {
-        observation:
-          issue === 'math'
-            ? 'too_broad: the goal is a generic "math" goal — ask which exam (Bagrut 3/4/5, Calculus 1, Discrete math, Linear algebra, …).'
-            : 'too_broad: the goal is a generic "physics" goal — ask for the scope (Mechanics/036-361, Electricity/036-371, Radiation & Matter/036-282, or the topic list).',
+        observation: broadGoalObservation(issue, ctx.locale).replace(
+          /^still_collecting:\s*/,
+          'too_broad: ',
+        ),
       };
     } catch (err) {
       logger.warn('tool validate_goal_scope failed', { err: String(err) });
@@ -420,10 +421,7 @@ const proposePlanChangeTool: AgentTool = {
         }
         if (broadGoal) {
           return {
-            observation:
-              scope === 'math'
-                ? 'still_collecting: the goal is too broad ("math"). Ask the learner which specific exam (Bagrut 3/4/5, Calculus 1, Discrete math, Linear algebra, …).'
-                : 'still_collecting: the goal is too broad ("physics"). Ask for the exact scope (Mechanics/036-361, Electricity/036-371, Radiation & Matter/036-282, or the topics).',
+            observation: broadGoalObservation(scope!, ctx.locale),
           };
         }
         return {

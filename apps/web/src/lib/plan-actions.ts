@@ -368,8 +368,11 @@ export function learnerPlanChangeIntentHeuristic(message: string): boolean {
 
   const planWord =
     /(?:תוכנית(?:\s+(?:לימוד|שבועית|הלימוד|השבועית))?|מסלול(?:\s+לימוד)?|לוח(?:\s+לימוד)?|study\s*plan|learning\s*plan|weekly\s*plan|study\s*schedule|learning\s*path|curriculum\s*path)/i;
+  // Include infinitive/conjugated Hebrew forms (לשנות / לשנותה) — bare שנה does
+  // NOT match לשנות (different letters), which previously missed the common
+  // opener "אני רוצה לשנות את התוכנית שלי".
   const changeWord =
-    /(?:שנה|שינוי|עדכן|עדכון|תשנה|תעדכן|התאם|התאמה|תתאם|ארג(?:ן|מ)?\s*מחדש|re(?:prioriti|organiz|schedul)|adjust|update|change|shift|modify|tweak|התמקד|העדף|תעד(?:ף|וף)|הוסף|הורד|add|remove|drop|focus|prepare|התכונ|דח(?:ף|י(?:ף|פה))\s+(?:את\s+)?)/i;
+    /(?:לשנות|אשנה|נשנה|שינוי|שנה|עדכן|לעדכן|עדכון|תשנה|תעדכן|התאם|התאמה|תתאם|ארג(?:ן|מ)?\s*מחדש|re(?:prioriti|organiz|schedul)|adjust|update|change|shift|modify|tweak|התמקד|העדף|תעד(?:ף|וף)|הוסף|הורד|add|remove|drop|focus|prepare|התכונ|דח(?:ף|י(?:ף|פה))\s+(?:את\s+)?)/i;
   const goalWord = /(?:המטרה|מטר(?:ה|ת)|goal|objective|target)/i;
 
   const readinessQuestion =
@@ -387,15 +390,20 @@ export function learnerPlanChangeIntentHeuristic(message: string): boolean {
   }
 
   if (
-    /^(שנה|עדכן|שינוי)\s+(את\s+)?(ה)?(מטרה|תוכנית)/i.test(t) ||
-    /(?:שנה|עדכן|שינוי).{0,32}תוכנית/i.test(t) ||
-    /(?:מבחן|exam).{0,48}(?:שנה|עדכן).{0,32}תוכנית/i.test(t) ||
-    /(?:שנה|עדכן).{0,32}תוכנית.{0,48}(?:מבחן|exam)/i.test(t) ||
-    /(?:רוצה|בבקשה|אפשר).{0,20}ש(?:ת)?(?:שנה|עדכן).{0,32}תוכנית/i.test(t) ||
+    /^(שנה|לשנות|עדכן|לעדכן|שינוי)\s+(את\s+)?(ה)?(מטרה|תוכנית)/i.test(t) ||
+    /(?:שנה|לשנות|עדכן|לעדכן|שינוי).{0,32}תוכנית/i.test(t) ||
+    /(?:מבחן|exam).{0,48}(?:שנה|לשנות|עדכן|לעדכן).{0,32}תוכנית/i.test(t) ||
+    /(?:שנה|לשנות|עדכן|לעדכן).{0,32}תוכנית.{0,48}(?:מבחן|exam)/i.test(t) ||
+    /(?:רוצה|בבקשה|אפשר).{0,24}(?:לשנות|לעדכן|ש(?:ת)?(?:שנה|עדכן)).{0,32}תוכנית/i.test(t) ||
     /ש(?:ת)?שנה\s+לי.{0,24}תוכנית/i.test(t) ||
     /המטרה החדשה(?: שלי)?/i.test(t) ||
-    /שנה את התוכנית|עדכן את התוכנית|תעד(?:כ|)ן(?:\s+לי)?\s+את\s+התוכנית/i.test(t) ||
+    /(?:לשנות|שנה) את התוכנית|(?:לעדכן|עדכן) את התוכנית|תעד(?:כ|)ן(?:\s+לי)?\s+את\s+התוכנית/i.test(
+      t,
+    ) ||
     /change my goal|update my goal|new goal is/i.test(lower) ||
+    /(?:want to|i'd like to|i would like to)\s+change\s+my\s+(?:study\s+|weekly\s+)?plan/i.test(
+      lower,
+    ) ||
     /change my (weekly )?plan|update my (weekly )?plan|adjust my (study )?plan/i.test(
       lower,
     ) ||

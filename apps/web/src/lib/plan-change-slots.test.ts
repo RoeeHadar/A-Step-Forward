@@ -3,6 +3,7 @@ import type { PlanChangeSessionSlots } from '@/lib/neon-db';
 import {
   REQUIRED_PLAN_SLOTS,
   SLOT_REASK_LIMIT,
+  broadGoalObservation,
   bumpReask,
   buildProposalDiff,
   buildProposalFromSlots,
@@ -73,12 +74,30 @@ describe('goalScopeIssue', () => {
     expect(goalScopeIssue('physics test')).toBe('physics');
   });
 
+  it('flags bare pre-academic / makhina goals as needing math vs physics', () => {
+    expect(goalScopeIssue('קורס קדם אקדמי')).toBe('subject');
+    expect(goalScopeIssue('pre-academic course')).toBe('subject');
+    expect(goalScopeIssue('מכינה')).toBe('subject');
+  });
+
+  it('accepts pre-academic once math or physics is named', () => {
+    expect(goalScopeIssue('מכינה במתמטיקה')).toBeNull();
+    expect(goalScopeIssue('pre-academic physics')).toBeNull();
+  });
+
   it('accepts a specific exam goal', () => {
     expect(goalScopeIssue('Calculus 1 exam')).toBeNull();
   });
 
   it('returns null for an empty goal', () => {
     expect(goalScopeIssue(undefined)).toBeNull();
+  });
+
+  it('anchors broadGoalObservation to math/physics only', () => {
+    const he = broadGoalObservation('subject', 'he');
+    expect(he).toContain('מתמטיקה');
+    expect(he).toContain('פיזיקה');
+    expect(he).toMatch(/אל תציע היסטוריה/);
   });
 });
 

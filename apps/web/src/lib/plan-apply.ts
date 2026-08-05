@@ -112,11 +112,17 @@ export function buildPlanApplyFailureNotice(
 const PHYSICS_GOAL_RE = /פיזיק|physics/i;
 const MATH_GENERIC_RE = /מתמטיק|mathematics|\bmath\b/i;
 const MATH_SPECIFIC_RE =
-  /חדו|calculus|\bcalc\s*1|calculus\s*1|בדיד|discrete|5\s*יח|4\s*יח|3\s*יח|bagrut|בגרות|אלגבר|algebra|לינאר|linear|סטטיסט|statistic|הסתבר|probability|מכינה|makhina|שאלון\s*47|שאלון\s*57/i;
+  /חדו|calculus|\bcalc\s*1|calculus\s*1|בדיד|discrete|5\s*יח|4\s*יח|3\s*יח|bagrut|בגרות|אלגבר|algebra|לינאר|linear|סטטיסט|statistic|הסתבר|probability|שאלון\s*47|שאלון\s*57/i;
 const PHYSICS_SPECIFIC_RE =
   /036-361|036-371|036-282|036-382|מכניק|קינמט|דינמיק|ניוטון|חשמל|מעגל|קרינה|חומר|mechanics?|kinematics?|dynamics?|newton|electric(?:ity|al)?|circuits?|radiation|matter/i;
+/** Pre-academic / makhina / university-prep style goals need math vs physics. */
+const PREP_GOAL_RE =
+  /קדם\s*אקדמ|pre[-\s]?academic|מכינה|makhina|university\s*prep|הכנה\s*לאוניברסיט/i;
+/** Subject hint that makes a prep goal specific enough to plan. */
+const PREP_SUBJECT_HINT_RE =
+  /מתמטיק|\bmath\b|פיזיק|physics|חדו|calculus|בדיד|discrete|אלגבר|algebra|לינאר|linear|מכניק|חשמל|electric|בגרות|bagrut/i;
 
-export type PlanClarificationReason = 'physics' | 'math';
+export type PlanClarificationReason = 'physics' | 'math' | 'subject';
 
 export function planPayloadNeedsClarification(
   payload: PlanUpdatePayload,
@@ -129,6 +135,15 @@ export function planPayloadNeedsClarification(
     .join('\n');
   if (!text.trim()) return null;
 
+  // "Pre-academic course" without math/physics is too vague — this platform only
+  // teaches those two subjects. Never invent history/literature/etc.
+  // Prep + an explicit math/physics hint is specific enough (maps to makhina /
+  // university_prep tracks); do not also demand Bagrut unit / Mechanics codes.
+  if (PREP_GOAL_RE.test(text)) {
+    if (!PREP_SUBJECT_HINT_RE.test(text)) return 'subject';
+    return null;
+  }
+
   if (PHYSICS_GOAL_RE.test(text) && !PHYSICS_SPECIFIC_RE.test(text)) return 'physics';
   if (MATH_GENERIC_RE.test(text) && !MATH_SPECIFIC_RE.test(text)) return 'math';
   return null;
@@ -139,6 +154,14 @@ export function buildPlanClarificationNotice(
   reason: PlanClarificationReason = 'physics',
 ): string {
   if (locale === 'he') {
+    if (reason === 'subject') {
+      return [
+        '---',
+        '⚠️ **לא עדכנתי את התוכנית עדיין**',
+        'באתר יש רק מתמטיקה ופיזיקה לקורסי קדם אקדמי / מכינה. ציין/י איזה מקצוע (מתמטיקה או פיזיקה) ואת המטרה המדויקת.',
+        'שלח/י שוב את תבנית **עדכון תוכנית הלימוד** בלבד (ללא טקסט נוסף לפני/אחרי), עם המטרה המדויקת והמועד.',
+      ].join('\n');
+    }
     if (reason === 'math') {
       return [
         '---',
@@ -155,6 +178,14 @@ export function buildPlanClarificationNotice(
     ].join('\n');
   }
 
+  if (reason === 'subject') {
+    return [
+      '---',
+      '⚠️ **I did not update the plan yet**',
+      'This site only covers math and physics for pre-academic / university-prep tracks. Specify which subject (math or physics) and the exact goal.',
+      'Resend only the **Learning plan update** template (no extra chat text before/after) with the exact goal and date.',
+    ].join('\n');
+  }
   if (reason === 'math') {
     return [
       '---',
