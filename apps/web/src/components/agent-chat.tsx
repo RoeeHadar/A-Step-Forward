@@ -8,10 +8,9 @@ import { MarkdownMath } from '@/components/markdown-math';
 import { ChatHistoryPanel } from '@/components/chat-history-panel';
 import { stripPlanMachineTags, shouldApplyPlanImmediately } from '@/lib/plan-actions';
 import { normalizePlanChangeMessage } from '@/lib/plan-change-template';
-import { PlanChangeTemplatePanel } from '@/components/plan-change-template-panel';
 import { stripAllMachineTags } from '@/lib/chat-cite-tags';
 import { useRouter } from 'next/navigation';
-import { Send, Loader2, X, RefreshCw, ChevronDown, ChevronUp, FileText } from 'lucide-react';
+import { Send, Loader2, X, RefreshCw } from 'lucide-react';
 import { Button } from '@asf/ui/button';
 import { Textarea } from '@asf/ui/textarea';
 import { cn } from '@asf/ui';
@@ -105,10 +104,6 @@ export function AgentChat({
   const [planApplyState, setPlanApplyState] = useState<
     'idle' | 'applying' | 'success' | 'failed'
   >('idle');
-  const [planTemplateMobileOpen, setPlanTemplateMobileOpen] = useState(false);
-
-  const showPlanTemplate = agentName === 'tutor' && !compact;
-
   useEffect(() => {
     if (!quickMode) return;
     setRemainingSeconds(totalQuickSeconds);
@@ -338,7 +333,7 @@ export function AgentChat({
   const statusMessage =
     showConnecting && isLoading ? i18nMessages.chat.connecting : i18nMessages.chat.thinking;
 
-  const isPlanAgent = showPlanTemplate;
+  const isPlanAgent = agentName === 'tutor' && !compact;
 
   function shouldShowPlanApplying(nextInput: string): boolean {
     if (!isPlanAgent) return false;
@@ -370,7 +365,6 @@ export function AgentChat({
         'agent-accent-context flex flex-col',
         compact ? 'h-full min-h-0' : 'h-[calc(100vh-8rem)]',
         showHistory && !compact ? 'lg:flex-row lg:gap-4' : '',
-        showPlanTemplate && !compact ? 'xl:flex-row' : '',
       )}
       style={agentAccentVars(agentName)}
     >
@@ -393,7 +387,7 @@ export function AgentChat({
         />
       ) : null}
 
-      <div className={cn('flex min-h-0 flex-1 flex-col', showPlanTemplate && !compact && 'xl:flex-row xl:gap-4')}>
+      <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex min-h-0 flex-1 flex-col">
       <header className={cn('mb-4 flex flex-wrap items-center gap-3', compact && 'mb-2')}>
         <div
@@ -578,47 +572,6 @@ export function AgentChat({
       </div>
       </div>
 
-      {/* Mobile plan template — visible below lg where the sidebar is hidden */}
-      {showPlanTemplate ? (
-        <div className="lg:hidden mt-3 px-2 pb-2">
-          <button
-            type="button"
-            onClick={() => setPlanTemplateMobileOpen((v) => !v)}
-            className="flex w-full items-center gap-2 rounded-xl border border-primary/30 bg-primary/5 px-4 py-2.5 text-sm font-medium text-primary hover:bg-primary/10"
-            dir={isHe ? 'rtl' : 'ltr'}
-          >
-            <FileText className="h-4 w-4 shrink-0" aria-hidden />
-            {isHe ? 'תבנית עדכון תוכנית לימודים' : 'Study Plan Update Template'}
-            {planTemplateMobileOpen ? (
-              <ChevronUp className="ms-auto h-4 w-4" aria-hidden />
-            ) : (
-              <ChevronDown className="ms-auto h-4 w-4" aria-hidden />
-            )}
-          </button>
-          {planTemplateMobileOpen ? (
-            <div className="mt-2">
-              <PlanChangeTemplatePanel
-                locale={isHe ? 'he' : 'en'}
-                copy={i18nMessages.chat.planChangeTemplate}
-                onUseTemplate={(text) => {
-                  setInput(text);
-                  setPlanTemplateMobileOpen(false);
-                }}
-                variant="inline"
-              />
-            </div>
-          ) : null}
-        </div>
-      ) : null}
-
-      {showPlanTemplate ? (
-        <PlanChangeTemplatePanel
-          locale={isHe ? 'he' : 'en'}
-          copy={i18nMessages.chat.planChangeTemplate}
-          onUseTemplate={(text) => setInput(text)}
-          variant="sidebar"
-        />
-      ) : null}
       </div>
     </div>
   );
