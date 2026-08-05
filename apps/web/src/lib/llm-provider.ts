@@ -622,6 +622,182 @@ export async function* llmStream(
   }
 }
 
+// ---------------------------------------------------------------------------
+// Native tool-calling (ReAct loop primitive)
+// ---------------------------------------------------------------------------
+
+/** OpenAI-style function tool advertised to the model. */
+export interface LLMTool {
+  type: 'function';
+  function: {
+    name: string;
+    description: string;
+    /** JSON Schema for the arguments object. */
+    parameters: Record<string, unknown>;
+  };
+}
+
+/** A tool call the model emitted (arguments is a raw JSON string). */
+export interface LLMToolCall {
+  id: string;
+  type: 'function';
+  function: { name: string; arguments: string };
+}
+
+/**
+ * Message shape for the tool loop. Extends the plain chat message with the
+ * OpenAI tool fields: an assistant turn may carry `tool_calls`, and a `tool`
+ * turn carries the matching `tool_call_id` + result `content`.
+ */
+export interface LLMToolMessage {
+  role: 'system' | 'user' | 'assistant' | 'tool';
+  content: string;
+  tool_calls?: LLMToolCall[];
+  tool_call_id?: string;
+  name?: string;
+}
+
+export interface LLMToolCompletionOptions {
+  system?: string;
+  messages: LLMToolMessage[];
+  tools: LLMTool[];
+  /** 'auto' (default) lets the model decide; 'none' forces a text answer. */
+  toolChoice?: 'auto' | 'none' | 'required';
+  maxTokens?: number;
+  temperature?: number;
+  topP?: number;
+  timeoutMs?: number;
+  models?: string[];
+  failureSink?: { current: LLMFailureInfo | null };
+}
+
+export interface LLMToolCompletionResult {
+  content: string;
+  toolCalls: LLMToolCall[];
+  model: string;
+  finishReason?: string;
+}
+
+/**
+ * Models we trust to honor OpenAI-style `tools` / `tool_calls`. Groq's 70B and
+ * gpt-oss/qwen3 lines support function calling reliably; the 8B instant model is
+ * flaky with tools, and NVIDIA NIM models vary — both are excluded so the loop
+ * only ever runs on a capable model and otherwise degrades to the prompt path.
+ */
+export function isToolCapableModel(model: string): boolean {
+  return /llama-3\.3-70b|gpt-oss|qwen3|llama-4|mixtral-8x/i.test(model);
+}
+
+/** Chat model chain filtered to tool-capable models (may be empty). */
+export function resolveToolModelChain(): string[] {
+  return resolveChatModelChain().filter(isToolCapableModel);
+}
+
+/** True when at least one tool-capable model is available in the chat chain. */
+export function toolCallingAvailable(): boolean {
+  return resolveToolModelChain().length > 0;
+}
+
+function buildToolMessages(opts: LLMToolCompletionOptions): LLMToolMessage[] {
+  const out: LLMToolMessage[] = [];
+  if (opts.system?.trim()) {
+    out.push({ role: 'system', content: opts.system.trim() });
+  }
+  for (const m of opts.messages) {
+    // Keep assistant turns that carry tool_calls even when content is empty,
+    // and always keep tool-result turns (their content is the observation).
+    const hasToolCalls = Array.isArray(m.tool_calls) && m.tool_calls.length > 0;
+    if (!m.content?.trim() && !hasToolCalls && m.role !== 'tool') continue;
+    const msg: LLMToolMessage = { role: m.role, content: m.content ?? '' };
+    if (hasToolCalls) msg.tool_calls = m.tool_calls;
+    if (m.role === 'tool') {
+      msg.tool_call_id = m.tool_call_id;
+      if (m.name) msg.name = m.name;
+    }
+    out.push(msg);
+  }
+  return out;
+}
+
+/**
+ * One non-streamed tool-calling turn. Returns the assistant message — which is
+ * EITHER a text answer (`content`, empty `toolCalls`) OR a set of `toolCalls`
+ * the caller must execute and feed back. Returns null when every model fails
+ * (e.g. the provider rejects the `tools` param), signalling the caller to
+ * degrade to the plain completion path.
+ */
+export async function llmCompleteWithTools(
+  opts: LLMToolCompletionOptions,
+): Promise<LLMToolCompletionResult | null> {
+  const cfg = getLLMConfig();
+  if (!cfg.configured) {
+    logger.warn('llm: tool completion skipped — not configured');
+    return null;
+  }
+
+  const models = (opts.models ?? resolveToolModelChain()).filter(isToolCapableModel);
+  if (models.length === 0) return null;
+
+  const messages = buildToolMessages(opts);
+  const timeoutMs = opts.timeoutMs ?? 45_000;
+
+  for (const model of models) {
+    const provider = resolveProviderForModel(model);
+    try {
+      const body: Record<string, unknown> = {
+        model,
+        messages,
+        max_tokens: opts.maxTokens ?? 1024,
+        ...resolveSamplingBody(model, opts),
+        tools: opts.tools,
+        tool_choice: opts.toolChoice ?? 'auto',
+      };
+
+      const resp = await fetchCompletions(provider, body, timeoutMs);
+      if (!resp.ok) {
+        recordFailure(
+          opts.failureSink,
+          classifyHttpStatus(resp.status, provider.label, model),
+        );
+        continue;
+      }
+
+      const json = (await resp.json()) as {
+        choices?: Array<{
+          message?: {
+            content?: string | null;
+            tool_calls?: LLMToolCall[] | null;
+          };
+          finish_reason?: string | null;
+        }>;
+      };
+      const choice = json.choices?.[0];
+      const msg = choice?.message;
+      const toolCalls = (msg?.tool_calls ?? []).filter(
+        (t) => t?.function?.name,
+      );
+      const content = msg?.content ?? '';
+      if (toolCalls.length > 0 || content.trim()) {
+        return {
+          content,
+          toolCalls,
+          model,
+          finishReason: choice?.finish_reason ?? undefined,
+        };
+      }
+      recordFailure(opts.failureSink, {
+        kind: 'empty_response',
+        provider: provider.label,
+        model,
+      });
+    } catch (err) {
+      recordFailure(opts.failureSink, classifyFetchError(err, provider.label, model));
+      logger.warn('llm: tool completion attempt failed', { model, err: String(err) });
+    }
+  }
+  return null;
+}
+
 /** Parse JSON object from an LLM completion (jsonMode). */
 export async function llmCompleteJson<T extends Record<string, unknown>>(
   opts: LLMCompletionOptions,

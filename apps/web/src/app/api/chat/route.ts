@@ -181,6 +181,9 @@ import {
 import { buildWeekTrainingSpec } from '@/lib/week-training-spec';
 import { buildActiveWeekBlock } from '@/lib/active-week-block';
 import { retrieveChunks } from '@/lib/rag-retrieve';
+import { toolCallingAvailable } from '@/lib/llm-provider';
+import { getToolsForAgent } from '@/lib/agent-tools';
+import { runReactLoop } from '@/lib/react-loop';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -193,6 +196,31 @@ const RAG_ENABLED = process.env.CHAT_RAG !== 'off' && process.env.CHAT_RAG !== '
 /** Max retrieved passages injected, and per-passage char budget. */
 const RAG_TOP_K = 4;
 const RAG_CHUNK_CHARS = 520;
+
+/**
+ * ReAct tool-calling loop toggle (ADR-0015, Phase A). ON by default; set
+ * CHAT_REACT_AGENT=off (or 0) to disable and fall back to static RAG grounding.
+ * Only ever runs when a tool-capable model is available (else it degrades).
+ */
+const REACT_ENABLED =
+  process.env.CHAT_REACT_AGENT !== 'off' && process.env.CHAT_REACT_AGENT !== '0';
+/**
+ * Bounds for the tool loop. The route is capped at 60s; the loop's overall
+ * budget (18s) + per-call ceiling (8s) leave ~40s for the answer generator.
+ */
+const REACT_MAX_TOOL_CALLS = 4;
+const REACT_MAX_ITERATIONS = 2;
+const REACT_BUDGET_MS = 18_000;
+const REACT_PER_CALL_TIMEOUT_MS = 8_000;
+const TOOL_PLANNER_INSTRUCTION = [
+  'You are the tool-planning stage for a learner-facing tutoring assistant.',
+  'Decide whether calling a tool would materially improve the answer to the',
+  'learner’s latest message, and if so call the most relevant tool(s).',
+  'Prefer `retrieve` for factual/explanatory questions, `get_lesson` to point to',
+  'structured material by concept id, and `learning_plan_next` for “what should I',
+  'study next / why am I stuck”. If no tool is needed (greetings, small talk,',
+  'pure motivation), do NOT call any tool. Never write the final answer here.',
+].join(' ');
 
 // Keep upstream LLM timeout under Vercel maxDuration (60s on Pro).
 const CHAT_LLM_TIMEOUT_MS = 45_000;
@@ -1377,13 +1405,67 @@ async function buildContextPrompt(
   // the bilingual corpus so Tutor/Coach answers are grounded in — and can cite —
   // our own content. Trimmable pack; degrades to lexical-only or nothing on
   // failure. Flag-gated (CHAT_RAG) and skipped for plan-change/minimal turns.
+  const planChangeTurn =
+    isPlanChangeTemplate(normalizePlanChangeMessage(message)) ||
+    shouldApplyPlanImmediately(message);
+
+  // ReAct tool loop (Phase A): the model plans read-only tool calls (retrieve,
+  // get_lesson, learning_plan_next); we execute them and inject the observations.
+  // Supersedes the static RAG block when it runs. Degrades to static RAG when
+  // the flag is off, no tool-capable model is available, or the planner fails.
+  let reactHandledGrounding = false;
+  const reactCandidateTurn =
+    REACT_ENABLED &&
+    !minimal &&
+    !planChangeTurn &&
+    searchMessage.trim().length >= 10 &&
+    getToolsForAgent(agent).length > 0 &&
+    toolCallingAvailable();
+  if (reactCandidateTurn) {
+    try {
+      const loop = await runReactLoop({
+        system: `${buildCompactAgentBaseline()}\n\n${TOOL_PLANNER_INSTRUCTION}`,
+        memory: recentForIntent.slice(-2).map((t) => ({
+          role: t.role === 'assistant' ? ('assistant' as const) : ('user' as const),
+          content: t.content,
+        })),
+        userMessage: searchMessage,
+        tools: getToolsForAgent(agent),
+        ctx: { userId, agent, locale: responseLocale === 'en' ? 'en' : 'he' },
+        maxToolCalls: REACT_MAX_TOOL_CALLS,
+        maxIterations: REACT_MAX_ITERATIONS,
+        budgetMs: REACT_BUDGET_MS,
+        perCallTimeoutMs: REACT_PER_CALL_TIMEOUT_MS,
+      });
+      if (!loop.degraded) {
+        for (const id of loop.groundingIds) addConceptGrounding(id);
+        if (loop.observations.trim()) {
+          // Only suppress the static-RAG fallback when the loop actually
+          // produced grounding; if the model chose no tools, let static RAG run
+          // for tutor/coach so we don't lose corpus grounding on a factual turn.
+          reactHandledGrounding = true;
+          context += `\n\n## Retrieved context (from tools — ground your answer in these when relevant)`;
+          context += `\nIf you materially use one, soft-cite once at the very end (stripped from the learner's view): [[ASF_CITE:{"concept_id":"<id>"}]]. Never invent citations, name the tools, or print these ids/headings in your reply.`;
+          context += `\n\n${loop.observations.replace(/(^|\n)#{1,6}[ \t]+/g, '$1')}`;
+          logger.info('chat: react tool grounding injected', {
+            agent,
+            toolCalls: loop.toolCallsMade,
+            grounding: loop.groundingIds.length,
+          });
+        }
+      }
+    } catch (err) {
+      logger.warn('chat: react loop failed', { err: String(err) });
+    }
+  }
+
   const ragCandidateTurn =
+    !reactHandledGrounding &&
     RAG_ENABLED &&
     !minimal &&
     (agent === 'tutor' || agent === 'coach') &&
     searchMessage.trim().length >= 10 &&
-    !isPlanChangeTemplate(normalizePlanChangeMessage(message)) &&
-    !shouldApplyPlanImmediately(message);
+    !planChangeTurn;
   if (ragCandidateTurn) {
     try {
       // Language is auto-detected from the query inside retrieveChunks so a

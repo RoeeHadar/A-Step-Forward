@@ -3,12 +3,15 @@ import {
   getLLMConfig,
   getChatProviders,
   isReasoningModel,
+  isToolCapableModel,
   llmConfigured,
   resetLLMConfigCache,
   resolveModelChain,
   resolveChatModelChain,
   resolveProviderForModel,
   resolveSamplingBody,
+  resolveToolModelChain,
+  toolCallingAvailable,
 } from './llm-provider';
 
 describe('llm-provider config', () => {
@@ -167,6 +170,49 @@ describe('isReasoningModel', () => {
     expect(isReasoningModel('meta/llama-3.3-70b-instruct')).toBe(false);
     expect(isReasoningModel('qwen/qwen2.5-72b-instruct')).toBe(false);
     expect(isReasoningModel('llama-3.3-70b-versatile')).toBe(false);
+  });
+});
+
+describe('tool-calling model selection', () => {
+  const env = process.env;
+  afterEach(() => {
+    process.env = { ...env };
+    resetLLMConfigCache();
+  });
+
+  it('flags tool-capable model families', () => {
+    expect(isToolCapableModel('llama-3.3-70b-versatile')).toBe(true);
+    expect(isToolCapableModel('openai/gpt-oss-120b')).toBe(true);
+    expect(isToolCapableModel('qwen/qwen3.6-27b')).toBe(true);
+  });
+
+  it('excludes the flaky 8B instant and unknown NVIDIA models', () => {
+    expect(isToolCapableModel('llama-3.1-8b-instant')).toBe(false);
+    expect(isToolCapableModel('meta/llama-3.3-70b-instruct')).toBe(true);
+    expect(isToolCapableModel('some-random-model')).toBe(false);
+  });
+
+  it('resolveToolModelChain keeps only tool-capable models', () => {
+    process.env.LLM_API_KEY = 'k';
+    process.env.LLM_PRIMARY_MODEL = 'llama-3.3-70b-versatile';
+    process.env.LLM_CHEAP_MODEL = 'llama-3.1-8b-instant';
+    delete process.env.LLM_FALLBACK_MODELS;
+    delete process.env.CHAT_MODEL_POLICY;
+    resetLLMConfigCache();
+    const chain = resolveToolModelChain();
+    expect(chain).toContain('llama-3.3-70b-versatile');
+    expect(chain).not.toContain('llama-3.1-8b-instant');
+    expect(toolCallingAvailable()).toBe(true);
+  });
+
+  it('toolCallingAvailable is false when only cheap models exist', () => {
+    process.env.LLM_API_KEY = 'k';
+    process.env.LLM_PRIMARY_MODEL = 'llama-3.1-8b-instant';
+    process.env.LLM_CHEAP_MODEL = 'llama-3.1-8b-instant';
+    process.env.CHAT_MODEL_POLICY = 'cheap';
+    delete process.env.LLM_FALLBACK_MODELS;
+    resetLLMConfigCache();
+    expect(toolCallingAvailable()).toBe(false);
   });
 });
 
