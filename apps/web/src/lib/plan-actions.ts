@@ -526,6 +526,59 @@ export function learnerConfirmedChange(message: string): boolean {
   return heConfirm || enConfirm;
 }
 
+/**
+ * Strict affirmation of a STAGED plan-change proposal (guided flow confirm
+ * gate). Unlike `learnerConfirmedChange`, this rejects messages that also carry
+ * new slot content — "update the date to Sep 20", "עדכן ל-20 בספטמבר" — so an
+ * EDIT is never mistaken for a bare "yes" and never applies the old proposal.
+ */
+export function learnerAffirmedProposal(message: string): boolean {
+  const t = message.trim();
+  if (!learnerConfirmedChange(t)) return false;
+  const lower = t.toLowerCase();
+  // Edit signals → not a bare confirmation.
+  const hasChangeTo =
+    /\b(change|update|make|set|move|push)\b[^.!?]{0,24}\bto\b/i.test(lower) ||
+    /(במקום|תשנה|שנה\s+ל|עדכן\s+ל|תעדכן\s+ל|instead)/.test(t);
+  const hasNumber = /\d/.test(t);
+  const tooLong = t.split(/\s+/).filter(Boolean).length > 6;
+  if (hasChangeTo || hasNumber || tooLong) return false;
+  return true;
+}
+
+/**
+ * Strong, unambiguous cancel of the guided plan-change flow. Distinct from
+ * `learnerRejectedChange`: a bare "no" or an explicit cancel word ends the
+ * flow (clears the session), but a longer "no, change the date to …" is an
+ * EDIT and must keep the session so we re-collect instead of losing slots.
+ */
+export function learnerCanceledPlanFlow(message: string): boolean {
+  const t = message.trim();
+  const lower = t.toLowerCase();
+  const wordCount = t.split(/\s+/).filter(Boolean).length;
+  const strongHe = /(^|\s)(ביטול|בטל|עצור|עזוב|תשכח מזה|לא רוצה בכלל|לא תודה)(\s|$)/.test(t);
+  const strongEn = /\b(cancel|never ?mind|forget it|nvm|drop it|call it off)\b/i.test(lower);
+  // Hebrew letters are not \w, so \b can't anchor "לא"; use an explicit
+  // non-Hebrew lookahead instead so "לא" cancels but "לאט"/"לעדכן" don't.
+  const plainNoEn = /^(no|nope|nah|stop)\b/i.test(lower);
+  const plainNoHe = /^(לא|עצור)(?![\u0590-\u05FF])/.test(t);
+  const plainNo = wordCount <= 3 && (plainNoEn || plainNoHe);
+  return strongHe || strongEn || plainNo;
+}
+
+/** Explicit rejection of a staged change ("no" / "לא" / "cancel"). */
+export function learnerRejectedChange(message: string): boolean {
+  const t = message.trim();
+  const lower = t.toLowerCase();
+  const heReject =
+    /^(לא|ביטול|עצור|לא תודה|בטל|לא רוצה|לא עכשיו)\b/.test(t) ||
+    /\b(אל תשנה|אל תעדכן|בטל את)\b/.test(t);
+  const enReject =
+    /^(no|nope|nah|cancel|stop|don't|do not|not now|never mind|nevermind)\b/i.test(lower) ||
+    /\b(don't (change|update)|do not (change|update)|cancel that)\b/i.test(lower);
+  return heReject || enReject;
+}
+
 export const PLAN_AGENT_INSTRUCTIONS = `
 ## Learning-plan & goal modification protocol (Tutor / Mentor)
 

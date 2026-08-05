@@ -6,6 +6,7 @@ import { Button } from '@asf/ui/button';
 import { cn } from '@asf/ui';
 import {
   getPlanChangeDisplayTemplate,
+  getPlanChangeGuidedOpener,
   wrapPlanChangeMessage,
 } from '@/lib/plan-change-template';
 
@@ -16,6 +17,8 @@ type PlanChangeTemplateCopy = {
   howTitle: string;
   howSteps: readonly string[];
   memoryNote: string;
+  guidedLabel: string;
+  guidedHint: string;
   copyLabel: string;
   useLabel: string;
   copiedLabel: string;
@@ -52,6 +55,10 @@ export function PlanChangeTemplatePanel({
 
   function handleUse() {
     onUseTemplate(wrapPlanChangeMessage(displayTemplate));
+  }
+
+  function handleStartGuided() {
+    onUseTemplate(getPlanChangeGuidedOpener(locale));
   }
 
   if (collapsed && variant === 'sidebar') {
@@ -132,10 +139,20 @@ export function PlanChangeTemplatePanel({
         <p className="mb-2 text-xs text-muted-foreground">{copy.memoryNote}</p>
 
         <div className="mt-auto flex flex-col gap-1.5 pt-1">
-          <Button type="button" size="sm" variant="default" className="w-full" onClick={handleUse}>
+          <Button
+            type="button"
+            size="sm"
+            variant="default"
+            className="w-full"
+            onClick={handleStartGuided}
+          >
+            {copy.guidedLabel}
+          </Button>
+          <p className="text-[11px] leading-snug text-muted-foreground">{copy.guidedHint}</p>
+          <Button type="button" size="sm" variant="outline" className="w-full" onClick={handleUse}>
             {copy.useLabel}
           </Button>
-          <Button type="button" size="sm" variant="outline" className="w-full" onClick={() => void handleCopy()}>
+          <Button type="button" size="sm" variant="ghost" className="w-full" onClick={() => void handleCopy()}>
             {copied ? (
               <>
                 <Check className="h-3.5 w-3.5" aria-hidden />

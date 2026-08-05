@@ -7,7 +7,9 @@ import {
   appendLearnerPersonaLine,
   applyPlanProfileUpdates,
   clearPendingPlanProposal,
+  clearPlanChangeSession,
   generateLearningPlan,
+  getPlanChangeSession,
   recordPlanChangeHistory,
   setPendingPlanProposal,
   type PendingPlanProposal,
@@ -18,6 +20,8 @@ import {
   DISCRETE_EXAM_CONCEPTS,
   inferConceptIdsFromText,
   inferGoalMetaFromText,
+  learnerAffirmedProposal,
+  learnerCanceledPlanFlow,
   planPayloadToOptions,
   proposalToUpdatePayload,
   shouldApplyPlanImmediately,
@@ -446,6 +450,65 @@ export async function resolvePayloadForApply(
   };
 
   return enrichPlanPayloadFromLearnerContext(raw, learnerCtx);
+}
+
+/**
+ * Server-enforced confirm gate for the guided (ReAct) plan-change flow (Phase B).
+ *
+ * The `propose_plan_change` tool stages a proposal (session → `awaiting_confirm`)
+ * and shows the learner a diff. The plan is applied ONLY here, and ONLY when
+ * BOTH hold: an `awaiting_confirm` session with a proposal exists AND the
+ * learner's latest message is an unambiguous affirmative. The model can never
+ * apply on its own. Returns:
+ *   - a PlanApplyResult (applied or failure w/ notice) when a confirm was acted on
+ *   - null when there's no confirmable session or the message isn't a clear yes
+ *     (an explicit rejection clears the session so we don't nag).
+ */
+export async function maybeApplyConfirmedPlanSession(
+  learnerId: string,
+  agent: string,
+  userMessage: string,
+  locale: 'he' | 'en' = 'he',
+): Promise<PlanApplyResult | null> {
+  const session = await getPlanChangeSession(learnerId).catch(() => null);
+  if (!session || session.status !== 'awaiting_confirm' || !session.proposal) return null;
+  // Only the agent that staged the proposal may apply it (a tutor session must
+  // not be confirmed on a mentor turn, and vice-versa).
+  if (session.agent !== agent) return null;
+
+  if (!learnerAffirmedProposal(userMessage)) {
+    // A strong, unambiguous cancel ends the flow (clears the session so we
+    // don't nag). A longer "no, change the date to …" is an EDIT — leave the
+    // session so the tool re-collects and re-summarizes on the next turn.
+    if (learnerCanceledPlanFlow(userMessage)) {
+      await clearPlanChangeSession(learnerId).catch(() => undefined);
+    }
+    return null;
+  }
+
+  const payload = proposalToUpdatePayload(session.proposal);
+  try {
+    const result = await executePlanUpdate(learnerId, payload, { agent, source: 'chat' });
+    if (result.applied) {
+      await clearPlanChangeSession(learnerId).catch(() => undefined);
+      return result;
+    }
+    // Apply failed — be honest, keep the session so the learner can retry/edit.
+    const failureNotice =
+      result.error === 'needs_exam_scope' && result.clarificationReason
+        ? buildPlanClarificationNotice(locale, result.clarificationReason)
+        : buildPlanApplyFailureNotice(locale, result.error);
+    return { ...result, failureNotice };
+  } catch (err) {
+    return {
+      applied: false,
+      error: err instanceof Error ? err.message : String(err),
+      failureNotice: buildPlanApplyFailureNotice(
+        locale,
+        err instanceof Error ? err.message : String(err),
+      ),
+    };
+  }
 }
 
 /** Apply plan as soon as the learner sends a direct imperative (before tutor Q&A). */

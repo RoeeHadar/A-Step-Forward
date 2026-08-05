@@ -37,6 +37,18 @@ export function getPlanChangeDisplayTemplate(locale: 'he' | 'en'): string {
   return locale === 'he' ? PLAN_CHANGE_DISPLAY_HE : PLAN_CHANGE_DISPLAY_EN;
 }
 
+/**
+ * Natural-language opener that launches the guided (conversational) plan-change
+ * flow (Phase B). It is deliberately phrased so `learnerPlanChangeIntentHeuristic`
+ * detects it, which makes the chat route expose the plan-change tool family and
+ * the agent starts asking for the missing slots one at a time.
+ */
+export function getPlanChangeGuidedOpener(locale: 'he' | 'en'): string {
+  return locale === 'he'
+    ? 'אני רוצה לעדכן את התוכנית שלי.'
+    : "I'd like to update my plan.";
+}
+
 /** @deprecated alias */
 export function getPlanChangeTemplate(locale: 'he' | 'en'): string {
   return getPlanChangeDisplayTemplate(locale);

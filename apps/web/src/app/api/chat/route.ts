@@ -21,11 +21,16 @@ import {
   evaluateWellbeingSignals,
   selectMoraleConcepts,
   wellbeingPlanBiasFromProfile,
+  PLAN_CHANGE_SESSION_TTL_MS,
+  type PlanChangeSession,
 } from '@/lib/neon-db';
 import { buildLearningPlan } from '@/lib/learning-plan';
 import { buildLessonCatalogSummary, buildPlanAllowlistBlock, PLAN_GROUNDING_RULES } from '@/lib/plan-catalog';
 import {
   extractPlanUpdate,
+  learnerPlanChangeIntentHeuristic,
+  learnerAffirmedProposal,
+  learnerCanceledPlanFlow,
   shouldApplyPlanChange,
   shouldApplyPlanImmediately,
   stripPlanMachineTags,
@@ -37,6 +42,7 @@ import {
   buildPlanApplyFailureNotice,
   buildPlanApplyingNotice,
   executePlanUpdate,
+  maybeApplyConfirmedPlanSession,
   resolvePayloadForApply,
   saveProposalFromAssistantTurn,
   type PlanApplyResult,
@@ -221,6 +227,46 @@ const TOOL_PLANNER_INSTRUCTION = [
   'study next / why am I stuck”. If no tool is needed (greetings, small talk,',
   'pure motivation), do NOT call any tool. Never write the final answer here.',
 ].join(' ');
+
+/**
+ * Planner instruction for the guided plan-change flow (Phase B). The model runs
+ * a slot-filling loop but NEVER applies the change — the site applies it only
+ * after the learner explicitly confirms the diff on a later turn.
+ */
+const PLAN_FLOW_PLANNER_INSTRUCTION = [
+  'The learner wants to change their study plan/goal. Drive a guided flow with',
+  'the plan tools. First call `get_current_plan`. Then call `propose_plan_change`',
+  'with EVERY slot the learner has already given (goal, target_date, optional',
+  'hours_per_week, notes). Obey its result:',
+  '- "still_collecting": ask the learner ONLY the single question it returns, then stop.',
+  '- "ready_to_confirm": show the learner the exact diff it returns and ask them',
+  '  to confirm (yes/no). Do NOT say the plan was changed — it is applied only',
+  '  after they confirm on the next turn.',
+  'Use `validate_goal_scope` only if unsure a goal is specific enough. You may',
+  'also use the read-only knowledge tools if genuinely helpful. Never write the',
+  'final answer here and never claim the plan is already updated.',
+].join(' ');
+
+/**
+ * Learner-facing behavior instructions for the guided plan-change flow. Injected
+ * into the ANSWER model's context (the tool loop produces the "still_collecting /
+ * ready_to_confirm / escalate" observations this refers to). Replaces the
+ * template-redirect protocol so the model handles the change conversationally.
+ */
+const PLAN_FLOW_AGENT_INSTRUCTIONS = [
+  '## Guided plan-change (in progress)',
+  'The learner is updating their study plan through a guided conversation. Follow the tool observations exactly:',
+  '- "still_collecting": ask ONLY the single question it gives, in the learner’s language; do not ask anything else about the plan and do not batch questions.',
+  '- "ready_to_confirm": present the current→proposed diff it gives and ask the learner to confirm (yes/no). Do NOT claim the plan changed yet — the site applies it only after they confirm.',
+  '- "escalate": offer the Mentor handoff or to pause and resume later; do not repeat the same question.',
+  'Never tell the learner to open or paste a sidebar template — you are handling this conversationally. Never say the plan was updated unless the system confirms it in this turn.',
+].join('\n');
+
+/** Steers the answer on a confirm turn so it acknowledges instead of re-asking. */
+const PLAN_CONFIRM_TURN_INSTRUCTION: Record<'he' | 'en', string> = {
+  he: '## עדכון תוכנית\nהלומד אישר זה עתה את שינוי התוכנית הממתין. אשר בקצרה שאתה מחיל את השינוי — אל תשאל שוב ואל תבקש פרטים נוספים. המערכת תוסיף הודעת אישור עם הפרטים.',
+  en: '## Plan update\nThe learner just confirmed the pending plan change. Briefly acknowledge you are applying it — do NOT ask again or request more details. The system will append a confirmation notice with the details.',
+};
 
 // Keep upstream LLM timeout under Vercel maxDuration (60s on Pro).
 const CHAT_LLM_TIMEOUT_MS = 45_000;
@@ -708,6 +754,48 @@ async function finalizeAssistantTurn(
   groundingIds: Iterable<string> = [],
 ): Promise<PlanApplyResult | null> {
   const visible = stripPlanMachineTags(assistantRaw);
+
+  // Guided plan-change flow confirm gate (Phase B): apply the staged proposal
+  // ONLY when an awaiting_confirm session exists AND the learner's latest
+  // message is an unambiguous affirmative. Tutor + Mentor. The model can never
+  // self-apply; a rejection clears the session inside the helper.
+  if (agent === 'tutor' || agent === 'mentor') {
+    const guided = await maybeApplyConfirmedPlanSession(
+      userId,
+      agent,
+      userMessage,
+      locale,
+    ).catch((err) => {
+      logger.warn('chat: guided plan confirm gate failed', { err: String(err) });
+      return null;
+    });
+    if (guided) {
+      if (guided.applied) onStatus?.('applying');
+      const notice = guided.applied
+        ? locale === 'en'
+          ? guided.noticeEn ?? ''
+          : guided.noticeHe ?? ''
+        : guided.failureNotice ?? '';
+      const full = notice ? `${visible}\n\n${notice}` : visible;
+      await saveAssistantTurn(
+        userId,
+        agent,
+        full,
+        sessionId,
+        locale,
+        childMode,
+        userMessage,
+        groundingIds,
+      );
+      if (guided.applied) {
+        logger.info('chat: plan updated (guided flow)', { agent, planId: guided.planId });
+      } else {
+        logger.warn('chat: guided plan apply failed', { agent, error: guided.error });
+      }
+      return guided;
+    }
+  }
+
   const isPlanAgent = agent === 'tutor';
 
   if (!isPlanAgent) {
@@ -1056,9 +1144,58 @@ async function buildContextPrompt(
     }
   }
 
+  // ── Guided plan-change flow flags (Phase B) ───────────────────────────────
+  // Computed early because the tutor preference override, the plan-instruction
+  // injection, and the ReAct tool loop all depend on them. `planChangeTurn` is
+  // the legacy template/imperative path; `planChangeFlow` is the new
+  // conversational flow.
+  const planChangeTurn =
+    isPlanChangeTemplate(normalizePlanChangeMessage(message)) ||
+    shouldApplyPlanImmediately(message);
+  const planSessionRaw = (
+    profile?.personality_profile as { plan_change_session?: PlanChangeSession } | null
+  )?.plan_change_session;
+  // Session only drives THIS agent's turns (a tutor session must not hijack a
+  // mentor turn) and must be unexpired.
+  const planSessionActive = Boolean(
+    planSessionRaw &&
+      planSessionRaw.agent === agent &&
+      Number.isFinite(Date.parse(planSessionRaw.updated_at ?? '')) &&
+      Date.now() - Date.parse(planSessionRaw.updated_at ?? '') < PLAN_CHANGE_SESSION_TTL_MS,
+  );
+  const planFlowAffirmative = learnerAffirmedProposal(message);
+  const planFlowCancel = learnerCanceledPlanFlow(message);
+  // While a guided session is open, the learner's reply is almost always part of
+  // the flow — a goal answer (which can be long), a date, an edit, or yes/no. So
+  // engage on ANY reply EXCEPT an unrelated question (has "?" or an interrogative
+  // lead), which falls through to static RAG / the normal tools. This both keeps
+  // long goal answers in the flow AND stops an open session from hijacking a
+  // spontaneous factual question.
+  const trimmedMsg = message.trim();
+  const looksLikeQuestion =
+    /[?？]/.test(trimmedMsg) ||
+    /^(what|why|how|when|who|which|where|explain|define|prove|solve|calculate|describe|מה|למה|איך|מתי|מי|כמה|היכן|הסבר|הגדר|הוכח|פתור|חשב)\b/i.test(
+      trimmedMsg,
+    );
+  const planSessionEngaged =
+    planSessionActive && (planFlowAffirmative || planFlowCancel || !looksLikeQuestion);
+  const planChangeFlow =
+    REACT_ENABLED &&
+    (agent === 'tutor' || agent === 'mentor') &&
+    !planChangeTurn &&
+    (learnerPlanChangeIntentHeuristic(message) || planSessionEngaged);
+  // On a confirm turn the server applies the staged proposal in finalize; we
+  // skip the tool loop and steer the answer to acknowledge (below).
+  const planConfirmTurn =
+    planSessionActive &&
+    planSessionRaw?.status === 'awaiting_confirm' &&
+    planFlowAffirmative;
+
   let context = `${buildCompactAgentBaseline()}\n\n${getAgentPersona(agent)}`;
 
-  if (agent === 'tutor' && tutorContract?.learnerPreferenceOverride) {
+  // Suppress the tutor "route to sidebar template" override during the guided
+  // conversational flow — it would contradict the slot-filling we're driving.
+  if (agent === 'tutor' && tutorContract?.learnerPreferenceOverride && !planChangeFlow) {
     context = `${tutorContract.learnerPreferenceOverride}\n\n${context}`;
   } else if (agent === 'tutor') {
     const tutorMode =
@@ -1277,6 +1414,7 @@ async function buildContextPrompt(
     const needsPlanCatalog =
       contextNeeds.planCatalog ||
       tutorContract?.injectPlanCatalog ||
+      planChangeFlow ||
       isPlanChangeTemplate(normalizedMsg) ||
       shouldApplyPlanImmediately(message);
 
@@ -1301,7 +1439,10 @@ async function buildContextPrompt(
       context += `\n\n## Plan mutation allowlist`;
       context += `\n${buildPlanAllowlistBlock(profile.subjects ?? [])}`;
       context += `\n\n${PLAN_GROUNDING_RULES}`;
-      context += `\n\n${PLAN_AGENT_INSTRUCTIONS}`;
+      // During the guided conversational flow, use the guided instructions
+      // instead of the template-redirect protocol (which would contradict it by
+      // telling the model to send the learner to the sidebar template).
+      context += `\n\n${planChangeFlow ? PLAN_FLOW_AGENT_INSTRUCTIONS : PLAN_AGENT_INSTRUCTIONS}`;
     } else if (!minimal && agent === 'tutor' && tutorContract) {
       context = appendTutorContractToContext(context, tutorContract);
     } else if (!minimal && agent === 'mentor') {
@@ -1405,32 +1546,36 @@ async function buildContextPrompt(
   // the bilingual corpus so Tutor/Coach answers are grounded in — and can cite —
   // our own content. Trimmable pack; degrades to lexical-only or nothing on
   // failure. Flag-gated (CHAT_RAG) and skipped for plan-change/minimal turns.
-  const planChangeTurn =
-    isPlanChangeTemplate(normalizePlanChangeMessage(message)) ||
-    shouldApplyPlanImmediately(message);
+  // (planChangeTurn / planChangeFlow / planConfirmTurn were computed above with
+  // the plan-instruction block so both surfaces stay in lock-step.)
 
   // ReAct tool loop (Phase A): the model plans read-only tool calls (retrieve,
   // get_lesson, learning_plan_next); we execute them and inject the observations.
-  // Supersedes the static RAG block when it runs. Degrades to static RAG when
-  // the flag is off, no tool-capable model is available, or the planner fails.
+  // Phase B additionally exposes the plan-change tool family when planChangeFlow
+  // is active. Supersedes the static RAG block when it runs. Degrades to static
+  // RAG when the flag is off, no tool-capable model is available, or it fails.
   let reactHandledGrounding = false;
+  const reactTools = getToolsForAgent(agent, { planChange: planChangeFlow });
   const reactCandidateTurn =
     REACT_ENABLED &&
     !minimal &&
     !planChangeTurn &&
-    searchMessage.trim().length >= 10 &&
-    getToolsForAgent(agent).length > 0 &&
+    !planConfirmTurn &&
+    (searchMessage.trim().length >= 10 || planChangeFlow) &&
+    reactTools.length > 0 &&
     toolCallingAvailable();
   if (reactCandidateTurn) {
     try {
       const loop = await runReactLoop({
-        system: `${buildCompactAgentBaseline()}\n\n${TOOL_PLANNER_INSTRUCTION}`,
+        system: `${buildCompactAgentBaseline()}\n\n${
+          planChangeFlow ? PLAN_FLOW_PLANNER_INSTRUCTION : TOOL_PLANNER_INSTRUCTION
+        }`,
         memory: recentForIntent.slice(-2).map((t) => ({
           role: t.role === 'assistant' ? ('assistant' as const) : ('user' as const),
           content: t.content,
         })),
         userMessage: searchMessage,
-        tools: getToolsForAgent(agent),
+        tools: reactTools,
         ctx: { userId, agent, locale: responseLocale === 'en' ? 'en' : 'he' },
         maxToolCalls: REACT_MAX_TOOL_CALLS,
         maxIterations: REACT_MAX_ITERATIONS,
@@ -1459,8 +1604,16 @@ async function buildContextPrompt(
     }
   }
 
+  // On a confirm turn the tool loop is skipped; steer the answer to acknowledge
+  // the change the server is about to apply (in finalize) instead of re-asking.
+  if (planConfirmTurn) {
+    context += `\n\n${PLAN_CONFIRM_TURN_INSTRUCTION[responseLocale === 'en' ? 'en' : 'he']}`;
+  }
+
   const ragCandidateTurn =
     !reactHandledGrounding &&
+    !planChangeFlow &&
+    !planConfirmTurn &&
     RAG_ENABLED &&
     !minimal &&
     (agent === 'tutor' || agent === 'coach') &&

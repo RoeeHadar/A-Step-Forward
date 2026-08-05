@@ -2267,6 +2267,84 @@ export async function clearPendingPlanProposal(learnerId: string): Promise<void>
   `;
 }
 
+/**
+ * Conversational plan-change slot-filling session (ADR-0015, Phase B). Stored in
+ * the same `personality_profile` JSONB as the pending proposal (no migration),
+ * keyed by learner. Survives serverless cold starts so a multi-turn guided flow
+ * is resumable. Expires via TTL so an abandoned flow never lingers.
+ */
+export interface PlanChangeSessionSlots {
+  goal?: string;
+  goal_key?: string;
+  target_date?: string | null;
+  hours_per_week?: number;
+  notes?: string;
+  priority_concepts?: string[];
+}
+
+export interface PlanChangeSession {
+  status: 'collecting' | 'awaiting_confirm';
+  agent: string;
+  updated_at: string;
+  slots: PlanChangeSessionSlots;
+  /** Resolved proposal to apply once the learner confirms (awaiting_confirm). */
+  proposal?: PendingPlanProposal;
+  /** Per-slot re-ask counters for bounded escalation. */
+  reask?: Record<string, number>;
+}
+
+/** 30 minutes: long enough to finish a guided flow, short enough to auto-expire. */
+export const PLAN_CHANGE_SESSION_TTL_MS = 30 * 60 * 1000;
+
+export async function setPlanChangeSession(
+  learnerId: string,
+  session: PlanChangeSession,
+): Promise<void> {
+  const s = requireSql();
+  const profile = await getLearnerProfile(learnerId);
+  if (!profile) return;
+  const existing = (profile.personality_profile ?? {}) as Record<string, unknown>;
+  const next = { ...session, updated_at: new Date().toISOString() };
+  await s`
+    UPDATE learner_profiles
+    SET personality_profile = ${JSON.stringify({ ...existing, plan_change_session: next })}::jsonb,
+        updated_at = NOW()
+    WHERE learner_id = ${learnerId}
+  `;
+}
+
+/** Return the active (non-expired) session, or null. Expired sessions are cleared. */
+export async function getPlanChangeSession(
+  learnerId: string,
+): Promise<PlanChangeSession | null> {
+  const profile = await getLearnerProfile(learnerId);
+  if (!profile?.personality_profile) return null;
+  const raw = (profile.personality_profile as Record<string, unknown>).plan_change_session;
+  if (!raw || typeof raw !== 'object') return null;
+  const session = raw as PlanChangeSession;
+  const ts = Date.parse(session.updated_at ?? '');
+  if (!Number.isFinite(ts) || Date.now() - ts > PLAN_CHANGE_SESSION_TTL_MS) {
+    await clearPlanChangeSession(learnerId).catch(() => undefined);
+    return null;
+  }
+  return session;
+}
+
+export async function clearPlanChangeSession(learnerId: string): Promise<void> {
+  const s = requireSql();
+  const profile = await getLearnerProfile(learnerId);
+  if (!profile) return;
+  const existing = { ...(profile.personality_profile ?? {}) } as Record<string, unknown>;
+  if (!('plan_change_session' in existing)) return;
+  delete existing.plan_change_session;
+  await s`
+    UPDATE learner_profiles
+    SET personality_profile = ${JSON.stringify(existing)}::jsonb,
+        updated_at = NOW()
+    WHERE learner_id = ${learnerId}
+  `;
+}
+
 export async function recordPlanChangeHistory(
   learnerId: string,
   entry: Omit<PlanChangeHistoryEntry, 'id' | 'at'> & { at?: string },

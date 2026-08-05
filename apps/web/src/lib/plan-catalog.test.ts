@@ -12,6 +12,8 @@ import {
   inferConceptIdsFromText,
   inferGoalMetaFromText,
   learnerConfirmedChange,
+  learnerAffirmedProposal,
+  learnerCanceledPlanFlow,
   learnerPlanChangeIntentHeuristic,
   looksLikePlanApplyIntent,
   looksLikePlanProposal,
@@ -81,6 +83,31 @@ describe('plan-actions', () => {
     expect(learnerConfirmedChange('עדכן')).toBe(true);
     expect(learnerConfirmedChange('כן, אני מסכים')).toBe(true);
     expect(learnerConfirmedChange('maybe later')).toBe(false);
+  });
+
+  it('affirms a bare yes but treats slot edits as non-confirmation', () => {
+    // bare confirmations apply the staged proposal
+    expect(learnerAffirmedProposal('yes')).toBe(true);
+    expect(learnerAffirmedProposal('yes, update my plan')).toBe(true);
+    expect(learnerAffirmedProposal('כן, אני מסכים')).toBe(true);
+    // edits carrying new slot content must NOT apply the old proposal
+    expect(learnerAffirmedProposal('update the date to September')).toBe(false);
+    expect(learnerAffirmedProposal('עדכן ל-20 בספטמבר')).toBe(false);
+    expect(learnerAffirmedProposal('yes but change it to Calculus 1')).toBe(false);
+    // plain non-confirmations
+    expect(learnerAffirmedProposal('maybe later')).toBe(false);
+  });
+
+  it('cancels the guided flow only on strong/short cancels, not on edits', () => {
+    // strong / short cancels end the flow
+    expect(learnerCanceledPlanFlow('no')).toBe(true);
+    expect(learnerCanceledPlanFlow('cancel')).toBe(true);
+    expect(learnerCanceledPlanFlow('never mind')).toBe(true);
+    expect(learnerCanceledPlanFlow('לא')).toBe(true);
+    expect(learnerCanceledPlanFlow('ביטול')).toBe(true);
+    // an EDIT keeps the session so we re-collect instead of losing slots
+    expect(learnerCanceledPlanFlow('no, change the date to September 20')).toBe(false);
+    expect(learnerCanceledPlanFlow('actually make it Calculus 1 exam')).toBe(false);
   });
 
   it('infers discrete-math concepts from Hebrew topic names', () => {
