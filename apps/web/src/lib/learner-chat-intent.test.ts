@@ -124,12 +124,14 @@ describe('buildTutorInteractionContract — mode contracts', () => {
     expect(c.turnInstruction).not.toMatch(/Name 2–3|improvise gaps/i);
   });
 
-  it('casual_plan_change includes copy-paste template example', () => {
+  it('casual_plan_change includes a specific-goal example, not a sidebar form', () => {
     const c = buildTutorInteractionContract('casual_plan_change', 'he', {
       subjects: ['physics'],
     });
     expect(c.injectCasualPlanChangeGuide).toBe(true);
     expect(c.templateSuggestion).toContain('מטרה או מבחן');
+    expect(c.turnInstruction).not.toMatch(/sidebar template|תבנית עדכון/i);
+    expect(c.learnerPreferenceOverride).not.toMatch(/sidebar template/i);
   });
 
   it('study_hours_increase never defers to parents (instruction guard)', () => {

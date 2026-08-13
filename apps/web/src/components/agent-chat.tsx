@@ -503,8 +503,8 @@ export function AgentChat({
               role="alert"
             >
               {isHe
-                ? '⚠️ לא הצלחנו לעדכן את התוכנית. השתמש בתבנית עדכון תוכנית הלימוד, מלא את השדות ושלח שוב.'
-                : '⚠️ We could not update your plan. Use the plan-update template, fill in the fields, and send again.'}
+                ? '⚠️ לא הצלחנו לעדכן את התוכנית. נסו שוב בשיחה — תארו את המטרה והמועד, ואשרו כשהמורה יציג את השינוי.'
+                : '⚠️ We could not update your plan. Try again in chat — describe the goal and date, then confirm when the tutor shows the change.'}
             </div>
           ) : null}
           {isLoading ? (

@@ -16,6 +16,7 @@ describe('chat-context-needs (ADR-0015)', () => {
     expect(needs.mastery).toBe(false);
     expect(needs.curriculumHints).toBe(true);
     expect(needs.hybridTools).toBe(true);
+    expect(needs.durableMemory).toBe(true);
   });
 
   it('status ask enables briefing packs for tutor', () => {

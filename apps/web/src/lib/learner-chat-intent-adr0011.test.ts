@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildTutorInteractionContract,
   classifyTutorChatIntent,
+  looksLikeLearnerQuestion,
   wantsExamReadinessAnswer,
   wantsExpandedOutputBudget,
   wantsProgressStatus,
@@ -14,7 +15,10 @@ import {
 
 describe('ADR-0011 learner-chat-intent', () => {
   it('classifies communication transcript intents', () => {
-    expect(classifyTutorChatIntent('מה הסטטוס הנוכחי שלי')).toBe('progress_status');
+    expect(
+      classifyTutorChatIntent('מה הסטטוס שלי בהקשר של התוכנית לימוד'),
+    ).toBe('progress_status');
+    expect(wantsProgressStatus('מה הסטטוס שלי בהקשר של התוכנית לימוד')).toBe(true);
     expect(
       classifyTutorChatIntent('איך אתה חושב שיהיה לי בבגרות אם אמשיך בקצב הזה'),
     ).toBe('exam_readiness');
@@ -57,5 +61,12 @@ describe('ADR-0011 learner-chat-intent', () => {
 
     const worked = buildTutorInteractionContract('worked_solution', 'he');
     expect(worked.turnInstruction).toContain('WORKED SOLUTION');
+  });
+
+  it('Hebrew status asks look like questions without ASCII word boundaries', () => {
+    expect(looksLikeLearnerQuestion('מה הסטטוס שלי בהקשר של התוכנית לימוד')).toBe(
+      true,
+    );
+    expect(looksLikeLearnerQuestion('אני רוצה לשנות את התוכנית שלי')).toBe(false);
   });
 });

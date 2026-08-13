@@ -23,7 +23,7 @@ export const CHAT_CONTEXT = {
   maxMemoryTurnChars: 1_200,
   maxMemoryCharsTotal: 4_500,
   maxPersonaChars: 2_500,
-  maxAgentNotes: 3,
+  maxAgentNotes: 8,
   maxAgentNoteChars: 280,
   maxSystemChars: 18_000,
   /** Default reply budget — keeps cost/latency down for normal turns. */
@@ -37,9 +37,10 @@ export const CHAT_CONTEXT = {
 } as const;
 
 export const CHAT_BREVITY_RULE = `## Response style (mandatory)
-- Be concise and relevant: answer the learner's question first.
-- Default length: 2–4 short paragraphs (or ≤6 bullets) unless they ask for depth.
-- Do not repeat injected profile/plan/persona/XP back to them — paraphrase the bilingual progress briefing.
+- Be relevant: answer the learner's question first.
+- Length follows \`## How to teach this learner\` when present (theory_first may go longer; practice_first stays short + example). Default otherwise: 2–4 short paragraphs unless they asked for depth.
+- Voice: a calm classroom teacher — concrete and complete, not bureaucratic, not slang, not hype. Hebrew replies must read as natural classroom Hebrew.
+- Do not repeat injected profile/plan/persona/XP back to them — paraphrase the bilingual progress briefing when they asked for status.
 - Never open with meta-phrases like "אני חושב שאני יודע מה קרה", "אני חושב שזה יעזור", "אני צריך להסביר זאת בצורה שונה", or repeat the same checklist from your prior turn.
 - End with one clear next step or one focused question — not both unless needed.
 - Follow the ## Interaction mode / THIS TURN block for this turn — it overrides default Socratic behavior.`;

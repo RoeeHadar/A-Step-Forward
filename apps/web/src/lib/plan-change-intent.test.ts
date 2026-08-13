@@ -88,6 +88,9 @@ describe('template-only plan change detection', () => {
     ).toBe(false);
     expect(learnerPlanChangeIntentHeuristic('מה הסטטוס שלי כרגע')).toBe(false);
     expect(
+      learnerPlanChangeIntentHeuristic('מה הסטטוס שלי בהקשר של התוכנית לימוד'),
+    ).toBe(false);
+    expect(
       learnerPlanChangeIntentHeuristic(
         'Will the plan prepare me in time for my Bagrut exam next week?',
       ),

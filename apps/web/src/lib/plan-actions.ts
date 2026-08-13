@@ -385,7 +385,13 @@ export function learnerPlanChangeIntentHeuristic(message: string): boolean {
   const explicitPlanChangeVerb =
     /(?:שנה|עדכן|שינוי|change|update|adjust|modify|re(?:prioriti|organiz))/i.test(t);
 
-  if (readinessQuestion && !explicitPlanChangeVerb) {
+  // Status / "how is my plan going" is NOT a change request even if the
+  // message mentions תוכנית. (JS \\b does not protect Hebrew.)
+  const statusAsk =
+    /מה הסטטוס|הסטטוס שלי|סטטוס.{0,24}תוכנית|תוכנית.{0,24}סטטוס|what(?:'s| is) my (?:status|progress)|how am i doing|איך אני מתקדם|מה המצב שלי/i.test(
+      t,
+    );
+  if ((readinessQuestion || statusAsk) && !explicitPlanChangeVerb) {
     return false;
   }
 
@@ -590,36 +596,42 @@ export function learnerRejectedChange(message: string): boolean {
 export const PLAN_AGENT_INSTRUCTIONS = `
 ## Learning-plan & goal modification protocol (Tutor / Mentor)
 
-The site applies plan changes **only** when the learner sends the official plan-update template from the **Tutor chat sidebar** — **by itself**, with no extra chat text before or after it. Casual phrasing never updates Neon, even if the template is pasted in the same message.
+Plan changes happen **in this chat** via the guided conversational flow. The site applies them only after the learner explicitly confirms a proposed diff.
 
-When the learner asks to change their plan in casual chat (without the template):
-1. **Do NOT** claim the plan was or will be updated.
-2. **Do NOT** ask exam-scope or goal-clarification questions as a substitute for a plan update.
-3. Tell them clearly (in their language): open **Tutor** chat → use the sidebar template **עדכון תוכנית לימוד** / **Learning plan update** → fill goal/exam + target date → send that message **alone**.
-4. You may briefly explain how to fill the template or answer unrelated learning questions — keep plan updates separate.
+When the learner asks to change their plan:
+1. **Do NOT** claim the plan was or will be updated until the system ✅ notice.
+2. Collect **one missing slot at a time** (exact goal/exam, then target date, then hours if needed). Math and physics only — never invent other subjects.
+3. When you have enough, call \`propose_plan_change\`, show the current→proposed change in their language, and ask yes/no.
+4. **Exam cram (≤2 weeks)**: focus ONLY on exam concepts. Do NOT add unrelated foundations.
+5. Never tell them to open a sidebar, paste a form, or use a "template". Do NOT emit \`[[ASF_PLAN_UPDATE:...]]\` tags.
 
-When you receive a valid template-only message:
-1. **Read goal/exam and date** — optional notes may mention topics; you already know the learner from memory and mastery.
-2. If the goal is still too broad for the server to build a plan, the server will refuse — do not claim success; help them refine the template fields.
-3. **Exam cram (≤2 weeks)**: focus ONLY on exam concepts. Do NOT add unrelated foundations.
-4. **Never** say the plan was updated unless the server confirmation appears in the chat (✅ notice). Do NOT emit \`[[ASF_PLAN_UPDATE:...]]\` tags.
-
-Rules:
-- Casual phrasing + template in one message = **no apply** — tell them to send the template alone.
-- For a test in ~1 week, the weekly plan should be **one week only**.
+For a test in ~1 week, the weekly plan should be **one week only**.
 `.trim();
 
-/** Injected on turns where the learner asked to change the plan without the official template. */
+/**
+ * When ReAct/tools are killed (`CHAT_REACT_AGENT=off`), do not promise a
+ * confirmable guided flow — nothing would be staged or applied.
+ */
+export const PLAN_AGENT_INSTRUCTIONS_UNAVAILABLE = `
+## Learning-plan & goal modification protocol (tools paused)
+
+Plan-change tools are temporarily unavailable. Do NOT collect slots, present a fake diff, or ask the learner to confirm a change — the site would not apply it.
+
+If they ask to change the plan: say honestly that plan updates are paused right now and they should try again shortly. Never send them to a form or template. Still answer ordinary learning questions.
+`.trim();
+
+export function planModificationProtocol(reactEnabled: boolean): string {
+  return reactEnabled ? PLAN_AGENT_INSTRUCTIONS : PLAN_AGENT_INSTRUCTIONS_UNAVAILABLE;
+}
+
+/** Injected on turns where the learner asked to change the plan in conversation. */
 export const CASUAL_PLAN_CHANGE_TURN_INSTRUCTION = `
-## THIS TURN — casual plan-change request (mandatory response)
-The learner asked to change their learning plan WITHOUT the official Tutor sidebar template.
+## THIS TURN — conversational plan-change request (mandatory response)
+The learner asked to change their learning plan in chat.
 You MUST:
-1. NOT claim the plan was or will be updated from this chat message.
-2. NOT ask exam-scope or goal-clarification questions as a substitute for a plan update.
-3. Tell them clearly: plan changes happen ONLY via **עדכון תוכנית לימוד** / **Learning plan update** in the Tutor chat sidebar (left). Fill goal + date + optional notes, send that message alone.
-4. Give a **copy-paste example** for their case when possible, e.g.:
-   - מטרה או מבחן: בגרות פיזיקה מכניקה (036-361)
-   - מועד: עוד שבוע
-   - הערות: מוכן ללמוד 5 שעות ביום — תכין תוכנית מלאה
-5. You may answer unrelated learning questions in the same reply — keep plan update steps separate and short.
+1. NOT claim the plan was or will be updated from this message.
+2. Start (or continue) the guided flow: one clarifying question at a time (exact goal/exam, then date).
+3. Never mention a sidebar, a form, or a copy-paste template.
+4. You may briefly name a concrete example of a *specific* goal (e.g. בגרות פיזיקה מכניקה 036-361) so they know what "specific" means.
+5. You may answer unrelated learning questions in the same reply — keep the plan-change question short.
 `.trim();

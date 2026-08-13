@@ -76,7 +76,7 @@ const EXAM_ODDS_RE =
   /(?:איך|מה).{0,25}(?:יהיה|יקרה|סיכוי).{0,40}(?:בגרות|מבחן)|how (?:will|would) i (?:do|fare).{0,30}(?:exam|bagrut|test)|bagrut odds|exam (?:odds|chances)/i;
 
 const PROGRESS_STATUS_RE =
-  /(?:מה|what(?:'s| is)?).{0,20}(?:הסטטוס|סטטוס|המצב|status)|איך אני מתקדם|מה המצב שלי|how am i doing|my (?:current )?status|current status|כמה XP|how much xp|מה ה-?XP/i;
+  /(?:מה|what(?:'s| is)?).{0,40}(?:הסטטוס|סטטוס|המצב|status)|איך אני מתקדם|מה המצב שלי|הסטטוס שלי|סטטוס.{0,24}תוכנית|תוכנית.{0,24}סטטוס|how am i doing|my (?:current )?status|current status|כמה XP|how much xp|מה ה-?XP/i;
 
 const RECOVERY_SIMPLIFY_RE =
   /(?:מסובך|לא מבין|לא הבנתי|תסביר.{0,20}(?:פשוט|פשוטה|יותר)|בצורה יותר פשוטה|צריך להכיר(?: את)? זה|האם אני צריך|too (?:hard|complicated)|simplify|explain (?:simpler|more simply)|do i need (?:to know )?this|i don'?t understand)/i;
@@ -130,6 +130,29 @@ export function wantsExamReadinessAnswer(message: string): boolean {
 
 export function wantsProgressStatus(message: string): boolean {
   return PROGRESS_STATUS_RE.test(message.trim());
+}
+
+/**
+ * True when the learner's message is a question (status, what/why/how, or '?').
+ * Hebrew must NOT use `\\b` — JS word boundaries are ASCII-only, so `^מה\\b`
+ * never matches "מה הסטטוס…" and previously let an open plan-change session
+ * hijack status asks as slot answers.
+ */
+export function looksLikeLearnerQuestion(message: string): boolean {
+  const t = message.trim();
+  if (!t) return false;
+  if (/[?？]/.test(t)) return true;
+  if (
+    /^(what|why|how|when|who|which|where|explain|define|prove|solve|calculate|describe)(\b|\s|$)/i.test(
+      t,
+    )
+  ) {
+    return true;
+  }
+  if (/^(מה|למה|איך|מתי|מי|כמה|היכן|הסבר|הגדר|הוכח|פתור|חשב)(?=$|\s|[?？,.:;])/u.test(t)) {
+    return true;
+  }
+  return wantsProgressStatus(t) || wantsExamReadinessAnswer(t) || wantsLearningPlanSnapshot(t);
 }
 
 export function wantsRecoverySimplify(message: string): boolean {
@@ -219,6 +242,16 @@ export function classifyTutorChatIntent(
   if (wantsWorkedSolution(message)) return 'worked_solution';
   if (wantsContextChallenge(message)) return 'context_challenge';
   if (wantsPlanOwnership(message)) return 'plan_ownership';
+  // Status about the current plan must beat casual plan-change (mentions of
+  // "תוכנית" used to look like an edit request).
+  if (
+    wantsProgressStatus(message) &&
+    !/(?:לשנות|לעדכן|שנה את|עדכן את|change my (?:weekly )?plan|update my (?:weekly )?plan)/i.test(
+      message,
+    )
+  ) {
+    return 'progress_status';
+  }
   if (learnerPlanChangeIntentHeuristic(message) && !isPlanChangeTemplate(normalized)) {
     return 'casual_plan_change';
   }
@@ -240,7 +273,7 @@ Answer DIRECTLY — timeline verdict using days until exam, hours/week, plan top
 - Never claim 100% / ~100% / "מאה אחוז" / "guaranteed" for bagrut success — not even as an aspirational target. Use humble readiness band/pace only (ADR-0010/0011).
 - If learner already affirmed they know topics, accept it → recommend practice/drills.
 - End with ONE concrete action for remaining days.
-- Plan edits: Tutor sidebar template only — never "נסער את התוכנית" from chat.`;
+- Plan edits: only if they explicitly ask — then the guided chat flow (propose → confirm). Never invent a rewrite on this turn.`;
 
 const CONVERSATION_ADVANCE_INSTRUCTION = `## Interaction mode: CONTINUE (mandatory)
 Learner asked you to stop repeating or to resume after a cut-off.
@@ -265,7 +298,7 @@ Follow the pressure-family 4-beat contract.
 - Honest status from the AUTHORITATIVE learner-facing pack (pace + readiness). If at_risk: no empty reassurance.
 - Exactly ONE next step from the pack — never a topic menu; never invent a new plan.
 - Offer to start that one topic.
-- Plan/hour changes only via sidebar template if they explicitly ask — do NOT volunteer a rewrite or paste a template example on this turn.`;
+- Plan/hour changes only if they explicitly ask — then the guided chat flow. Do NOT volunteer a rewrite on this turn.`;
 
 const CONTEXT_CHALLENGE_INSTRUCTION = `## Interaction mode: CONTEXT CHALLENGE (ADR-0012, mandatory)
 Learner challenges that you don't know their plan/status.
@@ -275,11 +308,14 @@ Learner challenges that you don't know their plan/status.
 const PLAN_OWNERSHIP_INSTRUCTION = `## Interaction mode: PLAN OWNERSHIP (ADR-0012, mandatory)
 Learner already has a plan; asks if you want to change it.
 - You are NOT replacing their plan. No new daily/weekly plan offer.
-- Changes → sidebar template only if they insist.
+- Changes → guided chat flow only if they insist. Never send them to a form.
 - Address concern via status pack + one next step.`;
 
 const PROGRESS_STATUS_INSTRUCTION = `## Interaction mode: PROGRESS STATUS (ADR-0012, mandatory)
-Answer from the AUTHORITATIVE learner-facing status pack (Mentor framing).
+The learner is asking about THEIR current study plan / progress — not to change it.
+Answer from the AUTHORITATIVE learner-facing status pack + profile/plan blocks.
+- You already have their plan. NEVER ask for the program name, subjects, or "which plan they mean".
+- Never start a plan-change / slot-filling flow on this turn.
 - No XP/ISO/raw dumps; no "gaps: none flagged"; no knowledge denial.
 - End with the pack's single next step.`;
 
@@ -296,13 +332,13 @@ const WORKED_SOLUTION_INSTRUCTION = `## Interaction mode: WORKED SOLUTION (manda
 - Math in \`$...$\` / \`$$...$$\`. No filler closers.`;
 
 const STUDY_HOURS_INSTRUCTION = `## Interaction mode: STUDY HOURS INCREASE (mandatory)
-Acknowledge commitment. Hours change via sidebar template **עדכון תוכנית לימוד** with notes (e.g. "5 שעות ביום").
-Spell out exact template fields. Never tell them to ask parents/teachers for permission.`;
+Acknowledge the extra hours. Continue the guided plan-change conversation so weekly hours update after they confirm a proposal.
+Never tell them to ask parents/teachers for permission. Never send them to a form.`;
 
 const CASUAL_PLAN_CHANGE_INSTRUCTION = `## Interaction mode: CASUAL PLAN CHANGE (mandatory)
-Plan changes apply ONLY via sidebar template **עדכון תוכנית לימוד** — sent alone, no extra chat text.
-Do NOT claim the plan was updated. Do NOT substitute exam-scope Q&A for a plan update.
-Provide the copy-paste example below when available.`;
+Handle the change in this chat: one clarifying question at a time (exact goal/exam, then date), then propose a diff and wait for yes/no.
+Do NOT claim the plan was updated. Do NOT mention a sidebar, a form, or a copy-paste template.
+You may name a concrete example of a specific goal so they know what "specific" means.`;
 
 const LEARN_DIRECT_NOTE = `## Interaction mode: DIRECT LEARN
 Answer the question clearly first. One focused follow-up at most.`;
@@ -332,41 +368,41 @@ export function buildPlanTemplateSuggestion(
   if (locale === 'he') {
     if (isPhysics) {
       return [
-        '**דוגמה להעתקה לתבנית:**',
+        '**דוגמה למטרה מדויקת (שאלו בשיחה — בלי טופס):**',
         'מטרה או מבחן: בגרות פיזיקה מכניקה (036-361)',
         'מועד: עוד שבוע',
-        `הערות: מוכן ללמוד ${dailyHours} שעות ביום — תכין תוכנית מלאה`,
+        `שעות: מוכן ללמוד ${dailyHours} שעות ביום`,
       ].join('\n');
     }
     if (isMath) {
       return [
-        '**דוגמה להעתקה לתבנית:**',
+        '**דוגמה למטרה מדויקת (שאלו בשיחה — בלי טופס):**',
         'מטרה או מבחן: בגרות מתמטיקה 5 יח״ל',
         'מועד: עוד שבוע',
-        `הערות: מוכן ללמוד ${dailyHours} שעות ביום`,
+        `שעות: מוכן ללמוד ${dailyHours} שעות ביום`,
       ].join('\n');
     }
     return [
-      '**דוגמה להעתקה לתבנית:**',
-      'מטרה או מבחן: [מבחן / מטרה מדויקת]',
+      '**שאלו בשיחה (בלי טופס):**',
+      'מטרה או מבחן: [מבחן / מטרה מדויקת במתמטיקה או פיזיקה]',
       'מועד: [תאריך או "עוד שבוע"]',
-      'הערות: [שעות ביום, נושאים חשובים]',
+      'שעות: [שעות ביום אם רלוונטי]',
     ].join('\n');
   }
 
   if (isPhysics) {
     return [
-      '**Copy-paste example for the template:**',
+      '**Example of a specific goal (ask in chat — no form):**',
       'Goal or exam: Bagrut Physics Mechanics (036-361)',
       'Target date: in one week',
-      `Notes: ready to study ${dailyHours} hours/day — build a full cram plan`,
+      `Hours: ready to study ${dailyHours} hours/day`,
     ].join('\n');
   }
   return [
-    '**Copy-paste example for the template:**',
-    'Goal or exam: [specific exam]',
+    '**Ask in chat (no form):**',
+    'Goal or exam: [specific math or physics exam]',
     'Target date: [date or "in one week"]',
-    'Notes: [hours/day, priority topics]',
+    'Hours: [hours/day if relevant]',
   ].join('\n');
 }
 
@@ -396,8 +432,8 @@ export function buildTutorInteractionContract(
     injectLearningPlanSnapshot: false,
     planGuidanceLine:
       locale === 'he'
-        ? 'שינוי תוכנית — רק דרך תבנית עדכון תוכנית בצד שמאל.'
-        : 'Plan changes — Tutor sidebar template only.',
+        ? 'שינוי תוכנית — בשיחה כאן: שאלה אחת בכל פעם, הצגת השינוי, ואישור לפני החלה.'
+        : 'Plan changes happen in this chat: one question at a time, show the diff, apply after they confirm.',
     turnInstruction: null,
     learnerPreferenceOverride: null,
     templateSuggestion,
@@ -413,12 +449,12 @@ export function buildTutorInteractionContract(
         injectPlanCatalog: true,
         planGuidanceLine:
           locale === 'he'
-            ? 'הודעת תבנית בלבד — השרת מעדכן את התוכנית. אל תמציא תוכנית; המתן לאישור ✅ מהמערכת.'
-            : 'Template-only message — server applies the plan. Do not invent a plan; wait for system ✅.',
+            ? 'השרת מעדכן את התוכנית מההודעה הזו. אל תמציא תוכנית; המתן לאישור ✅ מהמערכת.'
+            : 'The server applies the plan from this message. Do not invent a plan; wait for system ✅.',
         turnInstruction:
           locale === 'he'
-            ? '## Interaction mode: PLAN TEMPLATE\nאל תוסיף שאלות. אל תמציא תוכנית. השרת מטפל בעדכון.'
-            : '## Interaction mode: PLAN TEMPLATE\nNo questions. Do not invent a plan. Server handles the update.',
+            ? '## Interaction mode: PLAN APPLY\nאל תוסיף שאלות. אל תמציא תוכנית. השרת מטפל בעדכון.'
+            : '## Interaction mode: PLAN APPLY\nNo questions. Do not invent a plan. Server handles the update.',
       };
 
     case 'conversation_advance':
@@ -480,7 +516,7 @@ export function buildTutorInteractionContract(
           .filter(Boolean)
           .join('\n\n'),
         learnerPreferenceOverride:
-          'LEARNER PREFERENCE OVERRIDE: Direct mode — route to sidebar template with example.',
+          'LEARNER PREFERENCE OVERRIDE: Direct — handle the plan change in this chat; never send the learner to a form.',
       };
 
     case 'study_hours_increase':
@@ -497,7 +533,7 @@ export function buildTutorInteractionContract(
           .filter(Boolean)
           .join('\n\n'),
         learnerPreferenceOverride:
-          'LEARNER PREFERENCE OVERRIDE: Direct mode — explain template fields for hour increase.',
+          'LEARNER PREFERENCE OVERRIDE: Direct — continue guided plan-change so hours update after confirm; never mention a template.',
       };
 
     case 'exam_anxiety':
@@ -510,8 +546,8 @@ export function buildTutorInteractionContract(
         injectLearningPlanSnapshot: true,
         planGuidanceLine:
           locale === 'he'
-            ? 'אל תציע תוכנית חדשה. צעד אחד מהשבוע הפעיל. שינוי תוכנית — רק אם ביקשו במפורש דרך התבנית.'
-            : 'Do not offer a new plan. One step from the active week. Plan edits only if they explicitly ask via template.',
+            ? 'אל תציע תוכנית חדשה. צעד אחד מהשבוע הפעיל. שינוי תוכנית — רק אם ביקשו במפורש, ואז בשיחה כאן.'
+            : 'Do not offer a new plan. One step from the active week. Plan edits only if they explicitly ask — then in this chat.',
         turnInstruction: EXAM_ANXIETY_INSTRUCTION,
         learnerPreferenceOverride:
           'LEARNER PREFERENCE OVERRIDE: Direct 4-beat pressure mode — no topic menu, no plan rewrite.',

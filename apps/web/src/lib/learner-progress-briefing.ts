@@ -86,6 +86,21 @@ function joinList(items: string[] | undefined, empty: string): string {
   return items.slice(0, 3).join(', ');
 }
 
+/** Localized date for learner-facing packs — never leak ISO stamps. */
+export function formatLearnerFacingDate(
+  iso: string | null | undefined,
+  locale: 'he' | 'en',
+): string | null {
+  if (!iso?.trim()) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso.trim();
+  return d.toLocaleDateString(locale === 'he' ? 'he-IL' : 'en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
 /** Compact HE block (for injection). */
 export function formatProgressBriefingHe(input: ProgressBriefingInput): string {
   const readiness =
@@ -332,7 +347,8 @@ The learner is anxious, asking status, challenging your knowledge, asking what t
 
 **Hard bans:**
 - Never say you don't know the plan/status/XP when packs are present.
-- Never invent a new weekly/daily plan or ask to rebuild topics unless they explicitly request a plan change → sidebar template only.
+- Never ask the learner for the program name, which plan they mean, or their subjects — those are in the pack.
+- Never invent a new weekly/daily plan or start a plan-change interview unless they explicitly request a plan change.
 - Never dump raw keys (\`bagrut_math_5\`), ISO dates, or "gaps: none flagged".
 - Never misread points_group as completed study.
 - Ban garbage Hebrew: "חשוך", "באחריות", "להביא לדמיון", "אתה כבר יש לך", "חששותי".`;
@@ -357,7 +373,7 @@ export const PLAN_OWNERSHIP_TURN_INSTRUCTION = `## THIS TURN — plan ownership 
 Learner already has a plan and asks if you want to change it.
 - Affirm you are NOT replacing their plan.
 - Do not offer a new daily/weekly plan.
-- If they want changes: sidebar template only.
+- If they want changes: handle it in this chat (guided propose → confirm). Never send them to a form.
 - Answer what caused concern using the status pack; one next step from the active week.`;
 
 /** @deprecated Prefer PRESSURE_FAMILY_TURN_INSTRUCTION — kept for callers. */

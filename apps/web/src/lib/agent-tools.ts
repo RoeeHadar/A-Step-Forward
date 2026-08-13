@@ -73,16 +73,21 @@ function asString(v: unknown): string {
 // ---------------------------------------------------------------------------
 // retrieve — hybrid RAG over the authored bilingual corpus
 // ---------------------------------------------------------------------------
+const CORPUS_MISS_OBSERVATION =
+  'No matching passages in the authored math/physics corpus. Answer from general knowledge. Do not invent lesson:<id> or concept:<id> citations.';
+
 const retrieveTool: AgentTool = {
   spec: {
     type: 'function',
     function: {
       name: 'retrieve',
       description:
-        'Search the authored bilingual course corpus for passages relevant to a ' +
+        'Search the authored bilingual math/physics corpus for passages relevant to a ' +
         'learner question or concept. Use this to ground factual/explanatory ' +
-        'answers in our own content before replying. Returns numbered passages ' +
-        'with their concept ids.',
+        'answers in our own content before replying. Skip this tool for out-of-scope ' +
+        'subjects (there are no chemistry/history lessons) and for navigation questions. ' +
+        'Returns numbered passages with their concept ids. Empty result means answer from ' +
+        'general knowledge and do not invent citations.',
       parameters: {
         type: 'object',
         properties: {
@@ -108,7 +113,7 @@ const retrieveTool: AgentTool = {
     try {
       const chunks = await retrieveChunks({ query, lang, topK: 4 });
       if (chunks.length === 0) {
-        return { observation: 'No matching passages found in the corpus.' };
+        return { observation: CORPUS_MISS_OBSERVATION };
       }
       const groundingIds = chunks
         .map((c) => c.conceptId)
@@ -123,7 +128,7 @@ const retrieveTool: AgentTool = {
       return { observation: sanitizeObservation(body), groundingIds };
     } catch (err) {
       logger.warn('tool retrieve failed', { err: String(err) });
-      return { observation: 'Retrieval is temporarily unavailable.' };
+      return { observation: CORPUS_MISS_OBSERVATION };
     }
   },
 };
@@ -158,7 +163,9 @@ const getLessonTool: AgentTool = {
     try {
       const lesson = await fetchLessonByConceptId(conceptId).catch(() => null);
       if (!lesson) {
-        return { observation: `No authored lesson found for concept "${conceptId}".` };
+        return {
+          observation: `No authored lesson found for concept "${conceptId}". Answer from general knowledge if you can help; do not invent a lesson citation.`,
+        };
       }
       const l = lesson.lesson;
       const he = ctx.locale === 'he';
@@ -476,12 +483,19 @@ const proposePlanChangeTool: AgentTool = {
  * these; plan-mutation tools (Phase B) are added only for Tutor + Mentor.
  */
 export function getReadOnlyTools(): AgentTool[] {
-  return [retrieveTool, getLessonTool, learningPlanNextTool];
+  return [retrieveTool, getLessonTool, learningPlanNextTool, getCurrentPlanTool];
 }
 
-/** Plan-change slot-filling tools (Tutor + Mentor). Never mutate — staging only. */
+/** Observation used for both empty corpus hits and retrieve failures (ADR-0015). */
+export function corpusMissObservation(): string {
+  return CORPUS_MISS_OBSERVATION;
+}
+
+/** Plan-change slot-filling tools (Tutor + Mentor). Never mutate — staging only.
+ * `get_current_plan` lives in the read-only set so status questions can use it too.
+ */
 export function getPlanChangeTools(): AgentTool[] {
-  return [getCurrentPlanTool, validateGoalScopeTool, proposePlanChangeTool];
+  return [validateGoalScopeTool, proposePlanChangeTool];
 }
 
 /**

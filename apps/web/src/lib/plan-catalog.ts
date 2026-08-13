@@ -145,6 +145,16 @@ export function goalKeyLabel(
   return locale === 'he' ? found.label_he : found.label_en;
 }
 
+/** Show a catalog key as a label; leave free-text goals untouched. */
+export function displayLearnerGoal(
+  raw: string | null | undefined,
+  locale: 'he' | 'en' = 'he',
+): string {
+  if (!raw?.trim()) return '';
+  if (isValidGoalKey(raw)) return goalKeyLabel(raw, locale);
+  return raw.trim();
+}
+
 /** Validate + normalize an AI plan-update payload before writing to Neon. */
 export function sanitizePlanUpdatePayload(
   payload: PlanUpdatePayload,

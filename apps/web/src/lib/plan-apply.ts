@@ -94,7 +94,7 @@ export function buildPlanApplyFailureNotice(
       '---',
       '⚠️ **לא הצלחתי לעדכן את התוכנית באתר**',
       error ? `פרטים: ${error}` : '',
-      'נסה שוב: העתק את תבנית **עדכון תוכנית הלימוד** מהצ\'אט, מלא את השדות ושלח.',
+      'נסו שוב בשיחה: תארו את המטרה המדויקת ואת המועד, ואשרו את השינוי כשהמורה יציג אותו.',
     ]
       .filter(Boolean)
       .join('\n');
@@ -103,7 +103,7 @@ export function buildPlanApplyFailureNotice(
     '---',
     '⚠️ **I could not update your plan on the site**',
     error ? `Details: ${error}` : '',
-    'Try again: copy the **Learning plan update** template from chat, fill in the fields, and send it.',
+    'Try again in chat: say the exact goal and date, then confirm when the tutor shows the change.',
   ]
     .filter(Boolean)
     .join('\n');
@@ -159,7 +159,7 @@ export function buildPlanClarificationNotice(
         '---',
         '⚠️ **לא עדכנתי את התוכנית עדיין**',
         'באתר יש רק מתמטיקה ופיזיקה לקורסי קדם אקדמי / מכינה. ציין/י איזה מקצוע (מתמטיקה או פיזיקה) ואת המטרה המדויקת.',
-        'שלח/י שוב את תבנית **עדכון תוכנית הלימוד** בלבד (ללא טקסט נוסף לפני/אחרי), עם המטרה המדויקת והמועד.',
+        'המשיכו בשיחה: ציינו איזה מקצוע (מתמטיקה או פיזיקה) ואת המטרה המדויקת + המועד.',
       ].join('\n');
     }
     if (reason === 'math') {
@@ -167,14 +167,14 @@ export function buildPlanClarificationNotice(
         '---',
         '⚠️ **לא עדכנתי את התוכנית עדיין**',
         'המטרה "מבחן במתמטיקה" רחבה מדי — צריך לדעת איזה מבחן (בגרות 3/4/5 יח"ל, חדו״א 1, מתמטיקה בדידה, אלגברה לינארית וכו׳).',
-        'שלח/י שוב את תבנית **עדכון תוכנית הלימוד** בלבד (ללא טקסט נוסף לפני/אחרי), עם המטרה המדויקת והמועד.',
+        'המשיכו בשיחה עם המטרה המדויקת והמועד.',
       ].join('\n');
     }
     return [
       '---',
       '⚠️ **לא עדכנתי את התוכנית עדיין**',
       'המטרה "מבחן בפיזיקה" רחבה מדי, ולכן אי אפשר לבנות תוכנית טובה בלי לדעת את היקף הבחינה.',
-      'שלח/י שוב את תבנית **עדכון תוכנית הלימוד** בלבד (ללא טקסט נוסף), עם אחד מאלה: מכניקה / 036-361, חשמל / 036-371, קרינה וחומר / 036-282, פיזיקה 1 / פיזיקה 2, או רשימת הנושאים מהמבחן.',
+      'המשיכו בשיחה עם אחד מאלה: מכניקה / 036-361, חשמל / 036-371, קרינה וחומר / 036-282, פיזיקה 1 / פיזיקה 2, או רשימת הנושאים מהמבחן.',
     ].join('\n');
   }
 
@@ -183,7 +183,7 @@ export function buildPlanClarificationNotice(
       '---',
       '⚠️ **I did not update the plan yet**',
       'This site only covers math and physics for pre-academic / university-prep tracks. Specify which subject (math or physics) and the exact goal.',
-      'Resend only the **Learning plan update** template (no extra chat text before/after) with the exact goal and date.',
+      'Continue in chat with the subject, exact goal, and date.',
     ].join('\n');
   }
   if (reason === 'math') {
@@ -191,7 +191,7 @@ export function buildPlanClarificationNotice(
       '---',
       '⚠️ **I did not update the plan yet**',
       '"Math test" is too broad — specify the exam (Bagrut 3/4/5 units, Calculus 1, Discrete math, Linear algebra, etc.).',
-      'Resend only the **Learning plan update** template (no extra chat text before/after) with the exact goal and date.',
+      'Continue in chat with the exact exam and the date.',
     ].join('\n');
   }
 
@@ -199,7 +199,7 @@ export function buildPlanClarificationNotice(
     '---',
     '⚠️ **I did not update the plan yet**',
     '"Physics test" is too broad to turn into a useful weekly plan without the exam scope.',
-    'Resend only the **Learning plan update** template (no extra chat text) with: Mechanics / 036-361, Electricity / 036-371, Radiation & Matter / 036-282, Physics 1 / 2, or the topic list from the test.',
+    'Continue in chat with: Mechanics / 036-361, Electricity / 036-371, Radiation & Matter / 036-282, Physics 1 / 2, or the topic list from the test.',
   ].join('\n');
 }
 
@@ -263,7 +263,7 @@ export function buildPlanAppliedNotice(
     '**Week preview:**',
     ...lines,
     '',
-    'See the full projected plan (all weeks + dates) on [your learning plan](/app/plan). Future weeks may shift based on your progress.',
+    'See the full plan (all weeks + dates) on [your learning plan](/app/plan). Upcoming weeks may shift based on your progress.',
   ]
     .filter((line) => line !== null && line !== '')
     .join('\n');

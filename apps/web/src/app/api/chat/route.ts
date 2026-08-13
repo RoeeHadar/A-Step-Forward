@@ -25,7 +25,13 @@ import {
   type PlanChangeSession,
 } from '@/lib/neon-db';
 import { buildLearningPlan } from '@/lib/learning-plan';
-import { buildLessonCatalogSummary, buildPlanAllowlistBlock, PLAN_GROUNDING_RULES } from '@/lib/plan-catalog';
+import {
+  buildLessonCatalogSummary,
+  buildPlanAllowlistBlock,
+  displayLearnerGoal,
+  goalKeyLabel,
+  PLAN_GROUNDING_RULES,
+} from '@/lib/plan-catalog';
 import {
   extractPlanUpdate,
   learnerPlanChangeIntentHeuristic,
@@ -34,7 +40,7 @@ import {
   shouldApplyPlanChange,
   shouldApplyPlanImmediately,
   stripPlanMachineTags,
-  PLAN_AGENT_INSTRUCTIONS,
+  planModificationProtocol,
 } from '@/lib/plan-actions';
 import {
   applyPlanFromUserMessage,
@@ -73,6 +79,7 @@ import {
 import { buildContextNeeds } from '@/lib/chat-context-needs';
 import {
   assembleChatSystemPrompt,
+  buildHowToTeachBlock,
   filterNotesByRelevance,
   partitionInjectedContext,
 } from '@/lib/chat-context-builder';
@@ -88,6 +95,7 @@ import {
 import {
   buildBilingualProgressBriefing,
   buildLearnerFacingStatusPack,
+  formatLearnerFacingDate,
   AGENT_CORRECTION_TURN_INSTRUCTION,
   CONTEXT_CHALLENGE_TURN_INSTRUCTION,
   PLAN_OWNERSHIP_TURN_INSTRUCTION,
@@ -107,8 +115,12 @@ import {
   buildTutorInteractionContract,
   classifyTutorChatIntent,
   isPressureFamilyIntent,
+  looksLikeLearnerQuestion,
   wantsAgentCorrection,
   wantsExpandedOutputBudget,
+  wantsExamReadinessAnswer,
+  wantsProgressStatus,
+  wantsStudyHoursIncrease,
   type TutorIntentContext,
 } from '@/lib/learner-chat-intent';
 import { computeReadiness } from '@/lib/readiness';
@@ -222,10 +234,17 @@ const TOOL_PLANNER_INSTRUCTION = [
   'You are the tool-planning stage for a learner-facing tutoring assistant.',
   'Decide whether calling a tool would materially improve the answer to the',
   'learner’s latest message, and if so call the most relevant tool(s).',
-  'Prefer `retrieve` for factual/explanatory questions, `get_lesson` to point to',
-  'structured material by concept id, and `learning_plan_next` for “what should I',
-  'study next / why am I stuck”. If no tool is needed (greetings, small talk,',
-  'pure motivation), do NOT call any tool. Never write the final answer here.',
+  'Prefer `retrieve` for factual/explanatory questions IN math or physics,',
+  '`get_lesson` to point to structured material by concept id,',
+  '`get_current_plan` / `learning_plan_next` for “what is my status / what should I',
+  'study next / why am I stuck”. If the learner asks about THEIR plan or status,',
+  'do NOT call retrieve — the server already has their plan.',
+  'If they ask where to practice / take a test / open lessons, do NOT call retrieve;',
+  'the answer model already knows in-app routes.',
+  'If the question is outside math/physics (history, literature, chemistry as a course,',
+  'etc.), do NOT call retrieve hoping for a lesson — there is none. Skip tools.',
+  'If no tool is needed (greetings, small talk, pure motivation), do NOT call any tool.',
+  'Never write the final answer here.',
 ].join(' ');
 
 /**
@@ -261,7 +280,7 @@ const PLAN_FLOW_AGENT_INSTRUCTIONS = [
   '- "still_collecting": ask ONLY the single question it gives, in the learner’s language; do not ask anything else about the plan and do not batch questions.',
   '- "ready_to_confirm": present the current→proposed diff it gives and ask the learner to confirm (yes/no). Do NOT claim the plan changed yet — the site applies it only after they confirm.',
   '- "escalate": offer the Mentor handoff or to pause and resume later; do not repeat the same question.',
-  'Never tell the learner to open or paste a sidebar template — you are handling this conversationally. Never say the plan was updated unless the system confirms it in this turn.',
+  'Never tell the learner to open a form or paste a structured update — you are handling this conversationally. Never say the plan was updated unless the system confirms it in this turn.',
   'Corpus constraint: this platform only teaches **math** and **physics**. When clarifying a goal (e.g. pre-academic / makhina), offer ONLY math vs physics (and catalog tracks like Calculus 1, Bagrut units, Mechanics/Electricity). Never invent subjects like history, literature, biology, or chemistry.',
   'Do NOT ask why they want to change the plan — collect goal + target date via the tools, then show the diff.',
 ].join('\n');
@@ -1234,19 +1253,21 @@ async function buildContextPrompt(
   // lead), which falls through to static RAG / the normal tools. This both keeps
   // long goal answers in the flow AND stops an open session from hijacking a
   // spontaneous factual question.
+  const planStatusAsk = wantsProgressStatus(message) || wantsExamReadinessAnswer(message);
   const trimmedMsg = message.trim();
-  const looksLikeQuestion =
-    /[?？]/.test(trimmedMsg) ||
-    /^(what|why|how|when|who|which|where|explain|define|prove|solve|calculate|describe|מה|למה|איך|מתי|מי|כמה|היכן|הסבר|הגדר|הוכח|פתור|חשב)\b/i.test(
-      trimmedMsg,
-    );
+  const looksLikeQuestion = looksLikeLearnerQuestion(trimmedMsg);
   const planSessionEngaged =
-    planSessionActive && (planFlowAffirmative || planFlowCancel || !looksLikeQuestion);
+    planSessionActive &&
+    !planStatusAsk &&
+    (planFlowAffirmative || planFlowCancel || !looksLikeQuestion);
   const planChangeFlow =
     REACT_ENABLED &&
     (agent === 'tutor' || agent === 'mentor') &&
     !planChangeTurn &&
-    (learnerPlanChangeIntentHeuristic(message) || planSessionEngaged);
+    !planStatusAsk &&
+    (learnerPlanChangeIntentHeuristic(message) ||
+      wantsStudyHoursIncrease(message) ||
+      planSessionEngaged);
   // On a confirm turn the server applies the staged proposal in finalize; we
   // skip the tool loop and steer the answer to acknowledge (below).
   const planConfirmTurn =
@@ -1256,9 +1277,15 @@ async function buildContextPrompt(
 
   let context = `${buildCompactAgentBaseline()}\n\n${getAgentPersona(agent)}`;
 
-  // Suppress the tutor "route to sidebar template" override during the guided
-  // conversational flow — it would contradict the slot-filling we're driving.
-  if (agent === 'tutor' && tutorContract?.learnerPreferenceOverride && !planChangeFlow) {
+  // Skip Tutor THIS-TURN overrides when ReAct is off: casual plan-change
+  // would promise a confirmable flow we cannot stage. Other teaching-mode
+  // overrides (direct/Socratic) are also skipped in that kill-switch window.
+  if (
+    agent === 'tutor' &&
+    tutorContract?.learnerPreferenceOverride &&
+    !planChangeFlow &&
+    REACT_ENABLED
+  ) {
     context = `${tutorContract.learnerPreferenceOverride}\n\n${context}`;
   } else if (agent === 'tutor') {
     const tutorMode =
@@ -1272,6 +1299,16 @@ async function buildContextPrompt(
 
   context += `\n\n${languageInstructionBlock(responseLocale)}`;
   context += `\n- Trust hierarchy: current learner message > verified profile/plan/mastery > recent turns > inferred persona/notes. Do not let stale notes redirect the topic.`;
+
+  if (!minimal && liveAgents) {
+    const tutorModeHow =
+      (profile?.personality_profile as { tutor_mode?: string } | null)?.tutor_mode ?? null;
+    context += `\n\n${buildHowToTeachBlock({
+      tutorMode: tutorModeHow,
+      preferredStyle: profile?.preferred_style ?? null,
+      attentionSpanMin: profile?.attention_span ?? null,
+    })}`;
+  }
 
   if (profileDbUnavailable) {
     context += `\n\n## Learner context temporarily unavailable`;
@@ -1505,12 +1542,12 @@ async function buildContextPrompt(
       // During the guided conversational flow, use the guided instructions
       // instead of the template-redirect protocol (which would contradict it by
       // telling the model to send the learner to the sidebar template).
-      context += `\n\n${planChangeFlow ? PLAN_FLOW_AGENT_INSTRUCTIONS : PLAN_AGENT_INSTRUCTIONS}`;
+      context += `\n\n${planChangeFlow ? PLAN_FLOW_AGENT_INSTRUCTIONS : planModificationProtocol(REACT_ENABLED)}`;
     } else if (!minimal && agent === 'tutor' && tutorContract) {
       context = appendTutorContractToContext(context, tutorContract);
     } else if (!minimal && agent === 'mentor') {
       context += `\n\n## Plan guidance`;
-      context += `\nAnswer timeline/readiness from the plan above. Plan edits need the Tutor sidebar template.`;
+      context += `\nAnswer timeline/readiness from the plan above. If they want to change the plan, handle it in this chat (propose → confirm). Never send them to a form.`;
     }
   }
 
@@ -1624,6 +1661,8 @@ async function buildContextPrompt(
     !minimal &&
     !planChangeTurn &&
     !planConfirmTurn &&
+    !planStatusAsk &&
+    !(tutorIntent && isPressureFamilyIntent(tutorIntent)) &&
     (searchMessage.trim().length >= 10 || planChangeFlow) &&
     reactTools.length > 0 &&
     toolCallingAvailable();
@@ -1677,6 +1716,7 @@ async function buildContextPrompt(
     !reactHandledGrounding &&
     !planChangeFlow &&
     !planConfirmTurn &&
+    !planStatusAsk &&
     RAG_ENABLED &&
     !minimal &&
     (agent === 'tutor' || agent === 'coach') &&
@@ -2079,10 +2119,14 @@ async function buildContextPrompt(
     });
     const briefingInput = {
       goalKey,
-      goalLabel: profile.goal,
-      examDateLabel: profile.next_test_date
-        ? String(profile.next_test_date).slice(0, 10)
-        : null,
+      goalLabel:
+        displayLearnerGoal(profile.goal, responseLocale) ||
+        goalKeyLabel(goalKey, responseLocale) ||
+        null,
+      examDateLabel: formatLearnerFacingDate(
+        profile.next_test_date ?? profile.final_goal_date,
+        responseLocale,
+      ),
       daysToExam: daysLeft,
       hoursPerWeek: profile.hours_per_week,
       pointsGroup: profile.points_group,

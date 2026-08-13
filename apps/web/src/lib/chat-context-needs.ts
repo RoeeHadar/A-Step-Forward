@@ -103,9 +103,10 @@ export function buildContextNeeds(opts: {
     intent === 'context_challenge' ||
     intent === 'plan_ownership';
 
-  // Status packs only when the turn is actually about status/pressure — never on pure math.
+  // Pure teach turns skip plan/XP dumps so ordinary Q&A stays on-topic.
+  // Persona + private notes MUST still inject — otherwise every learner gets
+  // the same Socratic/concise lesson regardless of onboarding + memory.
   const wantStatus = statusAsk && !hasPractice && !(teachTurn && !pressure);
-  // Pure teach turns skip profile/mastery dumps so ordinary Q&A stays on-topic.
   const wantProfile = !teachTurn || wantStatus || planAsk || isMentor || hasPractice;
   const wantMastery =
     wantStatus ||
@@ -117,7 +118,7 @@ export function buildContextNeeds(opts: {
 
   return {
     intent,
-    durableMemory: !teachTurn || isCoach || isMentor || intent === 'agent_correction',
+    durableMemory: live,
     profile: wantProfile,
     mastery: wantMastery,
     // Active week: mentors/status/coach drills, or tutor when asking what-next — not every math stem.

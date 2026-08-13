@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { CHAT_CONTEXT, fitSystemSections } from './chat-context-policy';
 import {
   assembleChatSystemPrompt,
+  buildHowToTeachBlock,
   filterNotesByRelevance,
   partitionInjectedContext,
 } from './chat-context-builder';
@@ -65,5 +66,26 @@ describe('chat-context-builder (ADR-0015)', () => {
     const kept = filterNotesByRelevance(notes, 'help me with integrals please');
     expect(kept.map((n) => n.content)).toContain('struggles with integrals');
     expect(kept.map((n) => n.content)).not.toContain('unrelated hobby pottery');
+  });
+
+  it('filterNotesByRelevance keeps misconception notes without token overlap', () => {
+    const notes = [
+      { content: 'confuses chain rule with product rule', kind: 'misconception', importance: 3 },
+      { content: 'unrelated hobby pottery', kind: 'observation', importance: 2 },
+    ];
+    const kept = filterNotesByRelevance(notes, 'what is a derivative?');
+    expect(kept.map((n) => n.content)).toContain('confuses chain rule with product rule');
+    expect(kept.map((n) => n.content)).not.toContain('unrelated hobby pottery');
+  });
+
+  it('buildHowToTeachBlock encodes dialogue mode and explanation style', () => {
+    const block = buildHowToTeachBlock({
+      tutorMode: 'direct',
+      preferredStyle: 'practice_first',
+      attentionSpanMin: 20,
+    });
+    expect(block).toContain('direct');
+    expect(block).toContain('practice_first');
+    expect(block).toContain('20');
   });
 });

@@ -9,6 +9,9 @@ import {
   inferConceptIdsFromText,
   inferGoalMetaFromText,
   proposalToUpdatePayload,
+  planModificationProtocol,
+  PLAN_AGENT_INSTRUCTIONS,
+  PLAN_AGENT_INSTRUCTIONS_UNAVAILABLE,
 } from './plan-actions';
 import { buildPlanChangeRequest } from './plan-change-template';
 import {
@@ -82,7 +85,7 @@ describe('chat stream finalize (calc1 plan change template)', () => {
   it('surfaces failure notice when payload is missing', () => {
     const failure = buildPlanApplyFailureNotice('he', 'missing_payload');
     expect(failure).toContain('לא הצלחתי לעדכן את התוכנית');
-    expect(failure).toContain('תבנית');
+    expect(failure).toContain('בשיחה');
   });
 
   it('requires clarification before applying a broad physics exam template', () => {
@@ -135,5 +138,21 @@ describe('chat stream finalize (calc1 plan change template)', () => {
     expect(payload.prepend_concepts?.length).toBeGreaterThan(0);
     expect(planPayloadNeedsClarification(payload)).toBeNull();
     expect(meta.hours_per_week).toBe(35);
+  });
+});
+
+describe('planModificationProtocol (ReAct kill-switch)', () => {
+  it('promises guided confirmable flow when ReAct is on', () => {
+    const text = planModificationProtocol(true);
+    expect(text).toBe(PLAN_AGENT_INSTRUCTIONS);
+    expect(text).toMatch(/explicitly confirms/i);
+  });
+
+  it('does not promise a confirmable diff when ReAct is off', () => {
+    const text = planModificationProtocol(false);
+    expect(text).toBe(PLAN_AGENT_INSTRUCTIONS_UNAVAILABLE);
+    expect(text).toMatch(/temporarily unavailable|paused/i);
+    expect(text).not.toMatch(/call `propose_plan_change`/);
+    expect(text).not.toMatch(/ask yes\/no/i);
   });
 });

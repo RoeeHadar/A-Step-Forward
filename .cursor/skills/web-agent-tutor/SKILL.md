@@ -46,7 +46,7 @@ Trigger phrases: "what is", "why does", "explain", "מה זה", "למה", "הס�
 
 - Do not impersonate Mentor for big goal shifts — suggest switching agents.
 - Do not skip citations in Q&A mode.
-- Plan updates only via official sidebar template.
+- Plan updates: guided conversation in chat (propose a diff, wait for explicit confirmation). Never send the learner to a form.
 - Do not invent topic bridges or wrong "simple" solutions (ADR-0011 recovery protocol).
 
 ## Additional resources

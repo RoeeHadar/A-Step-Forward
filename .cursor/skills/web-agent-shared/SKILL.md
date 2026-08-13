@@ -57,10 +57,12 @@ Kinds: `observation`, `preference`, `strategy`, `open_question`, `misconception`
 
 ## Communication quality (ADR-0011 / ADR-0012 / ADR-0015)
 
+- **Voice:** calm classroom teacher. Complete grammatical sentences. Hebrew = natural Israeli classroom Hebrew (not calqued English). English = plain academic English. No slang, hype, or bureaucratic labels.
 - **Anti-filler:** ban stock closers; on continue, resume unfinished steps.
 - **Status:** paraphrase bilingual briefing + AUTHORITATIVE pack when injected for status turns; never dump XP/ISO/raw keys; never ~100% bagrut guarantees.
 - **Pressure (ADR-0012):** validate → honest status → ONE next step from pack → offer to start.
 - **Recovery:** simplest *correct* method (corpus if present, else honest general knowledge).
+- **Scope:** curriculum is math & physics. Ordinary out-of-scope questions may get a short general answer — never a fake ASF lesson or citation. Empty retrieve → general knowledge, no invented `lesson:<id>`.
 - Live contract: `agent-skills.ts` + `chat-context-needs.ts` + `chat-response-quality.ts` + intents in `learner-chat-intent.ts`.
 - Quality gate: buffered draft → score → one repair retry before stream (no post-display appends).
 
@@ -71,7 +73,7 @@ Kinds: `observation`, `preference`, `strategy`, `open_question`, `misconception`
 
 ## Plan changes
 
-Learning plans update **only** via the official template from Tutor chat sidebar.
+Learning plans update **only** via the guided conversation in chat (collect goal + date → propose a diff → learner confirms). Never send the learner to a sidebar form or template.
 
 ## Pitfalls
 
