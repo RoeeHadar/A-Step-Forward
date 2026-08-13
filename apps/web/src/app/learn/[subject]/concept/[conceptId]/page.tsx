@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { auth } from '@clerk/nextjs/server';
-import { SiteHeader } from '@/components/site-header';
 import { LocalizedSubjectLabel } from '@/components/localized-subject-label';
 import {
   dbConfigured,
@@ -204,9 +203,8 @@ export default async function ConceptPage({
     : { '3pt': '3-unit', '4pt': '4-unit', '5pt': '5-unit', uni: 'University' };
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <SiteHeader />
-      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-10">
+    <div className="bg-background">
+      <div className="mx-auto w-full max-w-4xl flex-1 px-4 py-10">
         <nav className="mb-4 text-sm text-muted-foreground">
           <Link href="/learn" className="hover:text-foreground">
             {t.learn}
@@ -294,7 +292,7 @@ export default async function ConceptPage({
               {dbConfigured ? t.noExplanationIngested : t.dbNotConnected}
             </p>
             <p className="mt-2 text-sm text-muted-foreground">
-              {dbConfigured ? t.adminSeedHint : t.dbSetupHint}
+              {dbConfigured ? t.tutorReadyHint : t.dbSetupHint}
             </p>
             <Link
               href={`/app/chat/tutor?topic=${encodeURIComponent(conceptId)}`}
@@ -349,7 +347,7 @@ export default async function ConceptPage({
         ) : null}
 
         <MathGlossaryPanel locale={locale} />
-      </main>
+      </div>
     </div>
   );
 }

@@ -78,6 +78,7 @@ const envelope = await buildCustomQuiz(learnerId, {
 ## When to call
 
 - **UI**: the `/app/quiz` page when the learner clicks "Generate quiz".
+- **Weekly gate** (`generateWeeklyQuizForUser`): same builder fills remaining slots after the exam-style corpus — weekly tests must match custom-test methodology (open multi-part, profile level). Do not use the lesson MCQ bank for weekly gates.
 - **Tutor agent**: after a chat where the learner says "quiz me on …" — call the builder, then either return the rendered quiz inline (`mixed`, ~5 minutes) or deep-link to `/app/quiz?seed=<topics>`.
 - **Coach agent**: spaced-repetition drill — when picking the next short session, call with `kind_mix: 'closed'`, `time_limit_min: 5`, `topics` = the FSRS-due concepts.
 - **Assessment Generator agent**: when an educator requests a custom checkpoint, call with the educator-supplied topics and time budget, then attach the envelope to the educator dashboard report.

@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { Fragment } from 'react';
 import { ArrowRight } from 'lucide-react';
-import { SiteHeader } from '@/components/site-header';
-import { AmbientBackground } from '@/components/ambient-background';
+import { auth } from '@clerk/nextjs/server';
 import { fetchSubjects } from '@/lib/content-api';
 import { subjectIcon, subjectLabel } from '@/lib/subject-labels';
 import { getServerLocale } from '@/i18n/locale-server';
@@ -145,6 +144,8 @@ function SubjectCard({
 export default async function LearnPage() {
   const locale = await getServerLocale();
   const isHe = locale === 'he';
+  const { userId } = await auth();
+  const signedIn = Boolean(userId);
   const subjects = await fetchSubjects();
 
   // Build a slug → card map from DB subjects.
@@ -175,10 +176,7 @@ export default async function LearnPage() {
   ];
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <SiteHeader />
-      <main className="relative isolate flex-1 overflow-x-hidden">
-        <AmbientBackground />
+    <div className="relative isolate">
         <div className="mx-auto w-full max-w-7xl px-4 py-12 lg:py-16">
           <header className="mb-12" dir={isHe ? 'rtl' : 'ltr'}>
             <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
@@ -189,9 +187,13 @@ export default async function LearnPage() {
               <span className="text-primary">{isHe ? 'לימוד' : 'Learn'}</span>
             </h1>
             <p className="mt-3 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-              {isHe
-                ? 'ספרי לימוד, חומרי תרגול ומבחני בגרות — ללא צורך בהרשמה.'
-                : 'Free textbooks, practice materials, and Bagrut exams — browse without signing in.'}
+              {signedIn
+                ? isHe
+                  ? 'ספרי לימוד, תרגול ומבחני בגרות — בחרו נושא והמשיכו מהתוכנית שלכם.'
+                  : 'Textbooks, practice, and Bagrut exams — pick a topic and continue from your plan.'
+                : isHe
+                  ? 'ספרי לימוד, חומרי תרגול ומבחני בגרות — אפשר לגלוש גם בלי הרשמה.'
+                  : 'Free textbooks, practice materials, and Bagrut exams — browse without signing in.'}
             </p>
           </header>
 
@@ -241,7 +243,6 @@ export default async function LearnPage() {
           ))}
           </div>
         </div>
-      </main>
     </div>
   );
 }

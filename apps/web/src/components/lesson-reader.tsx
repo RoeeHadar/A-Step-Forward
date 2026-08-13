@@ -24,7 +24,7 @@ import {
 import { cn } from '@/lib/utils';
 import { normalizeLatexInMarkdown } from '@/lib/normalize-latex';
 import { MarkdownMath } from '@/components/markdown-math';
-import { pickLessonText, lessonTextDir } from '@/lib/lesson-locale';
+import { pickLessonText, lessonTextDir, minutesLabel } from '@/lib/lesson-locale';
 import type { LessonSection, LessonWithQuestions, LessonPointsLevel } from '@/lib/neon-db';
 // MATH_GLOSSARY terms (see @/lib/math-glossary) could be wrapped with
 // GlossaryTooltip for inline hover hints; full Markdown post-processing is
@@ -525,7 +525,7 @@ export function LessonReader({
         </p>
         <div className="mt-3 flex flex-wrap gap-2 text-[11px]">
           <span className="rounded-full bg-primary/10 px-2 py-0.5 font-medium uppercase text-primary">
-            {lesson.est_minutes} min
+            {minutesLabel(lesson.est_minutes, lang)}
           </span>
           {lesson.math_track.length > 0
             ? lesson.math_track.map((t) => (

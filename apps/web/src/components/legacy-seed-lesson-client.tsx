@@ -16,6 +16,7 @@ import {
   getLessonEngagementTrack,
 } from '@/components/three-pt-lesson-engagement';
 import type { Lesson } from '@asf/schemas/curriculum';
+import { minutesLabel } from '@/lib/lesson-locale';
 
 type LegacySeedLessonClientProps = {
   lesson: Lesson;
@@ -59,7 +60,7 @@ export function LegacySeedLessonClient({
         <Badge variant="secondary">{lesson.modality}</Badge>
         <span className="flex items-center gap-1">
           <Clock className="h-4 w-4" aria-hidden />
-          {lesson.est_minutes} min
+          {minutesLabel(lesson.est_minutes, locale)}
         </span>
       </div>
 

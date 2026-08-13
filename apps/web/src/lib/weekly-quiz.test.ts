@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { scoreWeeklyQuizAnswers, normalizeWeeklyMcqOptions } from './weekly-quiz';
+import {
+  scoreWeeklyQuizAnswers,
+  normalizeWeeklyMcqOptions,
+  isExamAlignedGateQuiz,
+  customQuizQuestionToWeekly,
+} from './weekly-quiz';
 import { GATE_BANK_FORMAT_VERSION } from './gate-question-bank';
 import type { StoredWeeklyQuestion } from './weekly-quiz';
+import type { CustomQuizQuestion } from './quiz-builder';
 
 function mcq(
   id: string,
@@ -105,5 +111,55 @@ describe('normalizeWeeklyMcqOptions', () => {
     );
     expect(normalized?.correct).toBe('B');
     expect(normalized?.options.map((o) => o.key)).toEqual(['A', 'B', 'C', 'D']);
+  });
+});
+
+describe('isExamAlignedGateQuiz', () => {
+  it('rejects recognition MCQ caches so they regenerate', () => {
+    expect(
+      isExamAlignedGateQuiz([
+        { kind: 'mcq' },
+        { kind: 'open', parts: [{}, {}] },
+      ]),
+    ).toBe(false);
+  });
+
+  it('accepts open multi-part exam items', () => {
+    expect(
+      isExamAlignedGateQuiz([
+        { kind: 'open', parts: [{}, {}, {}] },
+        { kind: 'derivation' },
+      ]),
+    ).toBe(true);
+  });
+});
+
+describe('customQuizQuestionToWeekly', () => {
+  it('maps custom-builder open items to weekly open parts', () => {
+    const q: CustomQuizQuestion = {
+      ord: 1,
+      kind: 'open',
+      difficulty: 'hard',
+      concept_id: 'derivatives_rules',
+      skill_atoms: [],
+      stem_en: 'Given f(x)=x^2',
+      stem_he: 'נתון $f(x)=x^2$',
+      parts: [
+        { label: 'א', body_en: 'Find f\'', body_he: 'מצא את הנגזרת', points: 8 },
+        { label: 'ב', body_en: 'Find f\'\'', body_he: 'מצא את הנגזרת השנייה', points: 8 },
+      ],
+      total_points: 16,
+      sample_solution_en: 'f\'=2x',
+      sample_solution_he: '$f\'=2x$',
+      rubric_en: '8+8',
+      rubric_he: '8+8',
+    };
+    const weekly = customQuizQuestionToWeekly(q, 'he');
+    expect(weekly.kind).toBe('open');
+    expect(weekly.stem).toContain('נתון');
+    expect(weekly.parts).toHaveLength(2);
+    expect(weekly.parts?.[0]?.label).toBe('א');
+    expect(weekly.difficulty).toBe(0.9);
+    expect(weekly.options).toEqual([]);
   });
 });

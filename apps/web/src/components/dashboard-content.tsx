@@ -49,7 +49,8 @@ const STR = {
     kindRest: 'מנוחה',
     planTitle: 'התוכנית שלי לשבוע זה',
     noPlanTitle: 'נראה שאין לך תוכנית עדיין — בוא נתחיל!',
-    noPlanBlurb: 'השלם/י את שאלון ההיכרות כדי לקבל תכנית שבועית — או צור/י תוכנית מהמטרות שכבר מילאת.',
+    noPlanBlurb: 'השלם/י את שאלון ההיכרות כדי לקבל תכנית שבועית — או גלשו בלימוד בינתיים.',
+    noPlanBlurbHasProfile: 'צרו תוכנית שבועית מהמטרות שכבר מילאתם — או גלשו בלימוד בינתיים.',
     startNow: 'התחל/י עכשיו',
     createPlan: 'צור/י תוכנית',
     browseLearn: 'עבור ללימוד',
@@ -65,7 +66,7 @@ const STR = {
     overflowTitle: 'לא ייכנס עד היעד',
     overflowBody: (names: string) =>
       `${names} — הרחיבו את היעד או הוסיפו שעות לימוד`,
-    overflowCta: 'ערוך יעד',
+    overflowCta: 'דברו עם המורה',
     // R5 — Post-goal re-plan CTA
     replanTitle: 'התוכנית הסתיימה',
     replanBody: 'התוכנית שלך הגיעה לסיומה. זה הזמן ליצור תוכנית חדשה בהתאם להתקדמות שלך.',
@@ -80,7 +81,7 @@ const STR = {
     daysUntilGoal: (n: number) => `${n} days until your goal`,
     examToday: 'Exam day!',
     goalToday: 'Goal day!',
-    viewFullPlan: 'View full projected plan →',
+    viewFullPlan: 'View full plan →',
     streak: (n: number) => `🔥 ${n}-day streak`,
     estGrade: (g: number) => `Est. grade: ~${g}`,
     readinessPct: (p: number) => `Goal readiness: ~${p}%`,
@@ -88,7 +89,8 @@ const STR = {
     kindRest: 'Rest',
     planTitle: 'My Plan for This Week',
     noPlanTitle: "Looks like you don't have a plan yet — let's get started!",
-    noPlanBlurb: 'Complete onboarding to get a weekly plan — or create one from the goals you already shared.',
+    noPlanBlurb: 'Complete onboarding to get a weekly plan — or browse Learn in the meantime.',
+    noPlanBlurbHasProfile: 'Create a weekly plan from the goals you already shared — or browse Learn.',
     startNow: 'Start now',
     createPlan: 'Create my plan',
     browseLearn: 'Go to Learn',
@@ -104,7 +106,7 @@ const STR = {
     overflowTitle: "Won't fit before your goal",
     overflowBody: (names: string) =>
       `${names} — extend your goal date or add more study hours`,
-    overflowCta: 'Edit goal',
+    overflowCta: 'Talk to your Tutor',
     // R5 — Post-goal re-plan CTA
     replanTitle: 'Plan ended',
     replanBody: "Your plan has reached its end date. It's time to create a new plan based on your progress.",
@@ -142,7 +144,7 @@ const AGENT_CARDS: Array<{
     emoji: '🏋️',
     name_he: 'מאמן',
     name_en: 'Coach',
-    desc_he: 'תרגול יומי ועיוון בחולשות',
+    desc_he: 'תרגול יומי וחיזוק בחולשות',
     desc_en: 'Daily drills targeting your weak spots',
   },
   {
@@ -407,8 +409,7 @@ function OverflowNotice({
         {t.overflowTitle}:{' '}
       </span>
       <span className="text-muted-foreground">{t.overflowBody(displayNames)}</span>
-      {/* Goal editing happens via the plan-update template in the Tutor chat —
-          /plan-setup has no goal UI and would bounce back to the dashboard. */}
+      {/* Goal editing happens in Tutor chat — /plan-setup has no goal UI. */}
       <Link
         href="/app/chat/tutor"
         className="ms-2 font-medium text-primary hover:underline"
@@ -455,6 +456,7 @@ export function DashboardContent({
   goalKey,
   teacher,
   weekSpec,
+  hasProfile = false,
 }: {
   displayName: string;
   plan: LearningPlan | null;
@@ -467,6 +469,7 @@ export function DashboardContent({
   goalKey?: string | null;
   teacher?: { real_name: string; username: string } | null;
   weekSpec?: ClientWeekTrainingSpec | null;
+  hasProfile?: boolean;
 }) {
   const { locale } = useI18n();
   const isHe = locale === 'he';
@@ -606,14 +609,19 @@ export function DashboardContent({
         ) : (
           <div className="rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 to-accent-magenta/5 p-6 text-center">
             <p className="font-display font-medium">{t.noPlanTitle}</p>
-            <p className="mt-1 text-sm text-muted-foreground">{t.noPlanBlurb}</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {hasProfile ? t.noPlanBlurbHasProfile : t.noPlanBlurb}
+            </p>
             <div className="mt-4 flex flex-wrap justify-center gap-2">
-              <Button asChild size="sm">
-                <Link href="/onboarding">{t.startNow}</Link>
-              </Button>
-              <Button asChild variant="secondary" size="sm">
-                <Link href="/plan-setup">{t.createPlan}</Link>
-              </Button>
+              {hasProfile ? (
+                <Button asChild size="sm">
+                  <Link href="/plan-setup">{t.createPlan}</Link>
+                </Button>
+              ) : (
+                <Button asChild size="sm">
+                  <Link href="/onboarding">{t.startNow}</Link>
+                </Button>
+              )}
               <Button asChild variant="outline" size="sm">
                 <Link href="/learn">{t.browseLearn}</Link>
               </Button>

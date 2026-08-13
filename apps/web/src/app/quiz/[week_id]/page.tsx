@@ -3,7 +3,6 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { WeekQuizClient } from '@/components/week-quiz-client';
 import { QuizUnavailable } from '@/components/quiz-unavailable';
-import { SiteHeader } from '@/components/site-header';
 import { generateWeeklyQuizForUser } from '@/lib/weekly-quiz';
 import type { QuizStartResponse } from '@asf/schemas/learning_path';
 import { LOCALE_COOKIE, resolveLocale } from '@/i18n/locale-storage';
@@ -43,9 +42,8 @@ export default async function QuizPage({ params, searchParams }: Props) {
   const token = (await getToken()) ?? '';
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <SiteHeader />
-      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8">
+    <div className="bg-background">
+      <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-8">
         {quiz ? (
           <WeekQuizClient
             quiz={quiz}
@@ -56,7 +54,7 @@ export default async function QuizPage({ params, searchParams }: Props) {
         ) : (
           <QuizUnavailable />
         )}
-      </main>
+      </div>
     </div>
   );
 }

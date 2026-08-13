@@ -109,6 +109,7 @@ export default async function DashboardPage() {
             : null
         }
         weekSpec={weekSpec}
+        hasProfile={Boolean(profile)}
       />
     </>
   );

@@ -48,7 +48,7 @@ const STR = {
     plan_horizon: (start: string, end: string) => `תקופת התוכנית: ${start} – ${end}`,
     week_until: (d: string) => `עד ${d}`,
     projected_note:
-      'זו תוכנית מ-projected — השבועות הבאים עשויים להשתנות לפי ציונים, מבחנים והתקדמות בפועל.',
+      'השבועות הבאים עשויים להשתנות לפי ציונים, מבחנים והתקדמות בפועל.',
     readiness_title: 'מוכנות ליעד',
     readiness_pct: (p: number) => `${p}% מוכנות`,
     pace_ahead: 'מקדים/ה את הקצב',
@@ -66,7 +66,7 @@ const STR = {
   en: {
     title: 'Your learning plan',
     week: (n: number) => `Week ${n}`,
-    week_status: (n: number, status: string) => `${n} concepts · status: ${status}`,
+    week_status: (n: number, status: string) => `${n} concepts · ${statusEn(status)}`,
     start_week_quiz: 'Start Week Quiz',
     all_weeks: 'All weeks',
     future_weeks: 'Upcoming weeks (may shift based on your progress)',
@@ -110,8 +110,19 @@ const STATUS_HE: Record<string, string> = {
   skipped: 'דולג',
 };
 
+const STATUS_EN: Record<string, string> = {
+  active: 'in progress',
+  upcoming: 'upcoming',
+  completed: 'done',
+  skipped: 'skipped',
+};
+
 function statusHe(status: string): string {
   return STATUS_HE[status.toLowerCase()] ?? status;
+}
+
+function statusEn(status: string): string {
+  return STATUS_EN[status.toLowerCase()] ?? status;
 }
 
 function masteryBadgeVariant(score: number | null | undefined): 'success' | 'warning' | 'secondary' {

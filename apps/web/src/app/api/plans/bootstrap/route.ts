@@ -16,7 +16,7 @@ export async function POST() {
   const { userId } = await auth();
   if (!userId) return new Response('Unauthorized', { status: 401 });
   if (!(process.env.DATABASE_URL ?? process.env.POSTGRES_URL)) {
-    return Response.json({ error: 'DATABASE_URL not configured' }, { status: 503 });
+    return Response.json({ error: 'db_not_configured' }, { status: 503 });
   }
 
   try {
@@ -40,7 +40,7 @@ export async function POST() {
     const profile = rows[0];
     if (!profile) {
       return Response.json(
-        { error: 'Complete onboarding before creating a plan' },
+        { error: 'needs_onboarding' },
         { status: 400 },
       );
     }
@@ -72,7 +72,7 @@ export async function POST() {
   } catch (err) {
     console.error('[plans/bootstrap]', err);
     return Response.json(
-      { error: err instanceof Error ? err.message : 'Plan bootstrap failed' },
+      { error: 'bootstrap_failed' },
       { status: 500 },
     );
   }

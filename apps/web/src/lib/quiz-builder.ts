@@ -117,10 +117,15 @@ const UNIVERSITY_GOALS = new Set([
   'calculus1', 'linear_algebra', 'physics1', 'physics2', 'statistics',
 ]);
 
-function getQuizMode(profile: LearnerProfileRow | null): QuizMode {
+export function getQuizMode(profile: LearnerProfileRow | null): QuizMode {
   const goal = profile?.goal ?? '';
   if (UNIVERSITY_GOALS.has(goal)) return 'university_open';
   return 'bagrut_open';
+}
+
+/** Minutes the learner should budget per exam-style item (matches /app/quiz). */
+export function minutesPerExamQuestion(profile: LearnerProfileRow | null): number {
+  return getQuizMode(profile) === 'bagrut_open' ? 22 : 35;
 }
 
 function questionCountFromBudget(

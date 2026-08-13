@@ -11,7 +11,7 @@ import {
   InteractiveSeedQuestions,
   type InteractiveSeedQuestion,
 } from '@/components/interactive-seed-questions';
-import { lessonTextDir, pickLessonText } from '@/lib/lesson-locale';
+import { lessonTextDir, pickLessonText, minutesLabel } from '@/lib/lesson-locale';
 
 export type InteractiveSeedSection = {
   id: string;
@@ -56,7 +56,7 @@ export function InteractiveSeedLessonView({
         <Badge variant="secondary">{isHe ? 'אינטראקטיבי' : 'interactive'}</Badge>
         <span className="flex items-center gap-1">
           <Clock className="h-4 w-4" aria-hidden />
-          {minutes} min
+          {minutesLabel(minutes, locale)}
         </span>
       </div>
 

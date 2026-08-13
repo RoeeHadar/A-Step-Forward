@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { getAuthContext } from '@/lib/auth';
 import { PracticeArenaClient } from '@/components/practice-arena-client';
 import { getLearnerProfile } from '@/lib/neon-db';
+import { parsePracticeQueueMode } from '@/lib/practice-arena';
 import { parsePracticeTopicIds } from '@/lib/practice-topics';
 
 export const dynamic = 'force-dynamic';
@@ -34,6 +35,7 @@ export default async function PracticePage({
     <PracticeArenaClient
       initialConceptId={concept}
       initialTopicIds={initialTopicIds}
+      initialQueueMode={parsePracticeQueueMode(sp.mode)}
     />
   );
 }

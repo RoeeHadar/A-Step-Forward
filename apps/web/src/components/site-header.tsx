@@ -46,10 +46,12 @@ export function SiteHeader() {
   const { messages, locale, setLocale } = useI18n();
   const { user } = useUser();
   const isAdmin = isClerkAdmin(user);
+  const isSignedIn = Boolean(user);
   const toggleTheme = () => setTheme(resolved === 'dark' ? 'light' : 'dark');
   const otherLocale: Locale = locale === 'he' ? 'en' : 'he';
   const isEducatorShell = pathname.startsWith('/educator');
   const isAdminShell = pathname.startsWith('/admin');
+  const hideLearnerHeaderNav = isSignedIn && !isEducatorShell && !isAdminShell;
 
   const isActive = (href: string, exact = false) => {
     if (exact) return pathname === href;
@@ -58,7 +60,13 @@ export function SiteHeader() {
 
   const scrolled = useScrollY(8);
 
-  const brandHref = isEducatorShell ? '/educator' : isAdminShell ? '/admin' : '/';
+  const brandHref = isEducatorShell
+    ? '/educator'
+    : isAdminShell
+      ? '/admin'
+      : isSignedIn
+        ? '/app'
+        : '/';
 
   const visiblePublicLinks = publicNavLinks.filter(
     (link) => !(isAdmin && link.href === '/book'),
@@ -118,49 +126,71 @@ export function SiteHeader() {
               ))
             ) : (
               <>
-                {visiblePublicLinks.map((link) => (
+                {hideLearnerHeaderNav ? (
                   <Link
-                    key={link.href}
-                    href={link.href}
+                    href="/book"
                     className={cn(
                       'relative px-3 py-2 text-sm transition-colors hover:text-foreground',
-                      isActive(link.href)
+                      isActive('/book')
                         ? 'font-medium text-foreground'
                         : 'text-muted-foreground',
                     )}
                   >
-                    {messages.nav[link.labelKey]}
-                    {isActive(link.href) && (
+                    {messages.nav.book}
+                    {isActive('/book') && (
                       <span
                         className="absolute inset-x-3 -bottom-[13px] h-0.5 rounded-full bg-primary"
                         aria-hidden
                       />
                     )}
                   </Link>
-                ))}
+                ) : (
+                  visiblePublicLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className={cn(
+                        'relative px-3 py-2 text-sm transition-colors hover:text-foreground',
+                        isActive(link.href)
+                          ? 'font-medium text-foreground'
+                          : 'text-muted-foreground',
+                      )}
+                    >
+                      {messages.nav[link.labelKey]}
+                      {isActive(link.href) && (
+                        <span
+                          className="absolute inset-x-3 -bottom-[13px] h-0.5 rounded-full bg-primary"
+                          aria-hidden
+                        />
+                      )}
+                    </Link>
+                  ))
+                )}
                 <SignedIn>
-                  {visibleAppLinks
-                    .filter((link) => !publicNavLinks.some((p) => p.href === link.href))
-                    .map((link) => (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        className={cn(
-                          'relative px-3 py-2 text-sm transition-colors hover:text-foreground',
-                          isActive(link.href)
-                            ? 'font-medium text-foreground'
-                            : 'text-muted-foreground',
-                        )}
-                      >
-                        {messages.nav[link.labelKey]}
-                        {isActive(link.href) && (
-                          <span
-                            className="absolute inset-x-3 -bottom-[13px] h-0.5 rounded-full bg-primary"
-                            aria-hidden
-                          />
-                        )}
-                      </Link>
-                    ))}
+                  {!hideLearnerHeaderNav
+                    ? visibleAppLinks
+                        .filter((link) => !publicNavLinks.some((p) => p.href === link.href))
+                        .map((link) => (
+                          <Link
+                            key={link.href}
+                            href={link.href}
+                            className={cn(
+                              'relative px-3 py-2 text-sm transition-colors hover:text-foreground',
+                              isActive(link.href)
+                                ? 'font-medium text-foreground'
+                                : 'text-muted-foreground',
+                            )}
+                          >
+                            {messages.nav[link.labelKey]}
+                            {isActive(link.href) && (
+                              <span
+                                className="absolute inset-x-3 -bottom-[13px] h-0.5 rounded-full bg-primary"
+                                aria-hidden
+                              />
+                            )}
+                          </Link>
+                        ))
+                    : null}
                   {isAdmin ? (
                     <Link
                       href="/admin"
@@ -201,6 +231,7 @@ export function SiteHeader() {
             </Link>
           ) : (
             <>
+              {!hideLearnerHeaderNav ? (
               <Link
                 href="/learn"
                 className={cn(
@@ -212,6 +243,7 @@ export function SiteHeader() {
               >
                 {messages.nav.learn}
               </Link>
+              ) : null}
               {isAdmin ? (
                 <Link
                   href="/admin"

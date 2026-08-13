@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { currentUser } from '@clerk/nextjs/server';
 import { CheckCircle2, Clock, RefreshCw, BookOpen } from 'lucide-react';
-import { SiteHeader } from '@/components/site-header';
 import { PremiumBadge } from '@/components/premium-badge';
 import { fetchBagrutExams, fetchSubjects } from '@/lib/content-api';
 import { LocalizedSubjectLabel } from '@/components/localized-subject-label';
@@ -308,9 +307,8 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
   const totalWithLesson = conceptsWithCoverage.filter((c) => c.hasLesson).length;
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <SiteHeader />
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10">
+    <div className="bg-background">
+      <div className="mx-auto w-full max-w-5xl flex-1 px-4 py-10">
         <nav className="mb-4 text-sm text-muted-foreground">
           <Link href="/learn" className="hover:text-foreground">{t.learn}</Link>
           <span className="mx-2">/</span>
@@ -489,7 +487,7 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
             </Link>
           </section>
         )}
-      </main>
+      </div>
     </div>
   );
 }

@@ -49,3 +49,7 @@ export function pickLessonText(
 export function lessonTextDir(lang: LessonLang): 'rtl' | 'ltr' {
   return lang === 'he' ? 'rtl' : 'ltr';
 }
+
+export function minutesLabel(minutes: number, lang: LessonLang): string {
+  return lang === 'he' ? `${minutes} דק׳` : `${minutes} min`;
+}

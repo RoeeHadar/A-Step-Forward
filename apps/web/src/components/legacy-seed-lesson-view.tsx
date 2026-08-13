@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@asf/ui/card';
 import { PageHeader } from '@/components/page-header';
 import type { InteractiveSeedLesson } from '@/components/interactive-seed-lesson-view';
 import { InteractiveSeedLessonView } from '@/components/interactive-seed-lesson-view';
+import { minutesLabel } from '@/lib/lesson-locale';
 import {
   LegacySeedProgressBar,
   LegacySeedCompleteArea,
@@ -49,7 +50,7 @@ export async function LegacySeedLessonView({
         <Badge variant="secondary">{lesson.modality}</Badge>
         <span className="flex items-center gap-1">
           <Clock className="h-4 w-4" aria-hidden />
-          {lesson.est_minutes} min
+          {minutesLabel(lesson.est_minutes, locale)}
         </span>
       </div>
 

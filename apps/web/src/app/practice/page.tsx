@@ -11,6 +11,9 @@ export default async function PracticeRedirect({
   if (typeof sp.concept === 'string' && sp.concept.trim()) {
     params.set('concept', sp.concept.trim());
   }
+  if (typeof sp.mode === 'string' && sp.mode.trim()) {
+    params.set('mode', sp.mode.trim());
+  }
   if (typeof sp.topics === 'string' && sp.topics.trim()) {
     params.set('topics', sp.topics.trim());
   }

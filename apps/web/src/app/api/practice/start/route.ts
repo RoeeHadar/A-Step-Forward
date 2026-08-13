@@ -4,6 +4,7 @@
  */
 import { auth } from '@clerk/nextjs/server';
 import { advancePracticeItem } from '@/lib/practice-queue';
+import { parsePracticeQueueMode } from '@/lib/practice-arena';
 import { parsePracticeTopicIds } from '@/lib/practice-topics';
 import {
   createPracticeSession,
@@ -53,7 +54,8 @@ export async function POST(req: Request) {
       ? body.concept_id.trim()
       : null;
   const topicIds = parsePracticeTopicIds(body.topic_ids);
-  if (!topicIds.length && !conceptFilter) {
+  const queueMode = parsePracticeQueueMode(body.queue_mode ?? body.mode);
+  if (!topicIds.length && !conceptFilter && queueMode === 'default') {
     return Response.json(
       {
         error: 'topics_required',
@@ -74,7 +76,7 @@ export async function POST(req: Request) {
     topicIds,
     goalItems,
     goalMinutes,
-    queueMode: 'default',
+    queueMode,
   });
   if (!session) {
     return Response.json({ error: 'session_create_failed' }, { status: 503 });

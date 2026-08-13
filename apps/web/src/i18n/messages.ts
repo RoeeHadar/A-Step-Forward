@@ -7,7 +7,7 @@ const messages = {
       dashboard: 'Dashboard',
       chat: 'Chat',
       lessons: 'Lessons',
-      quiz: 'Quiz',
+      quiz: 'Custom quiz',
       practice: 'Practice',
       tests: 'My Tests',
       exams: 'Exams',
@@ -53,9 +53,9 @@ const messages = {
       demoTutorMsg:
         'Great question! Before I explain — what do you already know about rates of change? Can you think of a real-world example where something changes over time?',
       platformLabel: 'YOUR LEARNING PATH',
-      platformHighlight: 'Diagnostic · Weekly plan · Mastery tracking',
+      platformHighlight: 'Onboarding · Weekly plan · Mastery tracking',
       platformDesc:
-        'Get a tailored weekly plan from a short diagnostic — then watch it adapt as you learn.',
+        'Share your goals in a short questionnaire — then watch a weekly plan adapt as you learn.',
       statsCoursesValue: '13',
       statsCoursesLabel: 'Courses',
       statsAgentsValue: '4',
@@ -119,7 +119,8 @@ const messages = {
       description:
         'A read-only view of what your AI tutors know about you — built from onboarding, chats, and practice.',
       readOnlyNotice:
-        'This memory is managed by your agents. You cannot edit it here — if something is wrong or missing, tell your Tutor or Mentor in chat and they will update it.',
+        'Agent field notes are written by your tutors. You can edit how they see you (shared profile) anytime.',
+      editPersona: 'Edit how agents see you',
       chatTutor: 'Chat with Tutor',
       chatMentor: 'Chat with Mentor',
       searchPlaceholder: 'Search memory…',
@@ -248,7 +249,7 @@ const messages = {
           'Review the change and confirm — then your plan updates.',
         ],
         memoryNote:
-          'Topics are optional. The tutor uses your learning history and memory to pick what to review. Prefer a form? The template below still works.',
+          'Topics are optional. The tutor uses your learning history and memory to pick what to review.',
         guidedLabel: 'Start guided update',
         guidedHint: 'The tutor asks a couple of quick questions, then applies it once you confirm.',
         copyLabel: 'Copy',
@@ -277,6 +278,8 @@ const messages = {
         'Concept explanations are unavailable: the site database is not yet connected to this deployment.',
       adminSeedHint:
         'An administrator can run the concept-content seed workflow to fetch it from Wikipedia (CC BY-SA 4.0).',
+      tutorReadyHint:
+        'This topic is in your catalog. Chat with the Tutor to learn it now — a written lesson is still on the way.',
       dbSetupHint:
         'A maintainer needs to add DATABASE_URL to the Vercel environment variables. Until then the AI Tutor is the best way to learn this concept.',
       moreIn: 'More in',
@@ -498,7 +501,7 @@ const messages = {
       dashboard: 'לוח בקרה',
       chat: 'צ׳אט',
       lessons: 'שיעורים',
-      quiz: 'מבחן',
+      quiz: 'בוחן מותאם',
       practice: 'תרגול',
       tests: 'המבחנים שלי',
       exams: 'בחינות',
@@ -539,13 +542,13 @@ const messages = {
       trustAiPowered: 'מבוסס AI',
       trustFree: 'ללא עלות',
       demoLabel: 'הדגמה',
-      demoUserMsg: 'מה זה נגזרת?',
+      demoUserMsg: 'מהי נגזרת?',
       demoTutorMsg:
         'שאלה מצוינת! לפני שאסביר — מה אתה כבר יודע על קצב שינוי? האם אתה יכול לחשוב על דוגמה מהחיים שבה משהו משתנה עם הזמן?',
       platformLabel: 'מסלול הלמידה שלך',
-      platformHighlight: 'אבחון · תוכנית שבועית · מעקב שליטה',
+      platformHighlight: 'היכרות · תוכנית שבועית · מעקב שליטה',
       platformDesc:
-        'קבל תוכנית שבועית מותאמת מאבחון קצר — והיא מתעדכנת עם כל התקדמות.',
+        'שתפו מטרות בשאלון קצר — ותוכנית שבועית תתעדכן עם כל התקדמות.',
       statsCoursesValue: '13',
       statsCoursesLabel: 'קורסים',
       statsAgentsValue: '4',
@@ -609,7 +612,8 @@ const messages = {
       description:
         'תצוגה לקריאה בלבד של מה שמורים וסוכני AI יודעים עליך — מבוסס על הרשמה, שיחות ותרגול.',
       readOnlyNotice:
-        'הזיכרון מנוהל על ידי הסוכנים. אי אפשר לערוך כאן — אם משהו שגוי או חסר, ספר/י למורה או למנטור בצ\'אט והם יעדכנו.',
+        'הערות השדה נכתבות על ידי הסוכנים. אפשר לערוך בכל עת איך הם רואים אותך (הפרופיל המשותף).',
+      editPersona: 'עריכת הפרופיל שהסוכנים רואים',
       chatTutor: 'שוחח עם המורה',
       chatMentor: 'שוחח עם המנטור',
       searchPlaceholder: 'חיפוש בזיכרון…',
@@ -736,7 +740,7 @@ const messages = {
           'בדוק את השינוי ואשר — ואז התוכנית תתעדכן.',
         ],
         memoryNote:
-          'נושאים הם אופציונלי. המורה משתמש בזיכרון ובהיסטוריית הלמידה שלך כדי לבחור מה לחזור עליו. מעדיף טופס? התבנית למטה עדיין עובדת.',
+          'נושאים הם אופציונלי. המורה משתמש בזיכרון ובהיסטוריית הלמידה שלך כדי לבחור מה לחזור עליו.',
         guidedLabel: 'התחל עדכון מודרך',
         guidedHint: 'המורה ישאל כמה שאלות קצרות, ויחיל את השינוי אחרי שתאשר.',
         copyLabel: 'העתק',
@@ -764,6 +768,8 @@ const messages = {
       dbNotConnected: 'הסברי מושגים אינם זמינים: מסד הנתונים של האתר עדיין לא מחובר לפריסה זו.',
       adminSeedHint:
         'מנהל מערכת יכול להריץ את תהליך הזנת תוכן המושגים כדי להביא אותו מוויקיפדיה (CC BY-SA 4.0).',
+      tutorReadyHint:
+        'הנושא נמצא בקטלוג. שוחחו עם המורה כדי ללמוד אותו עכשיו — שיעור כתוב עדיין בדרך.',
       dbSetupHint:
         'יש להוסיף DATABASE_URL למשתני הסביבה ב-Vercel. עד אז, המורה ה-AI הוא הדרך הטובה ביותר ללמוד מושג זה.',
       moreIn: 'עוד ב',

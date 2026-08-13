@@ -11,8 +11,8 @@ export default function ChatLoading() {
       <div className="flex flex-1 flex-col overflow-hidden rounded-xl border border-border">
         <div className="flex-1 space-y-4 p-4">
           <Skeleton className="mx-auto h-4 w-2/3 max-w-sm" />
-          <Skeleton className="ml-auto h-16 w-[60%] max-w-xs rounded-lg" />
-          <Skeleton className="mr-auto h-24 w-[70%] max-w-md rounded-lg" />
+          <Skeleton className="ms-auto h-16 w-[60%] max-w-xs rounded-lg" />
+          <Skeleton className="me-auto h-24 w-[70%] max-w-md rounded-lg" />
         </div>
         <div className="flex gap-2 border-t border-border p-4">
           <Skeleton className="h-[44px] flex-1 rounded-md" />

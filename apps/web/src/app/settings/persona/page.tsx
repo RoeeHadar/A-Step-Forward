@@ -9,7 +9,7 @@
  * GET/POST/PATCH /api/agent-memory/persona + POST /api/agent-memory/consolidate.
  */
 import { auth } from '@clerk/nextjs/server';
-import { SiteHeader } from '@/components/site-header';
+import { redirect } from 'next/navigation';
 import { ensureOnboarded } from '@/lib/onboarding-gate';
 import {
   getLearnerPersona,
@@ -24,7 +24,7 @@ const AGENT_NAMES = ['tutor', 'mentor', 'coach', 'reviewer'] as const;
 
 export default async function PersonaSettingsPage() {
   const { userId } = await auth();
-  if (!userId) return null;
+  if (!userId) redirect('/sign-in');
   await ensureOnboarded(userId, '/settings/persona');
 
   const [persona, ...noteCounts] = dbConfigured
@@ -40,15 +40,14 @@ export default async function PersonaSettingsPage() {
   });
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <SiteHeader />
-      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-10">
+    <div className="bg-background">
+      <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-10">
         <PersonaEditor
           initialText={persona?.text ?? null}
           updatedAt={persona?.updated_at ?? null}
           noteCountsByAgent={noteCountsByAgent}
         />
-      </main>
+      </div>
     </div>
   );
 }

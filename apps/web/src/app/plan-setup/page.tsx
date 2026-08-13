@@ -11,6 +11,10 @@ const STR = {
     sub: 'Creating a 2-week starter plan from your goals…',
     elapsed: (s: number) => `Creating your plan… (${s}s)`,
     error: 'We could not create your plan.',
+    timeout: 'Plan creation timed out. Please try again.',
+    verifyFailed: 'Could not verify plan status. Please try again.',
+    dbError: 'The study plan service is temporarily unavailable. Please try again.',
+    failed: 'Plan creation failed',
     retry: 'Try again',
     redirecting: 'Plan ready — opening your dashboard…',
     needsOnboarding: 'Your profile is not complete yet. Returning to the questionnaire…',
@@ -21,6 +25,10 @@ const STR = {
     sub: 'בונים תוכנית ל-2 השבועות הקרובים מהמטרות שמילאת…',
     elapsed: (s: number) => `יוצר את תוכנית הלמידה האישית שלך… (${s} שניות)`,
     error: 'לא הצלחנו ליצור את התוכנית.',
+    timeout: 'יצירת התוכנית ארכה יותר מדי. נסו שוב.',
+    verifyFailed: 'לא הצלחנו לבדוק את סטטוס התוכנית. נסו שוב.',
+    dbError: 'שירות התוכנית אינו זמין כרגע. נסו שוב בעוד רגע.',
+    failed: 'יצירת התוכנית נכשלה',
     retry: 'נסה שוב',
     redirecting: 'התוכנית מוכנה — פותחים את לוח הבקרה…',
     needsOnboarding: 'הפרופיל שלך עדיין לא הושלם. חוזרים לשאלון…',
@@ -39,7 +47,10 @@ async function checkPlanExists(): Promise<PlanExistsCheck> {
 
 type BootstrapResult = { ok: boolean; status?: number; error?: string };
 
-async function bootstrapPlan(replan: boolean): Promise<BootstrapResult> {
+async function bootstrapPlan(
+  replan: boolean,
+  labels: { timeout: string; verifyFailed: string; failed: string; dbError: string },
+): Promise<BootstrapResult> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 25_000);
   try {
@@ -50,28 +61,34 @@ async function bootstrapPlan(replan: boolean): Promise<BootstrapResult> {
     });
     if (res.ok) return { ok: true };
     const text = await res.text();
-    let message = text.trim() || `Request failed (${res.status})`;
+    let code = text.trim() || `Request failed (${res.status})`;
     try {
       const body = JSON.parse(text) as { error?: string };
-      message = body.error ?? message;
+      code = body.error ?? code;
     } catch {
       /* plain */
     }
-    return { ok: false, status: res.status, error: message };
+    const mapped =
+      code === 'db_not_configured'
+        ? labels.dbError
+        : code === 'needs_onboarding'
+          ? labels.failed
+          : code === 'bootstrap_failed'
+            ? labels.failed
+            : labels.failed;
+    return { ok: false, status: res.status, error: mapped };
   } catch (err) {
     if (err instanceof Error && err.name === 'AbortError') {
-      // Server may still have finished — check exists. On a re-plan an existing
-      // plan proves nothing (the old plan also "exists"), so skip the shortcut.
       const check = replan ? 'no' : await checkPlanExists();
       if (check === 'yes') return { ok: true };
       if (check === 'unknown') {
-        return { ok: false, error: 'Could not verify plan status. Please try again.' };
+        return { ok: false, error: labels.verifyFailed };
       }
-      return { ok: false, error: 'Plan creation timed out. Please try again.' };
+      return { ok: false, error: labels.timeout };
     }
     return {
       ok: false,
-      error: err instanceof Error ? err.message : 'Plan creation failed',
+      error: err instanceof Error ? err.message : labels.failed,
     };
   } finally {
     clearTimeout(timeout);
@@ -109,18 +126,19 @@ export default function PlanSetupPage() {
     try {
       const initialCheck = replan ? 'no' : await checkPlanExists();
       if (initialCheck === 'unknown') {
-        throw new Error(
-          lang === 'he'
-            ? 'לא הצלחנו לבדוק את סטטוס התוכנית. נסה שוב בעוד רגע.'
-            : 'Could not verify plan status. Please try again in a moment.',
-        );
+        throw new Error(t.verifyFailed);
       }
       if (initialCheck === 'yes') {
         setPhase('redirecting');
         router.replace('/app');
         return;
       }
-      const result = await bootstrapPlan(replan);
+      const result = await bootstrapPlan(replan, {
+        timeout: t.timeout,
+        verifyFailed: t.verifyFailed,
+        failed: t.failed,
+        dbError: t.dbError,
+      });
       if (!result.ok) {
         // 400 = no profile in DB (onboarding may have aborted before profile commit).
         // Restore draft-based recovery: send learner back to onboarding.
@@ -137,11 +155,7 @@ export default function PlanSetupPage() {
           return;
         }
         if (retryCheck === 'unknown') {
-          throw new Error(
-            lang === 'he'
-              ? 'לא הצלחנו לבדוק את סטטוס התוכנית. נסה שוב בעוד רגע.'
-              : 'Could not verify plan status. Please try again in a moment.',
-          );
+          throw new Error(t.verifyFailed);
         }
         throw new Error(result.error ?? t.error);
       }

@@ -5,7 +5,7 @@
  * Topic multi-select → open exam-style items → Finish + summary.
  */
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@asf/ui/button';
 import { cn } from '@asf/ui';
@@ -16,6 +16,7 @@ import { useLanguagePreference } from '@/hooks/use-language-preference';
 import type {
   PracticeChatContext,
   PracticeItemPublic,
+  PracticeQueueMode,
   PracticeSessionPublic,
   PracticeSessionSummary,
 } from '@/lib/practice-arena';
@@ -67,9 +68,11 @@ async function fetchJson<T>(
 export function PracticeArenaClient({
   initialConceptId = null,
   initialTopicIds = [],
+  initialQueueMode = 'default',
 }: {
   initialConceptId?: string | null;
   initialTopicIds?: string[];
+  initialQueueMode?: PracticeQueueMode;
 }) {
   const [lang] = useLanguagePreference();
   const he = lang === 'he';
@@ -122,7 +125,7 @@ export function PracticeArenaClient({
   };
 
   const start = useCallback(async () => {
-    if (!topicIds.length && !initialConceptId) {
+    if (!topicIds.length && !initialConceptId && initialQueueMode === 'default') {
       setError(he ? 'בחרו לפחות נושא אחד' : 'Select at least one topic');
       return;
     }
@@ -140,6 +143,7 @@ export function PracticeArenaClient({
           topic_ids: topicIds,
           goal_items: 10,
           goal_minutes: 15,
+          queue_mode: initialQueueMode,
         }),
       }, 90_000);
       if (!ok) {
@@ -163,7 +167,15 @@ export function PracticeArenaClient({
     } finally {
       setBusy(false);
     }
-  }, [he, initialConceptId, topicIds]);
+  }, [he, initialConceptId, initialQueueMode, topicIds]);
+
+  const autoStarted = useRef(false);
+  useEffect(() => {
+    if (autoStarted.current) return;
+    if (initialQueueMode !== 'due' && initialQueueMode !== 'explore') return;
+    autoStarted.current = true;
+    void start();
+  }, [initialQueueMode, start]);
 
   const requestHint = useCallback(async () => {
     if (!session || busy) return;
@@ -475,10 +487,17 @@ export function PracticeArenaClient({
               </div>
             ))}
           </fieldset>
-          <Button onClick={() => void start()} disabled={busy || (!topicIds.length && !initialConceptId)}>
-            {busy ? <Loader2 className="me-2 h-4 w-4 animate-spin" /> : null}
-            {he ? 'התחל תרגול' : 'Start practice'}
-          </Button>
+          <div className="flex flex-wrap items-center gap-3">
+            <Button onClick={() => void start()} disabled={busy || (!topicIds.length && !initialConceptId)}>
+              {busy ? <Loader2 className="me-2 h-4 w-4 animate-spin" /> : null}
+              {he ? 'התחל תרגול' : 'Start practice'}
+            </Button>
+            <Button asChild variant="outline">
+              <Link href="/app/practice/history">
+                {he ? 'היסטוריית תרגולים' : 'Practice history'}
+              </Link>
+            </Button>
+          </div>
           <p className="text-xs text-muted-foreground">
             {he
               ? 'יעד רך: ~10 שאלות · עד 12 נושאים · אפשר לסיים בכל רגע'
@@ -488,11 +507,6 @@ export function PracticeArenaClient({
             {he
               ? 'השאלות לקוחות מבנק בסגנון בגרות/אוניברסיטה (אותו אקוסיסטם כמו מבחנים). אין כפילויות מדויקות מול תרגולים קודמים ומול מבחנים שכבר עשיתם — חפיפה קלה בנושא (עם מספרים אחרים) אפשרית.'
               : 'Items come from the bagrut/uni-style bank (same ecosystem as tests). Exact duplicates vs prior practice and recent tests are avoided; light topical overlap with different numbers is OK.'}
-          </p>
-          <p className="text-xs text-muted-foreground">
-            <Link href="/app/practice/history" className="underline-offset-2 hover:underline">
-              {he ? 'היסטוריית תרגולים' : 'Practice history'}
-            </Link>
           </p>
         </div>
       ) : null}

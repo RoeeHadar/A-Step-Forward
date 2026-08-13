@@ -19,7 +19,7 @@ import { cn } from '@asf/ui';
 import { MarkdownReader } from '@/components/markdown-reader';
 import { pickConceptTitle, resolveConceptTitles } from '@/lib/concept-display-names';
 import { localizePersonaMarkdown } from '@/lib/localize-persona';
-import { goalKeyLabel } from '@/lib/plan-catalog';
+import { displayLearnerGoal } from '@/lib/plan-catalog';
 import { liveSnapshotTitle } from '@/lib/plan-live-snapshot';
 import type { PlanStudyMode } from '@/lib/plan-mode';
 import { subjectLabel } from '@/lib/subject-labels';
@@ -277,6 +277,9 @@ export function MemoryOverview({ snapshot }: { snapshot: LearnerMemorySnapshot }
                 </Link>
               </Button>
               <Button asChild size="sm" variant="outline">
+                <Link href="/settings/persona">{t.editPersona}</Link>
+              </Button>
+              <Button asChild size="sm" variant="outline">
                 <Link href="/app/chat/mentor">{t.chatMentor}</Link>
               </Button>
             </div>
@@ -322,7 +325,7 @@ export function MemoryOverview({ snapshot }: { snapshot: LearnerMemorySnapshot }
               <dl className="grid gap-3 sm:grid-cols-2">
                 <ProfileField
                   label={t.fieldGoal}
-                  value={goalKeyLabel(snapshot.profile.goal, lang) || snapshot.profile.goal}
+                  value={displayLearnerGoal(snapshot.profile.goal, lang) || snapshot.profile.goal}
                 />
                 <ProfileField
                   label={t.fieldSubjects}
@@ -490,7 +493,7 @@ export function MemoryOverview({ snapshot }: { snapshot: LearnerMemorySnapshot }
             >
               {snapshot.activePlanGoal ? (
                 <p className="mb-3 text-sm font-medium">
-                  {goalKeyLabel(snapshot.activePlanGoal, lang) || snapshot.activePlanGoal}
+                  {displayLearnerGoal(snapshot.activePlanGoal, lang) || snapshot.activePlanGoal}
                 </p>
               ) : null}
               {snapshot.activeWeekConceptIds.length > 0 ? (

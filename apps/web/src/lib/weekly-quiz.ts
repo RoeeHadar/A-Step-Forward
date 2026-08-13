@@ -1,9 +1,9 @@
 ﻿/**
  * Weekly quiz / competency gate — Neon/Vercel path (no Render dependency).
  *
- * ADR-0010 + exam corpus: prefer original Bagrut-style multi-part items from
- * `exam-style-corpus`, then hard lesson-bank production items. LLM only fills
- * true gaps as hard open/numeric (never easy MCQ).
+ * Same methodology as `/app/quiz` custom tests: profile-attributed exam style
+ * (open multi-part Bagrut / university), never recognition MCQ. Authored exam
+ * corpus first; remaining slots use `buildCustomQuiz` (the custom-test builder).
  */
 import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
@@ -11,15 +11,11 @@ import { randomUUID } from 'node:crypto';
 import {
   advanceRollingPlanWindow,
   appendLearnerPersonaLine,
-  getConceptMastery,
   getLearnerProfile,
 } from './neon-db';
 import { countGateAttempts, GATE_PASS_THRESHOLD } from './test-attempts';
 import {
   GATE_BANK_FORMAT_VERSION,
-  isBankSourcedGateQuiz,
-  pickGateQuestionsFromBank,
-  type GateBankPick,
   type GateQuestionKind,
 } from './gate-question-bank';
 import {
@@ -29,6 +25,12 @@ import {
 } from './exam-style-corpus';
 import { answersMatch, getAcceptedAnswers, numericClose } from './answer-normalize';
 import { llmCompleteJson } from '@/lib/llm-provider';
+import {
+  buildCustomQuiz,
+  minutesPerExamQuestion,
+  type CustomQuizQuestion,
+} from '@/lib/quiz-builder';
+import { filterConceptIdsForProfile } from '@/lib/quiz-concept-filter';
 import kg from './kg-data.json';
 import type {
   QuizStartResponse,
@@ -36,7 +38,6 @@ import type {
   QuizSubmitResponse,
 } from '@asf/schemas/learning_path';
 import { sanitizeConceptIds } from '@/lib/plan-catalog';
-import { resolveConceptTitles } from '@/lib/concept-display-names';
 
 neonConfig.fetchConnectionCache = true;
 
@@ -93,24 +94,54 @@ export interface StoredWeeklyQuestion {
   format_version: typeof GATE_BANK_FORMAT_VERSION;
 }
 
-function fromBankPick(p: GateBankPick): StoredWeeklyQuestion {
+function difficultyToGate(d: CustomQuizQuestion['difficulty']): number {
+  if (d === 'hard') return 0.9;
+  if (d === 'medium') return 0.75;
+  return 0.55;
+}
+
+/** Map a custom-quiz item onto the weekly gate storage shape (same exam methodology). */
+export function customQuizQuestionToWeekly(
+  q: CustomQuizQuestion,
+  locale: 'he' | 'en',
+): StoredWeeklyQuestion {
+  const he = locale === 'he';
+  const parts = (q.parts ?? []).map((p) => ({
+    label: p.label,
+    body: he ? p.body_he : p.body_en,
+    points: p.points,
+  }));
   return {
-    id: p.id,
-    topic: p.topic,
-    subject: p.subject,
-    difficulty: p.difficulty,
-    kind: p.kind,
-    stem: p.stem,
-    options: p.options,
-    correct: p.correct,
-    correct_answer: p.correct_answer,
-    acceptable_answers: p.acceptable_answers,
-    rubric: p.rubric,
-    model_answer: p.model_answer,
-    source_question_id: p.source_question_id,
-    source: 'lesson_bank',
+    id: randomUUID(),
+    topic: q.concept_id,
+    subject: kgById[q.concept_id]?.subject === 'physics' ? 'physics' : 'math',
+    difficulty: difficultyToGate(q.difficulty),
+    kind: 'open',
+    stem: (he ? q.stem_he : q.stem_en).trim(),
+    options: [],
+    parts: parts.length > 0 ? parts : undefined,
+    total_points: q.total_points,
+    rubric: he ? q.rubric_he : q.rubric_en,
+    model_answer: he ? q.sample_solution_he : q.sample_solution_en,
+    source: 'llm_fallback',
     format_version: GATE_BANK_FORMAT_VERSION,
   };
+}
+
+/**
+ * True when a cached weekly quiz matches custom-test methodology:
+ * open / derivation / multi-part exam items — no recognition MCQ or true/false.
+ */
+export function isExamAlignedGateQuiz(
+  questions: Array<{ kind?: string; parts?: unknown[] }>,
+): boolean {
+  if (questions.length === 0) return false;
+  return questions.every((q) => {
+    if (q.kind === 'mcq' || q.kind === 'true_false') return false;
+    const openish = q.kind === 'open' || q.kind === 'derivation';
+    const multipart = Array.isArray(q.parts) && q.parts.length >= 2;
+    return openish || multipart;
+  });
 }
 
 function fromExamStyle(it: ExamStyleItem, locale: 'he' | 'en'): StoredWeeklyQuestion {
@@ -232,98 +263,6 @@ export function normalizeWeeklyMcqOptions(
   return { options: normalizedOptions, correct };
 }
 
-/**
- * Last-resort fill when a concept has no authored bank items. Demands
- * open/numeric at exam level — never invents easy 4-option recognition MCQs.
- */
-async function callLLMFallbackForGaps(
-  missingConcepts: Array<{ id: string; name: string; name_he: string | null; subject: string }>,
-  exemplars: GateBankPick[],
-  count: number,
-  goal: string | null,
-  locale: 'he' | 'en',
-): Promise<StoredWeeklyQuestion[]> {
-  if (missingConcepts.length === 0 || count <= 0) return [];
-
-  const languageRule =
-    locale === 'he'
-      ? 'All learner-facing text MUST be natural Hebrew. Math in $...$ LaTeX LTR.'
-      : 'All learner-facing text MUST be natural English. Math in $...$ LaTeX.';
-
-  const exemplarBlock = exemplars.slice(0, 4).map((e) =>
-    `- [${e.kind}/${e.difficulty}] ${e.stem.slice(0, 220)}`,
-  ).join('\n');
-
-  const system = `You author Israeli Bagrut / university exam questions for a competency GATE.
-${languageRule}
-Output ONLY valid JSON: { "questions": [ ... ] }
-Each question shape:
-{ "topic": "<concept_id>", "subject": "<subject>", "kind": "numeric"|"short_answer"|"open", "difficulty": 0.75-1.0, "stem": "...", "correct_answer": "<for numeric>", "acceptable_answers": ["..."], "rubric": "...", "model_answer": "..." }
-Rules:
-- NEVER generate multiple-choice. Recognition MCQs are forbidden on gates.
-- difficulty MUST be ≥ 0.75 (hard). Multi-step reasoning required.
-- Match the STYLE and DEPTH of the exemplar stems when provided.
-- "topic" must be one of the supplied concept IDs.
-- stem ≤ 800 chars.`;
-
-  const user = `Goal: ${goal ?? 'secondary exam'}
-Language: ${locale}
-Generate exactly ${count} HARD open/numeric/short_answer questions for:
-${missingConcepts.map((c) => `- ${c.id} (${c.name_he ?? c.name})`).join('\n')}
-
-Exemplars from the authored bank (match this level):
-${exemplarBlock || '(none — still produce exam-hard items)'}
-
-Return JSON only.`;
-
-  const parsed = await llmCompleteJson<{ questions?: unknown }>({
-    system,
-    messages: [{ role: 'user', content: user }],
-    maxTokens: 3500,
-    temperature: 0.45,
-    timeoutMs: 28_000,
-    modelTier: 'primary',
-    jsonMode: true,
-  });
-  if (!parsed || !Array.isArray(parsed.json.questions)) return [];
-
-  const valid = new Set(missingConcepts.map((c) => c.id));
-  const out: StoredWeeklyQuestion[] = [];
-  for (const raw of parsed.json.questions) {
-    if (!raw || typeof raw !== 'object') continue;
-    const q = raw as Record<string, unknown>;
-    const topic = typeof q.topic === 'string' ? q.topic : '';
-    if (!valid.has(topic)) continue;
-    const kindRaw = typeof q.kind === 'string' ? q.kind : 'open';
-    if (kindRaw !== 'numeric' && kindRaw !== 'short_answer' && kindRaw !== 'open') continue;
-    const stem = typeof q.stem === 'string' ? q.stem.trim() : '';
-    if (stem.length < 12) continue;
-    const subject =
-      typeof q.subject === 'string'
-        ? q.subject
-        : (missingConcepts.find((c) => c.id === topic)?.subject ?? 'math');
-    out.push({
-      id: randomUUID(),
-      topic,
-      subject,
-      difficulty: typeof q.difficulty === 'number' ? Math.max(0.75, Math.min(1, q.difficulty)) : 0.85,
-      kind: kindRaw,
-      stem: stem.slice(0, 1200),
-      options: [],
-      correct_answer: typeof q.correct_answer === 'string' ? q.correct_answer : null,
-      acceptable_answers: Array.isArray(q.acceptable_answers)
-        ? q.acceptable_answers.filter((a): a is string => typeof a === 'string')
-        : undefined,
-      rubric: typeof q.rubric === 'string' ? q.rubric : null,
-      model_answer: typeof q.model_answer === 'string' ? q.model_answer : null,
-      source: 'llm_fallback',
-      format_version: GATE_BANK_FORMAT_VERSION,
-    });
-    if (out.length >= count) break;
-  }
-  return out;
-}
-
 async function fetchPlanWeekConceptIds(
   learnerId: string,
   planId: string,
@@ -346,19 +285,6 @@ async function fetchPlanWeekConceptIds(
   } catch {
     return [];
   }
-}
-
-function goalToPointsMin(
-  goal: string | null | undefined,
-): '3pt' | '4pt' | '5pt' | 'hs_physics' | 'calc1' | 'la' | null {
-  if (!goal) return null;
-  if (goal.includes('math_3')) return '3pt';
-  if (goal.includes('math_4')) return '4pt';
-  if (goal.includes('math_5')) return '5pt';
-  if (goal === 'linear_algebra') return 'la';
-  if (goal.startsWith('calculus')) return 'calc1';
-  if (goal.includes('physics')) return 'hs_physics';
-  return null;
 }
 
 // ── Grading ──────────────────────────────────────────────────────────────────
@@ -510,6 +436,7 @@ function buildClientResponse(
   weekNum: number,
   storedQuestions: StoredWeeklyQuestion[],
   weekStartStr: string,
+  minutesPerQuestion = 22,
 ): QuizStartResponse {
   const clientQuestions: QuizQuestion[] = storedQuestions.map((q) => ({
     id: q.id,
@@ -523,8 +450,11 @@ function buildClientResponse(
     total_points: q.total_points,
   }));
 
-  // Bagrut-depth: ~18 min per multi-part item, floor 45 min, cap 90.
-  const time_limit_s = Math.min(5400, Math.max(2700, storedQuestions.length * 1080));
+  // Same timing as /app/quiz: 22 min/item Bagrut, 35 min/item university, cap 90.
+  const time_limit_s = Math.min(
+    90 * 60,
+    Math.max(minutesPerQuestion * 60, storedQuestions.length * minutesPerQuestion * 60),
+  );
 
   return {
     quiz_id: quizId,
@@ -541,7 +471,8 @@ function buildClientResponse(
 
 /**
  * Generates (or returns cached) a weekly quiz for the given learner.
- * Exam-style multi-part corpus first; legacy easy-MCQ caches are ignored.
+ * Same methodology as custom tests: profile-level open exam items.
+ * Closed-question caches are ignored so they regenerate.
  */
 export async function generateWeeklyQuizForUser(
   userId: string,
@@ -557,6 +488,9 @@ export async function generateWeeklyQuizForUser(
   const weekStart = new Date(now);
   weekStart.setUTCDate(weekStart.getUTCDate() - daysToMonday);
   const weekStartStr = weekStart.toISOString().slice(0, 10);
+
+  const profile = await getLearnerProfile(userId).catch(() => null);
+  const minutesPer = minutesPerExamQuestion(profile);
 
   try {
     await sql`
@@ -603,96 +537,68 @@ export async function generateWeeklyQuizForUser(
       const rawList = Array.isArray(cached[0].questions) ? cached[0].questions : [];
       const normalized = rawList.map(normalizeStored).filter((q): q is StoredWeeklyQuestion => q != null);
       // Ignore pre-bank easy-MCQ caches so learners are not stuck on trivial gates.
-      if (normalized.length > 0 && isBankSourcedGateQuiz(normalized)) {
-        return buildClientResponse(cached[0].id, planId, weekNum, normalized, weekStartStr);
+      if (normalized.length > 0 && isExamAlignedGateQuiz(normalized)) {
+        return buildClientResponse(
+          cached[0].id,
+          planId,
+          weekNum,
+          normalized,
+          weekStartStr,
+          minutesPer,
+        );
       }
     }
   } catch {
     // Cache read failed — proceed to generate.
   }
 
-  const [mastery, profile, weekConceptIds] = await Promise.all([
-    getConceptMastery(userId).catch(() => ({} as Record<string, number>)),
-    getLearnerProfile(userId).catch(() => null),
-    fetchPlanWeekConceptIds(userId, planId, weekNum),
-  ]);
+  const weekConceptIds = await fetchPlanWeekConceptIds(userId, planId, weekNum);
 
+  const weekValid = weekConceptIds.filter((id) => Boolean(kgById[id]));
+  const byProfile = filterConceptIdsForProfile(weekValid, profile);
   const profileSubjects = new Set(profile?.subjects ?? []);
-  const selectedConcepts = weekConceptIds
-    .filter((id) => Boolean(kgById[id]))
-    .filter((id) => {
-      if (profileSubjects.size === 0) return true;
-      return profileSubjects.has(kgById[id]!.subject);
-    })
-    .slice(0, 8);
+  const bySubject = weekValid.filter((id) => {
+    if (profileSubjects.size === 0) return true;
+    return profileSubjects.has(kgById[id]!.subject);
+  });
+  const selectedConcepts = (byProfile.length > 0 ? byProfile : bySubject).slice(0, 8);
   if (selectedConcepts.length === 0) return null;
 
-  void mastery; // reserved for future weak-atom steering within the bank
-
-  // Fewer, deeper items — real Bagrut questions take ~15–25 min each.
+  // Same depth as custom tests: 4 open multi-part items at the learner's exam mode.
   const questionCount = 4;
-  const pointsMin = goalToPointsMin(profile?.goal ?? null);
   const goalKey = profile?.goal ?? null;
 
-  // 1) Primary: original exam-style multi-part corpus (Bagrut/finals depth).
   const examPicks = pickExamStyleItems({
     conceptIds: selectedConcepts,
     goalKey,
     count: questionCount,
     rotation,
     locale,
+    requireGoal: Boolean(goalKey),
   });
-  let generated: StoredWeeklyQuestion[] = examPicks.map((it) => fromExamStyle(it, locale));
+  const weekSet = new Set(selectedConcepts);
+  const generated: StoredWeeklyQuestion[] = examPicks
+    .filter((it) => (it.concept_ids ?? []).some((id) => weekSet.has(id)))
+    .map((it) => fromExamStyle(it, locale));
 
-  // 2) Fill with hard lesson-bank production items (no easy MCQ).
   if (generated.length < questionCount) {
     const need = questionCount - generated.length;
-    const bankPicks = pickGateQuestionsFromBank({
-      conceptIds: selectedConcepts,
-      locale,
-      count: need,
-      rotation,
-      pointsLevelMin: pointsMin,
-      preferHard: true,
+    const envelope = await buildCustomQuiz(userId, {
+      topics: selectedConcepts,
+      time_limit_min: Math.min(90, Math.max(3, need * minutesPer)),
     });
-    generated = [...generated, ...bankPicks.map(fromBankPick)];
-  }
-
-  // 3) Last resort: LLM hard open/numeric only.
-  if (generated.length < questionCount) {
-    const covered = new Set(generated.map((q) => q.topic));
-    const missing = selectedConcepts
-      .filter((id) => !covered.has(id))
-      .map((id) => {
-        const info = kgById[id]!;
-        const titles = resolveConceptTitles(id, {
-          title_en: info.name,
-          title_he: info.name_he,
-        });
-        return {
-          id,
-          name: titles.title_en,
-          name_he: titles.title_he,
-          subject: info.subject,
-        };
-      });
-    const need = questionCount - generated.length;
-    if (missing.length > 0 && need > 0) {
-      const bankExemplars = pickGateQuestionsFromBank({
-        conceptIds: selectedConcepts,
-        locale,
-        count: 4,
-        rotation,
-        preferHard: true,
-      });
-      const fill = await callLLMFallbackForGaps(
-        missing,
-        bankExemplars,
-        need,
-        goalKey,
-        locale,
-      );
-      generated = [...generated, ...fill];
+    if (envelope) {
+      const seen = new Set(generated.map((q) => q.stem.replace(/\s+/g, ' ').slice(0, 80)));
+      for (const q of envelope.questions) {
+        if (q.kind !== 'open') continue;
+        const mapped = customQuizQuestionToWeekly(q, locale);
+        if (!mapped.stem || mapped.stem.length < 12) continue;
+        const key = mapped.stem.replace(/\s+/g, ' ').slice(0, 80);
+        if (seen.has(key)) continue;
+        seen.add(key);
+        generated.push(mapped);
+        if (generated.length >= questionCount) break;
+      }
     }
   }
 
@@ -720,13 +626,20 @@ export async function generateWeeklyQuizForUser(
       const stored = (Array.isArray(inserted[0].questions) ? inserted[0].questions : generated)
         .map(normalizeStored)
         .filter((q): q is StoredWeeklyQuestion => q != null);
-      return buildClientResponse(quizId, planId, weekNum, stored.length ? stored : generated, weekStartStr);
+      return buildClientResponse(
+        quizId,
+        planId,
+        weekNum,
+        stored.length ? stored : generated,
+        weekStartStr,
+        minutesPer,
+      );
     }
   } catch {
     // Cache write failed — still return the freshly-generated questions.
   }
 
-  return buildClientResponse(quizId, planId, weekNum, generated, weekStartStr);
+  return buildClientResponse(quizId, planId, weekNum, generated, weekStartStr, minutesPer);
 }
 
 /**

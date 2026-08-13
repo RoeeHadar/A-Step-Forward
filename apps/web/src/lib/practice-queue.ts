@@ -15,11 +15,14 @@ import {
   type PracticeDifficulty,
   type PracticeItemSealed,
   type PracticeQueueMode,
+  pickExploreFocusConceptId,
 } from '@/lib/practice-arena';
 import { conceptIdsForTopics } from '@/lib/practice-topics';
 import {
   fetchLessonByConceptId,
   getConceptMastery,
+  getCurrentPlan,
+  getDueReviews,
   getLearnerProfile,
   type LessonQuestionRow,
 } from '@/lib/neon-db';
@@ -121,6 +124,33 @@ export async function pickPracticeFocusConcept(opts: {
 }): Promise<string | null> {
   if (opts.conceptFilter && kgById[opts.conceptFilter]) {
     return opts.conceptFilter;
+  }
+
+  if (opts.queueMode === 'due') {
+    const due = await getDueReviews(opts.learnerId).catch(() => []);
+    const dueConcept = due.map((d) => d.concept_id).find((id) => kgById[id]);
+    if (dueConcept) return dueConcept;
+  }
+
+  if (opts.queueMode === 'explore') {
+    const [profile, mastery, plan] = await Promise.all([
+      getLearnerProfile(opts.learnerId).catch(() => null),
+      getConceptMastery(opts.learnerId).catch(() => ({}) as Record<string, number>),
+      getCurrentPlan(opts.learnerId).catch(() => null),
+    ]);
+    const activeIds = (plan?.weeks ?? [])
+      .filter((w) => w.status === 'active')
+      .flatMap((w) => w.concepts.map((c) => c.concept_id));
+    const subjects = profile?.subjects ?? [];
+    const candidates = (kg.concepts as KgConcept[])
+      .filter((c) => subjects.length === 0 || subjects.includes(c.subject))
+      .map((c) => c.id);
+    const exploreId = pickExploreFocusConceptId({
+      masteryMap: mastery as Record<string, number>,
+      activeConceptIds: activeIds,
+      candidateConceptIds: candidates,
+    });
+    if (exploreId) return exploreId;
   }
 
   const topicConcepts = conceptIdsForTopics(opts.topicIds ?? []).filter((id) => kgById[id]);
