@@ -28,8 +28,7 @@ import { buildLearningPlan } from '@/lib/learning-plan';
 import {
   buildLessonCatalogSummary,
   buildPlanAllowlistBlock,
-  displayLearnerGoal,
-  goalKeyLabel,
+  learnerFacingGoalLabel,
   PLAN_GROUNDING_RULES,
 } from '@/lib/plan-catalog';
 import {
@@ -103,6 +102,7 @@ import {
   RECOVERY_TURN_INSTRUCTION,
   WORKED_SOLUTION_TURN_INSTRUCTION,
   buildWeeklyPlanAbsenceBlock,
+  composeLearnerStatusReply,
 } from '@/lib/learner-progress-briefing';
 import { pickPressureNextStep } from '@/lib/pressure-next-step';
 import {
@@ -1104,6 +1104,7 @@ async function buildContextPrompt(
   responseLocale: ChatResponseLocale;
   planChangeFlow: boolean;
   statusTurn: boolean;
+  statusReply: string | null;
 }> {
   const {
     quickMode = false,
@@ -1113,6 +1114,7 @@ async function buildContextPrompt(
     minimal = false,
     practiceContext = null,
   } = opts;
+  let statusReply: string | null = null;
   const groundingIds = new Set<string>();
   const addConceptGrounding = (id: string | null | undefined) => {
     if (id) groundingIds.add(groundingConceptId(id));
@@ -1228,6 +1230,25 @@ async function buildContextPrompt(
         logger.warn('chat: wellbeing chat trigger persist failed', { err: String(err) }),
       );
     }
+  }
+
+  // Status / recall / "where do I stand on my plan" must never skip packs
+  // just because a phrasing missed the intent enum.
+  if (
+    liveAgents &&
+    !minimal &&
+    !practiceContext &&
+    (wantsProgressStatus(message) || wantsContextChallenge(message))
+  ) {
+    contextNeeds = {
+      ...contextNeeds,
+      statusPack: true,
+      bilingualBriefing: true,
+      profile: true,
+      mastery: true,
+      activeWeek: true,
+      xp: true,
+    };
   }
 
   // ── Guided plan-change flow flags (Phase B) ───────────────────────────────
@@ -1529,13 +1550,17 @@ async function buildContextPrompt(
       shouldApplyPlanImmediately(message);
 
     if (plan?.weeks?.length) {
-      if (weekSpec) {
+      const activeWeekAlreadyInjected = Boolean(weekSpec && contextNeeds.activeWeek);
+      if (activeWeekAlreadyInjected) {
         // Active week block already injected above — append a compact one-liner
         // to avoid duplicating ~900 chars of plan detail for tutor/mentor.
         context += `\n\n${buildPlanHeaderLine(plan)}`;
       } else {
+        // weekSpec can exist even when Active week was skipped (teach-turn
+        // budget). Never leave only a raw "Plan: … ISO date" one-liner —
+        // that is what made the model claim it had no progress data.
         context += `\n\n## Current weekly learning plan`;
-        context += `\nGoal: ${plan.goal} · ${plan.start_date} → ${plan.end_date ?? 'open'}`;
+        context += `\nGoal: ${learnerFacingGoalLabel(plan.goal, (profile.personality_profile as { goal_key?: string } | null)?.goal_key, responseLocale)} · ${formatLearnerFacingDate(plan.start_date, responseLocale) ?? plan.start_date} → ${formatLearnerFacingDate(plan.end_date, responseLocale) ?? plan.end_date ?? 'open'}`;
         context += `\n${formatPlanWeeksCompact(plan.weeks, minimal ? 'minimal' : 'full')}`;
       }
     } else if (!minimal) {
@@ -2134,11 +2159,11 @@ async function buildContextPrompt(
     const briefingInput = {
       goalKey,
       goalLabel:
-        displayLearnerGoal(profile.goal, responseLocale) ||
-        goalKeyLabel(goalKey, responseLocale) ||
+        learnerFacingGoalLabel(profile.goal, goalKey, responseLocale) ||
+        learnerFacingGoalLabel(currentPlan?.goal, goalKey, responseLocale) ||
         null,
       examDateLabel: formatLearnerFacingDate(
-        profile.next_test_date ?? profile.final_goal_date,
+        profile.next_test_date ?? profile.final_goal_date ?? currentPlan?.end_date,
         responseLocale,
       ),
       daysToExam: daysLeft,
@@ -2162,6 +2187,17 @@ async function buildContextPrompt(
       nextStepHe: nextStep?.labelHe ?? null,
       nextStepEn: nextStep?.labelEn ?? null,
       nextStepConceptId: nextStep?.conceptId ?? null,
+      frontierSize: pacingForBrief?.frontier_size ?? null,
+      remainingScope: pacingForBrief?.remaining_scope ?? null,
+      weeksLeft: pacingForBrief?.weeks_left ?? null,
+      planTopics: (currentPlan?.weeks ?? []).flatMap((w) =>
+        w.concepts
+          .filter((c) => c.kind !== 'rest')
+          .map((c) => ({
+            name: c.name_he || c.name || c.concept_id,
+            mastery: c.mastery ?? masteryScores[c.concept_id] ?? null,
+          })),
+      ),
     };
     if (contextNeeds.bilingualBriefing) {
       context += `\n\n${buildBilingualProgressBriefing(briefingInput)}`;
@@ -2173,6 +2209,12 @@ async function buildContextPrompt(
       !contextNeeds.statusPack;
     if (!skipStatusPack) {
       context += `\n\n${buildLearnerFacingStatusPack(briefingInput)}`;
+    }
+    if (contextNeeds.statusPack) {
+      statusReply = composeLearnerStatusReply(
+        briefingInput,
+        responseLocale === 'en' ? 'en' : 'he',
+      );
     }
   }
 
@@ -2235,6 +2277,7 @@ async function buildContextPrompt(
     responseLocale,
     planChangeFlow,
     statusTurn: Boolean(!minimal && liveAgents && contextNeeds.statusPack),
+    statusReply,
   };
 }
 
@@ -2281,6 +2324,7 @@ async function* streamFromLLM(
       responseLocale: 'he' as ChatResponseLocale,
       planChangeFlow: false,
       statusTurn: false,
+      statusReply: null,
     };
     publishGrounding(bareContext);
     attempts.push({
@@ -2299,6 +2343,16 @@ async function* streamFromLLM(
     const failureSink = { current: null as LLMFailureInfo | null };
     const finishSink = { current: null as string | null };
     const responseLocale = context.responseLocale ?? 'he';
+
+    if (context.statusReply?.trim()) {
+      logger.info('chat: deterministic status reply', { agent, label });
+      const text = context.statusReply.trim();
+      const chunkSize = 48;
+      for (let c = 0; c < text.length; c += chunkSize) {
+        yield text.slice(c, c + chunkSize);
+      }
+      return;
+    }
 
     const sampling = resolveAgentSampling(agent);
     const runOnce = async (system: string): Promise<string | null> => {

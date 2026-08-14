@@ -30,6 +30,7 @@ describe('agent-skills ADR-0011 / ADR-0012 / ADR-0015', () => {
     expect(tutor).toContain('AUTHORITATIVE pack');
     expect(tutor).toContain('never ask for pace/hours');
     expect(tutor).toContain('never offer a new plan');
+    expect(tutor).toContain('never redirect to Mentor');
   });
 
   it('mentor owns status narration and conversational plan updates', () => {

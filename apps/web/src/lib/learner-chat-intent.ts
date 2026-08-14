@@ -76,7 +76,7 @@ const EXAM_ODDS_RE =
   /(?:איך|מה).{0,25}(?:יהיה|יקרה|סיכוי).{0,40}(?:בגרות|מבחן)|how (?:will|would) i (?:do|fare).{0,30}(?:exam|bagrut|test)|bagrut odds|exam (?:odds|chances)/i;
 
 const PROGRESS_STATUS_RE =
-  /(?:מה|what(?:'s| is)?).{0,40}(?:הסטטוס|סטטוס|המצב|status)|איך אני מתקדם|איך ההתקדמות|התקדמות(?:י| שלי)?.{0,48}(?:לקראת|יחסית|קצב)|לקראת (?:ה)?(?:מטרה|יעד)|יחסית ל(?:קצב|הקצב)|קצב ההתקדמות|מה המצב שלי|הסטטוס שלי|סטטוס.{0,24}תוכנית|תוכנית.{0,24}סטטוס|how am i doing|my (?:current )?status|current status|progress toward|pace vs|כמה XP|how much xp|מה ה-?XP/i;
+  /(?:מה|what(?:'s| is)?).{0,40}(?:הסטטוס|סטטוס|המצב|status)|איך אני מתקדם|איך ההתקדמות|התקדמות(?:י| שלי)?.{0,48}(?:לקראת|יחסית|קצב|ביחס)|לקראת (?:ה)?(?:מטרה|יעד)|יחסית ל(?:קצב|הקצב)|קצב ההתקדמות|מה המצב שלי|הסטטוס שלי|סטטוס.{0,24}תוכנית|תוכנית.{0,24}סטטוס|תוכנית עבודה|איפה אני עומד|שיעורים שסיימ(?:תי|ת)|מה עשיתי עד כה|מה עוד יש לי לעשות|ביחס (?:אליה|לתוכנית|ליעד)|מהי (?:ה)?תוכנית|how am i doing|my (?:current )?status|current status|progress toward|pace vs|lessons (?:i )?(?:finished|completed)|what have i (?:done|completed)|כמה XP|how much xp|מה ה-?XP/i;
 
 /** "What do you know about me?" — load profile + status, not a Socratic teach turn. */
 const LEARNER_RECALL_RE =

@@ -32,6 +32,11 @@ export interface ProgressBriefingInput {
   nextStepHe?: string | null;
   nextStepEn?: string | null;
   nextStepConceptId?: string | null;
+  frontierSize?: number | null;
+  remainingScope?: number | null;
+  weeksLeft?: number | null;
+  /** Plan-window topics with mastery 0..1 (rest skipped by caller). */
+  planTopics?: Array<{ name: string; mastery: number | null }>;
 }
 
 function bandLabel(band: ReadinessBand | null | undefined, locale: 'he' | 'en'): string {
@@ -417,4 +422,107 @@ export function buildWeeklyPlanAbsenceBlock(opts: {
     `${weeks}${facts} Report status from the learner profile, hours/week, deadline, mastery, and AUTHORITATIVE pack when present.`,
     'Do NOT say you have no information. Do NOT invite onboarding. Do NOT invent a replacement plan unless they explicitly ask to change the plan.',
   ].join('\n');
+}
+
+const DONE_MASTERY = 0.7;
+
+function topicPct(mastery: number | null | undefined): string {
+  if (mastery == null || !Number.isFinite(mastery)) return '';
+  return ` (${Math.round(mastery * 100)}%)`;
+}
+
+/**
+ * Deterministic learner-visible status answer (Hebrew/English).
+ * Status turns must not depend on the LLM noticing injected packs.
+ */
+export function composeLearnerStatusReply(
+  input: ProgressBriefingInput,
+  locale: 'he' | 'en' = 'he',
+): string {
+  const topics = (input.planTopics ?? []).filter((t) => t.name.trim());
+  const done = topics.filter((t) => (t.mastery ?? 0) >= DONE_MASTERY);
+  const remaining = topics.filter((t) => (t.mastery ?? 0) < DONE_MASTERY);
+  const mastered =
+    input.frontierSize != null && input.remainingScope != null
+      ? Math.max(0, input.frontierSize - input.remainingScope)
+      : null;
+  const nextHe = input.nextStepHe || remaining[0]?.name || input.activeWeekConcepts?.[0] || null;
+  const nextEn = input.nextStepEn || remaining[0]?.name || input.activeWeekConcepts?.[0] || null;
+
+  if (locale === 'en') {
+    const goal = input.goalLabel || 'your learning goal';
+    const date = input.examDateLabel ? ` Target date: ${input.examDateLabel}.` : '';
+    const days =
+      input.daysToExam != null ? ` About ${input.daysToExam} days remain.` : '';
+    const hours =
+      input.hoursPerWeek != null ? ` Planned study time: about ${input.hoursPerWeek} hours/week.` : '';
+    const scope =
+      mastered != null && input.frontierSize
+        ? ` Toward the full goal, about ${mastered} of ${input.frontierSize} concepts are at mastery (${input.remainingScope} remaining).`
+        : '';
+    const week =
+      input.activeWeekNumber != null
+        ? ` Active week ${input.activeWeekNumber}: ${joinList(
+            topics.map((t) => `${t.name}${topicPct(t.mastery)}`),
+            'topics from your plan',
+          )}.`
+        : topics.length
+          ? ` On the current plan window: ${topics.map((t) => `${t.name}${topicPct(t.mastery)}`).join(', ')}.`
+          : ' The two-week topic window has no titles loaded yet — the goal and deadline above still stand.';
+    const finished = done.length
+      ? ` At mastery in this window: ${done.map((t) => t.name).join(', ')}.`
+      : ' No concept in the current window has crossed the mastery bar yet.';
+    const left = remaining.length
+      ? ` Still to do here: ${remaining.map((t) => t.name).join(', ')}.`
+      : done.length
+        ? ' This window is at mastery — next is the following week or a drill on weak atoms.'
+        : '';
+    const next = nextEn ? ` Next step: ${nextEn}.` : '';
+    return [
+      `Your site plan is ${goal}.${date}${days}${hours}`,
+      `${honestPaceSentenceEn(input)}${scope}`,
+      `${week}${finished}${left}${next}`,
+      'This is the status from your plan and mastery on this site. You do not need to open your profile or switch to the Mentor for these facts.',
+    ].join('\n\n');
+  }
+
+  const goal = input.goalLabel || 'היעד שלך';
+  const date = input.examDateLabel ? ` תאריך היעד הוא ${input.examDateLabel}.` : '';
+  const days =
+    input.daysToExam != null ? ` נשארו בערך ${input.daysToExam} ימים.` : '';
+  const hours =
+    input.hoursPerWeek != null
+      ? ` בתוכנית רשומות כ־${input.hoursPerWeek} שעות לימוד בשבוע.`
+      : '';
+  const track = input.pointsGroup
+    ? ` זה מסלול ${input.pointsGroup} — רמת המסלול, לא סימן שכבר סיימת את החומר.`
+    : '';
+  const scope =
+    mastered != null && input.frontierSize
+      ? ` מול היעד כולו נשלטו בערך ${mastered} מתוך ${input.frontierSize} מושגים (${input.remainingScope} נשארו).`
+      : '';
+  const week =
+    input.activeWeekNumber != null
+      ? ` בשבוע הפעיל (שבוע ${input.activeWeekNumber}): ${joinList(
+          topics.map((t) => `${t.name}${topicPct(t.mastery)}`),
+          'הנושאים שבתוכנית',
+        )}.`
+      : topics.length
+        ? ` בחלון התוכנית הנוכחי: ${topics.map((t) => `${t.name}${topicPct(t.mastery)}`).join(', ')}.`
+        : ' חלון השבועיים עדיין בלי כותרות נושאים טעונות — היעד והתאריך למעלה כן בתוקף.';
+  const finished = done.length
+    ? ` ברמת שליטה בחלון הזה: ${done.map((t) => t.name).join(', ')}.`
+    : ' בחלון הנוכחי עוד אין מושג שעבר את רף השליטה.';
+  const left = remaining.length
+    ? ` עוד לעשות כאן: ${remaining.map((t) => t.name).join(', ')}.`
+    : done.length
+      ? ' החלון הזה בשליטה — הצעד הבא הוא השבוע הבא או תרגול על נקודות חלשות.'
+      : '';
+  const next = nextHe ? ` הצעד הבא: ${nextHe}.` : '';
+  return [
+    `התוכנית שלך באתר היא ${goal}.${date}${days}${hours}${track}`,
+    `${honestPaceSentenceHe(input)}${scope}`,
+    `${week}${finished}${left}${next}`,
+    'זה הסטטוס לפי התוכנית והשליטה אצלנו באתר. אין צורך לפנות למנטור או לפרופיל כדי לדעת את זה.',
+  ].join('\n\n');
 }

@@ -52,6 +52,15 @@ describe('chat-context-needs (ADR-0015)', () => {
     expect(memory.intent).toBe('context_challenge');
     expect(memory.statusPack).toBe(true);
     expect(memory.profile).toBe(true);
+
+    const workPlan = buildContextNeeds({
+      agent: 'tutor',
+      message:
+        'יש לי תוכנית עבודה שניתנה לי באתר פה. אני רוצה לדעת מהי ואיפה אני עומד בהתקדמות שלי ביחס אליה',
+    });
+    expect(workPlan.intent).toBe('progress_status');
+    expect(workPlan.statusPack).toBe(true);
+    expect(workPlan.activeWeek).toBe(true);
   });
 
   it('mentor keeps active week; coach keeps drills', () => {

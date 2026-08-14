@@ -76,4 +76,20 @@ describe('chat-response-quality (ADR-0015)', () => {
     const repair = qualityRepairInstruction('he', ['status_denial']);
     expect(repair).toContain('אסור להגיד שאין מידע');
   });
+
+  it('flags mentor/profile redirects and ISO/English goal dumps on status turns', () => {
+    const redirect =
+      'אין לי פרטים על השיעורים שאתה סיימת. אני ממליץ לבדוק את הפרופיל שלך או לפנות למנטור שלך כדי לקבל עדכון.';
+    expect(scoreResponseQuality(redirect, 'he', { statusTurn: true }).failures).toContain(
+      'status_denial',
+    );
+
+    const dump = scoreResponseQuality(
+      'התוכנית שלך היא Pass Bagrut — Math 5pt עם תאריך יעד של 2027-01-08. כרגע אין לי מידע על ההתקדמות.',
+      'he',
+      { statusTurn: true },
+    );
+    expect(dump.failures).toContain('raw_dump');
+    expect(dump.failures).toContain('status_denial');
+  });
 });

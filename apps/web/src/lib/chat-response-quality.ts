@@ -35,10 +35,13 @@ const EN_FILLER_IN_HE_RE =
 
 /** Knowledge denial / fishing for facts the site already stores. */
 const STATUS_DENIAL_RE =
-  /אין מידע על (?:ה)?(?:סטטוס|התקדמות|תוכנית)|אין לי (?:את )?(?:ה)?מידע|לא יכול לראות מידע|לא רואה מידע על|אני זקוק למידע נוסף|אין לי מספיק מידע|מהו הקצב הנוכחי שלך|כמה חומר תיאורטי|האם אתה מרגיש שאתה מתקדם|לא נבנית עקב חוסר מידע|חוסר מידע על הנושאים|I (?:don't|do not) (?:have|see) (?:any )?(?:info|information)|I need (?:more|additional) information|what(?:'s| is) your current (?:pace|rate)/i;
+  /אין מידע על (?:ה)?(?:סטטוס|התקדמות|תוכנית)|אין לי (?:את )?(?:ה)?מידע|לא יכול לראות מידע|לא רואה מידע על|אני זקוק למידע נוסף|אין לי מספיק מידע|אין לי פרטים על|מהו הקצב הנוכחי שלך|כמה חומר תיאורטי|האם אתה מרגיש שאתה מתקדם|לא נבנית עקב חוסר מידע|חוסר מידע על הנושאים|פנה למנטור|לפנות למנטור|לבדוק את הפרופיל|I (?:don't|do not) (?:have|see) (?:any )?(?:info|information)|I need (?:more|additional) information|what(?:'s| is) your current (?:pace|rate)|check (?:your )?profile|ask (?:your )?mentor/i;
 
 const INVENTED_PLAN_OFFER_RE =
-  /לבנות תוכנית לימודים חדשה|תוכנית לימודים חדשה שתתאים|help you build a new (?:study )?plan|build a new (?:study |learning )?plan/i;
+  /לבנות תוכנית לימודים חדשה|תוכנית לימודים חדשה שתתאים|ליצור תוכנית לימודים אישית|help you build a new (?:study )?plan|build a new (?:study |learning )?plan/i;
+
+const STATUS_RAW_DUMP_RE =
+  /Pass Bagrut|\d{4}-\d{2}-\d{2}/;
 
 export function scoreResponseQuality(
   reply: string,
@@ -69,6 +72,7 @@ export function scoreResponseQuality(
   if (opts.statusTurn) {
     if (STATUS_DENIAL_RE.test(text)) failures.push('status_denial');
     if (INVENTED_PLAN_OFFER_RE.test(text)) failures.push('invented_plan_offer');
+    if (STATUS_RAW_DUMP_RE.test(text)) failures.push('raw_dump');
   }
 
   return { ok: failures.length === 0, failures };

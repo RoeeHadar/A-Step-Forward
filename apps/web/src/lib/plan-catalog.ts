@@ -155,6 +155,30 @@ export function displayLearnerGoal(
   return raw.trim();
 }
 
+/**
+ * Learner-facing goal: catalog key wins so English leftovers like
+ * "Pass Bagrut — Math 5pt" never leak into Hebrew chat.
+ */
+export function learnerFacingGoalLabel(
+  raw: string | null | undefined,
+  goalKey: string | null | undefined,
+  locale: 'he' | 'en' = 'he',
+): string {
+  const fromKey = goalKeyLabel(goalKey, locale);
+  if (fromKey) return fromKey;
+  const text = (raw ?? '').trim();
+  if (!text) return '';
+  if (isValidGoalKey(text)) return goalKeyLabel(text, locale);
+  const englishOnly = /[A-Za-z]{3,}/.test(text) && !/[\u0590-\u05FF]/.test(text);
+  if (locale === 'he' && englishOnly) {
+    if (/math\s*5|5\s*pt|5pt/i.test(text)) return goalKeyLabel('bagrut_math_5', 'he');
+    if (/math\s*4|4\s*pt|4pt/i.test(text)) return goalKeyLabel('bagrut_math_4', 'he');
+    if (/math\s*3|3\s*pt|3pt/i.test(text)) return goalKeyLabel('bagrut_math_3', 'he');
+    if (/physics|פיזיק/i.test(text)) return goalKeyLabel('bagrut_physics', 'he');
+  }
+  return text;
+}
+
 /** Validate + normalize an AI plan-update payload before writing to Neon. */
 export function sanitizePlanUpdatePayload(
   payload: PlanUpdatePayload,

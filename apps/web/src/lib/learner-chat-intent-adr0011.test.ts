@@ -88,6 +88,15 @@ describe('ADR-0011 learner-chat-intent', () => {
       'יש לי יעד באתר. אני רוצה לדעת איך ההתקדמות שלי לקראת היעד הזה יחסית לקצב ההתקדמות הנוכחי שלי';
     expect(classifyTutorChatIntent(paceVsGoal)).toBe('progress_status');
     expect(wantsProgressStatus(paceVsGoal)).toBe(true);
+
+    const workPlan =
+      'יש לי תוכנית עבודה שניתנה לי באתר פה. אני רוצה לדעת מהי ואיפה אני עומד בהתקדמות שלי ביחס אליה';
+    expect(classifyTutorChatIntent(workPlan)).toBe('progress_status');
+    expect(
+      classifyTutorChatIntent(
+        'מה עשיתי עד כה, מה השיעורים שסיימתי, מה עוד יש לי לעשות ואיך אני מבחינת ההתקדמות שלי',
+      ),
+    ).toBe('progress_status');
   });
 
   it('keeps Direct status override when ReAct is killed', () => {

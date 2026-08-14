@@ -4,6 +4,7 @@ import {
   goalKeyToPointsGroup,
   isKnownConceptId,
   isValidGoalKey,
+  learnerFacingGoalLabel,
   sanitizeConceptIds,
   sanitizePlanUpdatePayload,
 } from './plan-catalog';
@@ -44,6 +45,16 @@ describe('plan-catalog grounding', () => {
     expect(isValidGoalKey('bagrut_math')).toBe(false);
     expect(goalKeyToPointsGroup('bagrut_math_5')).toBe('5pt');
     expect(goalKeyToPointsGroup('bagrut_physics')).toBe('hs_physics');
+  });
+
+  it('localizes English leftover goal strings for Hebrew chat', () => {
+    expect(learnerFacingGoalLabel('Pass Bagrut — Math 5pt', 'bagrut_math_5', 'he')).toContain(
+      'בגרות',
+    );
+    expect(learnerFacingGoalLabel('Pass Bagrut — Math 5pt', null, 'he')).toContain('בגרות');
+    expect(learnerFacingGoalLabel('Pass Bagrut — Math 5pt', 'bagrut_math_5', 'he')).not.toMatch(
+      /Pass Bagrut/i,
+    );
   });
 
   it('strips invalid goal_key and external concepts from plan payloads', () => {

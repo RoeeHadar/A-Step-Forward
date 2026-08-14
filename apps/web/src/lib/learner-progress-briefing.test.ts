@@ -6,6 +6,7 @@ import {
   buildBilingualProgressBriefing,
   buildLearnerFacingStatusPack,
   buildWeeklyPlanAbsenceBlock,
+  composeLearnerStatusReply,
   formatLearnerFacingStatusHe,
   formatProgressBriefingEn,
   formatProgressBriefingHe,
@@ -93,5 +94,31 @@ describe('learner-progress-briefing', () => {
     expect(note).toContain('hours/week: 8');
     expect(note).not.toContain('/onboarding');
     expect(note).toContain('Do NOT invent a replacement plan');
+  });
+
+  it('composeLearnerStatusReply answers in Hebrew without ISO dumps or mentor redirects', () => {
+    const reply = composeLearnerStatusReply(
+      {
+        ...SAMPLE,
+        goalLabel: 'בגרות מתמטיקה 5 יח׳',
+        examDateLabel: '8 בינואר 2027',
+        frontierSize: 40,
+        remainingScope: 28,
+        planTopics: [
+          { name: 'גבולות', mastery: 0.82 },
+          { name: 'נגזרות', mastery: 0.4 },
+        ],
+        nextStepHe: 'נגזרות',
+      },
+      'he',
+    );
+    expect(reply).toContain('בגרות מתמטיקה 5 יח׳');
+    expect(reply).toContain('8 בינואר 2027');
+    expect(reply).toContain('גבולות');
+    expect(reply).toContain('נגזרות');
+    expect(reply).toContain('12 מתוך 40');
+    expect(reply).not.toMatch(/\d{4}-\d{2}-\d{2}/);
+    expect(reply).not.toMatch(/Pass Bagrut/i);
+    expect(reply).toContain('אין צורך לפנות למנטור');
   });
 });
