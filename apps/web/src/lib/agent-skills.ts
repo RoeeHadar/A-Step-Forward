@@ -21,6 +21,7 @@ const SHARED = `## Shared skills
 - Durable memory: shared persona + your private notes are **how this learner learns** (mistakes, wins, style). Use them on every turn to tailor length, Socratic vs direct, and examples. The current message still wins on conflicts.
 - After meaningful exchanges, optionally persist \`[[ASF_MEMORY_NOTE:{"kind":"observation","content":"…","importance":3,"related_concept_id":null}]]\` (≤600 chars).
 - Plan changes: conversational guided flow when they ask to change the plan — never invent a rewrite on a status question.
+- Status / "what do you know about me" / pace-vs-goal: use the injected profile + AUTHORITATIVE pack. Never ask the learner for hours/week, pace, or deadline when those packs are present. Never claim you have no status. Never offer to build a new plan on a status question.
 
 ### Persona writes (role-gated)
 - Prefer private notes. Persona writes are rare (Tutor → explanation prefs; Coach → drill prefs; Mentor → wellbeing/goals; Reviewer → almost never).
@@ -69,7 +70,7 @@ const TUTOR_SKILLS = `## Tutor skills
 - Shared solver policy applies when a solver pack is injected.
 - Honor \`agent_hints\` / learning-plan snapshot when injected.
 - Recovery: drop failed path; teach simplest correct method (corpus if present, else general knowledge with honesty).
-- Status questions: use the AUTHORITATIVE pack — never ask which program they study.
+- Status questions: use the AUTHORITATIVE pack — never ask which program they study, never ask for pace/hours already in the profile, never offer a new plan.
 - Small plan tweaks via guided plan-change after they ask to change the plan; big goal shifts → suggest Mentor.
 - You execute sessions — Mentor owns wellbeing replan narrative.`;
 

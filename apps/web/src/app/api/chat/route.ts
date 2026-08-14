@@ -102,6 +102,7 @@ import {
   PRESSURE_FAMILY_TURN_INSTRUCTION,
   RECOVERY_TURN_INSTRUCTION,
   WORKED_SOLUTION_TURN_INSTRUCTION,
+  buildWeeklyPlanAbsenceBlock,
 } from '@/lib/learner-progress-briefing';
 import { pickPressureNextStep } from '@/lib/pressure-next-step';
 import {
@@ -116,7 +117,9 @@ import {
   classifyTutorChatIntent,
   isPressureFamilyIntent,
   looksLikeLearnerQuestion,
+  shouldApplyLearnerPreferenceOverride,
   wantsAgentCorrection,
+  wantsContextChallenge,
   wantsExpandedOutputBudget,
   wantsExamReadinessAnswer,
   wantsProgressStatus,
@@ -1100,6 +1103,7 @@ async function buildContextPrompt(
   groundingIds: Set<string>;
   responseLocale: ChatResponseLocale;
   planChangeFlow: boolean;
+  statusTurn: boolean;
 }> {
   const {
     quickMode = false,
@@ -1253,7 +1257,10 @@ async function buildContextPrompt(
   // lead), which falls through to static RAG / the normal tools. This both keeps
   // long goal answers in the flow AND stops an open session from hijacking a
   // spontaneous factual question.
-  const planStatusAsk = wantsProgressStatus(message) || wantsExamReadinessAnswer(message);
+  const planStatusAsk =
+    wantsProgressStatus(message) ||
+    wantsExamReadinessAnswer(message) ||
+    wantsContextChallenge(message);
   const trimmedMsg = message.trim();
   const looksLikeQuestion = looksLikeLearnerQuestion(trimmedMsg);
   const planSessionEngaged =
@@ -1277,14 +1284,17 @@ async function buildContextPrompt(
 
   let context = `${buildCompactAgentBaseline()}\n\n${getAgentPersona(agent)}`;
 
-  // Skip Tutor THIS-TURN overrides when ReAct is off: casual plan-change
-  // would promise a confirmable flow we cannot stage. Other teaching-mode
-  // overrides (direct/Socratic) are also skipped in that kill-switch window.
+  // Direct THIS-TURN overrides (status, recovery, worked solution) apply even
+  // when ReAct is off. Only plan-mutating contracts are skipped — they promise
+  // a confirmable tool flow the kill-switch cannot stage.
   if (
     agent === 'tutor' &&
     tutorContract?.learnerPreferenceOverride &&
-    !planChangeFlow &&
-    REACT_ENABLED
+    shouldApplyLearnerPreferenceOverride({
+      intent: tutorIntent,
+      planChangeFlow,
+      reactEnabled: REACT_ENABLED,
+    })
   ) {
     context = `${tutorContract.learnerPreferenceOverride}\n\n${context}`;
   } else if (agent === 'tutor') {
@@ -1529,8 +1539,12 @@ async function buildContextPrompt(
         context += `\n${formatPlanWeeksCompact(plan.weeks, minimal ? 'minimal' : 'full')}`;
       }
     } else if (!minimal) {
-      context += `\n\n## Current weekly learning plan`;
-      context += `\nNo active plan yet — invite onboarding at /onboarding if the learner asks.`;
+      context += `\n\n${buildWeeklyPlanAbsenceBlock({
+        hasPlanRow: Boolean(plan),
+        goal: plan?.goal ?? profile.goal,
+        hoursPerWeek: profile.hours_per_week,
+        deadline: profile.next_test_date ?? profile.final_goal_date,
+      })}`;
     }
 
     if (needsPlanCatalog && !minimal) {
@@ -2162,13 +2176,17 @@ async function buildContextPrompt(
     }
   }
 
-  // Build protected tail: THIS TURN overrides — Tutor only for tutor contracts;
-  // other agents get brevity only (ADR-0015: stop intent leakage).
+  // Build protected tail: THIS TURN overrides for live agents on pressure/status.
   let promptTail = '';
-  if (agent === 'tutor' && liveAgents && !minimal && tutorIntent) {
-    if (tutorIntent === 'agent_correction') {
+  if (liveAgents && !minimal && tutorIntent) {
+    if (agent === 'tutor' && tutorIntent === 'agent_correction') {
       promptTail += `\n\n${AGENT_CORRECTION_TURN_INSTRUCTION}`;
-    } else if (isPressureFamilyIntent(tutorIntent) && !practiceContext && contextNeeds.statusPack) {
+    } else if (
+      (agent === 'tutor' || agent === 'mentor' || agent === 'coach') &&
+      isPressureFamilyIntent(tutorIntent) &&
+      !practiceContext &&
+      contextNeeds.statusPack
+    ) {
       promptTail += `\n\n${PRESSURE_FAMILY_TURN_INSTRUCTION}`;
       if (tutorIntent === 'context_challenge') {
         promptTail += `\n\n${CONTEXT_CHALLENGE_TURN_INSTRUCTION}`;
@@ -2177,10 +2195,13 @@ async function buildContextPrompt(
         promptTail += `\n\n${PLAN_OWNERSHIP_TURN_INSTRUCTION}`;
       }
     }
-    if (tutorIntent === 'recovery_simplify') {
+    if (agent === 'tutor' && tutorIntent === 'recovery_simplify') {
       promptTail += `\n\n${RECOVERY_TURN_INSTRUCTION}`;
     }
-    if (tutorIntent === 'worked_solution' || tutorIntent === 'conversation_advance') {
+    if (
+      agent === 'tutor' &&
+      (tutorIntent === 'worked_solution' || tutorIntent === 'conversation_advance')
+    ) {
       promptTail += `\n\n${WORKED_SOLUTION_TURN_INSTRUCTION}`;
     }
   }
@@ -2213,6 +2234,7 @@ async function buildContextPrompt(
     groundingIds,
     responseLocale,
     planChangeFlow,
+    statusTurn: Boolean(!minimal && liveAgents && contextNeeds.statusPack),
   };
 }
 
@@ -2258,6 +2280,7 @@ async function* streamFromLLM(
       groundingIds: new Set<string>(),
       responseLocale: 'he' as ChatResponseLocale,
       planChangeFlow: false,
+      statusTurn: false,
     };
     publishGrounding(bareContext);
     attempts.push({
@@ -2338,7 +2361,9 @@ async function* streamFromLLM(
       return failure ?? { kind: 'empty_response', provider: cfg.providerLabel };
     }
 
-    const quality = scoreResponseQuality(draft, responseLocale);
+    const quality = scoreResponseQuality(draft, responseLocale, {
+      statusTurn: context.statusTurn,
+    });
     // Guided plan-change turns are short slot questions — a quality "repair"
     // rewrite burns another full LLM pass and can blow the Vercel budget so the
     // stream never closes (UI stuck on "thinking…" after the reply appears).
@@ -2353,7 +2378,9 @@ async function* streamFromLLM(
         `${context.system}\n\n${qualityRepairInstruction(responseLocale, quality.failures)}`,
       );
       if (repaired) {
-        const q2 = scoreResponseQuality(repaired, responseLocale);
+        const q2 = scoreResponseQuality(repaired, responseLocale, {
+          statusTurn: context.statusTurn,
+        });
         if (q2.ok || q2.failures.length <= quality.failures.length) {
           draft = repaired;
         }

@@ -6,6 +6,8 @@
 import {
   classifyTutorChatIntent,
   isPressureFamilyIntent,
+  wantsContextChallenge,
+  wantsProgressStatus,
   type TutorChatIntent,
   type TutorIntentContext,
 } from '@/lib/learner-chat-intent';
@@ -101,7 +103,9 @@ export function buildContextNeeds(opts: {
     intent === 'exam_anxiety' ||
     intent === 'study_next' ||
     intent === 'context_challenge' ||
-    intent === 'plan_ownership';
+    intent === 'plan_ownership' ||
+    wantsProgressStatus(message) ||
+    wantsContextChallenge(message);
 
   // Pure teach turns skip plan/XP dumps so ordinary Q&A stays on-topic.
   // Persona + private notes MUST still inject — otherwise every learner gets

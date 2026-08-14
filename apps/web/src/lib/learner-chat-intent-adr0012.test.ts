@@ -23,6 +23,12 @@ describe('ADR-0012 pressure-family intents', () => {
       classifyTutorChatIntent('יש לי כבר תוכנית — אתה מציע לשנות אותה?'),
     ).toBe('plan_ownership');
     expect(classifyTutorChatIntent('מה כדאי שאעבוד עליו עכשיו')).toBe('study_next');
+    expect(
+      classifyTutorChatIntent(
+        'אני רוצה שאתה תגיד לי, יש לך את המידע הזה בזיכרון שלך, לא?',
+      ),
+    ).toBe('context_challenge');
+    expect(wantsContextChallenge('יש לך את המידע הזה בזיכרון שלך, לא?')).toBe(true);
   });
 
   it('ADR-0015: math stems with חסר / לא מספיק are not exam_anxiety', () => {

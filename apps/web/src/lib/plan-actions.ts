@@ -388,7 +388,7 @@ export function learnerPlanChangeIntentHeuristic(message: string): boolean {
   // Status / "how is my plan going" is NOT a change request even if the
   // message mentions תוכנית. (JS \\b does not protect Hebrew.)
   const statusAsk =
-    /מה הסטטוס|הסטטוס שלי|סטטוס.{0,24}תוכנית|תוכנית.{0,24}סטטוס|what(?:'s| is) my (?:status|progress)|how am i doing|איך אני מתקדם|מה המצב שלי/i.test(
+    /מה הסטטוס|הסטטוס שלי|סטטוס.{0,24}תוכנית|תוכנית.{0,24}סטטוס|what(?:'s| is) my (?:status|progress)|how am i doing|איך אני מתקדם|איך ההתקדמות|מה המצב שלי|התקדמות.{0,40}(?:לקראת|יחסית|קצב)|לקראת (?:ה)?(?:מטרה|יעד)|מה אתה יודע עלי|בזיכרון שלך/i.test(
       t,
     );
   if ((readinessQuestion || statusAsk) && !explicitPlanChangeVerb) {

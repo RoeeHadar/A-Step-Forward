@@ -282,7 +282,7 @@ export function formatLearnerFacingStatusHe(input: ProgressBriefingInput): strin
     strengths || null,
     gaps || null,
     next,
-    'אל תגיד שאינך יודע את התוכנית/הסטטוס. אל תציע תוכנית חדשה במקום הקיימת. אל תבקש מהלומד לבחור מתוך רשימת נושאים כשהוא לחוץ.',
+    'אל תגיד שאינך יודע את התוכנית/הסטטוס/הקצב. אל תשאל את הלומד מה הקצב או כמה שעות הוא לומד. אל תציע תוכנית חדשה במקום הקיימת. אל תבקש מהלומד לבחור מתוך רשימת נושאים כשהוא לחוץ.',
   ]
     .filter(Boolean)
     .join('\n');
@@ -319,7 +319,7 @@ export function formatLearnerFacingStatusEn(input: ProgressBriefingInput): strin
     strengths || null,
     gaps || null,
     next,
-    'Never say you do not know the plan/status. Do not invent a replacement plan. Do not ask a stressed learner to pick from a topic menu.',
+    'Never say you do not know the plan/status/pace. Do not ask the learner for hours or pace. Do not invent a replacement plan. Do not ask a stressed learner to pick from a topic menu.',
   ]
     .filter(Boolean)
     .join('\n');
@@ -346,8 +346,8 @@ The learner is anxious, asking status, challenging your knowledge, asking what t
 4. Offer to start that one topic now.
 
 **Hard bans:**
-- Never say you don't know the plan/status/XP when packs are present.
-- Never ask the learner for the program name, which plan they mean, or their subjects — those are in the pack.
+- Never say you don't know the plan/status/XP/memory when packs are present.
+- Never ask the learner for the program name, subjects, current pace, weekly hours, or how much theory they cover — those are in the profile and AUTHORITATIVE pack.
 - Never invent a new weekly/daily plan or start a plan-change interview unless they explicitly request a plan change.
 - Never dump raw keys (\`bagrut_math_5\`), ISO dates, or "gaps: none flagged".
 - Never misread points_group as completed study.
@@ -393,3 +393,28 @@ export const WORKED_SOLUTION_TURN_INSTRUCTION = `## THIS TURN — worked solutio
 - If the solution needs more than ~8 steps: give a short roadmap + first 2–3 steps, then ask whether to continue.
 - On "המשך / continue": resume from the last unfinished step — do NOT restate earlier steps or say you need to "explain differently".
 - Keep math in \`$...$\` / \`$$...$$\`. No filler closers.`;
+
+/**
+ * Agent-facing note when a profile exists but weekly plan weeks are missing.
+ * Must not invite onboarding or claim the learner has no goal/pace data.
+ */
+export function buildWeeklyPlanAbsenceBlock(opts: {
+  hasPlanRow: boolean;
+  goal?: string | null;
+  hoursPerWeek?: number | null;
+  deadline?: string | null;
+}): string {
+  const bits: string[] = [];
+  if (opts.goal?.trim()) bits.push(`goal: ${opts.goal.trim()}`);
+  if (opts.hoursPerWeek != null) bits.push(`hours/week: ${opts.hoursPerWeek}`);
+  if (opts.deadline?.trim()) bits.push(`deadline: ${opts.deadline.trim()}`);
+  const facts = bits.length ? ` Profile facts still apply (${bits.join('; ')}).` : '';
+  const weeks = opts.hasPlanRow
+    ? 'A plan row exists but weekly topics are empty.'
+    : 'No weekly topic schedule is loaded.';
+  return [
+    '## Current weekly learning plan',
+    `${weeks}${facts} Report status from the learner profile, hours/week, deadline, mastery, and AUTHORITATIVE pack when present.`,
+    'Do NOT say you have no information. Do NOT invite onboarding. Do NOT invent a replacement plan unless they explicitly ask to change the plan.',
+  ].join('\n');
+}

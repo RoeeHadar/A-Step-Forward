@@ -29,6 +29,31 @@ describe('chat-context-needs (ADR-0015)', () => {
     expect(needs.profile).toBe(true);
   });
 
+  it('recall, pace-vs-goal, and memory-challenge inject status packs', () => {
+    const recall = buildContextNeeds({ agent: 'tutor', message: 'מה אתה יודע עליי' });
+    expect(recall.intent).toBe('progress_status');
+    expect(recall.statusPack).toBe(true);
+    expect(recall.profile).toBe(true);
+    expect(recall.mastery).toBe(true);
+
+    const pace = buildContextNeeds({
+      agent: 'tutor',
+      message:
+        'יש לי יעד באתר. אני רוצה לדעת איך ההתקדמות שלי לקראת היעד הזה יחסית לקצב ההתקדמות הנוכחי שלי',
+    });
+    expect(pace.intent).toBe('progress_status');
+    expect(pace.statusPack).toBe(true);
+    expect(pace.profile).toBe(true);
+
+    const memory = buildContextNeeds({
+      agent: 'tutor',
+      message: 'אני רוצה שאתה תגיד לי, יש לך את המידע הזה בזיכרון שלך, לא?',
+    });
+    expect(memory.intent).toBe('context_challenge');
+    expect(memory.statusPack).toBe(true);
+    expect(memory.profile).toBe(true);
+  });
+
   it('mentor keeps active week; coach keeps drills', () => {
     const mentor = buildContextNeeds({ agent: 'mentor', message: 'איך אני מרגיש לגבי הלמידה?' });
     expect(mentor.activeWeek).toBe(true);

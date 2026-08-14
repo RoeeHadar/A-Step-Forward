@@ -76,7 +76,11 @@ const EXAM_ODDS_RE =
   /(?:איך|מה).{0,25}(?:יהיה|יקרה|סיכוי).{0,40}(?:בגרות|מבחן)|how (?:will|would) i (?:do|fare).{0,30}(?:exam|bagrut|test)|bagrut odds|exam (?:odds|chances)/i;
 
 const PROGRESS_STATUS_RE =
-  /(?:מה|what(?:'s| is)?).{0,40}(?:הסטטוס|סטטוס|המצב|status)|איך אני מתקדם|מה המצב שלי|הסטטוס שלי|סטטוס.{0,24}תוכנית|תוכנית.{0,24}סטטוס|how am i doing|my (?:current )?status|current status|כמה XP|how much xp|מה ה-?XP/i;
+  /(?:מה|what(?:'s| is)?).{0,40}(?:הסטטוס|סטטוס|המצב|status)|איך אני מתקדם|איך ההתקדמות|התקדמות(?:י| שלי)?.{0,48}(?:לקראת|יחסית|קצב)|לקראת (?:ה)?(?:מטרה|יעד)|יחסית ל(?:קצב|הקצב)|קצב ההתקדמות|מה המצב שלי|הסטטוס שלי|סטטוס.{0,24}תוכנית|תוכנית.{0,24}סטטוס|how am i doing|my (?:current )?status|current status|progress toward|pace vs|כמה XP|how much xp|מה ה-?XP/i;
+
+/** "What do you know about me?" — load profile + status, not a Socratic teach turn. */
+const LEARNER_RECALL_RE =
+  /מה אתה יודע עלי(?:י)?|מה ידוע לך עלי(?:י)?|מה זכור לך עלי(?:י)?|what do you know about me|tell me what you know about me/i;
 
 const RECOVERY_SIMPLIFY_RE =
   /(?:מסובך|לא מבין|לא הבנתי|תסביר.{0,20}(?:פשוט|פשוטה|יותר)|בצורה יותר פשוטה|צריך להכיר(?: את)? זה|האם אני צריך|too (?:hard|complicated)|simplify|explain (?:simpler|more simply)|do i need (?:to know )?this|i don'?t understand)/i;
@@ -102,7 +106,7 @@ const MATH_STEM_RE =
   /(?:מה החסר|חסר ב|ממוצע|פתור|חשב|אינטגרל|נגזר|משווא|\\int|\\frac|solve|calculate|derivative|integral|what(?:'s| is) (?:the )?missing)/i;
 
 const CONTEXT_CHALLENGE_RE =
-  /(?:אתה לא יודע|אתה אמור|אתה המורה|תגיד לי מה (?:ה)?מצב|you (?:don'?t|do not) know|you should know|you'?re (?:my )?teacher|tell me (?:my )?status)/i;
+  /(?:אתה לא יודע|אתה אמור(?: לדעת)?|אתה המורה|תגיד לי מה (?:ה)?מצב|יש לך את (?:ה)?מידע|בזיכרון שלך|זה בזיכרון|don'?t you (?:have|know)|in your memory|you (?:already )?have (?:this|that|the) (?:info|information)|you (?:don'?t|do not) know|you should know|you'?re (?:my )?teacher|tell me (?:my )?status)/i;
 
 const PLAN_OWNERSHIP_RE =
   /(?:יש לי כבר תוכנית|אתה מציע לשנות|לא לשנות את התוכנית|I already have (?:a )?plan|are you (?:suggesting|proposing) (?:to )?change|don'?t change my plan)/i;
@@ -128,8 +132,13 @@ export function wantsExamReadinessAnswer(message: string): boolean {
   );
 }
 
+export function wantsLearnerRecall(message: string): boolean {
+  return LEARNER_RECALL_RE.test(message.trim());
+}
+
 export function wantsProgressStatus(message: string): boolean {
-  return PROGRESS_STATUS_RE.test(message.trim());
+  const t = message.trim();
+  return PROGRESS_STATUS_RE.test(t) || LEARNER_RECALL_RE.test(t);
 }
 
 /**
@@ -312,9 +321,10 @@ Learner already has a plan; asks if you want to change it.
 - Address concern via status pack + one next step.`;
 
 const PROGRESS_STATUS_INSTRUCTION = `## Interaction mode: PROGRESS STATUS (ADR-0012, mandatory)
-The learner is asking about THEIR current study plan / progress — not to change it.
-Answer from the AUTHORITATIVE learner-facing status pack + profile/plan blocks.
-- You already have their plan. NEVER ask for the program name, subjects, or "which plan they mean".
+The learner is asking about THEIR current study plan / progress / what you know about them — not to change it.
+Answer from the AUTHORITATIVE learner-facing status pack + profile/plan/persona blocks.
+- You already have their goal, deadline, hours/week, pace, and (when present) weekly plan. NEVER ask them for pace, weekly hours, theory load, program name, or subjects.
+- Never say you lack status/memory when those packs are present. Never offer to build a new plan on this turn.
 - Never start a plan-change / slot-filling flow on this turn.
 - No XP/ISO/raw dumps; no "gaps: none flagged"; no knowledge denial.
 - End with the pack's single next step.`;
@@ -630,6 +640,25 @@ export function buildTutorInteractionContract(
             : 'LEARNER PREFERENCE: Socratic guidance — one targeted question before explaining.',
       };
   }
+}
+
+/**
+ * Direct THIS-TURN preference overrides apply even when ReAct tools are killed.
+ * Only plan-mutating contracts are skipped without ReAct — they promise a
+ * confirmable tool flow the kill-switch cannot stage.
+ */
+export function shouldApplyLearnerPreferenceOverride(opts: {
+  intent: TutorChatIntent | null;
+  planChangeFlow: boolean;
+  reactEnabled: boolean;
+}): boolean {
+  if (opts.planChangeFlow || !opts.intent) return false;
+  const planMutating =
+    opts.intent === 'casual_plan_change' ||
+    opts.intent === 'study_hours_increase' ||
+    opts.intent === 'plan_template';
+  if (planMutating && !opts.reactEnabled) return false;
+  return true;
 }
 
 /** Apply contract to system prompt fragments (testable without DB). */

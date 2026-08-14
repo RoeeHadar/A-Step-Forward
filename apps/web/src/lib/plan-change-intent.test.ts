@@ -95,5 +95,10 @@ describe('template-only plan change detection', () => {
         'Will the plan prepare me in time for my Bagrut exam next week?',
       ),
     ).toBe(false);
+    expect(
+      learnerPlanChangeIntentHeuristic(
+        'יש לי יעד באתר. אני רוצה לדעת איך ההתקדמות שלי לקראת היעד הזה יחסית לקצב ההתקדמות הנוכחי שלי',
+      ),
+    ).toBe(false);
   });
 });

@@ -6,8 +6,10 @@ import {
   buildTutorInteractionContract,
   classifyTutorChatIntent,
   looksLikeLearnerQuestion,
+  shouldApplyLearnerPreferenceOverride,
   wantsExamReadinessAnswer,
   wantsExpandedOutputBudget,
+  wantsLearnerRecall,
   wantsProgressStatus,
   wantsRecoverySimplify,
   wantsWorkedSolution,
@@ -68,5 +70,47 @@ describe('ADR-0011 learner-chat-intent', () => {
       true,
     );
     expect(looksLikeLearnerQuestion('אני רוצה לשנות את התוכנית שלי')).toBe(false);
+  });
+
+  it('classifies the live status/memory transcript (Aug 2026)', () => {
+    expect(classifyTutorChatIntent('מה הסטטוס הנוכחי שלי')).toBe('progress_status');
+    expect(wantsProgressStatus('מה הסטטוס הנוכחי שלי')).toBe(true);
+
+    expect(classifyTutorChatIntent('מה אתה יודע עליי')).toBe('progress_status');
+    expect(wantsLearnerRecall('מה אתה יודע עליי')).toBe(true);
+    expect(wantsProgressStatus('מה אתה יודע עליי')).toBe(true);
+
+    expect(classifyTutorChatIntent('מה הסטטוס התקדמות שלי לקראת המטרה')).toBe(
+      'progress_status',
+    );
+
+    const paceVsGoal =
+      'יש לי יעד באתר. אני רוצה לדעת איך ההתקדמות שלי לקראת היעד הזה יחסית לקצב ההתקדמות הנוכחי שלי';
+    expect(classifyTutorChatIntent(paceVsGoal)).toBe('progress_status');
+    expect(wantsProgressStatus(paceVsGoal)).toBe(true);
+  });
+
+  it('keeps Direct status override when ReAct is killed', () => {
+    expect(
+      shouldApplyLearnerPreferenceOverride({
+        intent: 'progress_status',
+        planChangeFlow: false,
+        reactEnabled: false,
+      }),
+    ).toBe(true);
+    expect(
+      shouldApplyLearnerPreferenceOverride({
+        intent: 'casual_plan_change',
+        planChangeFlow: false,
+        reactEnabled: false,
+      }),
+    ).toBe(false);
+    expect(
+      shouldApplyLearnerPreferenceOverride({
+        intent: 'casual_plan_change',
+        planChangeFlow: false,
+        reactEnabled: true,
+      }),
+    ).toBe(true);
   });
 });

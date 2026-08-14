@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildBilingualProgressBriefing,
   buildLearnerFacingStatusPack,
+  buildWeeklyPlanAbsenceBlock,
   formatLearnerFacingStatusHe,
   formatProgressBriefingEn,
   formatProgressBriefingHe,
@@ -77,5 +78,20 @@ describe('learner-progress-briefing', () => {
     expect(pack).not.toContain('עדיין לא סומנו');
     expect(pack).toContain('סיכון לפיגור');
     expect(formatLearnerFacingStatusHe(SAMPLE)).toContain('אל תגיד שאינך יודע');
+    expect(formatLearnerFacingStatusHe(SAMPLE)).toContain('אל תשאל את הלומד מה הקצב');
+  });
+
+  it('weekly-plan absence still tells the agent to use profile facts', () => {
+    const note = buildWeeklyPlanAbsenceBlock({
+      hasPlanRow: false,
+      goal: 'בגרות מתמטיקה 5 יח״ל',
+      hoursPerWeek: 8,
+      deadline: '2027-01-08',
+    });
+    expect(note).toContain('## Current weekly learning plan');
+    expect(note).toContain('בגרות מתמטיקה');
+    expect(note).toContain('hours/week: 8');
+    expect(note).not.toContain('/onboarding');
+    expect(note).toContain('Do NOT invent a replacement plan');
   });
 });
