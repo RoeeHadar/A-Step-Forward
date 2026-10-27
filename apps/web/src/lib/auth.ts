@@ -59,13 +59,13 @@ export function requireRole(ctx: AuthContext, allowed: AppRole[]): void {
 /** Best-effort sync of Clerk publicMetadata.role with app_users. */
 export async function syncClerkRole(userId: string, role: SocialRole): Promise<void> {
   try {
-    const existing = await clerkClient.users.getUser(userId);
+    const existing = await (await clerkClient()).users.getUser(userId);
     if ((existing.publicMetadata?.role as string | undefined) === 'admin') {
       // Never demote an admin via social/identity sync.
       return;
     }
     // Clerk session JWT may lag; Neon app_users is authoritative for routing.
-    await clerkClient.users.updateUserMetadata(userId, {
+    await (await clerkClient()).users.updateUserMetadata(userId, {
       publicMetadata: { role },
     });
   } catch (err) {

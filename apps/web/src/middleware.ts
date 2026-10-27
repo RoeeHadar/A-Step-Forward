@@ -27,7 +27,7 @@ const isPublicRoute = createRouteMatcher([
 // (currentUser() reads live publicMetadata, not the stale JWT claim).
 
 export default clerkMiddleware(async (auth, request) => {
-  const { userId } = auth();
+  const { userId } = await auth();
   const isApiRoute = request.nextUrl.pathname.startsWith('/api/');
 
   if (!isPublicRoute(request) && !userId) {
