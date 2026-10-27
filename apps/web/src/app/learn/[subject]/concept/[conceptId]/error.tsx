@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Button } from '@asf/ui/button';
@@ -9,11 +10,16 @@ import { Button } from '@asf/ui/button';
  * authored data), show a recoverable message instead of a bare 500 page.
  */
 export default function LessonError({
+  error,
   reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  useEffect(() => {
+    // Keep render failures visible in logs; the user only sees the message below.
+    console.error('[lesson-error-boundary]', error);
+  }, [error]);
   const params = useParams<{ subject?: string }>();
   const subject = typeof params?.subject === 'string' ? params.subject : '';
   return (
