@@ -105,11 +105,23 @@ export function coerceOptionIndex(value: unknown): number | null {
 }
 
 /** Coerce DB/JSON boolean flags (true_false). */
+// Hebrew cantillation marks and niqqud (U+0591–U+05C7), so "נָכוֹן" matches "נכון".
+const HEBREW_MARKS = /[\u0591-\u05C7]/g;
+
+/** Hebrew true/false words (נכון / לא נכון), tolerant of niqqud and spacing. */
+export function hebrewBooleanAnswer(value: unknown): boolean | null {
+  if (typeof value !== 'string') return null;
+  const t = value.replace(HEBREW_MARKS, '').replace(/\s+/g, ' ').trim();
+  if (t === 'נכון') return true;
+  if (t === 'לא נכון') return false;
+  return null;
+}
+
 export function coerceBooleanAnswer(value: unknown): boolean | null {
   if (typeof value === 'boolean') return value;
   if (value === 'true') return true;
   if (value === 'false') return false;
-  return null;
+  return hebrewBooleanAnswer(value);
 }
 
 /**
@@ -131,7 +143,7 @@ export function resolveCorrectBool(
   const ca = answerText(fallbacks?.correct_answer).toLowerCase();
   if (ca === 'true' || ca === '1' || ca === 'yes') return true;
   if (ca === 'false' || ca === '0' || ca === 'no') return false;
-  return null;
+  return hebrewBooleanAnswer(ca);
 }
 
 export function answersMatch(

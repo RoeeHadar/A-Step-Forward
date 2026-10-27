@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   answerText,
   answersMatch,
+  coerceBooleanAnswer,
   displayCorrectAnswer,
   getAcceptedAnswers,
   normalizeAnswerForGrading,
@@ -80,6 +81,29 @@ describe('answer-normalize', () => {
       expect(answersMatch('42', accepted)).toBe(true);
       expect(answersMatch('41', accepted)).toBe(false);
       expect(displayCorrectAnswer(undefined, asAnswer(7))).toBe('7');
+    });
+
+    it('accepts Hebrew true/false in the stored key and in the submission', () => {
+      // Stored key (correct_answer fallback).
+      expect(resolveCorrectBool(undefined, { correct_answer: 'נכון' })).toBe(true);
+      expect(resolveCorrectBool(undefined, { correct_answer: ' לא נכון ' })).toBe(false);
+      expect(resolveCorrectBool(undefined, { correct_answer: 'לא  נכון' })).toBe(false);
+      expect(resolveCorrectBool(undefined, { correct_answer: 'נָכוֹן' })).toBe(true);
+      expect(resolveCorrectBool(undefined, { correct_answer: 'לֹא נָכוֹן' })).toBe(false);
+      expect(resolveCorrectBool({ value: 'לא נכון' }, {})).toBe(false);
+      // Student submission.
+      expect(coerceBooleanAnswer('נכון')).toBe(true);
+      expect(coerceBooleanAnswer('  נכון\n')).toBe(true);
+      expect(coerceBooleanAnswer('לא נכון')).toBe(false);
+      expect(coerceBooleanAnswer('לא\tנכון')).toBe(false);
+      expect(coerceBooleanAnswer('נָכוֹן')).toBe(true);
+      // Not true/false words.
+      expect(coerceBooleanAnswer('נכון חלקית')).toBeNull();
+      expect(coerceBooleanAnswer('לא')).toBeNull();
+      expect(resolveCorrectBool(undefined, { correct_answer: 'נכון חלקית' })).toBeNull();
+      // English behaviour unchanged.
+      expect(coerceBooleanAnswer('true')).toBe(true);
+      expect(coerceBooleanAnswer(' true ')).toBeNull();
     });
 
     it('answerText coerces safely', () => {
