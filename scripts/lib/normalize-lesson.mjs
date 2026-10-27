@@ -88,6 +88,11 @@ function normalizeQuestion(q, index) {
     if (out.kind === 'true_false' && typeof out.correct_bool === 'boolean') {
       out.answer_payload = { ...(typeof p === 'object' && p ? p : {}), correct_bool: out.correct_bool };
     }
+    // correct_answer is a text column / string type downstream; numbers and
+    // booleans authored in seed JSON crashed `.trim()` on lesson pages.
+    if (typeof out.correct_answer === 'number' || typeof out.correct_answer === 'boolean') {
+      out.correct_answer = String(out.correct_answer);
+    }
     if ((out.kind === 'numeric' || out.kind === 'fill_blank') && (out.correct_answer === undefined || out.correct_answer === null)) {
       const v = p.value ?? p.answer ?? (Array.isArray(p.acceptable_answers) ? p.acceptable_answers[0] : undefined);
       if (v !== undefined && v !== null) out.correct_answer = String(v);

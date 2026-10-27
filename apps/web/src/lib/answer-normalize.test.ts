@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
+  answerText,
   answersMatch,
   displayCorrectAnswer,
   getAcceptedAnswers,
   normalizeAnswerForGrading,
   numericClose,
+  resolveCorrectBool,
 } from './answer-normalize';
 
 describe('answer-normalize', () => {
@@ -41,5 +43,52 @@ describe('answer-normalize', () => {
     expect(numericClose('8e-19', '6.6e-19')).toBe(false); // >5% off
     // Exact-zero answers still match a typed zero.
     expect(numericClose('0', '0')).toBe(true);
+  });
+
+  // Regression: seed/bundle data stored correct_answer as JSON numbers or
+  // booleans, and `.trim()` on them crashed lesson pages with a 500.
+  describe('non-string correct_answer', () => {
+    // Data arrives untyped from JSON, so cast past the declared string type.
+    const asAnswer = (v: unknown) => v as string;
+
+    it('resolveCorrectBool does not throw on numeric or boolean correct_answer', () => {
+      expect(() => resolveCorrectBool(undefined, { correct_answer: asAnswer(15) })).not.toThrow();
+      expect(() => resolveCorrectBool(undefined, { correct_answer: asAnswer(true) })).not.toThrow();
+      expect(() => resolveCorrectBool({ kind: 'x' }, { correct_answer: asAnswer(3.14) })).not.toThrow();
+    });
+
+    it('resolveCorrectBool still scores booleans correctly', () => {
+      expect(resolveCorrectBool(undefined, { correct_answer: asAnswer(true) })).toBe(true);
+      expect(resolveCorrectBool(undefined, { correct_answer: asAnswer(false) })).toBe(false);
+      expect(resolveCorrectBool(undefined, { correct_answer: asAnswer(1) })).toBe(true);
+      expect(resolveCorrectBool(undefined, { correct_answer: asAnswer(0) })).toBe(false);
+      expect(resolveCorrectBool(undefined, { correct_answer: asAnswer(15) })).toBeNull();
+      // String forms behave exactly as before.
+      expect(resolveCorrectBool(undefined, { correct_answer: ' True ' })).toBe(true);
+      expect(resolveCorrectBool(undefined, { correct_answer: 'no' })).toBe(false);
+      expect(resolveCorrectBool(undefined, { correct_answer: null })).toBeNull();
+      // Payload still wins over the fallback.
+      expect(resolveCorrectBool({ correct: false }, { correct_answer: asAnswer(true) })).toBe(false);
+    });
+
+    it('numeric answers still grade right and wrong', () => {
+      expect(numericClose('15', asAnswer(15))).toBe(true);
+      expect(numericClose('16', asAnswer(15))).toBe(false);
+      expect(numericClose('3.1416', asAnswer(3.14159))).toBe(true);
+      const accepted = getAcceptedAnswers([], asAnswer(42));
+      expect(accepted).toEqual(['42']);
+      expect(answersMatch('42', accepted)).toBe(true);
+      expect(answersMatch('41', accepted)).toBe(false);
+      expect(displayCorrectAnswer(undefined, asAnswer(7))).toBe('7');
+    });
+
+    it('answerText coerces safely', () => {
+      expect(answerText(12.5)).toBe('12.5');
+      expect(answerText(false)).toBe('false');
+      expect(answerText('  x ')).toBe('x');
+      expect(answerText(null)).toBe('');
+      expect(answerText(undefined)).toBe('');
+      expect(answerText({})).toBe('');
+    });
   });
 });

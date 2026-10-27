@@ -8,7 +8,7 @@
 import { createHash } from 'node:crypto';
 import { getBundledLesson } from '@/lib/lesson-bundle';
 import { resolveConceptAlias } from '@/lib/concept-aliases';
-import { resolveCorrectBool } from '@/lib/answer-normalize';
+import { answerText, resolveCorrectBool } from '@/lib/answer-normalize';
 import type { LessonQuestionRow, LessonPointsLevel } from '@/lib/neon-db';
 
 /** v3: exam-style multipart corpus preferred; v2 lesson-bank hard items still accepted. */
@@ -212,13 +212,13 @@ function toGatePick(
   }
 
   if (kind === 'numeric') {
-    if (!q.correct_answer?.trim()) return null;
+    if (!answerText(q.correct_answer)) return null;
     return base;
   }
 
   if (kind === 'short_answer') {
     const accepted = q.answer_payload?.acceptable_answers ?? [];
-    if (!q.correct_answer?.trim() && accepted.length === 0) return null;
+    if (!answerText(q.correct_answer) && accepted.length === 0) return null;
     return base;
   }
 
