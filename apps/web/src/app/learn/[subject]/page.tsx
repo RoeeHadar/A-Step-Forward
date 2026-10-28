@@ -11,7 +11,7 @@ import {
   fetchConceptMasteryBulk,
 } from '@/lib/neon-db';
 import { getLessonIndexEntry } from '@/lib/lesson-index';
-import { isConceptInBundle } from '@/lib/lesson-bundle';
+import { isConceptInBundle } from '@/lib/lesson-bundle-membership';
 import kg from '@/lib/kg-data.json';
 import { getCategoryById, SUBJECT_TO_CATEGORY } from '@/lib/curriculum-categories';
 import { resolveConceptAlias, dedupeConceptIdsForCatalog, resolveConceptAliasCanonical } from '@/lib/concept-aliases';

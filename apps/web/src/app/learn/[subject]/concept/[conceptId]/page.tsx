@@ -14,7 +14,7 @@ import { LessonPageClient } from '@/components/lesson-page-client';
 import { getServerLocale } from '@/i18n/locale-server';
 import { getMessages } from '@/i18n/messages';
 import { getLessonIndexEntry } from '@/lib/lesson-index';
-import { isConceptInBundle } from '@/lib/lesson-bundle';
+import { isConceptInBundle } from '@/lib/lesson-bundle-membership';
 import { MathGlossaryPanel } from '@/components/math-glossary-panel';
 import {
   resolveConceptTitles,

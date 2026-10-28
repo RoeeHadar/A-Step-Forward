@@ -3,7 +3,7 @@
  * Plans may only reference concept_ids present in our KG + lesson index.
  */
 import lessonsIndex from './lessons-index.generated.json';
-import { isConceptInBundle } from './lesson-bundle';
+import { isConceptInBundle } from './lesson-bundle-membership';
 import { resolveConceptAlias } from './concept-aliases';
 import kg from './kg-data.json';
 import {

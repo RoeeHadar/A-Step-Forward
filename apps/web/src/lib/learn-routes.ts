@@ -6,7 +6,7 @@ import {
 } from '@/lib/curriculum-categories';
 import { resolveConceptAlias } from '@/lib/concept-aliases';
 import { getLessonIndexEntry } from '@/lib/lesson-index';
-import { isConceptInBundle } from '@/lib/lesson-bundle';
+import { isConceptInBundle } from '@/lib/lesson-bundle-membership';
 
 /** Build a direct lesson URL for a concept page. */
 export function learnConceptHref(subject: string, conceptId: string): string {
