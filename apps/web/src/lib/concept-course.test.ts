@@ -3,6 +3,7 @@ import kg from './kg-data.json';
 import { CURRICULUM_CATEGORIES } from './curriculum-categories';
 import { canonicalCourseRedirect, courseContainsConcept, coursesForConcept } from './concept-course';
 import { getSiteUrl } from './site-url';
+import { aliasRedirectTarget } from './lesson-concept-resolve';
 import { sitemapEntries } from '../app/sitemap';
 
 const catalogIds = (c: (typeof CURRICULUM_CATEGORIES)[number]) => [
@@ -74,11 +75,13 @@ describe('sitemap (M4)', () => {
     const origin = getSiteUrl();
     const lessonUrls = urls.filter((u) => u.includes('/concept/'));
     expect(lessonUrls.length).toBeGreaterThan(200);
+    for (const path of ['/privacy', '/terms', '/accessibility']) expect(urls).toContain(`${origin}${path}`);
     for (const u of urls) expect(u.startsWith(`${origin}/`)).toBe(true);
     for (const u of lessonUrls) {
       const m = new URL(u).pathname.match(/^\/learn\/([^/]+)\/concept\/([^/]+)$/);
       expect(m).not.toBeNull();
       expect(canonicalCourseRedirect(m![1] ?? '', m![2] ?? '')).toBeNull();
+      expect(aliasRedirectTarget(m![2] ?? '')).toBeNull();
     }
   });
 });
