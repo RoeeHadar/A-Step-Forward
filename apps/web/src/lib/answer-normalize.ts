@@ -104,19 +104,26 @@ export function coerceOptionIndex(value: unknown): number | null {
   return null;
 }
 
-/** Coerce DB/JSON boolean flags (true_false). */
 // Hebrew cantillation marks and niqqud (U+0591–U+05C7), so "נָכוֹן" matches "נכון".
 const HEBREW_MARKS = /[\u0591-\u05C7]/g;
+// Word joiners between "לא" and "נכון": maqaf (U+05BE, inside HEBREW_MARKS's
+// range, so it must be replaced first), ASCII hyphen, and en/em dashes.
+const HEBREW_WORD_JOINERS = /[\u05BE\u2010-\u2014-]/g;
 
-/** Hebrew true/false words (נכון / לא נכון), tolerant of niqqud and spacing. */
+/** Hebrew true/false words (נכון / לא נכון), tolerant of niqqud, maqaf and spacing. */
 export function hebrewBooleanAnswer(value: unknown): boolean | null {
   if (typeof value !== 'string') return null;
-  const t = value.replace(HEBREW_MARKS, '').replace(/\s+/g, ' ').trim();
+  const t = value
+    .replace(HEBREW_WORD_JOINERS, ' ')
+    .replace(HEBREW_MARKS, '')
+    .replace(/\s+/g, ' ')
+    .trim();
   if (t === 'נכון') return true;
   if (t === 'לא נכון') return false;
   return null;
 }
 
+/** Coerce DB/JSON boolean flags and student answers (true_false). */
 export function coerceBooleanAnswer(value: unknown): boolean | null {
   if (typeof value === 'boolean') return value;
   if (value === 'true') return true;

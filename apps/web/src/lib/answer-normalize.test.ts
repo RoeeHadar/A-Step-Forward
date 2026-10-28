@@ -99,6 +99,13 @@ describe('answer-normalize', () => {
       expect(coerceBooleanAnswer('נָכוֹן')).toBe(true);
       // Not true/false words.
       expect(coerceBooleanAnswer('נכון חלקית')).toBeNull();
+      // maqaf / hyphen between the words (Orchestrator, 28 Oct)
+      expect(coerceBooleanAnswer('לא\u05BEנכון')).toBe(false);
+      expect(coerceBooleanAnswer('לא-נכון')).toBe(false);
+      expect(coerceBooleanAnswer('לא – נכון')).toBe(false);
+      expect(coerceBooleanAnswer('לֹא\u05BEנָכוֹן')).toBe(false);
+      expect(resolveCorrectBool(undefined, { correct_answer: 'לא\u05BEנכון' })).toBe(false);
+      expect(coerceBooleanAnswer('נכון-חלקית')).toBeNull();
       expect(coerceBooleanAnswer('לא')).toBeNull();
       expect(resolveCorrectBool(undefined, { correct_answer: 'נכון חלקית' })).toBeNull();
       // English behaviour unchanged.

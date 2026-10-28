@@ -6,6 +6,7 @@
 import {
   answerText,
   answersMatch,
+  coerceBooleanAnswer,
   getAcceptedAnswers,
   normalizeAnswerForGrading,
   numericClose,
@@ -463,13 +464,11 @@ export function gradePracticeItem(
     case 'true_false': {
       const expected = item.answer_payload?.correct_bool;
       const picked =
-        typeof userAnswer === 'boolean'
-          ? userAnswer
-          : userAnswer === 'true' || userAnswer === 'yes' || userAnswer === 'נכון'
-            ? true
-            : userAnswer === 'false' || userAnswer === 'no' || userAnswer === 'לא נכון'
-              ? false
-              : null;
+        userAnswer === 'yes'
+          ? true
+          : userAnswer === 'no'
+            ? false
+            : coerceBooleanAnswer(userAnswer);
       if (picked == null || expected == null) {
         return { correct: false, reason: 'invalid answer' };
       }
