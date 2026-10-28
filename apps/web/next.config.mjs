@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Don't advertise the framework in an X-Powered-By header (M4).
+  poweredByHeader: false,
   // ESM-only packages that Next.js must transpile to CommonJS for the build.
   // react-markdown v9+, remark-*, rehype-* are all pure-ESM.
   transpilePackages: [

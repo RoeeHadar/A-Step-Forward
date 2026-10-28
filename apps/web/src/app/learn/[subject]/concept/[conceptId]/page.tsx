@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { notFound, redirect } from 'next/navigation';
+import type { Metadata } from 'next';
+import { notFound, permanentRedirect, redirect } from 'next/navigation';
 import { auth } from '@clerk/nextjs/server';
 import { LocalizedSubjectLabel } from '@/components/localized-subject-label';
 import {
@@ -21,7 +22,14 @@ import {
   pickConceptTitle,
   isCatalogTitleConcept,
 } from '@/lib/concept-display-names';
-import { isConceptInCurriculumCatalog } from '@/lib/curriculum-categories';
+import {
+  getCategoryById,
+  isConceptInCurriculumCatalog,
+  SUBJECT_TO_CATEGORY,
+} from '@/lib/curriculum-categories';
+import { canonicalCourseRedirect } from '@/lib/concept-course';
+import { absoluteUrl } from '@/lib/site-url';
+import { pageOpenGraph, pageTwitter } from '@/lib/site-metadata';
 
 export const dynamic = 'force-dynamic';
 
@@ -60,6 +68,50 @@ function parseLevelQueryParam(
     : null;
 }
 
+/** Strips inline LaTeX ($...$, \\(...\\)) so titles read cleanly in search results. */
+function plainTitle(value: string): string {
+  return value
+    .replace(/\$+([^$]*)\$+/g, '$1')
+    .replace(/\\[()[\]]/g, '')
+    .replace(/\\[a-zA-Z]+/g, '')
+    .replace(/[{}]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ subject: string; conceptId: string }>;
+}): Promise<Metadata> {
+  const { subject, conceptId } = await params;
+  const locale = await getServerLocale();
+  const isHe = locale === 'he';
+  const category = getCategoryById(SUBJECT_TO_CATEGORY[subject] ?? subject);
+  const indexEntry = getLessonIndexEntry(resolveLessonConceptId(conceptId)) ?? getLessonIndexEntry(conceptId);
+  const titles = resolveConceptTitles(conceptId, {
+    title_en: indexEntry?.title_en ?? null,
+    title_he: indexEntry?.title_he ?? kgById[conceptId]?.name_he ?? null,
+  });
+  const conceptTitle = plainTitle(pickConceptTitle(titles, locale));
+  const courseLabel = category ? (isHe ? category.heLabel : category.enLabel) : null;
+  const questionnaires = category?.bagrut_questionnaires?.length
+    ? `${isHe ? 'שאלון' : 'questionnaire'} ${category.bagrut_questionnaires.join(', ')}`
+    : null;
+  const title = [conceptTitle, courseLabel].filter(Boolean).join(' · ');
+  const description = isHe
+    ? `שיעור אינטראקטיבי: ${conceptTitle}${courseLabel ? ` – ${courseLabel}` : ''}${questionnaires ? ` (${questionnaires})` : ''}. הסברים, דוגמאות פתורות ותרגול, עם מורה AI שזוכר אותך.`
+    : `Interactive lesson: ${conceptTitle}${courseLabel ? ` – ${courseLabel}` : ''}${questionnaires ? ` (${questionnaires})` : ''}. Explanations, worked examples and practice, with an AI tutor that remembers you.`;
+  const url = absoluteUrl(`/learn/${subject}/concept/${conceptId}`);
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: pageOpenGraph({ type: 'article', url, title, description }),
+    twitter: pageTwitter({ title, description }),
+  };
+}
+
 export default async function ConceptPage({
   params,
   searchParams,
@@ -72,14 +124,20 @@ export default async function ConceptPage({
   const levelOverride = parseLevelQueryParam(resolvedSearchParams.level);
 
   const redirectTarget = aliasRedirectTarget(rawConceptId);
-  if (redirectTarget) {
+  const targetConceptId = redirectTarget ?? rawConceptId;
+  // M4: a lesson opened under a course that doesn't list it moves (308) to the
+  // course that does, so each lesson has one URL per course it belongs to.
+  const courseTarget = canonicalCourseRedirect(subject, targetConceptId);
+  if (redirectTarget || courseTarget) {
     const qs = new URLSearchParams();
     for (const [key, value] of Object.entries(resolvedSearchParams)) {
       const raw = Array.isArray(value) ? value[0] : value;
       if (raw) qs.set(key, raw);
     }
     const suffix = qs.toString() ? `?${qs.toString()}` : '';
-    redirect(`/learn/${subject}/concept/${redirectTarget}${suffix}`);
+    const destination = `/learn/${courseTarget ?? subject}/concept/${targetConceptId}${suffix}`;
+    if (courseTarget) permanentRedirect(destination);
+    redirect(destination);
   }
 
   const conceptId = rawConceptId;

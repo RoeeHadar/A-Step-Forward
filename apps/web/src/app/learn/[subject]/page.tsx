@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { currentUser } from '@clerk/nextjs/server';
@@ -19,6 +20,8 @@ import { resolveLessonConceptId } from '@/lib/lesson-concept-resolve';
 import { getServerLocale } from '@/i18n/locale-server';
 import { getMessages } from '@/i18n/messages';
 import { resolveConceptTitles, pickConceptTitle } from '@/lib/concept-display-names';
+import { absoluteUrl } from '@/lib/site-url';
+import { pageOpenGraph, pageTwitter } from '@/lib/site-metadata';
 
 export const dynamic = 'force-dynamic';
 
@@ -180,6 +183,33 @@ const SUBJECT_ALIASES: Record<string, string> = {
   physics_pre_university: 'makhina_physics',
   math_pre_university: 'makhina',
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ subject: string }>;
+}): Promise<Metadata> {
+  const { subject } = await params;
+  const category = getCategoryById(SUBJECT_TO_CATEGORY[subject] ?? subject);
+  if (!category) return {};
+  const isHe = (await getServerLocale()) === 'he';
+  const label = isHe ? category.heLabel : category.enLabel;
+  const questionnaires = category.bagrut_questionnaires?.length
+    ? `${isHe ? 'שאלונים' : 'questionnaires'} ${category.bagrut_questionnaires.join(', ')}`
+    : null;
+  const title = questionnaires ? `${label} · ${questionnaires}` : label;
+  const description = isHe
+    ? `${label}${questionnaires ? ` (${questionnaires})` : ''}: כל השיעורים לפי נושא, עם הסברים, דוגמאות פתורות, תרגול ומורה AI.`
+    : `${label}${questionnaires ? ` (${questionnaires})` : ''}: every lesson by topic, with explanations, worked examples, practice and an AI tutor.`;
+  const url = absoluteUrl(`/learn/${category.id}`);
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: pageOpenGraph({ url, title, description }),
+    twitter: pageTwitter({ title, description }),
+  };
+}
 
 export default async function SubjectPage({ params }: { params: Promise<{ subject: string }> }) {
   const { subject } = await params;
