@@ -9,6 +9,8 @@ import { Label } from '@asf/ui/label';
 import { Textarea } from '@asf/ui/textarea';
 import { cn } from '@asf/ui';
 import { useI18n } from '@/providers/i18n-provider';
+import { BOOK_PRIVACY_NOTICE } from '@/lib/legal-content';
+import { renderLegalInline } from '@/lib/legal-markup';
 import {
   LESSON_DURATIONS_H,
   LESSON_HOURLY_RATE_ILS,
@@ -58,7 +60,8 @@ const initial: FormState = {
   bookingForOther: false,
   learnerName: '',
   learnerGrade: '',
-  shareDossier: true,
+  // Unticked by default (Roee, 28 Oct): consent must be an active choice.
+  shareDossier: false,
 };
 
 function toggleSubject(list: LessonSubject[], s: LessonSubject): LessonSubject[] {
@@ -524,6 +527,10 @@ export function BookLessonClient({ isAdmin = false }: { isAdmin?: boolean }) {
             {errorMessage(error)}
           </p>
         ) : null}
+
+        <p className="text-xs leading-relaxed text-muted-foreground" data-testid="book-privacy-notice">
+          {renderLegalInline(BOOK_PRIVACY_NOTICE[locale], 'bn')}
+        </p>
 
         <div className="space-y-3 border-t border-border pt-6">
           <Button type="submit" disabled={submitting || slotConflict} className="w-full sm:w-auto">
