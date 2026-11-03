@@ -128,6 +128,21 @@ function shuffleOrderingIndices(n: number): number[] {
   return shuffled.reverse();
 }
 
+/** Readable plain-text fallback for a markdown/TeX label, used as an accessible name
+ * when KaTeX output alone yields an empty name (math-only match labels). */
+function plainLabel(src: string): string {
+  return src
+    .replace(/\$+/g, '')
+    .replace(/\\(?:frac)\{([^}]*)\}\{([^}]*)\}/g, '$1 over $2')
+    .replace(/\\sqrt\{([^}]*)\}/g, 'square root of $1')
+    .replace(/\^\{?([^}\s]+)\}?/g, ' to the power $1')
+    .replace(/_\{?([^}\s]+)\}?/g, ' sub $1')
+    .replace(/\\([a-zA-Z]+)/g, '$1')
+    .replace(/[{}*_`#]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function MarkdownInline({ content }: { content: string }) {
   return <MarkdownMath>{content}</MarkdownMath>;
 }
@@ -353,7 +368,7 @@ function QuestionCard({
           #{question.ord}
         </span>
         {question.kind === 'open' || question.kind === 'derivation' ? (
-          <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-amber-800 dark:text-amber-300">
+          <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-amber-900 dark:text-amber-200">
             <Pencil className="h-3 w-3" aria-hidden />
             {kindLabel}
           </span>
@@ -582,7 +597,7 @@ function QuestionCard({
                 </span>
                 <span className="text-xs text-muted-foreground">→</span>
                 <select
-                  aria-labelledby={`${matchIdBase}-left-${i}`}
+                  aria-label={plainLabel(left)}
                   disabled={state.submitted || busy}
                   value={userChoice ?? ''}
                   onChange={(e) => {
