@@ -428,9 +428,9 @@ function SectionCard({
             ? `${label} ${section.example_number}`
             : label}
         </span>
-        <span className="block text-base font-semibold text-foreground">
+        <h2 className="block text-base font-semibold text-foreground">
           <MathText text={title} dir={dir} />
-        </span>
+        </h2>
       </div>
       {section.kind === 'worked_example' && section.difficulty ? (
         <DifficultyBadge difficulty={section.difficulty} lang={lang} />

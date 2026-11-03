@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useId, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { MarkdownMath } from '@/components/markdown-math';
 import { Check, X, HelpCircle, ChevronUp, ChevronDown, Pencil, Eye, EyeOff } from 'lucide-react';
@@ -177,6 +177,7 @@ function QuestionCard({
   const [openText, setOpenText] = useState('');
   const [multiSelected, setMultiSelected] = useState<Set<number>>(new Set());
   const [matchSelections, setMatchSelections] = useState<Record<number, number | null>>({});
+  const matchIdBase = useId();
   const [ordering, setOrdering] = useState<number[]>(() => {
     const payload = question.answer_payload;
     if (question.kind !== 'ordering' || !payload) return [];
@@ -576,11 +577,12 @@ function QuestionCard({
             }
             return (
               <div key={i} className={`flex flex-col gap-2 rounded-lg border bg-surface-1/50 p-3 text-sm sm:flex-row sm:items-center ${cls}`}>
-                <span className="flex-1 font-medium">
+                <span id={`${matchIdBase}-left-${i}`} className="flex-1 font-medium">
                   <MarkdownInline content={left} />
                 </span>
                 <span className="text-xs text-muted-foreground">→</span>
                 <select
+                  aria-labelledby={`${matchIdBase}-left-${i}`}
                   disabled={state.submitted || busy}
                   value={userChoice ?? ''}
                   onChange={(e) => {
