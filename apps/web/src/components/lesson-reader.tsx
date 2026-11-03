@@ -417,25 +417,35 @@ function SectionCard({
   // method_guide and before_exam: always open, no collapse button
   const alwaysOpen = section.kind === 'method_guide' || section.kind === 'before_exam';
 
-  const headerContent = (
-    <div className="flex items-center gap-3">
+  // The title is an <h2> on its own when the section is always open. In the
+  // accordion, the <h2> wraps the toggle <button> (a heading must not sit
+  // inside a button), so the inner title is a plain span. Only phrasing
+  // elements (span) are used here so they are valid inside <button> and <h2>.
+  const renderHeader = (titleAsHeading: boolean) => (
+    <span className="flex items-center gap-3">
       <span className="grid h-9 w-9 place-items-center rounded-full bg-background/60">
         <Icon className="h-4 w-4 text-foreground" />
       </span>
-      <div>
+      <span className="block">
         <span className="block text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
           {section.kind === 'worked_example' && section.example_number
             ? `${label} ${section.example_number}`
             : label}
         </span>
-        <h2 className="block text-base font-semibold text-foreground">
-          <MathText text={title} dir={dir} />
-        </h2>
-      </div>
+        {titleAsHeading ? (
+          <h2 className="block text-base font-semibold text-foreground">
+            <MathText text={title} dir={dir} />
+          </h2>
+        ) : (
+          <span className="block text-base font-semibold text-foreground">
+            <MathText text={title} dir={dir} />
+          </span>
+        )}
+      </span>
       {section.kind === 'worked_example' && section.difficulty ? (
         <DifficultyBadge difficulty={section.difficulty} lang={lang} />
       ) : null}
-    </div>
+    </span>
   );
 
   const bodyContent = (
@@ -456,7 +466,7 @@ function SectionCard({
     return (
       <div className={`glass-surface overflow-hidden rounded-2xl border-2 ${meta.tint} transition-all`}>
         <div className="flex items-center gap-3 px-5 py-4">
-          {headerContent}
+          {renderHeader(true)}
         </div>
         {bodyContent}
       </div>
@@ -467,25 +477,27 @@ function SectionCard({
     <div
       className={`glass-surface overflow-hidden rounded-2xl border-2 ${meta.tint} transition-all`}
     >
-      <button
-        type="button"
-        onClick={() => {
-          setOpen((v) => {
-            const next = !v;
-            if (next) onFocus?.(sectionIndex + 1);
-            return next;
-          });
-        }}
-        className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left"
-        aria-expanded={open}
-      >
-        {headerContent}
-        {open ? (
-          <ChevronUp className="h-5 w-5 shrink-0 text-muted-foreground" />
-        ) : (
-          <ChevronDown className="h-5 w-5 shrink-0 text-muted-foreground" />
-        )}
-      </button>
+      <h2 className="m-0 text-base font-semibold">
+        <button
+          type="button"
+          onClick={() => {
+            setOpen((v) => {
+              const next = !v;
+              if (next) onFocus?.(sectionIndex + 1);
+              return next;
+            });
+          }}
+          className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left"
+          aria-expanded={open}
+        >
+          {renderHeader(false)}
+          {open ? (
+            <ChevronUp className="h-5 w-5 shrink-0 text-muted-foreground" />
+          ) : (
+            <ChevronDown className="h-5 w-5 shrink-0 text-muted-foreground" />
+          )}
+        </button>
+      </h2>
 
       {open ? bodyContent : null}
     </div>
