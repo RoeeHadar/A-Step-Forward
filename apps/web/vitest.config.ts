@@ -30,6 +30,8 @@ if (fs.existsSync(envLocal)) {
 }
 
 export default defineConfig({
+  // Same JSX runtime as Next, so tests can render .tsx helpers.
+  esbuild: { jsx: 'automatic' },
   test: {
     environment: 'node',
     include: ['src/**/*.test.ts'],

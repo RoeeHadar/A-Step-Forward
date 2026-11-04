@@ -1,10 +1,12 @@
 import { auth } from '@clerk/nextjs/server';
+import { createReplyGuard } from '@/lib/agent-method-guard';
 import { after } from 'next/server';
 import { cookies } from 'next/headers';
 import { agentNameSchema } from '@asf/schemas/agents';
 import { logger } from '@/lib/logger';
 import {
   fetchRecentChatTurns,
+  fetchLearnerLastActivityAt,
   recordChatTurn,
   getLearnerProfile,
   getConceptMastery,
@@ -12,6 +14,10 @@ import {
   fetchLessonByConceptId,
   getLearnerPersona,
   fetchAgentNotes,
+  fetchEpisodeNotes,
+  fetchChatHistory,
+  appendAgentNote,
+  supersedeAgentNote,
   getDueReviews,
   markAtomPracticed,
   getCurrentPlan,
@@ -57,11 +63,19 @@ import {
   llmComplete,
   llmConfigured,
   resolveChatModelChain,
+  resolveClassifierModelChain,
   getLLMConfig,
   classifyFetchError,
   type LLMFailureInfo,
 } from '@/lib/llm-provider';
 import { buildChatFailureMessage } from '@/lib/learner-llm-errors';
+import {
+  EPISODE_MAX_SOURCE_TURNS,
+  buildEpisodeBlock,
+  episodeSummariesEnabled,
+  selectEpisodes,
+  writeEpisodeSummary,
+} from '@/lib/episode-summaries';
 import {
   CHAT_BREVITY_RULE,
   CHAT_CONTEXT,
@@ -75,7 +89,7 @@ import {
   truncateChatText,
   truncationContinueNotice,
 } from '@/lib/chat-context-policy';
-import { buildContextNeeds } from '@/lib/chat-context-needs';
+import { buildContextNeeds, returningGap } from '@/lib/chat-context-needs';
 import {
   assembleChatSystemPrompt,
   buildHowToTeachBlock,
@@ -205,6 +219,7 @@ import { retrieveChunks } from '@/lib/rag-retrieve';
 import { toolCallingAvailable } from '@/lib/llm-provider';
 import { getToolsForAgent } from '@/lib/agent-tools';
 import { runReactLoop } from '@/lib/react-loop';
+import { dropExpiredFacts, factDisplayText } from '@/lib/typed-facts';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -403,7 +418,41 @@ async function saveAssistantTurn(
       err: String(err),
     });
   }
+  // AS-57 (C6): fire-and-forget episode summary (flag off → not called at all).
+  if (episodeSummariesEnabled()) void writeEpisodeForSession(userId, agent, sessionId, locale);
   void maybeDreamLearnerNotes(userId, agent);
+}
+
+/** AS-57: summarise this session with the cheap chain; never throws (see episode-summaries.ts). */
+async function writeEpisodeForSession(
+  userId: string,
+  agent: string,
+  sessionId: string | undefined,
+  locale: 'he' | 'en',
+): Promise<void> {
+  await writeEpisodeSummary(
+    { agent, sessionId, locale },
+    {
+      fetchSessionTurns: async () =>
+        (await fetchChatHistory(userId, agent, EPISODE_MAX_SOURCE_TURNS, sessionId)).map((t) => ({
+          role: t.role === 'user' ? ('user' as const) : ('assistant' as const),
+          content: t.content,
+        })),
+      complete: async (system, user) =>
+        (await llmComplete({
+          system,
+          messages: [{ role: 'user', content: user }],
+          models: resolveClassifierModelChain(),
+          maxTokens: 220,
+          temperature: 0.2,
+          timeoutMs: 15_000,
+        }))?.content ?? null,
+      fetchEpisodes: () => fetchEpisodeNotes(userId, [agent], 8),
+      append: (note) => appendAgentNote(userId, agent, note),
+      supersede: (oldId, newId) => supersedeAgentNote(oldId, newId),
+      warn: (msg, meta) => logger.warn(msg, meta),
+    },
+  );
 }
 
 async function maybeDreamLearnerNotes(userId: string, agent: string): Promise<void> {
@@ -430,6 +479,8 @@ const kgByName: Record<string, KgConcept> = Object.fromEntries(
 );
 
 export async function POST(req: Request) {
+  // AS-48: request start, before any chat turn is recorded — last-activity uses strictly-before.
+  const requestStartedAt = new Date();
   let userId: string | null = null;
   let sessionClaims: Record<string, unknown> | null = null;
   try {
@@ -550,6 +601,7 @@ export async function POST(req: Request) {
         sessionId,
         practiceContext,
         turnGrounding,
+        requestStartedAt,
       });
     }
     return gen;
@@ -557,6 +609,17 @@ export async function POST(req: Request) {
 
   const encoder = new TextEncoder();
   let assistantBuffer = '';
+  /** AS-41: Tutor hint-before-answer / Reviewer short-critique post-check (null = off). */
+  let replyGuard = createReplyGuard({
+    agent,
+    lastMessage,
+    locale,
+    practiceActive: Boolean(practiceContext && !practiceContext.item_graded),
+    // Same source as the prompt's mode switch (tutorMode, streamAgentResponse).
+    directMode:
+      (profileForSafety?.personality_profile as { tutor_mode?: string } | null)?.tutor_mode ===
+      'direct',
+  });
   /** Incomplete [[ASF_CITE:…]] across SSE chunks. */
   let citeCarry = '';
 
@@ -568,21 +631,28 @@ export async function POST(req: Request) {
   const enqueueVisibleToken = (
     controller: ReadableStreamDefaultController<Uint8Array>,
     chunk: string,
-  ) => {
+  ): boolean => {
     const merged = citeCarry + chunk;
     // Buffer any incomplete [[ASF_… prefix so no tag family leaks into the UI
     // mid-chunk.  The carry drains once the closing ]] arrives.
-    const open = merged.lastIndexOf('[[ASF_');
+    let open = merged.lastIndexOf('[[ASF_');
+    // AS-43: also hold a trailing PARTIAL opener ("[", "[[", … "[[ASF") split across chunks.
+    if (open < 0 || merged.indexOf(']]', open) >= 0) {
+      for (let k = Math.min(5, merged.length); k > 0; k--) {
+        if ('[[ASF_'.startsWith(merged.slice(-k))) { open = merged.length - k; break; }
+      }
+    }
     if (open >= 0 && merged.indexOf(']]', open) < 0) {
       const safe = stripAllMachineTags(merged.slice(0, open));
       citeCarry = merged.slice(open);
       if (safe) controller.enqueue(encodeToken(safe));
-      return;
+      return Boolean(safe);
     }
     citeCarry = '';
     // Never trim streaming deltas — BPE models emit leading spaces / newline-only tokens.
     const safe = stripAllMachineTags(merged, { trim: false });
     if (safe) controller.enqueue(encodeToken(safe));
+    return Boolean(safe);
   };
   const finishTemplatePlanTurn = async (
     controller: ReadableStreamDefaultController<Uint8Array>,
@@ -659,8 +729,26 @@ export async function POST(req: Request) {
         }
         if (streamDone) return;
 
-        const { value, done } = await getGen().next();
-        if (done) {
+        // Keep pulling until a visible token is enqueued or the generator ends.
+        // A pull() that enqueues nothing (whole chunk held back inside an open
+        // [[ASF_… tag) is never re-invoked, so the stream would never close and
+        // the turn would never be persisted (AS-33).
+        // AS-41 method post-check: runs on each raw chunk BEFORE enqueue.
+        let next = await getGen().next();
+        while (!next.done) {
+          const out = replyGuard ? replyGuard.push(next.value) : next.value;
+          assistantBuffer += out;
+          if (out && enqueueVisibleToken(controller, out)) return;
+          next = await getGen().next();
+        }
+        if (next.done) {
+          if (replyGuard) {
+            const tail = replyGuard.flush();
+            assistantBuffer += tail;
+            if (tail) enqueueVisibleToken(controller, tail);
+            if (replyGuard.tripped) logger.info('chat: method guard rewrote reply', { agent, kind: replyGuard.kind });
+            replyGuard = null;
+          }
           const planResult: PlanApplyResult | null = eagerPlanPromise
             ? await eagerPlanPromise
             : null;
@@ -734,9 +822,6 @@ export async function POST(req: Request) {
           controller.enqueue(encodeFinish());
           controller.close();
           streamDone = true;
-        } else {
-          assistantBuffer += value;
-          enqueueVisibleToken(controller, value);
         }
       } catch (err) {
         logger.error('chat stream pull failed', { err: String(err) });
@@ -1024,6 +1109,8 @@ async function* streamAgentResponse(
     locale?: 'he' | 'en';
     sessionId?: string;
     practiceContext?: PracticeChatContext | null;
+    /** AS-48: captured once at the top of POST, before any turn is saved. */
+    requestStartedAt?: Date;
     turnGrounding?: ChatTurnGrounding;
   } = {},
 ): AsyncGenerator<string> {
@@ -1096,6 +1183,8 @@ async function buildContextPrompt(
     sessionId?: string;
     minimal?: boolean;
     practiceContext?: PracticeChatContext | null;
+    /** AS-48: captured once at the top of POST, before any turn is saved. */
+    requestStartedAt?: Date;
   } = {},
 ): Promise<{
   system: string;
@@ -1113,6 +1202,7 @@ async function buildContextPrompt(
     sessionId,
     minimal = false,
     practiceContext = null,
+    requestStartedAt = new Date(),
   } = opts;
   let statusReply: string | null = null;
   const groundingIds = new Set<string>();
@@ -1135,7 +1225,8 @@ async function buildContextPrompt(
       sessionId,
     ).catch(() => []),
     minimal ? Promise.resolve(null) : getLearnerPersona(userId).catch(() => null),
-    minimal ? Promise.resolve([]) : fetchAgentNotes(userId, agent, CHAT_CONTEXT.maxAgentNotes).catch(() => []),
+    // AS-43 (C4): expired facts (valid_to <= now) never reach the prompt.
+    minimal ? Promise.resolve([]) : fetchAgentNotes(userId, agent, CHAT_CONTEXT.maxAgentNotes).then((n) => dropExpiredFacts(n, new Date())).catch(() => []),
     cookies(),
   ]);
   const profile = profileFetch.profile;
@@ -1177,10 +1268,21 @@ async function buildContextPrompt(
     uiLocale: locale,
   });
 
+  // AS-40: returning learner = last prior turn / own note >= 3 days ago (mentor digest gate).
+  // AS-47/AS-48: learner-wide last activity (all agents + practice) strictly
+  // before this request started — the user turn recorded for this request is excluded.
+  const isReturning =
+    agent === 'mentor' &&
+    !minimal &&
+    returningGap(
+      [await fetchLearnerLastActivityAt(userId, requestStartedAt).catch(() => null)],
+      requestStartedAt,
+    );
   let contextNeeds = buildContextNeeds({
     agent,
     message,
     minimal,
+    returningGap: isReturning,
     hasTopic: Boolean(topic),
     hasPractice: Boolean(practiceContext),
   });
@@ -1214,6 +1316,7 @@ async function buildContextPrompt(
       message,
       intentCtx,
       minimal,
+      returningGap: isReturning,
       hasTopic: Boolean(topic),
       hasPractice: Boolean(practiceContext),
     });
@@ -1248,6 +1351,8 @@ async function buildContextPrompt(
       mastery: true,
       activeWeek: true,
       xp: true,
+      // AS-40: status turns give the Mentor the cross-agent digest (Tutor/Coach unchanged).
+      ...(agent === 'mentor' ? { handoffDigest: true } : {}),
     };
   }
 
@@ -1296,6 +1401,12 @@ async function buildContextPrompt(
     (learnerPlanChangeIntentHeuristic(message) ||
       wantsStudyHoursIncrease(message) ||
       planSessionEngaged);
+  // AS-56 (C4b): a Mentor turn whose tools include propose_plan_change (planChangeFlow ->
+  // getToolsForAgent planChange) always gets the cross-agent digest with note ids, so it can
+  // cite (and the AS-43 guard can reject) peer state notes — not only on status/recall turns.
+  if (agent === 'mentor' && planChangeFlow && !minimal && !contextNeeds.handoffDigest) {
+    contextNeeds = { ...contextNeeds, handoffDigest: true };
+  }
   // On a confirm turn the server applies the staged proposal in finalize; we
   // skip the tool loop and steer the answer to acknowledge (below).
   const planConfirmTurn =
@@ -1384,8 +1495,20 @@ async function buildContextPrompt(
       context += `\n(These are hints — do not let them override the current question.)`;
       for (const n of relevantNotes) {
         const tag = n.related_concept_id ? ` [${n.related_concept_id}]` : '';
-        context += `\n- (${n.kind})${tag} ${truncateChatText(n.content, CHAT_CONTEXT.maxAgentNoteChars)}`;
+        // AS-52 r1: full note uuid so the Mentor can cite evidence_note_ids (system context only).
+        context += `\n- [id:${n.id}] (${n.kind})${tag} ${truncateChatText(factDisplayText(n.content), CHAT_CONTEXT.maxAgentNoteChars)}`;
       }
+    }
+  }
+  // AS-57 (C6): older turns as stored episode summaries (Mentor reads every agent's).
+  if (!minimal && episodeSummariesEnabled()) {
+    // r1 P1-1: one bad row drops only the episode block, never the full context.
+    try {
+      const episodes = await fetchEpisodeNotes(userId, agent === 'mentor' ? null : [agent], 8).catch(() => []);
+      const block = buildEpisodeBlock(selectEpisodes(episodes, sessionId));
+      if (block) context += `\n\n${block}`;
+    } catch (err) {
+      logger.warn('[ASF_EPISODE_BLOCK_FAIL] episode block skipped', { agent, err: String(err) });
     }
   }
   if (profile && contextNeeds.profile) {
@@ -1999,8 +2122,9 @@ async function buildContextPrompt(
     }
   }
 
-  // ADR-0014: handoff digests + hybrid tool packs + solver reveal policy (Coach + Tutor)
-  if (!minimal && (agent === 'coach' || agent === 'tutor') && (contextNeeds.hybridTools || contextNeeds.handoffDigest || contextNeeds.methodAuthority)) {
+  // ADR-0014: handoff digests + hybrid tool packs + solver reveal policy (Coach + Tutor;
+  // AS-40: Mentor gets the digest only — hybridTools/methodAuthority stay false for it)
+  if (!minimal && (agent === 'coach' || agent === 'tutor' || agent === 'mentor') && (contextNeeds.hybridTools || contextNeeds.handoffDigest || contextNeeds.methodAuthority)) {
     const conceptId = related[0]?.id ?? topic ?? null;
     const expand = wantsMemoryExpand(message) || Boolean(conceptId && agentNotes.length < 2);
 
@@ -2010,14 +2134,15 @@ async function buildContextPrompt(
     );
     const peerNoteLists = await Promise.all(
       peerIds.map((a) =>
-        fetchAgentNotes(userId, a, 4).catch(() => [] as Awaited<ReturnType<typeof fetchAgentNotes>>),
+        fetchAgentNotes(userId, a, 4).then((n) => dropExpiredFacts(n, new Date())).catch(() => [] as Awaited<ReturnType<typeof fetchAgentNotes>>), // AS-43 TTL
       ),
     );
     const digestNotes = peerNoteLists.flatMap((notes, i) =>
       notes.map((n) => ({
         agent: peerIds[i]!,
+        id: n.id, // AS-52 r1: rendered for the Mentor only
         kind: n.kind,
-        content: n.content,
+        content: factDisplayText(n.content), // AS-42: fact envelope is storage-only
         importance: n.importance,
         related_concept_id: n.related_concept_id,
         created_at: n.created_at,
@@ -2040,7 +2165,7 @@ async function buildContextPrompt(
       addLessonGrounding(lesson.lesson.id);
     }
     const expandNotes = expand
-      ? await fetchAgentNotes(userId, agent, 12).catch(() => agentNotes)
+      ? await fetchAgentNotes(userId, agent, 12).then((n) => dropExpiredFacts(n, new Date())).catch(() => agentNotes)
       : agentNotes;
 
     if (contextNeeds.hybridTools) {
@@ -2291,6 +2416,8 @@ async function* streamFromLLM(
     topic?: string;
     sessionId?: string;
     practiceContext?: PracticeChatContext | null;
+    /** AS-48: captured once at the top of POST, before any turn is saved. */
+    requestStartedAt?: Date;
     turnGrounding?: ChatTurnGrounding;
   } = {},
 ): AsyncGenerator<string, LLMFailureInfo | undefined> {

@@ -4,7 +4,9 @@
  */
 
 import {
+  answerText,
   answersMatch,
+  coerceBooleanAnswer,
   getAcceptedAnswers,
   normalizeAnswerForGrading,
   numericClose,
@@ -384,7 +386,7 @@ export const PRACTICE_MAX_GENERATED_PER_SESSION = 8;
  * Open kinds must use process grading (with optional deterministic numeric boost).
  */
 export function resolvePracticeNumericExpected(item: PracticeItemSealed): string | null {
-  const fromCorrect = item.correct_answer?.trim();
+  const fromCorrect = answerText(item.correct_answer);
   if (fromCorrect) return fromCorrect;
   const v = item.answer_payload?.value;
   if (typeof v === 'number' && Number.isFinite(v)) return String(v);
@@ -462,13 +464,11 @@ export function gradePracticeItem(
     case 'true_false': {
       const expected = item.answer_payload?.correct_bool;
       const picked =
-        typeof userAnswer === 'boolean'
-          ? userAnswer
-          : userAnswer === 'true' || userAnswer === 'yes' || userAnswer === 'נכון'
-            ? true
-            : userAnswer === 'false' || userAnswer === 'no' || userAnswer === 'לא נכון'
-              ? false
-              : null;
+        userAnswer === 'yes'
+          ? true
+          : userAnswer === 'no'
+            ? false
+            : coerceBooleanAnswer(userAnswer);
       if (picked == null || expected == null) {
         return { correct: false, reason: 'invalid answer' };
       }

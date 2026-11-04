@@ -43,6 +43,8 @@ export function buildContextNeeds(opts: {
   hasTopic?: boolean;
   hasPractice?: boolean;
   minimal?: boolean;
+  /** AS-40: learner returns after >= RETURNING_GAP_DAYS (see returningGap). */
+  returningGap?: boolean;
 }): ContextNeeds {
   const {
     agent,
@@ -143,7 +145,34 @@ export function buildContextNeeds(opts: {
     methodAuthority: (isTutor || isCoach) && (teachTurn || hasPractice),
     wellbeing: (isTutor || isMentor) && (intent === 'exam_anxiety' || pressure),
     // Handoff digests only when expanding memory or coach session — not every tutor math turn.
-    handoffDigest: (isTutor || isCoach) && (isCoach || intent === 'agent_correction'),
+    // AS-40 (ADR-0014 amendment): Mentor reads the cross-agent digest only on
+    // status turns or when the learner returns after a gap — never on every turn.
+    handoffDigest:
+      ((isTutor || isCoach) && (isCoach || intent === 'agent_correction')) ||
+      (isMentor && (wantStatus || Boolean(opts.returningGap))),
     xp: wantStatus || isMentor,
   };
+}
+
+/** AS-40: gap (days) after which a learner counts as "returning". */
+export const RETURNING_GAP_DAYS = 3;
+
+/**
+ * AS-40: true when the latest prior activity is at least RETURNING_GAP_DAYS
+ * before `now`. Unknown / unparsable timestamps → false (first contact is not
+ * a "return").
+ */
+export function returningGap(
+  priorActivityAt: ReadonlyArray<string | Date | null | undefined>,
+  now: Date = new Date(),
+  days: number = RETURNING_GAP_DAYS,
+): boolean {
+  let latest = -Infinity;
+  for (const t of priorActivityAt) {
+    if (!t) continue;
+    const ms = (t instanceof Date ? t : new Date(t)).getTime();
+    if (Number.isFinite(ms) && ms > latest) latest = ms;
+  }
+  if (!Number.isFinite(latest)) return false;
+  return now.getTime() - latest >= days * 86_400_000;
 }

@@ -7,6 +7,7 @@
 import 'server-only';
 import { appendAgentNote } from '@/lib/neon-db';
 import { ruleClassify } from '@/lib/chat-safety';
+import { defaultValidTo, isTypedFactKind, normalizeFactKey, normalizeValidTo } from '@/lib/typed-facts';
 
 const MEMORY_NOTE_RE = /\[\[ASF_MEMORY_NOTE:(\{[\s\S]*?\})\]\]/g;
 
@@ -23,6 +24,9 @@ const VALID_KINDS = new Set([
   'misconception',
   'win',
   'plan',
+  // AS-42 (C3) typed-fact kinds (misconception/preference already above).
+  'goal',
+  'state',
 ]);
 
 export function stripMemoryMachineTags(content: string): string {
@@ -34,15 +38,36 @@ interface MemoryNotePayload {
   content?: string;
   importance?: number;
   related_concept_id?: string | null;
+  /** AS-42 (C3): supersede key for typed facts (kind + key). Optional: old tags omit it. */
+  key?: string;
+  /** AS-42 (C3): ISO end of validity, stored for C4 (state TTL); not enforced here. */
+  valid_to?: string | null;
+}
+
+/**
+ * AS-42 (C3): typed-fact fields of a parsed tag. Returns {} for untyped kinds or tags
+ * without a usable key (old tags), so those notes are stored exactly as before.
+ */
+export function typedFactFromTag(
+  kind: string,
+  parsed: Pick<MemoryNotePayload, 'key' | 'valid_to'>,
+  now: Date,
+): { fact?: { key: string; valid_to: string | null } } {
+  if (!isTypedFactKind(kind)) return {};
+  const key = normalizeFactKey(parsed.key);
+  if (!key) return {};
+  // AS-43 (C4): kind=state defaults to now + 14 d.
+  return { fact: { key, valid_to: defaultValidTo(kind, normalizeValidTo(parsed.valid_to), now) } };
 }
 
 export async function applyMemoryTagsFromAssistant(
   learnerId: string,
   agent: string,
   assistantContent: string,
-  opts?: { childMode?: boolean },
+  opts?: { childMode?: boolean; now?: Date },
 ): Promise<number> {
   const childMode = opts?.childMode ?? false;
+  const now = opts?.now ?? new Date(); // clock read at the I/O boundary only
   let applied = 0;
   for (const match of assistantContent.matchAll(MEMORY_NOTE_RE)) {
     try {
@@ -84,6 +109,7 @@ export async function applyMemoryTagsFromAssistant(
         content,
         importance,
         related_concept_id: parsed.related_concept_id ?? null,
+        ...typedFactFromTag(kind, parsed, now),
       });
       applied += 1;
     } catch (err) {

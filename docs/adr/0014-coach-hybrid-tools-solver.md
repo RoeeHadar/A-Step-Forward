@@ -24,7 +24,7 @@ Live web agents (Tutor, Mentor, Coach, Reviewer) were differentiated mainly by p
 
 ### Wave 1 out of scope
 
-Full MCP tool sprawl; inventing alternate methods beyond authored corpus; all-four digests as the primary ship (Coach/Tutor digests first); model-callable `mark_atom_practiced`; hard reply-blocking verify day one.
+Full MCP tool sprawl; inventing alternate methods beyond authored corpus; all-four digests as the primary ship (Coach/Tutor digests first) — *AS-40/AS-47 note (2026-11-04): Mentor now reads the digest on status turns and on returning turns (learner-wide last activity across agents + practice ≥3 days, `fetchLearnerLastActivityAt`, timestamp-only); Tutor/Coach gating and per-agent `fetchAgentNotes` unchanged*; model-callable `mark_atom_practiced`; hard reply-blocking verify day one.
 
 ## Amendment (2026-07-24) — method grounding (disease, not symptoms)
 

@@ -7,6 +7,8 @@ import { getServerLocale } from '@/i18n/locale-server';
 import { localeDir } from '@/i18n/locale-storage';
 
 import './globals.css';
+import { getSiteUrl } from '@/lib/site-url';
+import { pageOpenGraph, pageTwitter } from '@/lib/site-metadata';
 
 const heebo = Heebo({ subsets: ['hebrew', 'latin'], variable: '--font-heebo', display: 'swap' });
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
@@ -28,7 +30,7 @@ const newsreader = Newsreader({
 
 export const dynamic = 'force-dynamic';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://astepforward.app';
+const siteUrl = getSiteUrl();
 
 const title = 'A Step Forward \u2013 an AI learning center that remembers you';
 
@@ -42,15 +44,10 @@ export const metadata: Metadata = {
   applicationName: 'A Step Forward',
   authors: [{ name: 'Roee Hadar' }],
   keywords: ['AI tutor', 'AI learning', 'AI agents', 'Bagrut prep', 'memory', 'education', 'Hebrew'],
-  openGraph: {
-    type: 'website',
-    url: siteUrl,
-    siteName: 'A Step Forward',
-    title,
-    description,
-    images: [{ url: '/og.png', width: 1200, height: 630, alt: title }],
-  },
-  twitter: { card: 'summary_large_image', title, description, images: ['/og.png'] },
+  // No og:url here: a layout value is inherited by every page, which made
+  // og:url point at the homepage everywhere. Pages set their own (M4).
+  openGraph: pageOpenGraph({ title, description }),
+  twitter: pageTwitter({ title, description }),
   robots: { index: true, follow: true },
   icons: { icon: '/favicon.ico', apple: '/apple-touch-icon.png' },
 };

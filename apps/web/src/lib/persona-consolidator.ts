@@ -36,6 +36,7 @@ import {
   type LearnerAgentNote,
 } from '@/lib/neon-db';
 import { llmCompleteJson } from '@/lib/llm-provider';
+import { decodeFactContent, keepCurrentFacts } from '@/lib/typed-facts';
 
 neonConfig.fetchConnectionCache = true;
 const sql = process.env.DATABASE_URL ? neon(process.env.DATABASE_URL) : null;
@@ -113,7 +114,16 @@ Rules — non-negotiable:
     keep English — but never leave English "Diagnostic calibration" dumps when a Hebrew
     equivalent exists in the notes.`;
 
-function buildUserPrompt(
+/**
+ * AS-42 (C3): drop facts superseded by a newer fact with the same kind+key. The SQL
+ * already filters `superseded_by IS NULL`; this also covers same-key duplicates that
+ * pre-date supersede-on-write or raced it. AS-43: and expired facts (valid_to <= now).
+ */
+export function selectConsolidationNotes<T extends LiveNote>(notes: T[], now: Date): T[] {
+  return keepCurrentFacts(notes, now);
+}
+
+export function buildUserPrompt(
   currentPersona: string,
   notes: LiveNote[],
 ): string {
@@ -121,7 +131,9 @@ function buildUserPrompt(
   for (const n of notes) {
     const arr = linesByAgent.get(n.agent) ?? [];
     const tag = n.related_concept_id ? ` [concept:${n.related_concept_id}]` : '';
-    arr.push(`- id=${n.id} kind=${n.kind} importance=${n.importance}${tag} :: ${n.content}`);
+    const { text, meta } = decodeFactContent(n.content);
+    const fact = meta ? ` key=${meta.key}${meta.n > 1 ? ` count=${meta.n}` : ''}` : '';
+    arr.push(`- id=${n.id} kind=${n.kind}${fact} importance=${n.importance}${tag} :: ${text}`);
     linesByAgent.set(n.agent, arr);
   }
   const noteBlocks = [...linesByAgent.entries()]
@@ -255,10 +267,13 @@ async function _consolidateLearnerMemoryInner(
   learnerId: string,
   opts: { force?: boolean } = {},
 ): Promise<ConsolidationResult> {
-  const [persona, notes]: [LearnerPersona | null, LiveNote[]] = await Promise.all([
+  const [persona, fetched]: [LearnerPersona | null, LiveNote[]] = await Promise.all([
     getLearnerPersona(learnerId),
     fetchAllLiveNotes(learnerId),
   ]);
+  // AS-42 (C3): the consolidator sees only current facts (one per kind+key).
+  // AS-43 (C4): expired state facts are dropped too; clock read at the I/O boundary.
+  const notes = selectConsolidationNotes(fetched, new Date());
   const currentPersona = persona?.text ?? '';
   if (!opts.force && notes.length < MIN_NOTES_TO_CONSOLIDATE) {
     return {

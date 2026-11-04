@@ -57,6 +57,23 @@ describe('practice-arena (ADR-0013)', () => {
     expect(JSON.stringify(pub)).not.toContain('Power rule: increase');
   });
 
+  it('grades true_false via coerceBooleanAnswer (Hebrew, niqqud, maqaf, spacing)', () => {
+    const tf: PracticeItemSealed = {
+      ...sample,
+      kind: 'true_false',
+      correct_index: undefined,
+      answer_payload: { correct_bool: false },
+    } as PracticeItemSealed;
+    for (const a of [false, 'false', 'no', 'לא נכון', ' לא  נכון ', 'לא\u05BEנכון', 'לא-נכון', 'לֹא נָכוֹן']) {
+      expect(gradePracticeItem(tf, a).correct).toBe(true);
+    }
+    for (const a of [true, 'true', 'yes', 'נכון', ' נָכוֹן\n']) {
+      expect(gradePracticeItem(tf, a).correct).toBe(false);
+    }
+    expect(gradePracticeItem(tf, 'לא').reason).toBe('invalid answer');
+    expect(gradePracticeItem(tf, 'נכון חלקית').reason).toBe('invalid answer');
+  });
+
   it('grades MCQ server-side', () => {
     expect(gradePracticeItem(sample, 0).correct).toBe(true);
     expect(gradePracticeItem(sample, 1).correct).toBe(false);

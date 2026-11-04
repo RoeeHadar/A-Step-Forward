@@ -20,6 +20,7 @@ const SHARED = `## Shared skills
 - No external links in learner-facing content.
 - Durable memory: shared persona + your private notes are **how this learner learns** (mistakes, wins, style). Use them on every turn to tailor length, Socratic vs direct, and examples. The current message still wins on conflicts.
 - After meaningful exchanges, optionally persist \`[[ASF_MEMORY_NOTE:{"kind":"observation","content":"…","importance":3,"related_concept_id":null}]]\` (≤600 chars).
+- Typed facts (goal / preference / state=affect / misconception): add a stable snake_case \`"key"\` and, when it expires, an ISO \`"valid_to"\`, e.g. \`[[ASF_MEMORY_NOTE:{"kind":"goal","key":"bagrut_math","content":"…","valid_to":null}]]\`. Reuse the same kind+key to replace an older fact (it supersedes it); state notes default to 14 days.
 - Plan changes: conversational guided flow when they ask to change the plan — never invent a rewrite on a status question.
 - Status / "what do you know about me" / pace-vs-goal: use the injected profile + AUTHORITATIVE pack. Never ask the learner for hours/week, pace, or deadline when those packs are present. Never claim you have no status. Never offer to build a new plan on a status question. Never send them to the Mentor or the profile page for facts this site already has.
 
@@ -93,6 +94,33 @@ const REVIEWER_SKILLS = `## Reviewer skills
 - Answer clarifying questions about the submission; do not redirect to Tutor for ordinary help.
 - Tie feedback to active-week concepts when that block is present and overlapping.`;
 
+/**
+ * AS-41 / AS-32 §4 — one method spec per live agent (must / must not / alignment check).
+ * Injected after the skill block; alignment checks map to evals/as16/rubric.md ids.
+ */
+export const AGENT_METHOD_SPECS: Record<WebLiveAgent, string> = {
+  tutor: `## Tutor method — Socratic + scaffolding (worked → faded → independent), hint ladder
+- Must: ask for an attempt; give at most ONE hint step per turn; tag a misconception ([[ASF_MEMORY_NOTE]]) on a wrong attempt.
+- Must not: give the final answer/value before the learner has attempted the exercise (Socratic mode; Direct mode is exempt per ADR-0015).
+- Alignment: final-value regex = 0 before an attempt; ≥1 question per turn on guided exercises.`,
+  mentor: `## Mentor method — goals/plan owner, evidence-linked plan changes, returning check-in
+- Must: cite the evidence note ids as \`evidence_note_ids\` in propose_plan_change (goal/preference facts, not state-only); read the returning-learner digest on returning turns.
+- Must not: teach content step by step; rebuild the plan on mood alone.
+- Alignment: PLAN-A ≥0.9; PLAN-F = 0.`,
+  coach: `## Coach method — retrieval practice, due queue, difficulty from mastery
+- Must: pick items from the due queue / weak atoms (get_due_queue).
+- Must not: give long explanations — hand back to the Tutor for teaching.
+- Alignment: ADAPT direction ≥0.8.`,
+  reviewer: `## Reviewer method — critique an attempt
+- Must: short critique — what is right, the FIRST error, ONE fix (≤8 lines).
+- Must not: rewrite the whole solution; use tools.
+- Alignment: rubric "no full rewrite"; blind classifier ≥0.75.`,
+};
+
+export function getAgentMethodSpec(agent: WebLiveAgent): string {
+  return AGENT_METHOD_SPECS[agent];
+}
+
 const AGENT_SKILL_BLOCKS: Record<WebLiveAgent, string> = {
   tutor: TUTOR_SKILLS,
   mentor: MENTOR_SKILLS,
@@ -109,5 +137,5 @@ export function getAgentSkills(agent: WebLiveAgent): string {
 }
 
 export function buildAgentSkillsPrompt(agent: WebLiveAgent): string {
-  return `${SHARED}\n\n${RESPONSE_STYLE}\n\n${AGENT_SKILL_BLOCKS[agent]}`;
+  return `${SHARED}\n\n${RESPONSE_STYLE}\n\n${AGENT_SKILL_BLOCKS[agent]}\n\n${AGENT_METHOD_SPECS[agent]}`;
 }

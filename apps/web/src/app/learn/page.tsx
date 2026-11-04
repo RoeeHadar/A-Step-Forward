@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Fragment } from 'react';
 import { ArrowRight } from 'lucide-react';
@@ -5,8 +6,17 @@ import { auth } from '@clerk/nextjs/server';
 import { fetchSubjects } from '@/lib/content-api';
 import { subjectIcon, subjectLabel } from '@/lib/subject-labels';
 import { getServerLocale } from '@/i18n/locale-server';
+import { absoluteUrl } from '@/lib/site-url';
+import { pageOpenGraph } from '@/lib/site-metadata';
 
 export const dynamic = 'force-dynamic';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const isHe = (await getServerLocale()) === 'he';
+  const title = isHe ? 'קורסים' : 'Courses';
+  const url = absoluteUrl('/learn');
+  return { title, alternates: { canonical: url }, openGraph: pageOpenGraph({ url }) };
+}
 
 const MAKHINA_MATH_CARD = {
   subject: 'makhina',

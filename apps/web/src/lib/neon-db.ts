@@ -9,6 +9,7 @@
  * Uses @neondatabase/serverless (HTTP, no TCP pool).
  */
 import 'server-only';
+import { decodeFactContent, encodeFactContent, factEnvelopePrefix, isTypedFactKind, nextFactCount, normalizeFactKey, normalizeValidTo } from '@/lib/typed-facts';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import { randomUUID } from 'node:crypto';
 import type { LearnerDashboard } from '@asf/schemas/curriculum';
@@ -2826,6 +2827,43 @@ export async function recordChatTurn(
   }
 }
 
+/**
+ * AS-47: learner-wide last activity (read-only, one learner, no migration).
+ * Max over existing timestamp columns, across ALL agents:
+ *   - chat_turns.created_at        (infra/alembic/versions/0011_onboarding_extras.py:34-42)
+ *   - skill_practice.last_practiced (infra/alembic/versions/0013_lessons.py:84-92)
+ *   - test_attempts.created_at     (infra/alembic/versions/0019_test_attempts.py:36-57)
+ * Only rows strictly before `before` count, so the just-recorded user turn of
+ * the current request is excluded. Returns ISO string or null (no DB / no rows / error).
+ * Returns a timestamp only — never note or turn content (per-agent privacy intact).
+ */
+export async function fetchLearnerLastActivityAt(
+  learnerId: string,
+  before: Date,
+): Promise<string | null> {
+  if (!sql) return null;
+  if (!learnerId?.trim()) return null;
+  const cutoff = before.toISOString();
+  try {
+    const rows = (await sql`
+      SELECT GREATEST(
+        (SELECT MAX(created_at) FROM chat_turns
+          WHERE learner_id = ${learnerId} AND created_at < ${cutoff}),
+        (SELECT MAX(last_practiced) FROM skill_practice
+          WHERE learner_id = ${learnerId} AND last_practiced < ${cutoff}),
+        (SELECT MAX(created_at) FROM test_attempts
+          WHERE learner_id = ${learnerId} AND created_at < ${cutoff})
+      ) AS last_at
+    `) as Array<{ last_at: string | Date | null }>;
+    const v = rows[0]?.last_at ?? null;
+    if (!v) return null;
+    return v instanceof Date ? v.toISOString() : new Date(v).toISOString();
+  } catch (err) {
+    console.warn('[neon-db] fetchLearnerLastActivityAt failed', err);
+    return null;
+  }
+}
+
 export async function fetchRecentChatTurns(
   learnerId: string,
   agent: string,
@@ -3761,6 +3799,7 @@ export async function fetchAgentNotes(
       FROM learner_agent_notes
       WHERE learner_id = ${learnerId}
         AND agent = ${agent}
+        AND kind <> 'episode'
         AND archived_at IS NULL
         AND superseded_by IS NULL
       ORDER BY importance DESC, created_at DESC
@@ -3775,12 +3814,78 @@ export async function fetchAgentNotes(
   }
 }
 
+/**
+ * AS-57 (C6): live episode-summary notes (kind 'episode'), newest first. `agents` null =
+ * any agent (Mentor reads every agent's episodes). Kept out of fetchAgentNotes above so
+ * episodes never reach the notes block, the handoff digest or the dream pass.
+ */
+export async function fetchEpisodeNotes(
+  learnerId: string,
+  agents: string[] | null,
+  limit = 4,
+): Promise<LearnerAgentNote[]> {
+  if (!sql) return [];
+  try {
+    return (await sql`
+      SELECT id::text, learner_id, agent, kind, content, importance,
+             related_concept_id, source_turn_id::text AS source_turn_id,
+             created_at, last_referenced_at
+      FROM learner_agent_notes
+      WHERE learner_id = ${learnerId}
+        AND kind = 'episode'
+        AND (${agents === null} OR agent = ANY(${agents ?? []}))
+        AND archived_at IS NULL
+        AND superseded_by IS NULL
+      ORDER BY created_at DESC
+      LIMIT ${limit}
+    `) as LearnerAgentNote[];
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[neon-db] fetchEpisodeNotes failed', err);
+    }
+    return [];
+  }
+}
+
+/**
+ * AS-43 (C4): resolve cited evidence notes (this learner only, any agent, live rows).
+ * Used by propose_plan_change to reject state-only (mood) evidence.
+ */
+export async function fetchAgentNotesByIds(
+  learnerId: string,
+  ids: string[],
+): Promise<Array<{ id: string; kind: string; content: string }>> {
+  if (!sql || ids.length === 0) return [];
+  try {
+    return (await sql`
+      SELECT id::text, kind, content
+      FROM learner_agent_notes
+      WHERE learner_id = ${learnerId}
+        AND id::text = ANY(${ids})
+        AND archived_at IS NULL
+        AND superseded_by IS NULL
+    `) as Array<{ id: string; kind: string; content: string }>;
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[neon-db] fetchAgentNotesByIds failed', err);
+    }
+    return [];
+  }
+}
+
 export interface NewAgentNote {
   kind?: string;            // 'observation' | 'preference' | 'strategy' | 'open_question' | …
   content: string;
   importance?: number;      // 1..5; default 3
   related_concept_id?: string | null;
   source_turn_id?: string | null;
+  /**
+   * AS-42 (C3): typed fact. When set and `kind` is a typed-fact kind, key/count/valid_to
+   * are stored in the content envelope (see typed-facts.ts; no schema change) and every
+   * older live note with the same supersede key (kind + key, this learner, any agent)
+   * gets `superseded_by` = the new id.
+   */
+  fact?: { key: string; valid_to?: string | null } | null;
 }
 
 /**
@@ -3794,20 +3899,48 @@ export async function appendAgentNote(
 ): Promise<string | null> {
   if (!sql) return null;
   const id = randomUUID();
-  const content = note.content.slice(0, 600);
+  const kind = note.kind ?? 'observation';
+  const factKey = isTypedFactKind(kind) ? normalizeFactKey(note.fact?.key) : null;
+  let content = note.content.slice(0, 600);
   const importance = Math.max(1, Math.min(5, note.importance ?? 3));
   try {
+    let likePrefix = '';
+    if (factKey) {
+      // Escape LIKE wildcards (keys may contain `_`).
+      likePrefix = `%${factEnvelopePrefix(factKey).replace(/[\\%_]/g, (c) => `\\${c}`)}%`;
+      const prev = (await sql`
+        SELECT content FROM learner_agent_notes
+        WHERE learner_id = ${learnerId} AND kind = ${kind}
+          AND archived_at IS NULL AND superseded_by IS NULL
+          AND content LIKE ${likePrefix}
+        ORDER BY created_at DESC LIMIT 1
+      `) as Array<{ content: string }>;
+      const prevMeta = prev[0] ? decodeFactContent(prev[0].content).meta : null;
+      content = encodeFactContent(content, {
+        key: factKey,
+        n: nextFactCount(kind, prevMeta),
+        valid_to: normalizeValidTo(note.fact?.valid_to),
+      });
+    }
     await sql`
       INSERT INTO learner_agent_notes
         (id, learner_id, agent, kind, content, importance,
          related_concept_id, source_turn_id, created_at)
       VALUES
-        (${id}, ${learnerId}, ${agent}, ${note.kind ?? 'observation'},
+        (${id}, ${learnerId}, ${agent}, ${kind},
          ${content}, ${importance},
          ${note.related_concept_id ?? null},
          ${note.source_turn_id ?? null},
          NOW())
     `;
+    if (factKey) {
+      await sql`
+        UPDATE learner_agent_notes SET superseded_by = ${id}::uuid
+        WHERE learner_id = ${learnerId} AND kind = ${kind} AND id <> ${id}::uuid
+          AND archived_at IS NULL AND superseded_by IS NULL
+          AND content LIKE ${likePrefix}
+      `;
+    }
     return id;
   } catch (err) {
     if (process.env.NODE_ENV !== 'production') {

@@ -18,6 +18,7 @@ import {
   pickExploreFocusConceptId,
 } from '@/lib/practice-arena';
 import { conceptIdsForTopics } from '@/lib/practice-topics';
+import { masteryModelFromEnv, practiceDifficultyFromMastery, type MasteryModel } from '@/lib/bkt';
 import {
   fetchLessonByConceptId,
   getConceptMastery,
@@ -190,6 +191,8 @@ async function pickAuthoredItem(opts: {
   seenFingerprints: Set<string>;
   difficulty: PracticeDifficulty;
   recentTestQuestionIds: Set<string>;
+  /** AS-54: bkt mode only — rank only items at the target difficulty when any exist. */
+  strictDifficulty?: boolean;
 }): Promise<PracticeItemSealed | null> {
   const lesson = await fetchLessonByConceptId(opts.conceptId).catch(() => null);
   if (!lesson?.questions?.length) return null;
@@ -232,8 +235,14 @@ async function pickAuthoredItem(opts: {
     }))
     .sort((a, b) => b.score - a.score);
 
-  const topScore = scored[0]!.score;
-  const elite = scored.filter((s) => s.score >= topScore - 2);
+  // AS-54: bkt mode ranks only eligible items at the target difficulty when any exist
+  // (the +2 match bonus alone cannot beat a >2-point worthiness gap). Ratio mode unchanged.
+  const atDifficulty = opts.strictDifficulty
+    ? scored.filter((s) => s.q.difficulty === opts.difficulty)
+    : [];
+  const ranked = atDifficulty.length ? atDifficulty : scored;
+  const topScore = ranked[0]!.score;
+  const elite = ranked.filter((s) => s.score >= topScore - 2);
   const preferOpen = elite.filter((s) => s.q.kind === 'open' || s.q.kind === 'derivation');
   const pool = preferOpen.length ? preferOpen : elite;
   const pick = pool[Math.floor(Math.random() * pool.length)]!.q;
@@ -273,8 +282,10 @@ export async function advancePracticeItem(opts: {
   recentCorrect: boolean[];
   generatedCount: number;
   previousDifficulty?: PracticeDifficulty;
+  /** AS-54: defaults to MASTERY_MODEL (ratio unless 'bkt'). */
+  masteryModel?: MasteryModel;
 }): Promise<
-  | { item: PracticeItemSealed; focusConceptId: string }
+  | { item: PracticeItemSealed; focusConceptId: string; difficulty?: PracticeDifficulty }
   | { thin_topic: true; focusConceptId: string | null }
   | null
 > {
@@ -288,10 +299,14 @@ export async function advancePracticeItem(opts: {
   });
   if (!focusConceptId) return { thin_topic: true, focusConceptId: null };
 
-  const difficulty = nextDifficulty(
-    opts.recentCorrect,
-    opts.previousDifficulty ?? 'medium',
-  );
+  // AS-54 (C5c): MASTERY_MODEL=bkt -> difficulty from the BKT estimate over the session's
+  // ordered attempts; otherwise (default) the existing ratio/streak rule, unchanged.
+  const current = opts.previousDifficulty ?? 'medium';
+  const bktMode = (opts.masteryModel ?? masteryModelFromEnv()) === 'bkt';
+  const difficulty: PracticeDifficulty =
+    bktMode
+      ? practiceDifficultyFromMastery(opts.recentCorrect) ?? current
+      : nextDifficulty(opts.recentCorrect, current);
 
   const topicPool = conceptIdsForTopics(opts.topicIds ?? []);
   const tryConcepts = [
@@ -307,8 +322,9 @@ export async function advancePracticeItem(opts: {
       seenFingerprints,
       difficulty,
       recentTestQuestionIds,
+      strictDifficulty: bktMode,
     });
-    if (authored) return { item: authored, focusConceptId: conceptId };
+    if (authored) return { item: authored, focusConceptId: conceptId, difficulty };
 
     const generated = await pickGeneratedItem({
       learnerId: opts.learnerId,
@@ -317,7 +333,7 @@ export async function advancePracticeItem(opts: {
       difficulty,
       seenFingerprints,
     });
-    if (generated) return { item: generated, focusConceptId: conceptId };
+    if (generated) return { item: generated, focusConceptId: conceptId, difficulty };
   }
 
   return { thin_topic: true, focusConceptId };

@@ -3,6 +3,7 @@
  * Authoritative server results labeled as tool outputs — no LLM tools API.
  */
 import type { DueReviewItem } from '@/lib/neon-db';
+import { factDisplayText } from '@/lib/typed-facts';
 import type { LessonSection, LessonWithQuestions, LearnerAgentNote } from '@/lib/neon-db';
 import {
   trySolveAuthoritative,
@@ -116,7 +117,7 @@ export function formatMemoryExpandToolResult(
   }
   return filtered
     .slice(0, 6)
-    .map((n) => `- [${n.kind}|imp=${n.importance}] ${clip(n.content, 160)}`)
+    .map((n) => `- [${n.kind}|imp=${n.importance}] ${clip(factDisplayText(n.content), 160)}`)
     .join('\n');
 }
 

@@ -12,7 +12,9 @@
 import 'server-only';
 import type { LLMTool } from '@/lib/llm-provider';
 import { retrieveChunks, detectLang } from '@/lib/rag-retrieve';
+import { isStateOnlyEvidence } from '@/lib/typed-facts';
 import {
+  fetchAgentNotesByIds,
   fetchLessonByConceptId,
   getCurrentPlan,
   getLearnerProfile,
@@ -385,12 +387,32 @@ const proposePlanChangeTool: AgentTool = {
           },
           hours_per_week: { type: 'number', description: 'Optional weekly study hours.' },
           notes: { type: 'string', description: 'Optional focus topics.' },
+          evidence_note_ids: {
+            type: 'array',
+            items: { type: 'string' },
+            description:
+              'Ids of the memory notes that justify this change. A mood/state note alone is NOT evidence for a plan change.',
+          },
         },
       },
     },
   },
   handler: async (args, ctx) => {
     try {
+      // AS-43 (C4): a plan is never rebuilt on mood alone — reject when every cited
+      // evidence note is kind=state (no session write, nothing staged).
+      const evidenceIds = Array.isArray(args.evidence_note_ids)
+        ? args.evidence_note_ids.filter((x): x is string => typeof x === 'string').slice(0, 20)
+        : [];
+      if (evidenceIds.length > 0) {
+        const evidence = await fetchAgentNotesByIds(ctx.userId, evidenceIds).catch(() => []);
+        if (isStateOnlyEvidence(evidence)) {
+          return {
+            observation:
+              'rejected_state_only_evidence: the only evidence is the learner\'s current mood/state. Do NOT change the plan; acknowledge the feeling and keep the current plan.',
+          };
+        }
+      }
       const existing = await getPlanChangeSession(ctx.userId).catch(() => null);
       const { ctx: learnerCtx, facts } = await loadLearnerCtx(ctx.userId);
       const merged = mergeSlots(existing?.slots ?? {}, {

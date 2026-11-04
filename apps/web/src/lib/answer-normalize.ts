@@ -50,6 +50,20 @@ function extractInlineAnswers(raw: string): string[] {
   return out;
 }
 
+/**
+ * Coerce an authored answer to trimmed text. Seed and bundle data sometimes
+ * store numeric or boolean answers as JSON numbers/booleans even though the
+ * type says string; calling `.trim()` on those crashed lesson pages.
+ */
+export function answerText(value: unknown): string {
+  if (value === null || value === undefined) return '';
+  if (typeof value === 'string') return value.trim();
+  if (typeof value === 'number' || typeof value === 'boolean' || typeof value === 'bigint') {
+    return String(value).trim();
+  }
+  return '';
+}
+
 /** Build the list of strings to grade short_answer / fill_blank against. */
 export function getAcceptedAnswers(
   acceptable: string[] | undefined | null,
@@ -72,7 +86,7 @@ export function getAcceptedAnswers(
     out.push(candidate.trim());
   }
 
-  const ca = correctAnswer?.trim();
+  const ca = answerText(correctAnswer);
   if (ca && !seen.has(normalizeAnswerForGrading(ca))) {
     out.push(ca);
   }
@@ -90,12 +104,31 @@ export function coerceOptionIndex(value: unknown): number | null {
   return null;
 }
 
-/** Coerce DB/JSON boolean flags (true_false). */
+// Hebrew cantillation marks and niqqud (U+0591–U+05C7), so "נָכוֹן" matches "נכון".
+const HEBREW_MARKS = /[\u0591-\u05C7]/g;
+// Word joiners between "לא" and "נכון": maqaf (U+05BE, inside HEBREW_MARKS's
+// range, so it must be replaced first), ASCII hyphen, and en/em dashes.
+const HEBREW_WORD_JOINERS = /[\u05BE\u2010-\u2014-]/g;
+
+/** Hebrew true/false words (נכון / לא נכון), tolerant of niqqud, maqaf and spacing. */
+export function hebrewBooleanAnswer(value: unknown): boolean | null {
+  if (typeof value !== 'string') return null;
+  const t = value
+    .replace(HEBREW_WORD_JOINERS, ' ')
+    .replace(HEBREW_MARKS, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (t === 'נכון') return true;
+  if (t === 'לא נכון') return false;
+  return null;
+}
+
+/** Coerce DB/JSON boolean flags and student answers (true_false). */
 export function coerceBooleanAnswer(value: unknown): boolean | null {
   if (typeof value === 'boolean') return value;
   if (value === 'true') return true;
   if (value === 'false') return false;
-  return null;
+  return hebrewBooleanAnswer(value);
 }
 
 /**
@@ -114,10 +147,10 @@ export function resolveCorrectBool(
   }
   const fromTop = coerceBooleanAnswer(fallbacks?.correct_bool);
   if (fromTop != null) return fromTop;
-  const ca = fallbacks?.correct_answer?.trim().toLowerCase();
+  const ca = answerText(fallbacks?.correct_answer).toLowerCase();
   if (ca === 'true' || ca === '1' || ca === 'yes') return true;
   if (ca === 'false' || ca === '0' || ca === 'no') return false;
-  return null;
+  return hebrewBooleanAnswer(ca);
 }
 
 export function answersMatch(
@@ -136,13 +169,13 @@ export function displayCorrectAnswer(
   correctAnswer?: string | null,
 ): string {
   const list = getAcceptedAnswers(acceptable, correctAnswer);
-  const preferred = correctAnswer?.trim() || list[0] || '';
+  const preferred = answerText(correctAnswer) || list[0] || '';
   return preferred;
 }
 
 export function numericClose(a: string, b: string): boolean {
   const strip = (s: string) =>
-    s
+    answerText(s)
       .replace(LATEX_DELIMS, '')
       .replace(LATEX_INLINE, '')
       .replace(UNICODE_MINUS, '-')
