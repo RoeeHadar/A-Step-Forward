@@ -21,18 +21,22 @@ on:
         description: "Neon DB target"
         type: choice
         options:
-          - production
-          - staging
           - dev
-        default: production
+          - staging
+          - production
+        default: dev
       fresh:
         description: "TRUNCATE kg_chunks before ingest (clean slate)"
         type: boolean
         default: false
       recreate_schema:
-        description: "DROP+recreate kg_chunks at vector(1024) (safe: table is empty)"
+        description: "DROP+recreate kg_chunks at vector(1024) (destructive; production needs confirm_production)"
         type: boolean
-        default: true
+        default: false
+      confirm_production:
+        description: "Required to run fresh/recreate_schema against production"
+        type: boolean
+        default: false
       run_eval:
         description: "Run retrieval eval (recall@k) after ingest"
         type: boolean
@@ -64,6 +68,10 @@ jobs:
       - name: Install deps
         run: pnpm install --frozen-lockfile || pnpm install
 
+      - name: Target guard (refuse production + destructive without confirm)
+        run: |
+          node scripts/rag-ingest.mjs --guard-only --target "${{ inputs.db_target }}" ${{ inputs.recreate_schema && '--recreate-schema' || '' }} ${{ inputs.fresh && '--fresh' || '' }} ${{ inputs.confirm_production && '--confirm-production' || '' }}
+
       - name: Preflight (secrets present)
         run: |
           if [ -z "$DATABASE_URL" ]; then echo "::error::DB secret for target '${{ inputs.db_target }}' not set"; exit 1; fi
@@ -71,11 +79,11 @@ jobs:
 
       - name: Apply RAG schema (kg_chunks @ vector(1024))
         run: |
-          node scripts/apply-rag-schema.mjs --force ${{ inputs.recreate_schema && '--recreate' || '' }}
+          node scripts/apply-rag-schema.mjs --force --target "${{ inputs.db_target }}" ${{ inputs.recreate_schema && '--recreate' || '' }} ${{ inputs.confirm_production && '--confirm-production' || '' }}
 
       - name: Ingest corpus
         run: |
-          node scripts/rag-ingest.mjs --force ${{ inputs.fresh && '--fresh' || '' }}
+          node scripts/rag-ingest.mjs --force --target "${{ inputs.db_target }}" ${{ inputs.fresh && '--fresh' || '' }} ${{ inputs.confirm_production && '--confirm-production' || '' }}
 
       - name: Retrieval eval (recall@k)
         if: ${{ inputs.run_eval }}

@@ -12,6 +12,11 @@
  *   node --use-system-ca scripts/rag-ingest.mjs --limit 5  # smoke a few lessons
  *   node --use-system-ca scripts/rag-ingest.mjs --force    # allow non-dev host
  *
+ * Target guard (AS-72): --target dev|staging|production (default dev).
+ * production together with --fresh or --recreate-schema is refused unless
+ * --confirm-production is passed. --guard-only checks the flags and exits
+ * before any env/DB/network access (used by the workflow's first step).
+ *
  * Reads DATABASE_URL + NVIDIA_API_KEY from env or apps/web/.env.local.
  */
 import fs from 'node:fs';
@@ -20,6 +25,16 @@ import crypto from 'node:crypto';
 import { createRequire } from 'node:module';
 import { normalizeLesson, validateLesson } from './lib/normalize-lesson.mjs';
 import { makeEmbedder, EMBED_DIM } from './lib/rag-embed.mjs';
+import { checkIngestTarget, parseIngestArgs } from './lib/rag-ingest-guard.mjs';
+
+const guardArgs = parseIngestArgs(process.argv);
+const guard = checkIngestTarget(guardArgs);
+if (!guard.ok) {
+  console.error(guard.reason);
+  process.exit(1);
+}
+console.log(`ingest target: ${guard.target}`);
+if (guardArgs.guardOnly) process.exit(0);
 
 const ROOT = process.cwd();
 const WEB = path.join(ROOT, 'apps/web');

@@ -21,6 +21,27 @@ const RRF_K = 60;
 const DEFAULT_TOP_K = 6;
 const DEFAULT_CANDIDATE_K = 40;
 
+/**
+ * Relevance floor on the fused RRF score (AS-13 R3). Default 0 = no floor
+ * (AS-73 scope add: the 0.02 "two channels agree" floor from AS-72 is kept as
+ * an opt-in value, not the default). Set RAG_MIN_SCORE to enable a floor; on
+ * this RRF (k=60, 40 candidates) one channel scores 0.01-0.0164, so
+ * RAG_MIN_SCORE=0.02 keeps only chunks two channels both return.
+ */
+export const RAG_MIN_FUSED_SCORE = 0;
+
+export function ragMinScore(): number {
+  const raw = process.env.RAG_MIN_SCORE;
+  if (raw === undefined || raw.trim() === '') return RAG_MIN_FUSED_SCORE;
+  const n = Number(raw);
+  return Number.isFinite(n) && n >= 0 ? n : RAG_MIN_FUSED_SCORE;
+}
+
+/** Drop chunks whose fused score is below the relevance floor. */
+export function applyRelevanceFloor(chunks: RagChunk[], floor: number = ragMinScore()): RagChunk[] {
+  return chunks.filter((c) => Number.isFinite(c.score) && c.score >= floor);
+}
+
 export type RagLang = 'en' | 'he';
 
 export interface RagChunk {
@@ -86,6 +107,17 @@ function toChunk(r: Row, channel: RagChunk['channel']): RagChunk {
 const READY_TTL_MS = 5 * 60 * 1000;
 let readyCache: boolean | null = null;
 let readyCheckedAt = 0;
+let corpusWarned = false;
+
+function warnCorpusOnce(reason: 'empty' | 'missing', err?: unknown): void {
+  if (corpusWarned) return;
+  corpusWarned = true;
+  logger.warn('rag-retrieve: kg_chunks corpus not available, RAG grounding is off', {
+    reason,
+    // Only the error code: a driver message could echo connection details.
+    ...(err !== undefined ? { code: (err as { code?: unknown })?.code ?? 'unknown' } : {}),
+  });
+}
 
 async function ragCorpusReady(): Promise<boolean> {
   if (!sql) return false;
@@ -95,9 +127,12 @@ async function ragCorpusReady(): Promise<boolean> {
   try {
     const rows = (await sql`SELECT 1 AS ok FROM kg_chunks LIMIT 1`) as Array<{ ok: number }>;
     readyCache = rows.length > 0;
-  } catch {
-    // Table missing / not migrated yet → treat as not ready (no log spam).
+    if (!readyCache) warnCorpusOnce('empty');
+  } catch (err) {
+    // Table missing / not migrated yet → not ready. Warn once per instance
+    // (module-level flag) so a silently ungrounded deploy is visible.
     readyCache = false;
+    warnCorpusOnce('missing', err);
   }
   readyCheckedAt = now;
   return readyCache;
@@ -107,6 +142,7 @@ async function ragCorpusReady(): Promise<boolean> {
 export function resetRagReadyCache(): void {
   readyCache = null;
   readyCheckedAt = 0;
+  corpusWarned = false;
 }
 
 /** Retrieve the most relevant authored chunks for a query. Never throws. */
@@ -171,7 +207,7 @@ export async function retrieveChunks(opts: RetrieveOptions): Promise<RagChunk[]>
         ORDER BY f.score DESC
         LIMIT ${topK}
       `) as Row[];
-      return rows.map((r) => toChunk(r, 'hybrid'));
+      return applyRelevanceFloor(rows.map((r) => toChunk(r, 'hybrid')));
     }
 
     // Lexical-only fallback (embedding API unavailable): fuse FTS + trigram via
@@ -211,7 +247,7 @@ export async function retrieveChunks(opts: RetrieveOptions): Promise<RagChunk[]>
       ORDER BY f.score DESC
       LIMIT ${topK}
     `) as Row[];
-    return rows.map((r) => toChunk(r, 'lexical'));
+    return applyRelevanceFloor(rows.map((r) => toChunk(r, 'lexical')));
   } catch (err) {
     logger.error('rag-retrieve: query failed', { err: String(err) });
     return [];

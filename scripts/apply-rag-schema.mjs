@@ -27,6 +27,17 @@ const ROOT = process.cwd();
 const WEB = path.join(ROOT, 'apps/web');
 const require = createRequire(path.join(WEB, 'package.json'));
 const { neon } = require('@neondatabase/serverless');
+import { checkIngestTarget, parseIngestArgs } from './lib/rag-ingest-guard.mjs';
+
+// AS-72: --target dev|staging|production (default dev); production + --recreate
+// needs --confirm-production. Checked before any env/DB access.
+{
+  const g = checkIngestTarget(parseIngestArgs(process.argv));
+  if (!g.ok) {
+    console.error(g.reason);
+    process.exit(1);
+  }
+}
 
 const FORCE = process.argv.includes('--force');
 const DEV_HOST_MARKER = 'ep-purple-term';
