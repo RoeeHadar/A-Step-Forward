@@ -11,6 +11,7 @@
 import 'server-only';
 import { logger } from '@/lib/logger';
 import {
+  assertGroqBaseUrl,
   guardModelChain,
   isRetriableError,
   isRetriableStatus,
@@ -428,6 +429,9 @@ async function fetchCompletions(
 
 /** AS-95: resolve provider + model chain via the guard; throws before any fetch. */
 function guardedModels(models: readonly string[]): string[] {
+  // AS-100: a non-Groq base URL throws here, before any fetch.
+  assertGroqBaseUrl('LLM_BASE_URL', process.env.LLM_BASE_URL);
+  assertGroqBaseUrl('GROQ_BASE_URL', process.env.GROQ_BASE_URL);
   return guardModelChain(models, process.env.LLM_PROVIDER);
 }
 

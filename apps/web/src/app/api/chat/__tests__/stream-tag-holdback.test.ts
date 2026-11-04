@@ -91,7 +91,7 @@ describe('/api/chat stream with a long machine tag (AS-33)', () => {
   beforeAll(async () => {
     for (const k of ['DATABASE_URL', 'POSTGRES_URL', 'GROQ_API_KEY', 'LLM_API_KEY']) delete process.env[k];
     process.env.LLM_API_KEY = 'placeholder-offline';
-    process.env.LLM_BASE_URL = 'http://test.invalid/v1';
+    process.env.LLM_BASE_URL = 'https://api.groq.com/openai/v1'; // AS-100: only Groq is accepted; fetch is faked
     globalThis.fetch = (async () => { throw new Error('network disabled in test'); }) as typeof fetch;
     POST = (await import('@/app/api/chat/route')).POST;
   }, 60_000);

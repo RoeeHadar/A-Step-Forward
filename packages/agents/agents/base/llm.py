@@ -64,6 +64,26 @@ def resolve_model(model: str, provider: str = "groq") -> str:
     )
 
 
+# AS-100: the only chat endpoint allowed (docs/adr/0004-llm-provider-groq.md:36).
+GROQ_BASE_URL = "https://api.groq.com/openai/v1"
+
+
+def check_base_url(settings: Any) -> None:
+    """Raise ``ValueError`` unless every set base URL is the Groq endpoint.
+
+    Unset/empty is fine. Otherwise, after trimming whitespace, surrounding
+    quotes and trailing slashes, the value must equal ``GROQ_BASE_URL``.
+    """
+    for name in ("llm_base_url", "groq_base_url"):
+        raw = getattr(settings, name, None) or ""
+        v = raw.strip().strip("\"'").strip().rstrip("/")
+        if v and v != GROQ_BASE_URL:
+            raise ValueError(
+                f"{name.upper()} is not the Groq endpoint; only {GROQ_BASE_URL} is allowed "
+                "as the chat base URL (ADR-0004)"
+            )
+
+
 @dataclass
 class LLMRequest:
     system: str
@@ -199,6 +219,7 @@ class LLM:
         if not self._settings.resolved_api_key:
             return _stub_response(request, self.model, agent_label)
 
+        check_base_url(self._settings)  # AS-100: before any request
         model = resolve_model(self.model, getattr(self._settings, "llm_provider", "groq"))
         client = await self._get_client()
         params: dict[str, Any] = {
@@ -223,6 +244,7 @@ class LLM:
             yield _stub_response(request, self.model, agent_label).text
             return
 
+        check_base_url(self._settings)  # AS-100: before any request
         model = resolve_model(self.model, getattr(self._settings, "llm_provider", "groq"))
         client = await self._get_client()
         params: dict[str, Any] = {
@@ -273,7 +295,7 @@ class LLM:
 
                 self._client = AsyncGroq(
                     api_key=self._settings.resolved_api_key,
-                    base_url=self._settings.resolved_base_url,
+                    base_url=GROQ_BASE_URL,  # AS-100: check_base_url ran first
                     timeout=self._settings.llm_timeout_seconds,
                     max_retries=0,  # we own retries below
                 )
