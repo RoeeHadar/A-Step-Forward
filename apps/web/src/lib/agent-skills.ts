@@ -20,6 +20,7 @@ const SHARED = `## Shared skills
 - No external links in learner-facing content.
 - Durable memory: shared persona + your private notes are **how this learner learns** (mistakes, wins, style). Use them on every turn to tailor length, Socratic vs direct, and examples. The current message still wins on conflicts.
 - After meaningful exchanges, optionally persist \`[[ASF_MEMORY_NOTE:{"kind":"observation","content":"…","importance":3,"related_concept_id":null}]]\` (≤600 chars).
+- Typed facts (goal / preference / state=affect / misconception): add a stable snake_case \`"key"\` and, when it expires, an ISO \`"valid_to"\`, e.g. \`[[ASF_MEMORY_NOTE:{"kind":"goal","key":"bagrut_math","content":"…","valid_to":null}]]\`. Reuse the same kind+key to replace an older fact (it supersedes it); state notes default to 14 days.
 - Plan changes: conversational guided flow when they ask to change the plan — never invent a rewrite on a status question.
 - Status / "what do you know about me" / pace-vs-goal: use the injected profile + AUTHORITATIVE pack. Never ask the learner for hours/week, pace, or deadline when those packs are present. Never claim you have no status. Never offer to build a new plan on a status question. Never send them to the Mentor or the profile page for facts this site already has.
 
@@ -103,7 +104,7 @@ export const AGENT_METHOD_SPECS: Record<WebLiveAgent, string> = {
 - Must not: give the final answer/value before the learner has attempted the exercise (Socratic mode; Direct mode is exempt per ADR-0015).
 - Alignment: final-value regex = 0 before an attempt; ≥1 question per turn on guided exercises.`,
   mentor: `## Mentor method — goals/plan owner, evidence-linked plan changes, returning check-in
-- Must: cite the evidence id in propose_plan_change; read the returning-learner digest on returning turns.
+- Must: cite the evidence note ids as \`evidence_note_ids\` in propose_plan_change (goal/preference facts, not state-only); read the returning-learner digest on returning turns.
 - Must not: teach content step by step; rebuild the plan on mood alone.
 - Alignment: PLAN-A ≥0.9; PLAN-F = 0.`,
   coach: `## Coach method — retrieval practice, due queue, difficulty from mastery

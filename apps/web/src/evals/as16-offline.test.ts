@@ -191,7 +191,11 @@ vi.mock('@/lib/llm-provider', async (importOriginal) => {
     const lastRag = st.ragCalls.at(-1);
     if (st.noteTag) {
       const t = st.noteTag;
-      text += ` [[ASF_MEMORY_NOTE:${JSON.stringify({ kind: t.kind, key: t.key, content: `EVALTAG:${t.tag} ${t.kind === 'goal' ? 'learner states this goal' : t.kind === 'state' ? 'learner feels unmotivated today' : 'learner repeats this error'}`, importance: 4 })}]]`;
+      // AS-52 (C3b): scripted model follows the prompt — key/valid_to are emitted only when the
+      // system prompt carries the typed-fact instruction (agent-skills.ts SHARED); otherwise legacy untyped tag.
+      const instructed = (st.llmCalls.at(-1)?.system ?? '').includes('Typed facts (goal / preference / state=affect');
+      const typed = instructed && t.kind !== 'misconception' ? { key: t.key, valid_to: null } : t.kind === 'misconception' ? { key: t.key } : {};
+      text += ` [[ASF_MEMORY_NOTE:${JSON.stringify({ kind: t.kind, ...typed, content: `EVALTAG:${t.tag} ${t.kind === 'goal' ? 'learner states this goal' : t.kind === 'state' ? 'learner feels unmotivated today' : 'learner repeats this error'}`, importance: 4 })}]]`;
     }
     if (lastRag && lastRag.ids[0]) text += ` [[ASF_CITE:${JSON.stringify({ concept_id: lastRag.ids[0] })}]]`;
     return text;
@@ -396,6 +400,12 @@ async function runJourney(POST: (r: Request) => Promise<Response>, j: Journey, l
       const key = /\(([^)=]*=)?([^),]+)/.exec(cp)?.[2] ?? '';
       if (cp.startsWith('MEM.note_written')) {
         add('MEM-R', `s${sess.s}.${cp}`, st.notes.some((n) => n.learner_id === userId && n.content.includes(`EVALTAG:${key}`)), 'learner_agent_notes row via [[ASF_MEMORY_NOTE');
+      } else if (cp.startsWith('MEM.fact_supersedes')) {
+        // AS-52 (C3b): the new goal note carries the key and the earlier same-key goal is superseded.
+        const f = noteTagFor(cp);
+        const same = st.notes.filter((n) => n.learner_id === userId && n.kind === f.kind && tf_.decodeFactContent(n.content).meta?.key === f.key);
+        const live = same.filter((n) => !n.superseded_by);
+        add('MEM-R', `s${sess.s}.${cp}`, same.length >= 2 && live.length === 1 && live[0]!.content.includes(`EVALTAG:${f.tag} `), `${f.kind}:${f.key} rows=${same.length} live=${live.length}`);
       } else if (cp.startsWith('MEM.fact_written')) {
         // AS-42 (C3): typed goal fact written with kind + key.
         const f = noteTagFor(cp);
