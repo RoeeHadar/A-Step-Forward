@@ -1,0 +1,76 @@
+# AS-16 student-journey eval set (spec only; NOT run). Grounded at repo 9ecf599:
+# agents tutor/mentor/coach/reviewer (apps/web/src/lib/web-agents.ts:8,29-32); entry POST /api/chat;
+# memory: chat_turns, learner_agent_notes, learner persona (items/AS-15/asf-coder.md §1);
+# plan changes via propose_plan_change -> plan-apply (AS-15 §1). RAG kg_chunks tutor/coach only (AS-15 table rows 1-4).
+# Checkpoint ids map to evals/rubric.md metric ids (MEM, PLAN, ADAPT, ROLE, RAG, HAND, SITE, SAT, LAT).
+defaults: {env: dev_or_preview, student_agent_model: LLM_CHEAP_MODEL, judge_model: separate_from_agent, clock: simulated}
+journeys:
+- id: J1-weak-he
+  lang: he
+  persona: {level: weak (grade ~55), subject: math 3-units, behaviour: short answers, asks for the answer, gives up after 2 failures, misconceptions: ["(a+b)^2 = a^2+b^2", "sign error when moving terms across ="]}
+  sessions:
+  - s: 1
+    agent: tutor
+    turns: ["אני לא מבין משוואות, תן לי פשוט את התשובה ל 2x+3=11", "x=7?", "לא יודע", "אוקיי x=4"]
+    expect: [tutor scaffolds (Socratic hint, no final answer on turn 1), diagnoses the sign error, writes a memory note about the misconception]
+    checkpoints: [ROLE.tutor_no_direct_answer, MEM.note_written(misconception=sign_move), RAG.no_invented_bagrut]
+  - s: 2  # +1 day
+    agent: tutor
+    turns: ["תפתח לי את (x+2)^2", "x^2+4"]
+    expect: [recall prior weakness, catch the (a+b)^2 misconception, give an easier practice set]
+    checkpoints: [MEM.recall(sign_move), ADAPT.difficulty_down, SITE.practice_difficulty_changed]
+  - s: 3
+    agent: coach
+    turns: ["נמאס לי, אני לא טוב במתמטיקה"]
+    expect: [coach does motivation work, not content; short achievable goal; handoff digest mentions the misconceptions]
+    checkpoints: [ROLE.coach_motivational, HAND.digest_consistent, SAT.student_rating>=3.5]
+- id: J2-strong-en
+  lang: en
+  persona: {level: strong (grade ~92), subject: math 5-units, behaviour: fast, impatient with basics, wants exam-level challenge, misconceptions: []}
+  sessions:
+  - s: 1
+    agent: tutor
+    turns: ["Skip the intro. Give me a hard series convergence problem.", "Ratio test gives L=1 so it diverges."]
+    expect: [harder content, correct "ratio test inconclusive at L=1", no condescension]
+    checkpoints: [ADAPT.difficulty_up, RAG.grounded_math_fact, ROLE.tutor_method]
+  - s: 2
+    agent: reviewer
+    turns: ["Review my solution: <pasted proof with one gap>"]
+    expect: [reviewer critiques with a rubric, finds the gap, does not rewrite the whole solution]
+    checkpoints: [ROLE.reviewer_critique_only, ROLE.distinct_from_tutor]
+- id: J3-returning-he
+  lang: he
+  persona: {level: medium, behaviour: returns after 12 days away, forgot the plan, misconceptions: ["confuses derivative of sin and cos signs"]}
+  sessions:
+  - {s: 1, agent: tutor, turns: ["מה הנגזרת של cos x?", "sin x"], checkpoints: [MEM.note_written(trig_sign)]}
+  - s: 2  # +12 days simulated
+    agent: mentor
+    turns: ["היי חזרתי, איפה הייתי?"]
+    expect: [mentor summarises last state from memory, proposes a short review before new material, plan reflects the gap]
+    checkpoints: [MEM.recall_after_gap(trig_sign, plan_position), PLAN.update_with_evidence(reason=gap_days), SITE.next_lesson_is_review]
+- id: J4-repeat-misconception-en
+  lang: en
+  persona: {level: medium, behaviour: cooperative, misconceptions: ["sqrt(a+b)=sqrt(a)+sqrt(b)"] , repeats_in_sessions: [1,2,3]}
+  sessions:
+  - {s: 1, agent: tutor, turns: ["Simplify sqrt(9+16)", "7"], checkpoints: [MEM.note_written(sqrt_split)]}
+  - {s: 2, agent: tutor, turns: ["sqrt(x^2+1) = x+1 right?"], expect: [explicitly links to the earlier same error, changes explanation strategy], checkpoints: [MEM.recall(sqrt_split), ADAPT.new_strategy_not_repeat]}
+  - {s: 3, agent: mentor, turns: ["What should I focus on this week?"], expect: [plan includes targeted sqrt practice citing 2 prior errors], checkpoints: ["PLAN.audit_trail(evidence=[s1,s2])", SITE.plan_item_added]}
+- id: J5-topic-switch-he
+  lang: he
+  persona: {level: medium-strong, behaviour: switches from probability to geometry mid-session, misconceptions: ["P(A or B)=P(A)+P(B) always"]}
+  sessions:
+  - s: 1
+    agent: tutor
+    turns: ["P(A או B) זה תמיד חיבור נכון?", "אוקיי עזוב, בוא נעבור לגאומטריה, משפט פיתגורס במשולש לא ישר זווית"]
+    expect: [correct probability fix, clean switch, correctly says Pythagoras needs a right angle (law of cosines), keeps the probability note for later]
+    checkpoints: [MEM.note_written(prob_union), MEM.no_cross_topic_contamination, RAG.grounded_math_fact]
+  - {s: 2, agent: tutor, turns: ["נחזור להסתברות"], checkpoints: [MEM.recall(prob_union)]}
+- id: J6-behaviour-change-en
+  lang: en
+  persona: {level: medium, behaviour: motivated in s1; in s2 the exam date moves earlier (+60d -> +14d); in s3 motivation drops; in s4 the goal switches from 5-unit to 4-unit, misconceptions: []}
+  sessions:
+  - {s: 1, agent: mentor, turns: ["My Bagrut is in 2 months, build me a plan."], checkpoints: [PLAN.created, SITE.plan_visible, RAG.no_invented_bagrut(dates,question_numbers)]}
+  - {s: 2, agent: mentor, turns: ["Update: exam moved, it's in 2 weeks now."], expect: [compressed plan, reason logged], checkpoints: [PLAN.update_with_evidence(reason=exam_date), SITE.dashboard_countdown_changed]}
+  - {s: 3, agent: coach, turns: ["I don't feel like studying anymore, whatever."], expect: [coach responds; plan is NOT rebuilt for a mood alone (anchoring)], checkpoints: [ROLE.coach_motivational, PLAN.no_flip_flop]}
+  - {s: 4, agent: mentor, turns: ["I'm dropping to 4 units."], expect: [scope validated (validate_goal_scope), plan re-scoped, prior 5-unit items removed with a trace], checkpoints: [PLAN.update_with_evidence(reason=goal_switch), PLAN.consistent_across_sessions, SITE.plan_and_quiz_scope_changed, SAT.judge>=3.5]}
+# Each journey runs in he AND en (mirror) -> 12 runs/round. The mirrored text is generated by the student agent from the persona and is fixed (seeded) before scoring.
