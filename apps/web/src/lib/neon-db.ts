@@ -2826,6 +2826,43 @@ export async function recordChatTurn(
   }
 }
 
+/**
+ * AS-47: learner-wide last activity (read-only, one learner, no migration).
+ * Max over existing timestamp columns, across ALL agents:
+ *   - chat_turns.created_at        (infra/alembic/versions/0011_onboarding_extras.py:34-42)
+ *   - skill_practice.last_practiced (infra/alembic/versions/0013_lessons.py:84-92)
+ *   - test_attempts.created_at     (infra/alembic/versions/0019_test_attempts.py:36-57)
+ * Only rows strictly before `before` count, so the just-recorded user turn of
+ * the current request is excluded. Returns ISO string or null (no DB / no rows / error).
+ * Returns a timestamp only — never note or turn content (per-agent privacy intact).
+ */
+export async function fetchLearnerLastActivityAt(
+  learnerId: string,
+  before: Date,
+): Promise<string | null> {
+  if (!sql) return null;
+  if (!learnerId?.trim()) return null;
+  const cutoff = before.toISOString();
+  try {
+    const rows = (await sql`
+      SELECT GREATEST(
+        (SELECT MAX(created_at) FROM chat_turns
+          WHERE learner_id = ${learnerId} AND created_at < ${cutoff}),
+        (SELECT MAX(last_practiced) FROM skill_practice
+          WHERE learner_id = ${learnerId} AND last_practiced < ${cutoff}),
+        (SELECT MAX(created_at) FROM test_attempts
+          WHERE learner_id = ${learnerId} AND created_at < ${cutoff})
+      ) AS last_at
+    `) as Array<{ last_at: string | Date | null }>;
+    const v = rows[0]?.last_at ?? null;
+    if (!v) return null;
+    return v instanceof Date ? v.toISOString() : new Date(v).toISOString();
+  } catch (err) {
+    console.warn('[neon-db] fetchLearnerLastActivityAt failed', err);
+    return null;
+  }
+}
+
 export async function fetchRecentChatTurns(
   learnerId: string,
   agent: string,

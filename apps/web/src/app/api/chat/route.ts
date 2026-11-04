@@ -5,6 +5,7 @@ import { agentNameSchema } from '@asf/schemas/agents';
 import { logger } from '@/lib/logger';
 import {
   fetchRecentChatTurns,
+  fetchLearnerLastActivityAt,
   recordChatTurn,
   getLearnerProfile,
   getConceptMastery,
@@ -75,7 +76,7 @@ import {
   truncateChatText,
   truncationContinueNotice,
 } from '@/lib/chat-context-policy';
-import { buildContextNeeds } from '@/lib/chat-context-needs';
+import { buildContextNeeds, returningGap } from '@/lib/chat-context-needs';
 import {
   assembleChatSystemPrompt,
   buildHowToTeachBlock,
@@ -1184,10 +1185,20 @@ async function buildContextPrompt(
     uiLocale: locale,
   });
 
+  // AS-40: returning learner = last prior turn / own note >= 3 days ago (mentor digest gate).
+  // AS-47: learner-wide last activity (all agents + practice), excluding the
+  // user turn just recorded for this request (1-minute window).
+  const isReturning =
+    agent === 'mentor' &&
+    !minimal &&
+    returningGap([
+      await fetchLearnerLastActivityAt(userId, new Date(Date.now() - 60_000)).catch(() => null),
+    ]);
   let contextNeeds = buildContextNeeds({
     agent,
     message,
     minimal,
+    returningGap: isReturning,
     hasTopic: Boolean(topic),
     hasPractice: Boolean(practiceContext),
   });
@@ -1221,6 +1232,7 @@ async function buildContextPrompt(
       message,
       intentCtx,
       minimal,
+      returningGap: isReturning,
       hasTopic: Boolean(topic),
       hasPractice: Boolean(practiceContext),
     });
@@ -1255,6 +1267,8 @@ async function buildContextPrompt(
       mastery: true,
       activeWeek: true,
       xp: true,
+      // AS-40: status turns give the Mentor the cross-agent digest (Tutor/Coach unchanged).
+      ...(agent === 'mentor' ? { handoffDigest: true } : {}),
     };
   }
 
@@ -2006,8 +2020,9 @@ async function buildContextPrompt(
     }
   }
 
-  // ADR-0014: handoff digests + hybrid tool packs + solver reveal policy (Coach + Tutor)
-  if (!minimal && (agent === 'coach' || agent === 'tutor') && (contextNeeds.hybridTools || contextNeeds.handoffDigest || contextNeeds.methodAuthority)) {
+  // ADR-0014: handoff digests + hybrid tool packs + solver reveal policy (Coach + Tutor;
+  // AS-40: Mentor gets the digest only — hybridTools/methodAuthority stay false for it)
+  if (!minimal && (agent === 'coach' || agent === 'tutor' || agent === 'mentor') && (contextNeeds.hybridTools || contextNeeds.handoffDigest || contextNeeds.methodAuthority)) {
     const conceptId = related[0]?.id ?? topic ?? null;
     const expand = wantsMemoryExpand(message) || Boolean(conceptId && agentNotes.length < 2);
 
