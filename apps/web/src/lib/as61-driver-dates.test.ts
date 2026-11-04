@@ -6,7 +6,7 @@ import { coachDaysUntilExam } from './coach-session-context';
 // AS-61: neon 0.10.4 returns DATE columns (next_test_date / final_goal_date) as Date.
 // These consumers previously called .slice / .trim on them and threw.
 describe('AS-61 driver Date inputs', () => {
-  const date = new Date('2027-06-01T00:00:00.000Z');
+  const date = new Date(2027, 5, 1); // AS-63: the driver builds a DATE at local midnight
   it('planHorizon accepts Date and matches the string result', () => {
     const now = new Date('2026-11-04T00:00:00Z');
     expect(() => planHorizon({ next_test_date: date, final_goal_date: null, hours_per_week: 5 }, now)).not.toThrow();

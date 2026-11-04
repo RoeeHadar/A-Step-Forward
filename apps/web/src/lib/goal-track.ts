@@ -74,7 +74,10 @@ export function toIsoDateOnly(
   if (value == null) return null;
   if (value instanceof Date) {
     if (Number.isNaN(value.getTime())) return null;
-    return value.toISOString().slice(0, 10);
+    // AS-63: neon parses a Postgres DATE to *local* midnight, so read local fields;
+    // toISOString() (UTC) gave the previous day east of UTC (e.g. Asia/Jerusalem).
+    const p2 = (n: number) => String(n).padStart(2, '0');
+    return `${value.getFullYear()}-${p2(value.getMonth() + 1)}-${p2(value.getDate())}`;
   }
   if (typeof value === 'string') {
     const trimmed = value.trim();
