@@ -9,6 +9,7 @@
  * Uses @neondatabase/serverless (HTTP, no TCP pool).
  */
 import 'server-only';
+import { decodeFactContent, encodeFactContent, factEnvelopePrefix, isTypedFactKind, nextFactCount, normalizeFactKey, normalizeValidTo } from '@/lib/typed-facts';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import { randomUUID } from 'node:crypto';
 import type { LearnerDashboard } from '@asf/schemas/curriculum';
@@ -3818,6 +3819,13 @@ export interface NewAgentNote {
   importance?: number;      // 1..5; default 3
   related_concept_id?: string | null;
   source_turn_id?: string | null;
+  /**
+   * AS-42 (C3): typed fact. When set and `kind` is a typed-fact kind, key/count/valid_to
+   * are stored in the content envelope (see typed-facts.ts; no schema change) and every
+   * older live note with the same supersede key (kind + key, this learner, any agent)
+   * gets `superseded_by` = the new id.
+   */
+  fact?: { key: string; valid_to?: string | null } | null;
 }
 
 /**
@@ -3831,20 +3839,48 @@ export async function appendAgentNote(
 ): Promise<string | null> {
   if (!sql) return null;
   const id = randomUUID();
-  const content = note.content.slice(0, 600);
+  const kind = note.kind ?? 'observation';
+  const factKey = isTypedFactKind(kind) ? normalizeFactKey(note.fact?.key) : null;
+  let content = note.content.slice(0, 600);
   const importance = Math.max(1, Math.min(5, note.importance ?? 3));
   try {
+    let likePrefix = '';
+    if (factKey) {
+      // Escape LIKE wildcards (keys may contain `_`).
+      likePrefix = `%${factEnvelopePrefix(factKey).replace(/[\\%_]/g, (c) => `\\${c}`)}%`;
+      const prev = (await sql`
+        SELECT content FROM learner_agent_notes
+        WHERE learner_id = ${learnerId} AND kind = ${kind}
+          AND archived_at IS NULL AND superseded_by IS NULL
+          AND content LIKE ${likePrefix}
+        ORDER BY created_at DESC LIMIT 1
+      `) as Array<{ content: string }>;
+      const prevMeta = prev[0] ? decodeFactContent(prev[0].content).meta : null;
+      content = encodeFactContent(content, {
+        key: factKey,
+        n: nextFactCount(kind, prevMeta),
+        valid_to: normalizeValidTo(note.fact?.valid_to),
+      });
+    }
     await sql`
       INSERT INTO learner_agent_notes
         (id, learner_id, agent, kind, content, importance,
          related_concept_id, source_turn_id, created_at)
       VALUES
-        (${id}, ${learnerId}, ${agent}, ${note.kind ?? 'observation'},
+        (${id}, ${learnerId}, ${agent}, ${kind},
          ${content}, ${importance},
          ${note.related_concept_id ?? null},
          ${note.source_turn_id ?? null},
          NOW())
     `;
+    if (factKey) {
+      await sql`
+        UPDATE learner_agent_notes SET superseded_by = ${id}::uuid
+        WHERE learner_id = ${learnerId} AND kind = ${kind} AND id <> ${id}::uuid
+          AND archived_at IS NULL AND superseded_by IS NULL
+          AND content LIKE ${likePrefix}
+      `;
+    }
     return id;
   } catch (err) {
     if (process.env.NODE_ENV !== 'production') {

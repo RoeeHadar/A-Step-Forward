@@ -28,6 +28,7 @@ import tls from 'node:tls';
 import { syncBuiltinESMExports } from 'node:module';
 import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import { parse as parseYaml } from 'yaml';
+import * as tf_ from '@/lib/typed-facts';
 import { createReplyGuard, hasFinalValue, isLearnerAttempt, REVIEWER_MAX_LINES } from '@/lib/agent-method-guard';
 
 // ---------------------------------------------------------------- network guard
@@ -61,7 +62,7 @@ function removeGuard() {
 
 // ---------------------------------------------------------------- shared run state
 type Turn = { role: 'user' | 'assistant'; content: string; agent: string; sessionId?: string; created_at?: string };
-type Note = { id: string; learner_id: string; agent: string; kind: string; content: string; importance: number; related_concept_id: string | null; created_at: string };
+type Note = { id: string; learner_id: string; agent: string; kind: string; content: string; importance: number; related_concept_id: string | null; created_at: string; superseded_by?: string | null };
 const st = vi.hoisted(() => ({
   userId: 'eval-user',
   locale: 'he' as 'he' | 'en',
@@ -71,7 +72,8 @@ const st = vi.hoisted(() => ({
   llmCalls: [] as Array<{ system: string; messages: Array<{ role: string; content: string }> }>,
   llmCompleteCalls: 0,
   ragCalls: [] as Array<{ query: string; ids: string[] }>,
-  noteTag: null as string | null,
+  /** AS-42: typed fact the stub tags on this turn (kind + supersede key + EVALTAG suffix). */
+  noteTag: null as { kind: string; key: string; tag: string } | null,
   afterJobs: [] as Promise<unknown>[],
 }));
 
@@ -92,6 +94,7 @@ vi.mock('@/lib/neon-db', async (importOriginal) => {
   const emptyFor = (k: string): unknown =>
     /Mastery$|Map$|Record$/.test(k) ? {} : /^(fetch|list|select)|s$/.test(k) ? [] : null;
   const orig = (await importOriginal()) as Record<string, unknown>;
+  const tf = await import('@/lib/typed-facts');
   const fakes: Record<string, (...a: never[]) => unknown> = {
     recordChatTurn: async (learnerId: string, agent: string, role: 'user' | 'assistant', content: string, sessionId?: string) => {
       st.turns.push({ role, content, agent, sessionId, created_at: new Date().toISOString(), ...{ learnerId } } as Turn & { learnerId: string });
@@ -110,11 +113,22 @@ vi.mock('@/lib/neon-db', async (importOriginal) => {
         .sort();
       return ts.at(-1) ?? null;
     },
+    // Mirrors neon-db.ts fetchAgentNotes SQL (`superseded_by IS NULL`).
     fetchAgentNotes: async (learnerId: string, agent: string, limit = 8) =>
-      st.notes.filter((n) => n.learner_id === learnerId && n.agent === agent).slice(-limit),
-    appendAgentNote: async (learnerId: string, agent: string, note: { kind: string; content: string; importance?: number; related_concept_id?: string | null }) => {
+      st.notes.filter((n) => n.learner_id === learnerId && n.agent === agent && !n.superseded_by).slice(-limit),
+    // AS-42: mirrors neon-db.ts appendAgentNote — typed fact envelope, count, supersede by kind + key.
+    appendAgentNote: async (learnerId: string, agent: string, note: { kind: string; content: string; importance?: number; related_concept_id?: string | null; fact?: { key: string; valid_to?: string | null } | null }) => {
       const id = `note-${st.notes.length + 1}`;
-      st.notes.push({ id, learner_id: learnerId, agent, kind: note.kind, content: note.content.slice(0, 600), importance: note.importance ?? 3, related_concept_id: note.related_concept_id ?? null, created_at: new Date().toISOString() });
+      const key = tf.isTypedFactKind(note.kind) ? tf.normalizeFactKey(note.fact?.key) : null;
+      const sameKey = (n: Note) => !n.superseded_by && n.learner_id === learnerId && n.kind === note.kind && tf.decodeFactContent(n.content).meta?.key === key;
+      let content = note.content.slice(0, 600);
+      if (key) {
+        const prev = st.notes.filter(sameKey).at(-1);
+        content = tf.encodeFactContent(content, { key, n: tf.nextFactCount(note.kind, prev ? tf.decodeFactContent(prev.content).meta : null), valid_to: tf.normalizeValidTo(note.fact?.valid_to) });
+      }
+      const prior = key ? st.notes.filter(sameKey) : [];
+      st.notes.push({ id, learner_id: learnerId, agent, kind: note.kind, content, importance: note.importance ?? 3, related_concept_id: note.related_concept_id ?? null, created_at: new Date().toISOString() });
+      for (const n of prior) n.superseded_by = id;
       return id;
     },
   };
@@ -173,7 +187,8 @@ vi.mock('@/lib/llm-provider', async (importOriginal) => {
     if (a === 'reviewer') text += `\nHere is the full corrected solution:\n${Array.from({ length: 10 }, (_, i) => `Step ${i + 1}: rewritten line ${i + 1}.`).join('\n')}`;
     const lastRag = st.ragCalls.at(-1);
     if (st.noteTag) {
-      text += ` [[ASF_MEMORY_NOTE:${JSON.stringify({ kind: 'misconception', content: `EVALTAG:${st.noteTag} learner repeats this error`, importance: 4 })}]]`;
+      const t = st.noteTag;
+      text += ` [[ASF_MEMORY_NOTE:${JSON.stringify({ kind: t.kind, key: t.key, content: `EVALTAG:${t.tag} ${t.kind === 'goal' ? 'learner states this goal' : 'learner repeats this error'}`, importance: 4 })}]]`;
     }
     if (lastRag && lastRag.ids[0]) text += ` [[ASF_CITE:${JSON.stringify({ concept_id: lastRag.ids[0] })}]]`;
     return text;
@@ -259,6 +274,18 @@ async function settle() {
   for (let i = 0; i < 20; i++) await new Promise((ok) => setImmediate(ok));
 }
 
+/**
+ * AS-42: checkpoint -> stub note tag. `MEM.note_written(misconception=sign_move)` /
+ * `MEM.note_written(sqrt_split)` -> misconception fact keyed by the tag (as before, plus key);
+ * `MEM.fact_written(goal:exam_date=in_2_weeks)` -> goal fact, key exam_date.
+ */
+function noteTagFor(cp: string): { kind: string; key: string; tag: string } {
+  const typed = /\((\w+):(\w+)=(\w+)\)/.exec(cp);
+  if (typed) return { kind: typed[1]!, key: typed[2]!, tag: `${typed[1]}_${typed[2]}_${typed[3]}` };
+  const key = /\(([^)=]*=)?([^)]+)\)/.exec(cp)?.[2] ?? 'note';
+  return { kind: 'misconception', key, tag: key };
+}
+
 const decoys = new Map<string, string>(); // learner -> planted decoy text in a DIFFERENT learner's notes
 
 async function runJourney(POST: (r: Request) => Promise<Response>, j: Journey, locale: 'he' | 'en') {
@@ -301,11 +328,11 @@ async function runJourney(POST: (r: Request) => Promise<Response>, j: Journey, l
     currentAgent = sess.agent;
     const sessionId = `${userId}-s${sess.s}`;
     const cps = sess.checkpoints ?? [];
-    const noteCp = cps.find((c) => c.startsWith('MEM.note_written'));
+    const noteCp = cps.find((c) => c.startsWith('MEM.note_written') || c.startsWith('MEM.fact_written'));
     const history: Array<{ role: string; content: string }> = [];
     for (let ti = 0; ti < sess.turns.length; ti++) {
       const text = sess.turns[ti]!;
-      st.noteTag = noteCp && ti === sess.turns.length - 1 ? (/\(([^)=]*=)?([^)]+)\)/.exec(noteCp)?.[2] ?? 'note') : null;
+      st.noteTag = noteCp && ti === sess.turns.length - 1 ? noteTagFor(noteCp) : null;
       history.push({ role: 'user', content: text });
       const llmBefore = st.llmCalls.length; const ragBefore = st.ragCalls.length;
       const t0 = Date.now();
@@ -365,6 +392,22 @@ async function runJourney(POST: (r: Request) => Promise<Response>, j: Journey, l
       const key = /\(([^)=]*=)?([^),]+)/.exec(cp)?.[2] ?? '';
       if (cp.startsWith('MEM.note_written')) {
         add('MEM-R', `s${sess.s}.${cp}`, st.notes.some((n) => n.learner_id === userId && n.content.includes(`EVALTAG:${key}`)), 'learner_agent_notes row via [[ASF_MEMORY_NOTE');
+      } else if (cp.startsWith('MEM.fact_written')) {
+        // AS-42 (C3): typed goal fact written with kind + key.
+        const f = noteTagFor(cp);
+        add('MEM-R', `s${sess.s}.${cp}`, st.notes.some((n) => n.learner_id === userId && !n.superseded_by && n.kind === f.kind && n.content.includes(`EVALTAG:${f.tag} `)), `live ${f.kind}:${f.key} fact row`);
+      } else if (cp.startsWith('MEM.only_current_fact')) {
+        // AS-42 (C3): after a goal change only the newest goal (same kind+key) reaches the prompt.
+        const f = noteTagFor(cp);
+        const lastSys = st.llmCalls.at(-1)?.system ?? '';
+        const stale = [...lastSys.matchAll(new RegExp(`EVALTAG:${f.kind}_${f.key}_[\\w]+`, 'g'))].map((x) => x[0]).filter((x) => x !== `EVALTAG:${f.tag}`);
+        add('MEM-F', `s${sess.s}.${cp}`, lastSys.includes(`EVALTAG:${f.tag} `) && stale.length === 0, stale.length ? `stale facts in prompt: ${stale.join(',')}` : `only current ${f.kind}:${f.key} in ${sess.agent} prompt`);
+      } else if (cp.startsWith('MEM.misconception_count')) {
+        // AS-42 (C3): J4 repeated misconception -> one live fact, count incremented.
+        const [, key, want] = /\(([^=)]+)=(\d+)\)/.exec(cp) ?? [];
+        const liveFacts = st.notes.filter((n) => n.learner_id === userId && !n.superseded_by && n.kind === 'misconception' && tf_.decodeFactContent(n.content).meta?.key === key);
+        const got = liveFacts.map((n) => tf_.decodeFactContent(n.content).meta?.n);
+        add('MEM-R', `s${sess.s}.${cp}`, liveFacts.length === 1 && got[0] === Number(want), `live=${liveFacts.length} count=${got.join(',')}`);
       } else if (cp.startsWith('MEM.recall')) {
         const lastSys = st.llmCalls.at(-1)?.system ?? '';
         add('MEM-R', `s${sess.s}.${cp}`, lastSys.includes(`EVALTAG:${key}`), `prior note ${key} present in ${sess.agent} prompt`);
@@ -372,7 +415,7 @@ async function runJourney(POST: (r: Request) => Promise<Response>, j: Journey, l
         add('MEM-F', `s${sess.s}.${cp}`, true, 'topic contamination needs judge; isolation checked below');
       } else if (cp.startsWith('HAND.')) {
         const lastSys = st.llmCalls.at(-1)?.system ?? '';
-        const prior = st.notes.filter((n) => n.learner_id === userId && n.agent !== sess.agent);
+        const prior = st.notes.filter((n) => n.learner_id === userId && n.agent !== sess.agent && !n.superseded_by);
         add('HAND', `s${sess.s}.${cp}`, prior.length > 0 && prior.every((n) => lastSys.includes(n.content.slice(0, 40))), `${prior.length} other-agent notes; digest in ${sess.agent} prompt`);
       }
     }

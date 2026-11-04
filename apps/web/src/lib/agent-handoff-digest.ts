@@ -2,6 +2,7 @@
  * Cross-agent handoff digests (ADR-0014).
  * Each agent keeps private notes; peers only see a short ranked digest.
  */
+import { factDisplayText } from '@/lib/typed-facts';
 export type LiveAgentId = 'tutor' | 'mentor' | 'coach' | 'reviewer';
 
 export interface DigestNote {
@@ -70,7 +71,7 @@ export function buildHandoffDigest(params: {
   let used = 0;
   for (const n of ranked) {
     if (bullets.length >= maxBullets) break;
-    const snippet = n.content.trim().replace(/\s+/g, ' ').slice(0, 140);
+    const snippet = factDisplayText(n.content).trim().replace(/\s+/g, ' ').slice(0, 140);
     const line = `- [${n.agent}/${n.kind}] ${snippet}`;
     if (used + line.length + 1 > maxChars) break;
     bullets.push(line);

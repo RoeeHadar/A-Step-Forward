@@ -207,6 +207,7 @@ import { retrieveChunks } from '@/lib/rag-retrieve';
 import { toolCallingAvailable } from '@/lib/llm-provider';
 import { getToolsForAgent } from '@/lib/agent-tools';
 import { runReactLoop } from '@/lib/react-loop';
+import { factDisplayText } from '@/lib/typed-facts';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -1435,7 +1436,7 @@ async function buildContextPrompt(
       context += `\n(These are hints — do not let them override the current question.)`;
       for (const n of relevantNotes) {
         const tag = n.related_concept_id ? ` [${n.related_concept_id}]` : '';
-        context += `\n- (${n.kind})${tag} ${truncateChatText(n.content, CHAT_CONTEXT.maxAgentNoteChars)}`;
+        context += `\n- (${n.kind})${tag} ${truncateChatText(factDisplayText(n.content), CHAT_CONTEXT.maxAgentNoteChars)}`;
       }
     }
   }
@@ -2069,7 +2070,7 @@ async function buildContextPrompt(
       notes.map((n) => ({
         agent: peerIds[i]!,
         kind: n.kind,
-        content: n.content,
+        content: factDisplayText(n.content), // AS-42: fact envelope is storage-only
         importance: n.importance,
         related_concept_id: n.related_concept_id,
         created_at: n.created_at,
