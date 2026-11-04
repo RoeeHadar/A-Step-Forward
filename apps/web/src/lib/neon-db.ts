@@ -3799,6 +3799,7 @@ export async function fetchAgentNotes(
       FROM learner_agent_notes
       WHERE learner_id = ${learnerId}
         AND agent = ${agent}
+        AND kind <> 'episode'
         AND archived_at IS NULL
         AND superseded_by IS NULL
       ORDER BY importance DESC, created_at DESC
@@ -3808,6 +3809,39 @@ export async function fetchAgentNotes(
   } catch (err) {
     if (process.env.NODE_ENV !== 'production') {
       console.warn('[neon-db] fetchAgentNotes failed', err);
+    }
+    return [];
+  }
+}
+
+/**
+ * AS-57 (C6): live episode-summary notes (kind 'episode'), newest first. `agents` null =
+ * any agent (Mentor reads every agent's episodes). Kept out of fetchAgentNotes above so
+ * episodes never reach the notes block, the handoff digest or the dream pass.
+ */
+export async function fetchEpisodeNotes(
+  learnerId: string,
+  agents: string[] | null,
+  limit = 4,
+): Promise<LearnerAgentNote[]> {
+  if (!sql) return [];
+  try {
+    return (await sql`
+      SELECT id::text, learner_id, agent, kind, content, importance,
+             related_concept_id, source_turn_id::text AS source_turn_id,
+             created_at, last_referenced_at
+      FROM learner_agent_notes
+      WHERE learner_id = ${learnerId}
+        AND kind = 'episode'
+        AND (${agents === null} OR agent = ANY(${agents ?? []}))
+        AND archived_at IS NULL
+        AND superseded_by IS NULL
+      ORDER BY created_at DESC
+      LIMIT ${limit}
+    `) as LearnerAgentNote[];
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[neon-db] fetchEpisodeNotes failed', err);
     }
     return [];
   }

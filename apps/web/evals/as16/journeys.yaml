@@ -50,7 +50,7 @@ journeys:
     agent: mentor
     turns: ["היי חזרתי, איפה הייתי?"]
     expect: [mentor summarises last state from memory, proposes a short review before new material, plan reflects the gap]
-    checkpoints: [MEM.recall_after_gap(trig_sign, plan_position), PLAN.update_with_evidence(reason=gap_days), SITE.next_lesson_is_review]
+    checkpoints: [MEM.recall_after_gap(trig_sign, plan_position), PLAN.update_with_evidence(reason=gap_days), SITE.next_lesson_is_review, MEM.episode_tokens(max=1500;drop=30)]  # AS-57 (C6)
 - id: J4-repeat-misconception-en
   lang: en
   persona: {level: medium, behaviour: cooperative, misconceptions: ["sqrt(a+b)=sqrt(a)+sqrt(b)"] , repeats_in_sessions: [1,2,3]}

@@ -20,6 +20,7 @@
  * real latency/cost — those are null + needs_paid_run (or not_measurable_offline).
  */
 import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import http from 'node:http';
 import https from 'node:https';
@@ -29,6 +30,10 @@ import { syncBuiltinESMExports } from 'node:module';
 import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import { parse as parseYaml } from 'yaml';
 import * as tf_ from '@/lib/typed-facts';
+import * as ep_ from '@/lib/episode-summaries';
+
+// AS-57 (C6): episode summaries on for the whole run (EVAL_EPISODES=0 → flag off baseline).
+process.env.EPISODE_SUMMARIES = process.env.EVAL_EPISODES === '0' ? '0' : '1';
 import { createReplyGuard, hasFinalValue, isLearnerAttempt, REVIEWER_MAX_LINES } from '@/lib/agent-method-guard';
 
 // ---------------------------------------------------------------- network guard
@@ -72,6 +77,8 @@ const st = vi.hoisted(() => ({
   practiceFixture: null as unknown,
   llmCalls: [] as Array<{ system: string; messages: Array<{ role: string; content: string }> }>,
   llmCompleteCalls: 0,
+  /** AS-57: mocked cheap-chain summariser calls (episode writes). */
+  summarizerCalls: 0,
   ragCalls: [] as Array<{ query: string; ids: string[] }>,
   /** AS-42: typed fact the stub tags on this turn (kind + supersede key + EVALTAG suffix). */
   noteTag: null as { kind: string; key: string; tag: string } | null,
@@ -122,7 +129,20 @@ vi.mock('@/lib/neon-db', async (importOriginal) => {
     },
     // Mirrors neon-db.ts fetchAgentNotes SQL (`superseded_by IS NULL`).
     fetchAgentNotes: async (learnerId: string, agent: string, limit = 8) =>
-      st.notes.filter((n) => n.learner_id === learnerId && n.agent === agent && !n.superseded_by).slice(-limit),
+      st.notes.filter((n) => n.learner_id === learnerId && n.agent === agent && n.kind !== 'episode' && !n.superseded_by).slice(-limit),
+    // AS-57: mirrors neon-db.ts fetchEpisodeNotes (kind 'episode', live, newest first; null = any agent).
+    fetchEpisodeNotes: async (learnerId: string, agents: string[] | null, limit = 4) =>
+      st.notes.filter((n) => n.learner_id === learnerId && n.kind === 'episode' && !n.superseded_by && (agents === null || agents.includes(n.agent))).reverse().slice(0, limit),
+    // AS-57: session-scoped chronological history (mirrors neon-db.ts fetchChatHistory with sessionId).
+    fetchChatHistory: async (learnerId: string, agent: string, limit = 50, sessionId?: string | null) =>
+      (st.turns as Array<Turn & { learnerId: string }>)
+        .filter((t) => t.learnerId === learnerId && t.agent === agent && (!sessionId || t.sessionId === sessionId))
+        .slice(0, limit)
+        .map((t, i) => ({ id: String(i), role: t.role, content: t.content, created_at: t.created_at })),
+    supersedeAgentNote: async (noteId: string, by: string | null) => {
+      const n = st.notes.find((x) => x.id === noteId);
+      if (n && by) n.superseded_by = by;
+    },
     // AS-43: mirrors neon-db.ts fetchAgentNotesByIds (learner-scoped, live rows).
     fetchAgentNotesByIds: async (learnerId: string, ids: string[]) =>
       st.notes.filter((n) => n.learner_id === learnerId && ids.includes(n.id) && !n.superseded_by),
@@ -216,7 +236,17 @@ vi.mock('@/lib/llm-provider', async (importOriginal) => {
      
       yield reply([...opts.messages].reverse().find((x) => x.role === 'user')?.content ?? '');
     },
-    llmComplete: async () => { st.llmCompleteCalls += 1; return null; },
+    llmComplete: async (opts: { system?: string; messages: Array<{ content: string }> }) => {
+      // AS-57: mocked cheap-chain summariser (no paid call): short, deterministic, learner-centric.
+      if (opts.system?.startsWith(ep_.EPISODE_SUMMARIZER_MARKER)) {
+        st.summarizerCalls += 1;
+        const learner = (opts.messages[0]?.content ?? '').split('\n').filter((l) => l.startsWith('Learner: ')).map((l) => l.slice(9).slice(0, 60));
+        const he = st.locale === 'he';
+        return { model: 'mock-cheap', content: `${he ? 'הלומד שאל' : 'Learner asked'}: ${learner[0] ?? ''}${learner.length > 1 ? `; ${he ? 'ענה' : 'answered'}: ${learner.at(-1)}` : ''}.` };
+      }
+      st.llmCompleteCalls += 1;
+      return null;
+    },
     llmCompleteJson: async () => { st.llmCompleteCalls += 1; return null; },
     llmCompleteWithTools: async () => { st.llmCompleteCalls += 1; return null; },
   };
@@ -239,7 +269,7 @@ type Metric = {
   judge: { score: null; needs_paid_run: true } | null;
   note?: string;
 };
-const METRIC_IDS = ['MEM-R', 'MEM-F', 'PLAN-A', 'PLAN-F', 'ADAPT', 'ROLE', 'RAG', 'HAND', 'SITE', 'SAT', 'LAT', 'COST', 'PLUMB'] as const;
+const METRIC_IDS = ['MEM-R', 'MEM-F', 'MEM-T', 'PLAN-A', 'PLAN-F', 'ADAPT', 'ROLE', 'RAG', 'HAND', 'SITE', 'SAT', 'LAT', 'COST', 'PLUMB'] as const;
 const JUDGE = { score: null, needs_paid_run: true } as const;
 const HAS_JUDGE = new Set(['MEM-R', 'MEM-F', 'PLAN-A', 'ADAPT', 'ROLE', 'RAG', 'HAND', 'SAT']);
 const OFFLINE_NA: Record<string, string> = {
@@ -407,7 +437,23 @@ async function runJourney(POST: (r: Request) => Promise<Response>, j: Journey, l
     // MEM-R note_written: tag parsed by real chat-memory-persist -> fake appendAgentNote.
     for (const cp of cps) {
       const key = /\(([^)=]*=)?([^),]+)/.exec(cp)?.[2] ?? '';
-      if (cp.startsWith('MEM.note_written')) {
+      if (cp.startsWith('MEM.episode_tokens')) {
+        // AS-57 (C6): memory context on this turn (episode block + raw memory turns) vs the same
+        // history carried as raw turns. Must be <= max tokens, drop >= drop %, and actually carry
+        // the earlier session (block present) — disabling injection fails it.
+        const [, maxS, dropS] = /max=(\d+);drop=(\d+)/.exec(cp) ?? [];
+        const call = st.llmCalls.at(-1);
+        const sys = call?.system ?? '';
+        const i0 = sys.indexOf(ep_.EPISODE_BLOCK_HEADER);
+        const block = i0 < 0 ? '' : sys.slice(i0).split('\n\n## ')[0]!;
+        const rawNow = (call?.messages ?? []).slice(0, -1).map((x) => `${x.role}: ${x.content}`).join('\n');
+        const prior = (st.turns as Array<Turn & { learnerId: string }>).filter((t) => t.learnerId === userId && t.sessionId !== sessionId && !String(t.sessionId).includes('-probe') && !String(t.sessionId).includes('-plan'));
+        const rawPrior = prior.map((t) => `${t.role}: ${t.content}`).join('\n');
+        const epiTok = ep_.estimateTokens([block, rawNow].filter(Boolean).join('\n'));
+        const rawTok = ep_.estimateTokens([rawPrior, rawNow].filter(Boolean).join('\n'));
+        const drop = rawTok > 0 ? Math.round((1 - epiTok / rawTok) * 1000) / 10 : 0;
+        add('MEM-T', `s${sess.s}.${cp}`, block.length > 0 && prior.length > 0 && epiTok <= Number(maxS) && drop >= Number(dropS), `memory_tokens episodes=${epiTok} raw=${rawTok} drop=${drop}% (prior turns=${prior.length}; summariser calls so far (run)=${st.summarizerCalls}; block=${block.length > 0})`);
+      } else if (cp.startsWith('MEM.note_written')) {
         add('MEM-R', `s${sess.s}.${cp}`, st.notes.some((n) => n.learner_id === userId && n.content.includes(`EVALTAG:${key}`)), 'learner_agent_notes row via [[ASF_MEMORY_NOTE');
       } else if (cp.startsWith('MEM.fact_supersedes')) {
         // AS-52 (C3b): the new goal note carries the key and the earlier same-key goal is superseded.
@@ -506,7 +552,7 @@ async function runJourney(POST: (r: Request) => Promise<Response>, j: Journey, l
         add('MEM-F', `s${sess.s}.${cp}`, true, 'topic contamination needs judge; isolation checked below');
       } else if (cp.startsWith('HAND.')) {
         const lastSys = st.llmCalls.at(-1)?.system ?? '';
-        const prior = st.notes.filter((n) => n.learner_id === userId && n.agent !== sess.agent && !n.superseded_by);
+        const prior = st.notes.filter((n) => n.learner_id === userId && n.agent !== sess.agent && n.kind !== 'episode' && !n.superseded_by); // AS-57: episodes are not digest notes
         add('HAND', `s${sess.s}.${cp}`, prior.length > 0 && prior.every((n) => lastSys.includes(n.content.slice(0, 40))), `${prior.length} other-agent notes; digest in ${sess.agent} prompt`);
       }
     }
@@ -539,10 +585,13 @@ describe('AS-16 offline journey eval (stub LLM, fake DB, no network)', () => {
 
   it('runs 6 journeys x he/en with 0 network calls', async () => {
     const results = [];
+    const promptHash = createHash('sha256');
     for (const j of spec.journeys) for (const loc of ['he', 'en'] as const) {
       st.llmCalls = []; st.ragCalls = [];
       results.push(await runJourney(POST, j, loc));
+      promptHash.update(JSON.stringify(st.llmCalls));
     }
+    console.log(`[AS27] episode_summaries=${process.env.EPISODE_SUMMARIES} prompt_sha256=${promptHash.digest('hex')}`);
     const totals: Record<string, { checks: number; passed: number; score: number | null; judge_needs_paid_run: boolean; kind: string }> = {};
     for (const id of METRIC_IDS) {
       const all = results.flatMap((r) => r.metrics[id]!.checks);
@@ -552,7 +601,7 @@ describe('AS-16 offline journey eval (stub LLM, fake DB, no network)', () => {
     const out = {
       eval: 'AS-16 offline (AS-27)', mode: 'dry/stub', generated_at: new Date().toISOString(),
       runs: results.length, network_calls: net_.count, network_call_log: net_.calls,
-      llm_stream_calls_total: results.reduce((a, r) => a + r.transcript.length, 0), llm_aux_calls_stubbed_null: st.llmCompleteCalls,
+      llm_stream_calls_total: results.reduce((a, r) => a + r.transcript.length, 0), llm_aux_calls_stubbed_null: st.llmCompleteCalls, episode_summarizer_calls_mocked: st.summarizerCalls,
       db_helper_calls: st.dbCalls, totals, results,
     };
     console.log(`[AS27] runs=${results.length} network_calls=${net_.count}`);
@@ -560,5 +609,27 @@ describe('AS-16 offline journey eval (stub LLM, fake DB, no network)', () => {
     if (process.env.EVAL_OUT) fs.writeFileSync(process.env.EVAL_OUT, JSON.stringify(out, null, 2));
     expect(results.length).toBe(12);
     expect(net_.count).toBe(0);
+  }, 120_000);
+
+  // AS-57: flag off → every prompt the stub LLM receives is byte-identical to the pre-AS-57
+  // runner (base 9a8a4aa5); golden = sha256 over all journeys' llmStream calls.
+  it('EPISODE_SUMMARIES off: prompts byte-identical to pre-AS-57 golden', async () => {
+    const prev = process.env.EPISODE_SUMMARIES;
+    process.env.EPISODE_SUMMARIES = '0';
+    st.turns = []; st.notes = []; st.summarizerCalls = 0; decoys.clear();
+    const h = createHash('sha256');
+    try {
+      for (const j of spec.journeys) for (const loc of ['he', 'en'] as const) {
+        st.llmCalls = []; st.ragCalls = [];
+        await runJourney(POST, j, loc);
+        h.update(JSON.stringify(st.llmCalls));
+      }
+    } finally {
+      process.env.EPISODE_SUMMARIES = prev;
+    }
+    const golden = fs.readFileSync(path.join(EVAL_DIR, 'prompts.flagoff.sha256'), 'utf8').trim();
+    expect(st.summarizerCalls).toBe(0);
+    expect(st.notes.some((n) => n.kind === 'episode')).toBe(false);
+    expect(h.digest('hex')).toBe(golden);
   }, 120_000);
 });

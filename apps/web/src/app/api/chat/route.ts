@@ -14,6 +14,10 @@ import {
   fetchLessonByConceptId,
   getLearnerPersona,
   fetchAgentNotes,
+  fetchEpisodeNotes,
+  fetchChatHistory,
+  appendAgentNote,
+  supersedeAgentNote,
   getDueReviews,
   markAtomPracticed,
   getCurrentPlan,
@@ -59,11 +63,19 @@ import {
   llmComplete,
   llmConfigured,
   resolveChatModelChain,
+  resolveClassifierModelChain,
   getLLMConfig,
   classifyFetchError,
   type LLMFailureInfo,
 } from '@/lib/llm-provider';
 import { buildChatFailureMessage } from '@/lib/learner-llm-errors';
+import {
+  EPISODE_MAX_SOURCE_TURNS,
+  buildEpisodeBlock,
+  episodeSummariesEnabled,
+  selectEpisodes,
+  writeEpisodeSummary,
+} from '@/lib/episode-summaries';
 import {
   CHAT_BREVITY_RULE,
   CHAT_CONTEXT,
@@ -406,7 +418,41 @@ async function saveAssistantTurn(
       err: String(err),
     });
   }
+  // AS-57 (C6): fire-and-forget episode summary (flag off → not called at all).
+  if (episodeSummariesEnabled()) void writeEpisodeForSession(userId, agent, sessionId, locale);
   void maybeDreamLearnerNotes(userId, agent);
+}
+
+/** AS-57: summarise this session with the cheap chain; never throws (see episode-summaries.ts). */
+async function writeEpisodeForSession(
+  userId: string,
+  agent: string,
+  sessionId: string | undefined,
+  locale: 'he' | 'en',
+): Promise<void> {
+  await writeEpisodeSummary(
+    { agent, sessionId, locale },
+    {
+      fetchSessionTurns: async () =>
+        (await fetchChatHistory(userId, agent, EPISODE_MAX_SOURCE_TURNS, sessionId)).map((t) => ({
+          role: t.role === 'user' ? ('user' as const) : ('assistant' as const),
+          content: t.content,
+        })),
+      complete: async (system, user) =>
+        (await llmComplete({
+          system,
+          messages: [{ role: 'user', content: user }],
+          models: resolveClassifierModelChain(),
+          maxTokens: 220,
+          temperature: 0.2,
+          timeoutMs: 15_000,
+        }))?.content ?? null,
+      fetchEpisodes: () => fetchEpisodeNotes(userId, [agent], 8),
+      append: (note) => appendAgentNote(userId, agent, note),
+      supersede: (oldId, newId) => supersedeAgentNote(oldId, newId),
+      warn: (msg, meta) => logger.warn(msg, meta),
+    },
+  );
 }
 
 async function maybeDreamLearnerNotes(userId: string, agent: string): Promise<void> {
@@ -1453,6 +1499,12 @@ async function buildContextPrompt(
         context += `\n- [id:${n.id}] (${n.kind})${tag} ${truncateChatText(factDisplayText(n.content), CHAT_CONTEXT.maxAgentNoteChars)}`;
       }
     }
+  }
+  // AS-57 (C6): older turns as stored episode summaries (Mentor reads every agent's).
+  if (!minimal && episodeSummariesEnabled()) {
+    const episodes = await fetchEpisodeNotes(userId, agent === 'mentor' ? null : [agent], 8).catch(() => []);
+    const block = buildEpisodeBlock(selectEpisodes(episodes, sessionId));
+    if (block) context += `\n\n${block}`;
   }
   if (profile && contextNeeds.profile) {
     context += `\n\n## Learner profile (internal facts — paraphrase; never dump field-by-field)`;
