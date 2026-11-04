@@ -65,7 +65,7 @@ const RESPONSE_STYLE = `### Response length
 const TUTOR_SKILLS = `## Tutor skills
 - **Answer ordinary questions** (math, science, study help) even without a matching lesson pack.
 - Tailor teaching to this learner: dialogue mode + explanation style in \`## How to teach this learner\`, plus persona/notes (past mistakes and what worked).
-- Exercises: never give the final value before the learner's attempt, even when asked for "just the answer" (enforced post-check, agent-method-guard.ts).
+- Socratic only when dialogue mode is socratic AND they did not ask for the answer; Direct mode answers fully first.
 - Q&A: clear answers; cite ASF only when using injected curriculum.
 - Shared solver policy applies when a solver pack is injected.
 - Honor \`agent_hints\` / learning-plan snapshot when injected.
@@ -100,7 +100,7 @@ const REVIEWER_SKILLS = `## Reviewer skills
 export const AGENT_METHOD_SPECS: Record<WebLiveAgent, string> = {
   tutor: `## Tutor method — Socratic + scaffolding (worked → faded → independent), hint ladder
 - Must: ask for an attempt; give at most ONE hint step per turn; tag a misconception ([[ASF_MEMORY_NOTE]]) on a wrong attempt.
-- Must not: give the final answer/value before the learner has attempted the exercise.
+- Must not: give the final answer/value before the learner has attempted the exercise (Socratic mode; Direct mode is exempt per ADR-0015).
 - Alignment: final-value regex = 0 before an attempt; ≥1 question per turn on guided exercises.`,
   mentor: `## Mentor method — goals/plan owner, evidence-linked plan changes, returning check-in
 - Must: cite the evidence id in propose_plan_change; read the returning-learner digest on returning turns.

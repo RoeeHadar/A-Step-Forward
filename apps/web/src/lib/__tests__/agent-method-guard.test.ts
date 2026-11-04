@@ -8,6 +8,7 @@ import {
   hasFinalValue,
   isLearnerAttempt,
   shouldArmTutorGuard,
+  isAnswerRequest,
   tutorHint,
 } from '@/lib/agent-method-guard';
 import { AGENT_METHOD_SPECS, buildAgentSkillsPrompt } from '@/lib/agent-skills';
@@ -163,5 +164,31 @@ describe('AS-41 r1 (P1-1) arming rule + negative teaching fixtures (he/en)', () 
   });
   it('replacement hint is generic (no linear-equation wording)', () => {
     for (const l of ['he', 'en']) expect(tutorHint(l)).not.toMatch(/both sides|בשני הצדדים|undo/i);
+  });
+});
+
+describe('AS-41 r2 Hebrew answer request needs an object', () => {
+  it.each([
+    'תן לי את התשובה',
+    'תגידי לי רק את התוצאה',
+    'מה התשובה?',
+    'תפתור לי',
+    'אני לא מבין משוואות, תן לי פשוט את התשובה ל 2x+3=11',
+    'just give me the answer to 2x+3=11',
+  ])('arms: %s', (m) => {
+    expect(isAnswerRequest(m)).toBe(true);
+    expect(shouldArmTutorGuard(m, false)).toBe(true);
+  });
+  it.each(['תגיד לי מה זה החוק השני של ניוטון', 'תן לי הסבר על תאוצת כובד', 'תן לי דוגמה לנגזרת'])('does not arm: %s', (m) => {
+    expect(isAnswerRequest(m)).toBe(false);
+    expect(createReplyGuard({ agent: 'tutor', lastMessage: m, locale: 'he' })).toBeNull();
+  });
+});
+
+describe('AS-41 r2 Direct mode exempt (ADR-0015, ex AS-49)', () => {
+  it('Direct mode + answer request + active practice item: reply unchanged', () => {
+    const reply = 'נפתור: 2x = 8\nולכן x = 4.';
+    const g = createReplyGuard({ agent: 'tutor', lastMessage: 'תן לי את התשובה ל 2x+3=11', locale: 'he', practiceActive: true, directMode: true });
+    expect(g ? run(g, [reply]) : reply).toBe(reply);
   });
 });

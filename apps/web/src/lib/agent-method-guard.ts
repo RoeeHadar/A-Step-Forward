@@ -32,7 +32,23 @@ export function hasFinalValue(text: string): boolean {
 
 /** Learner explicitly asks to be handed the answer (he/en). */
 const ANSWER_REQUEST_RE =
-  /\b(?:give|tell|show)\s+me\s+(?:just\s+)?(?:the\s+)?(?:answer|solution|result)|\bjust\s+(?:give|tell)\b|\bwhat(?:'s| is)\s+the\s+answer|\bsolve\s+(?:it|this)\s+for\s+me|תן\s+לי|תני\s+לי|תגיד\s+לי|תגידי\s+לי|מה\s+התשובה|תפתור\s+לי|פתור\s+לי/i;
+  /\b(?:give|tell|show)\s+me\s+(?:just\s+)?(?:the\s+)?(?:answer|solution|result)|\bjust\s+(?:give|tell)\b|\bwhat(?:'s| is)\s+the\s+answer|\bsolve\s+(?:it|this)\s+for\s+me/i;
+/**
+ * AS-41 r2: Hebrew answer requests need an OBJECT, like the English ones —
+ * bare "תן לי" / "תגיד לי" ("give/tell me") is ordinary teaching phrasing.
+ * JS \b does not treat Hebrew letters as word chars, so word edges are
+ * explicit lookarounds on the Hebrew block (U+0590–U+05FF). Optional ו/ש
+ * prefix on the verb; optional רק/פשוט ("just/simply") and את; optional ה;
+ * plural suffix ות/ים allowed on the object.
+ */
+const HE = '\u0590-\u05FF';
+const HE_ANSWER_REQUEST_RE = new RegExp(
+  [
+    `(?<![${HE}])[וש]?(?:תן|תני|תגיד|תגידי)\\s+לי\\s+(?:(?:רק|פשוט)\\s+)?(?:את\\s+)?ה?(?:תשובה|תשובות|פתרון|פתרונות|תוצאה|תוצאות)(?![${HE}])`,
+    `(?<![${HE}])[וש]?מה\\s+התשובה(?![${HE}])`,
+    `(?<![${HE}])[וש]?ת?פתור\\s+לי(?![${HE}])`,
+  ].join('|'),
+);
 /** First-person attempt phrasings (he/en). */
 const ATTEMPT_PHRASE_RE =
   /\b(?:i\s+got|i\s+get|my\s+answer|i\s+think\s+it'?s|i\s+tried|is\s+it)\b|קיבלתי|יצא\s+לי|ניסיתי|לדעתי|התשובה\s+שלי|זה\s+יוצא/i;
@@ -52,7 +68,7 @@ const BARE_VALUE_RE = /^[-−]?\s*[\da-zA-Z(][\d\s+\-−*/^().,a-zA-Z=]*\??$/u;
 export function isLearnerAttempt(message: string): boolean {
   const m = (message ?? '').trim();
   if (!m) return false;
-  if (ANSWER_REQUEST_RE.test(m)) return false;
+  if (isAnswerRequest(m)) return false;
   if (ATTEMPT_PHRASE_RE.test(m)) return true;
   if (ATTEMPT_MATH_RE.test(m)) return true;
   const stripped = m.replace(/^(?:אוקיי|אוקי|ok(?:ay)?|so|אז|נו)[\s,]*/i, '');
@@ -60,7 +76,7 @@ export function isLearnerAttempt(message: string): boolean {
 }
 
 export function isAnswerRequest(message: string): boolean {
-  return ANSWER_REQUEST_RE.test(message ?? '');
+  return ANSWER_REQUEST_RE.test(message ?? '') || HE_ANSWER_REQUEST_RE.test(message ?? '');
 }
 
 /**
@@ -70,7 +86,9 @@ export function isAnswerRequest(message: string): boolean {
  * Ordinary teaching/explanation turns ("teach me Newton's second law") are
  * never armed, so worked examples / constants (g = 9.8, n = 1) pass through.
  */
-export function shouldArmTutorGuard(message: string, practiceActive: boolean): boolean {
+export function shouldArmTutorGuard(message: string, practiceActive: boolean, directMode = false): boolean {
+  // AS-41 r2 (ex AS-49): ADR-0015 — Direct dialogue mode answers directly; never armed.
+  if (directMode) return false;
   if (isLearnerAttempt(message)) return false;
   return isAnswerRequest(message) || practiceActive;
 }
@@ -109,8 +127,10 @@ export function createReplyGuard(opts: {
   locale: 'he' | 'en' | string;
   /** AS-41 r1: an ungraded practice-arena item is in this turn (route.ts practiceContext && !item_graded). */
   practiceActive?: boolean;
+  /** AS-41 r2: learner profile tutor_mode === 'direct' (ADR-0015 exemption). */
+  directMode?: boolean;
 }): ReplyGuard | null {
-  if (opts.agent === 'tutor' && shouldArmTutorGuard(opts.lastMessage, opts.practiceActive === true)) {
+  if (opts.agent === 'tutor' && shouldArmTutorGuard(opts.lastMessage, opts.practiceActive === true, opts.directMode === true)) {
     return lineGuard('tutor_hint_before_answer', (line) =>
       FINAL_VALUE_RE.test(stripTags(line)) ? `${tutorHint(opts.locale)}\n` : null,
     );

@@ -568,6 +568,10 @@ export async function POST(req: Request) {
     lastMessage,
     locale,
     practiceActive: Boolean(practiceContext && !practiceContext.item_graded),
+    // Same source as the prompt's mode switch (tutorMode, streamAgentResponse).
+    directMode:
+      (profileForSafety?.personality_profile as { tutor_mode?: string } | null)?.tutor_mode ===
+      'direct',
   });
   /** Incomplete [[ASF_CITE:…]] across SSE chunks. */
   let citeCarry = '';
