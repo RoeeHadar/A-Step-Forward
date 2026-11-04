@@ -28,9 +28,9 @@ function levelIndex(l: LessonPointsLevel) {
 type Lang = 'en' | 'he';
 
 const DIFFICULTY_TINT: Record<LessonQuestionRow['difficulty'], string> = {
-  easy: 'bg-emerald-500/10 text-emerald-400',
-  medium: 'bg-accent-amber/10 text-accent-amber',
-  hard: 'bg-destructive/10 text-rose-300',
+  easy: 'bg-emerald-500/10 text-emerald-800 dark:text-emerald-400',
+  medium: 'bg-accent-amber/10 text-amber-800 dark:text-accent-amber',
+  hard: 'bg-destructive/10 text-rose-800 dark:text-rose-300',
 };
 
 /** Label shown to the student, calibrated relative to their level. */
@@ -368,7 +368,7 @@ function QuestionCard({
           #{question.ord}
         </span>
         {question.kind === 'open' || question.kind === 'derivation' ? (
-          <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-amber-200">
+          <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-amber-800 dark:text-amber-200">
             <Pencil className="h-3 w-3" aria-hidden />
             {kindLabel}
           </span>
@@ -614,7 +614,7 @@ function QuestionCard({
                   ))}
                 </select>
                 {state.submitted && userChoice !== correctIdx ? (
-                  <span className="text-xs text-emerald-400">
+                  <span className="text-xs text-emerald-800 dark:text-emerald-400">
                     {lang === 'he' ? 'נכון: ' : 'Correct: '}
                     {correctRight}
                   </span>
@@ -725,7 +725,7 @@ function QuestionCard({
                 type="button"
                 disabled={busy}
                 onClick={() => handleSelfAssess('correct')}
-                className="min-h-11 rounded-full bg-emerald-500/10 px-3 py-1.5 text-xs font-medium text-emerald-400 hover:bg-emerald-500/20"
+                className="min-h-11 rounded-full bg-emerald-500/10 px-3 py-1.5 text-xs font-medium text-emerald-800 dark:text-emerald-400 hover:bg-emerald-500/20"
               >
                 {lang === 'he' ? 'נכון' : 'Correct'}
               </button>
@@ -733,7 +733,7 @@ function QuestionCard({
                 type="button"
                 disabled={busy}
                 onClick={() => handleSelfAssess('partial')}
-                className="min-h-11 rounded-full bg-accent-amber/10 px-3 py-1.5 text-xs font-medium text-accent-amber hover:bg-accent-amber/20"
+                className="min-h-11 rounded-full bg-accent-amber/10 px-3 py-1.5 text-xs font-medium text-amber-800 dark:text-accent-amber hover:bg-accent-amber/20"
               >
                 {lang === 'he' ? 'חלקי' : 'Partial'}
               </button>
@@ -1046,7 +1046,7 @@ function SkillAtomDrillSection({
   return (
     <div className="mt-6 space-y-4">
       <div className="flex items-center gap-2">
-        <span className="h-5 w-5 text-accent-amber">⚡</span>
+        <span className="h-5 w-5 text-amber-800 dark:text-accent-amber">⚡</span>
         <h3 className="font-display text-lg font-semibold">
           {lang === 'he' ? 'תרגול לפי מיומנות' : 'Practice by skill'}
         </h3>
