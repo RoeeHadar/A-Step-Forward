@@ -2,7 +2,7 @@
  * AS-42 (Phase 4 C3): typed facts — parse, supersede (kind + key), consolidator.
  * Offline: neon is mocked, no DB, no LLM.
  */
-import { describe, expect, it, vi, beforeEach } from 'vitest';
+import { describe, expect, it, vi, beforeEach, afterAll } from 'vitest';
 
 vi.mock('server-only', () => ({}));
 
@@ -14,6 +14,12 @@ const like = (v: string, pat: string) => {
     esc ? esc.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : wild ? (wild === '%' ? '[\\s\\S]*' : '.') : '\\' + meta) + '$');
   return re.test(v);
 };
+// AS-65: restore DATABASE_URL (set in the mock factory below) so single-fork runs don't leak it.
+const AS65_DB_URL = vi.hoisted(() => process.env.DATABASE_URL);
+afterAll(() => {
+  if (AS65_DB_URL === undefined) delete process.env.DATABASE_URL;
+  else process.env.DATABASE_URL = AS65_DB_URL;
+});
 vi.mock('@neondatabase/serverless', () => {
   process.env['DATABASE_URL'] = 'postgresql://test-typed-facts';
   const sql = async (strings: TemplateStringsArray, ...v: unknown[]) => {

@@ -33,6 +33,17 @@ import * as tf_ from '@/lib/typed-facts';
 import * as ep_ from '@/lib/episode-summaries';
 
 // AS-57 (C6): episode summaries on for the whole run (EVAL_EPISODES=0 → flag off baseline).
+// AS-65: snapshot every env var this file overrides; restored in afterAll so single-fork runs
+// don't inherit the placeholder LLM key/base URL (which un-skips the *.llm.integration suites).
+const AS65_ENV_KEYS = ['EPISODE_SUMMARIES', 'DATABASE_URL', 'POSTGRES_URL', 'GROQ_API_KEY', 'LLM_API_KEY', 'LLM_BASE_URL', 'XAI_API_KEY', 'LANGFUSE_SECRET_KEY', 'LANGFUSE_PUBLIC_KEY'] as const;
+const AS65_SAVED_ENV: Record<string, string | undefined> = Object.fromEntries(AS65_ENV_KEYS.map((k) => [k, process.env[k]]));
+function restoreAs65Env(): void {
+  for (const k of AS65_ENV_KEYS) {
+    const v = AS65_SAVED_ENV[k];
+    if (v === undefined) delete process.env[k];
+    else process.env[k] = v;
+  }
+}
 process.env.EPISODE_SUMMARIES = process.env.EVAL_EPISODES === '0' ? '0' : '1';
 import { createReplyGuard, hasFinalValue, isLearnerAttempt, REVIEWER_MAX_LINES } from '@/lib/agent-method-guard';
 
@@ -583,7 +594,7 @@ describe('AS-16 offline journey eval (stub LLM, fake DB, no network)', () => {
     installGuard();
     POST = (await import('@/app/api/chat/route')).POST;
   }, 60_000);
-  afterAll(() => { vi.useRealTimers(); removeGuard(); });
+  afterAll(() => { vi.useRealTimers(); removeGuard(); restoreAs65Env(); });
 
   it('runs 6 journeys x he/en with 0 network calls', async () => {
     const results = [];

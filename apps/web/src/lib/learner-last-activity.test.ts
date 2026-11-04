@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, beforeEach } from 'vitest';
+import { describe, expect, it, vi, beforeEach, afterAll } from 'vitest';
 
 // AS-47: read-only learner-wide last-activity query — exercised against a mocked
 // neon tagged-template (no DB, no network).
@@ -9,6 +9,12 @@ const mockSql = vi.fn((strings: TemplateStringsArray, ...values: unknown[]) => {
   return nextRows instanceof Error ? Promise.reject(nextRows) : Promise.resolve(nextRows);
 });
 vi.mock('server-only', () => ({}));
+// AS-65: restore DATABASE_URL (set in the mock factory below) so single-fork runs don't leak it.
+const AS65_DB_URL = vi.hoisted(() => process.env.DATABASE_URL);
+afterAll(() => {
+  if (AS65_DB_URL === undefined) delete process.env.DATABASE_URL;
+  else process.env.DATABASE_URL = AS65_DB_URL;
+});
 vi.mock('@neondatabase/serverless', () => {
   process.env['DATABASE_URL'] = 'postgresql://placeholder-as47';
   return { neon: () => mockSql, neonConfig: {} };
