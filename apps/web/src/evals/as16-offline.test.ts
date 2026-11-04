@@ -69,6 +69,7 @@ const st = vi.hoisted(() => ({
   turns: [] as Turn[],
   notes: [] as Note[],
   dbCalls: {} as Record<string, number>,
+  practiceFixture: null as unknown,
   llmCalls: [] as Array<{ system: string; messages: Array<{ role: string; content: string }> }>,
   llmCompleteCalls: 0,
   ragCalls: [] as Array<{ query: string; ids: string[] }>,
@@ -96,6 +97,12 @@ vi.mock('@/lib/neon-db', async (importOriginal) => {
   const orig = (await importOriginal()) as Record<string, unknown>;
   const tf = await import('@/lib/typed-facts');
   const fakes: Record<string, (...a: never[]) => unknown> = {
+    // AS-55: pinned practice fixture, served only while the SITE.practice_difficulty_changed check runs.
+    fetchLessonByConceptId: async (conceptId: string) => {
+      const fx = st.practiceFixture as { concept_id: string; lesson: unknown; questions: unknown[] } | null;
+      if (fx && conceptId === fx.concept_id) return { lesson: fx.lesson, questions: fx.questions };
+      return (orig.fetchLessonByConceptId as (c: string) => Promise<unknown>)(conceptId);
+    },
     recordChatTurn: async (learnerId: string, agent: string, role: 'user' | 'assistant', content: string, sessionId?: string) => {
       st.turns.push({ role, content, agent, sessionId, created_at: new Date().toISOString(), ...{ learnerId } } as Turn & { learnerId: string });
     },
@@ -454,17 +461,20 @@ async function runJourney(POST: (r: Request) => Promise<Response>, j: Journey, l
         add('ADAPT', `s${sess.s}.${cp}`, seq.length > 0 && dir === want && m > 0 && m < 1, `model=${model} attempts=[${seq.map((x) => (x ? 'C' : 'W')).join('')}] p_known=${m.toFixed(5)} dir=${dir}`);
       } else if (cp === 'SITE.practice_difficulty_changed') {
         // AS-54 (C5c): the REAL practice-selection path (advancePracticeItem, as /api/practice/next calls it)
-        // with the session's ordered attempts as recent_correct. Bundle lesson, no DB/LLM/network.
+        // with the session's ordered attempts as recent_correct. AS-55: pinned fixture lesson (evals/as16/practice-difficulty-fixture.json), no DB/LLM/network.
         const pq = await import('@/lib/practice-queue');
         const seq = sess.practice_attempts ?? [];
         const want = j.id.startsWith('J1') ? 'easy' : 'hard';
         const llmBefore = st.llmCalls.length;
         const run = (masteryModel: 'bkt' | 'ratio') => pq.advancePracticeItem({ learnerId: userId, conceptFilter: 'functions_quadratic', queueMode: 'default', seenIds: [], recentCorrect: seq, generatedCount: 0, previousDifficulty: 'medium', masteryModel });
-        const r = await run('bkt');
-        const ratio = await run('ratio');
+        const fx = JSON.parse(fs.readFileSync(path.join(EVAL_DIR, 'practice-difficulty-fixture.json'), 'utf8')) as { questions: Array<{ id: string }> };
+        const fxIds = new Set(fx.questions.map((q) => q.id));
+        st.practiceFixture = fx;
+        let r: Awaited<ReturnType<typeof run>>, ratio: Awaited<ReturnType<typeof run>>;
+        try { r = await run('bkt'); ratio = await run('ratio'); } finally { st.practiceFixture = null; }
         const got = r && 'item' in r ? r : null;
         const ratioDiff = ratio && 'item' in ratio ? ratio.difficulty : null;
-        add('SITE', `s${sess.s}.${cp}`, seq.length > 0 && !!got && got.difficulty === want && got.item.source === 'authored' && got.item.difficulty === want && st.llmCalls.length === llmBefore, `model=bkt attempts=[${seq.map((x) => (x ? 'C' : 'W')).join('')}] medium->${got?.difficulty ?? 'none'} (want ${want}; ratio->${ratioDiff}) item=${got?.item.source}/${got?.item.difficulty} llm+${st.llmCalls.length - llmBefore}`);
+        add('SITE', `s${sess.s}.${cp}`, seq.length > 0 && !!got && got.difficulty === want && got.item.source === 'authored' && got.item.difficulty === want && fxIds.has(got.item.question_id ?? '') && st.llmCalls.length === llmBefore, `model=bkt attempts=[${seq.map((x) => (x ? 'C' : 'W')).join('')}] medium->${got?.difficulty ?? 'none'} (want ${want}; ratio->${ratioDiff}) item=${got?.item.source}/${got?.item.difficulty} fixture=${fxIds.has(got?.item.question_id ?? '')} llm+${st.llmCalls.length - llmBefore}`);
       } else if (cp.startsWith('MEM.misconception_count')) {
         // AS-42 (C3): J4 repeated misconception -> one live fact, count incremented.
         const [, key, want] = /\(([^=)]+)=(\d+)\)/.exec(cp) ?? [];

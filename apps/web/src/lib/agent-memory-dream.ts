@@ -9,6 +9,7 @@ import { neon, neonConfig } from '@neondatabase/serverless';
 import { agentNameSchema, type AgentName } from '@asf/schemas/agents';
 import { supersedeAgentNote, dbConfigured, ensureMemoryClaimColumns } from '@/lib/neon-db';
 import { WEB_LIVE_AGENTS } from '@/lib/web-agents';
+import { factDisplayText } from '@/lib/typed-facts';
 
 neonConfig.fetchConnectionCache = true;
 const sql = process.env.DATABASE_URL ? neon(process.env.DATABASE_URL) : null;
@@ -43,9 +44,11 @@ interface NoteRow {
   created_at: string;
 }
 
-function tokenSet(s: string): Set<string> {
+/** AS-55 (C3c): tokens of the display text only — the typed-fact envelope (key/n/valid_to) is
+ * storage metadata and would otherwise dominate Jaccard for short facts. Exported for tests. */
+export function tokenSet(s: string): Set<string> {
   return new Set(
-    s
+    factDisplayText(s)
       .toLowerCase()
       .replace(/[^\p{L}\p{N}\s]/gu, ' ')
       .split(/\s+/)
@@ -53,7 +56,7 @@ function tokenSet(s: string): Set<string> {
   );
 }
 
-function jaccard(a: Set<string>, b: Set<string>): number {
+export function jaccard(a: Set<string>, b: Set<string>): number {
   if (a.size === 0 || b.size === 0) return 0;
   let intersect = 0;
   for (const x of a) if (b.has(x)) intersect += 1;

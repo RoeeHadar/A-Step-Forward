@@ -25,6 +25,7 @@ import {
 } from '@/lib/neon-db';
 import { dreamLearnerMemory, MAX_LIVE_NOTES_PER_AGENT } from '@/lib/agent-memory-dream';
 import { logger } from '@/lib/logger';
+import { factDisplayText } from '@/lib/typed-facts';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -51,7 +52,8 @@ export async function GET(req: Request) {
     return Response.json({ error: 'invalid agent' }, { status: 400 });
   }
   const notes = await fetchAgentNotes(userId, parsed.data, limit);
-  return Response.json({ notes });
+  // AS-55 (C3c): the typed-fact envelope is storage-only; never return it to the client.
+  return Response.json({ notes: notes.map((n) => ({ ...n, content: factDisplayText(n.content) })) });
 }
 
 export async function POST(req: Request) {
