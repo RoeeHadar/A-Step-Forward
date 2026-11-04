@@ -70,3 +70,19 @@ export function atomMastery(
 export function adaptDirection(mastery: number, threshold = 0.8, prior = BKT_GLOBAL_PARAMS.p_init): 'up' | 'hold' | 'down' {
   return mastery >= threshold ? 'up' : mastery < prior ? 'down' : 'hold';
 }
+
+/**
+ * AS-54 (C5c): practice difficulty band from the BKT estimate over the session's ordered
+ * attempts (practice_sessions.recent_correct). < p_init -> easy, >= 0.8 -> hard, else medium.
+ * No attempts -> null (caller keeps its current difficulty).
+ */
+export function practiceDifficultyFromMastery(
+  recentCorrect: readonly boolean[],
+  params: BktParams = BKT_GLOBAL_PARAMS,
+): 'easy' | 'medium' | 'hard' | null {
+  if (recentCorrect.length === 0) return null;
+  const m = bktReplay(recentCorrect, params);
+  if (m >= 0.8) return 'hard';
+  if (m < params.p_init) return 'easy';
+  return 'medium';
+}

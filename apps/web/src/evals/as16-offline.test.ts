@@ -240,7 +240,9 @@ const OFFLINE_NA: Record<string, string> = {
   // AS-43: PLAN-F is deterministic offline only for PLAN.no_change_from_state (mood-only turn stages 0 plan changes); plan-version flip-flop still needs a real DB.
   // AS-51 (C5): ADAPT is deterministic offline only for ADAPT.difficulty_up/down via the BKT mastery
   // read (MASTERY_MODEL=bkt) over the session's declared practice_attempts; strategy changes still need a paid run.
-  SITE: 'needs Playwright on preview + t189u decision->element map',
+  // AS-54 (C5c): SITE is deterministic offline only for SITE.practice_difficulty_changed via the real
+  // practice-selection path (advancePracticeItem, MASTERY_MODEL=bkt); other SITE checkpoints still need
+  // Playwright on preview + the t189u decision->element map and add no checks here.
   SAT: 'student-agent + judge ratings (paid)',
   LAT: 'stub has no model latency; needs Langfuse spans on a real run',
   COST: 'stub uses 0 tokens; needs Langfuse token usage',
@@ -450,6 +452,19 @@ async function runJourney(POST: (r: Request) => Promise<Response>, j: Journey, l
         const dir = bkt.adaptDirection(m);
         const want = cp.endsWith('_down') ? 'down' : 'up';
         add('ADAPT', `s${sess.s}.${cp}`, seq.length > 0 && dir === want && m > 0 && m < 1, `model=${model} attempts=[${seq.map((x) => (x ? 'C' : 'W')).join('')}] p_known=${m.toFixed(5)} dir=${dir}`);
+      } else if (cp === 'SITE.practice_difficulty_changed') {
+        // AS-54 (C5c): the REAL practice-selection path (advancePracticeItem, as /api/practice/next calls it)
+        // with the session's ordered attempts as recent_correct. Bundle lesson, no DB/LLM/network.
+        const pq = await import('@/lib/practice-queue');
+        const seq = sess.practice_attempts ?? [];
+        const want = j.id.startsWith('J1') ? 'easy' : 'hard';
+        const llmBefore = st.llmCalls.length;
+        const run = (masteryModel: 'bkt' | 'ratio') => pq.advancePracticeItem({ learnerId: userId, conceptFilter: 'functions_quadratic', queueMode: 'default', seenIds: [], recentCorrect: seq, generatedCount: 0, previousDifficulty: 'medium', masteryModel });
+        const r = await run('bkt');
+        const ratio = await run('ratio');
+        const got = r && 'item' in r ? r : null;
+        const ratioDiff = ratio && 'item' in ratio ? ratio.difficulty : null;
+        add('SITE', `s${sess.s}.${cp}`, seq.length > 0 && !!got && got.difficulty === want && got.item.source === 'authored' && got.item.difficulty === want && st.llmCalls.length === llmBefore, `model=bkt attempts=[${seq.map((x) => (x ? 'C' : 'W')).join('')}] medium->${got?.difficulty ?? 'none'} (want ${want}; ratio->${ratioDiff}) item=${got?.item.source}/${got?.item.difficulty} llm+${st.llmCalls.length - llmBefore}`);
       } else if (cp.startsWith('MEM.misconception_count')) {
         // AS-42 (C3): J4 repeated misconception -> one live fact, count incremented.
         const [, key, want] = /\(([^=)]+)=(\d+)\)/.exec(cp) ?? [];
