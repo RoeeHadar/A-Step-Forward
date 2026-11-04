@@ -80,6 +80,29 @@ flowchart LR
 Full diagrams: [`docs/diagrams/architecture.md`](docs/diagrams/architecture.md),
 [`docs/diagrams/graphrag.md`](docs/diagrams/graphrag.md).
 
+## Retrieval (RAG) ingest — the real path
+
+The web app's tutor grounding reads **only** the `kg_chunks` table (hybrid
+dense + FTS + trigram, RRF fused) via `apps/web/src/lib/rag-retrieve.ts`.
+What fills that table today:
+
+| Step | File | Notes |
+| --- | --- | --- |
+| Schema | `scripts/apply-rag-schema.mjs` | Neon-direct equivalent of Alembic `0024_kg_chunks_rag`; `--recreate` drops+recreates. |
+| Ingest | `scripts/rag-ingest.mjs` | Lessons only (`scripts/seed_data/lessons/*.json`, en+he), embedded with `nvidia/nv-embedqa-e5-v5` (1024d). Idempotent by `content_hash`; `--fresh` truncates. |
+| Eval | `scripts/rag-eval.mjs` | recall@k gate after ingest. |
+| CI | `.github/workflows/rag-ingest.yml` | Manual dispatch; `db_target` defaults to `dev`. |
+
+Safety: both scripts take `--target dev|staging|production` (default `dev`)
+and refuse `production` together with `--fresh`/`--recreate` unless
+`--confirm-production` is passed (workflow input `confirm_production=true`).
+At runtime an empty or missing `kg_chunks` logs one warning per instance and
+grounding is skipped; passages below `RAG_MIN_FUSED_SCORE` (override
+`RAG_MIN_SCORE`) are dropped.
+
+`scripts/ingest_content.py` and `scripts/ingest_graphrag.py` are the older
+GraphRAG/Neo4j path; the web app does not read their output.
+
 ## Quickstart (local)
 
 You need Docker, Node 20+, pnpm 9.12+, Python 3.11+, and `uv`.
