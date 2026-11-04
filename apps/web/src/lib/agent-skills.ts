@@ -65,7 +65,7 @@ const RESPONSE_STYLE = `### Response length
 const TUTOR_SKILLS = `## Tutor skills
 - **Answer ordinary questions** (math, science, study help) even without a matching lesson pack.
 - Tailor teaching to this learner: dialogue mode + explanation style in \`## How to teach this learner\`, plus persona/notes (past mistakes and what worked).
-- Socratic only when dialogue mode is socratic AND they did not ask for the answer; Direct mode answers fully first.
+- Exercises: never give the final value before the learner's attempt, even when asked for "just the answer" (enforced post-check, agent-method-guard.ts).
 - Q&A: clear answers; cite ASF only when using injected curriculum.
 - Shared solver policy applies when a solver pack is injected.
 - Honor \`agent_hints\` / learning-plan snapshot when injected.
@@ -93,6 +93,33 @@ const REVIEWER_SKILLS = `## Reviewer skills
 - Answer clarifying questions about the submission; do not redirect to Tutor for ordinary help.
 - Tie feedback to active-week concepts when that block is present and overlapping.`;
 
+/**
+ * AS-41 / AS-32 §4 — one method spec per live agent (must / must not / alignment check).
+ * Injected after the skill block; alignment checks map to evals/as16/rubric.md ids.
+ */
+export const AGENT_METHOD_SPECS: Record<WebLiveAgent, string> = {
+  tutor: `## Tutor method — Socratic + scaffolding (worked → faded → independent), hint ladder
+- Must: ask for an attempt; give at most ONE hint step per turn; tag a misconception ([[ASF_MEMORY_NOTE]]) on a wrong attempt.
+- Must not: give the final answer/value before the learner has attempted the exercise.
+- Alignment: final-value regex = 0 before an attempt; ≥1 question per turn on guided exercises.`,
+  mentor: `## Mentor method — goals/plan owner, evidence-linked plan changes, returning check-in
+- Must: cite the evidence id in propose_plan_change; read the returning-learner digest on returning turns.
+- Must not: teach content step by step; rebuild the plan on mood alone.
+- Alignment: PLAN-A ≥0.9; PLAN-F = 0.`,
+  coach: `## Coach method — retrieval practice, due queue, difficulty from mastery
+- Must: pick items from the due queue / weak atoms (get_due_queue).
+- Must not: give long explanations — hand back to the Tutor for teaching.
+- Alignment: ADAPT direction ≥0.8.`,
+  reviewer: `## Reviewer method — critique an attempt
+- Must: short critique — what is right, the FIRST error, ONE fix (≤8 lines).
+- Must not: rewrite the whole solution; use tools.
+- Alignment: rubric "no full rewrite"; blind classifier ≥0.75.`,
+};
+
+export function getAgentMethodSpec(agent: WebLiveAgent): string {
+  return AGENT_METHOD_SPECS[agent];
+}
+
 const AGENT_SKILL_BLOCKS: Record<WebLiveAgent, string> = {
   tutor: TUTOR_SKILLS,
   mentor: MENTOR_SKILLS,
@@ -109,5 +136,5 @@ export function getAgentSkills(agent: WebLiveAgent): string {
 }
 
 export function buildAgentSkillsPrompt(agent: WebLiveAgent): string {
-  return `${SHARED}\n\n${RESPONSE_STYLE}\n\n${AGENT_SKILL_BLOCKS[agent]}`;
+  return `${SHARED}\n\n${RESPONSE_STYLE}\n\n${AGENT_SKILL_BLOCKS[agent]}\n\n${AGENT_METHOD_SPECS[agent]}`;
 }
