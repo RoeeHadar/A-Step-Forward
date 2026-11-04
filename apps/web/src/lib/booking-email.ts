@@ -71,15 +71,18 @@ function appOrigin(): string {
       : 'https://a-step-forward-waij.vercel.app';
 }
 
-function formatJerusalem(iso: string): string {
+/** AS-61: accepts the neon driver's Date as well as an ISO string. */
+export function formatJerusalem(iso: string | Date): string {
   try {
-    return new Date(iso).toLocaleString('he-IL', {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return String(iso);
+    return d.toLocaleString('he-IL', {
       timeZone: 'Asia/Jerusalem',
       dateStyle: 'full',
       timeStyle: 'short',
     });
   } catch {
-    return iso;
+    return String(iso);
   }
 }
 
@@ -179,7 +182,7 @@ export async function sendBookingRequestNotifyEmail(
         <a href="${adminUrl}">פתח ניהול בקשות</a>
         · <a href="${statusUrl}">קישור סטטוס לתלמיד</a>
       </p>
-      <p style="color:#666;font-size:12px">נוצר: ${escapeHtml(row.created_at)}</p>
+      <p style="color:#666;font-size:12px">נוצר: ${escapeHtml(formatJerusalem(row.created_at))}</p>
     </div>
   `.trim();
 

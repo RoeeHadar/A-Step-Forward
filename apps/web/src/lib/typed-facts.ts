@@ -124,13 +124,13 @@ export function isStateOnlyEvidence(notes: Array<{ kind: string }>): boolean {
  * Keep only non-superseded facts from a note list: for each supersede key the newest
  * note wins (created_at, then list order). Notes without a fact envelope pass through.
  */
-export function keepCurrentFacts<T extends { kind: string; content: string; created_at?: string | null }>(notes: T[], now: Date): T[] {
+export function keepCurrentFacts<T extends { kind: string; content: string; created_at?: string | Date | null }>(notes: T[], now: Date): T[] {
   const winner = new Map<string, { i: number; t: number }>();
   notes.forEach((n, i) => {
     const meta = isTypedFactKind(n.kind) ? decodeFactContent(n.content).meta : null;
     if (!meta) return;
     const k = supersedeKey(n.kind, meta.key);
-    const t = Date.parse(n.created_at ?? '') || 0;
+    const t = (n.created_at == null ? 0 : new Date(n.created_at).getTime()) || 0; // AS-61: Date.parse(Date) drops ms
     const w = winner.get(k);
     if (!w || t > w.t || (t === w.t && i > w.i)) winner.set(k, { i, t });
   });

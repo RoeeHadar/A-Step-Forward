@@ -105,7 +105,7 @@ describe('AS-42 appendAgentNote supersede by kind + key', () => {
 
 describe('AS-42 persona consolidator keeps non-superseded facts only', () => {
   const n = (id: string, kind: string, content: string, created_at: string) =>
-    ({ id, learner_id: 'L', agent: 'mentor', kind, content, importance: 3, related_concept_id: null, source_turn_id: null, created_at, last_referenced_at: null });
+    ({ id, learner_id: 'L', agent: 'mentor', kind, content, importance: 3, related_concept_id: null, source_turn_id: null, created_at: new Date(created_at), last_referenced_at: null });
   it('drops older same-key facts, keeps other keys and plain notes', () => {
     const notes = [
       n('1', 'goal', encodeFactContent('5 units', { key: 'units', n: 1, valid_to: null }), '2026-01-01T00:00:00Z'),

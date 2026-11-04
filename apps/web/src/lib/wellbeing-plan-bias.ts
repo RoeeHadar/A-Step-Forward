@@ -63,7 +63,7 @@ const CROSS_RELATIONS = new Set(['prereq', 'generalizes', 'applies_to']);
 export interface WellbeingProfileInput {
   subjects: string[];
   mental_state: Record<string, unknown> | null;
-  next_test_date: string | null;
+  next_test_date: string | Date | null; // AS-61: neon DATE → Date (body uses new Date(x))
   personality_profile: Record<string, unknown> | null;
   points_group?: string | null;
   wellbeing_plan_bias?: unknown;

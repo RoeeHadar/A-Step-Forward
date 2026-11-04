@@ -15,8 +15,8 @@
 // ---------------------------------------------------------------------------
 
 export interface CapacityProfile {
-  next_test_date?: string | null;
-  final_goal_date?: string | null;
+  next_test_date?: string | Date | null; // AS-61: neon DATE → Date; onboarding payload → string
+  final_goal_date?: string | Date | null;
   hours_per_week?: number | null;
 }
 
@@ -82,8 +82,11 @@ export function planHorizon(
   profile: CapacityProfile,
   now: Date = new Date(),
 ): number | null {
-  const next = profile.next_test_date?.slice(0, 10) ?? null;
-  const final = profile.final_goal_date?.slice(0, 10) ?? null;
+  // AS-61: neon returns DATE as Date; `.slice` on a Date threw (import-free normaliser, see goal-track toIsoDateOnly).
+  const ymd = (v: string | Date | null | undefined) =>
+    v == null ? null : v instanceof Date ? (Number.isNaN(v.getTime()) ? null : v.toISOString().slice(0, 10)) : v.slice(0, 10);
+  const next = ymd(profile.next_test_date);
+  const final = ymd(profile.final_goal_date);
 
   // The later date wins (same logic as resolveGoalDeadlineIso in goal-track.ts).
   let deadline: string | null = null;

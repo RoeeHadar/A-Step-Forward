@@ -93,9 +93,11 @@ function joinList(items: string[] | undefined, empty: string): string {
 
 /** Localized date for learner-facing packs — never leak ISO stamps. */
 export function formatLearnerFacingDate(
-  iso: string | null | undefined,
+  isoOrDate: string | Date | null | undefined,
   locale: 'he' | 'en',
 ): string | null {
+  // AS-61: neon returns DATE/timestamptz as Date; `.trim()` on a Date threw.
+  const iso = isoOrDate instanceof Date ? (Number.isNaN(isoOrDate.getTime()) ? null : isoOrDate.toISOString().slice(0, 10)) : isoOrDate;
   if (!iso?.trim()) return null;
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso.trim();
@@ -407,12 +409,13 @@ export function buildWeeklyPlanAbsenceBlock(opts: {
   hasPlanRow: boolean;
   goal?: string | null;
   hoursPerWeek?: number | null;
-  deadline?: string | null;
+  deadline?: string | Date | null; // AS-61: neon DATE → Date
 }): string {
   const bits: string[] = [];
   if (opts.goal?.trim()) bits.push(`goal: ${opts.goal.trim()}`);
   if (opts.hoursPerWeek != null) bits.push(`hours/week: ${opts.hoursPerWeek}`);
-  if (opts.deadline?.trim()) bits.push(`deadline: ${opts.deadline.trim()}`);
+  const deadline = opts.deadline instanceof Date ? opts.deadline.toISOString().slice(0, 10) : opts.deadline; // AS-61
+  if (deadline?.trim()) bits.push(`deadline: ${deadline.trim()}`);
   const facts = bits.length ? ` Profile facts still apply (${bits.join('; ')}).` : '';
   const weeks = opts.hasPlanRow
     ? 'A plan row exists but weekly topics are empty.'

@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+import { toIsoDateOnly } from '@/lib/goal-track'; // AS-61: DATE → YYYY-MM-DD client prop
 import { getAuthContext } from '@/lib/auth';
 import {
   advanceRollingPlanWindow,
@@ -51,8 +52,8 @@ export default async function LearningPlanPage() {
       <PlanAdjustmentNotice plan={plan} learnerId={auth.learnerId} />
       <LearningPlanDashboard
         plan={plan}
-        finalGoalDate={profile?.final_goal_date ?? null}
-        nextTestDate={profile?.next_test_date ?? null}
+        finalGoalDate={toIsoDateOnly(profile?.final_goal_date)}
+        nextTestDate={toIsoDateOnly(profile?.next_test_date)}
       />
     </div>
   );

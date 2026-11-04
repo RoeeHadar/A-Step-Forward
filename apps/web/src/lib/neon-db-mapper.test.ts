@@ -35,7 +35,7 @@ describe('mapDashboardSnapshotToLearnerDashboard', () => {
         subject: 'math',
         progress: 0.55,
         est_minutes: null,
-        last_activity: '2026-07-01T12:00:00.000Z',
+        last_activity: new Date('2026-07-01T12:00:00.000Z'),
       },
       {
         id: 'lesson-uuid',
@@ -45,7 +45,7 @@ describe('mapDashboardSnapshotToLearnerDashboard', () => {
         subject: 'math',
         progress: 0.8,
         est_minutes: 35,
-        last_activity: '2026-07-02T09:30:00.000Z',
+        last_activity: new Date('2026-07-02T09:30:00.000Z'),
       },
     ],
     mastery_summary: [

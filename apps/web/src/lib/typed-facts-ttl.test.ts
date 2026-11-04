@@ -22,7 +22,7 @@ const T0 = new Date('2026-01-05T09:00:00Z');
 const at = (d: number) => new Date(T0.getTime() + d * DAY);
 const stateNote = (id = 's1') => ({
   id, learner_id: 'L', agent: 'coach', kind: 'state', importance: 3, related_concept_id: null, source_turn_id: null,
-  last_referenced_at: null, created_at: T0.toISOString(),
+  last_referenced_at: null, created_at: T0,
   content: encodeFactContent('feels unmotivated', { key: 'mood', n: 1, valid_to: defaultValidTo('state', null, T0) }),
 });
 

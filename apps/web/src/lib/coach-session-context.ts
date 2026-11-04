@@ -45,11 +45,11 @@ export function detectCoachDifficultySignal(
 }
 
 export function coachDaysUntilExam(
-  nextTestDate?: string | null,
-  finalGoalDate?: string | null,
+  nextTestDate?: string | Date | null,
+  finalGoalDate?: string | Date | null,
 ): number | null {
   const target = nextTestDate ?? finalGoalDate ?? null;
-  return daysUntilIsoDate(target);
+  return daysUntilIsoDate(target instanceof Date ? target.toISOString() : target); // AS-61
 }
 
 export function pickCoachPlannerGoal(params: {
