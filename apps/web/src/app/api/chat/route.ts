@@ -1502,9 +1502,14 @@ async function buildContextPrompt(
   }
   // AS-57 (C6): older turns as stored episode summaries (Mentor reads every agent's).
   if (!minimal && episodeSummariesEnabled()) {
-    const episodes = await fetchEpisodeNotes(userId, agent === 'mentor' ? null : [agent], 8).catch(() => []);
-    const block = buildEpisodeBlock(selectEpisodes(episodes, sessionId));
-    if (block) context += `\n\n${block}`;
+    // r1 P1-1: one bad row drops only the episode block, never the full context.
+    try {
+      const episodes = await fetchEpisodeNotes(userId, agent === 'mentor' ? null : [agent], 8).catch(() => []);
+      const block = buildEpisodeBlock(selectEpisodes(episodes, sessionId));
+      if (block) context += `\n\n${block}`;
+    } catch (err) {
+      logger.warn('[ASF_EPISODE_BLOCK_FAIL] episode block skipped', { agent, err: String(err) });
+    }
   }
   if (profile && contextNeeds.profile) {
     context += `\n\n## Learner profile (internal facts — paraphrase; never dump field-by-field)`;

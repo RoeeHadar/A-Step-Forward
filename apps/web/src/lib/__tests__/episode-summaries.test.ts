@@ -99,6 +99,15 @@ describe('AS-57 episode summaries', () => {
     expect(b).toContain('2026-01-02 coach:');
   });
 
+  it('r1 P1-1: Date created_at (neon driver) is normalised, sorted and rendered', () => {
+    const d = (id: string, sess: string, iso: string) => ({ ...note(id, sess, 4, iso), created_at: new Date(iso) });
+    const sel = selectEpisodes([d('a', 's1', '2026-01-01T10:00:00Z'), d('b', 's2', '2026-01-03T10:00:00Z'), note('c', 's3', 4, '2026-01-02T10:00:00Z')], 'cur');
+    expect(sel.map((n) => n.id)).toEqual(['b', 'c', 'a']);
+    const b = buildEpisodeBlock(sel);
+    expect(b).toContain('- 2026-01-01 tutor: summary a');
+    expect(b).toContain('- 2026-01-03 tutor: summary b');
+  });
+
   it('token estimate: Hebrew ≈2 chars/token, Latin ≈4', () => {
     expect(estimateTokens('')).toBe(0);
     expect(estimateTokens('abcdefgh')).toBe(2);

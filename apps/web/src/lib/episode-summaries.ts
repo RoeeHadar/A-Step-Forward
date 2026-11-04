@@ -77,7 +77,13 @@ export function buildSummarizerPrompt(agent: string, locale: 'he' | 'en', turns:
   return { system, user };
 }
 
-export interface EpisodeNoteLike { id: string; agent: string; kind: string; content: string; created_at: string }
+export interface EpisodeNoteLike { id: string; agent: string; kind: string; content: string; created_at: Date | string }
+
+/** r1 P1-1: neon returns timestamptz as Date; fixtures use ISO strings. NaN-safe. */
+function tsMs(x: Date | string): number {
+  const t = new Date(x).getTime();
+  return Number.isFinite(t) ? t : 0;
+}
 
 export interface WriteEpisodeDeps {
   fetchSessionTurns: () => Promise<EpisodeTurn[]>;
@@ -135,7 +141,7 @@ export function selectEpisodes(notes: EpisodeNoteLike[], currentSessionId: strin
   const curKey = currentSessionId ? episodeKey(currentSessionId) : null;
   const seen = new Set<string>();
   const out: EpisodeNoteLike[] = [];
-  for (const n of [...notes].sort((a, b) => (a.created_at < b.created_at ? 1 : -1))) {
+  for (const n of [...notes].sort((a, b) => tsMs(b.created_at) - tsMs(a.created_at))) {
     if (n.kind !== EPISODE_KIND) continue;
     const meta = decodeFactContent(n.content).meta;
     if (!meta || seen.has(meta.key)) continue;
@@ -150,6 +156,6 @@ export function selectEpisodes(notes: EpisodeNoteLike[], currentSessionId: strin
 /** "## Earlier sessions" block (oldest first), or '' when nothing to inject (fallback = raw-only). */
 export function buildEpisodeBlock(notes: EpisodeNoteLike[]): string {
   if (notes.length === 0) return '';
-  const lines = [...notes].reverse().map((n) => `- ${n.created_at.slice(0, 10)} ${n.agent}: ${decodeFactContent(n.content).text.trim()}`);
+  const lines = [...notes].reverse().map((n) => `- ${new Date(tsMs(n.created_at)).toISOString().slice(0, 10)} ${n.agent}: ${decodeFactContent(n.content).text.trim()}`);
   return `${EPISODE_BLOCK_HEADER}\n(Summaries of older turns — hints, the current question comes first.)\n${lines.join('\n')}`;
 }

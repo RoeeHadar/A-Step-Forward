@@ -132,7 +132,8 @@ vi.mock('@/lib/neon-db', async (importOriginal) => {
       st.notes.filter((n) => n.learner_id === learnerId && n.agent === agent && n.kind !== 'episode' && !n.superseded_by).slice(-limit),
     // AS-57: mirrors neon-db.ts fetchEpisodeNotes (kind 'episode', live, newest first; null = any agent).
     fetchEpisodeNotes: async (learnerId: string, agents: string[] | null, limit = 4) =>
-      st.notes.filter((n) => n.learner_id === learnerId && n.kind === 'episode' && !n.superseded_by && (agents === null || agents.includes(n.agent))).reverse().slice(0, limit),
+      st.notes.filter((n) => n.learner_id === learnerId && n.kind === 'episode' && !n.superseded_by && (agents === null || agents.includes(n.agent))).reverse().slice(0, limit)
+        .map((n) => ({ ...n, created_at: new Date(n.created_at) })), // r1 P1-1: neon returns timestamptz as Date
     // AS-57: session-scoped chronological history (mirrors neon-db.ts fetchChatHistory with sessionId).
     fetchChatHistory: async (learnerId: string, agent: string, limit = 50, sessionId?: string | null) =>
       (st.turns as Array<Turn & { learnerId: string }>)
