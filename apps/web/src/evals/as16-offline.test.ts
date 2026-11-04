@@ -116,6 +116,9 @@ vi.mock('@/lib/neon-db', async (importOriginal) => {
     // Mirrors neon-db.ts fetchAgentNotes SQL (`superseded_by IS NULL`).
     fetchAgentNotes: async (learnerId: string, agent: string, limit = 8) =>
       st.notes.filter((n) => n.learner_id === learnerId && n.agent === agent && !n.superseded_by).slice(-limit),
+    // AS-43: mirrors neon-db.ts fetchAgentNotesByIds (learner-scoped, live rows).
+    fetchAgentNotesByIds: async (learnerId: string, ids: string[]) =>
+      st.notes.filter((n) => n.learner_id === learnerId && ids.includes(n.id) && !n.superseded_by),
     // AS-42: mirrors neon-db.ts appendAgentNote — typed fact envelope, count, supersede by kind + key.
     appendAgentNote: async (learnerId: string, agent: string, note: { kind: string; content: string; importance?: number; related_concept_id?: string | null; fact?: { key: string; valid_to?: string | null } | null }) => {
       const id = `note-${st.notes.length + 1}`;
@@ -188,7 +191,7 @@ vi.mock('@/lib/llm-provider', async (importOriginal) => {
     const lastRag = st.ragCalls.at(-1);
     if (st.noteTag) {
       const t = st.noteTag;
-      text += ` [[ASF_MEMORY_NOTE:${JSON.stringify({ kind: t.kind, key: t.key, content: `EVALTAG:${t.tag} ${t.kind === 'goal' ? 'learner states this goal' : 'learner repeats this error'}`, importance: 4 })}]]`;
+      text += ` [[ASF_MEMORY_NOTE:${JSON.stringify({ kind: t.kind, key: t.key, content: `EVALTAG:${t.tag} ${t.kind === 'goal' ? 'learner states this goal' : t.kind === 'state' ? 'learner feels unmotivated today' : 'learner repeats this error'}`, importance: 4 })}]]`;
     }
     if (lastRag && lastRag.ids[0]) text += ` [[ASF_CITE:${JSON.stringify({ concept_id: lastRag.ids[0] })}]]`;
     return text;
@@ -230,7 +233,7 @@ const JUDGE = { score: null, needs_paid_run: true } as const;
 const HAS_JUDGE = new Set(['MEM-R', 'MEM-F', 'PLAN-A', 'ADAPT', 'ROLE', 'RAG', 'HAND', 'SAT']);
 const OFFLINE_NA: Record<string, string> = {
   'PLAN-A': 'plan writes need real DB + tool-calling model (propose_plan_change); stubbed off',
-  'PLAN-F': 'needs plan versions from a real DB',
+  // AS-43: PLAN-F is deterministic offline only for PLAN.no_change_from_state (mood-only turn stages 0 plan changes); plan-version flip-flop still needs a real DB.
   ADAPT: 'practice difficulty lives in DB/UI; stub replies do not adapt',
   SITE: 'needs Playwright on preview + t189u decision->element map',
   SAT: 'student-agent + judge ratings (paid)',
@@ -402,6 +405,22 @@ async function runJourney(POST: (r: Request) => Promise<Response>, j: Journey, l
         const lastSys = st.llmCalls.at(-1)?.system ?? '';
         const stale = [...lastSys.matchAll(new RegExp(`EVALTAG:${f.kind}_${f.key}_[\\w]+`, 'g'))].map((x) => x[0]).filter((x) => x !== `EVALTAG:${f.tag}`);
         add('MEM-F', `s${sess.s}.${cp}`, lastSys.includes(`EVALTAG:${f.tag} `) && stale.length === 0, stale.length ? `stale facts in prompt: ${stale.join(',')}` : `only current ${f.kind}:${f.key} in ${sess.agent} prompt`);
+      } else if (cp.startsWith('MEM.fact_expired')) {
+        // AS-43 (C4): state fact (valid_to = write + 14 d) is still stored after the 15-day
+        // gap but is absent from the prompt (TTL read filter on agent notes + digest).
+        const f = noteTagFor(cp);
+        const lastSys = st.llmCalls.at(-1)?.system ?? '';
+        const stored = st.notes.some((n) => n.learner_id === userId && !n.superseded_by && n.kind === f.kind && n.content.includes(`EVALTAG:${f.tag} `));
+        add('MEM-F', `s${sess.s}.${cp}`, stored && !lastSys.includes(`EVALTAG:${f.tag}`), `stored=${stored}; ${f.kind}:${f.key} ${lastSys.includes(`EVALTAG:${f.tag}`) ? 'STILL in' : 'absent from'} ${sess.agent} prompt`);
+      } else if (cp === 'PLAN.no_change_from_state') {
+        // AS-43 (C4): mood-only turn -> 0 propose_plan_change staged. The offline stub has no
+        // tool calling, so drive the real tool handler with the state note as sole evidence.
+        const stateIds = st.notes.filter((n) => n.learner_id === userId && n.kind === 'state' && !n.superseded_by).map((n) => n.id);
+        const tool = (await import('@/lib/agent-tools')).getPlanChangeTools().find((t) => t.spec.function.name === 'propose_plan_change')!;
+        const before = st.dbCalls.setPlanChangeSession ?? 0;
+        const r = await tool.handler({ goal: 'stop studying for the Bagrut', target_date: 'in 2 weeks', evidence_note_ids: stateIds }, { userId, agent: sess.agent, locale } as never);
+        const staged = (st.dbCalls.setPlanChangeSession ?? 0) - before;
+        add('PLAN-F', `s${sess.s}.${cp}`, stateIds.length > 0 && staged === 0 && r.observation.startsWith('rejected_state_only_evidence'), `state evidence=${stateIds.length}; propose_plan_change staged=${staged}; ${r.observation.slice(0, 40)}`);
       } else if (cp.startsWith('MEM.misconception_count')) {
         // AS-42 (C3): J4 repeated misconception -> one live fact, count incremented.
         const [, key, want] = /\(([^=)]+)=(\d+)\)/.exec(cp) ?? [];

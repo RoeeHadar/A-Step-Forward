@@ -117,10 +117,10 @@ Rules — non-negotiable:
 /**
  * AS-42 (C3): drop facts superseded by a newer fact with the same kind+key. The SQL
  * already filters `superseded_by IS NULL`; this also covers same-key duplicates that
- * pre-date supersede-on-write or raced it.
+ * pre-date supersede-on-write or raced it. AS-43: and expired facts (valid_to <= now).
  */
-export function selectConsolidationNotes<T extends LiveNote>(notes: T[]): T[] {
-  return keepCurrentFacts(notes);
+export function selectConsolidationNotes<T extends LiveNote>(notes: T[], now: Date): T[] {
+  return keepCurrentFacts(notes, now);
 }
 
 export function buildUserPrompt(
@@ -272,7 +272,8 @@ async function _consolidateLearnerMemoryInner(
     fetchAllLiveNotes(learnerId),
   ]);
   // AS-42 (C3): the consolidator sees only current facts (one per kind+key).
-  const notes = selectConsolidationNotes(fetched);
+  // AS-43 (C4): expired state facts are dropped too; clock read at the I/O boundary.
+  const notes = selectConsolidationNotes(fetched, new Date());
   const currentPersona = persona?.text ?? '';
   if (!opts.force && notes.length < MIN_NOTES_TO_CONSOLIDATE) {
     return {

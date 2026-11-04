@@ -3813,6 +3813,32 @@ export async function fetchAgentNotes(
   }
 }
 
+/**
+ * AS-43 (C4): resolve cited evidence notes (this learner only, any agent, live rows).
+ * Used by propose_plan_change to reject state-only (mood) evidence.
+ */
+export async function fetchAgentNotesByIds(
+  learnerId: string,
+  ids: string[],
+): Promise<Array<{ id: string; kind: string; content: string }>> {
+  if (!sql || ids.length === 0) return [];
+  try {
+    return (await sql`
+      SELECT id::text, kind, content
+      FROM learner_agent_notes
+      WHERE learner_id = ${learnerId}
+        AND id::text = ANY(${ids})
+        AND archived_at IS NULL
+        AND superseded_by IS NULL
+    `) as Array<{ id: string; kind: string; content: string }>;
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[neon-db] fetchAgentNotesByIds failed', err);
+    }
+    return [];
+  }
+}
+
 export interface NewAgentNote {
   kind?: string;            // 'observation' | 'preference' | 'strategy' | 'open_question' | …
   content: string;

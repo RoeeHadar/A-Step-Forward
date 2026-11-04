@@ -19,8 +19,10 @@
  * without `key`) decode to `meta: null` and behave exactly as before (never superseded
  * by key).
  *
- * C4 hook: `valid_to` is parsed, validated and stored; `isFactCurrent` is the single
- * place C4 will enforce TTL. In C3 it always returns true (no TTL logic yet).
+ * C4 (AS-43): `valid_to` is enforced by `isFactCurrent(meta, now)` — the single TTL rule,
+ * applied on every read path (chat agent notes, handoff digest, persona consolidator).
+ * kind=state defaults to valid_to = now + STATE_TTL_DAYS (14 d). `now` is always injected
+ * (no clock read inside this module).
  */
 
 export const TYPED_FACT_KINDS = ['misconception', 'goal', 'preference', 'state'] as const;
@@ -91,16 +93,38 @@ export function nextFactCount(kind: string, prev: FactMeta | null): number {
   return kind === 'misconception' && prev ? prev.n + 1 : 1;
 }
 
-/** C4 hook: TTL on `valid_to` (kind=state) is NOT enforced in C3. */
-export function isFactCurrent(_meta: FactMeta | null, _now: Date = new Date()): boolean {
-  return true;
+/** AS-43 (C4): default affect TTL for kind=state. */
+export const STATE_TTL_DAYS = 14;
+const DAY_MS = 86_400_000;
+
+/** valid_to to store: explicit valid_to wins; kind=state defaults to now + 14 d; else null. */
+export function defaultValidTo(kind: string, explicit: string | null, now: Date): string | null {
+  if (explicit) return explicit;
+  return kind === 'state' ? new Date(now.getTime() + STATE_TTL_DAYS * DAY_MS).toISOString() : null;
+}
+
+/** AS-43 (C4): a fact is current until `valid_to` (exclusive). No valid_to = no expiry. */
+export function isFactCurrent(meta: FactMeta | null, now: Date): boolean {
+  if (!meta?.valid_to) return true;
+  const t = Date.parse(meta.valid_to);
+  return !Number.isFinite(t) || t > now.getTime();
+}
+
+/** AS-43 (C4): read-path filter — drops expired facts; plain notes pass through. */
+export function dropExpiredFacts<T extends { kind: string; content: string }>(notes: T[], now: Date): T[] {
+  return notes.filter((n) => !isTypedFactKind(n.kind) || isFactCurrent(decodeFactContent(n.content).meta, now));
+}
+
+/** AS-43 (C4): true when every cited note is a kind=state fact (mood-only evidence). */
+export function isStateOnlyEvidence(notes: Array<{ kind: string }>): boolean {
+  return notes.length > 0 && notes.every((n) => n.kind === 'state');
 }
 
 /**
  * Keep only non-superseded facts from a note list: for each supersede key the newest
  * note wins (created_at, then list order). Notes without a fact envelope pass through.
  */
-export function keepCurrentFacts<T extends { kind: string; content: string; created_at?: string | null }>(notes: T[]): T[] {
+export function keepCurrentFacts<T extends { kind: string; content: string; created_at?: string | null }>(notes: T[], now: Date): T[] {
   const winner = new Map<string, { i: number; t: number }>();
   notes.forEach((n, i) => {
     const meta = isTypedFactKind(n.kind) ? decodeFactContent(n.content).meta : null;
@@ -113,6 +137,6 @@ export function keepCurrentFacts<T extends { kind: string; content: string; crea
   return notes.filter((n, i) => {
     const meta = isTypedFactKind(n.kind) ? decodeFactContent(n.content).meta : null;
     if (!meta) return true;
-    return winner.get(supersedeKey(n.kind, meta.key))!.i === i && isFactCurrent(meta);
+    return winner.get(supersedeKey(n.kind, meta.key))!.i === i && isFactCurrent(meta, now);
   });
 }

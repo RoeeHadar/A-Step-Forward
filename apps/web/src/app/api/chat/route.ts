@@ -207,7 +207,7 @@ import { retrieveChunks } from '@/lib/rag-retrieve';
 import { toolCallingAvailable } from '@/lib/llm-provider';
 import { getToolsForAgent } from '@/lib/agent-tools';
 import { runReactLoop } from '@/lib/react-loop';
-import { factDisplayText } from '@/lib/typed-facts';
+import { dropExpiredFacts, factDisplayText } from '@/lib/typed-facts';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -589,7 +589,13 @@ export async function POST(req: Request) {
     const merged = citeCarry + chunk;
     // Buffer any incomplete [[ASF_… prefix so no tag family leaks into the UI
     // mid-chunk.  The carry drains once the closing ]] arrives.
-    const open = merged.lastIndexOf('[[ASF_');
+    let open = merged.lastIndexOf('[[ASF_');
+    // AS-43: also hold a trailing PARTIAL opener ("[", "[[", … "[[ASF") split across chunks.
+    if (open < 0 || merged.indexOf(']]', open) >= 0) {
+      for (let k = Math.min(5, merged.length); k > 0; k--) {
+        if ('[[ASF_'.startsWith(merged.slice(-k))) { open = merged.length - k; break; }
+      }
+    }
     if (open >= 0 && merged.indexOf(']]', open) < 0) {
       const safe = stripAllMachineTags(merged.slice(0, open));
       citeCarry = merged.slice(open);
@@ -1173,7 +1179,8 @@ async function buildContextPrompt(
       sessionId,
     ).catch(() => []),
     minimal ? Promise.resolve(null) : getLearnerPersona(userId).catch(() => null),
-    minimal ? Promise.resolve([]) : fetchAgentNotes(userId, agent, CHAT_CONTEXT.maxAgentNotes).catch(() => []),
+    // AS-43 (C4): expired facts (valid_to <= now) never reach the prompt.
+    minimal ? Promise.resolve([]) : fetchAgentNotes(userId, agent, CHAT_CONTEXT.maxAgentNotes).then((n) => dropExpiredFacts(n, new Date())).catch(() => []),
     cookies(),
   ]);
   const profile = profileFetch.profile;
@@ -2063,7 +2070,7 @@ async function buildContextPrompt(
     );
     const peerNoteLists = await Promise.all(
       peerIds.map((a) =>
-        fetchAgentNotes(userId, a, 4).catch(() => [] as Awaited<ReturnType<typeof fetchAgentNotes>>),
+        fetchAgentNotes(userId, a, 4).then((n) => dropExpiredFacts(n, new Date())).catch(() => [] as Awaited<ReturnType<typeof fetchAgentNotes>>), // AS-43 TTL
       ),
     );
     const digestNotes = peerNoteLists.flatMap((notes, i) =>
@@ -2093,7 +2100,7 @@ async function buildContextPrompt(
       addLessonGrounding(lesson.lesson.id);
     }
     const expandNotes = expand
-      ? await fetchAgentNotes(userId, agent, 12).catch(() => agentNotes)
+      ? await fetchAgentNotes(userId, agent, 12).then((n) => dropExpiredFacts(n, new Date())).catch(() => agentNotes)
       : agentNotes;
 
     if (contextNeeds.hybridTools) {

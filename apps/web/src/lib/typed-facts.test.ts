@@ -50,12 +50,12 @@ const live = (learner: string) => rows.filter((r) => r.learner_id === learner &&
 
 describe('AS-42 parse', () => {
   it('typed tag yields kind + normalised key + valid_to', () => {
-    expect(typedFactFromTag('goal', { key: 'Exam Date', valid_to: '2026-12-01' })).toEqual({ fact: { key: 'exam_date', valid_to: '2026-12-01T00:00:00.000Z' } });
-    expect(typedFactFromTag('state', { key: 'mood', valid_to: 'not a date' })).toEqual({ fact: { key: 'mood', valid_to: null } });
+    expect(typedFactFromTag('goal', { key: 'Exam Date', valid_to: '2026-12-01' }, new Date('2026-01-05T09:00:00Z'))).toEqual({ fact: { key: 'exam_date', valid_to: '2026-12-01T00:00:00.000Z' } });
+    expect(typedFactFromTag('state', { key: 'mood', valid_to: 'not a date' }, new Date('2026-01-05T09:00:00Z'))).toEqual({ fact: { key: 'mood', valid_to: '2026-01-19T09:00:00.000Z' } }); // AS-43 default +14 d
   });
   it('old tags without key, or untyped kinds, parse exactly as before (no fact)', () => {
-    expect(typedFactFromTag('misconception', {})).toEqual({});
-    expect(typedFactFromTag('observation', { key: 'x' })).toEqual({});
+    expect(typedFactFromTag('misconception', {}, new Date('2026-01-05T09:00:00Z'))).toEqual({});
+    expect(typedFactFromTag('observation', { key: 'x' }, new Date('2026-01-05T09:00:00Z'))).toEqual({});
     expect(decodeFactContent('plain old note')).toEqual({ text: 'plain old note', meta: null });
     expect(decodeFactContent('broken ⟦fact {nope}⟧')).toEqual({ text: 'broken ⟦fact {nope}⟧', meta: null });
   });
@@ -67,8 +67,8 @@ describe('AS-42 parse', () => {
     expect(normalizeValidTo(undefined)).toBeNull();
     expect(supersedeKey('goal', 'units')).toBe('goal:units');
   });
-  it('C4 hook exists but enforces no TTL in C3', () => {
-    expect(isFactCurrent({ key: 'mood', n: 1, valid_to: '2000-01-01T00:00:00.000Z' })).toBe(true);
+  it('AS-43: C4 hook now enforces TTL (expired valid_to is not current)', () => {
+    expect(isFactCurrent({ key: 'mood', n: 1, valid_to: '2000-01-01T00:00:00.000Z' }, new Date('2026-01-05T09:00:00Z'))).toBe(false);
   });
 });
 
@@ -113,9 +113,9 @@ describe('AS-42 persona consolidator keeps non-superseded facts only', () => {
       n('3', 'goal', encodeFactContent('exam in 2 weeks', { key: 'exam_date', n: 1, valid_to: null }), '2026-01-15T00:00:00Z'),
       n('4', 'observation', 'likes diagrams', '2025-12-01T00:00:00Z'),
     ];
-    expect(selectConsolidationNotes(notes).map((x) => x.id)).toEqual(['2', '3', '4']);
-    expect(keepCurrentFacts([notes[1]!, notes[0]!]).map((x) => x.id)).toEqual(['2']);
-    const prompt = buildUserPrompt('', selectConsolidationNotes(notes));
+    expect(selectConsolidationNotes(notes, new Date('2026-01-05T09:00:00Z')).map((x) => x.id)).toEqual(['2', '3', '4']);
+    expect(keepCurrentFacts([notes[1]!, notes[0]!], new Date('2026-01-05T09:00:00Z')).map((x) => x.id)).toEqual(['2']);
+    const prompt = buildUserPrompt('', selectConsolidationNotes(notes, new Date('2026-01-05T09:00:00Z')));
     expect(prompt).toContain('kind=goal key=units importance=3 :: 4 units');
     expect(prompt).not.toContain('5 units');
     expect(prompt).not.toContain('⟦fact');
