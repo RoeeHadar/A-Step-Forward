@@ -51,6 +51,7 @@ DEFAULT_MAX_OUTPUT_TOKENS = 4_000
 
 def resolve_model(model: str, provider: str = "groq") -> str:
     """Return the provider model id for a manifest ``model``, or raise ``ValueError``."""
+    provider = (provider or "").strip().lower()  # AS-93: 'GROQ' / ' Groq ' accepted
     if provider != "groq":
         raise ValueError(f"LLM_PROVIDER={provider!r} is not supported; only 'groq' is configured (ADR-0004)")
     if model in GROQ_NATIVE_MODELS:
@@ -204,7 +205,7 @@ class LLM:
             "model": model,
             "messages": _build_openai_messages(request),
             "temperature": request.temperature,
-            "max_tokens": request.max_output_tokens or DEFAULT_MAX_OUTPUT_TOKENS,
+            "max_tokens": DEFAULT_MAX_OUTPUT_TOKENS if request.max_output_tokens is None else request.max_output_tokens,
         }
         started = time.perf_counter()
         completion = await self._create_with_fallback(client, params, label=f"groq.complete:{agent_label}")
@@ -228,7 +229,7 @@ class LLM:
             "model": model,
             "messages": _build_openai_messages(request),
             "temperature": request.temperature,
-            "max_tokens": request.max_output_tokens or DEFAULT_MAX_OUTPUT_TOKENS,
+            "max_tokens": DEFAULT_MAX_OUTPUT_TOKENS if request.max_output_tokens is None else request.max_output_tokens,
             "stream": True,
         }
         stream = await self._create_with_fallback(client, params, label=f"groq.astream:{agent_label}")
@@ -242,7 +243,7 @@ class LLM:
     # ----- internals -----
 
     async def _create_with_fallback(self, client: Any, params: dict[str, Any], *, label: str) -> Any:
-        """Primary call (with retries); on failure, exactly one call with ``fallback_model``.
+        """Primary call (with retries); on a retriable failure, exactly one call with ``fallback_model``.
 
         The fallback id goes through :func:`resolve_model` (AS-92), so a failover
         never sends a non-Groq id. No fallback configured, or the fallback also
@@ -251,7 +252,9 @@ class LLM:
         try:
             return await self._call_with_retry(lambda: client.chat.completions.create(**params), label=label)
         except Exception as primary_exc:
-            if not self.fallback_model:
+            # AS-93: fail over only on retriable errors (timeout, connection, 429, 5xx);
+            # 400/401/403 and other client errors propagate unchanged.
+            if not self.fallback_model or not _is_retriable_exception(primary_exc):
                 raise
             fallback = resolve_model(self.fallback_model, getattr(self._settings, "llm_provider", "groq"))
             logger.warning(

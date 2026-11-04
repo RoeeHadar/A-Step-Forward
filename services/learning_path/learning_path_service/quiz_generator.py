@@ -7,15 +7,12 @@ Fallback: generate new questions via Groq LLM when bank is sparse.
 from __future__ import annotations
 
 import json
-import os
-import re
 import uuid
 from typing import Any
 
+from schemas.learning_path import QuizOption, StoredQuizItem
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from schemas.learning_path import QuizOption, StoredQuizItem
 
 MIN_BANK_QUESTIONS = 5
 TARGET_QUIZ_SIZE = 8
@@ -120,15 +117,18 @@ async def generate_via_llm(
     concept_ids: list[str],
     subject: str,
     count: int = 5,
+    *,
+    llm: Any | None = None,
 ) -> list[StoredQuizItem]:
-    """Call Groq to generate quiz questions when the bank is sparse."""
-    api_key = os.environ.get("GROQ_API_KEY", "")
-    if not api_key:
-        return _stub_questions(concept_ids, subject, count)
+    """Generate quiz questions via the guarded LLM client when the bank is sparse.
 
+    AS-93: goes through ``agents.base.llm.LLM`` (resolve_model, retries, offline
+    stub when no key) instead of a direct Groq HTTP call.
+    """
     try:
-        import httpx
+        from agents.base.llm import LLM, STUB_PREFIX, LLMRequest
 
+        client = llm or LLM(model=GROQ_MODEL)
         prompt = (
             f"Generate exactly {count} multiple-choice quiz questions for these concepts: "
             f"{', '.join(concept_ids[:5])}. Subject: {subject}.\n\n"
@@ -140,25 +140,17 @@ async def generate_via_llm(
             '  "difficulty": number 1-10\n'
             "Make questions academically rigorous and Bloom-level appropriate."
         )
-
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            resp = await client.post(
-                "https://api.groq.com/openai/v1/chat/completions",
-                headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-                json={
-                    "model": GROQ_MODEL,
-                    "messages": [
-                        {"role": "system", "content": "You are an expert quiz generator. Reply with JSON only."},
-                        {"role": "user", "content": prompt},
-                    ],
-                    "max_tokens": 2048,
-                    "temperature": 0.7,
-                },
+        resp = await client.complete(
+            LLMRequest(
+                system="You are an expert quiz generator. Reply with JSON only.",
+                messages=[{"role": "user", "content": prompt}],
+                max_output_tokens=2048,
+                temperature=0.7,
+                metadata={"trace_name": "quiz_generator"},
             )
-            if resp.status_code != 200:
-                return _stub_questions(concept_ids, subject, count)
-            raw = resp.json()["choices"][0]["message"]["content"]
-            parsed = _parse_llm_questions(raw, concept_ids, subject)
+        )
+        if not resp.text.startswith(STUB_PREFIX):
+            parsed = _parse_llm_questions(resp.text, concept_ids, subject)
             if parsed:
                 return parsed[:count]
     except Exception:

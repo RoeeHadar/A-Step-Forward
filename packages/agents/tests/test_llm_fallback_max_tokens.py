@@ -10,6 +10,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import AsyncMock
 
+import groq
 import pytest
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -35,6 +36,15 @@ async def _stream():
     yield SimpleNamespace(choices=[SimpleNamespace(delta=SimpleNamespace(content="hi"))])
 
 
+def _primary_down():
+    # AS-93: failover now fires only on retriable errors; use a real retriable groq 503.
+    import groq
+    import httpx
+
+    req = httpx.Request("POST", "http://fake.invalid/chat/completions")
+    return groq.InternalServerError("primary down", response=httpx.Response(503, request=req), body=None)
+
+
 def _client(*effects) -> SimpleNamespace:
     return SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=AsyncMock(side_effect=list(effects)))))
 
@@ -49,7 +59,7 @@ def _sent(client) -> list[str]:
 
 @pytest.mark.asyncio
 async def test_complete_fails_over_once_to_resolved_fallback() -> None:
-    client = _client(RuntimeError("primary down"), _done())
+    client = _client(_primary_down(), _done())
     llm = LLM(model="claude-sonnet-4-5", fallback_model="gpt-5-mini", settings=_settings(), client=client)
     resp = await llm.complete(_req())
     assert resp.text == "ok"
@@ -59,7 +69,7 @@ async def test_complete_fails_over_once_to_resolved_fallback() -> None:
 
 @pytest.mark.asyncio
 async def test_astream_fails_over_once_to_resolved_fallback() -> None:
-    client = _client(RuntimeError("primary down"), _stream())
+    client = _client(_primary_down(), _stream())
     llm = LLM(model="claude-opus-4-8", fallback_model="claude-haiku-4-5", settings=_settings(), client=client)
     chunks = [c async for c in llm.astream(_req())]
     assert chunks == ["hi"]
@@ -68,7 +78,7 @@ async def test_astream_fails_over_once_to_resolved_fallback() -> None:
 
 @pytest.mark.asyncio
 async def test_fallback_failure_reraises_after_exactly_one_failover() -> None:
-    client = _client(RuntimeError("primary down"), RuntimeError("fallback down"), _done())
+    client = _client(_primary_down(), RuntimeError("fallback down"), _done())
     llm = LLM(model="claude-sonnet-4-5", fallback_model="gpt-5-mini", settings=_settings(), client=client)
     with pytest.raises(RuntimeError, match="fallback down"):
         await llm.complete(_req())
@@ -77,16 +87,16 @@ async def test_fallback_failure_reraises_after_exactly_one_failover() -> None:
 
 @pytest.mark.asyncio
 async def test_no_fallback_reraises_primary_error() -> None:
-    client = _client(RuntimeError("primary down"), _done())
+    client = _client(_primary_down(), _done())
     llm = LLM(model="claude-sonnet-4-5", settings=_settings(), client=client)
-    with pytest.raises(RuntimeError, match="primary down"):
+    with pytest.raises(groq.InternalServerError, match="primary down"):
         await llm.complete(_req())
     assert client.chat.completions.create.await_count == 1
 
 
 @pytest.mark.asyncio
 async def test_unknown_fallback_id_raises_and_is_not_sent() -> None:
-    client = _client(RuntimeError("primary down"), _done())
+    client = _client(_primary_down(), _done())
     llm = LLM(model="claude-sonnet-4-5", fallback_model="no-such-model", settings=_settings(), client=client)
     with pytest.raises(ValueError, match="no-such-model"):
         await llm.complete(_req())
