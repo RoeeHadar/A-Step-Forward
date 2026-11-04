@@ -115,7 +115,7 @@ describe('llm-provider multi-provider (NVIDIA fallback)', () => {
     expect(providers[0]!.label).toBe('groq');
   });
 
-  it('appends NVIDIA provider + models when configured', () => {
+  it('lists the NVIDIA provider but keeps NVIDIA models out of the chat chain (AS-95, ADR-0004 Groq-only)', () => {
     baseGroqEnv();
     process.env.NVIDIA_API_KEY = 'nvapi-xxx';
     process.env.NVIDIA_BASE_URL = 'https://integrate.api.nvidia.com/v1';
@@ -129,12 +129,8 @@ describe('llm-provider multi-provider (NVIDIA fallback)', () => {
 
     const chain = resolveChatModelChain();
     expect(chain).toContain('llama-3.3-70b-versatile');
-    expect(chain).toContain('meta/llama-3.3-70b-instruct');
-    expect(chain).toContain('qwen/qwen2.5-72b-instruct');
-    // Primary model comes before the NVIDIA fallback.
-    expect(chain.indexOf('llama-3.3-70b-versatile')).toBeLessThan(
-      chain.indexOf('meta/llama-3.3-70b-instruct'),
-    );
+    expect(chain).not.toContain('meta/llama-3.3-70b-instruct');
+    expect(chain).not.toContain('qwen/qwen2.5-72b-instruct');
   });
 
   it('routes each model to the provider that lists it', () => {
