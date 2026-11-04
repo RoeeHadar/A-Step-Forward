@@ -43,6 +43,12 @@ GROQ_MODEL_MAP: dict[str, str] = {
 GROQ_NATIVE_MODELS: frozenset[str] = frozenset({"llama-3.3-70b-versatile", "llama-3.1-8b-instant"})
 
 
+# AS-92: sent when a request carries max_output_tokens=None (the 9 agents with no
+# budget.py). 4_000 = the LLMRequest/complete_turn default and the median of the
+# 11 existing agent budgets (500, 2k, 2.5k, 3k, 4k x4, 5k, 6k, 8k).
+DEFAULT_MAX_OUTPUT_TOKENS = 4_000
+
+
 def resolve_model(model: str, provider: str = "groq") -> str:
     """Return the provider model id for a manifest ``model``, or raise ``ValueError``."""
     if provider != "groq":
@@ -198,13 +204,10 @@ class LLM:
             "model": model,
             "messages": _build_openai_messages(request),
             "temperature": request.temperature,
-            "max_tokens": request.max_output_tokens,
+            "max_tokens": request.max_output_tokens or DEFAULT_MAX_OUTPUT_TOKENS,
         }
         started = time.perf_counter()
-        completion = await self._call_with_retry(
-            lambda: client.chat.completions.create(**params),
-            label=f"groq.complete:{agent_label}",
-        )
+        completion = await self._create_with_fallback(client, params, label=f"groq.complete:{agent_label}")
         latency_ms = int((time.perf_counter() - started) * 1000)
         return self._completion_to_response(completion, latency_ms=latency_ms)
 
@@ -225,13 +228,10 @@ class LLM:
             "model": model,
             "messages": _build_openai_messages(request),
             "temperature": request.temperature,
-            "max_tokens": request.max_output_tokens,
+            "max_tokens": request.max_output_tokens or DEFAULT_MAX_OUTPUT_TOKENS,
             "stream": True,
         }
-        stream = await self._call_with_retry(
-            lambda: client.chat.completions.create(**params),
-            label=f"groq.astream:{agent_label}",
-        )
+        stream = await self._create_with_fallback(client, params, label=f"groq.astream:{agent_label}")
         async for chunk in stream:
             for choice in getattr(chunk, "choices", []) or []:
                 delta = getattr(choice, "delta", None)
@@ -240,6 +240,26 @@ class LLM:
                     yield text
 
     # ----- internals -----
+
+    async def _create_with_fallback(self, client: Any, params: dict[str, Any], *, label: str) -> Any:
+        """Primary call (with retries); on failure, exactly one call with ``fallback_model``.
+
+        The fallback id goes through :func:`resolve_model` (AS-92), so a failover
+        never sends a non-Groq id. No fallback configured, or the fallback also
+        fails: the error propagates.
+        """
+        try:
+            return await self._call_with_retry(lambda: client.chat.completions.create(**params), label=label)
+        except Exception as primary_exc:
+            if not self.fallback_model:
+                raise
+            fallback = resolve_model(self.fallback_model, getattr(self._settings, "llm_provider", "groq"))
+            logger.warning(
+                "llm.fallback",
+                extra={"label": label, "error": primary_exc.__class__.__name__, "fallback_model": fallback},
+            )
+            fb_params = {**params, "model": fallback}
+            return await client.chat.completions.create(**fb_params)
 
     async def _get_client(self) -> Any:
         if self._client is not None:
