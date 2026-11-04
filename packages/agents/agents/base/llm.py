@@ -30,6 +30,32 @@ logger = logging.getLogger(__name__)
 
 STUB_PREFIX = "[stub LLM response"
 
+# AS-91: agent manifests name Anthropic/OpenAI tiers, but the only configured
+# provider is Groq (ADR-0004: no paid providers). Map each manifest id to the
+# Groq id that serves that tier; Groq-native ids pass through unchanged. Any
+# other id raises instead of being sent to a client that cannot serve it.
+GROQ_MODEL_MAP: dict[str, str] = {
+    "claude-opus-4-8": "llama-3.3-70b-versatile",
+    "claude-sonnet-4-5": "llama-3.3-70b-versatile",
+    "claude-haiku-4-5": "llama-3.1-8b-instant",
+    "gpt-5-mini": "llama-3.1-8b-instant",
+}
+GROQ_NATIVE_MODELS: frozenset[str] = frozenset({"llama-3.3-70b-versatile", "llama-3.1-8b-instant"})
+
+
+def resolve_model(model: str, provider: str = "groq") -> str:
+    """Return the provider model id for a manifest ``model``, or raise ``ValueError``."""
+    if provider != "groq":
+        raise ValueError(f"LLM_PROVIDER={provider!r} is not supported; only 'groq' is configured (ADR-0004)")
+    if model in GROQ_NATIVE_MODELS:
+        return model
+    if model in GROQ_MODEL_MAP:
+        return GROQ_MODEL_MAP[model]
+    raise ValueError(
+        f"model {model!r} has no Groq mapping; add it to GROQ_MODEL_MAP or use one of "
+        f"{sorted(GROQ_NATIVE_MODELS)}"
+    )
+
 
 @dataclass
 class LLMRequest:
@@ -166,9 +192,10 @@ class LLM:
         if not self._settings.resolved_api_key:
             return _stub_response(request, self.model, agent_label)
 
+        model = resolve_model(self.model, getattr(self._settings, "llm_provider", "groq"))
         client = await self._get_client()
         params: dict[str, Any] = {
-            "model": self.model,
+            "model": model,
             "messages": _build_openai_messages(request),
             "temperature": request.temperature,
             "max_tokens": request.max_output_tokens,
@@ -192,9 +219,10 @@ class LLM:
             yield _stub_response(request, self.model, agent_label).text
             return
 
+        model = resolve_model(self.model, getattr(self._settings, "llm_provider", "groq"))
         client = await self._get_client()
         params: dict[str, Any] = {
-            "model": self.model,
+            "model": model,
             "messages": _build_openai_messages(request),
             "temperature": request.temperature,
             "max_tokens": request.max_output_tokens,
