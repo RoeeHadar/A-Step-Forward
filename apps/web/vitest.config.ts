@@ -35,6 +35,8 @@ export default defineConfig({
   test: {
     environment: 'node',
     include: ['src/**/*.test.ts'],
+    // AS-67: per-file env restore + real-LLM network block (opt in: ALLOW_REAL_LLM=1).
+    setupFiles: ['./src/test-utils/vitest-guard.ts'],
   },
   resolve: {
     alias: {
