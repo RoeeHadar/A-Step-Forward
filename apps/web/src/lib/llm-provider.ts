@@ -1,8 +1,10 @@
 /**
  * Unified OpenAI-compatible LLM provider for the Vercel web runtime.
  *
- * Supports Groq, Ollama, vLLM, Together, Fireworks, OpenRouter, etc. via:
- *   LLM_BASE_URL + LLM_API_KEY + LLM_PRIMARY_MODEL (+ optional LLM_CHEAP_MODEL)
+ * Chat runs on Groq only (ADR-0004, AS-95 guard; AS-101 removed the NVIDIA chat
+ * provider). Configured via LLM_BASE_URL + LLM_API_KEY + LLM_PRIMARY_MODEL
+ * (+ optional LLM_CHEAP_MODEL). NVIDIA is used only for search embeddings
+ * (rag-embed.ts), never here.
  *
  * Backward compatible with GROQ_API_KEY / GROQ_BASE_URL.
  */
@@ -46,10 +48,8 @@ export interface LLMProviderConfig {
 }
 
 /**
- * A concrete chat provider (base URL + key + the models it serves). The primary
- * comes from LLM_/GROQ_ env; optional secondaries (e.g. NVIDIA NIM) are appended
- * as quality fallbacks. The chat model chain spans providers; each model is
- * routed to the provider that lists it.
+ * A concrete chat provider (base URL + key + the models it serves). There is
+ * exactly one: the Groq provider from LLM_/GROQ_ env (AS-101).
  */
 export interface ChatProvider {
   label: string;
@@ -180,8 +180,9 @@ export function llmConfigured(): boolean {
 }
 
 /**
- * Ordered chat providers: primary (Groq / LLM_*) first, then optional
- * secondaries (NVIDIA NIM) as quality fallbacks. Cached per process.
+ * Chat providers: only the primary Groq provider (LLM_* / GROQ_*). AS-101
+ * removed the NVIDIA secondary and NVIDIA_FALLBACK_MODELS; NVIDIA_* env is read
+ * only by rag-embed.ts. Cached per process.
  */
 export function getChatProviders(): ChatProvider[] {
   if (cachedProviders) return cachedProviders;
@@ -195,30 +196,13 @@ export function getChatProviders(): ChatProvider[] {
     },
   ];
 
-  const nvidiaKey = unquoteEnv(process.env.NVIDIA_API_KEY);
-  const nvidiaModels = parseModelList(process.env.NVIDIA_FALLBACK_MODELS, []);
-  if (nvidiaKey && nvidiaModels.length) {
-    providers.push({
-      label: 'nvidia',
-      baseUrl: trimSlash(
-        unquoteEnv(process.env.NVIDIA_BASE_URL) || 'https://integrate.api.nvidia.com/v1',
-      ),
-      apiKey: nvidiaKey,
-      models: nvidiaModels,
-    });
-  }
-
   cachedProviders = providers;
   return providers;
 }
 
-/** Resolve which provider serves a model; defaults to the primary provider. */
-export function resolveProviderForModel(model: string): ChatProvider {
-  const providers = getChatProviders();
-  for (const p of providers) {
-    if (p.models.includes(model)) return p;
-  }
-  return providers[0]!;
+/** The provider that serves a chat model: always the Groq provider (AS-101). */
+export function resolveProviderForModel(_model: string): ChatProvider {
+  return getChatProviders()[0]!;
 }
 
 /**
@@ -266,8 +250,7 @@ export function resolveChatModelChain(): string[] {
     const model = cfg.cheapModels[0] ?? cfg.primaryModels[0] ?? DEFAULT_CHEAP;
     return [model];
   }
-  // AS-95 (ADR-0004): only the Groq chain is used for chat; secondary providers
-  // (NVIDIA NIM) are no longer appended, since their ids have no Groq mapping.
+  // AS-95 (ADR-0004): only the Groq chain is used for chat.
   return [...new Set(resolveModelChain('primary'))];
 }
 
@@ -296,8 +279,9 @@ function sleep(ms: number): Promise<void> {
 }
 
 /**
- * Per-process token bucket. Protects rate-limited providers (NVIDIA NIM free
- * tier is ~40 RPM) from being overrun. Serverless instances are independent, so
+ * Per-process token bucket. Protects rate-limited providers from being
+ * overrun (none configured since AS-101 removed the NVIDIA chat provider).
+ * Serverless instances are independent, so
  * this is an in-instance throttle layered on top of 429 backoff — not a global
  * quota. Per-user abuse limiting is enforced separately (Neon-backed).
  */
@@ -332,14 +316,8 @@ class TokenBucket {
   }
 }
 
-/**
- * Small burst (5) + ~30 tokens/min refill keeps worst-case first-minute
- * throughput (~35) safely under NVIDIA NIM's ~40 RPM free-tier ceiling, while
- * still absorbing short bursts. 429 backoff is the backstop above this.
- */
-const providerBuckets: Record<string, TokenBucket> = {
-  nvidia: new TokenBucket(5, 30 / 60),
-};
+/** Per-provider throttles, keyed by provider label. Empty since AS-101. */
+const providerBuckets: Record<string, TokenBucket> = {};
 
 export function classifyHttpStatus(status: number, provider?: string, model?: string): LLMFailureInfo {
   if (status === 401 || status === 403) {
@@ -692,7 +670,7 @@ export interface LLMToolCompletionResult {
 /**
  * Models we trust to honor OpenAI-style `tools` / `tool_calls`. Groq's 70B and
  * gpt-oss/qwen3 lines support function calling reliably; the 8B instant model is
- * flaky with tools, and NVIDIA NIM models vary — both are excluded so the loop
+ * flaky with tools — excluded so the loop
  * only ever runs on a capable model and otherwise degrades to the prompt path.
  */
 export function isToolCapableModel(model: string): boolean {
