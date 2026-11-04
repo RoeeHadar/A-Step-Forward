@@ -19,6 +19,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { neon } from '@neondatabase/serverless';
 import { normalizeLesson, validateLesson } from './lib/normalize-lesson.mjs';
+import { collectLessonAtoms } from './lib/skill-atoms.mjs';
 
 const LESSONS_DIR = 'scripts/seed_data/lessons';
 const CROSS_EDGES_PATH = 'apps/web/src/lib/kg-cross-edges.json';
@@ -57,10 +58,8 @@ function countSourceOfTruth() {
     }
     validLessons += 1;
     questionCount += data.questions.length;
-    for (const atom of data.agent_hints?.skill_atoms_unlocked ?? []) atoms.add(atom);
-    for (const q of data.questions) {
-      for (const atom of q.skill_atoms ?? []) atoms.add(atom);
-    }
+    // AS-66: count atom ids (strings), not object identities.
+    for (const atom of collectLessonAtoms(data, file).all) atoms.add(atom);
   }
 
   if (validationErrors.length) {
