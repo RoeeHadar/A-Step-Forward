@@ -30,6 +30,18 @@ function rawQuery(): ParamQuery {
   return client.query.bind(client);
 }
 
+/**
+ * AS-87: served (points, concept) pairs that AS-85's regen emptied under an exact
+ * points_level match. Their items now carry points_level 3pt (lowest lesson track)
+ * while math_track still lists the pre-AS-85 track. For these pairs only, the
+ * educator ?points= filter matches track membership; every other pair stays exact,
+ * so no other (points, concept) count changes.
+ */
+export const TRACK_MEMBERSHIP_PAIRS: Readonly<Record<string, readonly string[]>> = {
+  '4pt': ['functions_exponential', 'linear_programming'],
+  '5pt': ['function_transformations'],
+};
+
 export type QuestionDifficulty = 'easy' | 'medium' | 'hard';
 
 export interface QuestionPart {
@@ -197,7 +209,11 @@ export async function retrieveQuestions(
   }
   if (pointsLevel) {
     values.push(pointsLevel);
-    conditions.push(`points_level = $${values.length}`);
+    conditions.push(
+      TRACK_MEMBERSHIP_PAIRS[pointsLevel]?.includes(conceptId)
+        ? `math_track @> ARRAY[$${values.length}]::text[]`
+        : `points_level = $${values.length}`,
+    );
   }
   if (skillAtoms && skillAtoms.length > 0) {
     values.push(JSON.stringify(skillAtoms));
