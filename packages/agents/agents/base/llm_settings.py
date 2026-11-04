@@ -25,6 +25,10 @@ class LLMSettings(BaseSettings):
         extra="ignore",
     )
 
+    # Provider the manifest model ids are routed to (AS-91). Only "groq" is
+    # supported (ADR-0004); anything else raises in LLM.resolve_model.
+    llm_provider: str = "groq"
+
     # Unified OpenAI-compatible provider (preferred)
     llm_api_key: str | None = None
     llm_base_url: str = "https://api.groq.com/openai/v1"

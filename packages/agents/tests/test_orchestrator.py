@@ -56,3 +56,25 @@ def test_router_lesson_intent(router: DeclarativeRouter) -> None:
         OrchestratorInput(learner_id="learner-1", message="Walk me through this lesson step by step.")
     )
     assert decision.selected_agents == [AgentName.TUTOR]
+
+
+def test_budget_extra_fields_readable_as_attributes() -> None:
+    """AS-88: Budget fields must read their set values, not None via FlexibleModel.__getattr__."""
+    from agents.system.orchestrator.budget import BUDGET as B
+
+    assert B.max_output_tokens == 500
+    assert B.max_latency_ms == 2_000
+    assert B.max_input_tokens == 8_000
+    assert B.max_cost_usd == 0.02
+
+
+def test_agent_manifest_model_attributes_read_stored_extras() -> None:
+    """AS-88 r1: AgentManifest extras (primary/fallback model) must not read None by attribute."""
+    from agents import AGENT_REGISTRY
+    from schemas._dynamic import FlexibleModel
+
+    for manifest in AGENT_REGISTRY.values():
+        assert manifest.primary_model == manifest.model_extra["primary_model"]
+        assert manifest.fallback_model == manifest.model_extra["fallback_model"]
+        assert manifest.primary_model is not None
+    assert FlexibleModel().definitely_absent_key is None

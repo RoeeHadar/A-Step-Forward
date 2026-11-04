@@ -39,6 +39,12 @@ class ToolRef(FlexibleModel):
 class Budget(FlexibleModel):
     max_tokens: int | None = None
     timeout_s: float | None = None
+    # Declared (AS-88): FlexibleModel.__getattr__ returns None for undeclared
+    # extras, so these must be real fields for attribute reads to work.
+    max_input_tokens: int | None = None
+    max_output_tokens: int | None = None
+    max_latency_ms: int | None = None
+    max_cost_usd: float | None = None
 
 
 class AgentManifest(FlexibleModel):

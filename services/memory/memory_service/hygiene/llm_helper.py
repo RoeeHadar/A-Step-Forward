@@ -1,58 +1,48 @@
-"""Minimal Groq LLM helper for the dreaming pipeline."""
+"""Minimal LLM helper for the dreaming pipeline.
+
+AS-93: goes through the guarded ``agents.base.llm.LLM`` client (resolve_model,
+retries, offline stub) instead of a direct Groq HTTP call.
+"""
 
 from __future__ import annotations
 
 import logging
-
-import httpx
+from typing import Any
 
 from ..settings import MemorySettings
 
 logger = logging.getLogger(__name__)
-
-_GROQ_BASE = "https://api.groq.com/openai/v1"
 
 
 async def dream_llm_complete(
     prompt: str,
     *,
     settings: MemorySettings | None = None,
+    llm: Any | None = None,
 ) -> str:
-    """Call Groq to generate a semantic memory. Returns empty string on any failure."""
+    """Generate a semantic memory. Returns empty string on any failure or offline stub."""
     cfg = settings or MemorySettings()
-    if not cfg.groq_api_key:
+    if llm is None and not cfg.groq_api_key:
         return ""
     try:
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            response = await client.post(
-                f"{_GROQ_BASE}/chat/completions",
-                headers={
-                    "Authorization": f"Bearer {cfg.groq_api_key}",
-                    "Content-Type": "application/json",
-                },
-                json={
-                    "model": cfg.llm_default_model,
-                    "messages": [
-                        {
-                            "role": "system",
-                            "content": (
-                                "You are a Memory Steward. Synthesize episodic memories "
-                                "into enduring semantic insights."
-                            ),
-                        },
-                        {"role": "user", "content": prompt},
-                    ],
-                    "max_tokens": 200,
-                    "temperature": 0.3,
-                },
+        from agents.base.llm import LLM, STUB_PREFIX, LLMRequest
+
+        client = llm or LLM(model=cfg.llm_default_model)
+        resp = await client.complete(
+            LLMRequest(
+                system=(
+                    "You are a Memory Steward. Synthesize episodic memories "
+                    "into enduring semantic insights."
+                ),
+                messages=[{"role": "user", "content": prompt}],
+                max_output_tokens=200,
+                temperature=0.3,
+                metadata={"trace_name": "memory_dream"},
             )
-            response.raise_for_status()
-            data = response.json()
-            choices = data.get("choices") or []
-            if choices:
-                message = choices[0].get("message") or {}
-                return str(message.get("content") or "").strip()
+        )
+        if resp.text.startswith(STUB_PREFIX):
             return ""
-    except Exception:  # noqa: BLE001
+        return resp.text.strip()
+    except Exception:
         logger.exception("dream_llm_complete failed")
         return ""

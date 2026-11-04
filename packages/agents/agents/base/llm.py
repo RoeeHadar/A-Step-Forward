@@ -30,6 +30,39 @@ logger = logging.getLogger(__name__)
 
 STUB_PREFIX = "[stub LLM response"
 
+# AS-91: agent manifests name Anthropic/OpenAI tiers, but the only configured
+# provider is Groq (ADR-0004: no paid providers). Map each manifest id to the
+# Groq id that serves that tier; Groq-native ids pass through unchanged. Any
+# other id raises instead of being sent to a client that cannot serve it.
+GROQ_MODEL_MAP: dict[str, str] = {
+    "claude-opus-4-8": "llama-3.3-70b-versatile",
+    "claude-sonnet-4-5": "llama-3.3-70b-versatile",
+    "claude-haiku-4-5": "llama-3.1-8b-instant",
+    "gpt-5-mini": "llama-3.1-8b-instant",
+}
+GROQ_NATIVE_MODELS: frozenset[str] = frozenset({"llama-3.3-70b-versatile", "llama-3.1-8b-instant"})
+
+
+# AS-92: sent when a request carries max_output_tokens=None (the 9 agents with no
+# budget.py). 4_000 = the LLMRequest/complete_turn default and the median of the
+# 11 existing agent budgets (500, 2k, 2.5k, 3k, 4k x4, 5k, 6k, 8k).
+DEFAULT_MAX_OUTPUT_TOKENS = 4_000
+
+
+def resolve_model(model: str, provider: str = "groq") -> str:
+    """Return the provider model id for a manifest ``model``, or raise ``ValueError``."""
+    provider = (provider or "").strip().lower()  # AS-93: 'GROQ' / ' Groq ' accepted
+    if provider != "groq":
+        raise ValueError(f"LLM_PROVIDER={provider!r} is not supported; only 'groq' is configured (ADR-0004)")
+    if model in GROQ_NATIVE_MODELS:
+        return model
+    if model in GROQ_MODEL_MAP:
+        return GROQ_MODEL_MAP[model]
+    raise ValueError(
+        f"model {model!r} has no Groq mapping; add it to GROQ_MODEL_MAP or use one of "
+        f"{sorted(GROQ_NATIVE_MODELS)}"
+    )
+
 
 @dataclass
 class LLMRequest:
@@ -166,18 +199,16 @@ class LLM:
         if not self._settings.resolved_api_key:
             return _stub_response(request, self.model, agent_label)
 
+        model = resolve_model(self.model, getattr(self._settings, "llm_provider", "groq"))
         client = await self._get_client()
         params: dict[str, Any] = {
-            "model": self.model,
+            "model": model,
             "messages": _build_openai_messages(request),
             "temperature": request.temperature,
-            "max_tokens": request.max_output_tokens,
+            "max_tokens": DEFAULT_MAX_OUTPUT_TOKENS if request.max_output_tokens is None else request.max_output_tokens,
         }
         started = time.perf_counter()
-        completion = await self._call_with_retry(
-            lambda: client.chat.completions.create(**params),
-            label=f"groq.complete:{agent_label}",
-        )
+        completion = await self._create_with_fallback(client, params, label=f"groq.complete:{agent_label}")
         latency_ms = int((time.perf_counter() - started) * 1000)
         return self._completion_to_response(completion, latency_ms=latency_ms)
 
@@ -192,18 +223,16 @@ class LLM:
             yield _stub_response(request, self.model, agent_label).text
             return
 
+        model = resolve_model(self.model, getattr(self._settings, "llm_provider", "groq"))
         client = await self._get_client()
         params: dict[str, Any] = {
-            "model": self.model,
+            "model": model,
             "messages": _build_openai_messages(request),
             "temperature": request.temperature,
-            "max_tokens": request.max_output_tokens,
+            "max_tokens": DEFAULT_MAX_OUTPUT_TOKENS if request.max_output_tokens is None else request.max_output_tokens,
             "stream": True,
         }
-        stream = await self._call_with_retry(
-            lambda: client.chat.completions.create(**params),
-            label=f"groq.astream:{agent_label}",
-        )
+        stream = await self._create_with_fallback(client, params, label=f"groq.astream:{agent_label}")
         async for chunk in stream:
             for choice in getattr(chunk, "choices", []) or []:
                 delta = getattr(choice, "delta", None)
@@ -212,6 +241,28 @@ class LLM:
                     yield text
 
     # ----- internals -----
+
+    async def _create_with_fallback(self, client: Any, params: dict[str, Any], *, label: str) -> Any:
+        """Primary call (with retries); on a retriable failure, exactly one call with ``fallback_model``.
+
+        The fallback id goes through :func:`resolve_model` (AS-92), so a failover
+        never sends a non-Groq id. No fallback configured, or the fallback also
+        fails: the error propagates.
+        """
+        try:
+            return await self._call_with_retry(lambda: client.chat.completions.create(**params), label=label)
+        except Exception as primary_exc:
+            # AS-93: fail over only on retriable errors (timeout, connection, 429, 5xx);
+            # 400/401/403 and other client errors propagate unchanged.
+            if not self.fallback_model or not _is_retriable_exception(primary_exc):
+                raise
+            fallback = resolve_model(self.fallback_model, getattr(self._settings, "llm_provider", "groq"))
+            logger.warning(
+                "llm.fallback",
+                extra={"label": label, "error": primary_exc.__class__.__name__, "fallback_model": fallback},
+            )
+            fb_params = {**params, "model": fallback}
+            return await client.chat.completions.create(**fb_params)
 
     async def _get_client(self) -> Any:
         if self._client is not None:

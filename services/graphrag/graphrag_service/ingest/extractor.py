@@ -3,10 +3,9 @@
 from __future__ import annotations
 
 import json
-import os
 import re
+from typing import Any
 
-import httpx
 import structlog
 from schemas.graph import EdgeKind, Entity, Extraction, NodeKind, Relation
 
@@ -22,9 +21,12 @@ Keep entities concise and canonical."""
 
 
 class Extractor:
-    def __init__(self, settings: GraphRAGSettings) -> None:
+    def __init__(self, settings: GraphRAGSettings, llm: Any | None = None) -> None:
+        # AS-93: extraction goes through the guarded agents LLM client (resolve_model
+        # maps extraction_model, e.g. claude-sonnet-4-5, to a Groq id per ADR-0004)
+        # instead of a direct Anthropic HTTP call. No key -> offline stub -> heuristic.
         self.settings = settings
-        self._api_key = os.getenv("ANTHROPIC_API_KEY", "")
+        self._llm = llm
 
     def _heuristic_extract(self, chunks: list[str]) -> Extraction:
         """Offline fallback using markdown headings and keyword patterns."""
@@ -81,39 +83,30 @@ class Extractor:
     async def extract(self, chunks: list[str]) -> Extraction:
         if not chunks:
             return Extraction(entities=[], relations=[], claims=[], confidence=0.0, notes="low_confidence")
-        if not self._api_key:
-            log.warning("extractor.offline_mode", reason="ANTHROPIC_API_KEY not set")
-            return self._heuristic_extract(chunks)
+        from agents.base.llm import LLM, STUB_PREFIX, LLMRequest
 
-        payload = {
-            "model": self.settings.extraction_model,
-            "max_tokens": 4096,
-            "temperature": 0.0,
-            "system": _EXTRACTION_PROMPT,
-            "messages": [
-                {
-                    "role": "user",
-                    "content": "\n\n---\n\n".join(f"Chunk {i}:\n{c}" for i, c in enumerate(chunks)),
-                }
-            ],
-        }
-        async with httpx.AsyncClient(timeout=120.0) as client:
-            response = await client.post(
-                "https://api.anthropic.com/v1/messages",
-                headers={
-                    "x-api-key": self._api_key,
-                    "anthropic-version": "2023-06-01",
-                    "content-type": "application/json",
-                },
-                json=payload,
+        llm = self._llm or LLM(model=self.settings.extraction_model)
+        resp = await llm.complete(
+            LLMRequest(
+                system=_EXTRACTION_PROMPT,
+                messages=[
+                    {
+                        "role": "user",
+                        "content": "\n\n---\n\n".join(f"Chunk {i}:\n{c}" for i, c in enumerate(chunks)),
+                    }
+                ],
+                max_output_tokens=4096,
+                temperature=0.0,
+                metadata={"trace_name": "graphrag_extractor"},
             )
-            response.raise_for_status()
-            body = response.json()
-            text_blocks = [b["text"] for b in body.get("content", []) if b.get("type") == "text"]
-            raw = "\n".join(text_blocks).strip()
-            if raw.startswith("```"):
-                raw = raw.strip("`")
-                if raw.startswith("json"):
-                    raw = raw[4:].strip()
-            data = json.loads(raw)
-            return Extraction.model_validate(data)
+        )
+        if resp.text.startswith(STUB_PREFIX):
+            log.warning("extractor.offline_mode", reason="LLM not configured")
+            return self._heuristic_extract(chunks)
+        raw = resp.text.strip()
+        if raw.startswith("```"):
+            raw = raw.strip("`")
+            if raw.startswith("json"):
+                raw = raw[4:].strip()
+        data = json.loads(raw)
+        return Extraction.model_validate(data)

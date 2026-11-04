@@ -8,6 +8,12 @@
  */
 import 'server-only';
 import { logger } from '@/lib/logger';
+import {
+  guardModelChain,
+  isRetriableError,
+  isRetriableStatus,
+  resolveMaxTokens,
+} from '@/lib/llm/guarded-client';
 
 export type LLMFailureKind =
   | 'not_configured'
@@ -88,12 +94,8 @@ const DEFAULT_GROQ_BASE = 'https://api.groq.com/openai/v1';
  */
 const DEFAULT_PRIMARY = 'llama-3.3-70b-versatile';
 const DEFAULT_CHEAP = 'llama-3.1-8b-instant';
-/** Extra quality models when primary fails (auth/rate/empty). */
-const DEFAULT_EXTRA_PRIMARY = [
-  'openai/gpt-oss-120b',
-  'qwen/qwen3.6-27b',
-  'llama-3.1-8b-instant',
-];
+/** Fallback when primary fails. AS-95 r1: ADR-0004 ids only (fail closed). */
+const DEFAULT_EXTRA_PRIMARY = ['llama-3.1-8b-instant'];
 
 function trimSlash(url: string): string {
   return url.replace(/\/+$/, '');
@@ -264,11 +266,9 @@ export function resolveChatModelChain(): string[] {
     const model = cfg.cheapModels[0] ?? cfg.primaryModels[0] ?? DEFAULT_CHEAP;
     return [model];
   }
-  const primaryChain = resolveModelChain('primary');
-  const secondary = getChatProviders()
-    .slice(1)
-    .flatMap((p) => p.models);
-  return [...new Set([...primaryChain, ...secondary])];
+  // AS-95 (ADR-0004): only the Groq chain is used for chat; secondary providers
+  // (NVIDIA NIM) are no longer appended, since their ids have no Groq mapping.
+  return [...new Set(resolveModelChain('primary'))];
 }
 
 /** Classifier / background tasks — keep on the cheap tier. */
@@ -448,6 +448,11 @@ async function fetchCompletions(
   throw lastError ?? new Error('llm: fetch exhausted retries');
 }
 
+/** AS-95: resolve provider + model chain via the guard; throws before any fetch. */
+function guardedModels(models: readonly string[]): string[] {
+  return guardModelChain(models, process.env.LLM_PROVIDER);
+}
+
 function buildMessages(opts: LLMCompletionOptions): LLMChatMessage[] {
   const out: LLMChatMessage[] = [];
   if (opts.system?.trim()) {
@@ -469,13 +474,13 @@ function completionsUrl(baseUrl: string): string {
 export async function llmComplete(
   opts: LLMCompletionOptions,
 ): Promise<LLMCompletionResult | null> {
+  const models = guardedModels(opts.models ?? resolveModelChain(opts.modelTier ?? 'primary'));
   const cfg = getLLMConfig();
   if (!cfg.configured) {
     logger.warn('llm: not configured — set LLM_API_KEY or LLM_BASE_URL (Ollama)');
     return null;
   }
 
-  const models = opts.models ?? resolveModelChain(opts.modelTier ?? 'primary');
   const messages = buildMessages(opts);
   const timeoutMs = opts.timeoutMs ?? 45_000;
 
@@ -485,7 +490,7 @@ export async function llmComplete(
       const body: Record<string, unknown> = {
         model,
         messages,
-        max_tokens: opts.maxTokens ?? 2048,
+        max_tokens: resolveMaxTokens(opts.maxTokens, 2048),
         ...resolveSamplingBody(model, opts),
       };
       if (opts.jsonMode) {
@@ -499,8 +504,8 @@ export async function llmComplete(
           opts.failureSink,
           classifyHttpStatus(resp.status, provider.label, model),
         );
-        // Auth failure on one provider must not block a different provider's
-        // models later in the chain — skip to the next model instead of aborting.
+        // AS-95: fail over only on 429/5xx; 400/401/403 and other 4xx stop the chain.
+        if (!isRetriableStatus(resp.status)) return null;
         continue;
       }
 
@@ -522,6 +527,7 @@ export async function llmComplete(
         classifyFetchError(err, provider.label, model),
       );
       logger.warn('llm: completion attempt failed', { model, err: String(err) });
+      if (!isRetriableError(err)) return null; // AS-95: no failover on non-retriable errors
     }
   }
   return null;
@@ -533,13 +539,13 @@ export async function llmComplete(
 export async function* llmStream(
   opts: LLMCompletionOptions,
 ): AsyncGenerator<string> {
+  const models = guardedModels(opts.models ?? resolveModelChain(opts.modelTier ?? 'primary'));
   const cfg = getLLMConfig();
   if (!cfg.configured) {
     logger.warn('llm: stream skipped — not configured');
     return;
   }
 
-  const models = opts.models ?? resolveModelChain(opts.modelTier ?? 'primary');
   const messages = buildMessages(opts);
   const timeoutMs = opts.timeoutMs ?? 45_000;
 
@@ -552,7 +558,7 @@ export async function* llmStream(
         {
           model,
           messages,
-          max_tokens: opts.maxTokens ?? 1024,
+          max_tokens: resolveMaxTokens(opts.maxTokens, 1024),
           ...resolveSamplingBody(model, opts),
           stream: true,
         },
@@ -564,9 +570,9 @@ export async function* llmStream(
           opts.failureSink,
           classifyHttpStatus(resp.status, provider.label, model),
         );
-        // Skip to the next model/provider on failure (incl. auth) so a bad
-        // primary key still lets NVIDIA fallbacks run.
-        continue;
+        // AS-95: fail over only on 429/5xx (or a missing body); 4xx stops the stream.
+        if (resp.ok || isRetriableStatus(resp.status)) continue;
+        return;
       }
 
       const reader = resp.body.getReader();
@@ -618,6 +624,11 @@ export async function* llmStream(
         classifyFetchError(err, provider.label, model),
       );
       logger.warn('llm: stream attempt failed', { model, err: String(err) });
+      // AS-95 r1 (P1-1): once a token reached the caller, never retry or fail
+      // over — another model would re-emit the answer from the start. Re-throw;
+      // the chat route's streamAgentResponse catches it (learner fallback).
+      if (emitted) throw err;
+      if (!isRetriableError(err)) return; // AS-95: no failover on non-retriable errors
     }
   }
 }
@@ -690,7 +701,8 @@ export function isToolCapableModel(model: string): boolean {
 
 /** Chat model chain filtered to tool-capable models (may be empty). */
 export function resolveToolModelChain(): string[] {
-  return resolveChatModelChain().filter(isToolCapableModel);
+  // AS-95: map to Groq ids first, then keep tool-capable ones.
+  return guardedModels(resolveChatModelChain()).filter(isToolCapableModel);
 }
 
 /** True when at least one tool-capable model is available in the chat chain. */
@@ -729,13 +741,13 @@ function buildToolMessages(opts: LLMToolCompletionOptions): LLMToolMessage[] {
 export async function llmCompleteWithTools(
   opts: LLMToolCompletionOptions,
 ): Promise<LLMToolCompletionResult | null> {
+  const models = guardedModels(opts.models ?? resolveChatModelChain()).filter(isToolCapableModel);
   const cfg = getLLMConfig();
   if (!cfg.configured) {
     logger.warn('llm: tool completion skipped — not configured');
     return null;
   }
 
-  const models = (opts.models ?? resolveToolModelChain()).filter(isToolCapableModel);
   if (models.length === 0) return null;
 
   const messages = buildToolMessages(opts);
@@ -747,7 +759,7 @@ export async function llmCompleteWithTools(
       const body: Record<string, unknown> = {
         model,
         messages,
-        max_tokens: opts.maxTokens ?? 1024,
+        max_tokens: resolveMaxTokens(opts.maxTokens, 1024),
         ...resolveSamplingBody(model, opts),
         tools: opts.tools,
         tool_choice: opts.toolChoice ?? 'auto',
@@ -759,6 +771,7 @@ export async function llmCompleteWithTools(
           opts.failureSink,
           classifyHttpStatus(resp.status, provider.label, model),
         );
+        if (!isRetriableStatus(resp.status)) return null; // AS-95
         continue;
       }
 
@@ -793,6 +806,7 @@ export async function llmCompleteWithTools(
     } catch (err) {
       recordFailure(opts.failureSink, classifyFetchError(err, provider.label, model));
       logger.warn('llm: tool completion attempt failed', { model, err: String(err) });
+      if (!isRetriableError(err)) return null; // AS-95
     }
   }
   return null;
