@@ -59,7 +59,7 @@ function removeGuard() {
 }
 
 // ---------------------------------------------------------------- shared run state
-type Turn = { role: 'user' | 'assistant'; content: string; agent: string; sessionId?: string };
+type Turn = { role: 'user' | 'assistant'; content: string; agent: string; sessionId?: string; created_at?: string };
 type Note = { id: string; learner_id: string; agent: string; kind: string; content: string; importance: number; related_concept_id: string | null; created_at: string };
 const st = vi.hoisted(() => ({
   userId: 'eval-user',
@@ -93,13 +93,21 @@ vi.mock('@/lib/neon-db', async (importOriginal) => {
   const orig = (await importOriginal()) as Record<string, unknown>;
   const fakes: Record<string, (...a: never[]) => unknown> = {
     recordChatTurn: async (learnerId: string, agent: string, role: 'user' | 'assistant', content: string, sessionId?: string) => {
-      st.turns.push({ role, content, agent, sessionId, ...{ learnerId } } as Turn & { learnerId: string });
+      st.turns.push({ role, content, agent, sessionId, created_at: new Date().toISOString(), ...{ learnerId } } as Turn & { learnerId: string });
     },
     fetchRecentChatTurns: async (learnerId: string, agent: string, limit = 10, sessionId?: string | null) =>
       (st.turns as Array<Turn & { learnerId: string }>)
         .filter((t) => t.learnerId === learnerId && t.agent === agent && t.sessionId === sessionId)
         .slice(-limit)
         .map((t, i) => ({ id: String(i), learner_id: learnerId, agent, role: t.role, content: t.content, session_id: sessionId, created_at: new Date().toISOString() })),
+    // AS-47: in-memory stand-in for the learner-wide last-activity query (all agents).
+    fetchLearnerLastActivityAt: async (learnerId: string, before: Date) => {
+      const ts = (st.turns as Array<Turn & { learnerId: string }>)
+        .filter((t) => t.learnerId === learnerId && t.created_at && t.created_at < before.toISOString())
+        .map((t) => t.created_at!)
+        .sort();
+      return ts.at(-1) ?? null;
+    },
     fetchAgentNotes: async (learnerId: string, agent: string, limit = 8) =>
       st.notes.filter((n) => n.learner_id === learnerId && n.agent === agent).slice(-limit),
     appendAgentNote: async (learnerId: string, agent: string, note: { kind: string; content: string; importance?: number; related_concept_id?: string | null }) => {
@@ -180,7 +188,11 @@ vi.mock('@/lib/llm-provider', async (importOriginal) => {
 });
 
 // ---------------------------------------------------------------- journeys + scoring
-type Session = { s: number; agent: string; turns: string[]; checkpoints?: string[] };
+type Session = { s: number; agent: string; turns: string[]; checkpoints?: string[]; gap_days?: number };
+// AS-47: deterministic journey clock — Date is faked (timers stay real); each journey
+// starts at JOURNEY_EPOCH and a session's `gap_days` advances it before its first turn.
+const JOURNEY_EPOCH = Date.UTC(2026, 0, 5, 9, 0, 0);
+const DAY_MS = 86_400_000;
 type Journey = { id: string; lang: 'he' | 'en'; sessions: Session[] };
 const EVAL_DIR = path.resolve(__dirname, '../../evals/as16');
 const spec = parseYaml(fs.readFileSync(path.join(EVAL_DIR, 'journeys.yaml'), 'utf8')) as { journeys: Journey[] };
@@ -246,6 +258,8 @@ const decoys = new Map<string, string>(); // learner -> planted decoy text in a 
 async function runJourney(POST: (r: Request) => Promise<Response>, j: Journey, locale: 'he' | 'en') {
   const userId = `eval-${j.id}-${locale}`;
   st.userId = userId; st.locale = locale;
+  let clockMs = JOURNEY_EPOCH;
+  vi.setSystemTime(clockMs);
   // Plant a decoy note for another learner to test cross-learner isolation (MEM-F).
   const decoy = `DECOY_${j.id}_${locale}_other_student_fact`;
   st.notes.push({ id: `decoy-${userId}`, learner_id: `${userId}-OTHER`, agent: 'tutor', kind: 'observation', content: decoy, importance: 5, related_concept_id: null, created_at: new Date().toISOString() });
@@ -261,6 +275,7 @@ async function runJourney(POST: (r: Request) => Promise<Response>, j: Journey, l
   const personaMarkers: Record<string, string> = {};
 
   for (const sess of j.sessions) {
+    if (sess.gap_days) { clockMs += sess.gap_days * DAY_MS; vi.setSystemTime(clockMs); }
     currentAgent = sess.agent;
     const sessionId = `${userId}-s${sess.s}`;
     const cps = sess.checkpoints ?? [];
@@ -350,13 +365,14 @@ async function runJourney(POST: (r: Request) => Promise<Response>, j: Journey, l
 describe('AS-16 offline journey eval (stub LLM, fake DB, no network)', () => {
   let POST: (r: Request) => Promise<Response>;
   beforeAll(async () => {
+    vi.useFakeTimers({ toFake: ['Date'], shouldAdvanceTime: true }); // AS-47 journey clock
     for (const k of ['DATABASE_URL', 'POSTGRES_URL', 'GROQ_API_KEY', 'LLM_API_KEY', 'XAI_API_KEY', 'LANGFUSE_SECRET_KEY', 'LANGFUSE_PUBLIC_KEY']) delete process.env[k];
     process.env.LLM_API_KEY = 'placeholder-offline';
     process.env.LLM_BASE_URL = 'http://eval.invalid/v1';
     installGuard();
     POST = (await import('@/app/api/chat/route')).POST;
   }, 60_000);
-  afterAll(() => removeGuard());
+  afterAll(() => { vi.useRealTimers(); removeGuard(); });
 
   it('runs 6 journeys x he/en with 0 network calls', async () => {
     const results = [];

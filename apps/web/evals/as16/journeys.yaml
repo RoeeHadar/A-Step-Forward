@@ -43,11 +43,12 @@ journeys:
   persona: {level: medium, behaviour: returns after 12 days away, forgot the plan, misconceptions: ["confuses derivative of sin and cos signs"]}
   sessions:
   - {s: 1, agent: tutor, turns: ["מה הנגזרת של cos x?", "sin x"], checkpoints: [MEM.note_written(trig_sign)]}
-  - s: 2  # +12 days simulated
+  - s: 2  # +12 days simulated (AS-47: runner journey clock)
+    gap_days: 12
     agent: mentor
     turns: ["היי חזרתי, איפה הייתי?"]
     expect: [mentor summarises last state from memory, proposes a short review before new material, plan reflects the gap]
-    checkpoints: [PLAN.state_recall_after_gap(plan_position), PLAN.update_with_evidence(reason=gap_days), SITE.next_lesson_is_review]  # AS-40 option (b): Mentor recall is plan-state, not Tutor's private note (fetchAgentNotes per-agent; ADR-0014 Wave 1)
+    checkpoints: [MEM.recall_after_gap(trig_sign, plan_position), PLAN.update_with_evidence(reason=gap_days), SITE.next_lesson_is_review]
 - id: J4-repeat-misconception-en
   lang: en
   persona: {level: medium, behaviour: cooperative, misconceptions: ["sqrt(a+b)=sqrt(a)+sqrt(b)"] , repeats_in_sessions: [1,2,3]}
