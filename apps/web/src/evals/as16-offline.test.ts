@@ -103,6 +103,7 @@ vi.mock('@/lib/neon-db', async (importOriginal) => {
     /Mastery$|Map$|Record$/.test(k) ? {} : /^(fetch|list|select)|s$/.test(k) ? [] : null;
   const orig = (await importOriginal()) as Record<string, unknown>;
   const tf = await import('@/lib/typed-facts');
+  const { neonRow, COLS } = await import('./fake-db-types'); // AS-59: driver-shaped rows
   const fakes: Record<string, (...a: never[]) => unknown> = {
     // AS-55: pinned practice fixture, served only while the SITE.practice_difficulty_changed check runs.
     fetchLessonByConceptId: async (conceptId: string) => {
@@ -117,7 +118,7 @@ vi.mock('@/lib/neon-db', async (importOriginal) => {
       (st.turns as Array<Turn & { learnerId: string }>)
         .filter((t) => t.learnerId === learnerId && t.agent === agent && t.sessionId === sessionId)
         .slice(-limit)
-        .map((t, i) => ({ id: String(i), learner_id: learnerId, agent, role: t.role, content: t.content, session_id: sessionId, created_at: new Date().toISOString() })),
+        .map((t, i) => neonRow({ id: String(i), learner_id: learnerId, agent, role: t.role, content: t.content, session_id: sessionId, created_at: t.created_at }, COLS.chat_turns)),
     // AS-47/AS-48: in-memory stand-in for the learner-wide last-activity query (all agents),
     // strict `<` against the route's request-start timestamp.
     fetchLearnerLastActivityAt: async (learnerId: string, before: Date) => {
@@ -129,17 +130,17 @@ vi.mock('@/lib/neon-db', async (importOriginal) => {
     },
     // Mirrors neon-db.ts fetchAgentNotes SQL (`superseded_by IS NULL`).
     fetchAgentNotes: async (learnerId: string, agent: string, limit = 8) =>
-      st.notes.filter((n) => n.learner_id === learnerId && n.agent === agent && n.kind !== 'episode' && !n.superseded_by).slice(-limit),
+      st.notes.filter((n) => n.learner_id === learnerId && n.agent === agent && n.kind !== 'episode' && !n.superseded_by).slice(-limit).map((n) => neonRow(n, COLS.learner_agent_notes)),
     // AS-57: mirrors neon-db.ts fetchEpisodeNotes (kind 'episode', live, newest first; null = any agent).
     fetchEpisodeNotes: async (learnerId: string, agents: string[] | null, limit = 4) =>
       st.notes.filter((n) => n.learner_id === learnerId && n.kind === 'episode' && !n.superseded_by && (agents === null || agents.includes(n.agent))).reverse().slice(0, limit)
-        .map((n) => ({ ...n, created_at: new Date(n.created_at) })), // r1 P1-1: neon returns timestamptz as Date
+        .map((n) => neonRow(n, COLS.learner_agent_notes)), // neon returns timestamptz as Date
     // AS-57: session-scoped chronological history (mirrors neon-db.ts fetchChatHistory with sessionId).
     fetchChatHistory: async (learnerId: string, agent: string, limit = 50, sessionId?: string | null) =>
       (st.turns as Array<Turn & { learnerId: string }>)
         .filter((t) => t.learnerId === learnerId && t.agent === agent && (!sessionId || t.sessionId === sessionId))
         .slice(0, limit)
-        .map((t, i) => ({ id: String(i), role: t.role, content: t.content, created_at: t.created_at })),
+        .map((t, i) => neonRow({ id: String(i), role: t.role, content: t.content, created_at: t.created_at }, COLS.chat_turns)),
     supersedeAgentNote: async (noteId: string, by: string | null) => {
       const n = st.notes.find((x) => x.id === noteId);
       if (n && by) n.superseded_by = by;
