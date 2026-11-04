@@ -212,7 +212,7 @@ vi.mock('@/lib/llm-provider', async (importOriginal) => {
 });
 
 // ---------------------------------------------------------------- journeys + scoring
-type Session = { s: number; agent: string; turns: string[]; checkpoints?: string[]; gap_days?: number };
+type Session = { s: number; agent: string; turns: string[]; checkpoints?: string[]; gap_days?: number; practice_attempts?: boolean[] };
 // AS-47: deterministic journey clock — Date is faked (timers stay real); each journey
 // starts at JOURNEY_EPOCH and a session's `gap_days` advances it before its first turn.
 const JOURNEY_EPOCH = Date.UTC(2026, 0, 5, 9, 0, 0);
@@ -234,7 +234,8 @@ const HAS_JUDGE = new Set(['MEM-R', 'MEM-F', 'PLAN-A', 'ADAPT', 'ROLE', 'RAG', '
 const OFFLINE_NA: Record<string, string> = {
   'PLAN-A': 'plan writes need real DB + tool-calling model (propose_plan_change); stubbed off',
   // AS-43: PLAN-F is deterministic offline only for PLAN.no_change_from_state (mood-only turn stages 0 plan changes); plan-version flip-flop still needs a real DB.
-  ADAPT: 'practice difficulty lives in DB/UI; stub replies do not adapt',
+  // AS-51 (C5): ADAPT is deterministic offline only for ADAPT.difficulty_up/down via the BKT mastery
+  // read (MASTERY_MODEL=bkt) over the session's declared practice_attempts; strategy changes still need a paid run.
   SITE: 'needs Playwright on preview + t189u decision->element map',
   SAT: 'student-agent + judge ratings (paid)',
   LAT: 'stub has no model latency; needs Langfuse spans on a real run',
@@ -421,6 +422,16 @@ async function runJourney(POST: (r: Request) => Promise<Response>, j: Journey, l
         const r = await tool.handler({ goal: 'stop studying for the Bagrut', target_date: 'in 2 weeks', evidence_note_ids: stateIds }, { userId, agent: sess.agent, locale } as never);
         const staged = (st.dbCalls.setPlanChangeSession ?? 0) - before;
         add('PLAN-F', `s${sess.s}.${cp}`, stateIds.length > 0 && staged === 0 && r.observation.startsWith('rejected_state_only_evidence'), `state evidence=${stateIds.length}; propose_plan_change staged=${staged}; ${r.observation.slice(0, 40)}`);
+      } else if (cp === 'ADAPT.difficulty_down' || cp === 'ADAPT.difficulty_up') {
+        // AS-51 (C5): flag on -> BKT replay of the ordered attempts; direction from the mastery read.
+        // m > 0 is BKT-only (ratio gives 0 for all-wrong), so forcing the ratio model fails J1.
+        const bkt = await import('@/lib/bkt');
+        const seq = sess.practice_attempts ?? [];
+        const model = bkt.masteryModelFromEnv({ MASTERY_MODEL: 'bkt' });
+        const m = bkt.atomMastery({ attempts: seq.length, successes: seq.filter(Boolean).length }, model, seq);
+        const dir = bkt.adaptDirection(m);
+        const want = cp.endsWith('_down') ? 'down' : 'up';
+        add('ADAPT', `s${sess.s}.${cp}`, seq.length > 0 && dir === want && m > 0 && m < 1, `model=${model} attempts=[${seq.map((x) => (x ? 'C' : 'W')).join('')}] p_known=${m.toFixed(5)} dir=${dir}`);
       } else if (cp.startsWith('MEM.misconception_count')) {
         // AS-42 (C3): J4 repeated misconception -> one live fact, count incremented.
         const [, key, want] = /\(([^=)]+)=(\d+)\)/.exec(cp) ?? [];

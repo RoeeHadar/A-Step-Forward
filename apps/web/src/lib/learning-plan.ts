@@ -18,6 +18,7 @@
  */
 import 'server-only';
 import { neon } from '@neondatabase/serverless';
+import { atomMastery, masteryModelFromEnv, type MasteryModel } from '@/lib/bkt';
 import kg from '@/lib/kg-data.json';
 import crossEdges from '@/lib/kg-cross-edges.json';
 
@@ -98,7 +99,11 @@ export interface LearningPlan {
  */
 export async function fetchLearnerMastery(
   learnerId: string,
+  // AS-51 (C5): MASTERY_MODEL flag (default 'ratio' = unchanged). 'bkt' replays ordered
+  // per-atom attempts when a source provides them, else falls back to the ratio.
+  opts: { model?: MasteryModel; orderedAttempts?: ReadonlyMap<string, readonly boolean[]> } = {},
 ): Promise<Map<string, SkillMastery>> {
+  const model = opts.model ?? masteryModelFromEnv();
   const out = new Map<string, SkillMastery>();
   if (!sql) return out;
   try {
@@ -109,7 +114,7 @@ export async function fetchLearnerMastery(
       WHERE learner_id = ${learnerId}
     `) as Array<{ skill_atom: string; attempts: number; successes: number; staleness_days: number | null }>;
     for (const r of rows) {
-      const mastery = r.attempts > 0 ? r.successes / r.attempts : 0;
+      const mastery = atomMastery(r, model, opts.orderedAttempts?.get(r.skill_atom));
       out.set(r.skill_atom, {
         mastery,
         attempts: r.attempts,
