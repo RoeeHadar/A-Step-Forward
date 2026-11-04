@@ -30,7 +30,7 @@ type Lang = 'en' | 'he';
 const DIFFICULTY_TINT: Record<LessonQuestionRow['difficulty'], string> = {
   easy: 'bg-emerald-500/10 text-emerald-400',
   medium: 'bg-accent-amber/10 text-accent-amber',
-  hard: 'bg-destructive/10 text-destructive',
+  hard: 'bg-destructive/10 text-rose-300',
 };
 
 /** Label shown to the student, calibrated relative to their level. */
@@ -368,7 +368,7 @@ function QuestionCard({
           #{question.ord}
         </span>
         {question.kind === 'open' || question.kind === 'derivation' ? (
-          <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-amber-900 dark:text-amber-200">
+          <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-amber-200">
             <Pencil className="h-3 w-3" aria-hidden />
             {kindLabel}
           </span>

@@ -111,7 +111,7 @@ function getBodyForLevel(
 }
 
 const LEVEL_LABELS: Record<LessonPointsLevel, { en: string; he: string; color: string }> = {
-  '3pt': { en: '3-Unit', he: '3 יח״ל', color: 'bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border-emerald-500/30' },
+  '3pt': { en: '3-Unit', he: '3 יח״ל', color: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' },
   '4pt': { en: '4-Unit', he: '4 יח״ל', color: 'bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-500/30' },
   '5pt': { en: '5-Unit', he: '5 יח״ל', color: 'bg-violet-500/15 text-violet-700 dark:text-violet-400 border-violet-500/30' },
   'hs_physics': { en: 'HS Physics', he: 'פיזיקה תיכון', color: 'bg-orange-500/15 text-orange-700 dark:text-orange-400 border-orange-500/30' },
@@ -211,9 +211,9 @@ function DifficultyBadge({ difficulty, lang }: { difficulty: 'easy' | 'medium' |
     <span
       className={cn(
         'rounded-full border px-2 py-0.5 text-[10px] font-bold',
-        difficulty === 'easy' && 'border-emerald-500/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300',
-        difficulty === 'medium' && 'border-amber-500/30 bg-amber-500/10 text-amber-900 dark:text-amber-300',
-        difficulty === 'hard' && 'border-rose-500/30 bg-rose-500/10 text-rose-800 dark:text-rose-300',
+        difficulty === 'easy' && 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300',
+        difficulty === 'medium' && 'border-amber-500/30 bg-amber-500/10 text-amber-300',
+        difficulty === 'hard' && 'border-rose-500/30 bg-rose-500/10 text-rose-300',
       )}
     >
       {difficulty === 'easy' ? '⭐' : difficulty === 'medium' ? '⭐⭐' : '⭐⭐⭐'}
