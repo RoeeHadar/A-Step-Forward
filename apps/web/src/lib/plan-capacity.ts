@@ -83,8 +83,9 @@ export function planHorizon(
   now: Date = new Date(),
 ): number | null {
   // AS-61: neon returns DATE as Date; `.slice` on a Date threw (import-free normaliser, see goal-track toIsoDateOnly).
+  // AS-63: read local fields — the driver builds a DATE at local midnight (toISOString shifted it a day east of UTC).
   const ymd = (v: string | Date | null | undefined) =>
-    v == null ? null : v instanceof Date ? (Number.isNaN(v.getTime()) ? null : v.toISOString().slice(0, 10)) : v.slice(0, 10);
+    v == null ? null : v instanceof Date ? (Number.isNaN(v.getTime()) ? null : `${v.getFullYear()}-${String(v.getMonth() + 1).padStart(2, '0')}-${String(v.getDate()).padStart(2, '0')}`) : v.slice(0, 10);
   const next = ymd(profile.next_test_date);
   const final = ymd(profile.final_goal_date);
 

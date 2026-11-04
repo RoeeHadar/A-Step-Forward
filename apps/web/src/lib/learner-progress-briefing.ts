@@ -4,6 +4,7 @@
  */
 import type { ReadinessBand, ReadinessPhase } from '@/lib/readiness';
 import type { PaceStatus } from '@/lib/plan-pacing';
+import { toIsoDateOnly } from '@/lib/goal-track';
 
 export interface ProgressBriefingInput {
   goalKey?: string | null;
@@ -97,14 +98,18 @@ export function formatLearnerFacingDate(
   locale: 'he' | 'en',
 ): string | null {
   // AS-61: neon returns DATE/timestamptz as Date; `.trim()` on a Date threw.
-  const iso = isoOrDate instanceof Date ? (Number.isNaN(isoOrDate.getTime()) ? null : isoOrDate.toISOString().slice(0, 10)) : isoOrDate;
+  const iso = isoOrDate instanceof Date ? toIsoDateOnly(isoOrDate) : isoOrDate; // AS-63: TZ-safe DATE
   if (!iso?.trim()) return null;
-  const d = new Date(iso);
+  // AS-63: a bare YYYY-MM-DD is a calendar day — pin it to UTC both ways so it
+  // never renders as the previous day west of UTC.
+  const dayOnly = /^\d{4}-\d{2}-\d{2}$/.test(iso.trim());
+  const d = new Date(dayOnly ? `${iso.trim()}T00:00:00Z` : iso);
   if (Number.isNaN(d.getTime())) return iso.trim();
   return d.toLocaleDateString(locale === 'he' ? 'he-IL' : 'en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    ...(dayOnly ? { timeZone: 'UTC' } : {}),
   });
 }
 
@@ -414,7 +419,7 @@ export function buildWeeklyPlanAbsenceBlock(opts: {
   const bits: string[] = [];
   if (opts.goal?.trim()) bits.push(`goal: ${opts.goal.trim()}`);
   if (opts.hoursPerWeek != null) bits.push(`hours/week: ${opts.hoursPerWeek}`);
-  const deadline = opts.deadline instanceof Date ? opts.deadline.toISOString().slice(0, 10) : opts.deadline; // AS-61
+  const deadline = opts.deadline instanceof Date ? toIsoDateOnly(opts.deadline) : opts.deadline; // AS-61/AS-63: TZ-safe DATE
   if (deadline?.trim()) bits.push(`deadline: ${deadline.trim()}`);
   const facts = bits.length ? ` Profile facts still apply (${bits.join('; ')}).` : '';
   const weeks = opts.hasPlanRow
