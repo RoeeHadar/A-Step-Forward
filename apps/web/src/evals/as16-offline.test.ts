@@ -449,6 +449,24 @@ async function runJourney(POST: (r: Request) => Promise<Response>, j: Journey, l
         const r = await tool.handler({ goal: 'stop studying for the Bagrut', target_date: 'in 2 weeks', evidence_note_ids: stateIds }, { userId, agent: sess.agent, locale } as never);
         const staged = (st.dbCalls.setPlanChangeSession ?? 0) - before;
         add('PLAN-F', `s${sess.s}.${cp}`, stateIds.length > 0 && staged === 0 && r.observation.startsWith('rejected_state_only_evidence'), `state evidence=${stateIds.length}; propose_plan_change staged=${staged}; ${r.observation.slice(0, 40)}`);
+      } else if (cp === 'PLAN.mentor_plan_turn_rejects_state') {
+        // AS-56 (C4b): later NON-status Mentor plan-change turn (propose_plan_change in its tools);
+        // the coach's mood-only state note id must be in the rendered Mentor prompt, and the real
+        // propose_plan_change handler rejects it with 0 sessions saved.
+        const dbStateIds = st.notes.filter((n) => n.learner_id === userId && n.kind === 'state' && !n.superseded_by).map((n) => n.id);
+        const msg = "I want to change my study plan, drop the Bagrut prep.";
+        const prevAgent = currentAgent; currentAgent = 'mentor';
+        const probe = await POST(new Request('http://eval.local/api/chat', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ messages: [{ role: 'user', content: msg }], agent: 'mentor', sessionId: `${sessionId}-plan` }) }));
+        await probe.text(); currentAgent = prevAgent;
+        const pa = await import('@/lib/plan-actions');
+        const planTurn = pa.learnerPlanChangeIntentHeuristic(msg);
+        const mentorSys = st.llmCalls.at(-1)?.system ?? '';
+        const stateIds = [...mentorSys.matchAll(/\[id:([0-9a-f-]{36})\] \[?(?:\w+\/)?state\b/g)].map((x) => x[1]!);
+        const tool = (await import('@/lib/agent-tools')).getToolsForAgent('mentor', { planChange: planTurn }).find((t) => t.spec.function.name === 'propose_plan_change');
+        const before = st.dbCalls.setPlanChangeSession ?? 0;
+        const r = tool && stateIds.length ? await tool.handler({ goal: 'stop studying for the Bagrut', target_date: 'in 2 weeks', evidence_note_ids: stateIds }, { userId, agent: 'mentor', locale } as never) : { observation: 'no_ids' };
+        const staged = (st.dbCalls.setPlanChangeSession ?? 0) - before;
+        add('PLAN-F', `s${sess.s}.${cp}`, planTurn && !!tool && dbStateIds.length > 0 && dbStateIds.every((id) => stateIds.includes(id)) && staged === 0 && r.observation.startsWith('rejected_state_only_evidence'), `plan turn=${planTurn}; db state ids=${dbStateIds.length}; in mentor prompt=${stateIds.length}; staged=${staged}; ${r.observation.slice(0, 40)}`);
       } else if (cp === 'ADAPT.difficulty_down' || cp === 'ADAPT.difficulty_up') {
         // AS-51 (C5): flag on -> BKT replay of the ordered attempts; direction from the mastery read.
         // m > 0 is BKT-only (ratio gives 0 for all-wrong), so forcing the ratio model fails J1.

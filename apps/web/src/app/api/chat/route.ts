@@ -1355,6 +1355,12 @@ async function buildContextPrompt(
     (learnerPlanChangeIntentHeuristic(message) ||
       wantsStudyHoursIncrease(message) ||
       planSessionEngaged);
+  // AS-56 (C4b): a Mentor turn whose tools include propose_plan_change (planChangeFlow ->
+  // getToolsForAgent planChange) always gets the cross-agent digest with note ids, so it can
+  // cite (and the AS-43 guard can reject) peer state notes — not only on status/recall turns.
+  if (agent === 'mentor' && planChangeFlow && !minimal && !contextNeeds.handoffDigest) {
+    contextNeeds = { ...contextNeeds, handoffDigest: true };
+  }
   // On a confirm turn the server applies the staged proposal in finalize; we
   // skip the tool loop and steer the answer to acknowledge (below).
   const planConfirmTurn =
