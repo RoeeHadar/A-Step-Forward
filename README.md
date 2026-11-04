@@ -97,8 +97,9 @@ Safety: both scripts take `--target dev|staging|production` (default `dev`)
 and refuse `production` together with `--fresh`/`--recreate` unless
 `--confirm-production` is passed (workflow input `confirm_production=true`).
 At runtime an empty or missing `kg_chunks` logs one warning per instance and
-grounding is skipped; passages below `RAG_MIN_FUSED_SCORE` (override
-`RAG_MIN_SCORE`) are dropped.
+grounding is skipped. An optional relevance floor (`RAG_MIN_SCORE`, default 0 =
+off; e.g. 0.02 keeps only chunks two retrieval channels agree on) drops
+low-scoring passages.
 
 `scripts/ingest_content.py` and `scripts/ingest_graphrag.py` are the older
 GraphRAG/Neo4j path; the web app does not read their output.

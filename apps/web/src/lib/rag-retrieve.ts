@@ -22,16 +22,13 @@ const DEFAULT_TOP_K = 6;
 const DEFAULT_CANDIDATE_K = 40;
 
 /**
- * Relevance floor on the fused RRF score (AS-13 R3). Every candidate gets at
- * least 1/(RRF_K + DEFAULT_CANDIDATE_K) = 0.01 per channel it appears in, and a
- * single channel tops out at 1/(RRF_K + 1) ≈ 0.0164. A floor of
- * 2/(RRF_K + DEFAULT_CANDIDATE_K) = 0.02 therefore keeps only chunks that at
- * least two channels agree on (dense+lexical, or FTS+trigram), and drops
- * "nearest neighbour by default" hits. On the 31-chunk corpus the dense
- * channel returns every chunk of the language, so dense-only hits are exactly
- * the off-topic case. Override with RAG_MIN_SCORE (a number; 0 disables).
+ * Relevance floor on the fused RRF score (AS-13 R3). Default 0 = no floor
+ * (AS-73 scope add: the 0.02 "two channels agree" floor from AS-72 is kept as
+ * an opt-in value, not the default). Set RAG_MIN_SCORE to enable a floor; on
+ * this RRF (k=60, 40 candidates) one channel scores 0.01-0.0164, so
+ * RAG_MIN_SCORE=0.02 keeps only chunks two channels both return.
  */
-export const RAG_MIN_FUSED_SCORE = 2 / (RRF_K + DEFAULT_CANDIDATE_K);
+export const RAG_MIN_FUSED_SCORE = 0;
 
 export function ragMinScore(): number {
   const raw = process.env.RAG_MIN_SCORE;

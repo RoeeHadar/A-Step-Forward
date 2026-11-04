@@ -80,18 +80,22 @@ describe('relevance floor', () => {
     concept_id: null, title: null, score,
   });
 
-  it('is 2/(60+40) = 0.02 (two channels must agree)', async () => {
-    const m = await load();
-    expect(m.RAG_MIN_FUSED_SCORE).toBeCloseTo(0.02, 10);
-    // a single channel can never reach it, two channels at the window edge can
-    expect(1 / 61).toBeLessThan(m.RAG_MIN_FUSED_SCORE);
-    expect(2 / 100).toBeGreaterThanOrEqual(m.RAG_MIN_FUSED_SCORE);
-  });
-
-  it('drops below-floor chunks and keeps above-floor ones in retrieveChunks', async () => {
+  it('defaults to 0 (no floor): every chunk is kept', async () => {
     state.mode = 'rows';
     state.rows = [row('strong', 0.032), row('edge', 0.02), row('weak', 0.0164), row('junk', 0.01)];
     const m = await load();
+    expect(m.RAG_MIN_FUSED_SCORE).toBe(0);
+    expect(m.ragMinScore()).toBe(0);
+    const out = await m.retrieveChunks({ query: 'what is a limit?' });
+    expect(out.map((c) => c.id)).toEqual(['strong', 'edge', 'weak', 'junk']);
+  });
+
+  it('env override applies: RAG_MIN_SCORE=0.02 drops below-floor, keeps above', async () => {
+    process.env.RAG_MIN_SCORE = '0.02';
+    state.mode = 'rows';
+    state.rows = [row('strong', 0.032), row('edge', 0.02), row('weak', 0.0164), row('junk', 0.01)];
+    const m = await load();
+    expect(m.ragMinScore()).toBe(0.02);
     const out = await m.retrieveChunks({ query: 'what is a limit?' });
     expect(out.map((c) => c.id)).toEqual(['strong', 'edge']);
   });
@@ -104,7 +108,9 @@ describe('relevance floor', () => {
     }));
     process.env.RAG_MIN_SCORE = '0';
     expect(m.applyRelevanceFloor(chunks)).toHaveLength(2);
-    process.env.RAG_MIN_SCORE = 'nonsense';
+    process.env.RAG_MIN_SCORE = 'nonsense'; // invalid → default (0)
+    expect(m.applyRelevanceFloor(chunks)).toHaveLength(2);
+    process.env.RAG_MIN_SCORE = '0.01';
     expect(m.applyRelevanceFloor(chunks)).toHaveLength(1);
   });
 });
