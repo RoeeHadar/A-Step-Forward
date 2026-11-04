@@ -22,6 +22,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { neon } from '@neondatabase/serverless';
 import { normalizeLesson, validateLesson } from './lib/normalize-lesson.mjs';
+import { coerceAtomId, collectLessonAtoms } from './lib/skill-atoms.mjs';
 
 const args = new Map();
 for (const arg of process.argv.slice(2)) {
@@ -174,17 +175,18 @@ for (const { file, data } of lessons) {
           ${q.rubric_he ?? null},
           ${q.explanation_en},
           ${q.explanation_he},
-          ${JSON.stringify(q.skill_atoms ?? [])}::jsonb,
+          ${JSON.stringify((q.skill_atoms ?? []).map((a) => coerceAtomId(a, data.concept_id)))}::jsonb,
           ${q.points_level_min ?? null}
         )
       `;
       questionsInserted += 1;
     }
 
-    const taughtAtoms = new Set(data.agent_hints?.skill_atoms_unlocked ?? []);
-    const exercisedAtoms = new Set();
-    for (const q of data.questions) for (const a of q.skill_atoms ?? []) exercisedAtoms.add(a);
-    const allAtoms = new Set([...taughtAtoms, ...exercisedAtoms]);
+    // AS-66: object atoms are coerced to their id (with a warning), never sent as JSON text.
+    const { taught: taughtAtoms, exercised: exercisedAtoms, all: allAtoms } = collectLessonAtoms(
+      data,
+      data.concept_id,
+    );
 
     for (const atom of allAtoms) {
       await sql`
