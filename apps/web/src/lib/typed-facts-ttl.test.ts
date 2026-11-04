@@ -2,7 +2,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('server-only', () => ({}));
-const byIds = vi.fn(async (_l: string, _ids: string[]) => [] as Array<{ id: string; kind: string; content: string }>);
+const byIds = vi.fn<(l: string, ids: string[]) => Promise<Array<{ id: string; kind: string; content: string }>>>(async () => []);
 const setSession = vi.fn(async () => undefined);
 vi.mock('@/lib/neon-db', () => ({
   fetchAgentNotesByIds: (l: string, ids: string[]) => byIds(l, ids),
