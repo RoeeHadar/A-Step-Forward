@@ -10,6 +10,14 @@ class FlexibleModel(BaseModel):
     model_config = ConfigDict(extra="allow", arbitrary_types_allowed=True)
 
     def __getattr__(self, item: str) -> Any:
+        # AS-88 r1: return a stored extra (extra="allow") when present; only a
+        # truly absent key reads as None. Previously every extra read as None.
+        try:
+            extra = object.__getattribute__(self, "__pydantic_extra__")
+        except AttributeError:
+            extra = None
+        if extra and item in extra:
+            return extra[item]
         return None
 
 
