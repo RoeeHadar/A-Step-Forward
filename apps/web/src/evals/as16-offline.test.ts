@@ -121,7 +121,7 @@ vi.mock('@/lib/neon-db', async (importOriginal) => {
       st.notes.filter((n) => n.learner_id === learnerId && ids.includes(n.id) && !n.superseded_by),
     // AS-42: mirrors neon-db.ts appendAgentNote — typed fact envelope, count, supersede by kind + key.
     appendAgentNote: async (learnerId: string, agent: string, note: { kind: string; content: string; importance?: number; related_concept_id?: string | null; fact?: { key: string; valid_to?: string | null } | null }) => {
-      const id = `note-${st.notes.length + 1}`;
+      const id = `00000000-0000-4000-8000-${String(st.notes.length + 1).padStart(12, "0")}`; // AS-52 r1: uuid-shaped like prod
       const key = tf.isTypedFactKind(note.kind) ? tf.normalizeFactKey(note.fact?.key) : null;
       const sameKey = (n: Note) => !n.superseded_by && n.learner_id === learnerId && n.kind === note.kind && tf.decodeFactContent(n.content).meta?.key === key;
       let content = note.content.slice(0, 600);
@@ -426,7 +426,15 @@ async function runJourney(POST: (r: Request) => Promise<Response>, j: Journey, l
       } else if (cp === 'PLAN.no_change_from_state') {
         // AS-43 (C4): mood-only turn -> 0 propose_plan_change staged. The offline stub has no
         // tool calling, so drive the real tool handler with the state note as sole evidence.
-        const stateIds = st.notes.filter((n) => n.learner_id === userId && n.kind === 'state' && !n.superseded_by).map((n) => n.id);
+        // AS-52 r1: take the evidence ids from the rendered Mentor prompt (not the fake DB): one
+        // mentor probe turn, then parse `[id:<uuid>]` lines whose kind is state.
+        const dbStateIds = st.notes.filter((n) => n.learner_id === userId && n.kind === 'state' && !n.superseded_by).map((n) => n.id);
+        const prevAgent = currentAgent; currentAgent = 'mentor';
+        const probe = await POST(new Request('http://eval.local/api/chat', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ messages: [{ role: 'user', content: 'What do you know about me?' }], agent: 'mentor', sessionId: `${sessionId}-probe` }) }));
+        await probe.text(); currentAgent = prevAgent;
+        const mentorSys = st.llmCalls.at(-1)?.system ?? '';
+        const stateIds = [...mentorSys.matchAll(/\[id:([0-9a-f-]{36})\] \[?(?:\w+\/)?state\b/g)].map((x) => x[1]!);
+        add('MEM-R', `s${sess.s}.MEM.mentor_prompt_has_state_note_id`, dbStateIds.length > 0 && dbStateIds.every((id) => stateIds.includes(id)), `db state ids=${dbStateIds.length}; in mentor prompt=${stateIds.length}`);
         const tool = (await import('@/lib/agent-tools')).getPlanChangeTools().find((t) => t.spec.function.name === 'propose_plan_change')!;
         const before = st.dbCalls.setPlanChangeSession ?? 0;
         const r = await tool.handler({ goal: 'stop studying for the Bagrut', target_date: 'in 2 weeks', evidence_note_ids: stateIds }, { userId, agent: sess.agent, locale } as never);

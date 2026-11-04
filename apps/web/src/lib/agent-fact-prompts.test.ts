@@ -43,3 +43,13 @@ describe('AS-52 legacy untyped notes still parse and read', () => {
     expect(appended[0]!.fact).toEqual({ key: 'bagrut_math', valid_to: null });
   });
 });
+
+describe('AS-52 r1: note ids reach the Mentor (evidence_note_ids), not other agents', () => {
+  it('handoff digest renders full uuids for the mentor only', async () => {
+    const { buildHandoffDigest } = await import('./agent-handoff-digest');
+    const id = '0f8e2a4c-1b3d-4e5f-8a9b-0c1d2e3f4a5b';
+    const notes = [{ agent: 'coach', id, kind: 'state', content: 'learner feels unmotivated today', importance: 4 }];
+    expect(buildHandoffDigest({ readingAgent: 'mentor', notes })).toContain(`- [id:${id}] [coach/state] learner feels unmotivated today`);
+    expect(buildHandoffDigest({ readingAgent: 'tutor', notes })).not.toContain(id);
+  });
+});

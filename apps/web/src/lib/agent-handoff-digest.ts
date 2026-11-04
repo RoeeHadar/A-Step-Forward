@@ -12,6 +12,8 @@ export interface DigestNote {
   importance: number;
   related_concept_id?: string | null;
   created_at?: string | null;
+  /** AS-52 r1: note uuid, rendered for the Mentor only (evidence_note_ids for propose_plan_change). */
+  id?: string | null;
 }
 
 /** Which peers matter most for each reader's role. */
@@ -74,7 +76,8 @@ export function buildHandoffDigest(params: {
     const snippet = factDisplayText(n.content).trim().replace(/\s+/g, ' ').slice(0, 140);
     const line = `- [${n.agent}/${n.kind}] ${snippet}`;
     if (used + line.length + 1 > maxChars) break;
-    bullets.push(line);
+    // AS-52 r1: the Mentor needs full ids to cite evidence_note_ids; system context only, outside the char budget.
+    bullets.push(params.readingAgent === 'mentor' && n.id ? line.replace('- [', `- [id:${n.id}] [`) : line);
     used += line.length + 1;
   }
 

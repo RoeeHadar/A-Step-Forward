@@ -1443,7 +1443,8 @@ async function buildContextPrompt(
       context += `\n(These are hints — do not let them override the current question.)`;
       for (const n of relevantNotes) {
         const tag = n.related_concept_id ? ` [${n.related_concept_id}]` : '';
-        context += `\n- (${n.kind})${tag} ${truncateChatText(factDisplayText(n.content), CHAT_CONTEXT.maxAgentNoteChars)}`;
+        // AS-52 r1: full note uuid so the Mentor can cite evidence_note_ids (system context only).
+        context += `\n- [id:${n.id}] (${n.kind})${tag} ${truncateChatText(factDisplayText(n.content), CHAT_CONTEXT.maxAgentNoteChars)}`;
       }
     }
   }
@@ -2076,6 +2077,7 @@ async function buildContextPrompt(
     const digestNotes = peerNoteLists.flatMap((notes, i) =>
       notes.map((n) => ({
         agent: peerIds[i]!,
+        id: n.id, // AS-52 r1: rendered for the Mentor only
         kind: n.kind,
         content: factDisplayText(n.content), // AS-42: fact envelope is storage-only
         importance: n.importance,
