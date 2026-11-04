@@ -568,7 +568,7 @@ export async function POST(req: Request) {
   const enqueueVisibleToken = (
     controller: ReadableStreamDefaultController<Uint8Array>,
     chunk: string,
-  ) => {
+  ): boolean => {
     const merged = citeCarry + chunk;
     // Buffer any incomplete [[ASF_… prefix so no tag family leaks into the UI
     // mid-chunk.  The carry drains once the closing ]] arrives.
@@ -577,12 +577,13 @@ export async function POST(req: Request) {
       const safe = stripAllMachineTags(merged.slice(0, open));
       citeCarry = merged.slice(open);
       if (safe) controller.enqueue(encodeToken(safe));
-      return;
+      return Boolean(safe);
     }
     citeCarry = '';
     // Never trim streaming deltas — BPE models emit leading spaces / newline-only tokens.
     const safe = stripAllMachineTags(merged, { trim: false });
     if (safe) controller.enqueue(encodeToken(safe));
+    return Boolean(safe);
   };
   const finishTemplatePlanTurn = async (
     controller: ReadableStreamDefaultController<Uint8Array>,
@@ -659,8 +660,17 @@ export async function POST(req: Request) {
         }
         if (streamDone) return;
 
-        const { value, done } = await getGen().next();
-        if (done) {
+        // Keep pulling until a visible token is enqueued or the generator ends.
+        // A pull() that enqueues nothing (whole chunk held back inside an open
+        // [[ASF_… tag) is never re-invoked, so the stream would never close and
+        // the turn would never be persisted (AS-33).
+        let next = await getGen().next();
+        while (!next.done) {
+          assistantBuffer += next.value;
+          if (enqueueVisibleToken(controller, next.value)) return;
+          next = await getGen().next();
+        }
+        if (next.done) {
           const planResult: PlanApplyResult | null = eagerPlanPromise
             ? await eagerPlanPromise
             : null;
@@ -734,9 +744,6 @@ export async function POST(req: Request) {
           controller.enqueue(encodeFinish());
           controller.close();
           streamDone = true;
-        } else {
-          assistantBuffer += value;
-          enqueueVisibleToken(controller, value);
         }
       } catch (err) {
         logger.error('chat stream pull failed', { err: String(err) });
