@@ -26534,6 +26534,16 @@ def main() -> None:
             "points_level": lesson.get("points_level") or meta["points_level"],
         }
 
+    # AS-85: keep every served concept/track pair the committed store already
+    # serves (scripts/gen/served-track-baseline.json), so a lesson's narrower
+    # math_track can never drop a served track to 0 items on regen.
+    _bl = os.path.join(os.path.dirname(os.path.abspath(__file__)), "served-track-baseline.json")
+    if os.path.exists(_bl):
+        with open(_bl, encoding="utf-8") as fh:
+            _keep = json.load(fh).get("pairs", {}).get(args.concept, [])
+        _tracks = list(meta.get("math_track") or [])
+        meta["math_track"] = _tracks + [t for t in _keep if t not in _tracks]
+
     # The DEFAULT minimum points-level for an item is the LOWEST track the lesson
     # serves — otherwise a 3pt/4pt lesson's questions would be gated to 5pt and
     # hidden from the very learners it is for. Individual items may still be
