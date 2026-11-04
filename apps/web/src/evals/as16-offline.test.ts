@@ -28,7 +28,7 @@ import tls from 'node:tls';
 import { syncBuiltinESMExports } from 'node:module';
 import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import { parse as parseYaml } from 'yaml';
-import { hasFinalValue, isLearnerAttempt, REVIEWER_MAX_LINES } from '@/lib/agent-method-guard';
+import { createReplyGuard, hasFinalValue, isLearnerAttempt, REVIEWER_MAX_LINES } from '@/lib/agent-method-guard';
 
 // ---------------------------------------------------------------- network guard
 const net_ = vi.hoisted(() => ({ count: 0, calls: [] as string[] }));
@@ -279,6 +279,22 @@ async function runJourney(POST: (r: Request) => Promise<Response>, j: Journey, l
   const add = (id: string, checkpoint: string, pass: boolean, detail: string) => m[id]!.checks.push({ checkpoint, pass, detail });
   const transcript: Array<{ s: number; agent: string; user: string; reply: string; status: number }> = [];
   const personaMarkers: Record<string, string> = {};
+
+  // AS-41 r1 (P1-1): negative teaching fixtures (this locale) must pass the
+  // tutor + reviewer post-check unchanged (guard-level; same code the route runs before enqueue).
+  if (j.id === 'J1-weak-he') {
+    const neg = (JSON.parse(fs.readFileSync(path.join(EVAL_DIR, 'role-negative-fixtures.json'), 'utf8')) as { fixtures: Array<{ id: string; lang: string; prompt: string; reply: string }> }).fixtures;
+    for (const f of neg.filter((x) => x.lang === locale)) {
+      const ok = ['tutor', 'reviewer'].every((agent) => {
+        const g = createReplyGuard({ agent, lastMessage: f.prompt, locale, practiceActive: false });
+        if (!g) return true;
+        let out = '';
+        for (const c of f.reply.match(/[\s\S]{1,7}/g) ?? []) out += g.push(c);
+        return out + g.flush() === f.reply;
+      });
+      add('ROLE', `neg.${f.id}.teaching_passthrough`, ok, 'teaching reply with <var> = <number> passes unchanged');
+    }
+  }
 
   for (const sess of j.sessions) {
     if (sess.gap_days) { clockMs += sess.gap_days * DAY_MS; vi.setSystemTime(clockMs); }

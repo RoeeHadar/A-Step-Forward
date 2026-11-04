@@ -563,7 +563,12 @@ export async function POST(req: Request) {
   const encoder = new TextEncoder();
   let assistantBuffer = '';
   /** AS-41: Tutor hint-before-answer / Reviewer short-critique post-check (null = off). */
-  let replyGuard = createReplyGuard({ agent, lastMessage, locale });
+  let replyGuard = createReplyGuard({
+    agent,
+    lastMessage,
+    locale,
+    practiceActive: Boolean(practiceContext && !practiceContext.item_graded),
+  });
   /** Incomplete [[ASF_CITE:…]] across SSE chunks. */
   let citeCarry = '';
 

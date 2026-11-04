@@ -2,7 +2,8 @@
  * AS-41 (AS-32 §2 C2) — method post-checks applied in the chat stream path
  * (route.ts pull loop) BEFORE a chunk is enqueued to the client.
  *
- * - Tutor: no final value before the learner has attempted. When the guard is
+ * - Tutor: no final value before the learner has attempted. Armed only per
+ *   shouldArmTutorGuard (answer request or ungraded practice item). When the guard is
  *   active and a completed line matches FINAL_VALUE_RE, that line and the rest
  *   of the reply are replaced with a single hint step + an attempt request.
  * - Reviewer: short critique only — at most REVIEWER_MAX_LINES visible lines /
@@ -58,6 +59,22 @@ export function isLearnerAttempt(message: string): boolean {
   return stripped.length <= 24 && /\d/.test(stripped) && BARE_VALUE_RE.test(stripped);
 }
 
+export function isAnswerRequest(message: string): boolean {
+  return ANSWER_REQUEST_RE.test(message ?? '');
+}
+
+/**
+ * AS-41 r1 arming rule (P1-1): the Tutor guard is armed only when an answer
+ * could leak — the learner explicitly asked for the answer, OR an ungraded
+ * practice item is active — and the current message is not an attempt.
+ * Ordinary teaching/explanation turns ("teach me Newton's second law") are
+ * never armed, so worked examples / constants (g = 9.8, n = 1) pass through.
+ */
+export function shouldArmTutorGuard(message: string, practiceActive: boolean): boolean {
+  if (isLearnerAttempt(message)) return false;
+  return isAnswerRequest(message) || practiceActive;
+}
+
 export const REVIEWER_MAX_LINES = 8;
 export const REVIEWER_MAX_CHARS = 560;
 const FULL_SOLUTION_RE = /full\s+(?:corrected\s+)?solution|here(?:'s| is)\s+the\s+(?:complete|corrected)\s+(?:solution|proof)|פתרון\s+מלא|הפתרון\s+המלא/i;
@@ -72,8 +89,8 @@ function tagsOf(s: string): string {
 
 export function tutorHint(locale: 'he' | 'en' | string): string {
   return locale === 'en'
-    ? "Let's get there together — I won't give the final answer yet. Hint: undo one operation at a time on both sides. What would your first step be? Try it and tell me what you get."
-    : 'בוא נגיע לזה יחד — עוד לא אתן את התשובה הסופית. רמז: בטלו פעולה אחת בכל פעם בשני הצדדים. מה הצעד הראשון שהיית עושה? נסה ותגיד לי מה יצא.';
+    ? "Let's get there together — I won't give the final answer yet. Hint: write down what is given and what is asked, then pick the first step. What would that first step be? Try it and tell me what you get."
+    : 'בוא נגיע לזה יחד — עוד לא אתן את התשובה הסופית. רמז: כתוב מה נתון ומה מבקשים, ואז בחר את הצעד הראשון. מה הצעד הראשון שהיית עושה? נסה ותגיד לי מה יצא.';
 }
 
 export interface ReplyGuard {
@@ -90,8 +107,10 @@ export function createReplyGuard(opts: {
   agent: WebLiveAgent | string;
   lastMessage: string;
   locale: 'he' | 'en' | string;
+  /** AS-41 r1: an ungraded practice-arena item is in this turn (route.ts practiceContext && !item_graded). */
+  practiceActive?: boolean;
 }): ReplyGuard | null {
-  if (opts.agent === 'tutor' && !isLearnerAttempt(opts.lastMessage)) {
+  if (opts.agent === 'tutor' && shouldArmTutorGuard(opts.lastMessage, opts.practiceActive === true)) {
     return lineGuard('tutor_hint_before_answer', (line) =>
       FINAL_VALUE_RE.test(stripTags(line)) ? `${tutorHint(opts.locale)}\n` : null,
     );

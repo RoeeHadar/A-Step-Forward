@@ -7,6 +7,8 @@ import {
   createReplyGuard,
   hasFinalValue,
   isLearnerAttempt,
+  shouldArmTutorGuard,
+  tutorHint,
 } from '@/lib/agent-method-guard';
 import { AGENT_METHOD_SPECS, buildAgentSkillsPrompt } from '@/lib/agent-skills';
 import { getAgentPersona } from '@/lib/agent-prompts';
@@ -134,5 +136,32 @@ describe('AS-41 classifier fixtures 4 agents x 3 prompts', () => {
         expect(run(g, [f.reply]), f.id).toBe(f.reply);
       }
     }
+  });
+});
+
+describe('AS-41 r1 (P1-1) arming rule + negative teaching fixtures (he/en)', () => {
+  type Neg = { id: string; lang: 'he' | 'en'; prompt: string; reply: string };
+  const neg = (JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../evals/as16/role-negative-fixtures.json'), 'utf8')) as { fixtures: Neg[] }).fixtures;
+  it('covers he and en', () => {
+    expect(neg.some((f) => f.lang === 'he') && neg.some((f) => f.lang === 'en')).toBe(true);
+  });
+  it.each(neg.map((f) => [f.id, f] as const))('%s passes through unchanged (tutor + reviewer)', (_id, f) => {
+    expect(shouldArmTutorGuard(f.prompt, false)).toBe(false);
+    for (const agent of ['tutor', 'reviewer']) {
+      const g = createReplyGuard({ agent, lastMessage: f.prompt, locale: f.lang });
+      const chunks = f.reply.match(/[\s\S]{1,7}/g) ?? [];
+      expect(g ? run(g, chunks) : f.reply).toBe(f.reply);
+    }
+  });
+  it('arms on an explicit answer request or an ungraded practice item, not on teaching', () => {
+    expect(shouldArmTutorGuard('just give me the answer to 2x+3=11', false)).toBe(true);
+    expect(shouldArmTutorGuard('תן לי פשוט את התשובה', false)).toBe(true);
+    expect(shouldArmTutorGuard('teach me Newtons second law', true)).toBe(true);
+    expect(shouldArmTutorGuard('x=7?', true)).toBe(false);
+    expect(shouldArmTutorGuard('why?', false)).toBe(false);
+    expect(createReplyGuard({ agent: 'tutor', lastMessage: 'teach me Newtons second law', locale: 'en', practiceActive: false })).toBeNull();
+  });
+  it('replacement hint is generic (no linear-equation wording)', () => {
+    for (const l of ['he', 'en']) expect(tutorHint(l)).not.toMatch(/both sides|בשני הצדדים|undo/i);
   });
 });
