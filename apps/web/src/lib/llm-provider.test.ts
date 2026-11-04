@@ -15,10 +15,14 @@ import {
 } from './llm-provider';
 
 describe('llm-provider config', () => {
-  const env = process.env;
+  // AS-65: snapshot a COPY and restore IN PLACE. The old `const env = process.env` + `process.env = {...env}`
+  // left the original process.env object mutated (GROQ_API_KEY='test-key'), which leaked to later files
+  // in single-fork runs and un-skipped the live *.llm.integration suites.
+  const env = { ...process.env };
 
   afterEach(() => {
-    process.env = { ...env };
+    for (const k of Object.keys(process.env)) if (!(k in env)) delete process.env[k];
+    Object.assign(process.env, env);
     resetLLMConfigCache();
   });
 
@@ -89,10 +93,11 @@ describe('llm-provider config', () => {
 });
 
 describe('llm-provider multi-provider (NVIDIA fallback)', () => {
-  const env = process.env;
+  const env = { ...process.env }; // AS-65: copy, restored in place (see first describe)
 
   afterEach(() => {
-    process.env = { ...env };
+    for (const k of Object.keys(process.env)) if (!(k in env)) delete process.env[k];
+    Object.assign(process.env, env);
     resetLLMConfigCache();
   });
 
@@ -174,9 +179,10 @@ describe('isReasoningModel', () => {
 });
 
 describe('tool-calling model selection', () => {
-  const env = process.env;
+  const env = { ...process.env }; // AS-65: copy, restored in place (see first describe)
   afterEach(() => {
-    process.env = { ...env };
+    for (const k of Object.keys(process.env)) if (!(k in env)) delete process.env[k];
+    Object.assign(process.env, env);
     resetLLMConfigCache();
   });
 

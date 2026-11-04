@@ -9,7 +9,7 @@
  *  - Claim released on error                 → release UPDATE fired in finally
  *  - DB claim skipped on SQL error           → falls through to advisory lock only
  */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 
 vi.mock('server-only', () => ({}));
 
@@ -21,6 +21,12 @@ const { mockNeonSql, mockEnsureMemoryClaimColumns, mockGetLearnerPersona, mockPe
     mockPersistResult: vi.fn().mockResolvedValue({ ok: true }),
   }));
 
+// AS-65: restore DATABASE_URL (set in the mock factory below) so single-fork runs don't leak it.
+const AS65_DB_URL = vi.hoisted(() => process.env.DATABASE_URL);
+afterAll(() => {
+  if (AS65_DB_URL === undefined) delete process.env.DATABASE_URL;
+  else process.env.DATABASE_URL = AS65_DB_URL;
+});
 vi.mock('@neondatabase/serverless', () => {
   process.env['DATABASE_URL'] = 'postgresql://test-consolidate';
   return {

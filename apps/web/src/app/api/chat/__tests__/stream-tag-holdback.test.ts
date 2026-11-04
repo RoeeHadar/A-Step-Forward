@@ -5,7 +5,7 @@
  * re-invoked, so the stream never closed and the turn was never persisted.
  * In-process, stub LLM, fake DB, no network.
  */
-import { describe, it, expect, beforeAll, vi } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 
 const st = vi.hoisted(() => ({
   afterJobs: [] as Promise<unknown>[],
@@ -88,7 +88,21 @@ async function readWithTimeout(res: Response, ms: number) {
 
 describe('/api/chat stream with a long machine tag (AS-33)', () => {
   let POST: (r: Request) => Promise<Response>;
+  // AS-65: snapshot env + fetch overridden below; restored in afterAll (single-fork leak).
+  const AS65_KEYS = ['DATABASE_URL', 'POSTGRES_URL', 'GROQ_API_KEY', 'LLM_API_KEY', 'LLM_BASE_URL'] as const;
+  const as65Saved: Record<string, string | undefined> = {};
+  let as65Fetch: typeof fetch;
+  afterAll(() => {
+    globalThis.fetch = as65Fetch;
+    for (const k of AS65_KEYS) {
+      const v = as65Saved[k];
+      if (v === undefined) delete process.env[k];
+      else process.env[k] = v;
+    }
+  });
   beforeAll(async () => {
+    for (const k of AS65_KEYS) as65Saved[k] = process.env[k];
+    as65Fetch = globalThis.fetch;
     for (const k of ['DATABASE_URL', 'POSTGRES_URL', 'GROQ_API_KEY', 'LLM_API_KEY']) delete process.env[k];
     process.env.LLM_API_KEY = 'placeholder-offline';
     process.env.LLM_BASE_URL = 'http://test.invalid/v1';
