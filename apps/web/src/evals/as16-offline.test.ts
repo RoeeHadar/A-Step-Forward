@@ -28,6 +28,7 @@ import tls from 'node:tls';
 import { syncBuiltinESMExports } from 'node:module';
 import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import { parse as parseYaml } from 'yaml';
+import { hasFinalValue, isLearnerAttempt, REVIEWER_MAX_LINES } from '@/lib/agent-method-guard';
 
 // ---------------------------------------------------------------- network guard
 const net_ = vi.hoisted(() => ({ count: 0, calls: [] as string[] }));
@@ -163,9 +164,13 @@ let currentAgent = 'tutor';
 
 vi.mock('@/lib/llm-provider', async (importOriginal) => {
   const orig = (await importOriginal()) as Record<string, unknown>;
-  const reply = () => {
+  const reply = (lastUser: string) => {
     const a = currentAgent;
     let text = (STUB_REPLY[a] ?? STUB_REPLY.tutor!)[st.locale];
+    // AS-41: simulate a model that leaks — the tutor stub appends the J1 final value
+    // and the reviewer stub appends a full rewrite; the route post-check must strip them.
+    if (a === 'tutor' && /2x\s*\+\s*3\s*=\s*11|x\s*=\s*\d/.test(lastUser)) text += '\nx = 4.';
+    if (a === 'reviewer') text += `\nHere is the full corrected solution:\n${Array.from({ length: 10 }, (_, i) => `Step ${i + 1}: rewritten line ${i + 1}.`).join('\n')}`;
     const lastRag = st.ragCalls.at(-1);
     if (st.noteTag) {
       text += ` [[ASF_MEMORY_NOTE:${JSON.stringify({ kind: 'misconception', content: `EVALTAG:${st.noteTag} learner repeats this error`, importance: 4 })}]]`;
@@ -180,7 +185,7 @@ vi.mock('@/lib/llm-provider', async (importOriginal) => {
     llmStream: async function* (opts: { system: string; messages: Array<{ role: string; content: string }> }) {
       st.llmCalls.push({ system: opts.system, messages: opts.messages });
      
-      yield reply();
+      yield reply([...opts.messages].reverse().find((x) => x.role === 'user')?.content ?? '');
     },
     llmComplete: async () => { st.llmCompleteCalls += 1; return null; },
     llmCompleteJson: async () => { st.llmCompleteCalls += 1; return null; },
@@ -314,9 +319,16 @@ async function runJourney(POST: (r: Request) => Promise<Response>, j: Journey, l
       // ROLE: persona plumbing + regex checks on the (stub) reply.
       const ragExpected = sess.agent === 'tutor' || sess.agent === 'coach';
       for (const cp of cps.filter((c) => c.startsWith('ROLE.'))) {
+        // AS-41: hint-before-answer is judged on EVERY tutor turn with the shared
+        // RUB ROLE regex: no final value before an attempt; after an attempt the
+        // (leaky stub's) answer must be allowed through.
+        if (cp === 'ROLE.tutor_no_direct_answer') {
+          if (isLearnerAttempt(text)) add('ROLE', `${tag}.tutor_answer_allowed_after_attempt`, hasFinalValue(reply) || !/2x\s*\+\s*3\s*=\s*11|x\s*=\s*\d/.test(text), 'attempt turn: final value not suppressed');
+          else add('ROLE', `${tag}.${cp}`, !hasFinalValue(reply), 'no final value before an attempt (FINAL_VALUE_RE)');
+          continue;
+        }
         if (ti !== sess.turns.length - 1) continue;
-        if (cp === 'ROLE.tutor_no_direct_answer') add('ROLE', `${tag}.${cp}`, !/x\s*=\s*4\b/.test(reply), 'no final value x=4 in reply');
-        else if (cp === 'ROLE.reviewer_critique_only') add('ROLE', `${tag}.${cp}`, reply.length < 600 && !/full (corrected )?solution/i.test(reply), 'short critique, no full rewrite');
+        if (cp === 'ROLE.reviewer_critique_only') add('ROLE', `${tag}.${cp}`, reply.length < 600 && !/full (corrected )?solution/i.test(reply) && reply.split('\n').filter((l) => l.trim()).length <= REVIEWER_MAX_LINES, `short critique (<=${REVIEWER_MAX_LINES} lines), no full rewrite`);
         else if (cp === 'ROLE.distinct_from_tutor') add('ROLE', `${tag}.${cp}`, Boolean(personaMarkers.tutor) && personaMarkers.tutor !== sys.slice(0, 400), 'system prompt differs from tutor session');
         else add('ROLE', `${tag}.${cp}`, sys.length > 0, 'agent system prompt built (content quality = judge)');
       }

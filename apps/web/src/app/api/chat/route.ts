@@ -1,4 +1,5 @@
 import { auth } from '@clerk/nextjs/server';
+import { createReplyGuard } from '@/lib/agent-method-guard';
 import { after } from 'next/server';
 import { cookies } from 'next/headers';
 import { agentNameSchema } from '@asf/schemas/agents';
@@ -561,6 +562,8 @@ export async function POST(req: Request) {
 
   const encoder = new TextEncoder();
   let assistantBuffer = '';
+  /** AS-41: Tutor hint-before-answer / Reviewer short-critique post-check (null = off). */
+  let replyGuard = createReplyGuard({ agent, lastMessage, locale });
   /** Incomplete [[ASF_CITE:…]] across SSE chunks. */
   let citeCarry = '';
 
@@ -668,13 +671,22 @@ export async function POST(req: Request) {
         // A pull() that enqueues nothing (whole chunk held back inside an open
         // [[ASF_… tag) is never re-invoked, so the stream would never close and
         // the turn would never be persisted (AS-33).
+        // AS-41 method post-check: runs on each raw chunk BEFORE enqueue.
         let next = await getGen().next();
         while (!next.done) {
-          assistantBuffer += next.value;
-          if (enqueueVisibleToken(controller, next.value)) return;
+          const out = replyGuard ? replyGuard.push(next.value) : next.value;
+          assistantBuffer += out;
+          if (out && enqueueVisibleToken(controller, out)) return;
           next = await getGen().next();
         }
         if (next.done) {
+          if (replyGuard) {
+            const tail = replyGuard.flush();
+            assistantBuffer += tail;
+            if (tail) enqueueVisibleToken(controller, tail);
+            if (replyGuard.tripped) logger.info('chat: method guard rewrote reply', { agent, kind: replyGuard.kind });
+            replyGuard = null;
+          }
           const planResult: PlanApplyResult | null = eagerPlanPromise
             ? await eagerPlanPromise
             : null;
