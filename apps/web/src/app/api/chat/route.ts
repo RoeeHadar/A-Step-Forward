@@ -431,6 +431,8 @@ const kgByName: Record<string, KgConcept> = Object.fromEntries(
 );
 
 export async function POST(req: Request) {
+  // AS-48: request start, before any chat turn is recorded — last-activity uses strictly-before.
+  const requestStartedAt = new Date();
   let userId: string | null = null;
   let sessionClaims: Record<string, unknown> | null = null;
   try {
@@ -551,6 +553,7 @@ export async function POST(req: Request) {
         sessionId,
         practiceContext,
         turnGrounding,
+        requestStartedAt,
       });
     }
     return gen;
@@ -1032,6 +1035,8 @@ async function* streamAgentResponse(
     locale?: 'he' | 'en';
     sessionId?: string;
     practiceContext?: PracticeChatContext | null;
+    /** AS-48: captured once at the top of POST, before any turn is saved. */
+    requestStartedAt?: Date;
     turnGrounding?: ChatTurnGrounding;
   } = {},
 ): AsyncGenerator<string> {
@@ -1104,6 +1109,8 @@ async function buildContextPrompt(
     sessionId?: string;
     minimal?: boolean;
     practiceContext?: PracticeChatContext | null;
+    /** AS-48: captured once at the top of POST, before any turn is saved. */
+    requestStartedAt?: Date;
   } = {},
 ): Promise<{
   system: string;
@@ -1121,6 +1128,7 @@ async function buildContextPrompt(
     sessionId,
     minimal = false,
     practiceContext = null,
+    requestStartedAt = new Date(),
   } = opts;
   let statusReply: string | null = null;
   const groundingIds = new Set<string>();
@@ -1186,14 +1194,15 @@ async function buildContextPrompt(
   });
 
   // AS-40: returning learner = last prior turn / own note >= 3 days ago (mentor digest gate).
-  // AS-47: learner-wide last activity (all agents + practice), excluding the
-  // user turn just recorded for this request (1-minute window).
+  // AS-47/AS-48: learner-wide last activity (all agents + practice) strictly
+  // before this request started — the user turn recorded for this request is excluded.
   const isReturning =
     agent === 'mentor' &&
     !minimal &&
-    returningGap([
-      await fetchLearnerLastActivityAt(userId, new Date(Date.now() - 60_000)).catch(() => null),
-    ]);
+    returningGap(
+      [await fetchLearnerLastActivityAt(userId, requestStartedAt).catch(() => null)],
+      requestStartedAt,
+    );
   let contextNeeds = buildContextNeeds({
     agent,
     message,
@@ -2313,6 +2322,8 @@ async function* streamFromLLM(
     topic?: string;
     sessionId?: string;
     practiceContext?: PracticeChatContext | null;
+    /** AS-48: captured once at the top of POST, before any turn is saved. */
+    requestStartedAt?: Date;
     turnGrounding?: ChatTurnGrounding;
   } = {},
 ): AsyncGenerator<string, LLMFailureInfo | undefined> {

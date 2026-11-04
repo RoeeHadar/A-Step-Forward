@@ -47,4 +47,25 @@ describe('AS-47 fetchLearnerLastActivityAt', () => {
     expect(await fetchLearnerLastActivityAt('  ', new Date())).toBeNull();
     expect(calls).toHaveLength(0);
   });
+
+  it('AS-48: a turn 30 s before the request counts; the current turn (recorded after request start) does not', async () => {
+    const requestStartedAt = new Date('2026-01-17T09:00:00.000Z');
+    const rows = [
+      { table: 'chat_turns', learner_id: 'learner-A', at: '2026-01-17T08:59:30.000Z' }, // 30 s before → prior
+      { table: 'chat_turns', learner_id: 'learner-A', at: '2026-01-17T09:00:00.000Z' }, // == start → excluded (strict <)
+      { table: 'chat_turns', learner_id: 'learner-A', at: '2026-01-17T09:00:00.120Z' }, // current turn, saved after start
+      { table: 'chat_turns', learner_id: 'learner-B', at: '2026-01-17T08:59:59.000Z' }, // other learner
+    ];
+    // Evaluate the query's WHERE semantics (learner_id = $1 AND ts < $2) over fixture rows.
+    mockSql.mockImplementationOnce((strings: TemplateStringsArray, ...values: unknown[]) => {
+      calls.push({ text: strings.join('?'), values });
+      expect(strings.join('?')).toMatch(/created_at < \?/);
+      const [learner, cutoff] = values as [string, string];
+      const hits = rows.filter((r) => r.learner_id === learner && r.at < cutoff).map((r) => r.at).sort();
+      return Promise.resolve([{ last_at: hits.at(-1) ?? null }]);
+    });
+    const r = await fetchLearnerLastActivityAt('learner-A', requestStartedAt);
+    expect(calls[0]!.values[1]).toBe(requestStartedAt.toISOString()); // exact request start, no 60 s window
+    expect(r).toBe('2026-01-17T08:59:30.000Z');
+  });
 });

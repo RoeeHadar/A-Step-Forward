@@ -100,7 +100,8 @@ vi.mock('@/lib/neon-db', async (importOriginal) => {
         .filter((t) => t.learnerId === learnerId && t.agent === agent && t.sessionId === sessionId)
         .slice(-limit)
         .map((t, i) => ({ id: String(i), learner_id: learnerId, agent, role: t.role, content: t.content, session_id: sessionId, created_at: new Date().toISOString() })),
-    // AS-47: in-memory stand-in for the learner-wide last-activity query (all agents).
+    // AS-47/AS-48: in-memory stand-in for the learner-wide last-activity query (all agents),
+    // strict `<` against the route's request-start timestamp.
     fetchLearnerLastActivityAt: async (learnerId: string, before: Date) => {
       const ts = (st.turns as Array<Turn & { learnerId: string }>)
         .filter((t) => t.learnerId === learnerId && t.created_at && t.created_at < before.toISOString())
