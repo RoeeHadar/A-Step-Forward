@@ -34,6 +34,9 @@ class AgentName(StrEnum):
 class ToolRef(FlexibleModel):
     name: str = ""
     description: str = ""
+    # AS-90: fields read in production (was model_extra fallback).
+    server: Any = None
+    transport: str | None = None
 
 
 class Budget(FlexibleModel):
@@ -54,6 +57,11 @@ class AgentManifest(FlexibleModel):
     goal: str = ""
     tools: list[ToolRef] = Field(default_factory=list)
     budget: Budget | None = None
+    # AS-90: fields read in production (was model_extra fallback).
+    fallback_model: Any = None
+    memory_policy: Any = None
+    primary_model: Any = None
+    prompt_version: str | None = None
 
 
 class ChatRequest(FlexibleModel):
@@ -68,6 +76,8 @@ class ChatChunk(FlexibleModel):
     kind: str = "token"
     agent: AgentName | str | None = None
     text: str | None = None
+    # AS-90: fields read in production (was model_extra fallback).
+    citation: Any = None
 
 
 class RouteDecision(FlexibleModel):

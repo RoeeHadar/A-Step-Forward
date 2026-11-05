@@ -13,7 +13,7 @@ from ..services.progress_svc import get_progress_service
 router = APIRouter(prefix="/v1/progress", tags=["progress"])
 
 
-@router.get("", response_model=ProgressSummary)
+@router.get("", response_model=ProgressSummary, response_model_exclude_unset=True)
 async def get_progress(
     ctx: AuthCtx = Depends(require_learner),
     svc=Depends(get_progress_service),

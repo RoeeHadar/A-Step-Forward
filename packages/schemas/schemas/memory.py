@@ -44,6 +44,11 @@ class MemoryRecord(FlexibleModel):
     last_accessed_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     archived_at: datetime | None = None
     deleted_at: datetime | None = None
+    # AS-90: fields read in production (was model_extra fallback).
+    access_count: Any = None
+    kg_node_ids: Any = None
+    superseded_at: Any = None
+    superseded_by: Any = None
 
 
 class MemoryUpdateInput(FlexibleModel):
@@ -66,9 +71,75 @@ class MemorySearchInput(FlexibleModel):
     learner_id: str = ""
     query: str = ""
     types: list[MemoryType] = Field(default_factory=list)
+    # AS-90: fields read in production (was model_extra fallback).
+    agent_id: str | None = None
+    k: Any = None
+    min_strength: float | None = None
 
 
 def __getattr__(name: str) -> Any:
     model = flexible_model(name)
     globals()[name] = model
     return model
+
+
+class CompactionInput(FlexibleModel):
+    """AS-90: declared (was flexible_model(); fields read/set in production)."""
+
+    messages: list[Any] | None = None
+    pinned_memory_ids: Any = None
+    target_tokens: Any = None
+
+
+class CompactionOutput(FlexibleModel):
+    """AS-90: declared (was flexible_model(); fields read/set in production)."""
+
+    compacted_summary: Any = None
+    estimated_tokens: Any = None
+    kept_verbatim_count: Any = None
+    messages: Any = None
+
+
+class MemoryConflict(FlexibleModel):
+    """AS-90: declared (was flexible_model(); fields read/set in production)."""
+
+    existing: Any = None
+    incoming: Any = None
+    rationale: Any = None
+    resolution: Any = None
+
+
+class MemoryConsolidateResult(FlexibleModel):
+    """AS-90: declared (was flexible_model(); fields read/set in production)."""
+
+    merged_or_candidates: Any = None
+
+
+class MemoryDeleteResult(FlexibleModel):
+    """AS-90: declared (was flexible_model(); fields read/set in production)."""
+
+    deleted: bool | None = None
+
+
+class MemoryHealthReport(FlexibleModel):
+    """AS-90: declared (was flexible_model(); fields read/set in production)."""
+
+    conflicts_pending: Any = None
+    conflicts_resolved: Any = None
+    coverage_gaps: list[Any] | None = None
+    drift_notes: list[Any] | None = None
+    items_archived: Any = None
+    items_merged: Any = None
+    items_promoted: Any = None
+    items_reviewed: Any = None
+    learner_id: Any = None
+    window_end: Any = None
+    window_start: Any = None
+
+
+class MemorySearchResult(FlexibleModel):
+    """AS-90: declared (was flexible_model(); fields read/set in production)."""
+
+    components: dict[str, Any] | None = None
+    record: Any = None
+    score: Any = None

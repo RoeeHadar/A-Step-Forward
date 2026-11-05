@@ -69,7 +69,11 @@ async def start_week_quiz(
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
-@router.post("/{plan_id}/weeks/{week_num}/quiz/submit", response_model=QuizSubmitResponse)
+@router.post(
+    "/{plan_id}/weeks/{week_num}/quiz/submit",
+    response_model=QuizSubmitResponse,
+    response_model_exclude_unset=True,
+)
 async def submit_week_quiz(
     plan_id: str,
     week_num: int,

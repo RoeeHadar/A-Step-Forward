@@ -5,6 +5,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Any
 
+from schemas._as90_compat import dump_base_compat
 from schemas.common import Provenance
 from schemas.memory import MemoryRecord, MemoryType
 
@@ -76,7 +77,7 @@ def record_to_row(record: MemoryRecord, *, embedding: list[float] | None = None)
         access_count=record.access_count,
         superseded_by=record.superseded_by,
         superseded_at=record.superseded_at,
-        provenance=record.provenance.model_dump(mode="json"),
+        provenance=dump_base_compat(record.provenance),
         kg_node_ids=record.kg_node_ids,
         created_at=record.created_at,
         updated_at=record.updated_at,

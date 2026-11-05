@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from typing import Any
 
 import structlog
+from schemas._as90_compat import dump_base_compat
 from schemas.graph import KGChunk
 
 from ..settings import GraphRAGSettings
@@ -69,7 +70,7 @@ class ChunkRepository:
         from sqlalchemy import text
 
         embedding = chunk.embedding or [0.0] * self.settings.embedding_dim
-        provenance = chunk.provenance.model_dump(mode="json") if chunk.provenance else None
+        provenance = dump_base_compat(chunk.provenance) if chunk.provenance else None
         async with self._sessionmaker() as session:
             await session.execute(
                 text(
