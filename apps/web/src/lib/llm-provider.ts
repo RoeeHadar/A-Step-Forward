@@ -126,11 +126,9 @@ function parseModelList(raw: string | undefined, fallback: string[]): string[] {
 function detectProviderLabel(baseUrl: string): string {
   const lower = baseUrl.toLowerCase();
   if (lower.includes('groq.com')) return 'groq';
-  if (lower.includes('11434') || lower.includes('ollama')) return 'ollama';
   if (lower.includes('openrouter')) return 'openrouter';
   if (lower.includes('together')) return 'together';
   if (lower.includes('fireworks')) return 'fireworks';
-  if (lower.includes('localhost') || lower.includes('127.0.0.1')) return 'local';
   return 'openai-compatible';
 }
 
@@ -150,19 +148,21 @@ export function getLLMConfig(): LLMProviderConfig {
   const apiKey =
     unquoteEnv(process.env.LLM_API_KEY) ||
     unquoteEnv(process.env.GROQ_API_KEY) ||
-    (detectProviderLabel(baseUrl) === 'ollama' ? 'ollama' : '');
+    '';
 
   const primaryModels = parseModelList(process.env.LLM_PRIMARY_MODEL, [DEFAULT_PRIMARY]);
   const cheapModels = parseModelList(process.env.LLM_CHEAP_MODEL, [DEFAULT_CHEAP]);
   const fallbackModels = parseModelList(process.env.LLM_FALLBACK_MODELS, DEFAULT_EXTRA_PRIMARY);
 
   const allPrimary = [...new Set([...primaryModels, ...fallbackModels])];
-  const configured = Boolean(apiKey) || detectProviderLabel(baseUrl) === 'ollama';
+  // AS-103: keyless local-server fallback removed; assertGroqBaseUrl (AS-100)
+  // already rejected those base URLs, so the branch was unreachable.
+  const configured = Boolean(apiKey);
 
   cachedConfig = {
     configured,
     baseUrl,
-    apiKey: apiKey || 'ollama',
+    apiKey,
     primaryModels: allPrimary,
     cheapModels,
     providerLabel: process.env.LLM_PROVIDER?.trim() || detectProviderLabel(baseUrl),
@@ -459,7 +459,7 @@ export async function llmComplete(
   const models = guardedModels(opts.models ?? resolveModelChain(opts.modelTier ?? 'primary'));
   const cfg = getLLMConfig();
   if (!cfg.configured) {
-    logger.warn('llm: not configured — set LLM_API_KEY or LLM_BASE_URL (Ollama)');
+    logger.warn('llm: not configured — set LLM_API_KEY or GROQ_API_KEY');
     return null;
   }
 

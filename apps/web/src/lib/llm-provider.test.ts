@@ -37,15 +37,16 @@ describe('llm-provider config', () => {
     expect(llmConfigured()).toBe(true);
   });
 
-  it('supports Ollama without API key', () => {
+  it('AS-103: keyless local base URL is not configured (no ollama fallback key)', () => {
     delete process.env.GROQ_API_KEY;
     delete process.env.LLM_API_KEY;
     process.env.LLM_BASE_URL = 'http://localhost:11434/v1';
     resetLLMConfigCache();
     const cfg = getLLMConfig();
-    expect(cfg.configured).toBe(true);
-    expect(cfg.providerLabel).toBe('ollama');
-    expect(cfg.apiKey).toBe('ollama');
+    expect(cfg.configured).toBe(false);
+    expect(cfg.apiKey).toBe('');
+    expect(cfg.providerLabel).toBe('openai-compatible');
+    expect(llmConfigured()).toBe(false);
   });
 
   it('respects LLM_PRIMARY_MODEL and LLM_CHEAP_MODEL lists', () => {
