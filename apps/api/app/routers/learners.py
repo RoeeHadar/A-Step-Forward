@@ -3,12 +3,13 @@
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends
-
+from fastapi.responses import JSONResponse
 from learner_model_service.api import get_learner_model_service
 from schemas.learner_model import StudentModel
 from schemas.learners import LearnerProfile
 
 from ..core.auth import AuthCtx, require_learner
+from ..core.base_compat import base_compat_response
 from ..core.rate_limit import per_user
 from ..services.learner import get_learner_service
 
@@ -20,8 +21,8 @@ async def get_me(
     ctx: AuthCtx = Depends(require_learner),
     svc=Depends(get_learner_service),
     _=Depends(per_user("learners.me", per_min=120)),
-) -> LearnerProfile:
-    return await svc.get_or_create(ctx)
+) -> JSONResponse:
+    return base_compat_response(await svc.get_or_create(ctx))
 
 
 @router.get("/me/model", response_model=StudentModel)

@@ -5,6 +5,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Iterable
 
+from schemas._as90_compat import dump_base_compat
 from schemas.memory import MemoryRecord, MemoryType, MemoryUpdateInput
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -172,7 +173,7 @@ class TypedMemoryRepository:
         row.access_count = record.access_count
         row.superseded_by = record.superseded_by
         row.superseded_at = record.superseded_at
-        row.provenance = record.provenance.model_dump(mode="json")
+        row.provenance = dump_base_compat(record.provenance)
         row.kg_node_ids = record.kg_node_ids
         row.created_at = record.created_at
         row.updated_at = record.updated_at

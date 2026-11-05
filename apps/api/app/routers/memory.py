@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, Query
-
+from fastapi.responses import JSONResponse
 from memory_service.api import get_memory_service
 from schemas.memory import (
     MemoryRecord,
@@ -14,6 +14,7 @@ from schemas.memory import (
 )
 
 from ..core.auth import AuthCtx, require_learner
+from ..core.base_compat import base_compat_response
 from ..core.rate_limit import per_user
 
 router = APIRouter(prefix="/v1/memory", tags=["memory"])
@@ -26,7 +27,7 @@ async def list_memories(
     q: str | None = Query(default=None, description="Optional search query"),
     k: int = Query(default=100, ge=1, le=200),
     _=Depends(per_user("memory.list", per_min=120)),
-) -> list[MemoryRecord]:
+) -> JSONResponse:
     if q:
         results = await svc.search(
             MemorySearchInput(
@@ -36,8 +37,8 @@ async def list_memories(
                 agent_id="user:memory_inspector",
             )
         )
-        return [r.record for r in results]
-    return await svc.timeline(learner_id=ctx.learner_id, k=k)
+        return base_compat_response([r.record for r in results])
+    return base_compat_response(await svc.timeline(learner_id=ctx.learner_id, k=k))
 
 
 @router.post("", response_model=MemoryRecord)
@@ -46,10 +47,11 @@ async def create(
     ctx: AuthCtx = Depends(require_learner),
     svc=Depends(get_memory_service),
     _=Depends(per_user("memory.create", per_min=60)),
-) -> MemoryRecord:
+) -> JSONResponse:
     if body.learner_id != ctx.learner_id:
         body = body.model_copy(update={"learner_id": ctx.learner_id})
-    return await svc.write(body, agent_id="user:memory_inspector", child_mode=ctx.child_mode)
+    record = await svc.write(body, agent_id="user:memory_inspector", child_mode=ctx.child_mode)
+    return base_compat_response(record)
 
 
 @router.post("/search", response_model=list[MemorySearchResult])
@@ -58,10 +60,10 @@ async def search(
     ctx: AuthCtx = Depends(require_learner),
     svc=Depends(get_memory_service),
     _=Depends(per_user("memory.search", per_min=120)),
-) -> list[MemorySearchResult]:
+) -> JSONResponse:
     if body.learner_id != ctx.learner_id:
         body = body.model_copy(update={"learner_id": ctx.learner_id})
-    return await svc.search(body)
+    return base_compat_response(await svc.search(body))
 
 
 @router.get("/timeline", response_model=list[MemoryRecord])
@@ -70,8 +72,8 @@ async def timeline(
     svc=Depends(get_memory_service),
     k: int = 100,
     _=Depends(per_user("memory.timeline", per_min=120)),
-) -> list[MemoryRecord]:
-    return await svc.timeline(learner_id=ctx.learner_id, k=k)
+) -> JSONResponse:
+    return base_compat_response(await svc.timeline(learner_id=ctx.learner_id, k=k))
 
 
 @router.patch("/{memory_id}", response_model=MemoryRecord)
@@ -81,8 +83,11 @@ async def update(
     ctx: AuthCtx = Depends(require_learner),
     svc=Depends(get_memory_service),
     _=Depends(per_user("memory.update", per_min=60)),
-) -> MemoryRecord:
-    return await svc.update(memory_id, patch, learner_id=ctx.learner_id, agent_id="user:memory_inspector")
+) -> JSONResponse:
+    record = await svc.update(
+        memory_id, patch, learner_id=ctx.learner_id, agent_id="user:memory_inspector"
+    )
+    return base_compat_response(record)
 
 
 @router.delete("/{memory_id}")

@@ -8,6 +8,7 @@ from typing import Any
 
 import structlog
 from neo4j import AsyncGraphDatabase, AsyncDriver, AsyncSession
+from schemas._as90_compat import dump_base_compat
 from schemas.graph import EdgeKind, KGEdge, KGNode, KGPath, NodeKind
 
 from ..settings import GraphRAGSettings
@@ -19,7 +20,7 @@ def _serialize_provenance(provenance: Any) -> str | None:
     if provenance is None:
         return None
     if hasattr(provenance, "model_dump"):
-        return json.dumps(provenance.model_dump(mode="json"))
+        return json.dumps(dump_base_compat(provenance))
     return json.dumps(provenance)
 
 

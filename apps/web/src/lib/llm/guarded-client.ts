@@ -37,6 +37,23 @@ export const GROQ_NATIVE_MODELS: ReadonlySet<string> = new Set([
   'llama-3.1-8b-instant',
 ]);
 
+/** The only chat endpoint allowed (ADR-0004, docs/adr/0004-llm-provider-groq.md:36). */
+export const GROQ_BASE_URL = 'https://api.groq.com/openai/v1';
+
+/**
+ * AS-100: check a configured base URL (LLM_BASE_URL / GROQ_BASE_URL). Unset or
+ * empty is fine (the Groq default is used). Otherwise, after trimming
+ * whitespace, surrounding quotes and trailing slashes, it must equal
+ * GROQ_BASE_URL exactly; anything else throws before any request.
+ */
+export function assertGroqBaseUrl(name: string, raw: string | undefined | null): void {
+  const v = (raw ?? '').trim().replace(/^["']|["']$/g, '').trim().replace(/\/+$/, '');
+  if (v === '' || v === GROQ_BASE_URL) return;
+  throw new LLMGuardError(
+    `${name} is not the Groq endpoint; only ${GROQ_BASE_URL} is allowed as the chat base URL (ADR-0004)`,
+  );
+}
+
 /** Normalise LLM_PROVIDER ('GROQ', ' Groq ', unset → 'groq'); anything else throws. */
 export function resolveProvider(raw: string | undefined | null): 'groq' {
   const p = (raw ?? '').trim().toLowerCase();

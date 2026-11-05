@@ -69,12 +69,16 @@ def test_budget_extra_fields_readable_as_attributes() -> None:
 
 
 def test_agent_manifest_model_attributes_read_stored_extras() -> None:
-    """AS-88 r1: AgentManifest extras (primary/fallback model) must not read None by attribute."""
+    """AS-88 r1 / AS-90: primary/fallback model must read their set values by attribute.
+
+    AS-90 declares them as real fields, so they live in model_fields, not model_extra.
+    """
     from agents import AGENT_REGISTRY
     from schemas._dynamic import FlexibleModel
 
     for manifest in AGENT_REGISTRY.values():
-        assert manifest.primary_model == manifest.model_extra["primary_model"]
-        assert manifest.fallback_model == manifest.model_extra["fallback_model"]
+        assert {"primary_model", "fallback_model"} <= set(type(manifest).model_fields)
+        assert manifest.primary_model == manifest.model_dump()["primary_model"]
+        assert manifest.fallback_model == manifest.model_dump()["fallback_model"]
         assert manifest.primary_model is not None
     assert FlexibleModel().definitely_absent_key is None

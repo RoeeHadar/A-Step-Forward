@@ -10,6 +10,7 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 
 from memory_service.event_writer import persist_memory_event
+from schemas._as90_compat import dump_base_compat
 from schemas.agents import AgentName, ChatChunk, ChatRequest
 
 from ..core.auth import AuthCtx, require_learner
@@ -96,7 +97,7 @@ async def chat(
                 age=ctx.age,
             ):
                 chunks.append(chunk)
-                payload = json.dumps(chunk.model_dump(), default=str)
+                payload = json.dumps(dump_base_compat(chunk, mode="python"), default=str)
                 yield f"event: {chunk.kind}\ndata: {payload}\n\n".encode()
         finally:
             _schedule_memory_event(

@@ -7,14 +7,43 @@ from ._dynamic import FlexibleModel, flexible_model
 
 class LearnerProfileInput(FlexibleModel):
     learner_id: str | None = None
+    # AS-90: fields read in production (was model_extra fallback).
+    attention_span: Any = None
+    background_notes: Any = None
+    goal: Any = None
+    grade_level: Any = None
+    hours_per_week: Any = None
+    points_group: Any = None
+    preferred_style: Any = None
+    self_scores: Any = None
+    subjects: Any = None
 
 
 class StudentModel(FlexibleModel):
     learner_id: str = ""
+    # AS-90: fields read in production (was model_extra fallback).
+    developing: Any = None
+    last_active: Any = None
+    mastery: Any = None
+    profile: Any = None
+    strong: Any = None
+    weak: Any = None
 
 
 class AdaptiveLearnerProfile(FlexibleModel):
     learner_id: str = ""
+    # AS-90: fields read in production (was model_extra fallback).
+    attention_span: Any = None
+    background_notes: Any = None
+    created_at: Any = None
+    goal: Any = None
+    grade_level: Any = None
+    hours_per_week: Any = None
+    points_group: Any = None
+    preferred_style: Any = None
+    self_scores: Any = None
+    subjects: Any = None
+    updated_at: Any = None
 
 
 # AS-89: restored from bbd20c4 (lost in the ed6747a schemas rewrite). Without them the

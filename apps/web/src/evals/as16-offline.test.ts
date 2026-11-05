@@ -579,7 +579,7 @@ describe('AS-16 offline journey eval (stub LLM, fake DB, no network)', () => {
     vi.useFakeTimers({ toFake: ['Date'], shouldAdvanceTime: true }); // AS-47 journey clock
     for (const k of ['DATABASE_URL', 'POSTGRES_URL', 'GROQ_API_KEY', 'LLM_API_KEY', 'XAI_API_KEY', 'LANGFUSE_SECRET_KEY', 'LANGFUSE_PUBLIC_KEY']) delete process.env[k];
     process.env.LLM_API_KEY = 'placeholder-offline';
-    process.env.LLM_BASE_URL = 'http://eval.invalid/v1';
+    process.env.LLM_BASE_URL = 'https://api.groq.com/openai/v1'; // AS-100: only Groq is accepted; fetch is faked
     installGuard();
     POST = (await import('@/app/api/chat/route')).POST;
   }, 60_000);

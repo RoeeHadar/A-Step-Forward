@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from diagnostic_service.api import get_diagnostic_service
 from fastapi import APIRouter, Depends
-
+from fastapi.responses import JSONResponse
 from schemas.diagnostic import (
     DiagnosticAnswerRequest,
     DiagnosticAnswerResponse,
@@ -14,6 +14,7 @@ from schemas.diagnostic import (
 )
 
 from ..core.auth import AuthCtx, require_learner
+from ..core.base_compat import base_compat_response
 from ..core.rate_limit import per_user
 
 router = APIRouter(prefix="/v1/diagnostic", tags=["diagnostic"])
@@ -36,8 +37,8 @@ async def answer_diagnostic(
     ctx: AuthCtx = Depends(require_learner),
     svc=Depends(get_diagnostic_service),
     _=Depends(per_user("diagnostic.answer", per_min=120)),
-) -> DiagnosticAnswerResponse:
-    return await svc.answer(ctx.learner_id, session_id, body)
+) -> JSONResponse:
+    return base_compat_response(await svc.answer(ctx.learner_id, session_id, body))
 
 
 @router.get("/{session_id}", response_model=DiagnosticSessionState)

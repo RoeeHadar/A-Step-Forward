@@ -61,7 +61,7 @@ async function drain(it: AsyncGenerator<string>): Promise<string> {
 beforeEach(() => {
   process.env = { ...ENV };
   process.env.LLM_API_KEY = 'placeholder-offline';
-  process.env.LLM_BASE_URL = 'http://test.invalid/v1';
+  process.env.LLM_BASE_URL = 'https://api.groq.com/openai/v1'; // AS-100: only Groq is accepted; fetch is faked
   for (const k of ['LLM_PROVIDER', 'GROQ_API_KEY', 'LLM_PRIMARY_MODEL', 'LLM_CHEAP_MODEL', 'LLM_FALLBACK_MODELS', 'CHAT_MODEL_POLICY', 'NVIDIA_API_KEY', 'NVIDIA_FALLBACK_MODELS', 'ALLOW_REAL_LLM', 'EVAL_REAL']) delete process.env[k];
   resetLLMConfigCache();
   fetchMock.mockReset();

@@ -8,7 +8,12 @@ import {
   selectNextOpenItemId,
   GRADE_ITEM_MAX_RETRIES,
 } from './assessment-grading-logic';
-import { aggregateProcessScores, perTopicFromItemScores } from './process-grader';
+import {
+  aggregateProcessScores,
+  gradeOpenItemProcess,
+  perTopicFromItemScores,
+} from './process-grader';
+import { llmCompleteJson } from '@/lib/llm-provider';
 import { evaluateGatePass } from './plan-pacing';
 import { quizSubmitResponseSchema } from '../../../../packages/schemas/ts/learning_path';
 
@@ -259,14 +264,17 @@ vi.mock('@/lib/llm-provider', () => ({
   llmCompleteJson: vi.fn(),
 }));
 
+// AS-94: these tests used to call vi.resetModules() and then `await import()`
+// process-grader in every test. That re-loaded its module graph (including the
+// 520 KB exam-style corpus JSON) inside each test's 5 s timeout, so under
+// full-suite contention one of them could time out. The mock is hoisted, so
+// static imports already get it; we only need to reset the mock between tests.
 describe('gradeOpenItemProcess (mocked LLM)', () => {
   beforeEach(() => {
-    vi.resetModules();
+    vi.mocked(llmCompleteJson).mockReset();
   });
 
   it('empty response → graded 0 without LLM', async () => {
-    const { llmCompleteJson } = await import('@/lib/llm-provider');
-    const { gradeOpenItemProcess } = await import('./process-grader');
     const out = await gradeOpenItemProcess({
       item_id: 'x',
       stem: 'Prove…',
@@ -281,9 +289,7 @@ describe('gradeOpenItemProcess (mocked LLM)', () => {
   });
 
   it('LLM failure → failed status with incremented retries (no invented score)', async () => {
-    const { llmCompleteJson } = await import('@/lib/llm-provider');
     vi.mocked(llmCompleteJson).mockResolvedValueOnce({ json: null } as never);
-    const { gradeOpenItemProcess } = await import('./process-grader');
     const out = await gradeOpenItemProcess({
       item_id: 'x',
       stem: 'Prove…',
@@ -297,7 +303,6 @@ describe('gradeOpenItemProcess (mocked LLM)', () => {
   });
 
   it('clamps points_earned and computes process_score', async () => {
-    const { llmCompleteJson } = await import('@/lib/llm-provider');
     vi.mocked(llmCompleteJson).mockResolvedValueOnce({
       json: {
         strengths: 'ok',
@@ -309,7 +314,6 @@ describe('gradeOpenItemProcess (mocked LLM)', () => {
         next_fix: 'none',
       },
     } as never);
-    const { gradeOpenItemProcess } = await import('./process-grader');
     const out = await gradeOpenItemProcess({
       item_id: 'x',
       stem: 'Prove…',
@@ -322,7 +326,6 @@ describe('gradeOpenItemProcess (mocked LLM)', () => {
   });
 
   it('partial credit is process-aware (not binary)', async () => {
-    const { llmCompleteJson } = await import('@/lib/llm-provider');
     vi.mocked(llmCompleteJson).mockResolvedValueOnce({
       json: {
         strengths: 'started well',
@@ -334,7 +337,6 @@ describe('gradeOpenItemProcess (mocked LLM)', () => {
         next_fix: 'finish the proof',
       },
     } as never);
-    const { gradeOpenItemProcess } = await import('./process-grader');
     const out = await gradeOpenItemProcess({
       item_id: 'x',
       stem: 'Prove…',

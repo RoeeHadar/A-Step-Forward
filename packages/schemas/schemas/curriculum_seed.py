@@ -10,6 +10,8 @@ from ._dynamic import FlexibleModel, flexible_model
 
 class SeedBundle(FlexibleModel):
     courses: list[Any] = Field(default_factory=list)
+    # AS-90: set by load_seed_course (was model_extra fallback).
+    source: str | None = None
 
 
 def load_seed_course(path: str | Path | None = None) -> SeedBundle:

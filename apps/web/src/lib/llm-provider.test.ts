@@ -37,15 +37,16 @@ describe('llm-provider config', () => {
     expect(llmConfigured()).toBe(true);
   });
 
-  it('supports Ollama without API key', () => {
+  it('AS-103: keyless local base URL is not configured (no ollama fallback key)', () => {
     delete process.env.GROQ_API_KEY;
     delete process.env.LLM_API_KEY;
     process.env.LLM_BASE_URL = 'http://localhost:11434/v1';
     resetLLMConfigCache();
     const cfg = getLLMConfig();
-    expect(cfg.configured).toBe(true);
-    expect(cfg.providerLabel).toBe('ollama');
-    expect(cfg.apiKey).toBe('ollama');
+    expect(cfg.configured).toBe(false);
+    expect(cfg.apiKey).toBe('');
+    expect(cfg.providerLabel).toBe('openai-compatible');
+    expect(llmConfigured()).toBe(false);
   });
 
   it('respects LLM_PRIMARY_MODEL and LLM_CHEAP_MODEL lists', () => {
@@ -115,42 +116,31 @@ describe('llm-provider multi-provider (NVIDIA fallback)', () => {
     expect(providers[0]!.label).toBe('groq');
   });
 
-  it('lists the NVIDIA provider but keeps NVIDIA models out of the chat chain (AS-95, ADR-0004 Groq-only)', () => {
+  it('NVIDIA env never adds a chat provider (AS-101)', () => {
     baseGroqEnv();
     process.env.NVIDIA_API_KEY = 'nvapi-xxx';
     process.env.NVIDIA_BASE_URL = 'https://integrate.api.nvidia.com/v1';
     process.env.NVIDIA_FALLBACK_MODELS =
-      'meta/llama-3.3-70b-instruct,qwen/qwen2.5-72b-instruct';
+      'meta/llama-3.3-70b-instruct,llama-3.1-8b-instant';
     resetLLMConfigCache();
 
     const providers = getChatProviders();
-    expect(providers).toHaveLength(2);
-    expect(providers[1]!.label).toBe('nvidia');
-
+    expect(providers).toHaveLength(1);
+    expect(providers[0]!.label).toBe('groq');
     const chain = resolveChatModelChain();
     expect(chain).toContain('llama-3.3-70b-versatile');
     expect(chain).not.toContain('meta/llama-3.3-70b-instruct');
-    expect(chain).not.toContain('qwen/qwen2.5-72b-instruct');
   });
 
-  it('routes each model to the provider that lists it', () => {
+  it('routes every model to the Groq provider (AS-101)', () => {
     baseGroqEnv();
     process.env.NVIDIA_API_KEY = 'nvapi-xxx';
     process.env.NVIDIA_FALLBACK_MODELS = 'meta/llama-3.3-70b-instruct';
     resetLLMConfigCache();
 
     expect(resolveProviderForModel('llama-3.3-70b-versatile').label).toBe('groq');
-    expect(resolveProviderForModel('meta/llama-3.3-70b-instruct').label).toBe('nvidia');
-    // Unknown model falls back to the primary provider.
+    expect(resolveProviderForModel('meta/llama-3.3-70b-instruct').label).toBe('groq');
     expect(resolveProviderForModel('some-unknown-model').label).toBe('groq');
-  });
-
-  it('ignores NVIDIA when key present but no models listed', () => {
-    baseGroqEnv();
-    process.env.NVIDIA_API_KEY = 'nvapi-xxx';
-    delete process.env.NVIDIA_FALLBACK_MODELS;
-    resetLLMConfigCache();
-    expect(getChatProviders()).toHaveLength(1);
   });
 });
 
