@@ -16,8 +16,8 @@ import {
 export interface PlanLiveSnapshotInput {
   goal: string | null;
   goalKey?: string | null;
-  nextTestDate?: string | null;
-  finalGoalDate?: string | null;
+  nextTestDate?: string | Date | null; // AS-61: resolveGoalDeadlineIso accepts Date
+  finalGoalDate?: string | Date | null;
   planStartIso?: string | null;
   readiness?: number | null;
   weakConceptLabels?: string[];

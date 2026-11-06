@@ -139,13 +139,13 @@ function mapRow(r: Record<string, unknown>): LessonBookingRow {
     notes: r.notes == null ? null : String(r.notes),
     duration_h: Number(r.duration_h),
     price_ils: Number(r.price_ils),
-    preferred_start: new Date(String(r.preferred_start)).toISOString(),
-    preferred_end: new Date(String(r.preferred_end)).toISOString(),
+    preferred_start: new Date(r.preferred_start as string | Date).toISOString(), // AS-61: driver Date; String(Date) dropped ms
+    preferred_end: new Date(r.preferred_end as string | Date).toISOString(), // AS-61: driver Date; String(Date) dropped ms
     proposed_windows: r.proposed_windows ?? [],
     selected_window: r.selected_window ?? null,
     share_dossier: Boolean(r.share_dossier),
-    created_at: new Date(String(r.created_at)).toISOString(),
-    updated_at: new Date(String(r.updated_at)).toISOString(),
+    created_at: new Date(r.created_at as string | Date).toISOString(), // AS-61: driver Date; String(Date) dropped ms
+    updated_at: new Date(r.updated_at as string | Date).toISOString(), // AS-61: driver Date; String(Date) dropped ms
   };
 }
 

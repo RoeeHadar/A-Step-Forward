@@ -33,8 +33,8 @@ const baseProfile: LearnerProfileRow = {
   weak_concepts: null,
   strong_concepts: null,
   wellbeing_plan_bias: null,
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
+  created_at: new Date(),
+  updated_at: new Date(),
 };
 
 describe('canPersistWellbeingRewrite cooldowns', () => {

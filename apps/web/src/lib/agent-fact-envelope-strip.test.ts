@@ -24,7 +24,7 @@ const examFact = encodeFactContent('exam in 2 weeks', { key: 'goal:exam_date', n
 const langFact = encodeFactContent('prefers Hebrew', { key: 'preference:language', n: 1, valid_to: null });
 const note = (id: string, content: string): LearnerAgentNote => ({
   id, learner_id: 'u-test', agent: 'mentor', kind: 'goal', content, importance: 3,
-  related_concept_id: null, source_turn_id: null, created_at: '2026-01-01T00:00:00Z', last_referenced_at: null,
+  related_concept_id: null, source_turn_id: null, created_at: new Date('2026-01-01T00:00:00Z'), last_referenced_at: null,
 });
 
 describe('dream dedup ignores the fact envelope', () => {

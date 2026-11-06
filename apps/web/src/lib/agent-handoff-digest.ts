@@ -11,7 +11,7 @@ export interface DigestNote {
   content: string;
   importance: number;
   related_concept_id?: string | null;
-  created_at?: string | null;
+  created_at?: string | Date | null; // AS-61: neon timestamptz → Date (body uses new Date(x))
   /** AS-52 r1: note uuid, rendered for the Mentor only (evidence_note_ids for propose_plan_change). */
   id?: string | null;
 }

@@ -44,7 +44,7 @@ export default async function PersonaSettingsPage() {
       <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-10">
         <PersonaEditor
           initialText={persona?.text ?? null}
-          updatedAt={persona?.updated_at ?? null}
+          updatedAt={persona?.updated_at ? persona.updated_at.toISOString() : null}
           noteCountsByAgent={noteCountsByAgent}
         />
       </div>

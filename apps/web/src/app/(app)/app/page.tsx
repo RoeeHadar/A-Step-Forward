@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+import { toIsoDateOnly } from '@/lib/goal-track'; // AS-61: DATE → YYYY-MM-DD client prop
 import { Suspense } from 'react';
 import { DashboardContent } from '@/components/dashboard-content';
 import { AgentsIntroBanner } from '@/components/agents-intro-banner';
@@ -94,8 +95,8 @@ export default async function DashboardPage() {
       <DashboardContent
         displayName={auth.displayName}
         plan={plan}
-        nextTestDate={profile?.next_test_date ?? null}
-        finalGoalDate={profile?.final_goal_date ?? null}
+        nextTestDate={toIsoDateOnly(profile?.next_test_date)}
+        finalGoalDate={toIsoDateOnly(profile?.final_goal_date)}
         streak={streak}
         pointsGroup={profile?.points_group ?? null}
         subjects={profile?.subjects ?? null}

@@ -47,7 +47,7 @@ import {
   resolveGoalConceptId,
   ROLLING_VISIBLE_WEEKS,
 } from './plan-worklist';
-import { daysUntilIso, resolveGoalDeadlineIso } from './goal-track';
+import { daysUntilIso, resolveGoalDeadlineIso, toIsoDateOnly } from './goal-track';
 import {
   conceptsPerWeekFromHours,
   isPlanExpired,
@@ -220,15 +220,15 @@ export interface LearnerProfileRow {
   self_scores: Record<string, number> | null;
   background_notes: string | null;
   next_test_name: string | null;
-  next_test_date: string | null;
-  final_goal_date: string | null;
+  next_test_date: Date | null; // AS-61: DATE → Date (neon 0.10.4)
+  final_goal_date: Date | null;
   mental_state: Record<string, unknown> | null;
   personality_profile: Record<string, unknown> | null;
   weak_concepts: string[] | null;
   strong_concepts: string[] | null;
   wellbeing_plan_bias: Record<string, unknown> | null;
-  created_at: string;
-  updated_at: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export async function upsertLearnerProfile(
@@ -550,7 +550,7 @@ async function loadActivePlanStub(learnerId: string): Promise<LearningPlan | nul
     id: string;
     week_number: number;
     concepts: string[];
-    quiz_due_at: string | null;
+    quiz_due_at: Date | null; // AS-61: raw timestamptz
     status: string;
   }>;
 
@@ -574,7 +574,7 @@ async function loadActivePlanStub(learnerId: string): Promise<LearningPlan | nul
       concepts: w.concepts.map((token) =>
         litePlanConceptFromToken(token, subjects, mastery, profile?.points_group),
       ),
-      quiz_due_at: w.quiz_due_at,
+      quiz_due_at: w.quiz_due_at ? new Date(w.quiz_due_at).toISOString() : null, // AS-61: driver Date → ISO
       status: w.status,
     })),
   };
@@ -1132,7 +1132,7 @@ export interface PlanWeek {
   plan_id: string;
   week_number: number;
   concepts: PlanConcept[];
-  quiz_due_at: string | null;
+  quiz_due_at: string | null; // AS-61: built object (client-consumed via JSON); ISO string, normalised from the driver Date
   status: string;
 }
 
@@ -2545,7 +2545,7 @@ export async function getCurrentPlan(learnerId: string): Promise<LearningPlan | 
     id: string;
     week_number: number;
     concepts: string[];
-    quiz_due_at: string | null;
+    quiz_due_at: Date | null; // AS-61: raw timestamptz
     status: string;
   }>;
 
@@ -2567,7 +2567,7 @@ export async function getCurrentPlan(learnerId: string): Promise<LearningPlan | 
       plan_id: plan.id,
       week_number: w.week_number,
       concepts: hydrated,
-      quiz_due_at: w.quiz_due_at,
+      quiz_due_at: w.quiz_due_at ? new Date(w.quiz_due_at).toISOString() : null, // AS-61: driver Date → ISO
       status: w.status,
     });
   }
@@ -2639,7 +2639,7 @@ export function computeFullPacing(
     masteryScores: mastery,
     hoursPerWeek: profile?.hours_per_week ?? null,
     attentionSpanMin,
-    deadlineISO: profile?.next_test_date ?? profile?.final_goal_date ?? null,
+    deadlineISO: toIsoDateOnly(profile?.next_test_date ?? profile?.final_goal_date ?? null), // AS-61
     trailingVelocity: opts?.trailingVelocity ?? null,
     loadMultiplier,
   });
@@ -2806,7 +2806,7 @@ export interface ChatTurn {
   role: 'user' | 'assistant';
   content: string;
   agent: string;
-  created_at: string;
+  created_at: Date; // AS-61: timestamptz
 }
 
 export async function recordChatTurn(
@@ -2892,7 +2892,7 @@ export interface ChatHistoryMessage {
   id: string;
   role: 'user' | 'assistant';
   content: string;
-  created_at: string;
+  created_at: Date; // AS-61: timestamptz
 }
 
 export async function fetchChatHistory(
@@ -3036,7 +3036,7 @@ export interface ConceptExplanation {
   source_lang: string;
   license: string;
   attribution: string;
-  fetched_at: string;
+  fetched_at: Date; // AS-61: timestamptz
 }
 
 export interface ConceptCoverage {
@@ -3686,7 +3686,7 @@ async function applyPracticeMasteryUpdate(
 export interface LearnerPersona {
   learner_id: string;
   text: string | null;
-  updated_at: string | null;
+  updated_at: Date | null; // AS-61: timestamptz
 }
 
 export async function getLearnerPersona(
@@ -3776,8 +3776,8 @@ export interface LearnerAgentNote {
   importance: number;
   related_concept_id: string | null;
   source_turn_id: string | null;
-  created_at: string;
-  last_referenced_at: string | null;
+  created_at: Date; // AS-61: timestamptz
+  last_referenced_at: Date | null;
 }
 
 /**
@@ -4369,7 +4369,7 @@ export interface DashboardRecentLesson {
   subject: string;
   progress: number; // 0..1
   est_minutes: number | null;
-  last_activity: string; // ISO
+  last_activity: Date; // AS-61: raw timestamptz (was "ISO")
 }
 
 export interface DashboardMasteryItem {
@@ -4443,7 +4443,7 @@ export async function getDashboardSnapshot(
     const allMastery = masteryRowsRaw as Array<{
       concept_id: string;
       score: number;
-      last_activity: string | null;
+      last_activity: Date | null;
     }>;
     const atomCountRows = atomCountRowsRaw as Array<{ n: number }>;
     const completed = allMastery.filter((r) => Number(r.score) >= 0.7).length;
@@ -4472,7 +4472,7 @@ export async function getDashboardSnapshot(
           subject: kgInfo?.subject ?? inferSubject(r.concept_id, []),
           progress: Number(r.score),
           est_minutes: meta?.est_minutes ?? null,
-          last_activity: r.last_activity as string,
+          last_activity: r.last_activity as Date,
         };
       });
 
@@ -4521,7 +4521,7 @@ export function mapDashboardSnapshotToLearnerDashboard(
       id: l.id ?? l.concept_id,
       title: l.title,
       progress: l.progress,
-      last_accessed_at: l.last_activity,
+      last_accessed_at: l.last_activity.toISOString(), // AS-61: driver Date → ISO
       est_minutes: l.est_minutes ?? 20,
     })),
     mastery_summary: snap.mastery_summary.map((m) => ({
@@ -4881,11 +4881,12 @@ export interface LearnerMemorySnapshot {
 const MEMORY_TAB_AGENTS = ['tutor', 'mentor', 'coach', 'reviewer'] as const;
 
 /** Latest of a set of ISO timestamps, ignoring null/invalid. */
-function latestTimestamp(values: Array<string | null | undefined>): string | null {
+function latestTimestamp(values: Array<string | Date | null | undefined>): string | null {
   let bestMs = -Infinity;
   let best: string | null = null;
-  for (const v of values) {
-    if (!v) continue;
+  for (const raw of values) {
+    if (!raw) continue;
+    const v = raw instanceof Date ? raw.toISOString() : raw; // AS-61: driver Date
     const ms = new Date(v).getTime();
     if (Number.isFinite(ms) && ms > bestMs) {
       bestMs = ms;
@@ -5019,7 +5020,7 @@ export async function getLearnerMemorySnapshot(
     // One-time migration: rewrite English diagnostic dumps in the stored persona
     // so About-me stays Hebrew even without client-side localization.
     let personaText = persona?.text ?? null;
-    let personaUpdatedAt = persona?.updated_at ?? null;
+    let personaUpdatedAt = persona?.updated_at ? persona.updated_at.toISOString() : null; // AS-61: Date → ISO (JSON snapshot)
     if (
       personaText &&
       personaNeedsDiagnosticMigration(personaText) &&
@@ -5055,8 +5056,8 @@ export async function getLearnerMemorySnapshot(
             preferred_style: profile.preferred_style,
             background_notes: profile.background_notes,
             next_test_name: profile.next_test_name,
-            next_test_date: profile.next_test_date,
-            final_goal_date: profile.final_goal_date,
+            next_test_date: toIsoDateOnly(profile.next_test_date), // AS-61: DATE → YYYY-MM-DD
+            final_goal_date: toIsoDateOnly(profile.final_goal_date),
             grade_level: profile.grade_level,
             points_group: profile.points_group,
           }
@@ -5444,7 +5445,7 @@ export interface PublicShareStats {
 
 export interface MockExamHistoryItem {
   score_pct: number;
-  date: string;
+  date: Date; // AS-61: raw mock_exam_results.created_at
   subject: string;
 }
 
@@ -5513,7 +5514,7 @@ export async function getMockExamHistory(
     `) as Array<{
       score_mcq: number;
       max_mcq: number;
-      created_at: string;
+      created_at: Date;
       subject: string;
     }>;
 
