@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useId, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { MarkdownMath } from '@/components/markdown-math';
 import { Check, X, HelpCircle, ChevronUp, ChevronDown, Pencil, Eye, EyeOff } from 'lucide-react';
@@ -30,7 +30,7 @@ type Lang = 'en' | 'he';
 const DIFFICULTY_TINT: Record<LessonQuestionRow['difficulty'], string> = {
   easy: 'bg-emerald-500/10 text-emerald-400',
   medium: 'bg-accent-amber/10 text-accent-amber',
-  hard: 'bg-destructive/10 text-destructive',
+  hard: 'bg-destructive/10 text-rose-300',
 };
 
 /** Label shown to the student, calibrated relative to their level. */
@@ -128,6 +128,21 @@ function shuffleOrderingIndices(n: number): number[] {
   return shuffled.reverse();
 }
 
+/** Readable plain-text fallback for a markdown/TeX label, used as an accessible name
+ * when KaTeX output alone yields an empty name (math-only match labels). */
+function plainLabel(src: string): string {
+  return src
+    .replace(/\$+/g, '')
+    .replace(/\\(?:frac)\{([^}]*)\}\{([^}]*)\}/g, '$1 over $2')
+    .replace(/\\sqrt\{([^}]*)\}/g, 'square root of $1')
+    .replace(/\^\{?([^}\s]+)\}?/g, ' to the power $1')
+    .replace(/_\{?([^}\s]+)\}?/g, ' sub $1')
+    .replace(/\\([a-zA-Z]+)/g, '$1')
+    .replace(/[{}*_`#]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function MarkdownInline({ content }: { content: string }) {
   return <MarkdownMath>{content}</MarkdownMath>;
 }
@@ -177,6 +192,7 @@ function QuestionCard({
   const [openText, setOpenText] = useState('');
   const [multiSelected, setMultiSelected] = useState<Set<number>>(new Set());
   const [matchSelections, setMatchSelections] = useState<Record<number, number | null>>({});
+  const matchIdBase = useId();
   const [ordering, setOrdering] = useState<number[]>(() => {
     const payload = question.answer_payload;
     if (question.kind !== 'ordering' || !payload) return [];
@@ -352,7 +368,7 @@ function QuestionCard({
           #{question.ord}
         </span>
         {question.kind === 'open' || question.kind === 'derivation' ? (
-          <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-amber-800 dark:text-amber-300">
+          <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-amber-200">
             <Pencil className="h-3 w-3" aria-hidden />
             {kindLabel}
           </span>
@@ -576,11 +592,12 @@ function QuestionCard({
             }
             return (
               <div key={i} className={`flex flex-col gap-2 rounded-lg border bg-surface-1/50 p-3 text-sm sm:flex-row sm:items-center ${cls}`}>
-                <span className="flex-1 font-medium">
+                <span id={`${matchIdBase}-left-${i}`} className="flex-1 font-medium">
                   <MarkdownInline content={left} />
                 </span>
                 <span className="text-xs text-muted-foreground">→</span>
                 <select
+                  aria-label={plainLabel(left)}
                   disabled={state.submitted || busy}
                   value={userChoice ?? ''}
                   onChange={(e) => {

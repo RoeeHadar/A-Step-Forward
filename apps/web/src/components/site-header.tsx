@@ -40,6 +40,10 @@ function isClerkAdmin(user: ReturnType<typeof useUser>['user']): boolean {
   return (user?.publicMetadata?.role as string | undefined) === 'admin';
 }
 
+
+const navLinkFocus =
+  'rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2';
+
 export function SiteHeader() {
   const pathname = usePathname();
   const { resolved, setTheme } = useTheme();
@@ -83,10 +87,13 @@ export function SiteHeader() {
       )}
     >
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
-        <div className="flex items-center gap-6">
+        <div className="flex shrink-0 items-center gap-6">
           <Link
             href={brandHref}
-            className="flex items-center gap-2 transition-opacity hover:opacity-80"
+            className={cn(
+              'flex items-center gap-2 transition-opacity hover:opacity-80',
+              navLinkFocus,
+            )}
           >
             <span
               className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground shadow-sm"
@@ -110,6 +117,7 @@ export function SiteHeader() {
                   href={link.href}
                   className={cn(
                     'relative px-3 py-2 text-sm transition-colors hover:text-foreground',
+                    navLinkFocus,
                     isActive(link.href, link.exact)
                       ? 'font-medium text-foreground'
                       : 'text-muted-foreground',
@@ -131,6 +139,7 @@ export function SiteHeader() {
                     href="/book"
                     className={cn(
                       'relative px-3 py-2 text-sm transition-colors hover:text-foreground',
+                    navLinkFocus,
                       isActive('/book')
                         ? 'font-medium text-foreground'
                         : 'text-muted-foreground',
@@ -151,6 +160,7 @@ export function SiteHeader() {
                       href={link.href}
                       className={cn(
                         'relative px-3 py-2 text-sm transition-colors hover:text-foreground',
+                    navLinkFocus,
                         isActive(link.href)
                           ? 'font-medium text-foreground'
                           : 'text-muted-foreground',
@@ -176,6 +186,7 @@ export function SiteHeader() {
                             href={link.href}
                             className={cn(
                               'relative px-3 py-2 text-sm transition-colors hover:text-foreground',
+                    navLinkFocus,
                               isActive(link.href)
                                 ? 'font-medium text-foreground'
                                 : 'text-muted-foreground',
@@ -196,6 +207,7 @@ export function SiteHeader() {
                       href="/admin"
                       className={cn(
                         'relative px-3 py-2 text-sm transition-colors hover:text-foreground',
+                    navLinkFocus,
                         isActive('/admin')
                           ? 'font-medium text-foreground'
                           : 'text-muted-foreground',
@@ -216,12 +228,13 @@ export function SiteHeader() {
           </nav>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex min-w-0 items-center gap-2">
           {isEducatorShell ? (
             <Link
               href="/educator"
               className={cn(
                 'inline-flex rounded-lg px-2.5 py-1.5 text-sm font-medium md:hidden',
+                  navLinkFocus,
                 pathname === '/educator'
                   ? 'bg-primary/15 text-primary'
                   : 'text-muted-foreground hover:text-foreground',
@@ -235,7 +248,8 @@ export function SiteHeader() {
               <Link
                 href="/learn"
                 className={cn(
-                  'inline-flex rounded-lg px-2.5 py-1.5 text-sm font-medium md:hidden',
+                  'hidden rounded-lg px-2.5 py-1.5 text-sm font-medium sm:inline-flex md:hidden',
+                  navLinkFocus,
                   isActive('/learn')
                     ? 'bg-primary/15 text-primary'
                     : 'text-muted-foreground hover:text-foreground',
@@ -249,6 +263,7 @@ export function SiteHeader() {
                   href="/admin"
                   className={cn(
                     'inline-flex rounded-lg px-2.5 py-1.5 text-sm font-medium md:hidden',
+                  navLinkFocus,
                     isActive('/admin')
                       ? 'bg-primary/15 text-primary'
                       : 'text-muted-foreground hover:text-foreground',
@@ -260,7 +275,8 @@ export function SiteHeader() {
                 <Link
                   href="/book"
                   className={cn(
-                    'inline-flex rounded-lg px-2.5 py-1.5 text-sm font-medium md:hidden',
+                    'hidden rounded-lg px-2.5 py-1.5 text-sm font-medium sm:inline-flex md:hidden',
+                  navLinkFocus,
                     isActive('/book')
                       ? 'bg-primary/15 text-primary'
                       : 'text-muted-foreground hover:text-foreground',
@@ -276,7 +292,7 @@ export function SiteHeader() {
             size="sm"
             onClick={() => setLocale(otherLocale)}
             className="h-8 min-w-8 px-2 text-xs font-semibold text-muted-foreground hover:text-foreground"
-            aria-label={messages.common.selectLanguage}
+            aria-label={`${localeToggleLabel[locale]} – ${messages.common.selectLanguage}`}
           >
             {localeToggleLabel[locale]}
           </Button>
@@ -303,7 +319,7 @@ export function SiteHeader() {
             </SignInButton>
             <Link
               href="/sign-up"
-              className="inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="hidden items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:inline-flex"
             >
               {messages.nav.signUp}
             </Link>

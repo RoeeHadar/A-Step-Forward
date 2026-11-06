@@ -1056,7 +1056,7 @@ export default function OnboardingPage() {
               </div>
               {needsPointsGroup && (
                 <div>
-                  <FieldLabel hint={t.s0_unitsHint} className="mb-1.5 block text-xs">
+                  <FieldLabel htmlFor="points-group" hint={t.s0_unitsHint} className="mb-1.5 block text-xs">
                     {t.s0_units}
                   </FieldLabel>
                   <select
@@ -1111,7 +1111,7 @@ export default function OnboardingPage() {
 
             {needsUniversity ? (
               <div>
-                <FieldLabel hint={t.s0_universityHint} className="mb-1.5 block text-xs">
+                <FieldLabel htmlFor="target-university" hint={t.s0_universityHint} className="mb-1.5 block text-xs">
                   {t.s0_university}
                 </FieldLabel>
                 <select
