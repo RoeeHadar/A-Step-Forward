@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from pydantic import Field
 
 from ._dynamic import FlexibleModel, flexible_model
-from .common import ConfidenceScore, IDStr, Provenance, ProvenanceBody
+from .common import ConfidenceScore, DateTimeStr, IDStr, Provenance, ProvenanceBody
 
 
 class MemoryType(StrEnum):
@@ -173,6 +173,8 @@ class MemorySearchBody(MemorySearchInput):
     query: str = Field(min_length=1, max_length=2000)
     k: int = Field(default=10, ge=1, le=200)
     min_strength: ConfidenceScore = 0.0
+    # AS-120: ref type and default (3b7d2774 memory.py:86); None and False read the same.
+    include_archived: bool = False
 
 
 class CompactionBody(CompactionInput):
@@ -201,6 +203,8 @@ class MemoryWriteBody(MemoryWriteInput):
     valence: float | None = Field(default=None, ge=-1.0, le=1.0)
     importance_hint: ConfidenceScore | None = None
     provenance: ProvenanceBody
+    # AS-120: ref type (3b7d2774 memory.py:74), kept as the ISO string (DateTimeStr).
+    expires_at: DateTimeStr | None = None
 
 
 class MemoryUpdateBody(MemoryUpdateInput):

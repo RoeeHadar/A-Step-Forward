@@ -94,3 +94,9 @@ class LearnerProfileBody(LearnerProfileInput):
     subjects: list[str] = Field(min_length=1)
     hours_per_week: float = Field(ge=1, le=40)
     attention_span: int | None = Field(default=None, ge=10, le=180)
+    # AS-120: ref types and default (3b7d2774 learner_model.py:14-21).
+    grade_level: str | None = None
+    points_group: str | None = None
+    preferred_style: str | None = None
+    self_scores: dict[str, int] = Field(default_factory=dict)
+    background_notes: str | None = None

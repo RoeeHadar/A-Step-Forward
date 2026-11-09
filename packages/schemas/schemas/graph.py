@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from enum import StrEnum
-from typing import Any
+from typing import Annotated, Any, Literal
 
-from pydantic import Field
+from pydantic import AfterValidator, Field
 
 from ._dynamic import FlexibleModel, flexible_model
 from .common import ConfidenceScore, IDStr
@@ -190,12 +190,29 @@ class Relation(FlexibleModel):
 # output. Instances are still the base type, so services are unchanged.
 
 
+# AS-120: the ref (3b7d2774) kind enums for untrusted input. The shared NodeKind /
+# EdgeKind keep the 01c27b73 stub members (source, related_to, prerequisite) for the
+# internal defaults, but no caller, prompt or repo data sends them as input. Validated
+# values are converted to the shared enums, so the services see the same types.
+RefNodeKind = StrEnum(
+    "RefNodeKind", {k.name: k.value for k in NodeKind if k is not NodeKind.SOURCE}
+)
+RefEdgeKind = StrEnum(
+    "RefEdgeKind",
+    {k.name: k.value for k in EdgeKind if k not in (EdgeKind.RELATED_TO, EdgeKind.PREREQUISITE)},
+)
+NodeKindIn = Annotated[RefNodeKind, AfterValidator(lambda v: NodeKind(v.value))]
+EdgeKindIn = Annotated[RefEdgeKind, AfterValidator(lambda v: EdgeKind(v.value))]
+
+
 class KGSearchBody(KGSearchInput):
     """POST /v1/graphrag/search body and MCP kg.search input (pre-AS-90: query required)."""
 
     query: str
     # AS-113: pre-AS-90 bound (3b7d2774 graph.py:67).
     k: int = Field(default=10, ge=1, le=200)
+    # AS-120: ref type (3b7d2774 graph.py:68).
+    kinds: list[NodeKindIn] | None = None
 
 
 class KGHybridBody(KGHybridInput):
@@ -204,6 +221,8 @@ class KGHybridBody(KGHybridInput):
     query: str
     # AS-113: pre-AS-90 type (3b7d2774 graph.py:82); k/depth had no bounds there.
     learner_id: IDStr | None = None
+    # AS-120: ref type and default (3b7d2774 graph.py:80); the tip read-site default is 10.
+    k: int = 10
 
 
 class KGWalkBody(KGWalkInput):
@@ -213,13 +232,16 @@ class KGWalkBody(KGWalkInput):
     seed_node_ids: list[IDStr]
     depth: int = Field(default=2, ge=1, le=4)
     limit: int = Field(default=50, ge=1, le=500)
+    # AS-120: ref type (3b7d2774 graph.py:74).
+    edge_kinds: list[EdgeKindIn] | None = None
 
 
 class EntityPayload(Entity):
     """An entity in the LLM extraction JSON (pre-AS-90: name, kind required)."""
 
     name: str
-    kind: NodeKind
+    # AS-120: ref enum (3b7d2774 graph.py:100), without the stub 'source'.
+    kind: NodeKindIn
     # AS-113: pre-AS-90 type, bound and default (3b7d2774 graph.py:103).
     confidence: ConfidenceScore = 0.5
 
@@ -229,7 +251,8 @@ class RelationPayload(Relation):
 
     src_name: str
     dst_name: str
-    kind: EdgeKind
+    # AS-120: ref enum (3b7d2774 graph.py:109), without the stub related_to/prerequisite.
+    kind: EdgeKindIn
     # AS-113: pre-AS-90 type, bound and default (3b7d2774 graph.py:111).
     confidence: ConfidenceScore = 0.5
 
@@ -253,6 +276,8 @@ class ExtractionPayload(Extraction):
     # AS-119: pre-AS-90 type and default (3b7d2774 graph.py:122). Claims are validated
     # and become Claim models instead of staying raw dicts.
     claims: list[ClaimPayload] = Field(default_factory=list)
+    # AS-120: ref type and default (3b7d2774 graph.py:125); the verifier reads "" and None alike.
+    notes: Literal["", "low_confidence", "pending_review"] = ""
 
 
 Extraction.model_rebuild()

@@ -83,7 +83,9 @@ async def test_kg_walk_happy_path(mcp_server, mock_svc: MagicMock) -> None:
 
 @pytest.mark.asyncio
 async def test_kg_hybrid_happy_path(mcp_server, mock_svc: MagicMock) -> None:
-    await mcp_server.call_tool("kg.hybrid", {"inp": KGHybridInput(query="fractions").model_dump(mode="json")})
+    # AS-120: kg.hybrid k is an int again (ref); unset fields are omitted, not sent as null.
+    payload = KGHybridInput(query="fractions").model_dump(mode="json", exclude_none=True)
+    await mcp_server.call_tool("kg.hybrid", {"inp": payload})
     mock_svc.hybrid.assert_awaited_once()
 
 
