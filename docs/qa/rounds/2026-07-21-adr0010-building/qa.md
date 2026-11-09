@@ -22,12 +22,12 @@
 
 ```powershell
 # Local / corp-proxy TLS only — never commit DATABASE_URL
-$env:NODE_TLS_REJECT_UNAUTHORIZED='0'
+$env:NODE_EXTRA_CA_CERTS='C:\path\to\corporate-ca.pem'  # only behind a TLS-intercepting proxy; never disable TLS verification
 $env:DATABASE_URL='<Neon URL from local secrets>'
 node scripts/seed-pilot-demo.mjs --variant building
 # Optional wellbeing case:
 # node scripts/seed-pilot-demo.mjs --variant building --anxiety 8
-$env:DATABASE_URL=$null; $env:NODE_TLS_REJECT_UNAUTHORIZED=$null
+$env:DATABASE_URL=$null; $env:NODE_EXTRA_CA_CERTS=$null
 ```
 
 **Fingerprint after seed (`building`):**

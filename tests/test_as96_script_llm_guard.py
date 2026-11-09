@@ -35,7 +35,20 @@ GUARDED_SCRIPTS = [
     ("scripts/verify_prod_env.py", []),
 ]
 
-TLS_FILES = ["test-groq.mjs", "scripts/enrich-all-lessons.mjs", "scripts/generate-level-bodies.mjs"]
+TLS_FILES = [
+    "test-groq.mjs",
+    "scripts/enrich-all-lessons.mjs",
+    "scripts/generate-level-bodies.mjs",
+    # AS-125: the seed scripts' usage comments advised NODE_TLS_REJECT_UNAUTHORIZED='0' (AS-121).
+    "scripts/seed-pilot-demo.mjs",
+    "scripts/seed-cohort-pilot.mjs",
+]
+# AS-125: repo-wide, the only tracked files allowed to name the variable are the tests that
+# assert its absence.
+TLS_NAME_ALLOWED = {
+    "tests/test_as96_script_llm_guard.py",
+    "tests/test_as108_embedder_tls.py",
+}
 
 
 def _no_net_prefix() -> list[str]:
@@ -164,3 +177,23 @@ def test_guard_helpers_accept_only_explicit_opt_in(tmp_path: Path) -> None:
 def test_scripts_do_not_disable_tls_verification(rel: str) -> None:
     text = (REPO / rel).read_text(encoding="utf-8")
     assert "NODE_TLS_REJECT_UNAUTHORIZED" not in text
+
+
+def test_no_tls_off_advice_in_tracked_files() -> None:
+    """AS-125: no tracked file (docs, comments, scripts) names NODE_TLS_REJECT_UNAUTHORIZED,
+    except the guard tests above."""
+    git = shutil.which("git")
+    if not git or not (REPO / ".git").exists():
+        pytest.skip("not a git checkout")
+    files = subprocess.run(
+        [git, "ls-files", "-z"], cwd=REPO, capture_output=True, check=True
+    ).stdout.split(b"\0")
+    hits = []
+    for raw in files:
+        rel = raw.decode()
+        path = REPO / rel
+        if not rel or rel in TLS_NAME_ALLOWED or not path.is_file():
+            continue
+        if b"NODE_TLS_REJECT_UNAUTHORIZED" in path.read_bytes():
+            hits.append(rel)
+    assert hits == []

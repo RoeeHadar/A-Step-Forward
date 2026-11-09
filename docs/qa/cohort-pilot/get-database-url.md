@@ -16,7 +16,7 @@ DATABASE_URL=postgresql://...
 Then from repo root:
 
 ```powershell
-$env:NODE_TLS_REJECT_UNAUTHORIZED='0'
+$env:NODE_EXTRA_CA_CERTS='C:\path\to\corporate-ca.pem'  # only behind a TLS-intercepting proxy; never disable TLS verification
 node scripts/seed-cohort-pilot.mjs
 ```
 
@@ -32,7 +32,7 @@ node scripts/seed-cohort-pilot.mjs
 After pasting, from repo root:
 
 ```powershell
-$env:NODE_TLS_REJECT_UNAUTHORIZED='0'
+$env:NODE_EXTRA_CA_CERTS='C:\path\to\corporate-ca.pem'  # only behind a TLS-intercepting proxy; never disable TLS verification
 node scripts/_list-tables.mjs
 ```
 

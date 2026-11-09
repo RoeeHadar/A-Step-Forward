@@ -58,7 +58,7 @@ window.location.href = '/onboarding';
 
 ```powershell
 cd apps/web
-$env:NODE_TLS_REJECT_UNAUTHORIZED='0'
+$env:NODE_EXTRA_CA_CERTS='C:\path\to\corporate-ca.pem'  # only behind a TLS-intercepting proxy; never disable TLS verification
 npx.cmd vercel env run --environment production -- node -e "console.log(new URL(process.env.DATABASE_URL||'').hostname||'MISSING')"
 ```
 
@@ -68,7 +68,7 @@ If `MISSING` without `.env.local`, cloud var is unset — set it in Vercel dashb
 
 ```powershell
 cd <repo-root>
-$env:NODE_TLS_REJECT_UNAUTHORIZED='0'
+$env:NODE_EXTRA_CA_CERTS='C:\path\to\corporate-ca.pem'  # only behind a TLS-intercepting proxy; never disable TLS verification
 $env:DATABASE_URL = '<paste production Neon URL — never commit>'
 node scripts/reset-learner.mjs --email roeehadar@gmail.com --delete-profile
 ```
@@ -104,7 +104,7 @@ When `.env.local` already has the **correct production** `DATABASE_URL`:
 
 ```powershell
 cd apps/web
-$env:NODE_TLS_REJECT_UNAUTHORIZED='0'
+$env:NODE_EXTRA_CA_CERTS='C:\path\to\corporate-ca.pem'  # only behind a TLS-intercepting proxy; never disable TLS verification
 npx.cmd vercel env run --environment production -- node ../../scripts/reset-learner.mjs --email roeehadar@gmail.com --delete-profile
 ```
 
