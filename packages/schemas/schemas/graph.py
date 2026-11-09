@@ -119,6 +119,12 @@ class Entity(FlexibleModel):
     confidence: float | None = None
     kind: Any = None
     name: Any = None
+    # AS-116: pre-AS-90 fields, same types and defaults as 3b7d2774 graph.py:101-102.
+    # ingest/resolver.py:72-73 reads them; undeclared, they came from the AS-90
+    # fallback. Not in AS90_DECLARED: the registry stays frozen, and aliases has
+    # a non-None default (like Relation.weight).
+    aliases: list[str] = Field(default_factory=list)
+    description: str | None = None
 
 
 class KGHybridInput(FlexibleModel):

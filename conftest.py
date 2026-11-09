@@ -61,6 +61,25 @@ def _install() -> None:
 _install()
 
 
+# AS-116: CI enforcement without touching the exit status. The session check
+# tests/test_as116_no_fallback_hits.py::test_session_recorded_no_fallback_hits
+# runs last, so it sees every hit the session recorded. When hits exist it fails
+# as an ordinary test failure.
+_AS116_LAST = "test_session_recorded_no_fallback_hits"
+
+
+def pytest_collection_modifyitems(items: list[pytest.Item]) -> None:
+    last = [i for i in items if i.name == _AS116_LAST]
+    if last:
+        items[:] = [i for i in items if i.name != _AS116_LAST] + last
+
+
+@pytest.fixture
+def as90_fallback_hits() -> Counter[tuple[str, str, str]]:
+    """Live view of the AS-90 fallback hits recorded so far in this session."""
+    return _HITS
+
+
 def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:
     if not _HITS:
         return
