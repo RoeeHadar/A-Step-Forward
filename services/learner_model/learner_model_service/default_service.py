@@ -65,7 +65,9 @@ class DefaultLearnerModelService:
             updated_at=now,
         )
         self._profiles[learner_id] = adaptive
-        for concept_id, raw in profile.self_scores.items():
+        # AS-110: self_scores is an AS-90 field (None when the onboarding body omits it);
+        # pre-AS-90 default {}.
+        for concept_id, raw in (profile.self_scores or {}).items():
             await self.upsert_mastery(learner_id, concept_id, self_score_to_mastery(raw))
         return adaptive
 

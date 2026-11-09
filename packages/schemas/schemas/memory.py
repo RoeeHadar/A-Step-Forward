@@ -78,6 +78,10 @@ class MemorySearchInput(FlexibleModel):
     agent_id: str | None = None
     k: Any = None
     min_strength: float | None = None
+    # AS-110: read in production but never declared (AS-90 runtime guard hit once the
+    # read path is exercised). None default == what the model_extra fallback returned;
+    # not in AS90_DECLARED (input-only model, never serialized).
+    include_archived: Any = None
 
 
 def __getattr__(name: str) -> Any:

@@ -132,6 +132,10 @@ class KGSearchInput(FlexibleModel):
 
     k: Any = None
     query: Any = None
+    # AS-110: read in production but never declared (AS-90 runtime guard hit once the
+    # read path is exercised). None default == what the model_extra fallback returned;
+    # not in AS90_DECLARED (input-only model, never serialized).
+    kinds: Any = None
 
 
 class KGSearchResult(FlexibleModel):
@@ -148,6 +152,10 @@ class KGWalkInput(FlexibleModel):
     depth: Any = None
     limit: Any = None
     seed_node_ids: Any = None
+    # AS-110: read in production but never declared (AS-90 runtime guard hit once the
+    # read path is exercised). None default == what the model_extra fallback returned;
+    # not in AS90_DECLARED (input-only model, never serialized).
+    edge_kinds: Any = None
 
 
 class Relation(FlexibleModel):

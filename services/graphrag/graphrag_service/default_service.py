@@ -53,6 +53,7 @@ class DefaultGraphRAGService:
     # ----- reads -----
 
     async def search(self, input: KGSearchInput) -> list[KGSearchResult]:
+        k = input.k if input.k is not None else 10  # AS-110: AS-90 field, pre-AS-90 default 10
         q_tokens = {t for t in input.query.lower().split() if len(t) > 2}
         results: list[KGSearchResult] = []
         for node in self._nodes.values():
@@ -80,15 +81,18 @@ class DefaultGraphRAGService:
             score = min(0.72, score)
             results.append(KGSearchResult(node=node, score=score, snippet=node.summary))
         results.sort(key=lambda r: r.score, reverse=True)
-        return results[: input.k]
+        return results[:k]
 
     async def walk(self, input: KGWalkInput) -> list[KGPath]:
+        # AS-110: depth / limit are AS-90 fields (None when unset); pre-AS-90 defaults 2 / 50.
+        depth = input.depth if input.depth is not None else 2
+        limit = input.limit if input.limit is not None else 50
         paths: list[KGPath] = []
         for seed in input.seed_node_ids:
             visited_nodes: list[KGNode] = []
             visited_edges: list[KGEdge] = []
             frontier = [seed]
-            for _ in range(input.depth):
+            for _ in range(depth):
                 next_frontier: list[str] = []
                 for nid in frontier:
                     node = self._nodes.get(nid)
@@ -102,15 +106,18 @@ class DefaultGraphRAGService:
                         next_frontier.append(e.dst)
                 frontier = next_frontier
             paths.append(KGPath(nodes=visited_nodes, edges=visited_edges))
-        return paths[: input.limit]
+        return paths[:limit]
 
     async def hybrid(self, input: KGHybridInput) -> list[KGSearchResult]:
-        seeds = await self.search(KGSearchInput(query=input.query, k=input.k))
+        # AS-110: k / depth are AS-90 fields (None when unset); pre-AS-90 defaults 10 / 2.
+        k = input.k if input.k is not None else 10
+        depth = input.depth if input.depth is not None else 2
+        seeds = await self.search(KGSearchInput(query=input.query, k=k))
         seed_ids = [s.node.id for s in seeds if not s.node.id.startswith("resource:")]
         if not seed_ids:
             return seeds
         paths = await self.walk(
-            KGWalkInput(seed_node_ids=seed_ids, depth=input.depth, limit=input.k * 3)
+            KGWalkInput(seed_node_ids=seed_ids, depth=depth, limit=k * 3)
         )
         seen = {s.node.id for s in seeds}
         merged = list(seeds)
@@ -121,7 +128,7 @@ class DefaultGraphRAGService:
                 seen.add(node.id)
                 merged.append(KGSearchResult(node=node, score=0.55, snippet=node.summary))
         merged.sort(key=lambda r: r.score, reverse=True)
-        return merged[: input.k]
+        return merged[:k]
 
     async def personalized(self, *, learner_id: str, query: str, k: int = 10) -> list[KGSearchResult]:
         base = await self.hybrid(KGHybridInput(query=query, k=k, depth=2, learner_id=learner_id))

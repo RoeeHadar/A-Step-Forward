@@ -23,8 +23,9 @@ async def local_search(
     embedder: Embedder,
     input: KGSearchInput,
 ) -> list[KGSearchResult]:
+    k = input.k if input.k is not None else 10  # AS-110: AS-90 field, pre-AS-90 default 10
     query_embedding = (await embedder.embed_texts([input.query]))[0]
-    chunk_hits = await chunks.vector_search(query_embedding, k=input.k)
+    chunk_hits = await chunks.vector_search(query_embedding, k=k)
     if chunk_hits:
         return [
             KGSearchResult(
@@ -39,7 +40,7 @@ async def local_search(
             )
             for chunk, score in chunk_hits
         ]
-    hits = await store.fulltext_search(input.query, k=input.k, kinds=input.kinds)
+    hits = await store.fulltext_search(input.query, k=k, kinds=input.kinds)
     return [
         KGSearchResult(node=node, score=score, snippet=node.summary)
         for node, score in hits
@@ -49,9 +50,10 @@ async def local_search(
 async def graph_walk(store: Neo4jStore, input: KGWalkInput) -> list[KGPath]:
     return await store.walk(
         input.seed_node_ids,
-        depth=input.depth,
+        # AS-110: depth / limit are AS-90 fields (None when unset); pre-AS-90 defaults 2 / 50.
+        depth=input.depth if input.depth is not None else 2,
         edge_kinds=input.edge_kinds,
-        limit=input.limit,
+        limit=input.limit if input.limit is not None else 50,
     )
 
 
@@ -61,17 +63,20 @@ async def hybrid_search(
     embedder: Embedder,
     input: KGHybridInput,
 ) -> list[KGSearchResult]:
+    # AS-110: k / depth are AS-90 fields (None when unset); pre-AS-90 defaults 10 / 2.
+    k = input.k if input.k is not None else 10
+    depth = input.depth if input.depth is not None else 2
     seeds = await local_search(
         store,
         chunks,
         embedder,
-        KGSearchInput(query=input.query, k=input.k),
+        KGSearchInput(query=input.query, k=k),
     )
     seed_ids = [s.node.id for s in seeds if not s.node.id.startswith("chunk:")]
     if not seed_ids:
         return seeds
 
-    paths = await store.walk(seed_ids, depth=input.depth, limit=input.k * 3)
+    paths = await store.walk(seed_ids, depth=depth, limit=k * 3)
     seen: set[str] = {s.node.id for s in seeds}
     merged = list(seeds)
     for path in paths:
@@ -81,7 +86,7 @@ async def hybrid_search(
             seen.add(node.id)
             merged.append(KGSearchResult(node=node, score=0.55, snippet=node.summary))
     merged.sort(key=lambda r: r.score, reverse=True)
-    return merged[: input.k]
+    return merged[:k]
 
 
 async def personalized_search(

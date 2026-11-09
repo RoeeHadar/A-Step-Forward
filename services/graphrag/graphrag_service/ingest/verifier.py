@@ -40,6 +40,9 @@ class Verifier:
                     statement=claim.statement[:120],
                     confidence=claim.confidence,
                 )
-        if extraction.confidence < 0.5 or extraction.notes == "low_confidence":
+        # AS-110: confidence is an AS-90 field (None when an LLM extraction omits it);
+        # pre-AS-90 default 0.5.
+        confidence = extraction.confidence if extraction.confidence is not None else 0.5
+        if confidence < 0.5 or extraction.notes == "low_confidence":
             result.flagged += 1
         return result
