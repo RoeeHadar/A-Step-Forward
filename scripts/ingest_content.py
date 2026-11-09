@@ -22,7 +22,6 @@ import hashlib
 import json
 import os
 import re
-import ssl
 import sys
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
@@ -151,15 +150,15 @@ class _MainContentParser(HTMLParser):
 
 
 def _configure_ssl() -> bool:
-    """Return httpx verify flag; allow insecure fetches on dev Windows hosts."""
-    if os.environ.get("OPENSTAX_INSECURE_SSL", "").lower() in {"1", "true", "yes"}:
-        os.environ.setdefault("HF_HUB_DISABLE_SSL", "1")
-        try:
-            ssl._create_default_https_context = ssl._create_unverified_context  # type: ignore[method-assign]
-        except Exception:
-            pass
-        return False
-    return True
+    """Return the httpx ``verify`` flag for this script's own OpenStax client.
+
+    OPENSTAX_INSECURE_SSL (opt-in, same accepted values as before) turns verification off
+    for that one ``httpx.AsyncClient`` only. AS-109 (AS-108 embedder pattern): no global
+    TLS state is touched any more: no ``ssl._create_default_https_context`` swap and no
+    ``HF_HUB_DISABLE_SSL`` env var, so the default SSL context, urllib, other httpx/requests
+    clients and model downloads keep verifying.
+    """
+    return os.environ.get("OPENSTAX_INSECURE_SSL", "").lower() not in {"1", "true", "yes"}
 
 
 def _slugify(value: str) -> str:
