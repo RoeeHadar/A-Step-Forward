@@ -7,7 +7,6 @@ import hashlib
 import os
 import ssl
 
-import httpx
 import structlog
 
 from ..settings import GraphRAGSettings
@@ -41,7 +40,6 @@ def _allow_insecure_hub_downloads() -> None:
 class Embedder:
     def __init__(self, settings: GraphRAGSettings) -> None:
         self.settings = settings
-        self._api_key = os.getenv("VOYAGE_API_KEY", "")
         self._st_model: object | None = None
 
     @property
@@ -85,16 +83,12 @@ class Embedder:
                 log.warning("embedder.sentence_transformers_failed", error=str(exc))
                 return [self._deterministic(t) for t in texts]
 
-        if not self._api_key:
-            log.warning("embedder.offline_mode", reason="VOYAGE_API_KEY not set")
-            return [self._deterministic(t) for t in texts]
-
-        async with httpx.AsyncClient(timeout=60.0) as client:
-            response = await client.post(
-                "https://api.voyageai.com/v1/embeddings",
-                headers={"Authorization": f"Bearer {self._api_key}"},
-                json={"input": texts, "model": self.settings.embedding_model},
-            )
-            response.raise_for_status()
-            data = response.json()["data"]
-            return [row["embedding"] for row in data]
+        # AS-97: no hosted embedding API here. ADR-0004 hard constraint #1 rules out
+        # Voyage (paid), so the old Voyage branch is gone; a non sentence-transformers
+        # model gets the same offline hash fallback a missing VOYAGE_API_KEY used to.
+        log.warning(
+            "embedder.offline_mode",
+            reason="embedding_model is not sentence-transformers/*; no hosted embedder (ADR-0004)",
+            model=self.settings.embedding_model,
+        )
+        return [self._deterministic(t) for t in texts]

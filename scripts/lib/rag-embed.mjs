@@ -6,6 +6,8 @@
  * Run the ingestion script with `node --use-system-ca` behind a TLS-intercepting
  * proxy (same fix used for the Neon driver).
  */
+import { assertRealLlmAllowed } from './llm-script-guard.mjs';
+
 export const EMBED_MODEL = 'nvidia/nv-embedqa-e5-v5';
 export const EMBED_DIM = 1024;
 
@@ -19,6 +21,8 @@ export function makeEmbedder({ apiKey, baseUrl } = {}) {
     '',
   );
   if (!key) throw new Error('NVIDIA_API_KEY not set (needed for embeddings)');
+  // AS-97: hosted NVIDIA embeddings from a script need the AS-96 opt-in.
+  assertRealLlmAllowed('scripts/lib/rag-embed.mjs makeEmbedder (NVIDIA embeddings)');
 
   async function embedBatch(texts, inputType, { retries = 3 } = {}) {
     let attempt = 0;
