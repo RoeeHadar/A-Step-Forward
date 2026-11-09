@@ -19,12 +19,17 @@ help:
 	@echo "  seed             Seed curriculum + sample learner"
 	@echo "  seed-kg          Seed Neo4j prerequisite graph from content/knowledge-graph/"
 	@echo "  seed-diagnostic  Bootstrap diagnostic_items MCQ bank from KG YAML"
+	@echo "                   (with GROQ_API_KEY/LLM_API_KEY set it calls Groq: needs ALLOW_REAL_LLM=1)"
 	@echo "  ingest           Ingest Learning Database PDFs into Postgres"
 	@echo "  evals            Run full eval suite (promptfoo + DeepEval + memory)"
 	@echo "  evals-ci         Run touched-only evals (CI default)"
 	@echo "  lint fmt         ruff/eslint/prettier"
 	@echo "  test             pytest + vitest"
 	@echo "  smoke            Run Phase-0 smoke tests (memory, graphrag, orchestrator)"
+	@echo "  enrich-lessons      Groq: level bodies + level_focus      (needs ALLOW_REAL_LLM=1 + GROQ_API_KEY)"
+	@echo "  enrich-skill-atoms  Groq: per-skill-atom question banks   (needs ALLOW_REAL_LLM=1 + GROQ_API_KEY)"
+	@echo "  enrich-level-bodies Groq: body_by_level rewrites, ARGS=... (needs ALLOW_REAL_LLM=1 unless ARGS=--dry-run)"
+	@echo "  Real-LLM targets are refused (exit 3) unless you opt in, e.g.: ALLOW_REAL_LLM=1 make enrich-lessons"
 
 sync:
 	$(UV) sync --all-groups --python 3.11 $(UV_FLAGS)
@@ -51,6 +56,8 @@ seed:
 seed-kg:
 	$(UV) run $(UV_FLAGS) python scripts/seed_knowledge_graph.py
 
+# AS-107: with GROQ_API_KEY/LLM_API_KEY set, seed_diagnostic_items.py calls Groq and refuses
+# (exit 3) unless ALLOW_REAL_LLM=1 is in the environment. Make passes it through; it is never forced here.
 seed-diagnostic:
 	$(UV) run $(UV_FLAGS) python scripts/seed_diagnostic_items.py
 
@@ -84,22 +91,26 @@ smoke:
 	$(PYTHON) services/orchestrator/tests/test_smoke.py
 
 ## ── Adaptive lesson content ─────────────────────────────────────────────────
+# AS-107: the enrich-* targets call Groq. Their scripts refuse (exit 3, [llm-guard] message)
+# unless ALLOW_REAL_LLM=1 is set (AS-96). The Makefile only passes your environment through
+# and never sets the opt-in itself: run e.g. `ALLOW_REAL_LLM=1 make enrich-lessons`.
 
 seed-lessons:
 	# Seed all lesson JSONs (with level_focus + skill_atom_bank) to Neon DB
 	cd apps/web && DATABASE_URL=$$DATABASE_URL node ../../scripts/seed-lessons.mjs
 
 enrich-lessons:
-	# Generate level-differentiated body_by_level + level_focus for all lessons (needs GROQ_API_KEY)
+	# Generate level-differentiated body_by_level + level_focus for all lessons (needs GROQ_API_KEY + ALLOW_REAL_LLM=1)
 	node scripts/generate-adaptive-lessons.mjs
 
 enrich-skill-atoms:
-	# Generate per-skill-atom question banks for all lessons (needs GROQ_API_KEY)
+	# Generate per-skill-atom question banks for all lessons (needs GROQ_API_KEY + ALLOW_REAL_LLM=1)
 	node scripts/generate-skill-atom-questions.mjs
 
 enrich-level-bodies:
 	# Apply body_by_level rewrites to ALL lesson JSONs — generalizes level-calibration across all subjects.
 	# Options: --concept <id>  (single lesson), --missing-only  (only generate missing tracks), --dry-run
+	# Needs GROQ_API_KEY + ALLOW_REAL_LLM=1, except with ARGS=--dry-run (no LLM call).
 	node scripts/generate-level-bodies.mjs $(ARGS)
 
 migrate-neon:
