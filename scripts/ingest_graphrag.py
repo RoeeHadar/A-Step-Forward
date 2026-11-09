@@ -28,7 +28,6 @@ SEEDS_ROOT = ROOT / "infra" / "seeds" / "courses"
 
 def _configure_env() -> None:
     """Enable Postgres chunks + Neo4j when credentials are present."""
-    os.environ.setdefault("HF_HUB_DISABLE_SSL", "1")
     os.environ.setdefault("USE_POSTGRES_CHUNKS", "true")
     os.environ.setdefault("USE_NEO4J", "true")
     os.environ.setdefault(

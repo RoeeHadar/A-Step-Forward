@@ -4,8 +4,6 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
-import os
-import ssl
 
 import structlog
 
@@ -14,27 +12,6 @@ from ..settings import GraphRAGSettings
 log = structlog.get_logger(__name__)
 
 _ST_PREFIX = "sentence-transformers/"
-
-
-def _allow_insecure_hub_downloads() -> None:
-    """Best-effort SSL bypass for HuggingFace Hub on Windows dev machines."""
-    os.environ.setdefault("HF_HUB_DISABLE_SSL", "1")
-    try:
-        ssl._create_default_https_context = ssl._create_unverified_context  # type: ignore[method-assign]
-    except Exception:
-        pass
-    try:
-        import httpx
-
-        _orig_init = httpx.Client.__init__
-
-        def _patched_init(self, *args, **kwargs):  # type: ignore[no-untyped-def]
-            kwargs["verify"] = False
-            _orig_init(self, *args, **kwargs)
-
-        httpx.Client.__init__ = _patched_init  # type: ignore[method-assign]
-    except Exception:
-        pass
 
 
 class Embedder:
@@ -48,11 +25,17 @@ class Embedder:
 
     def _load_st_model(self) -> object:
         if self._st_model is None:
-            _allow_insecure_hub_downloads()
+            # AS-108: model load must not touch process-wide TLS state (no unverified
+            # ssl default context, no httpx verify=False, no TLS env vars). For hosts
+            # that can't reach the Hub, pre-download the model and set
+            # EMBEDDING_LOCAL_FILES_ONLY=1; that applies to this load only.
             from sentence_transformers import SentenceTransformer
 
             model_name = self.settings.embedding_model.removeprefix(_ST_PREFIX)
-            self._st_model = SentenceTransformer(model_name)
+            kwargs: dict[str, object] = {}
+            if self.settings.embedding_local_files_only:
+                kwargs["local_files_only"] = True
+            self._st_model = SentenceTransformer(model_name, **kwargs)
             log.info("embedder.sentence_transformers_loaded", model=model_name)
         return self._st_model
 
