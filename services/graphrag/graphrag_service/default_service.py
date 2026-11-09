@@ -59,7 +59,9 @@ class DefaultGraphRAGService:
             if input.kinds and node.kind not in input.kinds:
                 continue
             name_lower = node.canonical_name.lower()
-            hay = " ".join([node.canonical_name, *node.aliases, node.summary or ""]).lower()
+            # AS-99: aliases is an AS-90 field and may be None.
+            aliases = node.aliases or []
+            hay = " ".join([node.canonical_name, *aliases, node.summary or ""]).lower()
             hay_tokens = set(hay.split())
             overlap = len(q_tokens & hay_tokens)
             contains = input.query.lower() in hay

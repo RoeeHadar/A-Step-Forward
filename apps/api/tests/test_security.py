@@ -82,8 +82,41 @@ async def test_affective_memory_blocked_in_child_mode(client: AsyncClient) -> No
     assert resp.json()["error"]["code"] == "policy_violation"
 
 
+class _InMemoryRepo:
+    """AS-99: minimal fake of MemoryRepository for the write path (no Postgres)."""
+
+    def __init__(self) -> None:
+        self.rows: dict = {}
+
+    async def list_by_types(self, learner_id, types):
+        return [r for r in self.rows.values() if r.learner_id == learner_id and r.type in types]
+
+    async def upsert(self, record):
+        self.rows[record.id] = record
+        return record
+
+
+@pytest.fixture
+def real_memory_service_without_db(app, monkeypatch):
+    """Real DefaultMemoryService (child-mode + PII redaction) over an in-memory repo."""
+    from memory_service import default_service as ds
+    from memory_service.api import get_memory_service
+
+    async def _no_audit(*_args, **_kwargs) -> None:
+        return None
+
+    monkeypatch.setattr(ds, "audit_event", _no_audit)
+    svc = ds.DefaultMemoryService()
+    svc.repo = _InMemoryRepo()
+    app.dependency_overrides[get_memory_service] = lambda: svc
+    yield svc
+    app.dependency_overrides.pop(get_memory_service, None)
+
+
 @pytest.mark.asyncio
-async def test_pii_redacted_on_memory_write(client: AsyncClient) -> None:
+async def test_pii_redacted_on_memory_write(
+    client: AsyncClient, real_memory_service_without_db
+) -> None:
     resp = await client.post(
         "/v1/memory",
         headers=auth_headers(),
@@ -97,3 +130,5 @@ async def test_pii_redacted_on_memory_write(client: AsyncClient) -> None:
     assert resp.status_code == 200
     assert "[EMAIL]" in resp.json()["content"]
     assert "alice@example.com" not in resp.json()["content"]
+    stored = list(real_memory_service_without_db.repo.rows.values())
+    assert len(stored) == 1 and "alice@example.com" not in stored[0].content

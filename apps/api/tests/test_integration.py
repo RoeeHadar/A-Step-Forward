@@ -68,7 +68,13 @@ async def test_agents_list(client: AsyncClient) -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.skipif(
+    not os.getenv("DATABASE_URL"),
+    reason="needs a seeded curriculum Postgres (set DATABASE_URL to a test DB)",
+)
 async def test_lesson_detail(client: AsyncClient) -> None:
+    # AS-99: env-only. /v1/lessons/{id} reads the real curriculum repository
+    # (CurriculumRepository.get_lesson -> Postgres); without a DB it raised OSError.
     resp = await client.get("/v1/lessons/lesson-fractions-intro", headers=auth_headers())
     assert resp.status_code == 200
     assert resp.json()["title"] == "Introduction to Fractions"

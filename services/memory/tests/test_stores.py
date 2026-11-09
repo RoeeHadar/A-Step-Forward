@@ -22,13 +22,24 @@ from memory_service.stores.type_repositories import all_persisted_types, repo_fo
 
 
 def _database_reachable() -> bool:
-    url = os.getenv("DATABASE_URL", MemorySettings().database_url)
+    # AS-99: only run when a test DB is configured explicitly. The old fallback to
+    # MemorySettings().database_url (localhost default) made every store test try to
+    # connect, and fail, on any machine without Postgres.
+    url = os.getenv("DATABASE_URL")
+    if not url:
+        return False
     if "localhost" not in url and "127.0.0.1" not in url:
         return bool(os.getenv("RUN_MEMORY_STORE_TESTS"))
     return True
 
 
-pytestmark = pytest.mark.skipif(not _database_reachable(), reason="Postgres not configured for store tests")
+# AS-99 r1: applied per test to the tests that need Postgres only, not module-wide, so
+# DB-free tests (test_working_memory_rejected: upsert rejects WORKING before any
+# connection) keep running without a DB.
+requires_db = pytest.mark.skipif(
+    not _database_reachable(),
+    reason="Postgres not configured for store tests (set DATABASE_URL to a test DB)",
+)
 
 
 @pytest.fixture
@@ -51,6 +62,7 @@ def _sample_record(*, learner_id: str, memory_type: MemoryType, content: str) ->
     )
 
 
+@requires_db
 @pytest.mark.parametrize("memory_type", list(all_persisted_types()))
 async def test_upsert_and_get_per_type(repo: MemoryRepository, memory_type: MemoryType) -> None:
     learner_id = f"learner-{uuid4()}"
@@ -69,6 +81,7 @@ async def test_upsert_and_get_per_type(repo: MemoryRepository, memory_type: Memo
     assert fetched.tags == ["test"]
 
 
+@requires_db
 async def test_patch_updates_content(repo: MemoryRepository) -> None:
     learner_id = f"learner-{uuid4()}"
     record = _sample_record(
@@ -85,6 +98,7 @@ async def test_patch_updates_content(repo: MemoryRepository) -> None:
     assert updated.content == "Learner prefers worked examples."
 
 
+@requires_db
 async def test_soft_delete_hides_record(repo: MemoryRepository) -> None:
     learner_id = f"learner-{uuid4()}"
     record = _sample_record(
@@ -97,6 +111,7 @@ async def test_soft_delete_hides_record(repo: MemoryRepository) -> None:
     assert await repo.get(record.id, learner_id=learner_id) is None
 
 
+@requires_db
 async def test_timeline_orders_by_created_at(repo: MemoryRepository) -> None:
     learner_id = f"learner-{uuid4()}"
     first = _sample_record(learner_id=learner_id, memory_type=MemoryType.EPISODIC, content="first")
@@ -118,6 +133,7 @@ async def test_working_memory_rejected(repo: MemoryRepository) -> None:
         await repo.upsert(record)
 
 
+@requires_db
 async def test_set_embedding(repo: MemoryRepository) -> None:
     settings = MemorySettings()
     learner_id = f"learner-{uuid4()}"

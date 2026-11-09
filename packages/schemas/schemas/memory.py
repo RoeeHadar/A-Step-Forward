@@ -34,9 +34,12 @@ class MemoryRecord(FlexibleModel):
     summary: str | None = None
     tags: list[str] = Field(default_factory=list)
     valence: float = 0.0
-    salience: float | None = None
-    confidence: float | None = None
-    decay_tau_days: float | None = None
+    # AS-99: defaults restored to the memory table contract (0002_memory_tables:
+    # NOT NULL, server_default 0.5 / 0.5 / 14.0; original schema 1516f4d4). None broke
+    # consolidation.resolution_key and decay.strength_now.
+    salience: float = 0.5
+    confidence: float = 0.5
+    decay_tau_days: float = 14.0
     provenance: Provenance = Field(default_factory=Provenance)
     expires_at: str | None = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))

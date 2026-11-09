@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock
 
 import pytest
 from httpx import ASGITransport, AsyncClient
@@ -12,6 +12,7 @@ os.environ.setdefault("APP_ENV", "test")
 os.environ.setdefault("RATE_LIMIT_ENABLED", "false")
 
 from app.main import create_app  # noqa: E402
+from learning_path_service.api import get_learning_path_service  # noqa: E402
 from schemas.learning_path import LearningPlan, PlanConcept, PlanWeek  # noqa: E402
 
 
@@ -38,7 +39,7 @@ async def test_generate_plan_requires_auth(client: AsyncClient) -> None:
 
 
 @pytest.mark.asyncio
-async def test_generate_plan(client: AsyncClient) -> None:
+async def test_generate_plan(app, client: AsyncClient) -> None:
     sample = LearningPlan(
         id="plan-1",
         learner_id="learner-test-1",
@@ -61,11 +62,17 @@ async def test_generate_plan(client: AsyncClient) -> None:
             )
         ],
     )
-    with patch(
-        "app.routers.learning_path.get_learning_path_service",
-        return_value=AsyncMock(generate_plan=AsyncMock(return_value=sample)),
-    ):
+    # AS-99: the route takes the service via Depends(get_learning_path_service), which
+    # FastAPI resolves from the function object captured at import time, so patching the
+    # module attribute never took effect and the real Postgres service ran. Override the
+    # dependency instead.
+    fake_svc = AsyncMock(generate_plan=AsyncMock(return_value=sample))
+    app.dependency_overrides[get_learning_path_service] = lambda: fake_svc
+    try:
         resp = await client.post("/v1/learners/me/plans/generate", headers=auth_headers())
+    finally:
+        app.dependency_overrides.pop(get_learning_path_service, None)
+    fake_svc.generate_plan.assert_awaited_once()
     assert resp.status_code == 200
     body = resp.json()
     assert body["goal"] == "Pass Bagrut"

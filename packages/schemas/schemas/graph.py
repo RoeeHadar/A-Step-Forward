@@ -9,16 +9,42 @@ from ._dynamic import FlexibleModel, flexible_model
 
 
 class NodeKind(StrEnum):
-    CONCEPT = "concept"
-    LESSON = "lesson"
-    QUESTION = "question"
+    # AS-99: restored to the original GraphRAG ontology (1516f4d4). The 01c27b73 stub
+    # dropped the members and lowercased the values the graphrag ingest writer,
+    # retrieval queries, default service and Neo4j store use (RESOURCE, SKILL, TOPIC,
+    # MISCONCEPTION, LEARNER, ...), so ingest raised AttributeError.
+    LEARNER = "Learner"
+    CONCEPT = "Concept"
+    SKILL = "Skill"
+    TOPIC = "Topic"
+    COURSE = "Course"
+    LESSON = "Lesson"
+    RESOURCE = "Resource"
+    ASSESSMENT = "Assessment"
+    QUESTION = "Question"
+    MISCONCEPTION = "Misconception"
+    GOAL = "Goal"
+    EVENT = "Event"
+    AGENT = "Agent"
+    # Kept from the 01c27b73 stub for compatibility (no readers).
     SOURCE = "source"
 
 
 class EdgeKind(StrEnum):
+    # AS-99: restored (1516f4d4); default_service compares e.kind.value == "PREREQUISITE_OF".
+    PREREQUISITE_OF = "PREREQUISITE_OF"
+    TEACHES = "TEACHES"
+    COVERS = "COVERS"
+    MASTERS = "MASTERS"
+    STUDIED = "STUDIED"
+    TESTS = "TESTS"
+    OPPOSES = "OPPOSES"
+    REQUIRES = "REQUIRES"
+    MENTIONS = "MENTIONS"
+    DERIVED_FROM = "DERIVED_FROM"
+    # Kept from the 01c27b73 stub for compatibility (RELATED_TO is the KGEdge default).
     RELATED_TO = "related_to"
     PREREQUISITE = "prerequisite"
-    COVERS = "covers"
 
 
 class KGNode(FlexibleModel):
