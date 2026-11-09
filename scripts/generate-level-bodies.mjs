@@ -1,7 +1,4 @@
 #!/usr/bin/env node
-// ⚠ Corporate proxy / self-signed CA: bypass TLS verification for Groq API calls
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
 /**
  * generate-level-bodies.mjs
  *
@@ -45,6 +42,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 import { readFileSync, writeFileSync, readdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { requireRealLlmOptIn } from './lib/llm-script-guard.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const LESSONS_DIR = join(__dirname, 'seed_data', 'lessons');
@@ -130,6 +128,8 @@ const SUBTOPIC_REQUIREMENTS = {
 // ─── CLI ARGS ───────────────────────────────────────────────────────
 const args = process.argv.slice(2);
 const DRY_RUN = args.includes('--dry-run');
+// AS-96: --dry-run makes no LLM call; every other mode needs the opt-in.
+if (!DRY_RUN) requireRealLlmOptIn('scripts/generate-level-bodies.mjs');
 const MISSING_ONLY = args.includes('--missing-only');
 const CONCEPT_FILTER = (() => {
   const idx = args.indexOf('--concept');

@@ -1,6 +1,7 @@
 /**
  * Shared Groq chat-completions helper for curriculum scripts.
  */
+import { assertRealLlmAllowed } from './llm-script-guard.mjs';
 const GROQ_MODELS = ['llama-3.1-8b-instant', 'llama-3.3-70b-versatile'];
 
 export function getGroqApiKey() {
@@ -19,6 +20,7 @@ function parseRetryAfterMs(resp) {
 export async function callGroq(messages, { maxTokens = 4096, temperature = 0.45, timeoutMs = 120_000, maxRetries = 6 } = {}) {
   const apiKey = getGroqApiKey();
   if (!apiKey) return null;
+  assertRealLlmAllowed('scripts/lib/groq-client.mjs callGroq');
 
   for (const model of GROQ_MODELS) {
     for (let attempt = 0; attempt < maxRetries; attempt++) {

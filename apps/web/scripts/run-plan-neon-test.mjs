@@ -2,6 +2,10 @@ import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { requireRealLlmOptIn } from '../../../scripts/lib/llm-script-guard.mjs';
+
+// AS-96: forwards GROQ_API_KEY/LLM_API_KEY into plan-llm.integration.test.ts (live LLM).
+requireRealLlmOptIn('apps/web/scripts/run-plan-neon-test.mjs');
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const envPath = resolve(root, '.env.local');

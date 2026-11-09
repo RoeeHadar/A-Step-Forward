@@ -1,6 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { requireRealLlmOptIn } from '../../../scripts/lib/llm-script-guard.mjs';
+
+requireRealLlmOptIn('apps/web/scripts/verify-llm.mjs');
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 for (const line of readFileSync(resolve(root, '.env.local'), 'utf8').split(/\r?\n/)) {

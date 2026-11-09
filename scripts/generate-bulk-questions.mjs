@@ -32,6 +32,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { requireRealLlmOptIn } from './lib/llm-script-guard.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -56,6 +57,7 @@ const ONLY = (() => {
 })();
 const DRY = Boolean(flag('dry-run', false));
 
+requireRealLlmOptIn('scripts/generate-bulk-questions.mjs');
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 if (!GROQ_API_KEY) {
   console.error('[bulk-q] GROQ_API_KEY missing — set it before running.');

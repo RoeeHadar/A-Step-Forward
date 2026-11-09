@@ -120,6 +120,15 @@ def _status_label(passed: bool | None) -> str:
 
 
 def main() -> int:
+    if os.environ.get("GROQ_API_KEY", "").strip():
+        # AS-96: check_groq_api_key sends the key to the Groq API (LLM provider).
+        # Unset GROQ_API_KEY to run only the other checks, or opt in explicitly.
+        from llm_script_guard import require_real_llm_opt_in
+
+        require_real_llm_opt_in(
+            "scripts/verify_prod_env.py",
+            why="would send GROQ_API_KEY to the Groq API",
+        )
     checks = (
         check_database_url(),
         check_groq_api_key(),

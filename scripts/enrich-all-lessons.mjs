@@ -1,8 +1,4 @@
 #!/usr/bin/env node
-// ⚠ Corporate proxy / self-signed CA: bypass TLS verification
-// This is safe for outbound API calls to well-known services (Groq).
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
 /**
  * enrich-all-lessons.mjs
  *
@@ -26,6 +22,9 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 import { readFileSync, writeFileSync, readdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { requireRealLlmOptIn } from './lib/llm-script-guard.mjs';
+
+requireRealLlmOptIn('scripts/enrich-all-lessons.mjs');
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const LESSONS_DIR = join(__dirname, 'seed_data', 'lessons');

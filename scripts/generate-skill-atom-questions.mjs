@@ -27,6 +27,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { requireRealLlmOptIn } from './lib/llm-script-guard.mjs';
 import { randomUUID } from 'crypto';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -43,6 +44,8 @@ const CONCEPT_FILTER = (() => {
   return idx !== -1 ? process.argv[idx + 1] : null;
 })();
 
+// AS-96: --dry-run makes no LLM call; every other mode needs the opt-in.
+if (!DRY_RUN) requireRealLlmOptIn('scripts/generate-skill-atom-questions.mjs');
 if (!GROQ_API_KEY && !DRY_RUN) {
   console.error('GROQ_API_KEY not set.');
   process.exit(1);
