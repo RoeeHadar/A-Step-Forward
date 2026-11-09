@@ -6,6 +6,7 @@ from typing import Any
 from pydantic import Field
 
 from ._dynamic import FlexibleModel, flexible_model
+from .common import IDStr
 
 
 class AgentName(StrEnum):
@@ -89,3 +90,19 @@ def __getattr__(name: str) -> Any:
     model = flexible_model(name)
     globals()[name] = model
     return model
+
+
+# ---------------------------------------------------------------------------
+# AS-119: entry-point request models for the remaining pre-AS-90 bounds (3b7d2774).
+# Same pattern as AS-112/113: these subclasses are used only where untrusted input
+# enters (FastAPI bodies, MCP tool signatures, LLM output). The shared models, their
+# defaults and the frozen AS90_DECLARED registry stay unchanged. Instances are still
+# the base type, so the services are unchanged.
+
+
+class ChatBody(ChatRequest):
+    """POST /v1/chat body (3b7d2774 agents.py:70-75)."""
+
+    learner_id: IDStr
+    message: str
+    session_id: IDStr | None = None

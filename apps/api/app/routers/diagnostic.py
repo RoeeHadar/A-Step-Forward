@@ -9,7 +9,7 @@ from schemas.diagnostic import (
     DiagnosticAnswerBody,
     DiagnosticAnswerResponse,
     DiagnosticSessionState,
-    DiagnosticStartRequest,
+    DiagnosticStartBody,
     DiagnosticStartResponse,
 )
 
@@ -22,7 +22,7 @@ router = APIRouter(prefix="/v1/diagnostic", tags=["diagnostic"])
 
 @router.post("/start", response_model=DiagnosticStartResponse)
 async def start_diagnostic(
-    body: DiagnosticStartRequest,
+    body: DiagnosticStartBody,
     ctx: AuthCtx = Depends(require_learner),
     svc=Depends(get_diagnostic_service),
     _=Depends(per_user("diagnostic.start", per_min=10)),

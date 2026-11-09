@@ -234,6 +234,14 @@ class RelationPayload(Relation):
     confidence: ConfidenceScore = 0.5
 
 
+class ClaimPayload(__getattr__("Claim")):
+    """AS-119: a claim in the LLM extraction JSON (3b7d2774 graph.py:114-117)."""
+
+    statement: str
+    supporting_chunk_id: IDStr
+    confidence: ConfidenceScore = 0.5
+
+
 class ExtractionPayload(Extraction):
     """LLM extraction JSON (pre-AS-90: entities, relations required). Unknown kinds or
     missing names are rejected with a ValidationError, as before AS-90."""
@@ -242,6 +250,45 @@ class ExtractionPayload(Extraction):
     relations: list[RelationPayload]
     # AS-113: pre-AS-90 type, bound and default (3b7d2774 graph.py:124).
     confidence: ConfidenceScore = 0.5
+    # AS-119: pre-AS-90 type and default (3b7d2774 graph.py:122). Claims are validated
+    # and become Claim models instead of staying raw dicts.
+    claims: list[ClaimPayload] = Field(default_factory=list)
 
 
 Extraction.model_rebuild()
+
+
+# ---------------------------------------------------------------------------
+# AS-119: entry-point request models for the remaining pre-AS-90 bounds (3b7d2774).
+# Same pattern as AS-112/113: these subclasses are used only where untrusted input
+# enters (FastAPI bodies, MCP tool signatures, LLM output). The shared models, their
+# defaults and the frozen AS90_DECLARED registry stay unchanged. Instances are still
+# the base type, so the services are unchanged.
+
+
+class KGConceptBody(__getattr__("KGConceptInput")):
+    """kg.related_concepts / kg.prereqs MCP input (3b7d2774 graph.py:131-132)."""
+
+    concept_id: IDStr
+
+
+class KGNextTopicsBody(__getattr__("KGNextTopicsInput")):
+    """kg.next_topics MCP input (3b7d2774 graph.py:135-137)."""
+
+    concept_id: IDStr
+    learner_id: IDStr
+
+
+class KGExplainPathBody(__getattr__("KGExplainPathInput")):
+    """kg.explain_path MCP input (3b7d2774 graph.py:140-142)."""
+
+    src: IDStr
+    dst: IDStr
+
+
+class KGPersonalizedBody(__getattr__("KGPersonalizedInput")):
+    """kg.personalized MCP input (3b7d2774 graph.py:145-148)."""
+
+    learner_id: IDStr
+    query: str = Field(min_length=1, max_length=2000)
+    k: int = Field(default=10, ge=1, le=200)

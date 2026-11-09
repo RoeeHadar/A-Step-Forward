@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from pydantic import Field
 
 from ._dynamic import FlexibleModel, flexible_model
-from .common import ConfidenceScore, IDStr, Provenance
+from .common import ConfidenceScore, IDStr, Provenance, ProvenanceBody
 
 
 class MemoryType(StrEnum):
@@ -182,3 +182,75 @@ class CompactionBody(CompactionInput):
     # AS-113: pre-AS-90 types and bounds (3b7d2774 memory.py:140-141).
     target_tokens: int = Field(ge=512)
     pinned_memory_ids: list[IDStr] = Field(default_factory=list)
+
+
+# ---------------------------------------------------------------------------
+# AS-119: entry-point request models for the remaining pre-AS-90 bounds (3b7d2774).
+# Same pattern as AS-112/113: these subclasses are used only where untrusted input
+# enters (FastAPI bodies, MCP tool signatures, LLM output). The shared models, their
+# defaults and the frozen AS90_DECLARED registry stay unchanged. Instances are still
+# the base type, so the services are unchanged.
+
+
+class MemoryWriteBody(MemoryWriteInput):
+    """POST /v1/memory body and the memory.write MCP input (3b7d2774 memory.py:64-75)."""
+
+    learner_id: IDStr
+    type: MemoryType
+    content: str = Field(min_length=1, max_length=20_000)
+    valence: float | None = Field(default=None, ge=-1.0, le=1.0)
+    importance_hint: ConfidenceScore | None = None
+    provenance: ProvenanceBody
+
+
+class MemoryUpdateBody(MemoryUpdateInput):
+    """PATCH /v1/memory/{id} body and the memory.update MCP patch (3b7d2774
+    memory.py:99-107). content and tags default to None as on the ref, so unset
+    fields are left alone by the repository patch."""
+
+    content: str | None = None
+    summary: str | None = None
+    tags: list[str] | None = None
+    salience: ConfidenceScore | None = None
+    confidence: ConfidenceScore | None = None
+    reason: str = Field(min_length=1, max_length=500)
+
+
+class MemoryWriteToolBody(__getattr__("MemoryWriteToolInput")):
+    """memory.write MCP input (3b7d2774 memory.py:156-160)."""
+
+    agent_id: str = Field(min_length=1, max_length=128)
+    input: MemoryWriteBody
+
+
+class MemoryTimelineBody(__getattr__("MemoryTimelineInput")):
+    """memory.timeline MCP input (3b7d2774 memory.py:163-169)."""
+
+    learner_id: IDStr
+    since: str | None = None
+    until: str | None = None
+    k: int = Field(default=100, ge=1, le=500)
+
+
+class MemoryUpdateToolBody(__getattr__("MemoryUpdateToolInput")):
+    """memory.update MCP input (3b7d2774 memory.py:172-178)."""
+
+    memory_id: IDStr
+    learner_id: IDStr
+    agent_id: str = Field(min_length=1, max_length=128)
+    patch: MemoryUpdateBody
+
+
+class MemoryDeleteToolBody(__getattr__("MemoryDeleteToolInput")):
+    """memory.delete MCP input (3b7d2774 memory.py:181-187)."""
+
+    memory_id: IDStr
+    learner_id: IDStr
+    agent_id: str = Field(min_length=1, max_length=128)
+    hard: bool = False
+
+
+class LearnerOnlyBody(__getattr__("LearnerOnlyInput")):
+    """memory.dream_now / memory.consolidate MCP input (3b7d2774 memory.py:190-193)."""
+
+    learner_id: IDStr

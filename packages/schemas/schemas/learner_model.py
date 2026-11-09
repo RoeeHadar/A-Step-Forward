@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from pydantic import Field
+
 from ._dynamic import FlexibleModel, flexible_model
 
 
@@ -75,3 +77,20 @@ def __getattr__(name: str) -> Any:
     model = flexible_model(name)
     globals()[name] = model
     return model
+
+
+# ---------------------------------------------------------------------------
+# AS-119: entry-point request models for the remaining pre-AS-90 bounds (3b7d2774).
+# Same pattern as AS-112/113: these subclasses are used only where untrusted input
+# enters (FastAPI bodies, MCP tool signatures, LLM output). The shared models, their
+# defaults and the frozen AS90_DECLARED registry stay unchanged. Instances are still
+# the base type, so the services are unchanged.
+
+
+class LearnerProfileBody(LearnerProfileInput):
+    """POST /v1/onboarding/submit body (3b7d2774 learner_model.py:10-21)."""
+
+    goal: str = Field(min_length=1, max_length=500)
+    subjects: list[str] = Field(min_length=1)
+    hours_per_week: float = Field(ge=1, le=40)
+    attention_span: int | None = Field(default=None, ge=10, le=180)

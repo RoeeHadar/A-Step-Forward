@@ -10,8 +10,8 @@ from schemas.memory import (
     MemorySearchBody,
     MemorySearchInput,
     MemorySearchResult,
-    MemoryUpdateInput,
-    MemoryWriteInput,
+    MemoryUpdateBody,
+    MemoryWriteBody,
 )
 
 from ..core.auth import AuthCtx, require_learner
@@ -44,7 +44,7 @@ async def list_memories(
 
 @router.post("", response_model=MemoryRecord)
 async def create(
-    body: MemoryWriteInput,
+    body: MemoryWriteBody,
     ctx: AuthCtx = Depends(require_learner),
     svc=Depends(get_memory_service),
     _=Depends(per_user("memory.create", per_min=60)),
@@ -80,7 +80,7 @@ async def timeline(
 @router.patch("/{memory_id}", response_model=MemoryRecord)
 async def update(
     memory_id: str,
-    patch: MemoryUpdateInput,
+    patch: MemoryUpdateBody,
     ctx: AuthCtx = Depends(require_learner),
     svc=Depends(get_memory_service),
     _=Depends(per_user("memory.update", per_min=60)),

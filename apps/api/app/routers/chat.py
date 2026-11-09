@@ -11,7 +11,7 @@ from fastapi.responses import StreamingResponse
 
 from memory_service.event_writer import persist_memory_event
 from schemas._as90_compat import dump_base_compat
-from schemas.agents import AgentName, ChatChunk, ChatRequest
+from schemas.agents import AgentName, ChatChunk, ChatBody
 
 from ..core.auth import AuthCtx, require_learner
 from ..core.rate_limit import per_user
@@ -80,7 +80,7 @@ def _schedule_memory_event(
 
 @router.post("/chat")
 async def chat(
-    body: ChatRequest,
+    body: ChatBody,
     ctx: AuthCtx = Depends(require_learner),
     runner=Depends(_get_runner),
     _=Depends(per_user("chat.post", per_min=30)),

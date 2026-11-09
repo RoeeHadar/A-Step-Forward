@@ -4,13 +4,13 @@ from __future__ import annotations
 
 from mcp.server.fastmcp import FastMCP
 from schemas.graph import (
-    KGConceptInput,
-    KGExplainPathInput,
+    KGConceptBody,
+    KGExplainPathBody,
     KGHybridBody,
-    KGNextTopicsInput,
+    KGNextTopicsBody,
     KGNode,
     KGPath,
-    KGPersonalizedInput,
+    KGPersonalizedBody,
     KGSearchBody,
     KGSearchResult,
     KGWalkBody,
@@ -41,23 +41,23 @@ def register_graphrag_tools(mcp: FastMCP, *, svc: GraphRAGService | None = None)
         return await invoke(service.hybrid(inp))
 
     @mcp.tool(name="kg.personalized", description="Hybrid search biased toward a learner's subgraph.")
-    async def kg_personalized(inp: KGPersonalizedInput) -> list[KGSearchResult]:
+    async def kg_personalized(inp: KGPersonalizedBody) -> list[KGSearchResult]:
         return await invoke(service.personalized(learner_id=inp.learner_id, query=inp.query, k=inp.k))
 
     @mcp.tool(name="kg.related_concepts", description="List concepts directly related to a given concept.")
-    async def kg_related_concepts(inp: KGConceptInput) -> list[KGNode]:
+    async def kg_related_concepts(inp: KGConceptBody) -> list[KGNode]:
         return await invoke(service.related_concepts(inp.concept_id))
 
     @mcp.tool(name="kg.prereqs", description="List prerequisite concepts for a given concept.")
-    async def kg_prereqs(inp: KGConceptInput) -> list[KGNode]:
+    async def kg_prereqs(inp: KGConceptBody) -> list[KGNode]:
         return await invoke(service.prereqs(inp.concept_id))
 
     @mcp.tool(name="kg.next_topics", description="Suggest next topics for a learner from a concept.")
-    async def kg_next_topics(inp: KGNextTopicsInput) -> list[KGNode]:
+    async def kg_next_topics(inp: KGNextTopicsBody) -> list[KGNode]:
         return await invoke(service.next_topics(concept_id=inp.concept_id, learner_id=inp.learner_id))
 
     @mcp.tool(name="kg.explain_path", description="Return the shortest justified path between two graph nodes.")
-    async def kg_explain_path(inp: KGExplainPathInput) -> KGPath | None:
+    async def kg_explain_path(inp: KGExplainPathBody) -> KGPath | None:
         return await invoke(service.explain_path(inp.src, inp.dst))
 
     return service
