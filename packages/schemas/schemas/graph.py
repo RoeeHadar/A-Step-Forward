@@ -6,6 +6,7 @@ from typing import Any
 from pydantic import Field
 
 from ._dynamic import FlexibleModel, flexible_model
+from .common import ConfidenceScore, IDStr
 
 
 class NodeKind(StrEnum):
@@ -187,18 +188,25 @@ class KGSearchBody(KGSearchInput):
     """POST /v1/graphrag/search body and MCP kg.search input (pre-AS-90: query required)."""
 
     query: str
+    # AS-113: pre-AS-90 bound (3b7d2774 graph.py:67).
+    k: int = Field(default=10, ge=1, le=200)
 
 
 class KGHybridBody(KGHybridInput):
     """POST /v1/graphrag/hybrid body and MCP kg.hybrid input (pre-AS-90: query required)."""
 
     query: str
+    # AS-113: pre-AS-90 type (3b7d2774 graph.py:82); k/depth had no bounds there.
+    learner_id: IDStr | None = None
 
 
 class KGWalkBody(KGWalkInput):
     """MCP kg.walk input (pre-AS-90: seed_node_ids required)."""
 
-    seed_node_ids: list[str]
+    # AS-113: pre-AS-90 types and bounds (3b7d2774 graph.py:72-75).
+    seed_node_ids: list[IDStr]
+    depth: int = Field(default=2, ge=1, le=4)
+    limit: int = Field(default=50, ge=1, le=500)
 
 
 class EntityPayload(Entity):
@@ -206,6 +214,8 @@ class EntityPayload(Entity):
 
     name: str
     kind: NodeKind
+    # AS-113: pre-AS-90 type, bound and default (3b7d2774 graph.py:103).
+    confidence: ConfidenceScore = 0.5
 
 
 class RelationPayload(Relation):
@@ -214,6 +224,8 @@ class RelationPayload(Relation):
     src_name: str
     dst_name: str
     kind: EdgeKind
+    # AS-113: pre-AS-90 type, bound and default (3b7d2774 graph.py:111).
+    confidence: ConfidenceScore = 0.5
 
 
 class ExtractionPayload(Extraction):
@@ -222,6 +234,8 @@ class ExtractionPayload(Extraction):
 
     entities: list[EntityPayload]
     relations: list[RelationPayload]
+    # AS-113: pre-AS-90 type, bound and default (3b7d2774 graph.py:124).
+    confidence: ConfidenceScore = 0.5
 
 
 Extraction.model_rebuild()

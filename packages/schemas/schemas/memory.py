@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from pydantic import Field
 
 from ._dynamic import FlexibleModel, flexible_model
-from .common import Provenance
+from .common import ConfidenceScore, IDStr, Provenance
 
 
 class MemoryType(StrEnum):
@@ -167,10 +167,18 @@ class MemorySearchBody(MemorySearchInput):
     required). Internal callers keep using MemorySearchInput."""
 
     agent_id: str
+    # AS-113: pre-AS-90 types and bounds (3b7d2774 memory.py:81-87). The defaults equal
+    # what the AS-110 read-site guards apply when the shared model leaves them None.
+    learner_id: IDStr
+    query: str = Field(min_length=1, max_length=2000)
+    k: int = Field(default=10, ge=1, le=200)
+    min_strength: ConfidenceScore = 0.0
 
 
 class CompactionBody(CompactionInput):
     """MCP memory.compact_context input (pre-AS-90: messages, target_tokens required)."""
 
     messages: list[dict[str, Any]]
-    target_tokens: int
+    # AS-113: pre-AS-90 types and bounds (3b7d2774 memory.py:140-141).
+    target_tokens: int = Field(ge=512)
+    pinned_memory_ids: list[IDStr] = Field(default_factory=list)

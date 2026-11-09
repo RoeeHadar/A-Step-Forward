@@ -141,11 +141,14 @@ class QuizAnswerBody(QuizAnswerItem):
     """One answer in the quiz submit body (pre-AS-90: item_id, chosen required)."""
 
     item_id: str
-    chosen: str
+    # AS-113: pre-AS-90 bounds (3b7d2774 learning_path.py:94-95).
+    chosen: str = Field(min_length=1, max_length=8)
+    time_spent_s: int | None = Field(default=None, ge=0, le=3600)
 
 
 class QuizSubmitBody(QuizSubmitRequest):
     """POST .../quiz/submit body. answers was `Any`, so items stayed raw dicts and the
     quiz repository's `a.item_id` reads failed; pre-AS-90: list[QuizAnswerItem]."""
 
-    answers: list[QuizAnswerBody]
+    # AS-113: pre-AS-90 bound (3b7d2774 learning_path.py:99).
+    answers: list[QuizAnswerBody] = Field(min_length=1)

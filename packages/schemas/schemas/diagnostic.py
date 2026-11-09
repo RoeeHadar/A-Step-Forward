@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from pydantic import Field
+
 from ._dynamic import FlexibleModel, flexible_model
 
 
@@ -89,4 +91,5 @@ class DiagnosticAnswerBody(DiagnosticAnswerRequest):
     """POST /v1/diagnostic/{id}/answer body (pre-AS-90: item_id, chosen required)."""
 
     item_id: str
-    chosen: str
+    # AS-113: pre-AS-90 bound (3b7d2774 diagnostic.py:38).
+    chosen: str = Field(min_length=1, max_length=8)
