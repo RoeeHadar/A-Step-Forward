@@ -105,7 +105,8 @@ async def test_memory_write_happy_path(mcp_server, mock_svc: MagicMock) -> None:
 @pytest.mark.asyncio
 async def test_memory_search_happy_path(mcp_server, mock_svc: MagicMock) -> None:
     search_inp = MemorySearchInput(learner_id="learner-1", query="division", agent_id="tutor")
-    await mcp_server.call_tool("memory.search", {"inp": search_inp.model_dump(mode="json")})
+    payload = search_inp.model_dump(mode="json", exclude_none=True)
+    await mcp_server.call_tool("memory.search", {"inp": payload})
     mock_svc.search.assert_awaited_once()
 
 
@@ -167,7 +168,7 @@ async def test_memory_compact_context_happy_path(mcp_server) -> None:
                 "inp": CompactionInput(
                     messages=[{"role": "user", "content": "hello"}],
                     target_tokens=512,
-                ).model_dump(mode="json")
+                ).model_dump(mode="json", exclude_none=True)
             },
         )
 
