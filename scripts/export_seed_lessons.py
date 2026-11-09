@@ -25,6 +25,12 @@ from schemas.curriculum_seed import load_seed_course  # noqa: E402
 OUTPUT = ROOT / "apps" / "web" / "src" / "lib" / "seed-lessons.generated.json"
 
 
+def _level_value(course) -> str | None:
+    """AS-111 (AS-110 finding): guarded Course.level read; None/missing -> None."""
+    level = getattr(course, "level", None)
+    return getattr(level, "value", level)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--course", default="foundations-of-math")
@@ -48,7 +54,7 @@ def main() -> int:
         "course": {
             "id": bundle.course.id,
             "title": bundle.course.title,
-            "level": bundle.course.level.value,
+            "level": _level_value(bundle.course),
             "summary": bundle.course.summary,
             "units": [
                 {

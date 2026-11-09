@@ -33,19 +33,6 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 SEED_DIR = REPO_ROOT / "infra" / "seeds" / "courses" / "foundations-of-math"
 
 
-def _seed_loader_available() -> bool:
-    # AS-99: schemas.curriculum_seed.load_seed_course is a no-op stub since 01c27b73
-    # (returns SeedBundle without .course), so this suite cannot build its fake.
-    # Re-enables itself once the real loader is restored (open decision in AS-99).
-    return getattr(load_seed_course(SEED_DIR), "course", None) is not None
-
-
-pytestmark = pytest.mark.skipif(
-    not _seed_loader_available(),
-    reason="schemas.curriculum_seed.load_seed_course is a stub (no course parsed); see AS-99",
-)
-
-
 def _flatten_lessons(course: Course) -> Iterable[Lesson]:
     for unit in course.units:
         for lesson in unit.lessons:
