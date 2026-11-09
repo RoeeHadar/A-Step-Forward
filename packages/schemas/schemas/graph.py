@@ -99,9 +99,11 @@ class Extraction(FlexibleModel):
     # AS-90: fields read in production (was model_extra fallback).
     claims: list[Any] | None = None
     confidence: Any = None
-    entities: Any = None
+    # AS-112: typed (was Any) so dicts are coerced to Entity/Relation instead of
+    # reaching the resolver/writer raw. Default stays None (AS90_DECLARED).
+    entities: list[Entity] | None = None
     notes: Any = None
-    relations: Any = None
+    relations: list[Relation] | None = None
 
 
 def __getattr__(name: str) -> Any:
@@ -165,3 +167,61 @@ class Relation(FlexibleModel):
     dst_name: str | None = None
     kind: Any = None
     src_name: str | None = None
+    # AS-112: read by ingest/writer.py:68 but never declared (AS-90 runtime guard).
+    # None == the old model_extra fallback; the writer applies the pre-AS-90 1.0.
+    # Not in AS90_DECLARED.
+    weight: float | None = None
+
+
+# ---------------------------------------------------------------------------
+# AS-112: entry-point request models. The fields below were required before AS-90
+# (3b7d2774 schemas); AS-90 declared them `= None` on the shared models, so an
+# omitted field reached the service and crashed (500) instead of a 422. These
+# subclasses are used only where untrusted input enters (FastAPI bodies, MCP tool
+# signatures, LLM output); they restore the requirement without changing the
+# shared models' defaults, the frozen AS90_DECLARED registry or any emitted
+# output. Instances are still the base type, so services are unchanged.
+
+
+class KGSearchBody(KGSearchInput):
+    """POST /v1/graphrag/search body and MCP kg.search input (pre-AS-90: query required)."""
+
+    query: str
+
+
+class KGHybridBody(KGHybridInput):
+    """POST /v1/graphrag/hybrid body and MCP kg.hybrid input (pre-AS-90: query required)."""
+
+    query: str
+
+
+class KGWalkBody(KGWalkInput):
+    """MCP kg.walk input (pre-AS-90: seed_node_ids required)."""
+
+    seed_node_ids: list[str]
+
+
+class EntityPayload(Entity):
+    """An entity in the LLM extraction JSON (pre-AS-90: name, kind required)."""
+
+    name: str
+    kind: NodeKind
+
+
+class RelationPayload(Relation):
+    """A relation in the LLM extraction JSON (pre-AS-90: src_name, dst_name, kind required)."""
+
+    src_name: str
+    dst_name: str
+    kind: EdgeKind
+
+
+class ExtractionPayload(Extraction):
+    """LLM extraction JSON (pre-AS-90: entities, relations required). Unknown kinds or
+    missing names are rejected with a ValidationError, as before AS-90."""
+
+    entities: list[EntityPayload]
+    relations: list[RelationPayload]
+
+
+Extraction.model_rebuild()

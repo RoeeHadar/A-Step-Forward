@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from mcp.server.fastmcp import FastMCP
 from schemas.memory import (
-    CompactionInput,
+    CompactionBody,
     CompactionOutput,
     LearnerOnlyInput,
     MemoryConsolidateResult,
@@ -12,7 +12,7 @@ from schemas.memory import (
     MemoryDeleteToolInput,
     MemoryHealthReport,
     MemoryRecord,
-    MemorySearchInput,
+    MemorySearchBody,
     MemorySearchResult,
     MemoryTimelineInput,
     MemoryUpdateToolInput,
@@ -25,7 +25,12 @@ from memory_service.hygiene.compaction import compact_context
 
 
 def register_memory_tools(mcp: FastMCP, *, svc: MemoryService | None = None) -> MemoryService:
-    """Register all memory.* tools on the given FastMCP instance."""
+    """Register all memory.* tools on the given FastMCP instance.
+
+    AS-112: memory.search and memory.compact_context take the *Body input models, so
+    FastMCP's argument validation rejects a missing agent_id / messages / target_tokens
+    again (pre-AS-90).
+    """
     service = svc or get_memory_service()
 
     @mcp.tool(name="memory.write", description="Persist a new memory for a learner.")
@@ -33,7 +38,7 @@ def register_memory_tools(mcp: FastMCP, *, svc: MemoryService | None = None) -> 
         return await invoke(service.write(inp.input, agent_id=inp.agent_id))
 
     @mcp.tool(name="memory.search", description="Search learner memories with hybrid retrieval and policy filtering.")
-    async def memory_search(inp: MemorySearchInput) -> list[MemorySearchResult]:
+    async def memory_search(inp: MemorySearchBody) -> list[MemorySearchResult]:
         return await invoke(service.search(inp))
 
     @mcp.tool(name="memory.timeline", description="List episodic memories for a learner within a time window.")
@@ -68,7 +73,7 @@ def register_memory_tools(mcp: FastMCP, *, svc: MemoryService | None = None) -> 
         name="memory.compact_context",
         description="Compact a conversation transcript to fit a target token budget.",
     )
-    async def memory_compact_context(inp: CompactionInput) -> CompactionOutput:
+    async def memory_compact_context(inp: CompactionBody) -> CompactionOutput:
         return await invoke(compact_context(inp))
 
     return service

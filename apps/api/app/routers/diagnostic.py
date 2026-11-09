@@ -6,7 +6,7 @@ from diagnostic_service.api import get_diagnostic_service
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from schemas.diagnostic import (
-    DiagnosticAnswerRequest,
+    DiagnosticAnswerBody,
     DiagnosticAnswerResponse,
     DiagnosticSessionState,
     DiagnosticStartRequest,
@@ -33,7 +33,7 @@ async def start_diagnostic(
 @router.post("/{session_id}/answer", response_model=DiagnosticAnswerResponse)
 async def answer_diagnostic(
     session_id: str,
-    body: DiagnosticAnswerRequest,
+    body: DiagnosticAnswerBody,  # AS-112: item_id/chosen required -> 422 when omitted
     ctx: AuthCtx = Depends(require_learner),
     svc=Depends(get_diagnostic_service),
     _=Depends(per_user("diagnostic.answer", per_min=120)),

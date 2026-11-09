@@ -7,6 +7,7 @@ from fastapi.responses import JSONResponse
 from memory_service.api import get_memory_service
 from schemas.memory import (
     MemoryRecord,
+    MemorySearchBody,
     MemorySearchInput,
     MemorySearchResult,
     MemoryUpdateInput,
@@ -56,7 +57,7 @@ async def create(
 
 @router.post("/search", response_model=list[MemorySearchResult])
 async def search(
-    body: MemorySearchInput,
+    body: MemorySearchBody,  # AS-112: agent_id required -> 422 when omitted
     ctx: AuthCtx = Depends(require_learner),
     svc=Depends(get_memory_service),
     _=Depends(per_user("memory.search", per_min=120)),

@@ -73,3 +73,20 @@ class DiagnosticAnswerRequest(FlexibleModel):
 
     chosen: Any = None
     item_id: Any = None
+
+
+# ---------------------------------------------------------------------------
+# AS-112: entry-point request models. The fields below were required before AS-90
+# (3b7d2774 schemas); AS-90 declared them `= None` on the shared models, so an
+# omitted field reached the service and crashed (500) instead of a 422. These
+# subclasses are used only where untrusted input enters (FastAPI bodies, MCP tool
+# signatures, LLM output); they restore the requirement without changing the
+# shared models' defaults, the frozen AS90_DECLARED registry or any emitted
+# output. Instances are still the base type, so services are unchanged.
+
+
+class DiagnosticAnswerBody(DiagnosticAnswerRequest):
+    """POST /v1/diagnostic/{id}/answer body (pre-AS-90: item_id, chosen required)."""
+
+    item_id: str
+    chosen: str
