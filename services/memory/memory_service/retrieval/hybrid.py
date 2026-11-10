@@ -36,12 +36,16 @@ async def hybrid_search(repo: MemoryRepository, input: MemorySearchInput) -> lis
             continue
         rows.append(r)
 
+    # AS-110: k / min_strength are AS-90 fields (None when unset, e.g. the GET /v1/memory?q=
+    # route builds MemorySearchInput without min_strength); use the pre-AS-90 defaults.
+    min_strength = input.min_strength if input.min_strength is not None else 0.0
+    k = input.k if input.k is not None else 10
     results: list[MemorySearchResult] = []
     for r in rows:
         lex = _lexical_overlap(input.query, r.content)
         recency = strength_now(r)
         score = 0.55 * lex + 0.25 * recency + 0.20 * r.confidence
-        if score < input.min_strength:
+        if score < min_strength:
             continue
         results.append(
             MemorySearchResult(
@@ -52,4 +56,4 @@ async def hybrid_search(repo: MemoryRepository, input: MemorySearchInput) -> lis
         )
 
     results.sort(key=lambda x: x.score, reverse=True)
-    return results[: input.k]
+    return results[:k]

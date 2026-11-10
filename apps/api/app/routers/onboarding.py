@@ -5,7 +5,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends
 
 from learner_model_service.api import get_learner_model_service
-from schemas.learner_model import LearnerProfileInput
+from schemas.learner_model import LearnerProfileBody
 
 from ..core.auth import AuthCtx, require_learner
 from ..core.rate_limit import per_user
@@ -15,7 +15,7 @@ router = APIRouter(prefix="/v1/onboarding", tags=["onboarding"])
 
 @router.post("/submit")
 async def submit_onboarding(
-    body: LearnerProfileInput,
+    body: LearnerProfileBody,
     ctx: AuthCtx = Depends(require_learner),
     svc=Depends(get_learner_model_service),
     _=Depends(per_user("onboarding.submit", per_min=10)),

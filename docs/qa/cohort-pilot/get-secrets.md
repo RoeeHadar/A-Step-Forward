@@ -5,7 +5,7 @@
 From `apps/web` (corporate proxy may need TLS bypass):
 
 ```powershell
-$env:NODE_TLS_REJECT_UNAUTHORIZED='0'
+$env:NODE_EXTRA_CA_CERTS='C:\path\to\corporate-ca.pem'  # only behind a TLS-intercepting proxy; never disable TLS verification
 pnpm exec vercel link --yes --project a-step-forward-waij --scope a-step-forward
 pnpm exec vercel env pull .env.local --environment production --yes
 ```

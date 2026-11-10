@@ -1,4 +1,7 @@
-﻿process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+﻿import { requireRealLlmOptIn } from './scripts/lib/llm-script-guard.mjs';
+
+requireRealLlmOptIn('test-groq.mjs');
+
 async function check() {
   const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",

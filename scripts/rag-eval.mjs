@@ -14,6 +14,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { makeEmbedder } from './lib/rag-embed.mjs';
+import { requireRealLlmOptIn } from './lib/llm-script-guard.mjs';
+
+requireRealLlmOptIn('scripts/rag-eval.mjs (NVIDIA embeddings)');
 
 const ROOT = process.cwd();
 const WEB = path.join(ROOT, 'apps/web');

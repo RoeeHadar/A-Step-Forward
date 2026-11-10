@@ -70,7 +70,8 @@ class GraphWriter:
                 kind=relation.kind,
                 src=src.id,
                 dst=dst.id,
-                weight=relation.weight,
+                # AS-112: Relation.weight is unset on heuristic relations; pre-AS-90 default 1.0.
+                weight=relation.weight if relation.weight is not None else 1.0,
                 provenance=doc.source,
                 properties={"confidence": relation.confidence},
             )

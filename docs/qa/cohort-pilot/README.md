@@ -24,7 +24,7 @@ Human-operated production pilot to collect structured feedback and drive a prior
 
 ```powershell
 # Seed S7–S10 after roster.json has clerk_user_id or email
-$env:NODE_TLS_REJECT_UNAUTHORIZED='0'
+$env:NODE_EXTRA_CA_CERTS='C:\path\to\corporate-ca.pem'  # only behind a TLS-intercepting proxy; never disable TLS verification
 $env:DATABASE_URL='<prod Neon URL — never commit>'
 node scripts/seed-cohort-pilot.mjs --dry-run
 node scripts/seed-cohort-pilot.mjs

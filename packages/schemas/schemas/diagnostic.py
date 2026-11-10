@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from pydantic import Field
+
 from ._dynamic import FlexibleModel, flexible_model
 
 
@@ -73,3 +75,35 @@ class DiagnosticAnswerRequest(FlexibleModel):
 
     chosen: Any = None
     item_id: Any = None
+
+
+# ---------------------------------------------------------------------------
+# AS-112: entry-point request models. The fields below were required before AS-90
+# (3b7d2774 schemas); AS-90 declared them `= None` on the shared models, so an
+# omitted field reached the service and crashed (500) instead of a 422. These
+# subclasses are used only where untrusted input enters (FastAPI bodies, MCP tool
+# signatures, LLM output); they restore the requirement without changing the
+# shared models' defaults, the frozen AS90_DECLARED registry or any emitted
+# output. Instances are still the base type, so services are unchanged.
+
+
+class DiagnosticAnswerBody(DiagnosticAnswerRequest):
+    """POST /v1/diagnostic/{id}/answer body (pre-AS-90: item_id, chosen required)."""
+
+    item_id: str
+    # AS-113: pre-AS-90 bound (3b7d2774 diagnostic.py:38).
+    chosen: str = Field(min_length=1, max_length=8)
+
+
+# ---------------------------------------------------------------------------
+# AS-119: entry-point request models for the remaining pre-AS-90 bounds (3b7d2774).
+# Same pattern as AS-112/113: these subclasses are used only where untrusted input
+# enters (FastAPI bodies, MCP tool signatures, LLM output). The shared models, their
+# defaults and the frozen AS90_DECLARED registry stay unchanged. Instances are still
+# the base type, so the services are unchanged.
+
+
+class DiagnosticStartBody(DiagnosticStartRequest):
+    """POST /v1/diagnostic/start body (3b7d2774 diagnostic.py:11-12)."""
+
+    topics: list[str] = Field(default_factory=list, min_length=0, max_length=20)

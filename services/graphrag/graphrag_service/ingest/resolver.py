@@ -48,7 +48,11 @@ class EntityResolver:
             score = max(
                 fuzz.token_sort_ratio(entity.name.lower(), node.canonical_name.lower()) / 100.0,
                 max(
-                    (fuzz.token_sort_ratio(entity.name.lower(), alias.lower()) / 100.0 for alias in node.aliases),
+                    # AS-99: aliases is an AS-90 field and may be None.
+                    (
+                        fuzz.token_sort_ratio(entity.name.lower(), alias.lower()) / 100.0
+                        for alias in (node.aliases or [])
+                    ),
                     default=0.0,
                 ),
             )

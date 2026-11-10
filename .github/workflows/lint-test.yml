@@ -40,7 +40,12 @@ jobs:
           python-version: "3.11"
 
       - name: Install Python deps
-        run: uv sync --all-groups
+        run: |
+          uv sync --all-groups
+          uv sync --frozen --inexact --package curriculum-mcp
+          uv sync --frozen --inexact --package graphrag-mcp
+          uv sync --frozen --inexact --package memory-mcp
+          uv sync --frozen --inexact --package progress-mcp
 
       - name: Ruff lint
         run: uv run ruff check infra tests scripts
@@ -72,6 +77,16 @@ jobs:
 
       - name: Pytest
         run: uv run pytest tests
+
+      - name: MCP server tests
+        # One pytest call per server: the four tests/ dirs share file names (conftest.py,
+        # test_server.py), and -o addopts= drops their --cov-fail-under (pytest-cov is not
+        # in uv.lock).
+        run: |
+          uv run pytest -o addopts= mcp-servers/curriculum/tests
+          uv run pytest -o addopts= mcp-servers/graphrag/tests
+          uv run pytest -o addopts= mcp-servers/memory/tests
+          uv run pytest -o addopts= mcp-servers/progress/tests
 
   web:
     runs-on: ubuntu-latest

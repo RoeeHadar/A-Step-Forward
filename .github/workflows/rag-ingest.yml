@@ -49,6 +49,8 @@ jobs:
       DATABASE_URL: ${{ inputs.db_target == 'production' && secrets.PRODUCTION_DATABASE_URL || inputs.db_target == 'staging' && secrets.STAGING_DATABASE_URL || secrets.DATABASE_URL }}
       NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
       NVIDIA_BASE_URL: ${{ vars.NVIDIA_BASE_URL || 'https://integrate.api.nvidia.com/v1' }}
+      # AS-97: rag-ingest/rag-eval call hosted NVIDIA embeddings and refuse without this opt-in.
+      ALLOW_REAL_LLM: "1"
     steps:
       - uses: actions/checkout@v4
 

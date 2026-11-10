@@ -7,7 +7,7 @@ import re
 from typing import Any
 
 import structlog
-from schemas.graph import EdgeKind, Entity, Extraction, NodeKind, Relation
+from schemas.graph import EdgeKind, Entity, Extraction, ExtractionPayload, NodeKind, Relation
 
 from ..settings import GraphRAGSettings
 
@@ -109,4 +109,7 @@ class Extractor:
             if raw.startswith("json"):
                 raw = raw[4:].strip()
         data = json.loads(raw)
-        return Extraction.model_validate(data)
+        # AS-112: validate the LLM JSON against the pre-AS-90 requirements (entities,
+        # relations, entity name/kind, relation src/dst/kind); dicts become Entity /
+        # Relation models, anything else raises ValidationError as before AS-90.
+        return ExtractionPayload.model_validate(data)

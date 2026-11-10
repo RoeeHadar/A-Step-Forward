@@ -152,12 +152,15 @@ class Neo4jStore:
             "id": node.id,
             "kind": node.kind.value,
             "canonical_name": node.canonical_name,
-            "aliases": json.dumps(node.aliases),
+            # AS-110: aliases / properties / pending_review / created_at are AS-90 fields
+            # (None when unset; most writer.py KGNode(...) calls leave them unset). Use the
+            # pre-AS-90 defaults: [], {}, False, now (UTC).
+            "aliases": json.dumps(node.aliases if node.aliases is not None else []),
             "summary": node.summary,
-            "properties": json.dumps(node.properties),
+            "properties": json.dumps(node.properties if node.properties is not None else {}),
             "provenance": _serialize_provenance(node.provenance),
-            "pending_review": node.pending_review,
-            "created_at": node.created_at.isoformat(),
+            "pending_review": node.pending_review if node.pending_review is not None else False,
+            "created_at": (node.created_at or datetime.now(timezone.utc)).isoformat(),
         }
         async with self._session() as session:
             await session.run(cypher, params)
@@ -182,8 +185,10 @@ class Neo4jStore:
             "kind": edge.kind.value,
             "src_id": edge.src,
             "dst_id": edge.dst,
-            "weight": edge.weight,
-            "properties": json.dumps(edge.properties),
+            # AS-110: weight / properties are AS-90 fields (None when unset); pre-AS-90
+            # defaults 1.0 / {}.
+            "weight": edge.weight if edge.weight is not None else 1.0,
+            "properties": json.dumps(edge.properties if edge.properties is not None else {}),
             "provenance": _serialize_provenance(edge.provenance),
             "chunk_id": chunk_id,
         }

@@ -72,7 +72,8 @@ async def merge(repo: MemoryRepository, candidate: DuplicateCandidate) -> Memory
     canonical.tags = merged_tags
     canonical.salience = min(1.0, max(canonical.salience, duplicate.salience))
     canonical.confidence = min(1.0, (canonical.confidence + duplicate.confidence) / 2.0 + 0.05)
-    canonical.access_count += duplicate.access_count
+    # AS-99: access_count is an AS-90 field (None when unset); treat None as 0.
+    canonical.access_count = (canonical.access_count or 0) + (duplicate.access_count or 0)
     canonical.updated_at = datetime.now(timezone.utc)
 
     duplicate.superseded_by = canonical.id

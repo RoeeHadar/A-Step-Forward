@@ -44,7 +44,7 @@ pnpm build       # Production build
 - **Zod** at every API boundary via `@asf/schemas`.
 - **TanStack Query** hooks in `src/hooks/use-learner-data.ts` for client refetches.
 - **Zustand** UI state in `src/stores/ui-store.ts`.
-- **Mock data** in `src/lib/data.ts` when the FastAPI gateway is offline.
+- **Lessons** render from the committed seed snapshot (`src/lib/seed-lessons.ts`); progress and plans read Neon (`src/lib/neon-db.ts`).
 - **CSP** enforced in `middleware.ts` (no `unsafe-inline` for scripts).
 
 ## Required env

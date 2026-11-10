@@ -18,7 +18,7 @@ Free-tier critical path is **Vercel + Neon direct** (`apps/web/src/app/api/**`),
 
 **Verdict (iteration 1):** local ADR-0010 pure-logic Vitest largely green; Neon/HTTP gate + lesson≠advance **BLOCKED** (`SELECT 1` → `fetch failed`).
 
-**Verdict (iteration 2):** Neon reachable (`SELECT 1` OK with `NODE_TLS_REJECT_UNAUTHORIZED=0`). Checks **#8–11, #16 PASS** at DB/API boundary against live `building` pilot seed (fingerprint + gate fail early-return + gate pass→advance + lesson≠advance). Clerk-authenticated HTTP route round-trips still not executed this pass — boundary SQL mirrors `advanceRollingPlanWindow` / `markWeekCompleted` / `markLessonCompleteThin`. `seed_variant` remains `building` (re-seeded after mutating checks).
+**Verdict (iteration 2):** Neon reachable (`SELECT 1` OK; that local run had TLS verification disabled, which is not a recommended setup: behind a TLS-intercepting proxy set `NODE_EXTRA_CA_CERTS` to the corporate CA .pem instead). Checks **#8–11, #16 PASS** at DB/API boundary against live `building` pilot seed (fingerprint + gate fail early-return + gate pass→advance + lesson≠advance). Clerk-authenticated HTTP route round-trips still not executed this pass — boundary SQL mirrors `advanceRollingPlanWindow` / `markWeekCompleted` / `markLessonCompleteThin`. `seed_variant` remains `building` (re-seeded after mutating checks).
 
 ---
 
@@ -237,7 +237,7 @@ Status legend: **PASS** / **FAIL** / **BLOCKED** / **BLOCKED-PENDING-NEON**. Evi
 
 **Runtime:** Cursor Auto · **When:** 2026-07-21 · **Variant lock:** `building`  
 **Scope:** Integration checks **#8–11, #16** only (Coordinator iteration-2 binding).  
-**Env:** `DATABASE_URL` from `apps/web/.env.local` (never printed); `NODE_TLS_REJECT_UNAUTHORIZED=0`. Pilot `user_3FakzyAcsPAfzap2ule6sVHNahk`.
+**Env:** `DATABASE_URL` from `apps/web/.env.local` (never printed); TLS verification was disabled for this run (not recommended: behind a TLS-intercepting proxy set `NODE_EXTRA_CA_CERTS` to the corporate CA .pem; never disable TLS verification). Pilot `user_3FakzyAcsPAfzap2ule6sVHNahk`.
 
 ### Environment
 

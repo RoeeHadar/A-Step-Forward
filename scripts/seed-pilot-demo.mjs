@@ -18,7 +18,7 @@
  *                   maintenance/review week.
  *
  * Usage (Windows / corporate proxy):
- *   $env:NODE_TLS_REJECT_UNAUTHORIZED='0'
+ *   $env:NODE_EXTRA_CA_CERTS='C:\path\to\corporate-ca.pem'  # only behind a TLS-intercepting proxy; never disable TLS verification
  *   $env:DATABASE_URL='<prod Neon URL — never commit>'
  *   node scripts/seed-pilot-demo.mjs --variant building [--user-id user_xxx | --email a@b.com] [--goal bagrut_math_5] [--anxiety 8] [--hours 3]
  *

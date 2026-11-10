@@ -4,7 +4,7 @@
  *
  * Run with ephemeral test key in the shell (do not commit keys):
  *   $env:GROQ_API_KEY='…'; $env:LLM_BASE_URL='https://api.groq.com/openai/v1'; …
- *   $env:NODE_TLS_REJECT_UNAUTHORIZED='0'   # only if local TLS MITM breaks Node fetch
+ *   $env:NODE_EXTRA_CA_CERTS='C:\path\to\corporate-ca.pem'   # only behind a TLS-intercepting proxy; never disable TLS verification
  *   pnpm --filter @asf/web exec vitest run src/lib/agent-communication.llm.integration.test.ts
  */
 import { describe, expect, it } from 'vitest';

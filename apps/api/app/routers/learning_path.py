@@ -9,7 +9,7 @@ from schemas.learning_path import (
     LearningPlan,
     PlanWeek,
     QuizStartResponse,
-    QuizSubmitRequest,
+    QuizSubmitBody,
     QuizSubmitResponse,
 )
 from schemas.errors import NotFoundError
@@ -77,7 +77,7 @@ async def start_week_quiz(
 async def submit_week_quiz(
     plan_id: str,
     week_num: int,
-    body: QuizSubmitRequest,
+    body: QuizSubmitBody,  # AS-112: answers[].item_id/chosen required -> 422 when omitted
     ctx: AuthCtx = Depends(require_learner),
     svc=Depends(get_learning_path_service),
     _=Depends(per_user("learning_path.quiz.submit", per_min=10)),

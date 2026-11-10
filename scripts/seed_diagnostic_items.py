@@ -161,6 +161,15 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Seed diagnostic_items from KG YAML")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
+    if os.environ.get("GROQ_API_KEY") or os.environ.get("LLM_API_KEY"):
+        # AS-96: with a key set, items come from AssessmentGeneratorAgent (real Groq).
+        # Unset the key for template-only seeding, or opt in explicitly.
+        from llm_script_guard import require_real_llm_opt_in
+
+        require_real_llm_opt_in(
+            "scripts/seed_diagnostic_items.py",
+            why="would call a real LLM (Groq) because GROQ_API_KEY/LLM_API_KEY is set",
+        )
     asyncio.run(seed(dry_run=args.dry_run))
 
 

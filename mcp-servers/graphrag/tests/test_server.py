@@ -67,21 +67,25 @@ async def test_list_tools_registers_all_kg_tools(mcp_server) -> None:
 
 @pytest.mark.asyncio
 async def test_kg_search_happy_path(mcp_server, mock_svc: MagicMock) -> None:
-    await mcp_server.call_tool("kg.search", {"inp": KGSearchInput(query="fractions").model_dump(mode="json")})
+    payload = KGSearchInput(query="fractions").model_dump(mode="json", exclude_none=True)
+    await mcp_server.call_tool("kg.search", {"inp": payload})
     mock_svc.search.assert_awaited_once()
 
 
 @pytest.mark.asyncio
 async def test_kg_walk_happy_path(mcp_server, mock_svc: MagicMock) -> None:
     await mcp_server.call_tool(
-        "kg.walk", {"inp": KGWalkInput(seed_node_ids=["concept-1"]).model_dump(mode="json")}
+        "kg.walk",
+        {"inp": KGWalkInput(seed_node_ids=["concept-1"]).model_dump(mode="json", exclude_none=True)},
     )
     mock_svc.walk.assert_awaited_once()
 
 
 @pytest.mark.asyncio
 async def test_kg_hybrid_happy_path(mcp_server, mock_svc: MagicMock) -> None:
-    await mcp_server.call_tool("kg.hybrid", {"inp": KGHybridInput(query="fractions").model_dump(mode="json")})
+    # AS-120: kg.hybrid k is an int again (ref); unset fields are omitted, not sent as null.
+    payload = KGHybridInput(query="fractions").model_dump(mode="json", exclude_none=True)
+    await mcp_server.call_tool("kg.hybrid", {"inp": payload})
     mock_svc.hybrid.assert_awaited_once()
 
 
@@ -129,8 +133,9 @@ async def test_kg_explain_path_happy_path(mcp_server, mock_svc: MagicMock) -> No
 @pytest.mark.asyncio
 async def test_kg_search_maps_app_error(mcp_server, mock_svc: MagicMock) -> None:
     mock_svc.search.side_effect = NotFoundError("graph empty")
+    payload = KGSearchInput(query="fractions").model_dump(mode="json", exclude_none=True)
     with pytest.raises(ToolError, match="not_found"):
-        await mcp_server.call_tool("kg.search", {"inp": KGSearchInput(query="fractions").model_dump(mode="json")})
+        await mcp_server.call_tool("kg.search", {"inp": payload})
 
 
 def test_raise_tool_error_branches() -> None:

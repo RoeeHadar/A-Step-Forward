@@ -17,6 +17,9 @@ class GraphRAGSettings(BaseSettings):
 
     embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
     embedding_dim: int = 384
+    # AS-108: load the sentence-transformers model from the local HF cache only
+    # (no Hub download); replaces the old process-wide TLS-off workaround.
+    embedding_local_files_only: bool = False
     chunk_tokens: int = 600
     chunk_overlap: int = 50
 

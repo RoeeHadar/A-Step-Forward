@@ -20,6 +20,9 @@ import crypto from 'node:crypto';
 import { createRequire } from 'node:module';
 import { normalizeLesson, validateLesson } from './lib/normalize-lesson.mjs';
 import { makeEmbedder, EMBED_DIM } from './lib/rag-embed.mjs';
+import { requireRealLlmOptIn } from './lib/llm-script-guard.mjs';
+
+requireRealLlmOptIn('scripts/rag-ingest.mjs (NVIDIA embeddings)');
 
 const ROOT = process.cwd();
 const WEB = path.join(ROOT, 'apps/web');

@@ -8,7 +8,7 @@
  * Fresh students are skipped (they self-onboard). Fill email/clerk_user_id in roster
  * after Clerk signup, then:
  *
- *   $env:NODE_TLS_REJECT_UNAUTHORIZED='0'
+ *   $env:NODE_EXTRA_CA_CERTS='C:\path\to\corporate-ca.pem'  # only behind a TLS-intercepting proxy; never disable TLS verification
  *   $env:DATABASE_URL='<prod Neon URL — never commit>'
  *   node scripts/seed-cohort-pilot.mjs
  *   node scripts/seed-cohort-pilot.mjs --only S7,S8

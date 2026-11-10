@@ -13,7 +13,6 @@ class MemorySettings(BaseSettings):
     database_url: str = "postgresql+asyncpg://astepforward:astepforward@localhost:5432/astepforward"
     redis_url: str = "redis://localhost:6379/0"
 
-    embedding_model: str = "voyage-3-large"
     embedding_dim: int = 1024
     rerank_model: str = "rerank-2"
 

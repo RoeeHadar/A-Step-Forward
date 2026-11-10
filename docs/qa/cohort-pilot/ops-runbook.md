@@ -55,7 +55,7 @@ Friend graph (students): follow [personas.md](./personas.md) — do **not** frie
 
 ```powershell
 cd <repo-root>
-$env:NODE_TLS_REJECT_UNAUTHORIZED='0'
+$env:NODE_EXTRA_CA_CERTS='C:\path\to\corporate-ca.pem'  # only behind a TLS-intercepting proxy; never disable TLS verification
 $env:DATABASE_URL='<prod Neon URL — never commit>'
 node scripts/seed-cohort-pilot.mjs --dry-run
 node scripts/seed-cohort-pilot.mjs
@@ -102,7 +102,7 @@ After synthesis: **hold ~2 weeks**, then full reset all 11 (+ optional Clerk del
 
 ```powershell
 cd apps/web
-$env:NODE_TLS_REJECT_UNAUTHORIZED='0'
+$env:NODE_EXTRA_CA_CERTS='C:\path\to\corporate-ca.pem'  # only behind a TLS-intercepting proxy; never disable TLS verification
 npx.cmd vercel env run --environment production -- node -e "console.log(new URL(process.env.DATABASE_URL||'').hostname||'MISSING')"
 ```
 

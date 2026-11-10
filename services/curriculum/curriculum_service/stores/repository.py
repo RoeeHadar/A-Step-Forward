@@ -49,7 +49,7 @@ class CurriculumRepository:
         course_stmt = insert(CurriculumCourse).values(
             id=course.id,
             title=course.title,
-            level=course.level.value,
+            level=_level_value(course),
             summary=course.summary,
             prerequisites=course.prerequisites,
             payload=course.model_dump(mode="json"),
@@ -59,7 +59,7 @@ class CurriculumRepository:
             index_elements=[CurriculumCourse.id],
             set_={
                 "title": course.title,
-                "level": course.level.value,
+                "level": _level_value(course),
                 "summary": course.summary,
                 "prerequisites": course.prerequisites,
                 "payload": course.model_dump(mode="json"),
@@ -186,6 +186,17 @@ class CurriculumRepository:
             stmt = select(CurriculumConcept).where(CurriculumConcept.course_id == course_id)
             rows = (await session.scalars(stmt)).all()
             return [Concept.model_validate(row.payload) for row in rows]
+
+
+def _level_value(course: Course) -> str | None:
+    """AS-111 (AS-110 finding): guarded Course.level read for the course row.
+
+    3b7d2774 made Course.level a required Level, so a validated Course always has one.
+    A course built without validation (model_construct, or a level-less object) used to
+    crash here on ``None.value``; it now yields None (and a plain str passes through).
+    """
+    level = getattr(course, "level", None)
+    return getattr(level, "value", level)
 
 
 def _objective_concepts(lesson: Lesson) -> set[str]:

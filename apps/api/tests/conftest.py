@@ -2,7 +2,30 @@
 
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
 import pytest
+
+# AS-99: make the workspace members importable from source (same convention as
+# services/graphrag/tests/conftest.py), so the API tests collect without relying
+# on every member being installed into the active venv.
+_ROOT = Path(__file__).resolve().parents[3]
+for _rel in (
+    "packages/schemas",
+    "packages/agents",
+    "services/memory",
+    "services/graphrag",
+    "services/orchestrator",
+    "services/curriculum",
+    "services/learner_model",
+    "services/diagnostic",
+    "services/learning_path",
+    "apps/api",
+):
+    _p = str(_ROOT / _rel)
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
 
 
 @pytest.fixture(autouse=True)

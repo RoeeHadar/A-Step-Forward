@@ -28,6 +28,7 @@ def strength_now(record: MemoryRecord, *, now: datetime | None = None) -> float:
 def reinforce(record: MemoryRecord, *, delta: float = 0.05) -> MemoryRecord:
     """Increase salience and refresh last_accessed_at upon access."""
     record.salience = min(1.0, record.salience + delta)
-    record.access_count += 1
+    # AS-99: access_count is an AS-90 field (default None when unset); treat None as 0.
+    record.access_count = (record.access_count or 0) + 1
     record.last_accessed_at = datetime.now(timezone.utc)
     return record

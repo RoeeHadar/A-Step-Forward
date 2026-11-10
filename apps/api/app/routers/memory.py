@@ -7,10 +7,11 @@ from fastapi.responses import JSONResponse
 from memory_service.api import get_memory_service
 from schemas.memory import (
     MemoryRecord,
+    MemorySearchBody,
     MemorySearchInput,
     MemorySearchResult,
-    MemoryUpdateInput,
-    MemoryWriteInput,
+    MemoryUpdateBody,
+    MemoryWriteBody,
 )
 
 from ..core.auth import AuthCtx, require_learner
@@ -43,7 +44,7 @@ async def list_memories(
 
 @router.post("", response_model=MemoryRecord)
 async def create(
-    body: MemoryWriteInput,
+    body: MemoryWriteBody,
     ctx: AuthCtx = Depends(require_learner),
     svc=Depends(get_memory_service),
     _=Depends(per_user("memory.create", per_min=60)),
@@ -56,7 +57,7 @@ async def create(
 
 @router.post("/search", response_model=list[MemorySearchResult])
 async def search(
-    body: MemorySearchInput,
+    body: MemorySearchBody,  # AS-112: agent_id required -> 422 when omitted
     ctx: AuthCtx = Depends(require_learner),
     svc=Depends(get_memory_service),
     _=Depends(per_user("memory.search", per_min=120)),
@@ -79,7 +80,7 @@ async def timeline(
 @router.patch("/{memory_id}", response_model=MemoryRecord)
 async def update(
     memory_id: str,
-    patch: MemoryUpdateInput,
+    patch: MemoryUpdateBody,
     ctx: AuthCtx = Depends(require_learner),
     svc=Depends(get_memory_service),
     _=Depends(per_user("memory.update", per_min=60)),

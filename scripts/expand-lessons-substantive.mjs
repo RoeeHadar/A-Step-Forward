@@ -15,6 +15,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { callGroq, parseJsonLoose, getGroqApiKey, sleep } from './lib/groq-client.mjs';
+import { requireRealLlmOptIn } from './lib/llm-script-guard.mjs';
 import { pushProgressCommit } from './lib/git-push-progress.mjs';
 import {
   wordCount,
@@ -273,6 +274,7 @@ async function expandLesson(lesson) {
 }
 
 async function main() {
+  requireRealLlmOptIn('scripts/expand-lessons-substantive.mjs');
   if (!getGroqApiKey()) {
     console.error('[expand-substantive] GROQ_API_KEY (or LLM_API_KEY) is required.');
     process.exit(2);

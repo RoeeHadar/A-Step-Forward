@@ -16,10 +16,10 @@ For a **10 students + 1 teacher** human pilot (personas, forms, batch seed), see
 Seed a state with the reusable ops script (never commit the URL):
 
 ```powershell
-$env:NODE_TLS_REJECT_UNAUTHORIZED='0'          # local corporate-proxy TLS only
+$env:NODE_EXTRA_CA_CERTS='C:\path\to\corporate-ca.pem'  # only behind a TLS-intercepting proxy; never disable TLS verification
 $env:DATABASE_URL='<prod Neon URL>'
 node scripts/seed-pilot-demo.mjs --variant <variant>
-$env:DATABASE_URL=$null; $env:NODE_TLS_REJECT_UNAUTHORIZED=$null
+$env:DATABASE_URL=$null; $env:NODE_EXTRA_CA_CERTS=$null
 ```
 
 Variants: `fresh`, `building` (default), `at-risk`, `near-exam`, `day-before`, `goal-complete`.

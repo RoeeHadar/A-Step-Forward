@@ -102,7 +102,9 @@ class LearnerModelRepository:
         )
         await session.execute(stmt)
 
-        for concept_id, raw_score in profile.self_scores.items():
+        # AS-110: self_scores is an AS-90 field (None when the onboarding body omits it);
+        # pre-AS-90 default {}.
+        for concept_id, raw_score in (profile.self_scores or {}).items():
             await self._upsert_mastery(
                 session,
                 learner_id,

@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from pydantic import Field
 
 from ._dynamic import FlexibleModel, flexible_model
-from .common import Provenance
+from .common import ConfidenceScore, DateTimeStr, IDStr, Provenance, ProvenanceBody
 
 
 class MemoryType(StrEnum):
@@ -34,9 +34,12 @@ class MemoryRecord(FlexibleModel):
     summary: str | None = None
     tags: list[str] = Field(default_factory=list)
     valence: float = 0.0
-    salience: float | None = None
-    confidence: float | None = None
-    decay_tau_days: float | None = None
+    # AS-99: defaults restored to the memory table contract (0002_memory_tables:
+    # NOT NULL, server_default 0.5 / 0.5 / 14.0; original schema 1516f4d4). None broke
+    # consolidation.resolution_key and decay.strength_now.
+    salience: float = 0.5
+    confidence: float = 0.5
+    decay_tau_days: float = 14.0
     provenance: Provenance = Field(default_factory=Provenance)
     expires_at: str | None = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
@@ -75,6 +78,10 @@ class MemorySearchInput(FlexibleModel):
     agent_id: str | None = None
     k: Any = None
     min_strength: float | None = None
+    # AS-110: read in production but never declared (AS-90 runtime guard hit once the
+    # read path is exercised). None default == what the model_extra fallback returned;
+    # not in AS90_DECLARED (input-only model, never serialized).
+    include_archived: Any = None
 
 
 def __getattr__(name: str) -> Any:
@@ -143,3 +150,111 @@ class MemorySearchResult(FlexibleModel):
     components: dict[str, Any] | None = None
     record: Any = None
     score: Any = None
+
+
+# ---------------------------------------------------------------------------
+# AS-112: entry-point request models. The fields below were required before AS-90
+# (3b7d2774 schemas); AS-90 declared them `= None` on the shared models, so an
+# omitted field reached the service and crashed (500) instead of a 422. These
+# subclasses are used only where untrusted input enters (FastAPI bodies, MCP tool
+# signatures, LLM output); they restore the requirement without changing the
+# shared models' defaults, the frozen AS90_DECLARED registry or any emitted
+# output. Instances are still the base type, so services are unchanged.
+
+
+class MemorySearchBody(MemorySearchInput):
+    """POST /v1/memory/search body and MCP memory.search input (pre-AS-90: agent_id
+    required). Internal callers keep using MemorySearchInput."""
+
+    agent_id: str
+    # AS-113: pre-AS-90 types and bounds (3b7d2774 memory.py:81-87). The defaults equal
+    # what the AS-110 read-site guards apply when the shared model leaves them None.
+    learner_id: IDStr
+    query: str = Field(min_length=1, max_length=2000)
+    k: int = Field(default=10, ge=1, le=200)
+    min_strength: ConfidenceScore = 0.0
+    # AS-120: ref type and default (3b7d2774 memory.py:86); None and False read the same.
+    include_archived: bool = False
+
+
+class CompactionBody(CompactionInput):
+    """MCP memory.compact_context input (pre-AS-90: messages, target_tokens required)."""
+
+    messages: list[dict[str, Any]]
+    # AS-113: pre-AS-90 types and bounds (3b7d2774 memory.py:140-141).
+    target_tokens: int = Field(ge=512)
+    pinned_memory_ids: list[IDStr] = Field(default_factory=list)
+
+
+# ---------------------------------------------------------------------------
+# AS-119: entry-point request models for the remaining pre-AS-90 bounds (3b7d2774).
+# Same pattern as AS-112/113: these subclasses are used only where untrusted input
+# enters (FastAPI bodies, MCP tool signatures, LLM output). The shared models, their
+# defaults and the frozen AS90_DECLARED registry stay unchanged. Instances are still
+# the base type, so the services are unchanged.
+
+
+class MemoryWriteBody(MemoryWriteInput):
+    """POST /v1/memory body and the memory.write MCP input (3b7d2774 memory.py:64-75)."""
+
+    learner_id: IDStr
+    type: MemoryType
+    content: str = Field(min_length=1, max_length=20_000)
+    valence: float | None = Field(default=None, ge=-1.0, le=1.0)
+    importance_hint: ConfidenceScore | None = None
+    provenance: ProvenanceBody
+    # AS-120: ref type (3b7d2774 memory.py:74), kept as the ISO string (DateTimeStr).
+    expires_at: DateTimeStr | None = None
+
+
+class MemoryUpdateBody(MemoryUpdateInput):
+    """PATCH /v1/memory/{id} body and the memory.update MCP patch (3b7d2774
+    memory.py:99-107). content and tags default to None as on the ref, so unset
+    fields are left alone by the repository patch."""
+
+    content: str | None = None
+    summary: str | None = None
+    tags: list[str] | None = None
+    salience: ConfidenceScore | None = None
+    confidence: ConfidenceScore | None = None
+    reason: str = Field(min_length=1, max_length=500)
+
+
+class MemoryWriteToolBody(__getattr__("MemoryWriteToolInput")):
+    """memory.write MCP input (3b7d2774 memory.py:156-160)."""
+
+    agent_id: str = Field(min_length=1, max_length=128)
+    input: MemoryWriteBody
+
+
+class MemoryTimelineBody(__getattr__("MemoryTimelineInput")):
+    """memory.timeline MCP input (3b7d2774 memory.py:163-169)."""
+
+    learner_id: IDStr
+    since: str | None = None
+    until: str | None = None
+    k: int = Field(default=100, ge=1, le=500)
+
+
+class MemoryUpdateToolBody(__getattr__("MemoryUpdateToolInput")):
+    """memory.update MCP input (3b7d2774 memory.py:172-178)."""
+
+    memory_id: IDStr
+    learner_id: IDStr
+    agent_id: str = Field(min_length=1, max_length=128)
+    patch: MemoryUpdateBody
+
+
+class MemoryDeleteToolBody(__getattr__("MemoryDeleteToolInput")):
+    """memory.delete MCP input (3b7d2774 memory.py:181-187)."""
+
+    memory_id: IDStr
+    learner_id: IDStr
+    agent_id: str = Field(min_length=1, max_length=128)
+    hard: bool = False
+
+
+class LearnerOnlyBody(__getattr__("LearnerOnlyInput")):
+    """memory.dream_now / memory.consolidate MCP input (3b7d2774 memory.py:190-193)."""
+
+    learner_id: IDStr
