@@ -31,6 +31,7 @@ import {
   type PacingResult,
 } from './plan-pacing';
 import { computeReadiness } from './readiness';
+import { BKT_GLOBAL_PARAMS, bktObservationFromProcessScore, bktUpdate, masteryModelFromEnv } from './bkt';
 import {
   countGateAttempts,
   ensureTestAttemptsTable,
@@ -3620,6 +3621,38 @@ export async function recordCustomQuizPractice(args: {
   await applyPracticeMasteryUpdate(learnerId, conceptId, correct, skillAtoms);
 }
 
+// ── AS-53 (C5b): BKT posterior per (learner, atom) in skill_practice.p_known ──
+// Migration: infra/alembic/versions/0025_skill_practice_p_known.py (NUMERIC, NULL = no BKT
+// history). Only reached with MASTERY_MODEL=bkt. No backfill: an existing row with
+// p_known NULL starts from BKT_GLOBAL_PARAMS.p_init on its next attempt.
+let pKnownColumnReady: Promise<void> | null = null;
+
+function ensureSkillPracticePKnownColumn(): Promise<void> {
+  if (!pKnownColumnReady) {
+    const s = requireSql();
+    pKnownColumnReady = (async () => {
+      await s`ALTER TABLE skill_practice ADD COLUMN IF NOT EXISTS p_known NUMERIC`;
+    })().catch((err: unknown) => {
+      pKnownColumnReady = null;
+      throw err;
+    });
+  }
+  return pKnownColumnReady;
+}
+
+/** Read the stored prior (NULL/missing row -> p_init) and apply one BKT step. Read-modify-write
+ * per attempt: two concurrent attempts on one row can start from the same prior (accepted,
+ * see migration-proposal-p_known.md). */
+async function nextPKnown(learnerId: string, atom: string, correct: boolean): Promise<number> {
+  const s = requireSql();
+  const rows = (await s`
+    SELECT p_known FROM skill_practice WHERE learner_id = ${learnerId} AND skill_atom = ${atom}
+  `) as Array<{ p_known: string | number | null }>;
+  const raw = rows[0]?.p_known;
+  const prior = raw === null || raw === undefined ? NaN : Number(raw);
+  return bktUpdate(Number.isFinite(prior) ? prior : BKT_GLOBAL_PARAMS.p_init, correct);
+}
+
 async function applyPracticeMasteryUpdate(
   learnerId: string,
   conceptId: string,
@@ -3638,8 +3671,25 @@ async function applyPracticeMasteryUpdate(
       last_activity = NOW()
   `;
 
+  // AS-53 (C5b): MASTERY_MODEL=bkt also writes the BKT posterior p_known. Flag off: the
+  // loop below runs the pre-AS-53 statement only (byte-identical).
+  const bkt = masteryModelFromEnv() === 'bkt';
+  if (bkt && skillAtoms.length > 0) await ensureSkillPracticePKnownColumn();
   for (const atom of skillAtoms) {
     if (!atom || typeof atom !== 'string') continue;
+    if (bkt) {
+      const pKnown = await nextPKnown(learnerId, atom, correct);
+      await s`
+        INSERT INTO skill_practice (learner_id, skill_atom, attempts, successes, last_practiced, p_known)
+        VALUES (${learnerId}, ${atom}, 1, ${correct ? 1 : 0}, NOW(), ${pKnown})
+        ON CONFLICT (learner_id, skill_atom) DO UPDATE SET
+          attempts = skill_practice.attempts + 1,
+          successes = skill_practice.successes + ${correct ? 1 : 0},
+          last_practiced = NOW(),
+          p_known = ${pKnown}
+      `;
+      continue;
+    }
     await s`
       INSERT INTO skill_practice (learner_id, skill_atom, attempts, successes, last_practiced)
       VALUES (${learnerId}, ${atom}, 1, ${correct ? 1 : 0}, NOW())
@@ -5373,6 +5423,29 @@ export async function markAtomPracticed(
   const clamped = Math.max(0, Math.min(1, score));
   const days = clamped >= 0.8 ? 7 : clamped >= 0.6 ? 3 : 1;
   const successInc = clamped >= 0.6 ? 1 : 0;
+
+  // AS-53 (C5b): MASTERY_MODEL=bkt also writes p_known (observation = the same >= 0.6 cut).
+  // Flag off: the statement below is the pre-AS-53 one, unchanged.
+  if (masteryModelFromEnv() === 'bkt') {
+    await ensureSkillPracticePKnownColumn();
+    const pKnown = await nextPKnown(userId, atomId, bktObservationFromProcessScore(clamped));
+    await s`
+      INSERT INTO skill_practice (
+        learner_id, skill_atom, attempts, successes, last_practiced, last_score, next_review_date, p_known
+      )
+      VALUES (
+        ${userId}, ${atomId}, 1, ${successInc}, NOW(), ${clamped}, NOW() + (${days} || ' days')::interval, ${pKnown}
+      )
+      ON CONFLICT (learner_id, skill_atom) DO UPDATE SET
+        attempts = skill_practice.attempts + 1,
+        successes = skill_practice.successes + ${successInc},
+        last_practiced = NOW(),
+        last_score = ${clamped},
+        next_review_date = NOW() + (${days} || ' days')::interval,
+        p_known = ${pKnown}
+    `;
+    return;
+  }
 
   await s`
     INSERT INTO skill_practice (
